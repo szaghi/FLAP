@@ -1,0 +1,14 @@
+[builder]
+compiler=intel
+cflags=-O0 -warn all -check all -debug all -traceback -assume protect_parens -assume realloc_lhs -fp-model source -cpp -c -module ./mod/
+lflags=-O0 -warn all -check all -debug all -traceback -assume protect_parens -assume realloc_lhs -fp-model source
+dmod=./mod/
+dobj=./obj/
+dexe=./
+src=./src/
+colors=True
+quiet=False
+[files]
+target=src/flap_test.f90
+o=flap_test
+log=False
