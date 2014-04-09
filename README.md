@@ -5,7 +5,7 @@ A very simple and stupid tool for building easily nice Command Line Interface fo
 
 ### A Taste of FLAP
 
-Running the test program a taste of FLAP is served:
+Running the provided test program, __flap_test__, a taste of FLAP is served:
 ```bash
 +--> flap_test, a testing program for FLAP library
 +--> Parsing Command Line Arguments
