@@ -31,7 +31,7 @@ Running the provided test program, __flap_test__, a taste of FLAP is served:
 |-->   -) flap_test -s 'Hello FLAP' -i -2 -r 33.d0
 |-->   -) flap_test -string 'Hello FLAP' -boolean
 ```
-Not so bad for just a very fews statements as the following:
+Not so bad for just a very few statements as the following:
 ```fortran
 ...
 write(stdout,'(A)')'+--> flap_test, a testing program for FLAP library'
