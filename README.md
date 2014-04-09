@@ -179,3 +179,7 @@ The dummy arguments should be auto-explicative. Note that the _help_  and _examp
 
 ### Compile Testing Program
 
+As a practical example of FLAP usage a testing program named __flap_test__ is provided. You can compile with Fortran compiler supporting modern standards (2003+). Note that the dependency hierarchy of modules USE statement must be respected in order to successfully compile the program. If you are tired by frustrating usage of makefiles & co. you can try [FoBiS.py](https://github.com/szaghi/FoBiS) for building the program. A _fobos_ file is provided with FLAP. To build it just type into the root directory of FLAP:
+```bash
+FoBiS.py build
+```

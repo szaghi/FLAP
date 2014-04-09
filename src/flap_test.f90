@@ -42,7 +42,7 @@ integer(I4P)::                      error  !< Error trapping flag.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-write(stdout,'(A)'  )'+--> flap_test, a testing program for FLAP library'
+write(stdout,'(A)')'+--> flap_test, a testing program for FLAP library'
 ! setting CLAs
 call cli%add(switch='-string',     switch_ab='-s', help='String input',        required=.true.,  act='store'                   )
 call cli%add(switch='-integer',    switch_ab='-i', help='Integer input',       required=.false., act='store',     def='-1'     )
