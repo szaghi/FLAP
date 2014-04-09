@@ -107,23 +107,23 @@ Fews methods are provided within this derived type: _free_ for freeing the CLI m
 Essentially, for building up a minimal CLI you should follow the 3 steps:
 
 - declare a CLI variable:
-  ```fortran
+```fortran
   type(Type_Command_Line_Interface):: cli
-  ```
+```
 - adding one or more CLA definition to the CLI:
-  ```fortran
+```fortran
   call cli%add(switch='-o',help='Output file name',required=.false.,act='store',def='myfile.md')
-  ```
+```
   more details on how declare a CLA are reported in the followings;
 - parsing the actually passed command line arguments:
-  ```fortran
+```fortran
   call cli%parse(examples=["example -o my_new_filename.md"],progname='example',error=error)
-  ```
+```
   more details on parsing method are reported in the followings;
 - getting parsed values and storing into user-defined variables:
-  ```fortran
+```fortran
   call cli%get(switch='-o',val=OutputFilename)
-  ```
+```
   _OutputFilename_ being a previously defined variable.
 
 ### Compile Testing Program
