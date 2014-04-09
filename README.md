@@ -31,6 +31,26 @@ Running the provided test program, __flap_test__, a taste of FLAP is served:
 |-->   -) flap_test -s 'Hello FLAP' -i -2 -r 33.d0
 |-->   -) flap_test -string 'Hello FLAP' -boolean
 ```
+Not so bad for just a very fews statements as the following:
+```fortran
+...
+write(stdout,'(A)')'+--> flap_test, a testing program for FLAP library'
+! setting CLAs
+call cli%add(switch='-string',     switch_ab='-s', help='String input',        required=.true.,  act='store'                   )
+call cli%add(switch='-integer',    switch_ab='-i', help='Integer input',       required=.false., act='store',     def='-1'     )
+call cli%add(switch='-real',       switch_ab='-r', help='Real input',          required=.false., act='store',     def='1.0'    )
+call cli%add(switch='-boolean',    switch_ab='-b', help='Boolean input',       required=.false., act='store_true',def='.false.')
+call cli%add(switch='-boolean_val',switch_ab='-bv',help='Valued boolean input',required=.false., act='store',     def='.true.' )
+! checking consistency of CLAs
+call cli%check(error=error,pref='|-->') ; if (error/=0) stop
+! parsing CLI
+write(stdout,'(A)')'+--> Parsing Command Line Arguments'
+call cli%parse(examples=["flap_test -s 'Hello FLAP'               ",&
+                         "flap_test -s 'Hello FLAP' -i -2         ",&
+                         "flap_test -s 'Hello FLAP' -i -2 -r 33.d0",&
+                         "flap_test -string 'Hello FLAP' -boolean "],progname='FLAP_Test',error=error,pref='|-->')
+...
+```
 
 ## Table of Contents
 
