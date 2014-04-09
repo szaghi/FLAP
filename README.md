@@ -73,3 +73,43 @@ FLAP is developed on a GNU/Linux architecture. For Windows architecture there is
 FLAP is an open source project, it is distributed under the [GPL v3](http://www.gnu.org/licenses/gpl-3.0.html). Anyone is interest to use, to develop or to contribute to FLAP is welcome.
 
 ## <a name="usage"></a>Usage
+
+### API
+FLAP is currently composed by two modules, namely  __Data_Type_Command_Line_Argument.f90__ and  __Data_Type_Command_Line_Interface.f90__. The first one is such as a back-end handling CLAs while the latter is the front-end providing all you need to handle your CLI. Two auxiliary modules, __IR_Precision.f90__ and __Lib_IO_Misc.f90__ are used for minor tasks. Finally, a testing program __flap_test__ is provided showing a basic example of FLAP usage.
+
+The main CLI object, that is the only one you must know, is __Type_Command_Line_Interface__
+
+```fortran
+type, public:: Type_Command_Line_Interface
+  integer(I4P)::                                  Na          = 0_I4P !< Number of CLA.
+  integer(I4P)::                                  Na_required = 0_I4P !< Number of command line arguments that CLI requires.
+  integer(I4P)::                                  Na_optional = 0_I4P !< Number of command line arguments that are optional for CLI.
+  type(Type_Command_Line_Argument), allocatable:: cla(:)              !< CLA list [1:Na].
+  contains
+    procedure:: free         ! Procedure for freeing dynamic memory.
+    procedure:: add_cla      ! Procedure for adding CLA to CLAs list.
+    procedure:: add_init_cla ! Procedure for adding an on-the-fly-initialized CLA to CLAs list.
+    procedure:: check        ! Procedure for checking CLAs data consistenc.
+    procedure:: passed       ! Procedure for checking if a CLA has been passed.
+    procedure:: parse        ! Procedure for parsing Command Line Interfaces by means of a previously initialized CLA list.
+    procedure:: get          ! Procedure for getting CLA value from CLAs list parsed.
+    final::     finalize     ! Procedure for freeing dynamic memory when finalizing.
+    generic::   add => add_cla,add_init_cla
+    ! operators overloading
+    generic:: assignment(=) => assign_self
+    ! private procedures
+    procedure, pass(self1), private:: assign_self
+endtype Type_Command_Line_Interface
+```
+
+Fews methods are provided within this derived type: _free_ for freeing the CLI memory, _add_ for adding a CLA to the CLI, _check_ for checking the CLAs definition consistency, _passed_ for checking is a particular CLA has been actually passed, _parse_ for parsing all passed CLAs to the list previously defined for building up the CLI and _get_ for returning a particular CLA value and storing it into user-defined variable.
+
+Essentially, for building up a minimal CLI you should follow the 3 steps:
+
+- declare a CLI variable: `type(Type_Command_Line_Interface):: cli`;
+- adding one or more CLA definition to the CLI: `call cli%add(switch='-o',help='Output file name',required=.false.,act='store',def='myfile.md')`; more details on how declare a CLA are reported in the followings;
+- parsing the actually passed command line arguments: `call cli%parse(examples=["example -o my_new_filename.md"],progname='example',error=error)`; more details on parsing method are reported in the followings;
+- getting parsed values and storing into user-defined variables: `call cli%get(switch='-o',val=OutputFilename)`, _OutputFilename_ being a previously defined variable.
+
+### Compile Testing Program
+

@@ -37,16 +37,18 @@ character(99)::                     sval   !< String value.
 real(R8P)::                         rval   !< Real value.
 integer(I4P)::                      ival   !< Integer value.
 logical::                           bval   !< Boolean value.
+logical::                           vbval  !< Valued-boolean value.
 integer(I4P)::                      error  !< Error trapping flag.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 write(stdout,'(A)'  )'+--> flap_test, a testing program for FLAP library'
 ! setting CLAs
-call cli%add(switch='-string', switch_ab='-s',help='String input', required=.true.,  act='store'                   )
-call cli%add(switch='-integer',switch_ab='-i',help='Integer input',required=.false., act='store',     def='-1'     )
-call cli%add(switch='-real',   switch_ab='-r',help='Real input',   required=.false., act='store',     def='1.0'    )
-call cli%add(switch='-boolean',switch_ab='-b',help='Boolean input',required=.false., act='store_true',def='.false.')
+call cli%add(switch='-string',     switch_ab='-s', help='String input',        required=.true.,  act='store'                   )
+call cli%add(switch='-integer',    switch_ab='-i', help='Integer input',       required=.false., act='store',     def='-1'     )
+call cli%add(switch='-real',       switch_ab='-r', help='Real input',          required=.false., act='store',     def='1.0'    )
+call cli%add(switch='-boolean',    switch_ab='-b', help='Boolean input',       required=.false., act='store_true',def='.false.')
+call cli%add(switch='-boolean_val',switch_ab='-bv',help='Valued boolean input',required=.false., act='store',     def='.true.' )
 ! checking consistency of CLAs
 call cli%check(error=error,pref='|-->') ; if (error/=0) stop
 ! parsing CLI
@@ -57,15 +59,17 @@ call cli%parse(examples=["flap_test -s 'Hello FLAP'               ",&
                          "flap_test -string 'Hello FLAP' -boolean "],progname='FLAP_Test',error=error,pref='|-->')
 if (error/=0) stop
 ! using CLI data to set FLAP_Test behaviour
-call cli%get(switch='-s',val=sval,pref='|-->')
-call cli%get(switch='-r',val=rval,pref='|-->')
-call cli%get(switch='-i',val=ival,pref='|-->')
-call cli%get(switch='-b',val=bval,pref='|-->')
+call cli%get(switch='-s', val=sval, pref='|-->')
+call cli%get(switch='-r', val=rval, pref='|-->')
+call cli%get(switch='-i', val=ival, pref='|-->')
+call cli%get(switch='-b', val=bval, pref='|-->')
+call cli%get(switch='-bv',val=vbval,pref='|-->')
 write(stdout,'(A)'  )'+--> Your flap_test calling has the following arguments values:'
-write(stdout,'(A)'  )'|--> String  input = '//trim(adjustl(sval))
-write(stdout,'(A)'  )'|--> Real    input = '//str(n=rval)
-write(stdout,'(A)'  )'|--> Integer input = '//str(n=ival)
-write(stdout,'(A,L)')'|--> Boolean input = ',bval
+write(stdout,'(A)'  )'|--> String         input = '//trim(adjustl(sval))
+write(stdout,'(A)'  )'|--> Real           input = '//str(n=rval)
+write(stdout,'(A)'  )'|--> Integer        input = '//str(n=ival)
+write(stdout,'(A,L)')'|--> Boolean        input = ',bval
+write(stdout,'(A,L)')'|--> Valued boolean input = ',vbval
 stop
 !-----------------------------------------------------------------------------------------------------------------------------------
 endprogram FLAP_Test

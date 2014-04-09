@@ -159,7 +159,7 @@ contains
   character(*), optional,             intent(IN)::  pref  !< Prefixing string.
   integer(I4P),                       intent(OUT):: error !< Error trapping flag.
   character(len=:), allocatable::                   prefd !< Prefixing string.
-  integer(I4P)::                                    a     !< CLA counter.
+  integer(I4P)::                                    a,aa  !< CLA counters.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -169,6 +169,22 @@ contains
     call cli%cla(a)%check(pref=prefd,error=error)
     if (error/=0) exit
   enddo
+  ! verifing if CLAs switches are unique
+  CLA_unique: do a=1,cli%Na
+    do aa=1,cli%Na
+      if (a/=aa) then
+        if ((cli%cla(a)%switch==cli%cla(aa)%switch   ).or.(cli%cla(a)%switch_ab==cli%cla(aa)%switch   ).or.&
+            (cli%cla(a)%switch==cli%cla(aa)%switch_ab).or.(cli%cla(a)%switch_ab==cli%cla(aa)%switch_ab)) then
+          error = 1
+          write(stderr,'(A)')prefd//' Error: the '//trim(str(.true.,a))//'-th CLA has the same switch or abbreviated switch of '//&
+                             trim(str(.true.,aa))//'-th CLA:'
+          write(stderr,'(A)')prefd//' CLA('//trim(str(.true.,a)) //') switches = '//cli%cla(a)%switch //' '//cli%cla(a)%switch_ab
+          write(stderr,'(A)')prefd//' CLA('//trim(str(.true.,aa))//') switches = '//cli%cla(aa)%switch//' '//cli%cla(aa)%switch_ab
+          exit CLA_unique
+        endif
+      endif
+    enddo
+  enddo CLA_unique
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check
