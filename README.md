@@ -102,14 +102,29 @@ type, public:: Type_Command_Line_Interface
 endtype Type_Command_Line_Interface
 ```
 
-Fews methods are provided within this derived type: _free_ for freeing the CLI memory, _add_ for adding a CLA to the CLI, _check_ for checking the CLAs definition consistency, _passed_ for checking is a particular CLA has been actually passed, _parse_ for parsing all passed CLAs to the list previously defined for building up the CLI and _get_ for returning a particular CLA value and storing it into user-defined variable.
+Fews methods are provided within this derived type: _free_ for freeing the CLI memory, _add_ for adding a CLA to the CLI, _check_ for checking the CLAs definition consistency, _passed_ for checking is a particular CLA has been actually passed, _parse_ for parsing all passed CLAs accordingly to the list previously defined for building up the CLI and _get_ for returning a particular CLA value and storing it into user-defined variable.
 
 Essentially, for building up a minimal CLI you should follow the 3 steps:
 
-- declare a CLI variable: `type(Type_Command_Line_Interface):: cli`;
-- adding one or more CLA definition to the CLI: `call cli%add(switch='-o',help='Output file name',required=.false.,act='store',def='myfile.md')`; more details on how declare a CLA are reported in the followings;
-- parsing the actually passed command line arguments: `call cli%parse(examples=["example -o my_new_filename.md"],progname='example',error=error)`; more details on parsing method are reported in the followings;
-- getting parsed values and storing into user-defined variables: `call cli%get(switch='-o',val=OutputFilename)`, _OutputFilename_ being a previously defined variable.
+- declare a CLI variable:
+  ```fortran
+  type(Type_Command_Line_Interface):: cli
+  ```
+- adding one or more CLA definition to the CLI:
+  ```fortran
+  call cli%add(switch='-o',help='Output file name',required=.false.,act='store',def='myfile.md')
+  ```
+  more details on how declare a CLA are reported in the followings;
+- parsing the actually passed command line arguments:
+  ```fortran
+  call cli%parse(examples=["example -o my_new_filename.md"],progname='example',error=error)
+  ```
+  more details on parsing method are reported in the followings;
+- getting parsed values and storing into user-defined variables:
+  ```fortran
+  call cli%get(switch='-o',val=OutputFilename)
+  ```
+  _OutputFilename_ being a previously defined variable.
 
 ### Compile Testing Program
 
