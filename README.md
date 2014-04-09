@@ -112,12 +112,12 @@ Essentially, for building up a minimal CLI you should follow the 3 steps:
 ```
 - adding one or more CLA definition to the CLI:
 ```fortran
-  call cli%add(switch='-o',help='Output file name',required=.false.,act='store',def='myfile.md')
+  call cli%add(switch='-o',help='Output file name',def='myfile.md')
 ```
   more details on how declare a CLA are reported in the followings;
 - parsing the actually passed command line arguments:
 ```fortran
-  call cli%parse(examples=["example -o my_new_filename.md"],progname='example',error=error)
+  call cli%parse(progname='example',error=error)
 ```
   more details on parsing method are reported in the followings;
 - getting parsed values and storing into user-defined variables:
