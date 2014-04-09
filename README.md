@@ -3,6 +3,35 @@
 
 A very simple and stupid tool for building easily nice Command Line Interface for modern Fortran projects.
 
+### A Taste of FLAP
+
+Running the test program a taste of FLAP is served:
+```bash
++--> flap_test, a testing program for FLAP library
++--> Parsing Command Line Arguments
+|--> Error: the Command Line Interface requires at least 1 arguments to be passed whereas only 0 have been!
+|--> The Command Line Interface (CLI) has the following options
+|-->   FLAP_Test -string value [-integer value] [-real value] [-boolean]
+|--> Each Command Line Argument (CLA) has the following meaning:
+|-->   [-string value] or [-s value]
+|-->     String input
+|-->     It is a non optional CLA thus must be passed to CLI
+|-->   [-integer value] or [-i value]
+|-->     Integer input
+|-->     It is a optional CLA which default value is "-1"
+|-->   [-real value] or [-r value]
+|-->     Real input
+|-->     It is a optional CLA which default value is "1.0"
+|-->   [-boolean] or [-b]
+|-->     Boolean input
+|-->     It is a optional CLA which default value is ".false."
+|--> Usage examples:
+|-->   -) flap_test -s 'Hello FLAP'
+|-->   -) flap_test -s 'Hello FLAP' -i -2
+|-->   -) flap_test -s 'Hello FLAP' -i -2 -r 33.d0
+|-->   -) flap_test -string 'Hello FLAP' -boolean
+```
+
 ## Table of Contents
 
 * [Team Members](#team-members)
