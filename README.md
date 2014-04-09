@@ -126,5 +126,56 @@ Essentially, for building up a minimal CLI you should follow the 3 steps:
 ```
   _OutputFilename_ being a previously defined variable.
 
+#### Adding a new CLA to CLI
+
+There are two ways for adding a new definition of CLA into your CLI:
+
+- adding and defining a CLA on-the-fly using _add_ generic type bound procedure;
+- adding a previously defined CLA
+```fortran
+  type(Type_Command_Line_Command):: cla
+```
+
+Note that in the second case you must access also to the module __Data_Type_Command_Line_Argument.f90__  and not only to __Data_Type_Command_Line_Interface.f90__. In all cases, the definition of a new CLA has presently the following signature:
+```fortran
+  call cli%add(switch_ab,help,required,act,def,nargs,switch)
+```
+or
+```fortran
+  call cla%init(switch_ab,help,required,act,def,nargs,switch)
+```
+or
+```fortran
+  cla = cla_init(switch_ab,help,required,act,def,nargs,switch)
+```
+where
+```fortran
+  character(*), optional, intent(IN):: switch_ab !< Abbreviated switch name.
+  character(*), optional, intent(IN):: help      !< Help message describing the CLA.
+  logical,      optional, intent(IN):: required  !< Flag for set required argument.
+  character(*), optional, intent(IN):: act       !< CLA value action.
+  character(*), optional, intent(IN):: def       !< Default value.
+  character(*), optional, intent(IN):: nargs     !< Number of arguments of CLA.
+  character(*),           intent(IN):: switch    !< Switch name.
+```
+The dummy arguments should be auto-explicative. Note that the _help_ dummy argument is used for printing a pretty help message explaining the CLI usage, thus should be always provided even if it is an optional argument. It is also worthy of note that the abbreviated switch is set equal to switch name (the only argument non optional) is no otherwise defined.
+
+#### Parsing the CLI
+The complete signature of _parse_ method is the following:
+```fortran
+  call cli%parse(pref,help,examples,progname,error)
+```
+where
+```fortran
+character(*), optional, intent(IN)::  pref         !< Prefixing string.
+character(*), optional, intent(IN)::  help         !< Help message describing the Command Line Interface.
+character(*), optional, intent(IN)::  examples(1:) !< Examples of correct usage.
+character(*),           intent(IN)::  progname     !< Program name.
+integer(I4P),           intent(OUT):: error        !< Error trapping flag.
+```
+The dummy arguments should be auto-explicative. Note that the _help_  and _examples_ dummy arguments are used for printing a pretty help message explaining the CLI usage, thus should be always provided even if they are optional arguments. The help messages are print is one of the following issues arise:
+- the switch name of unknown CLA is passed;
+- the number of passed CLAs is less than the required CLAs previously defined.
+
 ### Compile Testing Program
 
