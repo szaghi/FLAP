@@ -122,7 +122,7 @@ contains
   endsubroutine add_cla
 
   !> @brief Procedure for adding an on-the-fly-initialized CLA to CLAs list.
-  elemental subroutine add_init_cla(cli,switch_ab,help,required,act,def,nargs,switch)
+  elemental subroutine add_init_cla(cli,switch_ab,help,required,act,def,nargs,choices,switch)
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Interface), intent(INOUT):: cli       !< CLI data.
@@ -132,6 +132,7 @@ contains
   character(*), optional,             intent(IN)::    act       !< CLA value action.
   character(*), optional,             intent(IN)::    def       !< Default value.
   character(*), optional,             intent(IN)::    nargs     !< Number of arguments of CLA.
+  character(*), optional,             intent(IN)::    choices   !< List of allowable values for the argument.
   character(*),                       intent(IN)::    switch    !< Switch name.
   type(Type_Command_Line_Argument)::                  cla       !< CLA data.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -145,6 +146,7 @@ contains
   cla%act       = action_store            ; if (present(act      )) cla%act       = trim(adjustl(Upper_Case(act)))
                                             if (present(def      )) cla%def       = def
                                             if (present(nargs    )) cla%nargs     = nargs
+                                            if (present(choices  )) cla%choices   = choices
   ! adding CLA to CLI
   call cli%add_cla(cla=cla)
   return
@@ -306,44 +308,13 @@ contains
     !-------------------------------------------------------------------------------------------------------------------------------
     cla_list_sign = '   '//progname//' '
     do a=1,cli%Na
-      if (cli%cla(a)%act==action_store) then
-        if (cli%cla(a)%required) then
-          cla_list_sign = trim(cla_list_sign)//' '//trim(adjustl(cli%cla(a)%switch))//' value'
-        else
-          cla_list_sign = trim(cla_list_sign)//' ['//trim(adjustl(cli%cla(a)%switch))//' value]'
-        endif
-      else
-        if (cli%cla(a)%required) then
-          cla_list_sign = trim(cla_list_sign)//' '//trim(adjustl(cli%cla(a)%switch))
-        else
-          cla_list_sign = trim(cla_list_sign)//' ['//trim(adjustl(cli%cla(a)%switch))//']'
-        endif
-      endif
+      call cli%cla(a)%add_signature(signature=cla_list_sign)
     enddo
     write(stdout,'(A)')prefd//cli_help
     write(stdout,'(A)')prefd//cla_list_sign
     write(stdout,'(A)')prefd//' Each Command Line Argument (CLA) has the following meaning:'
     do a=1,Cli%Na
-      if (cli%cla(a)%act==action_store) then
-        if (trim(adjustl(cli%cla(a)%switch))/=trim(adjustl(cli%cla(a)%switch_ab))) then
-          write(stdout,'(A)')prefd//'   ['//trim(adjustl(cli%cla(a)%switch))//' value] or ['//&
-                                            trim(adjustl(cli%cla(a)%switch_ab))//' value]'
-        else
-          write(stdout,'(A)')prefd//'   ['//trim(adjustl(cli%cla(a)%switch))//' value]'
-        endif
-      else
-        if (trim(adjustl(cli%cla(a)%switch))/=trim(adjustl(cli%cla(a)%switch_ab))) then
-          write(stdout,'(A)')prefd//'   ['//trim(adjustl(cli%cla(a)%switch))//'] or ['//trim(adjustl(cli%cla(a)%switch_ab))//']'
-        else
-          write(stdout,'(A)')prefd//'   ['//trim(adjustl(cli%cla(a)%switch))//']'
-        endif
-      endif
-      write(stdout,'(A)')prefd//'     '//trim(adjustl(cli%cla(a)%help))
-      if (cli%cla(a)%required) then
-        write(stdout,'(A)')prefd//'     It is a non optional CLA thus must be passed to CLI'
-      else
-        write(stdout,'(A)')prefd//'     It is a optional CLA which default value is "'//trim(adjustl(cli%cla(a)%def))//'"'
-      endif
+      call cli%cla(a)%print(pref=prefd,unit=stdout)
     enddo
     if (present(examples)) then
       write(stdout,'(A)')prefd//' Usage examples:'
@@ -358,13 +329,14 @@ contains
 
   !> @brief Procedure for getting CLA value from CLAs list parsed.
   !> @note For logical type CLA the value is directly read without any robust error trapping.
-  subroutine get(cli,pref,switch,val)
+  subroutine get(cli,pref,switch,val,error)
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Interface), intent(INOUT):: cli      !< CLI data.
   character(*), optional,             intent(IN)::    pref     !< Prefixing string.
   character(*),                       intent(IN)::    switch   !< Switch name.
   class(*),                           intent(INOUT):: val      !< CLA value.
+  integer(I4P),                       intent(OUT)::   error    !< Error trapping flag.
   character(len=:), allocatable::                     prefd    !< Prefixing string.
   logical::                                           found    !< Flag for checking if CLA containing switch has been found.
   integer(I4P)::                                      a        !< Argument counter.
@@ -383,7 +355,7 @@ contains
   if (.not.found) then
     write(stderr,'(A)')prefd//' Error: there is no CLA into CLI containing "'//trim(adjustl(switch))//'"'
   else
-    call cli%cla(a)%get(pref=prefd,val=val)
+    call cli%cla(a)%get(pref=prefd,val=val,error=error)
   endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------

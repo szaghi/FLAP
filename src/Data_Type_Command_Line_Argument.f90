@@ -59,13 +59,17 @@ type, public:: Type_Command_Line_Argument
   character(len=:), allocatable:: act              !< CLA value action.
   character(len=:), allocatable:: def              !< Default value.
   character(len=:), allocatable:: nargs            !< Number of arguments of CLA.
+  character(len=:), allocatable:: choices          !< List (comma separated) of allowable values for the argument.
   character(len=:), allocatable:: val              !< CLA value.
   contains
-    procedure:: free => free_self   ! Procedure for freeing dynamic memory.
-    procedure:: init => init_self   ! Procedure for initializing CLA.
-    procedure:: get  => get_self    ! Procedure for getting CLA value.
-    procedure:: check => check_self ! Procedure for checking CLA data consistency.
-    final::     finalize            ! Procedure for freeing dynamic memory when finalizing.
+    procedure:: free          => free_self          ! Procedure for freeing dynamic memory.
+    procedure:: init          => init_self          ! Procedure for initializing CLA.
+    procedure:: get           => get_self           ! Procedure for getting CLA value.
+    procedure:: check         => check_self         ! Procedure for checking CLA data consistency.
+    procedure:: check_choices => check_choices_self ! Procedure for checking if CLA value is in allowed choices.
+    procedure:: print         => print_self         ! Procedure for printing CLA data with a pretty format.
+    procedure:: add_signature                       ! Procedure for adding CLA signature to the CLI one.
+    final::     finalize                            ! Procedure for freeing dynamic memory when finalizing.
     ! operators overloading
     generic:: assignment(=) => assign_self
     ! private procedures
@@ -89,6 +93,7 @@ contains
   if (allocated( cla%act      )) deallocate(cla%act      )
   if (allocated( cla%def      )) deallocate(cla%def      )
   if (allocated( cla%nargs    )) deallocate(cla%nargs    )
+  if (allocated( cla%choices  )) deallocate(cla%choices  )
   if (allocated( cla%val      )) deallocate(cla%val      )
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -109,7 +114,7 @@ contains
 
   !> @brief Procedure for initializing CLA.
   !> @note If not otherwise declared the action on CLA value is set to "store" a value that must be passed after the switch name.
-  elemental subroutine init_self(cla,switch_ab,help,required,act,def,nargs,switch)
+  elemental subroutine init_self(cla,switch_ab,help,required,act,def,nargs,choices,switch)
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Argument), intent(INOUT):: cla       !< CLA data.
@@ -119,6 +124,7 @@ contains
   character(*), optional,            intent(IN)::    act       !< CLA value action.
   character(*), optional,            intent(IN)::    def       !< Default value.
   character(*), optional,            intent(IN)::    nargs     !< Number of arguments of CLA.
+  character(*), optional,            intent(IN)::    choices   !< List of allowable values for the argument.
   character(*),                      intent(IN)::    switch    !< Switch name.
   !---------------------------------------------------------------------------------------------------------------------------------
 
@@ -130,19 +136,21 @@ contains
   cla%act       = action_store            ; if (present(act      )) cla%act       = trim(adjustl(Upper_Case(act)))
                                             if (present(def      )) cla%def       = def
                                             if (present(nargs    )) cla%nargs     = nargs
+                                            if (present(choices  )) cla%choices   = choices
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init_self
 
   !> @brief Procedure for getting CLA value.
   !> @note For logical type CLA the value is directly read without any robust error trapping.
-  subroutine get_self(cla,pref,val)
+  subroutine get_self(cla,pref,val,error)
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  class(Type_Command_Line_Argument), intent(INOUT):: cla   !< CLA data.
-  character(*), optional,            intent(IN)::    pref  !< Prefixing string.
-  class(*),                          intent(INOUT):: val   !< CLA value.
-  character(len=:), allocatable::                    prefd !< Prefixing string.
+  class(Type_Command_Line_Argument), intent(INOUT):: cla     !< CLA data.
+  character(*), optional,            intent(IN)::    pref    !< Prefixing string.
+  class(*),                          intent(INOUT):: val     !< CLA value.
+  integer(I4P),                      intent(OUT)::   error   !< Error trapping flag.
+  character(len=:), allocatable::                    prefd   !< Prefixing string.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -157,46 +165,62 @@ contains
 #ifdef r16p
       type is(real(R16P))
         val = cton(str=trim(adjustl(cla%val)),knd=1._R16P)
+        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
 #endif
       type is(real(R8P))
         val = cton(str=trim(adjustl(cla%val)),knd=1._R8P)
+        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
       type is(real(R4P))
         val = cton(str=trim(adjustl(cla%val)),knd=1._R4P)
+        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
       type is(integer(I8P))
         val = cton(str=trim(adjustl(cla%val)),knd=1_I8P)
+        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
       type is(integer(I4P))
         val = cton(str=trim(adjustl(cla%val)),knd=1_I4P)
+        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
       type is(integer(I2P))
         val = cton(str=trim(adjustl(cla%val)),knd=1_I2P)
+        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
       type is(integer(I1P))
         val = cton(str=trim(adjustl(cla%val)),knd=1_I1P)
+        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
       type is(logical)
         read(cla%val,*)val
       type is(character(*))
         val = cla%val
+        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
       endselect
     else
       select type(val)
 #ifdef r16p
       type is(real(R16P))
         val = cton(str=trim(adjustl(cla%def)),knd=1._R16P)
+        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
 #endif
       type is(real(R8P))
         val = cton(str=trim(adjustl(cla%def)),knd=1._R8P)
+        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
       type is(real(R4P))
         val = cton(str=trim(adjustl(cla%def)),knd=1._R4P)
+        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
       type is(integer(I8P))
         val = cton(str=trim(adjustl(cla%def)),knd=1_I8P)
+        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
       type is(integer(I4P))
         val = cton(str=trim(adjustl(cla%def)),knd=1_I4P)
+        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
       type is(integer(I2P))
         val = cton(str=trim(adjustl(cla%def)),knd=1_I2P)
+        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
       type is(integer(I1P))
         val = cton(str=trim(adjustl(cla%def)),knd=1_I1P)
+        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
       type is(logical)
         read(cla%def,*)val
       type is(character(*))
         val = cla%def
+        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
       endselect
     endif
   elseif (cla%act==action_store_true) then
@@ -249,6 +273,158 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check_self
 
+  !> @brief Procedure for checking if CLA value is in allowed choices.
+  !> @note This procedure can be called if and only if cla%choices has been allocated.
+  subroutine check_choices_self(cla,val,pref,error)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  class(Type_Command_Line_Argument), intent(IN)::  cla        !< CLA data.
+  class(*),                          intent(IN)::  val        !< CLA value.
+  character(*), optional,            intent(IN)::  pref       !< Prefixing string.
+  integer(I4P),                      intent(OUT):: error      !< Error trapping flag.
+  character(len=:), allocatable::                  prefd      !< Prefixing string.
+  character(len(cla%choices)), allocatable::       toks(:)    !< Tokens for parsing choices list.
+  integer(I4P)::                                   Nc         !< Number of choices.
+  logical::                                        val_in     !< Flag for checking if val is in the choosen range.
+  character(len=:), allocatable::                  val_str    !< Value in string form.
+  integer(I4P)::                                   c          !< Counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  error = 0
+  val_in = .false.
+  val_str = ''
+  call tokenize(strin=cla%choices,delimiter=',',Nt=Nc,toks=toks)
+  select type(val)
+#ifdef r16p
+  type is(real(R16P))
+    val_str = str(n=val)
+    do c=1,Nc
+      if (val==cton(str=trim(adjustl(toks(c))),knd=1._R16P)) val_in = .true.
+    enddo
+#endif
+  type is(real(R8P))
+    val_str = str(n=val)
+    do c=1,Nc
+      if (val==cton(str=trim(adjustl(toks(c))),knd=1._R8P)) val_in = .true.
+    enddo
+  type is(real(R4P))
+    val_str = str(n=val)
+    do c=1,Nc
+      if (val==cton(str=trim(adjustl(toks(c))),knd=1._R4P)) val_in = .true.
+    enddo
+  type is(integer(I8P))
+    val_str = str(n=val)
+    do c=1,Nc
+      if (val==cton(str=trim(adjustl(toks(c))),knd=1_I8P)) val_in = .true.
+    enddo
+  type is(integer(I4P))
+    val_str = str(n=val)
+    do c=1,Nc
+      if (val==cton(str=trim(adjustl(toks(c))),knd=1_I4P)) val_in = .true.
+    enddo
+  type is(integer(I2P))
+    val_str = str(n=val)
+    do c=1,Nc
+      if (val==cton(str=trim(adjustl(toks(c))),knd=1_I2P)) val_in = .true.
+    enddo
+  type is(integer(I1P))
+    val_str = str(n=val)
+    do c=1,Nc
+      if (val==cton(str=trim(adjustl(toks(c))),knd=1_I1P)) val_in = .true.
+    enddo
+  type is(character(*))
+    val_str = val
+    do c=1,Nc
+      if (val==toks(c)) val_in = .true.
+    enddo
+  endselect
+  if (.not.val_in) then
+    error = 1
+    prefd = '' ; if (present(pref)) prefd = pref
+    write(stderr,'(A)')prefd//' Error: the value of CLA "'//cla%switch//'" must be chosen in: ('//cla%choices//') but "'//&
+                              trim(val_str)//'" has been passed!'
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine check_choices_self
+
+  !> @brief Procedure for printing CLA data with a pretty format.
+  subroutine print_self(cla,pref,iostat,iomsg,unit)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  class(Type_Command_Line_Argument), intent(IN)::  cla     !< CLA data.
+  character(*), optional,            intent(IN)::  pref    !< Prefixing string.
+  integer(I4P), optional,            intent(OUT):: iostat  !< IO error.
+  character(*), optional,            intent(OUT):: iomsg   !< IO error message.
+  integer(I4P),                      intent(IN)::  unit    !< Logic unit.
+  character(len=:), allocatable::                  prefd   !< Prefixing string.
+  integer(I4P)::                                   iostatd !< IO error.
+  character(500)::                                 iomsgd  !< Temporary variable for IO error message.
+  character(len=:), allocatable::                  sig     !< CLA signature.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  prefd = '' ; if (present(pref)) prefd = pref
+  if (cla%act==action_store) then
+    if (trim(adjustl(cla%switch))/=trim(adjustl(cla%switch_ab))) then
+      sig = '   ['//trim(adjustl(cla%switch))//' value] or ['//trim(adjustl(cla%switch_ab))//' value]'
+    else
+      sig = '   ['//trim(adjustl(cla%switch))//' value]'
+    endif
+    if (allocated(cla%choices)) then
+      sig = sig//' with value chosen in: ('//cla%choices//')'
+    endif
+  else
+    if (trim(adjustl(cla%switch))/=trim(adjustl(cla%switch_ab))) then
+      sig = '   ['//trim(adjustl(cla%switch))//'] or ['//trim(adjustl(cla%switch_ab))//']'
+    else
+      sig = '   ['//trim(adjustl(cla%switch))//']'
+    endif
+  endif
+  write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd)prefd//sig
+  write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd)prefd//'     '//trim(adjustl(cla%help))
+  if (cla%required) then
+    write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd)prefd//'     It is a non optional CLA thus must be passed to CLI'
+  else
+    write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd)prefd//'     It is a optional CLA which default value is "'//&
+                                                                 trim(adjustl(cla%def))//'"'
+  endif
+  if (present(iostat)) iostat = iostatd
+  if (present(iomsg))  iomsg  = iomsgd
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine print_self
+
+  !> @brief Procedure for adding CLA signature to the CLI one.
+  subroutine add_signature(cla,signature)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  class(Type_Command_Line_Argument), intent(IN)::    cla       !< CLA data.
+  character(len=:), allocatable,     intent(INOUT):: signature !< CLI signature.
+  character(len=:), allocatable::                    signd     !< Temporary CLI signature.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  signd = '' ; if (allocated(signature)) signd = signature
+  if (cla%act==action_store) then
+    if (cla%required) then
+      signd = trim(signd)//' '//trim(adjustl(cla%switch))//' value'
+    else
+      signd = trim(signd)//' ['//trim(adjustl(cla%switch))//' value]'
+    endif
+  else
+    if (cla%required) then
+      signd = trim(signd)//' '//trim(adjustl(cla%switch))
+    else
+      signd = trim(signd)//' ['//trim(adjustl(cla%switch))//']'
+    endif
+  endif
+  signature = signd
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine add_signature
+
   ! Assignment (=)
   !> @brief Procedure for assignment between two selfs.
   elemental subroutine assign_self(self1,self2)
@@ -265,6 +441,7 @@ contains
   if (allocated(self2%act      )) self1%act       =  self2%act
   if (allocated(self2%def      )) self1%def       =  self2%def
   if (allocated(self2%nargs    )) self1%nargs     =  self2%nargs
+  if (allocated(self2%choices  )) self1%choices   =  self2%choices
   if (allocated(self2%val      )) self1%val       =  self2%val
                                   self1%required  =  self2%required
                                   self1%passed    =  self2%passed
@@ -277,7 +454,7 @@ contains
   !> @{
   !> @brief Procedure for parsing Command Line Arguments by means of a previously initialized CLA list.
   !> @note This procedure should execute the identical statements of type bound procedure init_self.
-  elemental function cla_init(switch_ab,help,required,act,def,nargs,switch) result(cla)
+  elemental function cla_init(switch_ab,help,required,act,def,nargs,choices,switch) result(cla)
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   character(*), optional, intent(IN):: switch_ab !< Abbreviated switch name.
@@ -286,6 +463,7 @@ contains
   character(*), optional, intent(IN):: act       !< CLA value action.
   character(*), optional, intent(IN):: def       !< Default value.
   character(*), optional, intent(IN):: nargs     !< Number of arguments of CLA.
+  character(*), optional, intent(IN):: choices   !< List of allowable values for the argument.
   character(*),           intent(IN):: switch    !< Switch name.
   type(Type_Command_Line_Argument)::   cla       !< CLA data.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -298,6 +476,7 @@ contains
   cla%act       = action_store            ; if (present(act      )) cla%act       = trim(adjustl(Upper_Case(act)))
                                             if (present(def      )) cla%def       = def
                                             if (present(nargs    )) cla%nargs     = nargs
+                                            if (present(choices  )) cla%choices   = choices
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction cla_init

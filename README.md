@@ -73,6 +73,7 @@ Modern Fortran standards (2003+) have introduced support for Command Line Argume
 + user-friendly methods for building flexible and effective Command Line Interfaces (CLI);
 + handling optional and non optional Command Line Argument (CLA);
 + handling boolean CLA;
++ handling list of allowable values for defined CLA with automatic consistency check;
 + automatic generation of help and usage messages;
 + errors trapping for invalid CLI usage.
 + ...
@@ -142,9 +143,9 @@ Essentially, for building up a minimal CLI you should follow the 3 steps:
   more details on parsing method are reported in the followings;
 - getting parsed values and storing into user-defined variables:
 ```fortran
-  call cli%get(switch='-o',val=OutputFilename)
+  call cli%get(switch='-o',val=OutputFilename,error=error)
 ```
-  _OutputFilename_ being a previously defined variable.
+  _OutputFilename_ and _error_ being previously defined variables.
 
 #### Adding a new CLA to CLI
 
@@ -158,15 +159,15 @@ There are two ways for adding a new definition of CLA into your CLI:
 
 Note that in the second case you must access also to the module __Data_Type_Command_Line_Argument.f90__  and not only to __Data_Type_Command_Line_Interface.f90__. In all cases, the definition of a new CLA has presently the following signature:
 ```fortran
-  call cli%add(switch_ab,help,required,act,def,nargs,switch)
+  call cli%add(switch_ab,help,required,act,def,nargs,choices,switch)
 ```
 or
 ```fortran
-  call cla%init(switch_ab,help,required,act,def,nargs,switch)
+  call cla%init(switch_ab,help,required,act,def,nargs,choices,switch)
 ```
 or
 ```fortran
-  cla = cla_init(switch_ab,help,required,act,def,nargs,switch)
+  cla = cla_init(switch_ab,help,required,act,def,nargs,choices,switch)
 ```
 where
 ```fortran
@@ -176,9 +177,12 @@ where
   character(*), optional, intent(IN):: act       !< CLA value action.
   character(*), optional, intent(IN):: def       !< Default value.
   character(*), optional, intent(IN):: nargs     !< Number of arguments of CLA.
+  character(*), optional, intent(IN):: choices   !< List of allowable values for the argument.
   character(*),           intent(IN):: switch    !< Switch name.
 ```
 The dummy arguments should be auto-explicative. Note that the _help_ dummy argument is used for printing a pretty help message explaining the CLI usage, thus should be always provided even if it is an optional argument. It is also worthy of note that the abbreviated switch is set equal to switch name (the only argument non optional) is no otherwise defined.
+
+Note that _choices_  must be a comma-separated list of allowable values and if it has been specified the passed value is checked to be consistent with this list when the _get_ method is invoked: an error code is returned and if the value is not into the specified range an error message is printed to stderr. However the value of CLA is not modified and it is equal to the passed value.
 
 #### Parsing the CLI
 The complete signature of _parse_ method is the following:
