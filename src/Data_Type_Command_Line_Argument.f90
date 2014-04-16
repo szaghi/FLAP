@@ -51,16 +51,18 @@ character(11), parameter:: action_store_false = 'STORE_FALSE' !< CLA that stores
 !> @note If not otherwise declared the action on CLA value is set to "store" a value that must be passed after the switch name.
 !> @ingroup Data_Type_Command_Line_ArgumentDerivedType
 type, public:: Type_Command_Line_Argument
-  character(len=:), allocatable:: switch           !< Switch name.
-  character(len=:), allocatable:: switch_ab        !< Abbreviated switch name.
-  character(len=:), allocatable:: help             !< Help message describing the CLA.
-  logical::                       required=.false. !< Flag for set required argument.
-  logical::                       passed  =.false. !< Flag for checking if CLA has been passed to CLI.
-  character(len=:), allocatable:: act              !< CLA value action.
-  character(len=:), allocatable:: def              !< Default value.
-  character(len=:), allocatable:: nargs            !< Number of arguments of CLA.
-  character(len=:), allocatable:: choices          !< List (comma separated) of allowable values for the argument.
-  character(len=:), allocatable:: val              !< CLA value.
+  character(len=:), allocatable:: switch             !< Switch name.
+  character(len=:), allocatable:: switch_ab          !< Abbreviated switch name.
+  character(len=:), allocatable:: help               !< Help message describing the CLA.
+  logical::                       required  =.false. !< Flag for set required argument.
+  logical::                       positional=.false. !< Flag for checking if CLA is a positional or a named CLA.
+  integer(I4P)::                  position  = 0_I4P  !< Position of positional CLA.
+  logical::                       passed    =.false. !< Flag for checking if CLA has been passed to CLI.
+  character(len=:), allocatable:: act                !< CLA value action.
+  character(len=:), allocatable:: def                !< Default value.
+  character(len=:), allocatable:: nargs              !< Number of arguments of CLA.
+  character(len=:), allocatable:: choices            !< List (comma separated) of allowable values for the argument.
+  character(len=:), allocatable:: val                !< CLA value.
   contains
     procedure:: free          => free_self          ! Procedure for freeing dynamic memory.
     procedure:: init          => init_self          ! Procedure for initializing CLA.
@@ -113,30 +115,43 @@ contains
   endsubroutine finalize
 
   !> @brief Procedure for initializing CLA.
-  !> @note If not otherwise declared the action on CLA value is set to "store" a value that must be passed after the switch name.
-  elemental subroutine init_self(cla,switch_ab,help,required,act,def,nargs,choices,switch)
+  !> @note If not otherwise declared the action on CLA value is set to "store" a value that must be passed after the switch name
+  !> or directly passed in case of positional CLA.
+  subroutine init_self(cla,pref,switch,switch_ab,help,required,positional,position,act,def,nargs,choices,error)
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  class(Type_Command_Line_Argument), intent(INOUT):: cla       !< CLA data.
-  character(*), optional,            intent(IN)::    switch_ab !< Abbreviated switch name.
-  character(*), optional,            intent(IN)::    help      !< Help message describing the CLA.
-  logical,      optional,            intent(IN)::    required  !< Flag for set required argument.
-  character(*), optional,            intent(IN)::    act       !< CLA value action.
-  character(*), optional,            intent(IN)::    def       !< Default value.
-  character(*), optional,            intent(IN)::    nargs     !< Number of arguments of CLA.
-  character(*), optional,            intent(IN)::    choices   !< List of allowable values for the argument.
-  character(*),                      intent(IN)::    switch    !< Switch name.
+  class(Type_Command_Line_Argument), intent(INOUT):: cla        !< CLA data.
+  character(*), optional,            intent(IN)::    pref       !< Prefixing string.
+  character(*), optional,            intent(IN)::    switch     !< Switch name.
+  character(*), optional,            intent(IN)::    switch_ab  !< Abbreviated switch name.
+  character(*), optional,            intent(IN)::    help       !< Help message describing the CLA.
+  logical,      optional,            intent(IN)::    required   !< Flag for set required argument.
+  logical,      optional,            intent(IN)::    positional !< Flag for checking if CLA is a positional or a named CLA.
+  integer(I4P), optional,            intent(IN)::    position   !< Position of positional CLA.
+  character(*), optional,            intent(IN)::    act        !< CLA value action.
+  character(*), optional,            intent(IN)::    def        !< Default value.
+  character(*), optional,            intent(IN)::    nargs      !< Number of arguments of CLA.
+  character(*), optional,            intent(IN)::    choices    !< List of allowable values for the argument.
+  integer(I4P),                      intent(OUT)::   error      !< Error trapping flag.
+  character(len=:), allocatable::                    prefd      !< Prefixing string.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  cla%switch    = switch
-  cla%switch_ab = switch                  ; if (present(switch_ab)) cla%switch_ab = switch_ab
-  cla%help      = 'Undocumented argument' ; if (present(help     )) cla%help      = help
-  cla%required  = .false.                 ; if (present(required )) cla%required  = required
-  cla%act       = action_store            ; if (present(act      )) cla%act       = trim(adjustl(Upper_Case(act)))
-                                            if (present(def      )) cla%def       = def
-                                            if (present(nargs    )) cla%nargs     = nargs
-                                            if (present(choices  )) cla%choices   = choices
+  if (present(switch)) then
+    cla%switch    = switch
+    cla%switch_ab = switch
+  endif
+                                             if (present(switch_ab )) cla%switch_ab  = switch_ab
+  cla%help       = 'Undocumented argument' ; if (present(help      )) cla%help       = help
+  cla%required   = .false.                 ; if (present(required  )) cla%required   = required
+  cla%positional = .false.                 ; if (present(positional)) cla%positional = positional
+  cla%position   = 0_I4P                   ; if (present(position  )) cla%position   = position
+  cla%act        = action_store            ; if (present(act       )) cla%act        = trim(adjustl(Upper_Case(act)))
+                                             if (present(def       )) cla%def        = def
+                                             if (present(nargs     )) cla%nargs      = nargs
+                                             if (present(choices   )) cla%choices    = choices
+  prefd = '' ; if (present(pref)) prefd = pref
+  call cla%check(pref=prefd,error=error)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init_self
@@ -264,10 +279,25 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   error = 0
+  prefd = '' ; if (present(pref)) prefd = pref
   if ((.not.cla%required).and.(.not.allocated(cla%def))) then
     error = 1
-    prefd = '' ; if (present(pref)) prefd = pref
-    write(stderr,'(A)')prefd//' Error: the CLA "'//cla%switch//'" is not set as "required" but no default value has been set!'
+    if (cla%positional) then
+      write(stderr,'(A)')prefd//' Error: the positional CLA "'//trim(str(n=cla%position))//'-th" is not set as "required"'//&
+                                ' but no default value has been set!'
+    else
+      write(stderr,'(A)')prefd//' Error: the CLA "'//cla%switch//'" is not set as "required" but no default value has been set!'
+    endif
+  endif
+  if ((.not.cla%positional).and.(.not.allocated(cla%switch))) then
+    error = 2
+    write(stderr,'(A)')prefd//' Error: a non positional CLA must have a switch name!'
+  elseif ((cla%positional).and.(cla%position==0_I4P)) then
+    error = 3
+    write(stderr,'(A)')prefd//' Error: a positional CLA must have a position number different from 0!'
+  elseif ((cla%positional).and.(cla%act/=action_store)) then
+    error = 4
+    write(stderr,'(A)')prefd//' Error: a positional CLA must have action set to "'//action_store//'"!'
   endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -367,13 +397,20 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   prefd = '' ; if (present(pref)) prefd = pref
   if (cla%act==action_store) then
-    if (trim(adjustl(cla%switch))/=trim(adjustl(cla%switch_ab))) then
-      sig = '   ['//trim(adjustl(cla%switch))//' value] or ['//trim(adjustl(cla%switch_ab))//' value]'
+    if (.not.cla%positional) then
+      if (trim(adjustl(cla%switch))/=trim(adjustl(cla%switch_ab))) then
+        sig = '   ['//trim(adjustl(cla%switch))//' value] or ['//trim(adjustl(cla%switch_ab))//' value]'
+      else
+        sig = '   ['//trim(adjustl(cla%switch))//' value]'
+      endif
+      if (allocated(cla%choices)) then
+        sig = sig//' with value chosen in: ('//cla%choices//')'
+      endif
     else
-      sig = '   ['//trim(adjustl(cla%switch))//' value]'
-    endif
-    if (allocated(cla%choices)) then
-      sig = sig//' with value chosen in: ('//cla%choices//')'
+      sig = '   [value]'
+      if (allocated(cla%choices)) then
+        sig = sig//' with value chosen in: ('//cla%choices//')'
+      endif
     endif
   else
     if (trim(adjustl(cla%switch))/=trim(adjustl(cla%switch_ab))) then
@@ -384,6 +421,10 @@ contains
   endif
   write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd)prefd//sig
   write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd)prefd//'     '//trim(adjustl(cla%help))
+  if (cla%positional) then
+    write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd)prefd//'     It is a positional CLA having position "'//&
+                                                                 trim(str(.true.,cla%position))//'-th"'
+  endif
   if (cla%required) then
     write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd)prefd//'     It is a non optional CLA thus must be passed to CLI'
   else
@@ -408,10 +449,18 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   signd = '' ; if (allocated(signature)) signd = signature
   if (cla%act==action_store) then
-    if (cla%required) then
-      signd = trim(signd)//' '//trim(adjustl(cla%switch))//' value'
+    if (.not.cla%positional) then
+      if (cla%required) then
+        signd = trim(signd)//' '//trim(adjustl(cla%switch))//' value'
+      else
+        signd = trim(signd)//' ['//trim(adjustl(cla%switch))//' value]'
+      endif
     else
-      signd = trim(signd)//' ['//trim(adjustl(cla%switch))//' value]'
+      if (cla%required) then
+        signd = trim(signd)//' value'
+      else
+        signd = trim(signd)//' [value]'
+      endif
     endif
   else
     if (cla%required) then
@@ -435,16 +484,18 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  if (allocated(self2%switch   )) self1%switch    =  self2%switch
-  if (allocated(self2%switch_ab)) self1%switch_ab =  self2%switch_ab
-  if (allocated(self2%help     )) self1%help      =  self2%help
-  if (allocated(self2%act      )) self1%act       =  self2%act
-  if (allocated(self2%def      )) self1%def       =  self2%def
-  if (allocated(self2%nargs    )) self1%nargs     =  self2%nargs
-  if (allocated(self2%choices  )) self1%choices   =  self2%choices
-  if (allocated(self2%val      )) self1%val       =  self2%val
-                                  self1%required  =  self2%required
-                                  self1%passed    =  self2%passed
+  if (allocated(self2%switch   )) self1%switch     = self2%switch
+  if (allocated(self2%switch_ab)) self1%switch_ab  = self2%switch_ab
+  if (allocated(self2%help     )) self1%help       = self2%help
+  if (allocated(self2%act      )) self1%act        = self2%act
+  if (allocated(self2%def      )) self1%def        = self2%def
+  if (allocated(self2%nargs    )) self1%nargs      = self2%nargs
+  if (allocated(self2%choices  )) self1%choices    = self2%choices
+  if (allocated(self2%val      )) self1%val        = self2%val
+                                  self1%required   = self2%required
+                                  self1%positional = self2%positional
+                                  self1%position   = self2%position
+                                  self1%passed     = self2%passed
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine assign_self
@@ -454,29 +505,41 @@ contains
   !> @{
   !> @brief Procedure for parsing Command Line Arguments by means of a previously initialized CLA list.
   !> @note This procedure should execute the identical statements of type bound procedure init_self.
-  elemental function cla_init(switch_ab,help,required,act,def,nargs,choices,switch) result(cla)
+  function cla_init(pref,switch,switch_ab,help,required,positional,position,act,def,nargs,choices,error) result(cla)
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  character(*), optional, intent(IN):: switch_ab !< Abbreviated switch name.
-  character(*), optional, intent(IN):: help      !< Help message describing the CLA.
-  logical,      optional, intent(IN):: required  !< Flag for set required argument.
-  character(*), optional, intent(IN):: act       !< CLA value action.
-  character(*), optional, intent(IN):: def       !< Default value.
-  character(*), optional, intent(IN):: nargs     !< Number of arguments of CLA.
-  character(*), optional, intent(IN):: choices   !< List of allowable values for the argument.
-  character(*),           intent(IN):: switch    !< Switch name.
-  type(Type_Command_Line_Argument)::   cla       !< CLA data.
+  character(*), optional, intent(IN)::  pref       !< Prefixing string.
+  character(*), optional, intent(IN)::  switch     !< Switch name.
+  character(*), optional, intent(IN)::  switch_ab  !< Abbreviated switch name.
+  character(*), optional, intent(IN)::  help       !< Help message describing the CLA.
+  logical,      optional, intent(IN)::  required   !< Flag for set required argument.
+  logical,      optional, intent(IN)::  positional !< Flag for checking if CLA is a positional or a named CLA.
+  integer(I4P), optional, intent(IN)::  position   !< Position of positional CLA.
+  character(*), optional, intent(IN)::  act        !< CLA value action.
+  character(*), optional, intent(IN)::  def        !< Default value.
+  character(*), optional, intent(IN)::  nargs      !< Number of arguments of CLA.
+  character(*), optional, intent(IN)::  choices    !< List of allowable values for the argument.
+  integer(I4P),           intent(OUT):: error      !< Error trapping flag.
+  type(Type_Command_Line_Argument)::    cla        !< CLA data.
+  character(len=:), allocatable::       prefd      !< Prefixing string.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  cla%switch    = switch
-  cla%switch_ab = switch                  ; if (present(switch_ab)) cla%switch_ab = switch_ab
-  cla%help      = 'Undocumented argument' ; if (present(help     )) cla%help      = help
-  cla%required  = .false.                 ; if (present(required )) cla%required  = required
-  cla%act       = action_store            ; if (present(act      )) cla%act       = trim(adjustl(Upper_Case(act)))
-                                            if (present(def      )) cla%def       = def
-                                            if (present(nargs    )) cla%nargs     = nargs
-                                            if (present(choices  )) cla%choices   = choices
+  if (present(switch)) then
+    cla%switch    = switch
+    cla%switch_ab = switch
+  endif
+                                             if (present(switch_ab )) cla%switch_ab  = switch_ab
+  cla%help       = 'Undocumented argument' ; if (present(help      )) cla%help       = help
+  cla%required   = .false.                 ; if (present(required  )) cla%required   = required
+  cla%positional = .false.                 ; if (present(positional)) cla%positional = positional
+  cla%position   = 0_I4P                   ; if (present(position  )) cla%position   = position
+  cla%act        = action_store            ; if (present(act       )) cla%act        = trim(adjustl(Upper_Case(act)))
+                                             if (present(def       )) cla%def        = def
+                                             if (present(nargs     )) cla%nargs      = nargs
+                                             if (present(choices   )) cla%choices    = choices
+  prefd = '' ; if (present(pref)) prefd = pref
+  call cla%check(pref=prefd,error=error)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction cla_init

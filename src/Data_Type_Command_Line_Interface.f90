@@ -93,67 +93,93 @@ contains
   endsubroutine finalize
 
   !> @brief Procedure for adding CLA to CLAs list.
-  elemental subroutine add_cla(cli,cla)
+  subroutine add_cla(cli,pref,cla,error)
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Interface), intent(INOUT):: cli             !< CLI data.
+  character(*), optional,             intent(IN)::    pref            !< Prefixing string.
   type(Type_Command_Line_Argument),   intent(IN)::    cla             !< CLA data.
+  integer(I4P),                       intent(OUT)::   error           !< Error trapping flag.
   type(Type_Command_Line_Argument), allocatable::     cla_list_new(:) !< New (extended) CLA list.
+  character(len=:), allocatable::                     prefd           !< Prefixing string.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  if (cli%Na>0_I4P) then
-    allocate(cla_list_new(1:cli%Na+1))
-    cla_list_new(1:cli%Na)=cli%cla
-    cla_list_new(cli%Na+1)=cla
-  else
-    allocate(cla_list_new(1:1))
-    cla_list_new(1)=cla
-  endif
-  call move_alloc(from=cla_list_new,to=cli%cla)
-  cli%Na = cli%Na + 1
-  if (cla%required) then
-    cli%Na_required = cli%Na_required + 1
-  else
-    cli%Na_optional = cli%Na_optional + 1
+  prefd = '' ; if (present(pref)) prefd = pref
+  call cla%check(pref=prefd,error=error)
+  if (error==0) then
+    if (cli%Na>0_I4P) then
+      if (.not.cla%positional) then
+        allocate(cla_list_new(1:cli%Na+1))
+        cla_list_new(1:cli%Na)=cli%cla
+        cla_list_new(cli%Na+1)=cla
+      else
+        allocate(cla_list_new(1:cli%Na+1))
+        cla_list_new(1:cla%position-1)=cli%cla(1:cla%position-1)
+        cla_list_new(cla%position)=cla
+        cla_list_new(cla%position+1:cli%Na+1)=cli%cla(cla%position:cli%Na)
+      endif
+    else
+      allocate(cla_list_new(1:1))
+      cla_list_new(1)=cla
+    endif
+    call move_alloc(from=cla_list_new,to=cli%cla)
+    cli%Na = cli%Na + 1
+    if (cla%required) then
+      cli%Na_required = cli%Na_required + 1
+    else
+      cli%Na_optional = cli%Na_optional + 1
+    endif
   endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine add_cla
 
   !> @brief Procedure for adding an on-the-fly-initialized CLA to CLAs list.
-  elemental subroutine add_init_cla(cli,switch_ab,help,required,act,def,nargs,choices,switch)
+  subroutine add_init_cla(cli,pref,switch,switch_ab,help,required,positional,position,act,def,nargs,choices,error)
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  class(Type_Command_Line_Interface), intent(INOUT):: cli       !< CLI data.
-  character(*), optional,             intent(IN)::    switch_ab !< Abbreviated switch name.
-  character(*), optional,             intent(IN)::    help      !< Help message describing the CLA.
-  logical,      optional,             intent(IN)::    required  !< Flag for set required argument.
-  character(*), optional,             intent(IN)::    act       !< CLA value action.
-  character(*), optional,             intent(IN)::    def       !< Default value.
-  character(*), optional,             intent(IN)::    nargs     !< Number of arguments of CLA.
-  character(*), optional,             intent(IN)::    choices   !< List of allowable values for the argument.
-  character(*),                       intent(IN)::    switch    !< Switch name.
-  type(Type_Command_Line_Argument)::                  cla       !< CLA data.
+  class(Type_Command_Line_Interface), intent(INOUT):: cli        !< CLI data.
+  character(*), optional,             intent(IN)::    pref       !< Prefixing string.
+  character(*), optional,             intent(IN)::    switch     !< Switch name.
+  character(*), optional,             intent(IN)::    switch_ab  !< Abbreviated switch name.
+  character(*), optional,             intent(IN)::    help       !< Help message describing the CLA.
+  logical,      optional,             intent(IN)::    required   !< Flag for set required argument.
+  logical,      optional,             intent(IN)::    positional !< Flag for checking if CLA is a positional or a named CLA.
+  integer(I4P), optional,             intent(IN)::    position   !< Position of positional CLA.
+  character(*), optional,             intent(IN)::    act        !< CLA value action.
+  character(*), optional,             intent(IN)::    def        !< Default value.
+  character(*), optional,             intent(IN)::    nargs      !< Number of arguments of CLA.
+  character(*), optional,             intent(IN)::    choices    !< List of allowable values for the argument.
+  integer(I4P),                       intent(OUT)::   error      !< Error trapping flag.
+  type(Type_Command_Line_Argument)::                  cla        !< CLA data.
+  character(len=:), allocatable::                     prefd      !< Prefixing string.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   ! initializing CLA data with the identical statements of type bound procedure cla%init
-  cla%switch    = switch
-  cla%switch_ab = switch                  ; if (present(switch_ab)) cla%switch_ab = switch_ab
-  cla%help      = 'Undocumented argument' ; if (present(help     )) cla%help      = help
-  cla%required  = .false.                 ; if (present(required )) cla%required  = required
-  cla%act       = action_store            ; if (present(act      )) cla%act       = trim(adjustl(Upper_Case(act)))
-                                            if (present(def      )) cla%def       = def
-                                            if (present(nargs    )) cla%nargs     = nargs
-                                            if (present(choices  )) cla%choices   = choices
+  if (present(switch)) then
+    cla%switch    = switch
+    cla%switch_ab = switch
+  endif
+                                             if (present(switch_ab )) cla%switch_ab  = switch_ab
+  cla%help       = 'Undocumented argument' ; if (present(help      )) cla%help       = help
+  cla%required   = .false.                 ; if (present(required  )) cla%required   = required
+  cla%positional = .false.                 ; if (present(positional)) cla%positional = positional
+  cla%position   = 0_I4P                   ; if (present(position  )) cla%position   = position
+  cla%act        = action_store            ; if (present(act       )) cla%act        = trim(adjustl(Upper_Case(act)))
+                                             if (present(def       )) cla%def        = def
+                                             if (present(nargs     )) cla%nargs      = nargs
+                                             if (present(choices   )) cla%choices    = choices
+  prefd = '' ; if (present(pref)) prefd = pref
+  call cla%check(pref=prefd,error=error)
   ! adding CLA to CLI
-  call cli%add_cla(cla=cla)
+  if (error==0) call cli%add_cla(cla=cla,pref=prefd,error=error)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine add_init_cla
 
-  !> @brief Procedure for checking CLAs data consistenc.
+  !> @brief Procedure for checking CLAs data consistency.
   subroutine check(cli,pref,error)
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
@@ -173,42 +199,49 @@ contains
   enddo
   ! verifing if CLAs switches are unique
   CLA_unique: do a=1,cli%Na
-    do aa=1,cli%Na
-      if (a/=aa) then
-        if ((cli%cla(a)%switch==cli%cla(aa)%switch   ).or.(cli%cla(a)%switch_ab==cli%cla(aa)%switch   ).or.&
-            (cli%cla(a)%switch==cli%cla(aa)%switch_ab).or.(cli%cla(a)%switch_ab==cli%cla(aa)%switch_ab)) then
-          error = 1
-          write(stderr,'(A)')prefd//' Error: the '//trim(str(.true.,a))//'-th CLA has the same switch or abbreviated switch of '//&
-                             trim(str(.true.,aa))//'-th CLA:'
-          write(stderr,'(A)')prefd//' CLA('//trim(str(.true.,a)) //') switches = '//cli%cla(a)%switch //' '//cli%cla(a)%switch_ab
-          write(stderr,'(A)')prefd//' CLA('//trim(str(.true.,aa))//') switches = '//cli%cla(aa)%switch//' '//cli%cla(aa)%switch_ab
-          exit CLA_unique
+    if (.not.cli%cla(a)%positional) then
+      do aa=1,cli%Na
+        if ((a/=aa).and.(.not.cli%cla(aa)%positional)) then
+          if ((cli%cla(a)%switch==cli%cla(aa)%switch   ).or.(cli%cla(a)%switch_ab==cli%cla(aa)%switch   ).or.&
+              (cli%cla(a)%switch==cli%cla(aa)%switch_ab).or.(cli%cla(a)%switch_ab==cli%cla(aa)%switch_ab)) then
+            error = 1
+            write(stderr,'(A)')prefd//' Error: the '//trim(str(.true.,a))//'-th CLA has the same switch or abbreviated switch of '&
+                               //trim(str(.true.,aa))//'-th CLA:'
+            write(stderr,'(A)')prefd//' CLA('//trim(str(.true.,a)) //') switches = '//cli%cla(a)%switch //' '//cli%cla(a)%switch_ab
+            write(stderr,'(A)')prefd//' CLA('//trim(str(.true.,aa))//') switches = '//cli%cla(aa)%switch//' '//cli%cla(aa)%switch_ab
+            exit CLA_unique
+          endif
         endif
-      endif
-    enddo
+      enddo
+    endif
   enddo CLA_unique
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check
 
   !> @brief Procedure for checking if a CLA has been passed.
-  pure function passed(cli,switch)
+  pure function passed(cli,switch,position)
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  class(Type_Command_Line_Interface), intent(IN)::  cli    !< CLI data.
-  character(*),                       intent(IN)::  switch !< Switch name.
-  logical::                                         passed !< Check if a CLA has been passed.
-  integer(I4P)::                                    a      !< CLA counter.
+  class(Type_Command_Line_Interface), intent(IN):: cli      !< CLI data.
+  character(*), optional,             intent(IN):: switch   !< Switch name.
+  integer(I4P), optional,             intent(IN):: position !< Position of positional CLA.
+  logical::                                        passed   !< Check if a CLA has been passed.
+  integer(I4P)::                                   a        !< CLA counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   passed = .false.
-  do a=1,cli%Na
-    if ((cli%cla(a)%switch==switch).or.(cli%cla(a)%switch_ab==switch)) then
-      passed = cli%cla(a)%passed
-      exit
-    endif
-  enddo
+  if (present(switch)) then
+    do a=1,cli%Na
+      if ((cli%cla(a)%switch==switch).or.(cli%cla(a)%switch_ab==switch)) then
+        passed = cli%cla(a)%passed
+        exit
+      endif
+    enddo
+  elseif (present(position)) then
+    passed = cli%cla(position)%passed
+  endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction passed
@@ -225,9 +258,8 @@ contains
   character(*),                       intent(IN)::    progname       !< Program name.
   integer(I4P),                       intent(OUT)::   error          !< Error trapping flag.
   integer(I4P)::                                      Na             !< Number of command line arguments passed.
-  character(len=:), allocatable::                     switch         !< Switch name.
+  character(max_val_len)::                            switch         !< Switch name.
   character(max_val_len)::                            val            !< Switch value.
-  integer(I4P)::                                      max_switch_len !< Maximum number of characters of CLA switches passed.
   character(len=:), allocatable::                     cli_help       !< Dummy variable for CLI help.
   logical::                                           found          !< Flag for checking if switch has been found in cli%cla.
   character(len=:), allocatable::                     prefd          !< Prefixing string.
@@ -243,12 +275,6 @@ contains
   else
     cli_help = ' The Command Line Interface (CLI) has the following options'
   endif
-  ! computing the maximum length of switch name
-  max_switch_len = 0_I4P
-  do a=1,cli%Na
-    max_switch_len = max(max_switch_len,len_trim(adjustl(cli%cla(a)%switch)))
-  enddo
-  switch = repeat(' ',max_switch_len)
   ! counting the passed CLA
   Na = command_argument_count()
   if (Na<cli%Na_required) then
@@ -265,22 +291,30 @@ contains
       call get_command_argument(a,switch)
       found = .false.
       do aa=1,cli%Na
-        if (trim(adjustl(cli%cla(aa)%switch   ))==trim(adjustl(switch)).or.&
-            trim(adjustl(cli%cla(aa)%switch_ab))==trim(adjustl(switch))) then
-          if (cli%cla(aa)%act==action_store) then
-            a = a + 1
-            call get_command_argument(a,val)
-            cli%cla(aa)%val = trim(adjustl(val))
+        if (.not.cli%cla(aa)%positional) then
+          if (trim(adjustl(cli%cla(aa)%switch   ))==trim(adjustl(switch)).or.&
+              trim(adjustl(cli%cla(aa)%switch_ab))==trim(adjustl(switch))) then
+            if (cli%cla(aa)%act==action_store) then
+              a = a + 1
+              call get_command_argument(a,val)
+              cli%cla(aa)%val = trim(adjustl(val))
+            endif
+            cli%cla(aa)%passed = .true.
+            found = .true.
           endif
-          cli%cla(aa)%passed = .true.
-          found = .true.
         endif
       enddo
       if (.not.found) then
-        write(stderr,'(A)')prefd//' Error: switch "'//trim(adjustl(switch))//'" is unknown!'
-        call print_usage
-        error = 2
-        return
+        if (.not.cli%cla(a)%positional) then
+          write(stderr,'(A)')prefd//' Error: switch "'//trim(adjustl(switch))//'" is unknown!'
+          call print_usage
+          error = 2
+          return
+        else
+          ! positional CLA always  stores a value
+          cli%cla(a)%val = trim(adjustl(switch))
+          cli%cla(a)%passed = .true.
+        endif
       endif
     enddo
   endif
@@ -288,8 +322,13 @@ contains
   do a=1,cli%Na
     if (cli%cla(a)%required) then
       if (.not.cli%cla(a)%passed) then
-        write(stderr,'(A)')prefd//' Error: CLA "'//trim(adjustl(cli%cla(a)%switch))//&
-                                  '" is required by CLI but it has not been passed!'
+        if (.not.cli%cla(a)%positional) then
+          write(stderr,'(A)')prefd//' Error: CLA "'//trim(adjustl(cli%cla(a)%switch))//&
+                                    '" is required by CLI but it has not been passed!'
+        else
+          write(stderr,'(A)')prefd//' Error: positional CLA "'//trim(str(.true.,cli%cla(a)%position))//'-th" '//&
+                                    ' is required by CLI but it has not been passed!'
+        endif
         call print_usage
         error = 3
         return
@@ -329,12 +368,13 @@ contains
 
   !> @brief Procedure for getting CLA value from CLAs list parsed.
   !> @note For logical type CLA the value is directly read without any robust error trapping.
-  subroutine get(cli,pref,switch,val,error)
+  subroutine get(cli,pref,switch,position,val,error)
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Interface), intent(INOUT):: cli      !< CLI data.
   character(*), optional,             intent(IN)::    pref     !< Prefixing string.
-  character(*),                       intent(IN)::    switch   !< Switch name.
+  character(*), optional,             intent(IN)::    switch   !< Switch name.
+  integer(I4P), optional,             intent(IN)::    position !< Position of positional CLA.
   class(*),                           intent(INOUT):: val      !< CLA value.
   integer(I4P),                       intent(OUT)::   error    !< Error trapping flag.
   character(len=:), allocatable::                     prefd    !< Prefixing string.
@@ -344,18 +384,27 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   prefd = '' ; if (present(pref)) prefd = pref
-  ! searching for the CLA corresponding to switch
-  found = .false.
-  do a=1,cli%Na
-    if ((cli%cla(a)%switch==switch).or.(cli%cla(a)%switch_ab==switch)) then
-      found = .true.
-      exit
+  if (present(switch)) then
+    ! searching for the CLA corresponding to switch
+    found = .false.
+    do a=1,cli%Na
+      if (.not.cli%cla(a)%positional) then
+        if ((cli%cla(a)%switch==switch).or.(cli%cla(a)%switch_ab==switch)) then
+          found = .true.
+          exit
+        endif
+      endif
+    enddo
+    if (.not.found) then
+      write(stderr,'(A)')prefd//' Error: there is no CLA into CLI containing "'//trim(adjustl(switch))//'"'
+    else
+      call cli%cla(a)%get(pref=prefd,val=val,error=error)
     endif
-  enddo
-  if (.not.found) then
-    write(stderr,'(A)')prefd//' Error: there is no CLA into CLI containing "'//trim(adjustl(switch))//'"'
+  elseif (present(position)) then
+    call cli%cla(position)%get(pref=prefd,val=val,error=error)
   else
-    call cli%cla(a)%get(pref=prefd,val=val,error=error)
+    error = 1
+    write(stderr,'(A)')prefd//' Error: to obtaining a CLA value, one of CLA switch name or CLA position must be provided!'
   endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------

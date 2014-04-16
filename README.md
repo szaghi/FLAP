@@ -6,28 +6,36 @@ A very simple and stupid tool for building easily nice Command Line Interface fo
 ### A Taste of FLAP
 
 Running the provided test program, __flap_test__, a taste of FLAP is served:
-```bash
+```shell
 +--> flap_test, a testing program for FLAP library
 +--> Parsing Command Line Arguments
 |--> Error: the Command Line Interface requires at least 1 arguments to be passed whereas only 0 have been!
 |--> The Command Line Interface (CLI) has the following options
-|-->   FLAP_Test -string value [-integer value] [-real value] [-boolean]
+|-->   FLAP_Test [value] -string value [-integer value] [-real value] [-boolean] [-boolean_val value]
 |--> Each Command Line Argument (CLA) has the following meaning:
+|-->   [value]
+|-->     Positional real input
+|-->     It is a positional CLA having position "1-th"
+|-->     It is a optional CLA which default value is "1.0"
 |-->   [-string value] or [-s value]
 |-->     String input
 |-->     It is a non optional CLA thus must be passed to CLI
-|-->   [-integer value] or [-i value]
-|-->     Integer input
-|-->     It is a optional CLA which default value is "-1"
+|-->   [-integer value] or [-i value] with value chosen in: (1,3,5)
+|-->     Integer input with fixed range
+|-->     It is a optional CLA which default value is "1"
 |-->   [-real value] or [-r value]
 |-->     Real input
 |-->     It is a optional CLA which default value is "1.0"
 |-->   [-boolean] or [-b]
 |-->     Boolean input
 |-->     It is a optional CLA which default value is ".false."
+|-->   [-boolean_val value] or [-bv value]
+|-->     Valued boolean input
+|-->     It is a optional CLA which default value is ".true."
 |--> Usage examples:
 |-->   -) flap_test -s 'Hello FLAP'
 |-->   -) flap_test -s 'Hello FLAP' -i -2
+|-->   -) flap_test 33.0 -s 'Hello FLAP' -i -2
 |-->   -) flap_test -s 'Hello FLAP' -i -2 -r 33.d0
 |-->   -) flap_test -string 'Hello FLAP' -boolean
 ```
@@ -36,17 +44,22 @@ Not so bad for just a very few statements as the following:
 ...
 write(stdout,'(A)')'+--> flap_test, a testing program for FLAP library'
 ! setting CLAs
-call cli%add(switch='-string',     switch_ab='-s', help='String input',        required=.true.,  act='store'                   )
-call cli%add(switch='-integer',    switch_ab='-i', help='Integer input',       required=.false., act='store',     def='-1'     )
-call cli%add(switch='-real',       switch_ab='-r', help='Real input',          required=.false., act='store',     def='1.0'    )
-call cli%add(switch='-boolean',    switch_ab='-b', help='Boolean input',       required=.false., act='store_true',def='.false.')
-call cli%add(switch='-boolean_val',switch_ab='-bv',help='Valued boolean input',required=.false., act='store',     def='.true.' )
+call cli%add(pref='|-->',switch='-string',switch_ab='-s',help='String input',required=.true.,act='store',error=error)
+call cli%add(pref='|-->',switch='-integer',switch_ab='-i',help='Integer input with fixed range',required=.false.,act='store',&
+             def='1',choices='1,3,5',error=error)
+call cli%add(pref='|-->',switch='-real',switch_ab='-r',help='Real input',required=.false.,act='store',def='1.0',error=error)
+call cli%add(pref='|-->',switch='-boolean',switch_ab='-b',help='Boolean input',required=.false.,act='store_true',def='.false.',&
+             error=error)
+call cli%add(pref='|-->',switch='-boolean_val',switch_ab='-bv',help='Valued boolean input',required=.false., act='store',&
+             def='.true.',error=error)
+call cli%add(pref='|-->',positional=.true.,position=1,help='Positional real input',required=.false.,def='1.0',error=error)
 ! checking consistency of CLAs
 call cli%check(error=error,pref='|-->') ; if (error/=0) stop
 ! parsing CLI
 write(stdout,'(A)')'+--> Parsing Command Line Arguments'
 call cli%parse(examples=["flap_test -s 'Hello FLAP'               ",&
                          "flap_test -s 'Hello FLAP' -i -2         ",&
+                         "flap_test 33.0 -s 'Hello FLAP' -i -2    ",&
                          "flap_test -s 'Hello FLAP' -i -2 -r 33.d0",&
                          "flap_test -string 'Hello FLAP' -boolean "],progname='FLAP_Test',error=error,pref='|-->')
 ...
@@ -73,14 +86,14 @@ Modern Fortran standards (2003+) have introduced support for Command Line Argume
 + user-friendly methods for building flexible and effective Command Line Interfaces (CLI);
 + handling optional and non optional Command Line Argument (CLA);
 + handling boolean CLA;
++ handling positional CLA;
 + handling list of allowable values for defined CLA with automatic consistency check;
 + automatic generation of help and usage messages;
 + errors trapping for invalid CLI usage.
 + ...
 
 ## <a name="todos"></a>Todos
-+ Support for positional CLAs;
-+ support for multiple valued (list of values) CLAs.
++ Support for multiple valued (list of values) CLAs.
 + ...
 
 ## <a name="requirements"></a>Requirements
@@ -133,7 +146,7 @@ Essentially, for building up a minimal CLI you should follow the 3 steps:
 ```
 - adding one or more CLA definition to the CLI:
 ```fortran
-  call cli%add(switch='-o',help='Output file name',def='myfile.md')
+  call cli%add(switch='-o',help='Output file name',def='myfile.md',error=err)
 ```
   more details on how declare a CLA are reported in the followings;
 - parsing the actually passed command line arguments:
@@ -159,28 +172,32 @@ There are two ways for adding a new definition of CLA into your CLI:
 
 Note that in the second case you must access also to the module __Data_Type_Command_Line_Argument.f90__  and not only to __Data_Type_Command_Line_Interface.f90__. In all cases, the definition of a new CLA has presently the following signature:
 ```fortran
-  call cli%add(switch_ab,help,required,act,def,nargs,choices,switch)
+  call cli%add(pref,switch,switch_ab,help,required,positional,position,act,def,nargs,choices,error)
 ```
 or
 ```fortran
-  call cla%init(switch_ab,help,required,act,def,nargs,choices,switch)
+  call cla%init(pref,switch,switch_ab,help,required,positional,position,act,def,nargs,choices,error)
 ```
 or
 ```fortran
-  cla = cla_init(switch_ab,help,required,act,def,nargs,choices,switch)
+  cla = cla_init(pref,switch,switch_ab,help,required,positional,position,act,def,nargs,choices,error)
 ```
 where
 ```fortran
-  character(*), optional, intent(IN):: switch_ab !< Abbreviated switch name.
-  character(*), optional, intent(IN):: help      !< Help message describing the CLA.
-  logical,      optional, intent(IN):: required  !< Flag for set required argument.
-  character(*), optional, intent(IN):: act       !< CLA value action.
-  character(*), optional, intent(IN):: def       !< Default value.
-  character(*), optional, intent(IN):: nargs     !< Number of arguments of CLA.
-  character(*), optional, intent(IN):: choices   !< List of allowable values for the argument.
-  character(*),           intent(IN):: switch    !< Switch name.
+  character(*), optional, intent(IN)::  pref       !< Prefixing string.
+  character(*), optional, intent(IN)::  switch     !< Switch name.
+  character(*), optional, intent(IN)::  switch_ab  !< Abbreviated switch name.
+  character(*), optional, intent(IN)::  help       !< Help message describing the CLA.
+  logical,      optional, intent(IN)::  required   !< Flag for set required argument.
+  logical,      optional, intent(IN)::  positional !< Flag for checking if CLA is a positional or a named CLA.
+  integer(I4P), optional, intent(IN)::  position   !< Position of positional CLA.
+  character(*), optional, intent(IN)::  act        !< CLA value action.
+  character(*), optional, intent(IN)::  def        !< Default value.
+  character(*), optional, intent(IN)::  nargs      !< Number of arguments of CLA.
+  character(*), optional, intent(IN)::  choices    !< List of allowable values for the argument.
+  integer(I4P),           intent(OUT):: error      !< Error trapping flag.
 ```
-The dummy arguments should be auto-explicative. Note that the _help_ dummy argument is used for printing a pretty help message explaining the CLI usage, thus should be always provided even if it is an optional argument. It is also worthy of note that the abbreviated switch is set equal to switch name (the only argument non optional) is no otherwise defined.
+The dummy arguments should be auto-explicative. Note that the _help_ dummy argument is used for printing a pretty help message explaining the CLI usage, thus should be always provided even if it is an optional argument. It is also worthy of note that the abbreviated switch is set equal to switch name (if passed) if no otherwise defined. Moreover, one between _switch_ and _position_ must be defined: if _switch_ is defined then a named CLA is initialed, otherwise _position_ must be defined (with _positional=.true._) and a positional CLA is initialized.
 
 Note that _choices_  must be a comma-separated list of allowable values and if it has been specified the passed value is checked to be consistent with this list when the _get_ method is invoked: an error code is returned and if the value is not into the specified range an error message is printed to stderr. However the value of CLA is not modified and it is equal to the passed value.
 
@@ -200,6 +217,41 @@ integer(I4P),           intent(OUT):: error        !< Error trapping flag.
 The dummy arguments should be auto-explicative. Note that the _help_  and _examples_ dummy arguments are used for printing a pretty help message explaining the CLI usage, thus should be always provided even if they are optional arguments. The help messages are print is one of the following issues arise:
 - the switch name of unknown CLA is passed;
 - the number of passed CLAs is less than the required CLAs previously defined.
+
+#### Getting a CLA value from parsed CLI
+After the CLI has been parsed, the user is allowed to get any of the defined CLA value. Accordingly to the user-definition, a CLA
+value can be obtained either by the switch name (for named CLA) or by the CLA position (for positional CLA):
+```fortran
+call cli%get(switch='-r',val=rval,error=err)
+```
+or
+```fortran
+call cli%get(position=1,val=prval,error=err)
+```
+where _rval_ and _prval_ are two previously defined variables. Currently, the _val_ variable can be only scalar of types _integer_, _real_, _logical_ and _character_. The complete API of _cli%get_ is the following:
+```fortran
+  call cli%get(pref,switch,position,val,error)
+```
+where the signature of  _get_ is:
+```fortran
+  character(*), optional, intent(IN)::    pref     !< Prefixing string.
+  character(*), optional, intent(IN)::    switch   !< Switch name.
+  integer(I4P), optional, intent(IN)::    position !< Position of positional CLA.
+  class(*),               intent(INOUT):: val      !< CLA value.
+  integer(I4P),           intent(OUT)::   error    !< Error trapping flag.
+```
+The dummy arguments should be auto-explicative. Note that the _switch_ passed can be also the abbreviated form if defined differently from the extended one. If no _switch_ neither _position_ is passed and error is arised.
+
+In the case that the CLA is directly handled, i.e. without the interface of CLI type, its value can be obtained by its type bound procedure _get_:
+```fortran
+  call cla%get(pref,val,error)
+```
+where the signature of  _get_ is:
+```fortran
+  character(*), optional, intent(IN)::    pref  !< Prefixing string.
+  class(*),               intent(INOUT):: val   !< CLA value.
+  integer(I4P),           intent(OUT)::   error !< Error trapping flag.
+```
 
 ### Compile Testing Program
 
