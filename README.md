@@ -95,6 +95,7 @@ Modern Fortran standards (2003+) have introduced support for Command Line Argume
 ## <a name="todos"></a>Todos
 + Support for multiple valued (list of values) CLAs.
 + ...
++ any feature request is welcome!
 
 ## <a name="requirements"></a>Requirements
 + Modern Fortran Compiler (standard 2003+);
@@ -109,10 +110,9 @@ FLAP is an open source project, it is distributed under the [GPL v3](http://www.
 ## <a name="usage"></a>Usage
 
 ### API
-FLAP is currently composed by two modules, namely  __Data_Type_Command_Line_Argument.f90__ and  __Data_Type_Command_Line_Interface.f90__. The first one is such as a back-end handling CLAs while the latter is the front-end providing all you need to handle your CLI. Two auxiliary modules, __IR_Precision.f90__ and __Lib_IO_Misc.f90__ are used for minor tasks. Finally, a testing program __flap_test__ is provided showing a basic example of FLAP usage.
+FLAP is currently composed by one module, namely  __Data_Type_Command_Line_Interface.f90__, where two derived types are defined, namely __Type_Command_Line_Argument__ and __Type_Command_Line_Interface__. The first one is a back-end handling CLAs while the latter is the front-end providing all you need to handle your CLI. Two auxiliary modules, __IR_Precision.f90__ and __Lib_IO_Misc.f90__ are used for minor tasks. Finally, a testing program __flap_test__ is provided showing a basic example of FLAP usage.
 
 The main CLI object, that is the only one you must know, is __Type_Command_Line_Interface__
-
 ```fortran
 type, public:: Type_Command_Line_Interface
   integer(I4P)::                                  Na          = 0_I4P !< Number of CLA.
@@ -120,19 +120,17 @@ type, public:: Type_Command_Line_Interface
   integer(I4P)::                                  Na_optional = 0_I4P !< Number of command line arguments that are optional for CLI.
   type(Type_Command_Line_Argument), allocatable:: cla(:)              !< CLA list [1:Na].
   contains
-    procedure:: free         ! Procedure for freeing dynamic memory.
-    procedure:: add_cla      ! Procedure for adding CLA to CLAs list.
-    procedure:: add_init_cla ! Procedure for adding an on-the-fly-initialized CLA to CLAs list.
-    procedure:: check        ! Procedure for checking CLAs data consistenc.
-    procedure:: passed       ! Procedure for checking if a CLA has been passed.
-    procedure:: parse        ! Procedure for parsing Command Line Interfaces by means of a previously initialized CLA list.
-    procedure:: get          ! Procedure for getting CLA value from CLAs list parsed.
-    final::     finalize     ! Procedure for freeing dynamic memory when finalizing.
-    generic::   add => add_cla,add_init_cla
+    procedure:: free     ! Procedure for freeing dynamic memory.
+    procedure:: add      ! Procedure for adding CLA to CLAs list.
+    procedure:: check    ! Procedure for checking CLAs data consistenc.
+    procedure:: passed   ! Procedure for checking if a CLA has been passed.
+    procedure:: parse    ! Procedure for parsing Command Line Interfaces by means of a previously initialized CLA list.
+    procedure:: get      ! Procedure for getting CLA value from CLAs list parsed.
+    final::     finalize ! Procedure for freeing dynamic memory when finalizing.
     ! operators overloading
-    generic:: assignment(=) => assign_self
+    generic:: assignment(=) => assign_cli
     ! private procedures
-    procedure, pass(self1), private:: assign_self
+    procedure, pass(self1), private:: assign_cli
 endtype Type_Command_Line_Interface
 ```
 
@@ -162,25 +160,9 @@ Essentially, for building up a minimal CLI you should follow the 3 steps:
 
 #### Adding a new CLA to CLI
 
-There are two ways for adding a new definition of CLA into your CLI:
-
-- adding and defining a CLA on-the-fly using _add_ generic type bound procedure;
-- adding a previously defined CLA
-```fortran
-  type(Type_Command_Line_Command):: cla
-```
-
-Note that in the second case you must access also to the module __Data_Type_Command_Line_Argument.f90__  and not only to __Data_Type_Command_Line_Interface.f90__. In all cases, the definition of a new CLA has presently the following signature:
+CLA cannot be directly defined and modified: to handle a CLA you must use CLI methods. Adding CLA to CLI is performed through the _add_ method:
 ```fortran
   call cli%add(pref,switch,switch_ab,help,required,positional,position,act,def,nargs,choices,error)
-```
-or
-```fortran
-  call cla%init(pref,switch,switch_ab,help,required,positional,position,act,def,nargs,choices,error)
-```
-or
-```fortran
-  cla = cla_init(pref,switch,switch_ab,help,required,positional,position,act,def,nargs,choices,error)
 ```
 where
 ```fortran
@@ -197,9 +179,9 @@ where
   character(*), optional, intent(IN)::  choices    !< List of allowable values for the argument.
   integer(I4P),           intent(OUT):: error      !< Error trapping flag.
 ```
-The dummy arguments should be auto-explicative. Note that the _help_ dummy argument is used for printing a pretty help message explaining the CLI usage, thus should be always provided even if it is an optional argument. It is also worthy of note that the abbreviated switch is set equal to switch name (if passed) if no otherwise defined. Moreover, one between _switch_ and _position_ must be defined: if _switch_ is defined then a named CLA is initialed, otherwise _position_ must be defined (with _positional=.true._) and a positional CLA is initialized.
+The dummy arguments should be auto-explicative. Note that the _help_ dummy argument is used for printing a pretty help message explaining the CLI usage, thus should be always provided even if CLA is an optional argument. It is also worthy of note that the abbreviated switch is set equal to switch name (if passed) if no otherwise defined. Moreover, one between _switch_ and _position_ must be defined: if _switch_ is defined then a named CLA is initialed, otherwise _position_ must be defined (with _positional=.true._) and a positional CLA is initialized. When a CLA is added a self-consistency-check is performed, e.g. it is checked if an optional CLA has a default value or if one of _position_ and _switch_ has been passed. In case the self-consistency-check fails and error code is returned and an error message is printed to _stderr_.
 
-Note that _choices_  must be a comma-separated list of allowable values and if it has been specified the passed value is checked to be consistent with this list when the _get_ method is invoked: an error code is returned and if the value is not into the specified range an error message is printed to stderr. However the value of CLA is not modified and it is equal to the passed value.
+Note that _choices_  must be a comma-separated list of allowable values and if it has been specified the passed value is checked to be consistent with this list when the _get_ method is invoked: an error code is returned and if the value is not into the specified range an error message is printed to _stderr_. However the value of CLA is not modified and it is equal to the passed value.
 
 #### Parsing the CLI
 The complete signature of _parse_ method is the following:
@@ -214,7 +196,9 @@ character(*), optional, intent(IN)::  examples(1:) !< Examples of correct usage.
 character(*),           intent(IN)::  progname     !< Program name.
 integer(I4P),           intent(OUT):: error        !< Error trapping flag.
 ```
-The dummy arguments should be auto-explicative. Note that the _help_  and _examples_ dummy arguments are used for printing a pretty help message explaining the CLI usage, thus should be always provided even if they are optional arguments. The help messages are print is one of the following issues arise:
+The dummy arguments should be auto-explicative. Note that the _help_  and _examples_ dummy arguments are used for printing a pretty help message explaining the CLI usage, thus should be always provided even if they are optional arguments. It is worthy of note that when _parse_ method is invoked a consistency-check is invoked: in particular it is checked that all named CLAs (the non positional ones having defined the switch name) have a unique switch name in order to avoid ambiguity.
+
+The help messages are print if one of the following issues arise:
 - the switch name of unknown CLA is passed;
 - the number of passed CLAs is less than the required CLAs previously defined.
 
@@ -241,17 +225,6 @@ where the signature of  _get_ is:
   integer(I4P),           intent(OUT)::   error    !< Error trapping flag.
 ```
 The dummy arguments should be auto-explicative. Note that the _switch_ passed can be also the abbreviated form if defined differently from the extended one. If no _switch_ neither _position_ is passed and error is arised.
-
-In the case that the CLA is directly handled, i.e. without the interface of CLI type, its value can be obtained by its type bound procedure _get_:
-```fortran
-  call cla%get(pref,val,error)
-```
-where the signature of  _get_ is:
-```fortran
-  character(*), optional, intent(IN)::    pref  !< Prefixing string.
-  class(*),               intent(INOUT):: val   !< CLA value.
-  integer(I4P),           intent(OUT)::   error !< Error trapping flag.
-```
 
 ### Compile Testing Program
 
