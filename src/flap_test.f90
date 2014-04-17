@@ -44,6 +44,13 @@ integer(I4P)::                      error  !< Error trapping flag.
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 write(stdout,'(A)')'+--> flap_test, a testing program for FLAP library'
+! initializing CLI
+call cli%init(progname='flap_test',                                &
+              examples=["flap_test -s 'Hello FLAP'               ",&
+                        "flap_test -s 'Hello FLAP' -i -2         ",&
+                        "flap_test 33.0 -s 'Hello FLAP' -i -2    ",&
+                        "flap_test -s 'Hello FLAP' -i -2 -r 33.d0",&
+                        "flap_test -string 'Hello FLAP' -boolean "])
 ! setting CLAs
 call cli%add(pref='|-->',switch='-string',switch_ab='-s',help='String input',required=.true.,act='store',error=error)
 call cli%add(pref='|-->',switch='-integer',switch_ab='-i',help='Integer input with fixed range',required=.false.,act='store',&
@@ -54,15 +61,9 @@ call cli%add(pref='|-->',switch='-boolean',switch_ab='-b',help='Boolean input',r
 call cli%add(pref='|-->',switch='-boolean_val',switch_ab='-bv',help='Valued boolean input',required=.false., act='store',&
              def='.true.',error=error)
 call cli%add(pref='|-->',positional=.true.,position=1,help='Positional real input',required=.false.,def='1.0',error=error)
-! checking consistency of CLAs
-call cli%check(error=error,pref='|-->') ; if (error/=0) stop
 ! parsing CLI
 write(stdout,'(A)')'+--> Parsing Command Line Arguments'
-call cli%parse(examples=["flap_test -s 'Hello FLAP'               ",&
-                         "flap_test -s 'Hello FLAP' -i -2         ",&
-                         "flap_test 33.0 -s 'Hello FLAP' -i -2    ",&
-                         "flap_test -s 'Hello FLAP' -i -2 -r 33.d0",&
-                         "flap_test -string 'Hello FLAP' -boolean "],progname='FLAP_Test',error=error,pref='|-->')
+call cli%parse(error=error,pref='|-->')
 if (error/=0) stop
 ! using CLI data to set FLAP_Test behaviour
 call cli%get(switch='-s',    val=sval,  error=error,pref='|-->') ; if (error/=0) stop

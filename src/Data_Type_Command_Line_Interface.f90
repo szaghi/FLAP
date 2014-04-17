@@ -75,14 +75,18 @@ type, public:: Type_Command_Line_Interface
   integer(I4P)::                                  Na_required = 0_I4P !< Number of command line arguments that CLI requires.
   integer(I4P)::                                  Na_optional = 0_I4P !< Number of command line arguments that are optional for CLI.
   type(Type_Command_Line_Argument), allocatable:: cla(:)              !< CLA list [1:Na].
+  character(len=:), allocatable::                 progname            !< Program name.
+  character(len=:), allocatable::                 help                !< Help message introducing the CLI usage.
+  character(len=:), allocatable::                 examples(:)         !< Examples of correct usage.
   contains
-    procedure:: free         ! Procedure for freeing dynamic memory.
-    procedure:: add          ! Procedure for adding CLA to CLAs list.
-    procedure:: check        ! Procedure for checking CLAs data consistenc.
-    procedure:: passed       ! Procedure for checking if a CLA has been passed.
-    procedure:: parse        ! Procedure for parsing Command Line Interfaces by means of a previously initialized CLA list.
-    procedure:: get          ! Procedure for getting CLA value from CLAs list parsed.
-    final::     finalize     ! Procedure for freeing dynamic memory when finalizing.
+    procedure:: free     ! Procedure for freeing dynamic memory.
+    procedure:: init     ! Procedure for initializing CLI.
+    procedure:: add      ! Procedure for adding CLA to CLAs list.
+    procedure:: check    ! Procedure for checking CLAs data consistenc.
+    procedure:: passed   ! Procedure for checking if a CLA has been passed.
+    procedure:: parse    ! Procedure for parsing Command Line Interfaces by means of a previously initialized CLA list.
+    procedure:: get      ! Procedure for getting CLA value from CLAs list parsed.
+    final::     finalize ! Procedure for freeing dynamic memory when finalizing.
     ! operators overloading
     generic:: assignment(=) => assign_cli
     ! private procedures
@@ -500,6 +504,27 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine finalize
 
+  !> @brief Procedure for initializing CLI.
+  pure subroutine init(cli,progname,help,examples)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  class(Type_Command_Line_Interface), intent(INOUT):: cli          !< CLI data.
+  character(*), optional,             intent(IN)::    progname     !< Program name.
+  character(*), optional,             intent(IN)::    help         !< Help message introducing the CLI usage.
+  character(*), optional,             intent(IN)::    examples(1:) !< Examples of correct usage.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  cli%progname = 'program'                                                     ; if (present(progname)) cli%progname = progname
+  cli%help     = ' The Command Line Interface (CLI) has the following options' ; if (present(help    )) cli%help     = help
+  if (present(examples)) then
+    allocate(character(len=len(examples(1))):: cli%examples(1:size(examples)))
+    cli%examples = examples
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine init
+
   !> @brief Procedure for adding CLA to CLAs list.
   !> @note If not otherwise declared the action on CLA value is set to "store" a value that must be passed after the switch name
   !> or directly passed in case of positional CLA.
@@ -636,19 +661,15 @@ contains
 
   !> @brief Procedure for parsing Command Line Interfaces by means of a previously initialized CLA list.
   !> @note The leading and trailing white spaces are removed from CLA values.
-  subroutine parse(cli,pref,help,examples,progname,error)
+  subroutine parse(cli,pref,error)
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Interface), intent(INOUT):: cli            !< CLI data.
   character(*), optional,             intent(IN)::    pref           !< Prefixing string.
-  character(*), optional,             intent(IN)::    help           !< Help message describing the Command Line Interface.
-  character(*), optional,             intent(IN)::    examples(1:)   !< Examples of correct usage.
-  character(*),                       intent(IN)::    progname       !< Program name.
   integer(I4P),                       intent(OUT)::   error          !< Error trapping flag.
   integer(I4P)::                                      Na             !< Number of command line arguments passed.
   character(max_val_len)::                            switch         !< Switch name.
   character(max_val_len)::                            val            !< Switch value.
-  character(len=:), allocatable::                     cli_help       !< Dummy variable for CLI help.
   logical::                                           found          !< Flag for checking if switch has been found in cli%cla.
   character(len=:), allocatable::                     prefd          !< Prefixing string.
   integer(I4P)::                                      a,aa           !< Counter for command line arguments.
@@ -657,12 +678,6 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   error = 0
   prefd = '' ; if (present(pref)) prefd = pref
-  ! setting the general CLI help message
-  if (present(help)) then
-    cli_help = help
-  else
-    cli_help = ' The Command Line Interface (CLI) has the following options'
-  endif
   ! counting the passed CLA
   Na = command_argument_count()
   if (Na<cli%Na_required) then
@@ -672,6 +687,8 @@ contains
     error = 1
     return
   else
+    ! checking CLI consistency
+    call cli%check(error=error,pref=prefd) ; if (error/=0) return
     ! parsing switch
     a = 0
     do while (a<Na)
@@ -733,20 +750,20 @@ contains
     !-------------------------------------------------------------------------------------------------------------------------------
 
     !-------------------------------------------------------------------------------------------------------------------------------
-    cla_list_sign = '   '//progname//' '
+    cla_list_sign = '   '//cli%progname//' '
     do a=1,cli%Na
       call cli%cla(a)%add_signature(signature=cla_list_sign)
     enddo
-    write(stdout,'(A)')prefd//cli_help
+    write(stdout,'(A)')prefd//cli%help
     write(stdout,'(A)')prefd//cla_list_sign
     write(stdout,'(A)')prefd//' Each Command Line Argument (CLA) has the following meaning:'
     do a=1,Cli%Na
       call cli%cla(a)%print(pref=prefd,unit=stdout)
     enddo
-    if (present(examples)) then
+    if (allocated(cli%examples)) then
       write(stdout,'(A)')prefd//' Usage examples:'
-      do a=1,size(examples,dim=1)
-        write(stdout,'(A)')prefd//'   -) '//trim(examples(a))
+      do a=1,size(cli%examples,dim=1)
+        write(stdout,'(A)')prefd//'   -) '//trim(cli%examples(a))
       enddo
     endif
     return

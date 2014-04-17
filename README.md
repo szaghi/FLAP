@@ -43,6 +43,13 @@ Not so bad for just a very few statements as the following:
 ```fortran
 ...
 write(stdout,'(A)')'+--> flap_test, a testing program for FLAP library'
+! initializing CLI
+call cli%init(progname='flap_test',                                &
+              examples=["flap_test -s 'Hello FLAP'               ",&
+                        "flap_test -s 'Hello FLAP' -i -2         ",&
+                        "flap_test 33.0 -s 'Hello FLAP' -i -2    ",&
+                        "flap_test -s 'Hello FLAP' -i -2 -r 33.d0",&
+                        "flap_test -string 'Hello FLAP' -boolean "])
 ! setting CLAs
 call cli%add(pref='|-->',switch='-string',switch_ab='-s',help='String input',required=.true.,act='store',error=error)
 call cli%add(pref='|-->',switch='-integer',switch_ab='-i',help='Integer input with fixed range',required=.false.,act='store',&
@@ -53,15 +60,9 @@ call cli%add(pref='|-->',switch='-boolean',switch_ab='-b',help='Boolean input',r
 call cli%add(pref='|-->',switch='-boolean_val',switch_ab='-bv',help='Valued boolean input',required=.false., act='store',&
              def='.true.',error=error)
 call cli%add(pref='|-->',positional=.true.,position=1,help='Positional real input',required=.false.,def='1.0',error=error)
-! checking consistency of CLAs
-call cli%check(error=error,pref='|-->') ; if (error/=0) stop
 ! parsing CLI
 write(stdout,'(A)')'+--> Parsing Command Line Arguments'
-call cli%parse(examples=["flap_test -s 'Hello FLAP'               ",&
-                         "flap_test -s 'Hello FLAP' -i -2         ",&
-                         "flap_test 33.0 -s 'Hello FLAP' -i -2    ",&
-                         "flap_test -s 'Hello FLAP' -i -2 -r 33.d0",&
-                         "flap_test -string 'Hello FLAP' -boolean "],progname='FLAP_Test',error=error,pref='|-->')
+call cli%parse(error=error,pref='|-->')
 ...
 ```
 
@@ -119,8 +120,12 @@ type, public:: Type_Command_Line_Interface
   integer(I4P)::                                  Na_required = 0_I4P !< Number of command line arguments that CLI requires.
   integer(I4P)::                                  Na_optional = 0_I4P !< Number of command line arguments that are optional for CLI.
   type(Type_Command_Line_Argument), allocatable:: cla(:)              !< CLA list [1:Na].
+  character(len=:), allocatable::                 progname            !< Program name.
+  character(len=:), allocatable::                 help                !< Help message introducing the CLI usage.
+  character(len=:), allocatable::                 examples(:)         !< Examples of correct usage.
   contains
     procedure:: free     ! Procedure for freeing dynamic memory.
+    procedure:: init     ! Procedure for initializing CLI.
     procedure:: add      ! Procedure for adding CLA to CLAs list.
     procedure:: check    ! Procedure for checking CLAs data consistenc.
     procedure:: passed   ! Procedure for checking if a CLA has been passed.
@@ -134,7 +139,7 @@ type, public:: Type_Command_Line_Interface
 endtype Type_Command_Line_Interface
 ```
 
-Fews methods are provided within this derived type: _free_ for freeing the CLI memory, _add_ for adding a CLA to the CLI, _check_ for checking the CLAs definition consistency, _passed_ for checking is a particular CLA has been actually passed, _parse_ for parsing all passed CLAs accordingly to the list previously defined for building up the CLI and _get_ for returning a particular CLA value and storing it into user-defined variable.
+Fews methods are provided within this derived type: _free_ for freeing the CLI memory, _init_ for initializing CLI with user defined help messages, _add_ for adding a CLA to the CLI, _check_ for checking the CLAs definition consistency, _passed_ for checking is a particular CLA has been actually passed, _parse_ for parsing all passed CLAs accordingly to the list previously defined for building up the CLI and _get_ for returning a particular CLA value and storing it into user-defined variable.
 
 Essentially, for building up a minimal CLI you should follow the 3 steps:
 
@@ -149,14 +154,28 @@ Essentially, for building up a minimal CLI you should follow the 3 steps:
   more details on how declare a CLA are reported in the followings;
 - parsing the actually passed command line arguments:
 ```fortran
-  call cli%parse(progname='example',error=error)
+  call cli%parse(error=error)
 ```
   more details on parsing method are reported in the followings;
 - getting parsed values and storing into user-defined variables:
 ```fortran
   call cli%get(switch='-o',val=OutputFilename,error=error)
 ```
-  _OutputFilename_ and _error_ being previously defined variables.
+  _OutputFilename_ and _error_ being previously defined variables. Optionally you can initialize CLI with custom help messages by means of _init_ method.
+
+#### Initializing CLI with personalized help messages
+
+CLI data type can already (quasi-automatically) handle CLAs through its default values (provided from the baseline variable declaration, i.e. `type(Type_Command_Line_Interface):: cli`). However, in order to improve the clearness CLI messages you can personalized help messages by means of _init_ method (that remains an optional step):
+```fortran
+  call cli%init(progname,help,examples)
+```
+where
+```fortran
+  character(*), optional, intent(IN):: progname     !< Program name.
+  character(*), optional, intent(IN):: help         !< Help message introducing the CLI usage.
+  character(*), optional, intent(IN):: examples(1:) !< Examples of correct usage.
+```
+The dummy arguments should be auto-explicative. Note that the _help_  and _examples_ dummy arguments are used for printing a pretty help message explaining the CLI usage, thus should be always provided even if they are optional arguments. Moreover, due the Fortran limitations, the array containing the examples must have character elements with the same length, thus trailing white spaces must padded to short examples.
 
 #### Adding a new CLA to CLI
 
@@ -186,17 +205,14 @@ Note that _choices_  must be a comma-separated list of allowable values and if i
 #### Parsing the CLI
 The complete signature of _parse_ method is the following:
 ```fortran
-  call cli%parse(pref,help,examples,progname,error)
+  call cli%parse(pref,error)
 ```
 where
 ```fortran
-character(*), optional, intent(IN)::  pref         !< Prefixing string.
-character(*), optional, intent(IN)::  help         !< Help message describing the Command Line Interface.
-character(*), optional, intent(IN)::  examples(1:) !< Examples of correct usage.
-character(*),           intent(IN)::  progname     !< Program name.
-integer(I4P),           intent(OUT):: error        !< Error trapping flag.
+character(*), optional, intent(IN)::  pref  !< Prefixing string.
+integer(I4P),           intent(OUT):: error !< Error trapping flag.
 ```
-The dummy arguments should be auto-explicative. Note that the _help_  and _examples_ dummy arguments are used for printing a pretty help message explaining the CLI usage, thus should be always provided even if they are optional arguments. It is worthy of note that when _parse_ method is invoked a consistency-check is invoked: in particular it is checked that all named CLAs (the non positional ones having defined the switch name) have a unique switch name in order to avoid ambiguity.
+The dummy arguments should be auto-explicative. It is worthy of note that when _parse_ method is invoked a consistency-check is performed: in particular it is checked that all named CLAs (the non positional ones having defined the switch name) have a unique switch name in order to avoid ambiguity.
 
 The help messages are print if one of the following issues arise:
 - the switch name of unknown CLA is passed;
