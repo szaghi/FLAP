@@ -65,6 +65,7 @@ write(stdout,'(A)')'+--> Parsing Command Line Arguments'
 call cli%parse(error=error,pref='|-->')
 ...
 ```
+For a practical example of FLAP usage see [POG](https://github.com/szaghi/OFF/blob/testing/src/POG.f90) source file at line `85`.
 
 ## Table of Contents
 
