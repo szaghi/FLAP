@@ -11,7 +11,7 @@ Running the provided test program, __flap_test__, a taste of FLAP is served:
 +--> Parsing Command Line Arguments
 |--> Error: the Command Line Interface requires at least 1 arguments to be passed whereas only 0 have been!
 |--> The Command Line Interface (CLI) has the following options
-|-->   FLAP_Test [value] -string value [-integer value] [-real value] [-boolean] [-boolean_val value]
+|-->   flap_test  [value] -string value [-integer value] [-real value] [-boolean] [-boolean_val value] [-integer_list value#1 value#2 value#3]
 |--> Each Command Line Argument (CLA) has the following meaning:
 |-->   [value]
 |-->     Positional real input
@@ -32,11 +32,15 @@ Running the provided test program, __flap_test__, a taste of FLAP is served:
 |-->   [-boolean_val value] or [-bv value]
 |-->     Valued boolean input
 |-->     It is a optional CLA which default value is ".true."
+|-->   [-integer_list value#1 value#2 value#3] or [-il value#1 value#2 value#3]
+|-->     Integer list input
+|-->     It is a optional CLA which default value is "1 8 32"
 |--> Usage examples:
 |-->   -) flap_test -s 'Hello FLAP'
-|-->   -) flap_test -s 'Hello FLAP' -i -2
-|-->   -) flap_test 33.0 -s 'Hello FLAP' -i -2
-|-->   -) flap_test -s 'Hello FLAP' -i -2 -r 33.d0
+|-->   -) flap_test -s 'Hello FLAP' -i -2 # printing error...
+|-->   -) flap_test -s 'Hello FLAP' -i 3 -r 33.d0
+|-->   -) flap_test -s 'Hello FLAP' -integer_list 10 -3 87
+|-->   -) flap_test 33.0 -s 'Hello FLAP' -i 5
 |-->   -) flap_test -string 'Hello FLAP' -boolean
 ```
 Not so bad for just a very few statements as the following:
@@ -44,12 +48,13 @@ Not so bad for just a very few statements as the following:
 ...
 write(stdout,'(A)')'+--> flap_test, a testing program for FLAP library'
 ! initializing CLI
-call cli%init(progname='flap_test',                                &
-              examples=["flap_test -s 'Hello FLAP'               ",&
-                        "flap_test -s 'Hello FLAP' -i -2         ",&
-                        "flap_test 33.0 -s 'Hello FLAP' -i -2    ",&
-                        "flap_test -s 'Hello FLAP' -i -2 -r 33.d0",&
-                        "flap_test -string 'Hello FLAP' -boolean "])
+call cli%init(progname='flap_test',                                           &
+              examples=["flap_test -s 'Hello FLAP'                          ",&
+                        "flap_test -s 'Hello FLAP' -i -2 # printing error...",&
+                        "flap_test -s 'Hello FLAP' -i 3 -r 33.d0            ",&
+                        "flap_test -s 'Hello FLAP' -integer_list 10 -3 87   ",&
+                        "flap_test 33.0 -s 'Hello FLAP' -i 5                ",&
+                        "flap_test -string 'Hello FLAP' -boolean            "])
 ! setting CLAs
 call cli%add(pref='|-->',switch='-string',switch_ab='-s',help='String input',required=.true.,act='store',error=error)
 call cli%add(pref='|-->',switch='-integer',switch_ab='-i',help='Integer input with fixed range',required=.false.,act='store',&
@@ -59,6 +64,8 @@ call cli%add(pref='|-->',switch='-boolean',switch_ab='-b',help='Boolean input',r
              error=error)
 call cli%add(pref='|-->',switch='-boolean_val',switch_ab='-bv',help='Valued boolean input',required=.false., act='store',&
              def='.true.',error=error)
+call cli%add(pref='|-->',switch='-integer_list',switch_ab='-il',help='Integer list input',required=.false.,act='store',&
+             nargs='3',args_sep=' ',def='1 8 32',error=error)
 call cli%add(pref='|-->',positional=.true.,position=1,help='Positional real input',required=.false.,def='1.0',error=error)
 ! parsing CLI
 write(stdout,'(A)')'+--> Parsing Command Line Arguments'
@@ -82,20 +89,22 @@ For a practical example of FLAP usage see [POG](https://github.com/szaghi/OFF/bl
 
 ## <a name="what"></a>What is FLAP?
 
-Modern Fortran standards (2003+) have introduced support for Command Line Arguments (CLA), thus it is possible to construct nice and effective Command Line Interface (CLI). FLAP is a small library designed to simplify the (repetitive) construction of complicated CLI in pure Fortran (standard 2003+). FLAP has been inspired by the python module _argparse_ trying to mimic it. Once you have defined what arguments are required setting up the CLI through a user-friendly methods, FLAP will parse the CLAs for you. It is worthy of note that FLAP, as _argparse_, also automatically generates help and usage messages and issues errors when users give the program invalid arguments.
+Modern Fortran standards (2003+) have introduced support for Command Line Arguments (CLA), thus it is possible to construct nice and effective Command Line Interface (CLI). FLAP is a small library designed to simplify the (repetitive) construction of complicated CLI in pure Fortran (standard 2003+). FLAP has been inspired by the python module _argparse_ trying to mimic it. Once you have defined the arguments are required by means of a user-friendly method of the CLI, FLAP will parse the CLAs for you. It is worthy of note that FLAP, as _argparse_, also automatically generates help and usage messages and issues errors when users give the program invalid arguments.
 
 ## <a name="main-features"></a>Main features
-+ user-friendly methods for building flexible and effective Command Line Interfaces (CLI);
-+ handling optional and non optional Command Line Argument (CLA);
-+ handling boolean CLA;
-+ handling positional CLA;
-+ handling list of allowable values for defined CLA with automatic consistency check;
++ User-friendly methods for building flexible and effective Command Line Interfaces (CLI);
++ support optional and non optional Command Line Argument (CLA);
++ support boolean CLA;
++ support positional CLA;
++ support list of allowable values for defined CLA with automatic consistency check;
++ support multiple valued (list of values) CLA;
 + automatic generation of help and usage messages;
-+ errors trapping for invalid CLI usage.
++ self-consistency-check of CLA definition;
++ consistency-check of whole CLI definition;
++ errors trapping for invalid CLI usage;
 + ...
 
 ## <a name="todos"></a>Todos
-+ Support for multiple valued (list of values) CLAs.
 + ...
 + any feature request is welcome!
 
@@ -125,21 +134,22 @@ type, public:: Type_Command_Line_Interface
   character(len=:), allocatable::                 help                !< Help message introducing the CLI usage.
   character(len=:), allocatable::                 examples(:)         !< Examples of correct usage.
   contains
-    procedure:: free     ! Procedure for freeing dynamic memory.
-    procedure:: init     ! Procedure for initializing CLI.
-    procedure:: add      ! Procedure for adding CLA to CLAs list.
-    procedure:: check    ! Procedure for checking CLAs data consistenc.
-    procedure:: passed   ! Procedure for checking if a CLA has been passed.
-    procedure:: parse    ! Procedure for parsing Command Line Interfaces by means of a previously initialized CLA list.
-    procedure:: get      ! Procedure for getting CLA value from CLAs list parsed.
-    final::     finalize ! Procedure for freeing dynamic memory when finalizing.
+    procedure:: free                                ! Procedure for freeing dynamic memory.
+    procedure:: init                                ! Procedure for initializing CLI.
+    procedure:: add                                 ! Procedure for adding CLA to CLAs list.
+    procedure:: check                               ! Procedure for checking CLAs data consistenc.
+    procedure:: passed                              ! Procedure for checking if a CLA has been passed.
+    procedure:: parse                               ! Procedure for parsing Command Line Interfaces.
+    generic::   get => get_cla_cli,get_cla_list_cli ! Procedure for getting CLA value(s) from CLAs list parsed.
+    final::     finalize                            ! Procedure for freeing dynamic memory when finalizing.
     ! operators overloading
     generic:: assignment(=) => assign_cli
     ! private procedures
+    procedure,              private:: get_cla_cli
+    procedure,              private:: get_cla_list_cli
     procedure, pass(self1), private:: assign_cli
 endtype Type_Command_Line_Interface
 ```
-
 Fews methods are provided within this derived type: _free_ for freeing the CLI memory, _init_ for initializing CLI with user defined help messages, _add_ for adding a CLA to the CLI, _check_ for checking the CLAs definition consistency, _passed_ for checking is a particular CLA has been actually passed, _parse_ for parsing all passed CLAs accordingly to the list previously defined for building up the CLI and _get_ for returning a particular CLA value and storing it into user-defined variable.
 
 Essentially, for building up a minimal CLI you should follow the 3 steps:
@@ -182,7 +192,7 @@ The dummy arguments should be auto-explicative. Note that the _help_  and _examp
 
 CLA cannot be directly defined and modified: to handle a CLA you must use CLI methods. Adding CLA to CLI is performed through the _add_ method:
 ```fortran
-  call cli%add(pref,switch,switch_ab,help,required,positional,position,act,def,nargs,choices,error)
+  call cli%add(pref,switch,switch_ab,help,required,positional,position,act,def,nargs,args_sep,choices,error)
 ```
 where
 ```fortran
@@ -195,11 +205,14 @@ where
   integer(I4P), optional, intent(IN)::  position   !< Position of positional CLA.
   character(*), optional, intent(IN)::  act        !< CLA value action.
   character(*), optional, intent(IN)::  def        !< Default value.
-  character(*), optional, intent(IN)::  nargs      !< Number of arguments of CLA.
+  character(*), optional, intent(IN)::  nargs      !< Number of arguments consumed by CLA.
+  character(*), optional, intent(IN)::  args_sep   !< Arguments separator for multiple valued (list) CLA.
   character(*), optional, intent(IN)::  choices    !< List of allowable values for the argument.
   integer(I4P),           intent(OUT):: error      !< Error trapping flag.
 ```
 The dummy arguments should be auto-explicative. Note that the _help_ dummy argument is used for printing a pretty help message explaining the CLI usage, thus should be always provided even if CLA is an optional argument. It is also worthy of note that the abbreviated switch is set equal to switch name (if passed) if no otherwise defined. Moreover, one between _switch_ and _position_ must be defined: if _switch_ is defined then a named CLA is initialed, otherwise _position_ must be defined (with _positional=.true._) and a positional CLA is initialized. When a CLA is added a self-consistency-check is performed, e.g. it is checked if an optional CLA has a default value or if one of _position_ and _switch_ has been passed. In case the self-consistency-check fails and error code is returned and an error message is printed to _stderr_.
+
+If _nargs_ is passed (for defining multiple valued, list, CLA) also __args_sep__ must be passed. It is worth mentioning that __args_sep__ is only the _internal_ separator of the values (i.e. internally used by FLAP): when the values are passed by means of the command line the values must be always separated by means of a white space independently of the separator specified defining the CLA. However, the value of the separator must be consistent with the default list if passed.
 
 Note that _choices_  must be a comma-separated list of allowable values and if it has been specified the passed value is checked to be consistent with this list when the _get_ method is invoked: an error code is returned and if the value is not into the specified range an error message is printed to _stderr_. However the value of CLA is not modified and it is equal to the passed value.
 
@@ -241,7 +254,17 @@ where the signature of  _get_ is:
   class(*),               intent(INOUT):: val      !< CLA value.
   integer(I4P),           intent(OUT)::   error    !< Error trapping flag.
 ```
-The dummy arguments should be auto-explicative. Note that the _switch_ passed can be also the abbreviated form if defined differently from the extended one. If no _switch_ neither _position_ is passed and error is arised.
+The dummy arguments should be auto-explicative. Note that the _switch_ passed can be also the abbreviated form if defined differently from the extended one. If no _switch_ neither _position_ is passed and error is arisen.
+
+Note that for multiple valued (list) CLA, the _get_ method accept also array _val_:
+```fortran
+  character(*), optional, intent(IN)::    pref     !< Prefixing string.
+  character(*), optional, intent(IN)::    switch   !< Switch name.
+  integer(I4P), optional, intent(IN)::    position !< Position of positional CLA.
+  class(*),               intent(INOUT):: val(1:)  !< CLA value.
+  integer(I4P),           intent(OUT)::   error    !< Error trapping flag.
+```
+however, the _get_ method is invoked exactly with the same signature of single valued CLA as above: _get_ is a generic, user-friendly method that automatically handles both scalar and array _val_ variables.
 
 ### Compile Testing Program
 
