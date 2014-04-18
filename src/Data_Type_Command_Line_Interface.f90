@@ -35,14 +35,13 @@ private
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-integer(I4P),     parameter::   max_val_len        = 1000          !< Maximum number of characters of CLA value.
-character(len=*), parameter::   action_store       = 'STORE'       !< CLA that stores a value associated to its switch.
-character(len=*), parameter::   action_store_true  = 'STORE_TRUE'  !< CLA that stores .true. without the necessity of a value.
-character(len=*), parameter::   action_store_false = 'STORE_FALSE' !< CLA that stores .false. without the necessity of a value.
+integer(I4P),     parameter:: max_val_len        = 1000          !< Maximum number of characters of CLA value.
+character(len=*), parameter:: action_store       = 'STORE'       !< CLA that stores a value associated to its switch.
+character(len=*), parameter:: action_store_true  = 'STORE_TRUE'  !< CLA that stores .true. without the necessity of a value.
+character(len=*), parameter:: action_store_false = 'STORE_FALSE' !< CLA that stores .false. without the necessity of a value.
+character(len=*), parameter:: args_sep           = '||!||'       !< Arguments separator for multiple valued (list) CLA.
 !> Derived type containing the useful data for handling command line arguments (CLA).
 !> @note If not otherwise declared the action on CLA value is set to "store" a value.
-!> @note The "args_sep" variable is used only internally: the multiple values of a list CLA must always be seperated by means of
-!> white spaces into the command line.
 !> @ingroup Data_Type_Command_Line_InterfaceDerivedType
 type:: Type_Command_Line_Argument
   character(len=:), allocatable:: switch             !< Switch name.
@@ -55,7 +54,6 @@ type:: Type_Command_Line_Argument
   character(len=:), allocatable:: act                !< CLA value action.
   character(len=:), allocatable:: def                !< Default value.
   character(len=:), allocatable:: nargs              !< Number of arguments consumed by CLA.
-  character(len=:), allocatable:: args_sep           !< Arguments separator for multiple valued (list) CLA.
   character(len=:), allocatable:: choices            !< List (comma separated) of allowable values for the argument.
   character(len=:), allocatable:: val                !< CLA value.
   contains
@@ -118,7 +116,6 @@ contains
   if (allocated( cla%act      )) deallocate(cla%act      )
   if (allocated( cla%def      )) deallocate(cla%def      )
   if (allocated( cla%nargs    )) deallocate(cla%nargs    )
-  if (allocated( cla%args_sep )) deallocate(cla%args_sep )
   if (allocated( cla%choices  )) deallocate(cla%choices  )
   if (allocated( cla%val      )) deallocate(cla%val      )
   return
@@ -160,24 +157,14 @@ contains
       write(stderr,'(A)')prefd//' Error: the CLA "'//cla%switch//'" is not set as "required" but no default value has been set!'
     endif
   endif
-  if ((allocated(cla%nargs)).and.(.not.allocated(cla%args_sep))) then
-    error = 2
-    if (cla%positional) then
-      write(stderr,'(A)')prefd//' Error: the positional CLA "'//trim(str(n=cla%position))//'-th" is set as "list"'//&
-                                ' but no argument separator (args_sep) value has been set!'
-    else
-      write(stderr,'(A)')prefd//' Error: the CLA "'//cla%switch//'" is set as "list"'//&
-                                ' but no argument separator (args_sep) value has been set!'
-    endif
-  endif
   if ((.not.cla%positional).and.(.not.allocated(cla%switch))) then
-    error = 3
+    error = 2
     write(stderr,'(A)')prefd//' Error: a non positional CLA must have a switch name!'
   elseif ((cla%positional).and.(cla%position==0_I4P)) then
-    error = 4
+    error = 3
     write(stderr,'(A)')prefd//' Error: a positional CLA must have a position number different from 0!'
   elseif ((cla%positional).and.(cla%act/=action_store)) then
-    error = 5
+    error = 4
     write(stderr,'(A)')prefd//' Error: a positional CLA must have action set to "'//action_store//'"!'
   endif
   return
@@ -413,7 +400,7 @@ contains
   endif
   if (cla%act==action_store) then
     if (cla%passed) then
-      call tokenize(strin=cla%val,delimiter=cla%args_sep,Nt=Nv,toks=valsV)
+      call tokenize(strin=cla%val,delimiter=args_sep,Nt=Nv,toks=valsV)
       select type(val)
 #ifdef r16p
       type is(real(R16P))
@@ -469,7 +456,7 @@ contains
         enddo
       endselect
     else
-      call tokenize(strin=cla%def,delimiter=cla%args_sep,Nt=Nv,toks=valsD)
+      call tokenize(strin=cla%def,delimiter=' ',Nt=Nv,toks=valsD)
       select type(val)
 #ifdef r16p
       type is(real(R16P))
@@ -532,7 +519,7 @@ contains
         val = .true.
       endselect
     else
-      call tokenize(strin=cla%def,delimiter=cla%args_sep,Nt=Nv,toks=valsD)
+      call tokenize(strin=cla%def,delimiter=' ',Nt=Nv,toks=valsD)
       select type(val)
       type is(logical)
         do v=1,Nv
@@ -547,7 +534,7 @@ contains
         val = .false.
       endselect
     else
-      call tokenize(strin=cla%def,delimiter=cla%args_sep,Nt=Nv,toks=valsD)
+      call tokenize(strin=cla%def,delimiter=' ',Nt=Nv,toks=valsD)
       select type(val)
       type is(logical)
         do v=1,Nv
@@ -591,7 +578,6 @@ contains
           do a=1,nargs
             sig = sig//' value#'//trim(str(.true.,a))
           enddo
-          !sig = ' '//sig(1+len(cla%args_sep):)
         endselect
         if (trim(adjustl(cla%switch))/=trim(adjustl(cla%switch_ab))) then
           sig = '   ['//trim(adjustl(cla%switch))//sig//'] or ['//trim(adjustl(cla%switch_ab))//sig//']'
@@ -663,7 +649,6 @@ contains
           do a=1,nargs
             sig = sig//' value#'//trim(str(.true.,a))
           enddo
-          !sig = ' '//sig(1+len(cla%args_sep):)
         endselect
       else
         sig = ' value'
@@ -708,7 +693,6 @@ contains
   if (allocated(self2%act      )) self1%act        = self2%act
   if (allocated(self2%def      )) self1%def        = self2%def
   if (allocated(self2%nargs    )) self1%nargs      = self2%nargs
-  if (allocated(self2%args_sep )) self1%args_sep   = self2%args_sep
   if (allocated(self2%choices  )) self1%choices    = self2%choices
   if (allocated(self2%val      )) self1%val        = self2%val
                                   self1%required   = self2%required
@@ -773,9 +757,7 @@ contains
   !> @brief Procedure for adding CLA to CLAs list.
   !> @note If not otherwise declared the action on CLA value is set to "store" a value that must be passed after the switch name
   !> or directly passed in case of positional CLA.
-  !> @note The "args_sep" variable is used only internally: the multiple values of a list CLA must always be seperated by means of
-  !> white spaces into the command line.
-  subroutine add(cli,pref,switch,switch_ab,help,required,positional,position,act,def,nargs,args_sep,choices,error)
+  subroutine add(cli,pref,switch,switch_ab,help,required,positional,position,act,def,nargs,choices,error)
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Interface), intent(INOUT):: cli             !< CLI data.
@@ -789,7 +771,6 @@ contains
   character(*), optional,             intent(IN)::    act             !< CLA value action.
   character(*), optional,             intent(IN)::    def             !< Default value.
   character(*), optional,             intent(IN)::    nargs           !< Number of arguments consumed by CLA.
-  character(*), optional,             intent(IN)::    args_sep        !< Arguments separator for multiple valued (list) CLA.
   character(*), optional,             intent(IN)::    choices         !< List of allowable values for the argument.
   integer(I4P),                       intent(OUT)::   error           !< Error trapping flag.
   type(Type_Command_Line_Argument)::                  cla             !< CLA data.
@@ -811,7 +792,6 @@ contains
   cla%act        = action_store            ; if (present(act       )) cla%act        = trim(adjustl(Upper_Case(act)))
                                              if (present(def       )) cla%def        = def
                                              if (present(nargs     )) cla%nargs      = nargs
-                                             if (present(args_sep  )) cla%args_sep   = args_sep
                                              if (present(choices   )) cla%choices    = choices
   prefd = '' ; if (present(pref)) prefd = pref
   call cla%check(pref=prefd,error=error)
@@ -964,9 +944,9 @@ contains
                   endif
                   do aaa=a+1,a+nargs
                     call get_command_argument(aaa,val)
-                    cli%cla(aa)%val = cli%cla(aa)%val//cli%cla(aa)%args_sep//trim(adjustl(val))
+                    cli%cla(aa)%val = cli%cla(aa)%val//args_sep//trim(adjustl(val))
                   enddo
-                  cli%cla(aa)%val = cli%cla(aa)%val(1+len(cli%cla(aa)%args_sep):)
+                  cli%cla(aa)%val = cli%cla(aa)%val(1+len(args_sep):)
                   a = a + nargs
                 endselect
               else

@@ -64,7 +64,7 @@ call cli%add(pref='|-->',switch='-boolean',switch_ab='-b',help='Boolean input',r
 call cli%add(pref='|-->',switch='-boolean_val',switch_ab='-bv',help='Valued boolean input',required=.false., act='store',&
              def='.true.',error=error)
 call cli%add(pref='|-->',switch='-integer_list',switch_ab='-il',help='Integer list input',required=.false.,act='store',&
-             nargs='3',args_sep=' ',def='1 8 32',error=error)
+             nargs='3',def='1 8 32',error=error)
 call cli%add(pref='|-->',positional=.true.,position=1,help='Positional real input',required=.false.,def='1.0',error=error)
 ! parsing CLI
 write(stdout,'(A)')'+--> Parsing Command Line Arguments'

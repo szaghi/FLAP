@@ -65,7 +65,7 @@ call cli%add(pref='|-->',switch='-boolean',switch_ab='-b',help='Boolean input',r
 call cli%add(pref='|-->',switch='-boolean_val',switch_ab='-bv',help='Valued boolean input',required=.false., act='store',&
              def='.true.',error=error)
 call cli%add(pref='|-->',switch='-integer_list',switch_ab='-il',help='Integer list input',required=.false.,act='store',&
-             nargs='3',args_sep=' ',def='1 8 32',error=error)
+             nargs='3',def='1 8 32',error=error)
 call cli%add(pref='|-->',positional=.true.,position=1,help='Positional real input',required=.false.,def='1.0',error=error)
 ! parsing CLI
 write(stdout,'(A)')'+--> Parsing Command Line Arguments'
@@ -192,7 +192,7 @@ The dummy arguments should be auto-explicative. Note that the _help_  and _examp
 
 CLA cannot be directly defined and modified: to handle a CLA you must use CLI methods. Adding CLA to CLI is performed through the _add_ method:
 ```fortran
-  call cli%add(pref,switch,switch_ab,help,required,positional,position,act,def,nargs,args_sep,choices,error)
+  call cli%add(pref,switch,switch_ab,help,required,positional,position,act,def,nargs,choices,error)
 ```
 where
 ```fortran
@@ -206,13 +206,10 @@ where
   character(*), optional, intent(IN)::  act        !< CLA value action.
   character(*), optional, intent(IN)::  def        !< Default value.
   character(*), optional, intent(IN)::  nargs      !< Number of arguments consumed by CLA.
-  character(*), optional, intent(IN)::  args_sep   !< Arguments separator for multiple valued (list) CLA.
   character(*), optional, intent(IN)::  choices    !< List of allowable values for the argument.
   integer(I4P),           intent(OUT):: error      !< Error trapping flag.
 ```
 The dummy arguments should be auto-explicative. Note that the _help_ dummy argument is used for printing a pretty help message explaining the CLI usage, thus should be always provided even if CLA is an optional argument. It is also worthy of note that the abbreviated switch is set equal to switch name (if passed) if no otherwise defined. Moreover, one between _switch_ and _position_ must be defined: if _switch_ is defined then a named CLA is initialed, otherwise _position_ must be defined (with _positional=.true._) and a positional CLA is initialized. When a CLA is added a self-consistency-check is performed, e.g. it is checked if an optional CLA has a default value or if one of _position_ and _switch_ has been passed. In case the self-consistency-check fails and error code is returned and an error message is printed to _stderr_.
-
-If _nargs_ is passed (for defining multiple valued, list, CLA) also __args_sep__ must be passed. It is worth mentioning that __args_sep__ is only the _internal_ separator of the values (i.e. internally used by FLAP): when the values are passed by means of the command line the values must be always separated by means of a white space independently of the separator specified defining the CLA. However, the value of the separator must be consistent with the default list if passed.
 
 Note that _choices_  must be a comma-separated list of allowable values and if it has been specified the passed value is checked to be consistent with this list when the _get_ method is invoked: an error code is returned and if the value is not into the specified range an error message is printed to _stderr_. However the value of CLA is not modified and it is equal to the passed value.
 
