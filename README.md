@@ -139,14 +139,24 @@ FLAP is an open source project, it is distributed under the [GPL v3](http://www.
 
 Go to [Top](#top) or [Toc](#toc)
 ## <a name="usage"></a>Usage
-
-### <a name="API">API
+FLAP is a module library.
 FLAP is currently composed by one module, namely  __Data_Type_Command_Line_Interface.f90__, where two derived types are defined: 
 1. __Type_Command_Line_Argument__;
 2. __Type_Command_Line_Interface__. 
 
 The first one is a back-end handling CLAs while the latter is the front-end providing all you need to handle your CLI. Two auxiliary modules, __IR_Precision.f90__ and __Lib_IO_Misc.f90__ are used for minor tasks. Finally, a testing program __flap_test__ is provided showing a basic example of FLAP usage.
 
+To start using FLAP and declaring your CLI, you must import its main module:
+```fortran
+...
+USE Data_Type_Command_Line_Interface
+...
+
+type(Type_Command_Line_Interface):: CLI
+```
+Now that you have your CLI declared you can start using it. The API to handle it follows.
+
+### <a name="API">API
 The main CLI object, that is the only one you must know, is __Type_Command_Line_Interface__
 ```fortran
 type, public:: Type_Command_Line_Interface
@@ -189,24 +199,24 @@ Fews methods are provided within this derived type:
 Essentially, for building up and using a minimal CLI you should follow the 4 steps:
 
 1. declare a CLI variable:
-  ```fortran
-    type(Type_Command_Line_Interface):: cli
-  ```
+```fortran
+type(Type_Command_Line_Interface):: cli
+```
 2. adding one or more CLA definition to the CLI:
-  ```fortran
-    call cli%add(switch='-o',help='Output file name',def='myfile.md',error=err)
-  ```
-  more details on how declare a CLA are reported in the followings;
+```fortran
+call cli%add(switch='-o',help='Output file name',def='myfile.md',error=err)
+```
+more details on how declare a CLA are reported in the followings;
 3. parsing the actually passed command line arguments:
-  ```fortran
-    call cli%parse(error=error)
-  ```
-  more details on parsing method are reported in the followings;
+```fortran
+call cli%parse(error=error)
+```
+more details on parsing method are reported in the followings;
 4. getting parsed values and storing into user-defined variables:
-  ```fortran
-    call cli%get(switch='-o',val=OutputFilename,error=error)
-  ```
-  _OutputFilename_ and _error_ being previously defined variables. 
+```fortran
+call cli%get(switch='-o',val=OutputFilename,error=error)
+```
+_OutputFilename_ and _error_ being previously defined variables. 
 
 Optionally you can initialize CLI with custom help messages by means of _init_ method.
 
@@ -214,15 +224,15 @@ Optionally you can initialize CLI with custom help messages by means of _init_ m
 
 CLI data type can already (quasi-automatically) handle CLAs through its default values (provided from the baseline variable declaration, i.e. `type(Type_Command_Line_Interface):: cli`). However, in order to improve the clearness CLI messages you can personalized help messages by means of _init_ method (that remains an optional step):
 ```fortran
-  call cli%init(progname,version,help,examples,disable_hv)
+call cli%init(progname,version,help,examples,disable_hv)
 ```
 where
 ```fortran
-  character(*), optional, intent(IN):: progname     !< Program name.
-  character(*), optional, intent(IN):: version      !< Program version.
-  character(*), optional, intent(IN):: help         !< Help message introducing the CLI usage.
-  character(*), optional, intent(IN):: examples(1:) !< Examples of correct usage.
-  logical,      optional, intent(IN):: disable_hv   !< Disable automatic inserting of 'help' and 'version' CLAs.
+character(*), optional, intent(IN):: progname     !< Program name.
+character(*), optional, intent(IN):: version      !< Program version.
+character(*), optional, intent(IN):: help         !< Help message introducing the CLI usage.
+character(*), optional, intent(IN):: examples(1:) !< Examples of correct usage.
+logical,      optional, intent(IN):: disable_hv   !< Disable automatic inserting of 'help' and 'version' CLAs.
 ```
 The dummy arguments should be auto-explicative. Note that the _help_ and _examples_ dummy arguments are used for printing a pretty help message explaining the CLI usage, thus should be always provided even if they are optional arguments. Moreover, due the Fortran limitations, the array containing the examples must have character elements with the same length, thus trailing white spaces must padded to short examples.
 
@@ -241,7 +251,7 @@ This two CLAs has the following default switches:
 
 However, FLAP before adding these two CLAs to the CLI checks if these switches have been already used and in case does not add them. To disable such an automatic CLAs creation initialized the CLI with:
 ```fortran
-  call cli%init(...,disable_hv=.true.)
+call cli%init(...,disable_hv=.true.)
 ```
 
 Go to [Top](#top) or [Toc](#toc)
@@ -253,18 +263,18 @@ CLA cannot be directly defined and modified: to handle a CLA you must use CLI me
 ```
 where
 ```fortran
-  character(*), optional, intent(IN)::  pref       !< Prefixing string.
-  character(*), optional, intent(IN)::  switch     !< Switch name.
-  character(*), optional, intent(IN)::  switch_ab  !< Abbreviated switch name.
-  character(*), optional, intent(IN)::  help       !< Help message describing the CLA.
-  logical,      optional, intent(IN)::  required   !< Flag for set required argument.
-  logical,      optional, intent(IN)::  positional !< Flag for checking if CLA is a positional or a named CLA.
-  integer(I4P), optional, intent(IN)::  position   !< Position of positional CLA.
-  character(*), optional, intent(IN)::  act        !< CLA value action.
-  character(*), optional, intent(IN)::  def        !< Default value.
-  character(*), optional, intent(IN)::  nargs      !< Number of arguments consumed by CLA.
-  character(*), optional, intent(IN)::  choices    !< List of allowable values for the argument.
-  integer(I4P),           intent(OUT):: error      !< Error trapping flag.
+character(*), optional, intent(IN)::  pref       !< Prefixing string.
+character(*), optional, intent(IN)::  switch     !< Switch name.
+character(*), optional, intent(IN)::  switch_ab  !< Abbreviated switch name.
+character(*), optional, intent(IN)::  help       !< Help message describing the CLA.
+logical,      optional, intent(IN)::  required   !< Flag for set required argument.
+logical,      optional, intent(IN)::  positional !< Flag for checking if CLA is a positional or a named CLA.
+integer(I4P), optional, intent(IN)::  position   !< Position of positional CLA.
+character(*), optional, intent(IN)::  act        !< CLA value action.
+character(*), optional, intent(IN)::  def        !< Default value.
+character(*), optional, intent(IN)::  nargs      !< Number of arguments consumed by CLA.
+character(*), optional, intent(IN)::  choices    !< List of allowable values for the argument.
+integer(I4P),           intent(OUT):: error      !< Error trapping flag.
 ```
 The dummy arguments should be auto-explicative. Note that the _help_ dummy argument is used for printing a pretty help message explaining the CLI usage, thus should be always provided even if CLA is an optional argument. It is also worthy of note that the abbreviated switch is set equal to switch name (if passed) if no otherwise defined. Moreover, one between _switch_ and _position_ must be defined: if _switch_ is defined then a named CLA is initialed, otherwise _position_ must be defined (with _positional=.true._) and a positional CLA is initialized. 
 
@@ -314,25 +324,25 @@ call cli%get(position=1,val=prval,error=err)
 ```
 where _rval_ and _prval_ are two previously defined variables. Currently, the _val_ variable can be only scalar of types _integer_, _real_, _logical_ and _character_. The complete API of _cli%get_ is the following:
 ```fortran
-  call cli%get(pref,switch,position,val,error)
+call cli%get(pref,switch,position,val,error)
 ```
 where the signature of  _get_ is:
 ```fortran
-  character(*), optional, intent(IN)::    pref     !< Prefixing string.
-  character(*), optional, intent(IN)::    switch   !< Switch name.
-  integer(I4P), optional, intent(IN)::    position !< Position of positional CLA.
-  class(*),               intent(INOUT):: val      !< CLA value.
-  integer(I4P),           intent(OUT)::   error    !< Error trapping flag.
+character(*), optional, intent(IN)::    pref     !< Prefixing string.
+character(*), optional, intent(IN)::    switch   !< Switch name.
+integer(I4P), optional, intent(IN)::    position !< Position of positional CLA.
+class(*),               intent(INOUT):: val      !< CLA value.
+integer(I4P),           intent(OUT)::   error    !< Error trapping flag.
 ```
 The dummy arguments should be auto-explicative. Note that the _switch_ passed can be also the abbreviated form if defined differently from the extended one. If no _switch_ neither _position_ is passed and error is arisen. Moreover, the type of the value returned is chosen accordingly to actual _val_ argument passed: inside the _get_ method _val_ is an unlimited polymorphic variable which type is defined only when the user passes the actual _val_ container.
 
 Note that for multiple valued (list) CLA, the _get_ method accept also array _val_:
 ```fortran
-  character(*), optional, intent(IN)::    pref     !< Prefixing string.
-  character(*), optional, intent(IN)::    switch   !< Switch name.
-  integer(I4P), optional, intent(IN)::    position !< Position of positional CLA.
-  class(*),               intent(INOUT):: val(1:)  !< CLA value.
-  integer(I4P),           intent(OUT)::   error    !< Error trapping flag.
+character(*), optional, intent(IN)::    pref     !< Prefixing string.
+character(*), optional, intent(IN)::    switch   !< Switch name.
+integer(I4P), optional, intent(IN)::    position !< Position of positional CLA.
+class(*),               intent(INOUT):: val(1:)  !< CLA value.
+integer(I4P),           intent(OUT)::   error    !< Error trapping flag.
 ```
 however, the _get_ method is invoked exactly with the same signature of single valued CLA as above: _get_ is a generic, user-friendly method that automatically handles both scalar and array _val_ variables.
 
