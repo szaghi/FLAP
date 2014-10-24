@@ -204,7 +204,7 @@ type(Type_Command_Line_Interface):: cli
 ```
 2. adding one or more CLA definition to the CLI:
 ```fortran
-call cli%add(switch='-o',help='Output file name',def='myfile.md',error=err)
+call cli%add(switch='-o',help='Output file name',def='myfile.md',error=error)
 ```
 more details on how declare a CLA are reported in the followings;
 3. parsing the actually passed command line arguments:
