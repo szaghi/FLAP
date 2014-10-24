@@ -48,6 +48,7 @@ integer(I4P)::                      l          !< Counter.
 write(stdout,'(A)')'+--> flap_test, a testing program for FLAP library'
 ! initializing CLI
 call cli%init(progname='flap_test',                                           &
+              version ='v0.0.1',                                              &
               examples=["flap_test -s 'Hello FLAP'                          ",&
                         "flap_test -s 'Hello FLAP' -i -2 # printing error...",&
                         "flap_test -s 'Hello FLAP' -i 3 -r 33.d0            ",&
@@ -55,15 +56,15 @@ call cli%init(progname='flap_test',                                           &
                         "flap_test 33.0 -s 'Hello FLAP' -i 5                ",&
                         "flap_test -string 'Hello FLAP' -boolean            "])
 ! setting CLAs
-call cli%add(pref='|-->',switch='-string',switch_ab='-s',help='String input',required=.true.,act='store',error=error)
-call cli%add(pref='|-->',switch='-integer',switch_ab='-i',help='Integer input with fixed range',required=.false.,act='store',&
+call cli%add(pref='|-->',switch='--string',switch_ab='-s',help='String input',required=.true.,act='store',error=error)
+call cli%add(pref='|-->',switch='--integer',switch_ab='-i',help='Integer input with fixed range',required=.false.,act='store',&
              def='1',choices='1,3,5',error=error)
-call cli%add(pref='|-->',switch='-real',switch_ab='-r',help='Real input',required=.false.,act='store',def='1.0',error=error)
-call cli%add(pref='|-->',switch='-boolean',switch_ab='-b',help='Boolean input',required=.false.,act='store_true',def='.false.',&
+call cli%add(pref='|-->',switch='--real',switch_ab='-r',help='Real input',required=.false.,act='store',def='1.0',error=error)
+call cli%add(pref='|-->',switch='--boolean',switch_ab='-b',help='Boolean input',required=.false.,act='store_true',def='.false.',&
              error=error)
-call cli%add(pref='|-->',switch='-boolean_val',switch_ab='-bv',help='Valued boolean input',required=.false., act='store',&
+call cli%add(pref='|-->',switch='--boolean_val',switch_ab='-bv',help='Valued boolean input',required=.false., act='store',&
              def='.true.',error=error)
-call cli%add(pref='|-->',switch='-integer_list',switch_ab='-il',help='Integer list input',required=.false.,act='store',&
+call cli%add(pref='|-->',switch='--integer_list',switch_ab='-il',help='Integer list input',required=.false.,act='store',&
              nargs='3',def='1 8 32',error=error)
 call cli%add(pref='|-->',positional=.true.,position=1,help='Positional real input',required=.false.,def='1.0',error=error)
 ! parsing CLI
