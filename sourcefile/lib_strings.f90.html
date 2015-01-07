@@ -10,7 +10,7 @@
     <meta name="author" content="Chris MacMackin" >
     <link rel="icon" href="../favicon.png">
 
-    <title>Lib_IO_Misc.f90 &ndash; FLAP</title>
+    <title>Lib_Strings.f90 &ndash; FLAP</title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -80,7 +80,7 @@
     
   
   <div class="row">
-    <h1>Lib_IO_Misc.f90
+    <h1>Lib_Strings.f90
     <small>Source File</small>
     
     </h1>
@@ -95,7 +95,7 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/Lib_IO_Misc.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/Lib_Strings.f90"> Source File</a></li>
      
   </ul>
   </div>
@@ -103,7 +103,7 @@
   <div class="col-lg-5">
   <ol class="breadcrumb hierarchy text-right">
   
-     <li class="active">Lib_IO_Misc.f90</li>
+     <li class="active">Lib_Strings.f90</li>
   </ol>
   </div>
 </div>
@@ -120,7 +120,7 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Modules</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../sourcefile/lib_io_misc.f90.html#mod-Lib_IO_Misc">Lib_IO_Misc</a>
+      <a class="list-group-item" href="../sourcefile/lib_strings.f90.html#mod-Lib_Strings">Lib_Strings</a>
       
     </div>
   </div>
@@ -158,47 +158,52 @@
     
     <div class="highlight"><pre><span class="c">!&gt; @ingroup Library</span>
 <span class="c">!&gt; @{</span>
-<span class="c">!&gt; @defgroup Lib_IO_MiscLibrary Lib_IO_Misc</span>
+<span class="c">!&gt; @defgroup Lib_StringsLibrary Lib_Strings</span>
+<span class="c">!&gt; Library of miscellanea procedures for strings operations.</span>
 <span class="c">!&gt; @}</span>
 
 <span class="c">!&gt; @ingroup Interface</span>
 <span class="c">!&gt; @{</span>
-<span class="c">!&gt; @defgroup Lib_IO_MiscInterface Lib_IO_Misc</span>
+<span class="c">!&gt; @defgroup Lib_StringsInterface Lib_Strings</span>
+<span class="c">!&gt; Library of miscellanea procedures for strings operations.</span>
 <span class="c">!&gt; @}</span>
 
 <span class="c">!&gt; @ingroup GlobalVarPar</span>
 <span class="c">!&gt; @{</span>
-<span class="c">!&gt; @defgroup Lib_IO_MiscGlobalVarPar Lib_IO_Misc</span>
+<span class="c">!&gt; @defgroup Lib_StringsGlobalVarPar Lib_Strings</span>
+<span class="c">!&gt; Library of miscellanea procedures for strings operations.</span>
 <span class="c">!&gt; @}</span>
 
 <span class="c">!&gt; @ingroup PublicProcedure</span>
 <span class="c">!&gt; @{</span>
-<span class="c">!&gt; @defgroup Lib_IO_MiscPublicProcedure Lib_IO_Misc</span>
+<span class="c">!&gt; @defgroup Lib_StringsPublicProcedure Lib_Strings</span>
+<span class="c">!&gt; Library of miscellanea procedures for strings operations.</span>
 <span class="c">!&gt; @}</span>
 
-<span class="c">!&gt; This module contains miscellanea procedures for input/output and strings operations.</span>
+<span class="c">!&gt; @ingroup PrivateProcedure</span>
+<span class="c">!&gt; @{</span>
+<span class="c">!&gt; @defgroup Lib_StringsPrivateProcedure Lib_Strings</span>
+<span class="c">!&gt; Library of miscellanea procedures for strings operations.</span>
+<span class="c">!&gt; @}</span>
+
+<span class="c">!&gt; Library of miscellanea procedures for strings operations.</span>
 <span class="c">!&gt; This is a library module.</span>
-<span class="c">!&gt; @ingroup Lib_IO_MiscLibrary</span>
-<span class="k">module </span><span class="n">Lib_IO_Misc</span>
+<span class="c">!&gt; @ingroup Lib_StringsLibrary</span>
+<span class="k">module </span><span class="n">Lib_Strings</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="k">USE </span><span class="n">IR_Precision</span>                                                                  <span class="c">! Integers and reals precision definition.</span>
-<span class="k">USE</span><span class="p">,</span> <span class="k">intrinsic</span><span class="kd">::</span> <span class="n">ISO_FORTRAN_ENV</span><span class="p">,</span> <span class="n">only</span><span class="p">:</span> <span class="n">stdout</span><span class="o">=&gt;</span><span class="n">OUTPUT_UNIT</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=&gt;</span><span class="n">ERROR_UNIT</span><span class="p">,&amp;</span> <span class="c">! Standard output/error logical units.</span>
-                                        <span class="n">IOSTAT_END</span><span class="p">,</span> <span class="n">IOSTAT_EOR</span>                    <span class="c">! Standard end-of-file/end-of record parameters.</span>
+<span class="k">USE </span><span class="n">IR_Precision</span> <span class="c">! Integers and reals precision definition.</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="k">implicit none</span>
 <span class="k">save</span>
 <span class="k">private</span>
-<span class="k">public</span><span class="kd">::</span> <span class="n">stdout</span><span class="p">,</span><span class="n">stderr</span><span class="p">,</span><span class="n">iostat_end</span><span class="p">,</span><span class="n">iostat_eor</span>
-<span class="k">public</span><span class="kd">::</span> <span class="n">Get_Unit</span>
-<span class="k">public</span><span class="kd">::</span> <span class="n">get_extension</span><span class="p">,</span><span class="n">set_extension</span>
-<span class="k">public</span><span class="kd">::</span> <span class="n">inquire_dir</span>
-<span class="k">public</span><span class="kd">::</span> <span class="n">lc_file</span>
-<span class="k">public</span><span class="kd">::</span> <span class="n">File_Not_Found</span>
-<span class="k">public</span><span class="kd">::</span> <span class="n">Dir_Not_Found</span>
+<span class="k">public</span><span class="kd">::</span> <span class="n">re_match</span>
 <span class="k">public</span><span class="kd">::</span> <span class="n">Upper_Case</span>
 <span class="k">public</span><span class="kd">::</span> <span class="n">Lower_Case</span>
+<span class="k">public</span><span class="kd">::</span> <span class="n">delete</span>
+<span class="k">public</span><span class="kd">::</span> <span class="n">insert</span>
+<span class="k">public</span><span class="kd">::</span> <span class="n">replace</span>
 <span class="k">public</span><span class="kd">::</span> <span class="n">tokenize</span>
 <span class="k">public</span><span class="kd">::</span> <span class="n">tags_match</span>
 <span class="k">public</span><span class="kd">::</span> <span class="n">unique</span>
@@ -206,217 +211,223 @@
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">public</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">err_file_not_found</span> <span class="o">=</span> <span class="mi">10100</span> <span class="c">!&lt; File not found error ID.</span>
+<span class="c">!&gt; @ingroup Lib_StringsGlobalVarPar</span>
+<span class="c">!&gt; @{</span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">26</span><span class="p">),</span> <span class="k">parameter</span><span class="p">,</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">upper_alphabet</span> <span class="o">=</span> <span class="s1">&#39;ABCDEFGHIJKLMNOPQRSTUVWXYZ&#39;</span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">26</span><span class="p">),</span> <span class="k">parameter</span><span class="p">,</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">lower_alphabet</span> <span class="o">=</span> <span class="s1">&#39;abcdefghijklmnopqrstuvwxyz&#39;</span>
+<span class="c">!&gt; @}</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="c">!&gt; Overloading intrinsic function count.</span>
-<span class="c">!&gt; @ingroup Lib_IO_MiscInterface</span>
+<span class="c">!&gt; @ingroup Lib_StringsInterface</span>
 <span class="k">interface </span><span class="nb">count</span>
 <span class="nb">  </span><span class="k">module procedure </span><span class="n">count_substring</span>
 <span class="n">endinterface</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="k">contains</span>
-  <span class="c">!&gt; @ingroup Lib_IO_MiscPublicProcedure</span>
+  <span class="c">!&gt; @ingroup Lib_StringsPublicProcedure</span>
   <span class="c">!&gt; @{</span>
-  <span class="c">!&gt; @brief The Get_Unit function returns a free logic unit for opening a file. The unit value is returned by the function, and also</span>
-  <span class="c">!&gt; by the optional argument &quot;Free_Unit&quot;. This allows the function to be used directly in an open statement like:</span>
-  <span class="c">!&gt; open(unit=Get_Unit(myunit),...) ; read(myunit)...</span>
-  <span class="c">!&gt; If no units are available, -1 is returned.</span>
-  <span class="kt">integer </span><span class="k">function </span><span class="n">Get_Unit</span><span class="p">(</span><span class="n">Free_Unit</span><span class="p">)</span>
+  <span class="c">!&gt; @brief Procedure for regular expression mathcing. Tries to match the given string with the pattern and give .true. if the</span>
+  <span class="c">!&gt; entire string matches the pattern, .false. otherwise.</span>
+  <span class="c">!&gt; @note Trailing blanks are ignored.</span>
+  <span class="k">recursive function </span><span class="n">re_match</span><span class="p">(</span><span class="n">string</span><span class="p">,</span><span class="n">pattern</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">match</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
-<span class="k">  </span><span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">Free_Unit</span> <span class="c">!&lt; Free logic unit.</span>
-  <span class="kt">integer</span><span class="kd">::</span>                        <span class="n">n1</span>        <span class="c">!&lt; Counter.</span>
-  <span class="kt">integer</span><span class="kd">::</span>                        <span class="n">ios</span>       <span class="c">!&lt; Inquiring flag.</span>
-  <span class="kt">logical</span><span class="kd">::</span>                        <span class="n">lopen</span>     <span class="c">!&lt; Inquiring flag.</span>
+<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="kd">::</span> <span class="n">string</span>  <span class="c">!&lt; Input string.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="kd">::</span> <span class="n">pattern</span> <span class="c">!&lt; Pattern to search for.</span>
+  <span class="kt">logical</span><span class="kd">::</span>                      <span class="n">match</span>   <span class="c">!&lt; Match or not.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">pattern</span><span class="p">))</span><span class="kd">::</span>  <span class="n">literal</span>
+  <span class="kt">integer</span><span class="kd">::</span>                      <span class="n">ptrim</span>
+  <span class="kt">integer</span><span class="kd">::</span>                      <span class="n">p</span>
+  <span class="kt">integer</span><span class="kd">::</span>                      <span class="n">k</span>
+  <span class="kt">integer</span><span class="kd">::</span>                      <span class="n">ll</span>
+  <span class="kt">integer</span><span class="kd">::</span>                      <span class="n">method</span>
+  <span class="kt">integer</span><span class="kd">::</span>                      <span class="n">start</span>
+  <span class="kt">integer</span><span class="kd">::</span>                      <span class="n">strim</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="k">parameter</span><span class="kd">::</span>  <span class="n">backslash</span> <span class="o">=</span> <span class="s1">&#39;\\&#39;</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="k">parameter</span><span class="kd">::</span>  <span class="n">star</span>      <span class="o">=</span> <span class="s1">&#39;*&#39;</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="k">parameter</span><span class="kd">::</span>  <span class="n">question</span>  <span class="o">=</span> <span class="s1">&#39;?&#39;</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">Get_Unit</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-  <span class="n">n1</span><span class="o">=</span><span class="mi">1</span>
-  <span class="k">do</span>
-<span class="k">    if</span> <span class="p">((</span><span class="n">n1</span><span class="o">/=</span><span class="n">stdout</span><span class="p">).</span><span class="nb">AND</span><span class="p">.(</span><span class="n">n1</span><span class="o">/=</span><span class="n">stderr</span><span class="p">))</span> <span class="k">then</span>
-<span class="k">      inquire</span> <span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="n">n1</span><span class="p">,</span><span class="n">opened</span><span class="o">=</span><span class="n">lopen</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">ios</span><span class="p">)</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">ios</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">        if</span> <span class="p">(.</span><span class="nb">NOT</span><span class="p">.</span><span class="n">lopen</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">          </span><span class="n">Get_Unit</span> <span class="o">=</span> <span class="n">n1</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">Free_Unit</span><span class="p">))</span> <span class="n">Free_Unit</span> <span class="o">=</span> <span class="n">Get_Unit</span>
-          <span class="k">return</span>
-<span class="k">        </span><span class="n">endif</span>
+  <span class="n">match</span>  <span class="o">=</span> <span class="p">.</span><span class="n">false</span><span class="p">.</span>
+  <span class="n">method</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="n">ptrim</span>  <span class="o">=</span> <span class="nb">len_trim</span><span class="p">(</span> <span class="n">pattern</span> <span class="p">)</span>
+  <span class="n">strim</span>  <span class="o">=</span> <span class="nb">len_trim</span><span class="p">(</span> <span class="n">string</span> <span class="p">)</span>
+  <span class="n">p</span>      <span class="o">=</span> <span class="mi">1</span>
+  <span class="n">ll</span>     <span class="o">=</span> <span class="mi">0</span>
+  <span class="n">start</span>  <span class="o">=</span> <span class="mi">1</span>
+  <span class="c">! Split off a piece of the pattern</span>
+  <span class="k">do while</span> <span class="p">(</span><span class="n">p</span> <span class="o">&lt;=</span> <span class="n">ptrim</span><span class="p">)</span>
+    <span class="k">select case</span> <span class="p">(</span><span class="n">pattern</span><span class="p">(</span><span class="n">p</span><span class="p">:</span><span class="n">p</span><span class="p">))</span>
+      <span class="k">case</span><span class="p">(</span><span class="n">star</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ll</span><span class="p">.</span><span class="n">ne</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="k">exit</span>
+<span class="k">        </span><span class="n">method</span> <span class="o">=</span> <span class="mi">1</span>
+      <span class="k">case</span><span class="p">(</span><span class="n">question</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ll</span><span class="p">.</span><span class="n">ne</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="k">exit</span>
+<span class="k">        </span><span class="n">method</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="n">start</span>  <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span>
+      <span class="k">case</span><span class="p">(</span><span class="n">backslash</span><span class="p">)</span>
+        <span class="n">p</span>  <span class="o">=</span> <span class="n">p</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">ll</span> <span class="o">=</span> <span class="n">ll</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">literal</span><span class="p">(</span><span class="n">ll</span><span class="p">:</span><span class="n">ll</span><span class="p">)</span> <span class="o">=</span> <span class="n">pattern</span><span class="p">(</span><span class="n">p</span><span class="p">:</span><span class="n">p</span><span class="p">)</span>
+      <span class="k">case </span><span class="n">default</span>
+        <span class="n">ll</span> <span class="o">=</span> <span class="n">ll</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">literal</span><span class="p">(</span><span class="n">ll</span><span class="p">:</span><span class="n">ll</span><span class="p">)</span> <span class="o">=</span> <span class="n">pattern</span><span class="p">(</span><span class="n">p</span><span class="p">:</span><span class="n">p</span><span class="p">)</span>
+    <span class="n">endselect</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">p</span> <span class="o">+</span> <span class="mi">1</span>
+  <span class="n">enddo</span>
+  <span class="c">! Now look for the literal string (if any!)</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">method</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+    <span class="c">! We are at the end of the pattern, and of the string?</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">strim</span><span class="o">==</span><span class="mf">0.</span><span class="nb">and</span><span class="p">.</span><span class="n">ptrim</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">      </span><span class="n">match</span> <span class="o">=</span> <span class="p">.</span><span class="n">true</span><span class="p">.</span>
+    <span class="k">else</span>
+      <span class="c">! The string matches a literal part?</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">ll</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">        if</span> <span class="p">(</span><span class="n">string</span><span class="p">(</span><span class="n">start</span><span class="p">:</span><span class="nb">min</span><span class="p">(</span><span class="n">strim</span><span class="p">,</span><span class="n">start</span><span class="o">+</span><span class="n">ll</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">==</span><span class="n">literal</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">ll</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">          </span><span class="n">start</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="n">ll</span>
+          <span class="n">match</span> <span class="o">=</span> <span class="n">re_match</span><span class="p">(</span><span class="n">string</span><span class="p">(</span><span class="n">start</span><span class="p">:),</span><span class="n">pattern</span><span class="p">(</span><span class="n">p</span><span class="p">:))</span>
+        <span class="n">endif</span>
       <span class="n">endif</span>
     <span class="n">endif</span>
-    <span class="n">n1</span><span class="o">=</span><span class="n">n1</span><span class="o">+</span><span class="mi">1</span>
-  <span class="n">enddo</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endfunction</span> <span class="n">Get_Unit</span>
-
-  <span class="c">!&gt; @brief Procedure for extracting the extension of a filename.</span>
-  <span class="c">!&gt; @note The leading and trealing spaces are removed from the file name.</span>
-  <span class="k">elemental function </span><span class="n">get_extension</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">implicit none</span>
-<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">filename</span>      <span class="c">!&lt; File name.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span><span class="kd">::</span> <span class="n">get_extension</span> <span class="c">!&lt; Extension of input file Name.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">get_extension</span> <span class="o">=</span> <span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">filename</span><span class="p">(</span><span class="nb">index</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="n">back</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.)</span><span class="o">+</span><span class="mi">1</span><span class="p">:)))</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endfunction</span> <span class="n">get_extension</span>
-
-  <span class="c">!&gt; @brief Procedure for setting the extension of a filename.</span>
-  <span class="c">!&gt; @note The leading and trealing spaces are removed from the file name.</span>
-  <span class="k">elemental function </span><span class="n">set_extension</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="n">extension</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">newfilename</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">implicit none</span>
-<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">filename</span>    <span class="c">!&lt; File name.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">extension</span>   <span class="c">!&lt; Extension to be imposed.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span><span class="kd">::</span> <span class="n">newfilename</span> <span class="c">!&lt; New file name.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                  <span class="n">i</span>           <span class="c">!&lt; Counter.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="kd">::</span>                  <span class="n">dot</span>         <span class="c">!&lt; Doc caracter.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">dot</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">get_extension</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">filename</span><span class="p">)))</span><span class="o">/=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">extension</span><span class="p">)))</span> <span class="k">then</span>
-<span class="k">    </span><span class="n">i</span> <span class="o">=</span> <span class="nb">index</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="n">back</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.)</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">      </span><span class="n">i</span>   <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-      <span class="n">dot</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span>
-    <span class="n">endif</span>
-    <span class="n">newfilename</span> <span class="o">=</span> <span class="n">filename</span><span class="p">(:</span><span class="n">i</span><span class="p">)</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">dot</span><span class="p">)</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">extension</span><span class="p">))</span>
-    <span class="n">newfilename</span> <span class="o">=</span> <span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">newfilename</span><span class="p">))</span>
   <span class="n">endif</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endfunction</span> <span class="n">set_extension</span>
-
-  <span class="c">!&gt; @brief Function for inquiring the presence of a directory.</span>
-  <span class="c">!&gt; @return \b err integer(I_P) variable for error trapping.</span>
-  <span class="c">!&gt; @note The leading and trealing spaces are removed from the directory name.</span>
-  <span class="k">function </span><span class="n">inquire_dir</span><span class="p">(</span><span class="n">myrank</span><span class="p">,</span><span class="n">errmsg</span><span class="p">,</span><span class="n">directory</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">implicit none</span>
-<span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span>  <span class="k">optional</span><span class="kd">::</span> <span class="n">myrank</span>    <span class="c">!&lt; Actual rank process necessary for concurrent multi-processes calls.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">errmsg</span>    <span class="c">!&lt; Explanatory message if an I/O error occurs.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>            <span class="n">directory</span> <span class="c">!&lt; Name of the directory that must be created.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                        <span class="n">err</span>       <span class="c">!&lt; Error trapping flag: 0 no errors, &gt;0 error occurs.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                        <span class="n">UnitFree</span>  <span class="c">!&lt; Free logic unit.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">! Creating a test file in the directory for inquiring its presence.</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">myrank</span><span class="p">))</span> <span class="k">then</span>
-<span class="k">    if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">errmsg</span><span class="p">))</span> <span class="k">then</span>
-<span class="k">      open</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="n">Get_Unit</span><span class="p">(</span><span class="n">UnitFree</span><span class="p">),</span><span class="k">file</span><span class="o">=</span><span class="nb">adjustl</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="n">directory</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;ExiSt.p&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strz</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="n">myrank</span><span class="p">)),</span><span class="n">iostat</span><span class="o">=</span><span class="n">err</span><span class="p">,</span><span class="n">iomsg</span><span class="o">=</span><span class="n">errmsg</span><span class="p">)</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">method</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+    <span class="c">! Scan the whole of the remaining string ...</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">ll</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">      </span><span class="n">match</span> <span class="o">=</span> <span class="p">.</span><span class="n">true</span><span class="p">.</span>
     <span class="k">else</span>
-<span class="k">      open</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="n">Get_Unit</span><span class="p">(</span><span class="n">UnitFree</span><span class="p">),</span><span class="k">file</span><span class="o">=</span><span class="nb">adjustl</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="n">directory</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;ExiSt.p&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strz</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="n">myrank</span><span class="p">)),</span><span class="n">iostat</span><span class="o">=</span><span class="n">err</span><span class="p">)</span>
-    <span class="n">endif</span>
-  <span class="k">else</span>
-<span class="k">    if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">errmsg</span><span class="p">))</span> <span class="k">then</span>
-<span class="k">      open</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="n">Get_Unit</span><span class="p">(</span><span class="n">UnitFree</span><span class="p">),</span><span class="k">file</span><span class="o">=</span><span class="nb">adjustl</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="n">directory</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;ExiSt.p&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strz</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">)),</span><span class="n">iostat</span><span class="o">=</span><span class="n">err</span><span class="p">,</span><span class="n">iomsg</span><span class="o">=</span><span class="n">errmsg</span><span class="p">)</span>
-    <span class="k">else</span>
-<span class="k">      open</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="n">Get_Unit</span><span class="p">(</span><span class="n">UnitFree</span><span class="p">),</span><span class="k">file</span><span class="o">=</span><span class="nb">adjustl</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="n">directory</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;ExiSt.p&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strz</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">)),</span><span class="n">iostat</span><span class="o">=</span><span class="n">err</span><span class="p">)</span>
-    <span class="n">endif</span>
-  <span class="n">endif</span>
-  <span class="c">! Deletig the test file if successfully created.</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">err</span><span class="o">==</span><span class="mi">0_I4P</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">    if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">errmsg</span><span class="p">))</span> <span class="k">then</span>
-<span class="k">      close</span><span class="p">(</span><span class="n">UnitFree</span><span class="p">,</span><span class="n">status</span><span class="o">=</span><span class="s1">&#39;DELETE&#39;</span><span class="p">,</span><span class="n">iomsg</span><span class="o">=</span><span class="n">errmsg</span><span class="p">)</span>
-    <span class="k">else</span>
-<span class="k">      close</span><span class="p">(</span><span class="n">UnitFree</span><span class="p">,</span><span class="n">status</span><span class="o">=</span><span class="s1">&#39;DELETE&#39;</span><span class="p">)</span>
-    <span class="n">endif</span>
-  <span class="n">endif</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endfunction</span> <span class="n">inquire_dir</span>
-
-  <span class="c">!&gt; @brief Function for calculating the number of lines (records) of a sequential file.</span>
-  <span class="c">!&gt;@return \b n integer(I4P) variable</span>
-  <span class="k">function </span><span class="n">lc_file</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">implicit none</span>
-<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">filename</span> <span class="c">! File name.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>             <span class="n">n</span>        <span class="c">! Number of lines (records).</span>
-  <span class="kt">logical</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="kd">::</span>               <span class="n">is_file</span>  <span class="c">! Inquiring flag.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="kd">::</span>            <span class="n">fileform</span> <span class="c">! File format: FORMATTED or UNFORMATTED.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>             <span class="n">unitfile</span> <span class="c">! Logic unit.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">inquire</span><span class="p">(</span><span class="k">file</span><span class="o">=</span><span class="nb">adjustl</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="n">filename</span><span class="p">)),</span><span class="n">exist</span><span class="o">=</span><span class="n">is_file</span><span class="p">,</span><span class="n">form</span><span class="o">=</span><span class="n">fileform</span><span class="p">)</span> <span class="c">! Verifing the presence of the file.</span>
-  <span class="k">if</span> <span class="p">(.</span><span class="nb">NOT</span><span class="p">.</span><span class="n">is_file</span><span class="p">)</span> <span class="k">then</span>                                            <span class="c">! File not found.</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1_I4P</span>                                                      <span class="c">! Returning -1.</span>
-  <span class="k">else</span>                                                              <span class="c">! File found.</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="mi">0_I4P</span>                                                       <span class="c">! Initializing number of records.</span>
-    <span class="k">open</span><span class="p">(</span><span class="n">unit</span>   <span class="o">=</span> <span class="n">Get_Unit</span><span class="p">(</span><span class="n">unitfile</span><span class="p">),</span>      <span class="p">&amp;</span>
-         <span class="k">file</span>   <span class="o">=</span> <span class="nb">adjustl</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="n">filename</span><span class="p">)),</span> <span class="p">&amp;</span>
-         <span class="n">action</span> <span class="o">=</span> <span class="s1">&#39;READ&#39;</span><span class="p">,</span>                  <span class="p">&amp;</span>
-         <span class="n">form</span>   <span class="o">=</span> <span class="nb">adjustl</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="n">Upper_Case</span><span class="p">(</span><span class="n">fileform</span><span class="p">))))</span>              <span class="c">! Opening file.</span>
-    <span class="k">select case</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="n">Upper_Case</span><span class="p">(</span><span class="n">fileform</span><span class="p">))))</span>
-    <span class="k">case</span><span class="p">(</span><span class="s1">&#39;FORMATTED&#39;</span><span class="p">)</span>
-      <span class="k">do</span>
-<span class="k">        read</span><span class="p">(</span><span class="n">unitfile</span><span class="p">,</span><span class="o">*</span><span class="p">,</span><span class="k">end</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>                                     <span class="c">! Reading record.</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1_I4P</span>                                               <span class="c">! Updating number of records.</span>
+<span class="k">      do while</span> <span class="p">(</span><span class="n">start</span> <span class="o">&lt;=</span> <span class="n">strim</span><span class="p">)</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="nb">index</span><span class="p">(</span><span class="n">string</span><span class="p">(</span><span class="n">start</span><span class="p">:),</span><span class="n">literal</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">ll</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">)</span> <span class="k">then</span>
+<span class="k">          </span><span class="n">start</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="n">k</span> <span class="o">+</span> <span class="n">ll</span> <span class="o">-</span> <span class="mi">1</span>
+          <span class="n">match</span> <span class="o">=</span> <span class="n">re_match</span><span class="p">(</span><span class="n">string</span><span class="p">(</span><span class="n">start</span><span class="p">:),</span><span class="n">pattern</span><span class="p">(</span><span class="n">p</span><span class="p">:))</span>
+          <span class="k">if</span> <span class="p">(</span><span class="n">match</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">            exit</span>
+<span class="k">          </span><span class="n">endif</span>
+        <span class="n">endif</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span>
       <span class="n">enddo</span>
-    <span class="k">case</span><span class="p">(</span><span class="s1">&#39;UNFORMATTED&#39;</span><span class="p">)</span>
-      <span class="k">do</span>
-<span class="k">        read</span><span class="p">(</span><span class="n">unitfile</span><span class="p">,</span><span class="k">end</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>                                       <span class="c">! Reading record.</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1_I4P</span>                                               <span class="c">! Updating number of records.</span>
-      <span class="n">enddo</span>
-    <span class="n">endselect</span>
-    <span class="mi">10</span> <span class="k">continue</span>
-<span class="k">    close</span><span class="p">(</span><span class="n">unitfile</span><span class="p">)</span>                                                 <span class="c">! Closing file.</span>
+    <span class="n">endif</span>
+  <span class="n">endif</span>
+  <span class="k">if</span> <span class="p">(</span> <span class="n">method</span> <span class="o">==</span> <span class="mi">2</span> <span class="p">.</span><span class="nb">and</span><span class="p">.</span> <span class="n">ll</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">)</span> <span class="k">then</span>
+    <span class="c">! Scan the whole of the remaining string ...</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">string</span><span class="p">(</span><span class="n">start</span><span class="p">:</span><span class="nb">min</span><span class="p">(</span><span class="n">strim</span><span class="p">,</span><span class="n">start</span><span class="o">+</span><span class="n">ll</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">==</span> <span class="n">literal</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">ll</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">      </span><span class="n">match</span> <span class="o">=</span> <span class="n">re_match</span><span class="p">(</span><span class="n">string</span><span class="p">(</span><span class="n">start</span><span class="o">+</span><span class="n">ll</span><span class="p">:),</span><span class="n">pattern</span><span class="p">(</span><span class="n">p</span><span class="p">:))</span>
+    <span class="n">endif</span>
   <span class="n">endif</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endfunction</span> <span class="n">lc_file</span>
+  <span class="n">endfunction</span> <span class="n">re_match</span>
 
-  <span class="c">!&gt; @brief The Upper_Case function converts the lower case characters of a string to upper case one.</span>
-  <span class="c">!&gt;@return \b Upper_Case character(*) variable</span>
+  <span class="c">!&gt; @brief Procedure for converting the lower case characters of a string to upper case one.</span>
+  <span class="c">!&gt;@return \b Upper_Case character(len(string)) variable</span>
   <span class="k">elemental function </span><span class="n">Upper_Case</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">string</span>     <span class="c">!&lt; String to be converted.</span>
   <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">))</span><span class="kd">::</span>   <span class="n">Upper_Case</span> <span class="c">!&lt; Converted string.</span>
-  <span class="kt">integer</span><span class="kd">::</span>                      <span class="n">n1</span>         <span class="c">!&lt; Characters counter.</span>
+  <span class="kt">integer</span><span class="kd">::</span>                      <span class="n">n1</span><span class="p">,</span><span class="n">n2</span>      <span class="c">!&lt; Characters counters.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">Upper_Case</span> <span class="o">=</span> <span class="n">string</span>
   <span class="k">do </span><span class="n">n1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
-    <span class="k">select case</span><span class="p">(</span><span class="nb">ichar</span><span class="p">(</span><span class="n">string</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n1</span><span class="p">)))</span>
-    <span class="k">case</span><span class="p">(</span><span class="mi">97</span><span class="p">:</span><span class="mi">122</span><span class="p">)</span>
-      <span class="n">Upper_Case</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n1</span><span class="p">)</span><span class="o">=</span><span class="nb">char</span><span class="p">(</span><span class="nb">ichar</span><span class="p">(</span><span class="n">string</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n1</span><span class="p">))</span><span class="o">-</span><span class="mi">32</span><span class="p">)</span> <span class="c">! upper case conversion</span>
-    <span class="n">endselect</span>
+    <span class="n">n2</span> <span class="o">=</span> <span class="nb">index</span><span class="p">(</span><span class="n">lower_alphabet</span><span class="p">,</span><span class="n">string</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n1</span><span class="p">))</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">n2</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="n">Upper_Case</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n1</span><span class="p">)</span> <span class="o">=</span> <span class="n">upper_alphabet</span><span class="p">(</span><span class="n">n2</span><span class="p">:</span><span class="n">n2</span><span class="p">)</span>
   <span class="n">enddo</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">Upper_Case</span>
 
-  <span class="c">!&gt; @brief The Lower_Case function converts the upper case characters of a string to lower case one.</span>
-  <span class="c">!&gt;@return \b Lower_Case character(*) variable</span>
+  <span class="c">!&gt; @brief Procedure for converting the upper case characters of a string to lower case one.</span>
+  <span class="c">!&gt;@return \b Lower_Case character(len(string)) variable</span>
   <span class="k">elemental function </span><span class="n">Lower_Case</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">string</span>     <span class="c">!&lt; String to be converted.</span>
   <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">))</span><span class="kd">::</span>   <span class="n">Lower_Case</span> <span class="c">!&lt; Converted string.</span>
-  <span class="kt">integer</span><span class="kd">::</span>                      <span class="n">n1</span>         <span class="c">!&lt; Characters counter.</span>
+  <span class="kt">integer</span><span class="kd">::</span>                      <span class="n">n1</span><span class="p">,</span><span class="n">n2</span>      <span class="c">!&lt; Characters counters.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">Lower_Case</span> <span class="o">=</span> <span class="n">string</span>
   <span class="k">do </span><span class="n">n1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="nb">len_trim</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
-    <span class="k">select case</span><span class="p">(</span><span class="nb">ichar</span><span class="p">(</span><span class="n">string</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n1</span><span class="p">)))</span>
-    <span class="k">case</span><span class="p">(</span><span class="mi">65</span><span class="p">:</span><span class="mi">90</span><span class="p">)</span>
-      <span class="n">Lower_Case</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n1</span><span class="p">)</span><span class="o">=</span><span class="nb">char</span><span class="p">(</span><span class="nb">ichar</span><span class="p">(</span><span class="n">string</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n1</span><span class="p">))</span><span class="o">+</span><span class="mi">32</span><span class="p">)</span> <span class="c">! lower case conversion</span>
-    <span class="n">endselect</span>
+    <span class="n">n2</span> <span class="o">=</span> <span class="nb">index</span><span class="p">(</span><span class="n">upper_alphabet</span><span class="p">,</span><span class="n">string</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n1</span><span class="p">))</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">n2</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="n">Lower_Case</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n1</span><span class="p">)</span> <span class="o">=</span> <span class="n">lower_alphabet</span><span class="p">(</span><span class="n">n2</span><span class="p">:</span><span class="n">n2</span><span class="p">)</span>
   <span class="n">enddo</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">Lower_Case</span>
+
+  <span class="c">!&gt; @brief Procedure for deleting substring from a string.</span>
+  <span class="c">!&gt;@return \b newstring character(len(string)-len(substring)) variable</span>
+  <span class="k">elemental function </span><span class="n">delete</span><span class="p">(</span><span class="n">string</span><span class="p">,</span><span class="n">substring</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">newstring</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">implicit none</span>
+<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>              <span class="n">string</span>    <span class="c">!&lt; String to be modified.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>              <span class="n">substring</span> <span class="c">!&lt; Substring to be inserted.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">substring</span><span class="p">))</span><span class="kd">::</span> <span class="n">newstring</span> <span class="c">!&lt; New modified string.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                              <span class="n">pos</span>       <span class="c">!&lt; Position from which delete the substring.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">pos</span> <span class="o">=</span> <span class="nb">index</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="n">string</span><span class="p">,</span><span class="n">substring</span><span class="o">=</span><span class="n">string</span><span class="p">)</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">    if</span> <span class="p">(</span><span class="n">pos</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">      </span><span class="n">newstring</span> <span class="o">=</span> <span class="n">string</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">substring</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">:)</span>
+    <span class="k">else</span>
+<span class="k">      </span><span class="n">newstring</span> <span class="o">=</span> <span class="n">string</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">pos</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="n">string</span><span class="p">(</span><span class="n">pos</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="n">substring</span><span class="p">):)</span>
+    <span class="n">endif</span>
+  <span class="n">endif</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endfunction</span> <span class="n">delete</span>
+
+  <span class="c">!&gt; @brief Procedure for inserting substring into a string from a certaing position.</span>
+  <span class="c">!&gt;@return \b newstring character(len(string)+len(substring)) variable</span>
+  <span class="k">elemental function </span><span class="n">insert</span><span class="p">(</span><span class="n">string</span><span class="p">,</span><span class="n">substring</span><span class="p">,</span><span class="n">pos</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">newstring</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">implicit none</span>
+<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>              <span class="n">string</span>    <span class="c">!&lt; String to be modified.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>              <span class="n">substring</span> <span class="c">!&lt; Substring to be inserted.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span>     <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>              <span class="n">pos</span>       <span class="c">!&lt; Position from which insert the substring.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="n">substring</span><span class="p">))</span><span class="kd">::</span> <span class="n">newstring</span> <span class="c">!&lt; New modified string.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                              <span class="n">safepos</span>   <span class="c">!&lt; Safe position from which insert the substring.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">safepos</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">pos</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">))</span>
+  <span class="n">newstring</span> <span class="o">=</span> <span class="n">string</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">safepos</span><span class="p">)</span><span class="o">//</span><span class="n">substring</span><span class="o">//</span><span class="n">string</span><span class="p">(</span><span class="n">safepos</span><span class="o">+</span><span class="mi">1</span><span class="p">:)</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endfunction</span> <span class="n">insert</span>
+
+  <span class="c">!&gt; @brief Procedure for replacing substring into a string.</span>
+  <span class="c">!&gt;@return \b newstring character(len(string)-len(substring)+len(restring)) variable</span>
+  <span class="k">elemental function </span><span class="n">replace</span><span class="p">(</span><span class="n">string</span><span class="p">,</span><span class="n">substring</span><span class="p">,</span><span class="n">restring</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">newstring</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">implicit none</span>
+<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>              <span class="n">string</span>    <span class="c">!&lt; String to be modified.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>              <span class="n">substring</span> <span class="c">!&lt; Substring to be replaced.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>              <span class="n">restring</span>  <span class="c">!&lt; String to be inserted.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">substring</span><span class="p">))</span><span class="kd">::</span> <span class="n">newstring</span> <span class="c">!&lt; New modified string.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                              <span class="n">pos</span>       <span class="c">!&lt; Position from which replace the substring.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">pos</span> <span class="o">=</span> <span class="nb">index</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="n">string</span><span class="p">,</span><span class="n">substring</span><span class="o">=</span><span class="n">string</span><span class="p">)</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">    if</span> <span class="p">(</span><span class="n">pos</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">      </span><span class="n">newstring</span> <span class="o">=</span> <span class="n">restring</span><span class="o">//</span><span class="n">string</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">substring</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">:)</span>
+    <span class="k">else</span>
+<span class="k">      </span><span class="n">newstring</span> <span class="o">=</span> <span class="n">string</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">pos</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="n">restring</span><span class="o">//</span><span class="n">string</span><span class="p">(</span><span class="n">pos</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="n">substring</span><span class="p">):)</span>
+    <span class="n">endif</span>
+  <span class="n">endif</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endfunction</span> <span class="n">replace</span>
 
   <span class="c">!&gt; @brief Subroutine for tokenizing a string in order to parse it.</span>
   <span class="c">!&gt; @note The dummy array containing tokens must allocatable and its character elements must have the same length of the input</span>
@@ -554,7 +565,10 @@
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">unique</span>
+  <span class="c">!&gt; @}</span>
 
+  <span class="c">!&gt; @ingroup Lib_StringsPrivateProcedure</span>
+  <span class="c">!&gt; @{</span>
   <span class="c">!&gt; @brief Procedure for counting the number of occurences of a substring into a string.</span>
   <span class="k">elemental function </span><span class="n">count_substring</span><span class="p">(</span><span class="n">string</span><span class="p">,</span><span class="n">substring</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">No</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -575,51 +589,8 @@
     <span class="n">c1</span> <span class="o">=</span> <span class="n">c1</span> <span class="o">+</span> <span class="n">c2</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">substring</span><span class="p">)</span>
   <span class="n">enddo</span>
 <span class="n">endfunction</span> <span class="n">count_substring</span>
-
-  <span class="c">!&gt; @brief Procedure for printing to stderr a &quot;file not found error&quot;.</span>
-  <span class="k">function </span><span class="n">File_Not_Found</span><span class="p">(</span><span class="n">stderrpref</span><span class="p">,</span><span class="n">filename</span><span class="p">,</span><span class="n">cpn</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">implicit none</span>
-<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">stderrpref</span> <span class="c">!&lt; Prefixing string for stderr outputs.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">filename</span>   <span class="c">!&lt; Name of file.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">cpn</span>        <span class="c">!&lt; Calling procedure name.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                       <span class="n">err</span>        <span class="c">!&lt; Error trapping flag: 0 no errors, &gt;0 error occurs.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">stderrpref</span><span class="p">))</span> <span class="k">then</span>
-<span class="k">    write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="n">stderrpref</span><span class="o">//</span><span class="s1">&#39; File &#39;</span><span class="o">//</span><span class="nb">adjustl</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; Not Found!&#39;</span>
-    <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="n">stderrpref</span><span class="o">//</span><span class="s1">&#39; Calling procedure &quot;&#39;</span><span class="o">//</span><span class="nb">adjustl</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="n">cpn</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&quot;&#39;</span>
-  <span class="k">else</span>
-<span class="k">    write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span>            <span class="s1">&#39; File &#39;</span><span class="o">//</span><span class="nb">adjustl</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; Not Found!&#39;</span>
-    <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span>            <span class="s1">&#39; Calling procedure &quot;&#39;</span><span class="o">//</span><span class="nb">adjustl</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="n">cpn</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&quot;&#39;</span>
-  <span class="n">endif</span>
-  <span class="n">err</span> <span class="o">=</span> <span class="n">err_file_not_found</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endfunction</span> <span class="n">File_Not_Found</span>
-
-  <span class="c">!&gt; @brief Subroutine for printing to stderr a &quot;directory not found error&quot;.</span>
-  <span class="k">subroutine </span><span class="n">Dir_Not_Found</span><span class="p">(</span><span class="n">myrank</span><span class="p">,</span><span class="n">Nproc</span><span class="p">,</span><span class="n">dirname</span><span class="p">,</span><span class="n">cpn</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">implicit none</span>
-<span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">myrank</span>      <span class="c">!&lt; Actual rank process.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">Nproc</span>       <span class="c">!&lt; Number of MPI processes used.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>           <span class="n">dirname</span>     <span class="c">!&lt; Name of directory.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>           <span class="n">cpn</span>         <span class="c">!&lt; Calling procedure name.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="n">DI4P</span><span class="p">)</span><span class="kd">::</span>                    <span class="n">rks</span>         <span class="c">!&lt; String containing myrank.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                       <span class="n">rank</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">Np</span><span class="o">=</span><span class="mi">1</span> <span class="c">!&lt; Dummy temporary variables.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">myrank</span><span class="p">))</span> <span class="n">rank</span> <span class="o">=</span> <span class="n">myrank</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">Nproc</span><span class="p">))</span> <span class="n">Np</span> <span class="o">=</span> <span class="n">Nproc</span> <span class="p">;</span> <span class="n">rks</span> <span class="o">=</span> <span class="s1">&#39;rank&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strz</span><span class="p">(</span><span class="n">Np</span><span class="p">,</span><span class="n">rank</span><span class="p">))</span>
-  <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="nb">trim</span><span class="p">(</span><span class="n">rks</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39; Directory &#39;</span><span class="o">//</span><span class="nb">adjustl</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="n">dirname</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; Not Found!&#39;</span>
-  <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="nb">trim</span><span class="p">(</span><span class="n">rks</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39; Calling procedure &quot;&#39;</span><span class="o">//</span><span class="nb">adjustl</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="n">cpn</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&quot;&#39;</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endsubroutine</span> <span class="n">Dir_Not_Found</span>
   <span class="c">!&gt; @}</span>
-<span class="n">endmodule</span> <span class="n">Lib_IO_Misc</span>
+<span class="n">endmodule</span> <span class="n">Lib_Strings</span>
 </pre></div>
 
     </div>

@@ -10,7 +10,7 @@
     <meta name="author" content="Chris MacMackin" >
     <link rel="icon" href="../favicon.png">
 
-    <title>Lib_IO_Misc &ndash; FLAP</title>
+    <title>Lib_Strings &ndash; FLAP</title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -80,7 +80,7 @@
     
   
   <div class="row">
-    <h1>Lib_IO_Misc 
+    <h1>Lib_Strings 
     <small>Module</small>
     
     </h1>
@@ -95,7 +95,7 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/Lib_IO_Misc.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/Lib_Strings.f90"> Source File</a></li>
      
   </ul>
   </div>
@@ -103,9 +103,9 @@
   <div class="col-lg-5">
   <ol class="breadcrumb hierarchy text-right">
   
-     <li><a href='../sourcefile/lib_io_misc.f90.html'>Lib_IO_Misc.f90</a></li>
+     <li><a href='../sourcefile/lib_strings.f90.html'>Lib_Strings.f90</a></li>
   
-     <li class="active">Lib_IO_Misc</li>
+     <li class="active">Lib_Strings</li>
   </ol>
   </div>
 </div>
@@ -116,15 +116,6 @@
     <div class="col-lg-3">
     
   
-  <div class="panel panel-primary">
-    <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
-    <div class="list-group">
-      
-      <a class="list-group-item" href="../module/lib_io_misc.html#var-err_file_not_found">err_file_not_found</a>
-      
-    </div>
-  </div>
-  
   
   
   
@@ -133,7 +124,7 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Interfaces</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../module/lib_io_misc.html#intr-count">count</a>
+      <a class="list-group-item" href="../module/lib_strings.html#intr-count">count</a>
       
     </div>
   </div>
@@ -144,23 +135,19 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Functions</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../module/lib_io_misc.html#proc-Get_Unit">Get_Unit</a>
+      <a class="list-group-item" href="../module/lib_strings.html#proc-re_match">re_match</a>
       
-      <a class="list-group-item" href="../module/lib_io_misc.html#proc-get_extension">get_extension</a>
+      <a class="list-group-item" href="../module/lib_strings.html#proc-Upper_Case">Upper_Case</a>
       
-      <a class="list-group-item" href="../module/lib_io_misc.html#proc-set_extension">set_extension</a>
+      <a class="list-group-item" href="../module/lib_strings.html#proc-Lower_Case">Lower_Case</a>
       
-      <a class="list-group-item" href="../module/lib_io_misc.html#proc-inquire_dir">inquire_dir</a>
+      <a class="list-group-item" href="../module/lib_strings.html#proc-delete">delete</a>
       
-      <a class="list-group-item" href="../module/lib_io_misc.html#proc-lc_file">lc_file</a>
+      <a class="list-group-item" href="../module/lib_strings.html#proc-insert">insert</a>
       
-      <a class="list-group-item" href="../module/lib_io_misc.html#proc-Upper_Case">Upper_Case</a>
+      <a class="list-group-item" href="../module/lib_strings.html#proc-replace">replace</a>
       
-      <a class="list-group-item" href="../module/lib_io_misc.html#proc-Lower_Case">Lower_Case</a>
-      
-      <a class="list-group-item" href="../module/lib_io_misc.html#proc-unique">unique</a>
-      
-      <a class="list-group-item" href="../module/lib_io_misc.html#proc-File_Not_Found">File_Not_Found</a>
+      <a class="list-group-item" href="../module/lib_strings.html#proc-unique">unique</a>
       
     </div>
   </div>
@@ -170,11 +157,9 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Subroutine</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../module/lib_io_misc.html#proc-tokenize">tokenize</a>
+      <a class="list-group-item" href="../module/lib_strings.html#proc-tokenize">tokenize</a>
       
-      <a class="list-group-item" href="../module/lib_io_misc.html#proc-tags_match">tags_match</a>
-      
-      <a class="list-group-item" href="../module/lib_io_misc.html#proc-Dir_Not_Found">Dir_Not_Found</a>
+      <a class="list-group-item" href="../module/lib_strings.html#proc-tags_match">tags_match</a>
       
     </div>
   </div>
@@ -216,38 +201,6 @@
     
     
 
-    
-    <section>
-    <h2>Variables</h2>
-    
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th><th>Visibility</th>
-
-<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-err_file_not_found"></a>integer(kind=I4P),</td>
-  
-  <td>public,</td>
-  <td>parameter</td><td>::</td>
-  <td><strong>err_file_not_found</strong></td><td> =</td><td>10100</td><td><p>File not found error ID.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-    </section>
-    <br>
     
     
     
@@ -347,8 +300,8 @@ private  function count_substring(string, substring)
     
     
   <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="proc-Get_Unit"></a><h3>
-public  function <a href='../proc/get_unit.html'>Get_Unit</a>(Free_Unit)
+  <div class="panel-heading codesum"><a class="anchor" name="proc-re_match"></a><h3>
+public recursive function <a href='../proc/re_match.html'>re_match</a>(string, pattern)
 </h3></div>
   <div class="panel-body">
        
@@ -372,12 +325,27 @@ public  function <a href='../proc/get_unit.html'>Get_Unit</a>(Free_Unit)
   
 <tr>
   
-  <td><a class="anchor" name="var-Free_Unit"></a>integer,</td>
-  <td>intent(out),</td>
-  <td>optional</td>
+  <td><a class="anchor" name="var-string"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
   
   <td></td><td>::</td>
-  <td><strong>Free_Unit</strong></td><td><p>Free logic unit.</p></td>
+  <td><strong>string</strong></td><td><p>Input string.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pattern"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>pattern</strong></td><td><p>Pattern to search for.</p></td>
   
 </tr>
 
@@ -392,282 +360,9 @@ public  function <a href='../proc/get_unit.html'>Get_Unit</a>(Free_Unit)
   
   
   
-     <h4>Return Value <small><a class="anchor" name="var-Get_Unit"></a>integer
+     <h4>Return Value <small><a class="anchor" name="var-match"></a>logical
   </small></h4>
-  
-    
-        
-
-  </div>
-  </div>
-
-    
-    
-  <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="proc-get_extension"></a><h3>
-public  function <a href='../proc/get_extension.html'>get_extension</a>(filename)
-</h3></div>
-  <div class="panel-body">
-       
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-filename"></a>character(len=*),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>filename</strong></td><td><p>File name.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-
-  
-  
-  
-  
-     <h4>Return Value <small><a class="anchor" name="var-get_extension"></a>character(len=len(filename))
-  </small></h4>
-  <p>Extension of input file Name.</p>
-    
-        
-
-  </div>
-  </div>
-
-    
-    
-  <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="proc-set_extension"></a><h3>
-public  function <a href='../proc/set_extension.html'>set_extension</a>(filename, extension)
-</h3></div>
-  <div class="panel-body">
-       
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-filename"></a>character(len=*),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>filename</strong></td><td><p>File name.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-extension"></a>character(len=*),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>extension</strong></td><td><p>Extension to be imposed.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-
-  
-  
-  
-  
-     <h4>Return Value <small><a class="anchor" name="var-newfilename"></a>character(len=:),
-  allocatable</small></h4>
-  <p>New file name.</p>
-    
-        
-
-  </div>
-  </div>
-
-    
-    
-  <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="proc-inquire_dir"></a><h3>
-public  function <a href='../proc/inquire_dir.html'>inquire_dir</a>(myrank, errmsg, directory)
-</h3></div>
-  <div class="panel-body">
-       
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-myrank"></a>integer(kind=I4P),</td>
-  <td>intent(in),</td>
-  <td>optional</td>
-  
-  <td></td><td>::</td>
-  <td><strong>myrank</strong></td><td><p>Actual rank process necessary for concurrent multi-processes calls.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-errmsg"></a>character(len=*),</td>
-  <td>intent(out),</td>
-  <td>optional</td>
-  
-  <td></td><td>::</td>
-  <td><strong>errmsg</strong></td><td><p>Explanatory message if an I/O error occurs.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-directory"></a>character(len=*),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>directory</strong></td><td><p>Name of the directory that must be created.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-
-  
-  
-  
-  
-     <h4>Return Value <small><a class="anchor" name="var-err"></a>integer(kind=I4P)
-  </small></h4>
-  <p>Error trapping flag: 0 no errors, &gt;0 error occurs.</p>
-    
-        
-
-  </div>
-  </div>
-
-    
-    
-  <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="proc-lc_file"></a><h3>
-public  function <a href='../proc/lc_file.html'>lc_file</a>(filename)
-</h3></div>
-  <div class="panel-body">
-       
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-filename"></a>character(len=*),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>filename</strong></td><td></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-
-  
-  
-  
-  
-     <h4>Return Value <small><a class="anchor" name="var-n"></a>integer(kind=I4P)
-  </small></h4>
-  
+  <p>Match or not.</p>
     
         
 
@@ -791,6 +486,252 @@ public  function <a href='../proc/lower_case.html'>Lower_Case</a>(string)
     
     
   <div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="proc-delete"></a><h3>
+public  function <a href='../proc/delete.html'>delete</a>(string, substring)
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-string"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>string</strong></td><td><p>String to be modified.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-substring"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>substring</strong></td><td><p>Substring to be inserted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-newstring"></a>character(len=len(string)-len(substring))
+  </small></h4>
+  <p>New modified string.</p>
+    
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="proc-insert"></a><h3>
+public  function <a href='../proc/insert.html'>insert</a>(string, substring, pos)
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-string"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>string</strong></td><td><p>String to be modified.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-substring"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>substring</strong></td><td><p>Substring to be inserted.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pos"></a>integer(kind=I4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>pos</strong></td><td><p>Position from which insert the substring.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-newstring"></a>character(len=len(string)+len(substring))
+  </small></h4>
+  <p>New modified string.</p>
+    
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="proc-replace"></a><h3>
+public  function <a href='../proc/replace.html'>replace</a>(string, substring, restring)
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-string"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>string</strong></td><td><p>String to be modified.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-substring"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>substring</strong></td><td><p>Substring to be replaced.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-restring"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>restring</strong></td><td><p>String to be inserted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-newstring"></a>character(len=len(string)-len(substring))
+  </small></h4>
+  <p>New modified string.</p>
+    
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
   <div class="panel-heading codesum"><a class="anchor" name="proc-unique"></a><h3>
 public  function <a href='../proc/unique.html'>unique</a>(string, substring)
 </h3></div>
@@ -854,93 +795,6 @@ public  function <a href='../proc/unique.html'>unique</a>(string, substring)
      <h4>Return Value <small><a class="anchor" name="var-uniq"></a>character(len=len(string))
   </small></h4>
   <p>String parsed.</p>
-    
-        
-
-  </div>
-  </div>
-
-    
-    
-  <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="proc-File_Not_Found"></a><h3>
-public  function <a href='../proc/file_not_found.html'>File_Not_Found</a>(stderrpref, filename, cpn)
-</h3></div>
-  <div class="panel-body">
-       
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-stderrpref"></a>character(len=*),</td>
-  <td>intent(in),</td>
-  <td>optional</td>
-  
-  <td></td><td>::</td>
-  <td><strong>stderrpref</strong></td><td><p>Prefixing string for stderr outputs.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-filename"></a>character(len=*),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>filename</strong></td><td><p>Name of file.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-cpn"></a>character(len=*),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>cpn</strong></td><td><p>Calling procedure name.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-
-  
-  
-  
-  
-     <h4>Return Value <small><a class="anchor" name="var-err"></a>integer(kind=I4P)
-  </small></h4>
-  <p>Error trapping flag: 0 no errors, &gt;0 error occurs.</p>
     
         
 
@@ -1143,99 +997,6 @@ public pure subroutine <a href='../proc/tags_match.html'>tags_match</a>(strin, t
   
   <td>allocatable</td><td>::</td>
   <td><strong>match</strong>(:)</td><td><p>Matching substrings.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-        
-
-  </div>
-  </div>
-
-    
-    
-  <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="proc-Dir_Not_Found"></a><h3>
-public  subroutine <a href='../proc/dir_not_found.html'>Dir_Not_Found</a>(myrank, Nproc, dirname, cpn)
-</h3></div>
-  <div class="panel-body">
-       
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-myrank"></a>integer(kind=I4P),</td>
-  <td>intent(in),</td>
-  <td>optional</td>
-  
-  <td></td><td>::</td>
-  <td><strong>myrank</strong></td><td><p>Actual rank process.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-Nproc"></a>integer(kind=I4P),</td>
-  <td>intent(in),</td>
-  <td>optional</td>
-  
-  <td></td><td>::</td>
-  <td><strong>Nproc</strong></td><td><p>Number of MPI processes used.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-dirname"></a>character(len=*),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>dirname</strong></td><td><p>Name of directory.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-cpn"></a>character(len=*),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>cpn</strong></td><td><p>Calling procedure name.</p></td>
   
 </tr>
 

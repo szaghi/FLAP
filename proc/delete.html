@@ -10,7 +10,7 @@
     <meta name="author" content="Chris MacMackin" >
     <link rel="icon" href="../favicon.png">
 
-    <title>IR_Print &ndash; FLAP</title>
+    <title>delete &ndash; FLAP</title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -80,8 +80,8 @@
     
   
   <div class="row">
-    <h1>IR_Print
-    <small>Subroutine</small>
+    <h1>delete
+    <small>Function</small>
     
     </h1>
 	 
@@ -95,7 +95,7 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/IR_Precision.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/Lib_Strings.f90"> Source File</a></li>
      
   </ul>
   </div>
@@ -103,11 +103,11 @@
   <div class="col-lg-5">
   <ol class="breadcrumb hierarchy text-right">
   
-     <li><a href='../sourcefile/ir_precision.f90.html'>IR_Precision.f90</a></li>
+     <li><a href='../sourcefile/lib_strings.f90.html'>Lib_Strings.f90</a></li>
   
-     <li><a href='../module/ir_precision.html'>IR_Precision</a></li>
+     <li><a href='../module/lib_strings.html'>Lib_Strings</a></li>
   
-     <li class="active">IR_Print</li>
+     <li class="active">delete</li>
   </ol>
   </div>
 </div>
@@ -122,11 +122,7 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../proc/ir_print.html#var-prefd">prefd</a>
-      
-      <a class="list-group-item" href="../proc/ir_print.html#var-iostatd">iostatd</a>
-      
-      <a class="list-group-item" href="../proc/ir_print.html#var-iomsgd">iomsgd</a>
+      <a class="list-group-item" href="../proc/delete.html#var-pos">pos</a>
       
     </div>
   </div>
@@ -221,7 +217,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-public  subroutine IR_Print(pref, iostat, iomsg, unit)
+public  function delete(string, substring)
 </h2>
     
   
@@ -246,57 +242,27 @@ public  subroutine IR_Print(pref, iostat, iomsg, unit)
   
 <tr>
   
-  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
-  <td>intent(in),</td>
-  <td>optional</td>
-  
-  <td></td><td>::</td>
-  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-iostat"></a>integer(kind=I4P),</td>
-  <td>intent(out),</td>
-  <td>optional</td>
-  
-  <td></td><td>::</td>
-  <td><strong>iostat</strong></td><td><p>IO error.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-iomsg"></a>character(len=*),</td>
-  <td>intent(out),</td>
-  <td>optional</td>
-  
-  <td></td><td>::</td>
-  <td><strong>iomsg</strong></td><td><p>IO error message.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-unit"></a>integer(kind=I4P),</td>
+  <td><a class="anchor" name="var-string"></a>character(len=*),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>unit</strong></td><td><p>Logic unit.</p></td>
+  <td><strong>string</strong></td><td><p>String to be modified.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-substring"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>substring</strong></td><td><p>Substring to be inserted.</p></td>
   
 </tr>
 
@@ -304,6 +270,15 @@ public  subroutine IR_Print(pref, iostat, iomsg, unit)
 </table>
 
     
+    
+    
+    
+    
+    
+    
+	 <h3>Return Value <small><a class="anchor" name="var-newstring"></a>character(len=len(string)-len(substring))
+    </small></h3>
+    <p>New modified string.</p>
     
     
     <br>
@@ -326,39 +301,11 @@ public  subroutine IR_Print(pref, iostat, iomsg, unit)
   
 <tr>
   
-  <td><a class="anchor" name="var-prefd"></a>character(len=:),</td>
-  
-  <td>public,</td>
-  <td>allocatable</td><td>::</td>
-  <td><strong>prefd</strong></td><td></td><td></td><td><p>Prefixing string.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-iostatd"></a>integer(kind=I4P),</td>
+  <td><a class="anchor" name="var-pos"></a>integer(kind=I4P),</td>
   
   <td>public</td>
   <td></td><td>::</td>
-  <td><strong>iostatd</strong></td><td></td><td></td><td><p>IO error.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-iomsgd"></a>character(len=500),</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>iomsgd</strong></td><td></td><td></td><td><p>Temporary variable for IO error message.</p></td>
+  <td><strong>pos</strong></td><td></td><td></td><td><p>Position from which delete the substring.</p></td>
   
 </tr>
 
