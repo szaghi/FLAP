@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Flap : Fortran command Line Arguments Parser for poor men">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Flap</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/szaghi/FLAP">View on GitHub</a>
+
+          <h1 id="project_title">Flap</h1>
+          <h2 id="project_tagline">Fortran command Line Arguments Parser for poor men</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/szaghi/FLAP/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/szaghi/FLAP/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p><a href="https://waffle.io/szaghi/FLAP"><img src="https://badge.waffle.io/szaghi/FLAP.png?label=ready&amp;title=Ready" alt="Ready in backlog"></a>
+<a href="https://waffle.io/szaghi/FLAP"><img src="https://badge.waffle.io/szaghi/FLAP.png?label=in%20progress&amp;title=In%20Progress" alt="In Progress"></a>
+<a href="https://waffle.io/szaghi/FLAP"><img src="https://badge.waffle.io/szaghi/FLAP.png?label=bug&amp;title=Open%20Bugs" alt="Open bugs"></a>
+<a href="https://bitdeli.com/free" title="Bitdeli Badge"><img src="https://d2weczhvl823v0.cloudfront.net/szaghi/flap/trend.png" alt="Bitdeli Badge"></a></p>
+
+<h1>
+<a id="flap" class="anchor" href="#flap" aria-hidden="true"><span class="octicon octicon-link"></span></a>FLAP</h1>
+
+<h3>
+<a id="flap-fortran-command-line-arguments-parser-for-poor-men" class="anchor" href="#flap-fortran-command-line-arguments-parser-for-poor-men" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="top">FLAP, Fortran command Line Arguments Parser for poor men</a>
+</h3>
+
+<p>A very simple and stupid tool for building easily nice Command Line Interface for modern Fortran projects.</p>
+
+<h3>
+<a id="a-taste-of-flap" class="anchor" href="#a-taste-of-flap" aria-hidden="true"><span class="octicon octicon-link"></span></a>A Taste of FLAP</h3>
+
+<p>Running the provided test program, <strong>flap_test</strong>, a taste of FLAP is served:</p>
+
+<div class="highlight highlight-shell"><pre>+--<span class="pl-k">&gt;</span> flap_test, a testing program <span class="pl-k">for</span> <span class="pl-vo">FLAP</span> library
++--<span class="pl-k">&gt;</span> Parsing Command Line Arguments
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span> The Command Line Interface (CLI) has the following options
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>   flap_test  [value] --string value [--integer value] [--real value] [--boolean] [--boolean_val value] [--integer_list value#1 value#2 value#3] [--help] [--version]
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span> Each Command Line Argument (CLA) has the following meaning:
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>   [value]
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>     Positional real input
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>     It is a positional CLA having position <span class="pl-s1"><span class="pl-pds">"</span>1-th<span class="pl-pds">"</span></span>
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>     It is a optional CLA which default value is <span class="pl-s1"><span class="pl-pds">"</span>1.0<span class="pl-pds">"</span></span>
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>   [--string value] or [-s value]
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>     String input
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>     It is a non optional CLA thus must be passed to CLI
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>   [--integer value] or [-i value] with value chosen <span class="pl-k">in</span>: (1,3,5)
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>     Integer input with fixed range
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>     It is a optional CLA which default value is <span class="pl-s1"><span class="pl-pds">"</span>1<span class="pl-pds">"</span></span>
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>   [--real value] or [-r value]
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>     Real input
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>     It is a optional CLA which default value is <span class="pl-s1"><span class="pl-pds">"</span>1.0<span class="pl-pds">"</span></span>
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>   [--boolean] or [-b]
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>     Boolean input
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>     It is a optional CLA which default value is <span class="pl-s1"><span class="pl-pds">"</span>.false.<span class="pl-pds">"</span></span>
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>   [--boolean_val value] or [-bv value]
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>     Valued boolean input
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>     It is a optional CLA which default value is <span class="pl-s1"><span class="pl-pds">"</span>.true.<span class="pl-pds">"</span></span>
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>   [--integer_list value#1 value#2 value#3] or [-il value#1 value#2 value#3]
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>     Integer list input
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>     It is a optional CLA which default value is <span class="pl-s1"><span class="pl-pds">"</span>1 8 32<span class="pl-pds">"</span></span>
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>   [--help] or [-h]
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>     Print this <span class="pl-s3">help</span> message
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>     It is a optional CLA
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>   [--version] or [-v]
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>     Print version
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>     It is a optional CLA
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span> Usage examples:
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>   -) flap_test -s <span class="pl-s1"><span class="pl-pds">'</span>Hello FLAP<span class="pl-pds">'</span></span>
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>   -) flap_test -s <span class="pl-s1"><span class="pl-pds">'</span>Hello FLAP<span class="pl-pds">'</span></span> -i -2 <span class="pl-c"># printing error...</span>
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>   -) flap_test -s <span class="pl-s1"><span class="pl-pds">'</span>Hello FLAP<span class="pl-pds">'</span></span> -i 3 -r 33.d0
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>   -) flap_test -s <span class="pl-s1"><span class="pl-pds">'</span>Hello FLAP<span class="pl-pds">'</span></span> -integer_list 10 -3 87
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>   -) flap_test 33.0 -s <span class="pl-s1"><span class="pl-pds">'</span>Hello FLAP<span class="pl-pds">'</span></span> -i 5
+<span class="pl-k">|</span>--<span class="pl-k">&gt;</span>   -) flap_test -string <span class="pl-s1"><span class="pl-pds">'</span>Hello FLAP<span class="pl-pds">'</span></span> -boolean</pre></div>
+
+<p>Not so bad for just a very few statements as the following:</p>
+
+<div class="highlight highlight-fortran"><pre>...
+<span class="pl-k">write</span>(stdout,<span class="pl-s1"><span class="pl-pds">'</span>(A)<span class="pl-pds">'</span></span>)<span class="pl-s1"><span class="pl-pds">'</span>+--&gt; flap_test, a testing program for FLAP library<span class="pl-pds">'</span></span>
+<span class="pl-c">! initializing CLI</span>
+<span class="pl-k">call</span> cli<span class="pl-k">%</span>init(progname<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>flap_test<span class="pl-pds">'</span></span>,                                           &amp;
+              version <span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>v0.0.1<span class="pl-pds">'</span></span>,                                              &amp;
+              examples<span class="pl-k">=</span>[<span class="pl-s1"><span class="pl-pds">"</span>flap_test -s 'Hello FLAP'                          <span class="pl-pds">"</span></span>,&amp;
+                        <span class="pl-s1"><span class="pl-pds">"</span>flap_test -s 'Hello FLAP' -i -2 # printing error...<span class="pl-pds">"</span></span>,&amp;
+                        <span class="pl-s1"><span class="pl-pds">"</span>flap_test -s 'Hello FLAP' -i 3 -r 33.d0            <span class="pl-pds">"</span></span>,&amp;
+                        <span class="pl-s1"><span class="pl-pds">"</span>flap_test -s 'Hello FLAP' -integer_list 10 -3 87   <span class="pl-pds">"</span></span>,&amp;
+                        <span class="pl-s1"><span class="pl-pds">"</span>flap_test 33.0 -s 'Hello FLAP' -i 5                <span class="pl-pds">"</span></span>,&amp;
+                        <span class="pl-s1"><span class="pl-pds">"</span>flap_test -string 'Hello FLAP' -boolean            <span class="pl-pds">"</span></span>])
+<span class="pl-c">! setting CLAs</span>
+<span class="pl-k">call</span> cli<span class="pl-k">%</span>add(pref<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>|--&gt;<span class="pl-pds">'</span></span>,switch<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>--string<span class="pl-pds">'</span></span>,      switch_ab<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>-s<span class="pl-pds">'</span></span>, help<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>String input<span class="pl-pds">'</span></span>,                  required<span class="pl-k">=</span><span class="pl-c1">.true.</span>, act<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>store<span class="pl-pds">'</span></span>,                                  error<span class="pl-k">=</span>error)
+<span class="pl-k">call</span> cli<span class="pl-k">%</span>add(pref<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>|--&gt;<span class="pl-pds">'</span></span>,switch<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>--integer<span class="pl-pds">'</span></span>,     switch_ab<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>-i<span class="pl-pds">'</span></span>, help<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>Integer input with fixed range<span class="pl-pds">'</span></span>,required<span class="pl-k">=</span><span class="pl-c1">.false.</span>,act<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>store<span class="pl-pds">'</span></span>,          def<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>1<span class="pl-pds">'</span></span>,choices<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>1,3,5<span class="pl-pds">'</span></span>,error<span class="pl-k">=</span>error)
+<span class="pl-k">call</span> cli<span class="pl-k">%</span>add(pref<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>|--&gt;<span class="pl-pds">'</span></span>,switch<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>--real<span class="pl-pds">'</span></span>,        switch_ab<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>-r<span class="pl-pds">'</span></span>, help<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>Real input<span class="pl-pds">'</span></span>,                    required<span class="pl-k">=</span><span class="pl-c1">.false.</span>,act<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>store<span class="pl-pds">'</span></span>,          def<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>1.0<span class="pl-pds">'</span></span>,              error<span class="pl-k">=</span>error)
+<span class="pl-k">call</span> cli<span class="pl-k">%</span>add(pref<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>|--&gt;<span class="pl-pds">'</span></span>,switch<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>--boolean<span class="pl-pds">'</span></span>,     switch_ab<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>-b<span class="pl-pds">'</span></span>, help<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>Boolean input<span class="pl-pds">'</span></span>,                 required<span class="pl-k">=</span><span class="pl-c1">.false.</span>,act<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>store_true<span class="pl-pds">'</span></span>,     def<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>.false.<span class="pl-pds">'</span></span>,          error<span class="pl-k">=</span>error)
+<span class="pl-k">call</span> cli<span class="pl-k">%</span>add(pref<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>|--&gt;<span class="pl-pds">'</span></span>,switch<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>--boolean_val<span class="pl-pds">'</span></span>, switch_ab<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>-bv<span class="pl-pds">'</span></span>,help<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>Valued boolean input<span class="pl-pds">'</span></span>,          required<span class="pl-k">=</span><span class="pl-c1">.false.</span>,act<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>store<span class="pl-pds">'</span></span>,          def<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>.true.<span class="pl-pds">'</span></span>,           error<span class="pl-k">=</span>error)
+<span class="pl-k">call</span> cli<span class="pl-k">%</span>add(pref<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>|--&gt;<span class="pl-pds">'</span></span>,switch<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>--integer_list<span class="pl-pds">'</span></span>,switch_ab<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>-il<span class="pl-pds">'</span></span>,help<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>Integer list input<span class="pl-pds">'</span></span>,            required<span class="pl-k">=</span><span class="pl-c1">.false.</span>,act<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>store<span class="pl-pds">'</span></span>,nargs<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>3<span class="pl-pds">'</span></span>,def<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>1 8 32<span class="pl-pds">'</span></span>,           error<span class="pl-k">=</span>error)
+<span class="pl-k">call</span> cli<span class="pl-k">%</span>add(pref<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>|--&gt;<span class="pl-pds">'</span></span>,positional<span class="pl-k">=</span><span class="pl-c1">.true.</span>,position<span class="pl-k">=</span><span class="pl-c1">1</span>,           help<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>Positional real input<span class="pl-pds">'</span></span>,         required<span class="pl-k">=</span><span class="pl-c1">.false.</span>,                      def<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>1.0<span class="pl-pds">'</span></span>,              error<span class="pl-k">=</span>error)
+<span class="pl-c">! parsing CLI</span>
+<span class="pl-k">write</span>(stdout,<span class="pl-s1"><span class="pl-pds">'</span>(A)<span class="pl-pds">'</span></span>)<span class="pl-s1"><span class="pl-pds">'</span>+--&gt; Parsing Command Line Arguments<span class="pl-pds">'</span></span>
+<span class="pl-k">call</span> cli<span class="pl-k">%</span>parse(error<span class="pl-k">=</span>error,pref<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>|--&gt;<span class="pl-pds">'</span></span>)
+...</pre></div>
+
+<p>For a practical example of FLAP usage see <a href="https://github.com/szaghi/OFF/blob/testing/src/POG.f90">POG</a> source file at line <code>85</code>.</p>
+
+<p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
+
+<h2>
+<a id="table-of-contents" class="anchor" href="#table-of-contents" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="toc">Table of Contents</a>
+</h2>
+
+<ul>
+<li><a href="#team-members">Team Members</a></li>
+<li><a href="#what">What is FLAP?</a></li>
+<li><a href="#main-features">Main features</a></li>
+<li><a href="#todos">Todos</a></li>
+<li><a href="#requirements">Requirements</a></li>
+<li><a href="#copyrights">Copyrights</a></li>
+<li>
+<a href="#usage">Usage</a>
+
+<ul>
+<li>
+<a href="#API">API</a>
+
+<ul>
+<li><a href="#cli-init">Initializing CLI with personalized help messages</a></li>
+<li><a href="#cla-add">Adding a new CLA to CLI</a></li>
+<li><a href="#cli-parse">Parsing the CLI</a></li>
+<li><a href="#cla-get">Getting a CLA value from parsed CLI</a></li>
+</ul>
+</li>
+<li><a href="#test">Compile Testing Program</a></li>
+</ul>
+</li>
+<li><a href="#versions">Version History</a></li>
+</ul>
+
+<p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
+
+<h2>
+<a id="team-members" class="anchor" href="#team-members" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+<a name="team-members"></a>Team Members</h2>
+
+<ul>
+<li>Stefano Zaghi <a href="mailto:stefano.zaghi@gmail.com">stefano.zaghi@gmail.com</a>
+</li>
+</ul>
+
+<p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
+
+<h2>
+<a id="what-is-flap" class="anchor" href="#what-is-flap" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+<a name="what"></a>What is FLAP?</h2>
+
+<p>Modern Fortran standards (2003+) have introduced support for Command Line Arguments (CLA), thus it is possible to construct nice and effective Command Line Interface (CLI). FLAP is a small library designed to simplify the (repetitive) construction of complicated CLI in pure Fortran (standard 2003+). FLAP has been inspired by the python module <em>argparse</em> trying to mimic it. Once you have defined the arguments are required by means of a user-friendly method of the CLI, FLAP will parse the CLAs for you. It is worthy of note that FLAP, as <em>argparse</em>, also automatically generates help and usage messages and issues errors when users give the program invalid arguments.</p>
+
+<p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
+
+<h2>
+<a id="main-features" class="anchor" href="#main-features" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+<a name="main-features"></a>Main features</h2>
+
+<ul>
+<li>User-friendly methods for building flexible and effective Command Line Interfaces (CLI);</li>
+<li>support optional and non optional Command Line Argument (CLA);</li>
+<li>support boolean CLA;</li>
+<li>support positional CLA;</li>
+<li>support list of allowable values for defined CLA with automatic consistency check;</li>
+<li>support multiple valued (list of values) CLA;</li>
+<li>automatic generation of help and usage messages;</li>
+<li>self-consistency-check of CLA definition;</li>
+<li>consistency-check of whole CLI definition;</li>
+<li>errors trapping for invalid CLI usage;</li>
+</ul>
+
+<p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
+
+<h2>
+<a id="todos" class="anchor" href="#todos" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+<a name="todos"></a>Todos</h2>
+
+<ul>
+<li>Try <a href="https://github.com/docopt/docopt">docopt</a> features;</li>
+<li>any feature request is welcome!</li>
+</ul>
+
+<p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
+
+<h2>
+<a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+<a name="requirements"></a>Requirements</h2>
+
+<ul>
+<li>Modern Fortran Compiler (standard 2003+);</li>
+<li>a lot of patience with the author.</li>
+</ul>
+
+<p>FLAP is developed on a GNU/Linux architecture. For Windows architecture there is no support, however it should be work out-of-the-box.</p>
+
+<p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
+
+<h2>
+<a id="copyrights" class="anchor" href="#copyrights" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+<a name="Copyrights"></a>Copyrights</h2>
+
+<p>FLAP is an open source project, it is distributed under the <a href="http://www.gnu.org/licenses/gpl-3.0.html">GPL v3</a>. Anyone is interest to use, to develop or to contribute to FLAP is welcome.</p>
+
+<p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+<a name="usage"></a>Usage</h2>
+
+<p>FLAP is a module library.
+FLAP is currently composed by one module, namely  <strong>Data_Type_Command_Line_Interface.f90</strong>, where two derived types are defined: 
+1. <strong>Type_Command_Line_Argument</strong>;
+2. <strong>Type_Command_Line_Interface</strong>. </p>
+
+<p>The first one is a back-end handling CLAs while the latter is the front-end providing all you need to handle your CLI. Two auxiliary modules, <strong>IR_Precision.f90</strong> and <strong>Lib_IO_Misc.f90</strong> are used for minor tasks. Finally, a testing program <strong>flap_test</strong> is provided showing a basic example of FLAP usage.</p>
+
+<p>To start using FLAP and declaring your CLI, you must import its main module:</p>
+
+<div class="highlight highlight-fortran"><pre>...
+<span class="pl-k">USE</span> Data_Type_Command_Line_Interface
+...
+
+<span class="pl-st">type</span>(Type_Command_Line_Interface)<span class="pl-k">::</span> CLI</pre></div>
+
+<p>Now that you have your CLI declared you can start using it. The API to handle it follows.</p>
+
+<h3>
+<a id="api" class="anchor" href="#api" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="API">API</a>
+</h3>
+
+<p>The main CLI object, that is the only one you must know, is <strong>Type_Command_Line_Interface</strong></p>
+
+<div class="highlight highlight-fortran"><pre>type, <span class="pl-s">public</span><span class="pl-k">::</span> Type_Command_Line_Interface
+  <span class="pl-st">integer</span>(I4P)<span class="pl-k">::</span>                                  Na          <span class="pl-k">=</span> <span class="pl-c1">0_I4P</span> <span class="pl-c">!&lt; Number of CLA.</span>
+  <span class="pl-st">integer</span>(I4P)<span class="pl-k">::</span>                                  Na_required <span class="pl-k">=</span> <span class="pl-c1">0_I4P</span> <span class="pl-c">!&lt; Number of command line arguments that CLI requires.</span>
+  <span class="pl-st">integer</span>(I4P)<span class="pl-k">::</span>                                  Na_optional <span class="pl-k">=</span> <span class="pl-c1">0_I4P</span> <span class="pl-c">!&lt; Number of command line arguments that are optional for CLI.</span>
+  <span class="pl-st">type</span>(Type_Command_Line_Argument), <span class="pl-s">allocatable</span><span class="pl-k">::</span> cla(:)              <span class="pl-c">!&lt; CLA list [1:Na].</span>
+  <span class="pl-st">character</span>(len<span class="pl-k">=</span>:), allocatable<span class="pl-k">::</span>                 progname            <span class="pl-c">!&lt; Program name.</span>
+  <span class="pl-st">character</span>(len<span class="pl-k">=</span>:), allocatable<span class="pl-k">::</span>                 version             <span class="pl-c">!&lt; Program version.</span>
+  <span class="pl-st">character</span>(len<span class="pl-k">=</span>:), allocatable<span class="pl-k">::</span>                 help                <span class="pl-c">!&lt; Help message introducing the CLI usage.</span>
+  <span class="pl-st">character</span>(len<span class="pl-k">=</span>:), allocatable<span class="pl-k">::</span>                 examples(:)         <span class="pl-c">!&lt; Examples of correct usage.</span>
+  <span class="pl-st">logical</span><span class="pl-k">::</span>                                       disable_hv <span class="pl-k">=</span> <span class="pl-c1">.false.</span><span class="pl-c">!&lt; Disable automatic inserting of 'help' and 'version' CLAs.</span>
+  <span class="pl-k">contains</span>
+    <span class="pl-k">procedure</span><span class="pl-k">::</span> free                                <span class="pl-c">! Procedure for freeing dynamic memory.</span>
+    <span class="pl-k">procedure</span><span class="pl-k">::</span> init                                <span class="pl-c">! Procedure for initializing CLI.</span>
+    <span class="pl-k">procedure</span><span class="pl-k">::</span> add                                 <span class="pl-c">! Procedure for adding CLA to CLAs list.</span>
+    <span class="pl-k">procedure</span><span class="pl-k">::</span> check                               <span class="pl-c">! Procedure for checking CLAs data consistenc.</span>
+    <span class="pl-k">procedure</span><span class="pl-k">::</span> passed                              <span class="pl-c">! Procedure for checking if a CLA has been passed.</span>
+    <span class="pl-k">procedure</span><span class="pl-k">::</span> parse                               <span class="pl-c">! Procedure for parsing Command Line Interfaces.</span>
+    generic<span class="pl-k">::</span>   get <span class="pl-k">=</span>&gt; get_cla_cli,get_cla_list_cli <span class="pl-c">! Procedure for getting CLA value(s) from CLAs list parsed.</span>
+    final<span class="pl-k">::</span>     finalize                            <span class="pl-c">! Procedure for freeing dynamic memory when finalizing.</span>
+    <span class="pl-c">! operators overloading</span>
+    generic<span class="pl-k">::</span> <span class="pl-st">assignment</span>(<span class="pl-k">=</span>) <span class="pl-k">=</span>&gt; assign_cli
+    <span class="pl-c">! private procedures</span>
+    <span class="pl-k">procedure</span>,              <span class="pl-s">private</span><span class="pl-k">::</span> get_cla_cli
+    <span class="pl-k">procedure</span>,              <span class="pl-s">private</span><span class="pl-k">::</span> get_cla_list_cli
+    <span class="pl-k">procedure</span>, pass(self1), <span class="pl-s">private</span><span class="pl-k">::</span> assign_cli
+endtype Type_Command_Line_Interface</pre></div>
+
+<p>Fews methods are provided within this derived type:</p>
+
+<ul>
+<li>
+<em>free</em> for freeing the CLI memory;</li>
+<li>
+<em>init</em> for initializing CLI with user defined help messages; </li>
+<li>
+<em>add</em> for adding a CLA to the CLI; </li>
+<li>
+<em>check</em> for checking the CLAs definition consistency;</li>
+<li>
+<em>passed</em> for checking is a particular CLA has been actually passed; </li>
+<li>
+<em>parse</em> for parsing all passed CLAs accordingly to the list previously defined for building up the CLI;</li>
+<li>
+<em>get</em> for returning a particular CLA value and storing it into user-defined variable.</li>
+</ul>
+
+<p>Essentially, for building up and using a minimal CLI you should follow the 4 steps:</p>
+
+<ol>
+<li>declare a CLI variable:</li>
+</ol>
+
+<div class="highlight highlight-fortran"><pre><span class="pl-st">type</span>(Type_Command_Line_Interface)<span class="pl-k">::</span> cli</pre></div>
+
+<ol>
+<li>adding one or more CLA definition to the CLI:</li>
+</ol>
+
+<div class="highlight highlight-fortran"><pre><span class="pl-k">call</span> cli<span class="pl-k">%</span>add(switch<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>-o<span class="pl-pds">'</span></span>,help<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>Output file name<span class="pl-pds">'</span></span>,def<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>myfile.md<span class="pl-pds">'</span></span>,error<span class="pl-k">=</span>error)</pre></div>
+
+<p>more details on how declare a CLA are reported in the followings;
+3. parsing the actually passed command line arguments:</p>
+
+<div class="highlight highlight-fortran"><pre><span class="pl-k">call</span> cli<span class="pl-k">%</span>parse(error<span class="pl-k">=</span>error)</pre></div>
+
+<p>more details on parsing method are reported in the followings;
+4. getting parsed values and storing into user-defined variables:</p>
+
+<div class="highlight highlight-fortran"><pre><span class="pl-k">call</span> cli<span class="pl-k">%</span>get(switch<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>-o<span class="pl-pds">'</span></span>,val<span class="pl-k">=</span>OutputFilename,error<span class="pl-k">=</span>error)</pre></div>
+
+<p><em>OutputFilename</em> and <em>error</em> being previously defined variables. </p>
+
+<p>Optionally you can initialize CLI with custom help messages by means of <em>init</em> method.</p>
+
+<h4>
+<a id="initializing-cli-with-personalized-help-messages" class="anchor" href="#initializing-cli-with-personalized-help-messages" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="cli-init">Initializing CLI with personalized help messages</a>
+</h4>
+
+<p>CLI data type can already (quasi-automatically) handle CLAs through its default values (provided from the baseline variable declaration, i.e. <code>type(Type_Command_Line_Interface):: cli</code>). However, in order to improve the clearness CLI messages you can personalized help messages by means of <em>init</em> method (that remains an optional step):</p>
+
+<div class="highlight highlight-fortran"><pre><span class="pl-k">call</span> cli<span class="pl-k">%</span>init(progname,version,help,examples,disable_hv)</pre></div>
+
+<p>where</p>
+
+<div class="highlight highlight-fortran"><pre><span class="pl-st">character</span>(<span class="pl-k">*</span>), optional, <span class="pl-s">intent</span>(<span class="pl-s">IN</span>)<span class="pl-k">::</span> progname     <span class="pl-c">!&lt; Program name.</span>
+<span class="pl-st">character</span>(<span class="pl-k">*</span>), optional, <span class="pl-s">intent</span>(<span class="pl-s">IN</span>)<span class="pl-k">::</span> version      <span class="pl-c">!&lt; Program version.</span>
+<span class="pl-st">character</span>(<span class="pl-k">*</span>), optional, <span class="pl-s">intent</span>(<span class="pl-s">IN</span>)<span class="pl-k">::</span> help         <span class="pl-c">!&lt; Help message introducing the CLI usage.</span>
+<span class="pl-st">character</span>(<span class="pl-k">*</span>), optional, <span class="pl-s">intent</span>(<span class="pl-s">IN</span>)<span class="pl-k">::</span> examples(<span class="pl-c1">1</span>:) <span class="pl-c">!&lt; Examples of correct usage.</span>
+<span class="pl-st">logical</span>,      optional, <span class="pl-s">intent</span>(<span class="pl-s">IN</span>)<span class="pl-k">::</span> disable_hv   <span class="pl-c">!&lt; Disable automatic inserting of 'help' and 'version' CLAs.</span></pre></div>
+
+<p>The dummy arguments should be auto-explicative. Note that the <em>help</em> and <em>examples</em> dummy arguments are used for printing a pretty help message explaining the CLI usage, thus should be always provided even if they are optional arguments. Moreover, due the Fortran limitations, the array containing the examples must have character elements with the same length, thus trailing white spaces must padded to short examples.</p>
+
+<p>The only not so clear argument of <em>init</em> method is <strong>disable_hv</strong>.</p>
+
+<h6>
+<a id="disabling-automatic-help-and-version" class="anchor" href="#disabling-automatic-help-and-version" aria-hidden="true"><span class="octicon octicon-link"></span></a>Disabling automatic Help and Version</h6>
+
+<p>FLAP automatically add 2 special CLA to CLI:</p>
+
+<ol>
+<li>a CLA for printing a help message explaining the correct use of the CLI;</li>
+<li>a CLA for printing the version (if defined when the CLI is initialized) of the program.</li>
+</ol>
+
+<p>This two CLAs has the following default switches:</p>
+
+<ul>
+<li>
+<em>help</em>: switch <code>--help</code>, abbreviated switch <code>-h</code>;</li>
+<li>
+<em>version</em>: switch <code>--version</code>, abbreviated switch <code>-v</code>;</li>
+</ul>
+
+<p>However, FLAP before adding these two CLAs to the CLI checks if these switches have been already used and in case does not add them. To disable such an automatic CLAs creation initialized the CLI with:</p>
+
+<div class="highlight highlight-fortran"><pre><span class="pl-k">call</span> cli<span class="pl-k">%</span>init(...,disable_hv<span class="pl-k">=</span><span class="pl-c1">.true.</span>)</pre></div>
+
+<p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
+
+<h4>
+<a id="adding-a-new-cla-to-cli" class="anchor" href="#adding-a-new-cla-to-cli" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="cla-add">Adding a new CLA to CLI</a>
+</h4>
+
+<p>CLA cannot be directly defined and modified: to handle a CLA you must use CLI methods. Adding CLA to CLI is performed through the <em>add</em> method:</p>
+
+<div class="highlight highlight-fortran"><pre>  <span class="pl-k">call</span> cli<span class="pl-k">%</span>add(pref,switch,switch_ab,help,required,positional,position,act,def,nargs,choices,error)</pre></div>
+
+<p>where</p>
+
+<div class="highlight highlight-fortran"><pre><span class="pl-st">character</span>(<span class="pl-k">*</span>), optional, <span class="pl-s">intent</span>(<span class="pl-s">IN</span>)<span class="pl-k">::</span>  pref       <span class="pl-c">!&lt; Prefixing string.</span>
+<span class="pl-st">character</span>(<span class="pl-k">*</span>), optional, <span class="pl-s">intent</span>(<span class="pl-s">IN</span>)<span class="pl-k">::</span>  switch     <span class="pl-c">!&lt; Switch name.</span>
+<span class="pl-st">character</span>(<span class="pl-k">*</span>), optional, <span class="pl-s">intent</span>(<span class="pl-s">IN</span>)<span class="pl-k">::</span>  switch_ab  <span class="pl-c">!&lt; Abbreviated switch name.</span>
+<span class="pl-st">character</span>(<span class="pl-k">*</span>), optional, <span class="pl-s">intent</span>(<span class="pl-s">IN</span>)<span class="pl-k">::</span>  help       <span class="pl-c">!&lt; Help message describing the CLA.</span>
+<span class="pl-st">logical</span>,      optional, <span class="pl-s">intent</span>(<span class="pl-s">IN</span>)<span class="pl-k">::</span>  required   <span class="pl-c">!&lt; Flag for set required argument.</span>
+<span class="pl-st">logical</span>,      optional, <span class="pl-s">intent</span>(<span class="pl-s">IN</span>)<span class="pl-k">::</span>  positional <span class="pl-c">!&lt; Flag for checking if CLA is a positional or a named CLA.</span>
+<span class="pl-st">integer</span>(I4P), optional, <span class="pl-s">intent</span>(<span class="pl-s">IN</span>)<span class="pl-k">::</span>  position   <span class="pl-c">!&lt; Position of positional CLA.</span>
+<span class="pl-st">character</span>(<span class="pl-k">*</span>), optional, <span class="pl-s">intent</span>(<span class="pl-s">IN</span>)<span class="pl-k">::</span>  act        <span class="pl-c">!&lt; CLA value action.</span>
+<span class="pl-st">character</span>(<span class="pl-k">*</span>), optional, <span class="pl-s">intent</span>(<span class="pl-s">IN</span>)<span class="pl-k">::</span>  def        <span class="pl-c">!&lt; Default value.</span>
+<span class="pl-st">character</span>(<span class="pl-k">*</span>), optional, <span class="pl-s">intent</span>(<span class="pl-s">IN</span>)<span class="pl-k">::</span>  nargs      <span class="pl-c">!&lt; Number of arguments consumed by CLA.</span>
+<span class="pl-st">character</span>(<span class="pl-k">*</span>), optional, <span class="pl-s">intent</span>(<span class="pl-s">IN</span>)<span class="pl-k">::</span>  choices    <span class="pl-c">!&lt; List of allowable values for the argument.</span>
+<span class="pl-st">integer</span>(I4P),           <span class="pl-s">intent</span>(<span class="pl-s">OUT</span>)<span class="pl-k">::</span> error      <span class="pl-c">!&lt; Error trapping flag.</span></pre></div>
+
+<p>The dummy arguments should be auto-explicative. Note that the <em>help</em> dummy argument is used for printing a pretty help message explaining the CLI usage, thus should be always provided even if CLA is an optional argument. It is also worthy of note that the abbreviated switch is set equal to switch name (if passed) if no otherwise defined. Moreover, one between <em>switch</em> and <em>position</em> must be defined: if <em>switch</em> is defined then a named CLA is initialed, otherwise <em>position</em> must be defined (with <em>positional=.true.</em>) and a positional CLA is initialized. </p>
+
+<p>The following rules apply:</p>
+
+<ul>
+<li>
+<code>pref</code> string is used as prefixing string for any messages on standard out/err;</li>
+<li>if <code>required</code> is set to <code>.false.</code> a default value must be defined, even if it is a null string;</li>
+<li>no matter the type of CLA value is (real, integer, etc...) the definition of default value for an optional CLA must be always a string, e.g. <code>def='1'</code> or <code>def='1.0'</code>; the actual type casting is performed when the CLA value is gotten by means of the <code>get</code> method: the type casting is performed by means of the actual type (and kind) of the variable used for storing CLA value;</li>
+<li>presently the possible actions of CLA are (all actions definitions are case insensitive):
+
+<ul>
+<li>
+<code>act=store</code>, the CLA stores a value that must be passed after the CLA switch for named CLA;</li>
+<li>
+<code>act=store_true</code>, the CLA stores <code>.true.</code>;</li>
+<li>
+<code>act=store_false</code>, the CLA stores <code>.false.</code>;</li>
+<li>
+<code>act=print_help</code>, the CLA triggers the printing of the help message that is built with the help messages of all defined CLAs and the help message of CLI;</li>
+<li>
+<code>act=print_version</code>, the CLA triggers the printing the program version; if the version is not defined when the CLI is initialized the message will contain <code>version unknown</code>.</li>
+</ul>
+</li>
+</ul>
+
+<p>When a CLA is added a self-consistency-check is performed, e.g. it is checked if an optional CLA has a default value or if one of <em>position</em> and <em>switch</em> has been passed. In case the self-consistency-check fails an error code is returned and an error message is printed to <em>stderr</em>.</p>
+
+<p>Note that <em>choices</em>  must be a comma-separated list of allowable values and if it has been specified the passed value is checked to be consistent with this list when the <em>get</em> method is invoked: an error code is returned and if the value is not into the specified range an error message is printed to <em>stderr</em>. However the value of CLA is not modified and it is equal to the passed value.</p>
+
+<p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
+
+<h4>
+<a id="parsing-the-cli" class="anchor" href="#parsing-the-cli" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="cli-parse">Parsing the CLI</a>
+</h4>
+
+<p>The complete signature of <em>parse</em> method is the following:</p>
+
+<div class="highlight highlight-fortran"><pre>  <span class="pl-k">call</span> cli<span class="pl-k">%</span>parse(pref,error)</pre></div>
+
+<p>where</p>
+
+<div class="highlight highlight-fortran"><pre><span class="pl-st">character</span>(<span class="pl-k">*</span>), optional, <span class="pl-s">intent</span>(<span class="pl-s">IN</span>)<span class="pl-k">::</span>  pref  <span class="pl-c">!&lt; Prefixing string.</span>
+<span class="pl-st">integer</span>(I4P),           <span class="pl-s">intent</span>(<span class="pl-s">OUT</span>)<span class="pl-k">::</span> error <span class="pl-c">!&lt; Error trapping flag.</span></pre></div>
+
+<p>The dummy arguments should be auto-explicative. It is worthy of note that when <em>parse</em> method is invoked a consistency-check is performed: in particular it is checked that all named CLAs (the non positional ones having defined the switch name) have a unique switch name in order to avoid ambiguity.</p>
+
+<p>The help messages are print if one of the following issues arise:</p>
+
+<ul>
+<li>the <em>help</em> CLA is passed;</li>
+<li>the switch name of unknown CLA is passed;</li>
+<li>the number of passed CLAs is less than the required CLAs previously defined.</li>
+</ul>
+
+<p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
+
+<h4>
+<a id="getting-a-cla-value-from-parsed-cli" class="anchor" href="#getting-a-cla-value-from-parsed-cli" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="cla-get">Getting a CLA value from parsed CLI</a>
+</h4>
+
+<p>After the CLI has been parsed, the user is allowed to get any of the defined CLA value. Accordingly to the user-definition, a CLA value can be obtained either by the switch name (for named CLA) or by the CLA position (for positional CLA):</p>
+
+<div class="highlight highlight-fortran"><pre><span class="pl-k">call</span> cli<span class="pl-k">%</span>get(switch<span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">'</span>-r<span class="pl-pds">'</span></span>,val<span class="pl-k">=</span>rval,error<span class="pl-k">=</span>err)</pre></div>
+
+<p>or</p>
+
+<div class="highlight highlight-fortran"><pre><span class="pl-k">call</span> cli<span class="pl-k">%</span>get(position<span class="pl-k">=</span><span class="pl-c1">1</span>,val<span class="pl-k">=</span>prval,error<span class="pl-k">=</span>err)</pre></div>
+
+<p>where <em>rval</em> and <em>prval</em> are two previously defined variables. Currently, the <em>val</em> variable can be only scalar of types <em>integer</em>, <em>real</em>, <em>logical</em> and <em>character</em>. The complete API of <em>cli%get</em> is the following:</p>
+
+<div class="highlight highlight-fortran"><pre><span class="pl-k">call</span> cli<span class="pl-k">%</span>get(pref,switch,position,val,error)</pre></div>
+
+<p>where the signature of  <em>get</em> is:</p>
+
+<div class="highlight highlight-fortran"><pre><span class="pl-st">character</span>(<span class="pl-k">*</span>), optional, <span class="pl-s">intent</span>(<span class="pl-s">IN</span>)<span class="pl-k">::</span>    pref     <span class="pl-c">!&lt; Prefixing string.</span>
+<span class="pl-st">character</span>(<span class="pl-k">*</span>), optional, <span class="pl-s">intent</span>(<span class="pl-s">IN</span>)<span class="pl-k">::</span>    switch   <span class="pl-c">!&lt; Switch name.</span>
+<span class="pl-st">integer</span>(I4P), optional, <span class="pl-s">intent</span>(<span class="pl-s">IN</span>)<span class="pl-k">::</span>    position <span class="pl-c">!&lt; Position of positional CLA.</span>
+class(<span class="pl-k">*</span>),               <span class="pl-s">intent</span>(<span class="pl-s">INOUT</span>)<span class="pl-k">::</span> val      <span class="pl-c">!&lt; CLA value.</span>
+<span class="pl-st">integer</span>(I4P),           <span class="pl-s">intent</span>(<span class="pl-s">OUT</span>)<span class="pl-k">::</span>   error    <span class="pl-c">!&lt; Error trapping flag.</span></pre></div>
+
+<p>The dummy arguments should be auto-explicative. Note that the <em>switch</em> passed can be also the abbreviated form if defined differently from the extended one. If no <em>switch</em> neither <em>position</em> is passed and error is arisen. Moreover, the type of the value returned is chosen accordingly to actual <em>val</em> argument passed: inside the <em>get</em> method <em>val</em> is an unlimited polymorphic variable which type is defined only when the user passes the actual <em>val</em> container.</p>
+
+<p>Note that for multiple valued (list) CLA, the <em>get</em> method accept also array <em>val</em>:</p>
+
+<div class="highlight highlight-fortran"><pre><span class="pl-st">character</span>(<span class="pl-k">*</span>), optional, <span class="pl-s">intent</span>(<span class="pl-s">IN</span>)<span class="pl-k">::</span>    pref     <span class="pl-c">!&lt; Prefixing string.</span>
+<span class="pl-st">character</span>(<span class="pl-k">*</span>), optional, <span class="pl-s">intent</span>(<span class="pl-s">IN</span>)<span class="pl-k">::</span>    switch   <span class="pl-c">!&lt; Switch name.</span>
+<span class="pl-st">integer</span>(I4P), optional, <span class="pl-s">intent</span>(<span class="pl-s">IN</span>)<span class="pl-k">::</span>    position <span class="pl-c">!&lt; Position of positional CLA.</span>
+class(<span class="pl-k">*</span>),               <span class="pl-s">intent</span>(<span class="pl-s">INOUT</span>)<span class="pl-k">::</span> val(<span class="pl-c1">1</span>:)  <span class="pl-c">!&lt; CLA value.</span>
+<span class="pl-st">integer</span>(I4P),           <span class="pl-s">intent</span>(<span class="pl-s">OUT</span>)<span class="pl-k">::</span>   error    <span class="pl-c">!&lt; Error trapping flag.</span></pre></div>
+
+<p>however, the <em>get</em> method is invoked exactly with the same signature of single valued CLA as above: <em>get</em> is a generic, user-friendly method that automatically handles both scalar and array <em>val</em> variables.</p>
+
+<p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
+
+<h3>
+<a id="compile-testing-program" class="anchor" href="#compile-testing-program" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="test">Compile Testing Program</a>
+</h3>
+
+<p>As a practical example of FLAP usage a testing program named <strong>flap_test</strong> is provided. You can compile with Fortran compiler supporting modern standards (2003+). Note that the dependency hierarchy of modules USE statement must be respected in order to successfully compile the program. If you are tired by frustrating usage of makefiles &amp; co. you can try <a href="https://github.com/szaghi/FoBiS">FoBiS.py</a> for building the program. A <em>fobos</em> file is provided with FLAP. To build it just type into the root directory of FLAP:</p>
+
+<div class="highlight highlight-bash"><pre>FoBiS.py build</pre></div>
+
+<p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
+
+<h2>
+<a id="version-history" class="anchor" href="#version-history" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+<a name="versions"></a>Version History</h2>
+
+<p>In the following the changelog of most important releases is reported.</p>
+
+<h3>
+<a id="v001" class="anchor" href="#v001" aria-hidden="true"><span class="octicon octicon-link"></span></a>v0.0.1</h3>
+
+<h5>
+<a id="download-zip-ball-or-tar-one" class="anchor" href="#download-zip-ball-or-tar-one" aria-hidden="true"><span class="octicon octicon-link"></span></a>Download <a href="https://github.com/szaghi/FLAP/archive/v0.0.1.zip">ZIP</a> ball or <a href="https://github.com/szaghi/FLAP/archive/v0.0.1.tar.gz">TAR</a> one</h5>
+
+<p>Stable Release. Fully backward compatible. </p>
+
+<p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Flap maintained by <a href="https://github.com/szaghi">szaghi</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
