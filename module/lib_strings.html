@@ -116,6 +116,17 @@
     <div class="col-lg-3">
     
   
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/lib_strings.html#var-upper_alphabet">upper_alphabet</a>
+      
+      <a class="list-group-item" href="../module/lib_strings.html#var-lower_alphabet">lower_alphabet</a>
+      
+    </div>
+  </div>
+  
   
   
   
@@ -148,6 +159,8 @@
       <a class="list-group-item" href="../module/lib_strings.html#proc-replace">replace</a>
       
       <a class="list-group-item" href="../module/lib_strings.html#proc-unique">unique</a>
+      
+      <a class="list-group-item" href="../module/lib_strings.html#proc-count_substring">count_substring</a>
       
     </div>
   </div>
@@ -202,6 +215,52 @@
     
 
     
+    <section>
+    <h2>Variables</h2>
+    
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Visibility</th>
+
+<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-upper_alphabet"></a>character(len=26),</td>
+  
+  <td>private,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>upper_alphabet</strong></td><td> =</td><td>'ABCDEFGHIJKLMNOPQRSTUVWXYZ'</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-lower_alphabet"></a>character(len=26),</td>
+  
+  <td>private,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>lower_alphabet</strong></td><td> =</td><td>'abcdefghijklmnopqrstuvwxyz'</td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    </section>
+    <br>
+    
     
     
 	 <h2>Interfaces</h2>
@@ -219,7 +278,7 @@
     
     
     <h3>
-private  function count_substring(string, substring)
+private  function <a href='../proc/count_substring.html'>count_substring</a>(string, substring)
 </h3>
     
     <h4>Arguments</h4>
@@ -795,6 +854,78 @@ public  function <a href='../proc/unique.html'>unique</a>(string, substring)
      <h4>Return Value <small><a class="anchor" name="var-uniq"></a>character(len=len(string))
   </small></h4>
   <p>String parsed.</p>
+    
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="proc-count_substring"></a><h3>
+private  function <a href='../proc/count_substring.html'>count_substring</a>(string, substring)
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-string"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>string</strong></td><td><p>String.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-substring"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>substring</strong></td><td><p>Substring.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-No"></a>integer(kind=I4P)
+  </small></h4>
+  <p>Number of occurrences.</p>
     
         
 

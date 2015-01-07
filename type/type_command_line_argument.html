@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	 
+	 <meta name="description" content="<p>Fortran command Line Arguments Parser for poor men</p>">
+    
+    <meta name="author" content="Chris MacMackin" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>Type_Command_Line_Argument &ndash; FLAP </title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">FLAP </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            
+            <li><a href="../lists/files.html">Source Files</a></li>
+				
+				
+            <li><a href="../lists/modules.html">Modules</a></li>
+				
+				
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+				
+				
+            <li><a href="../lists/types.html">Derived Types</a></li>
+				
+				
+            <li><a href="../program/flap_test.html">Program</a></li>
+								
+          </ul>
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>Type_Command_Line_Argument
+    <small>Derived Type</small>
+    
+    </h1>
+	 
+<div class="row">
+<div class="col-lg-7">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px">
+     
+     
+     
+     
+    
+    
+    <li><i class="fa fa-code"></i><a href="../src/Data_Type_Command_Line_Interface.f90"> Source File</a></li>
+     
+  </ul>
+  </div>
+  </div>
+  <div class="col-lg-5">
+  <ol class="breadcrumb hierarchy text-right">
+  
+     <li><a href='../sourcefile/data_type_command_line_interface.f90.html'>Data_Type_Command_Line_Interface.f90</a></li>
+  
+     <li><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></li>
+  
+     <li class="active">Type_Command_Line_Argument</li>
+  </ol>
+  </div>
+</div>
+    
+  </div>
+  
+  <div class="row">
+    <div class="col-lg-3">
+    
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#var-switch">switch</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#var-switch_ab">switch_ab</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#var-help">help</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#var-required">required</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#var-positional">positional</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#var-position">position</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#var-passed">passed</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#var-act">act</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#var-def">def</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#var-nargs">nargs</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#var-choices">choices</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#var-val">val</a>
+      
+    </div>
+  </div>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Finalization Procedures</h3></div>
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#fp-finalize_cla">finalize_cla</a>
+      
+    </div>
+  </div>
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Type-Bound Procedures</h3></div>
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#bp-free">free</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#bp-check">check</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#bp-check_choices">check_choices</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#bp-get">get</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#bp-print">print</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#bp-add_signature">add_signature</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#bp-assignment(=)">assignment(=)</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#bp-get_cla">get_cla</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#bp-get_cla_list">get_cla_list</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#bp-assign_cla">assign_cla</a>
+      
+    </div>
+  </div>
+  
+  
+  <hr>
+  
+  <div class="panel panel-default">
+    <div class="panel-heading text-left"><h3 class="panel-title">All Derived Types</h3></div>
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html">Type_Command_Line_Argument</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_interface.html">Type_Command_Line_Interface</a>
+      
+    </div>
+  </div>
+  
+  
+    </div>
+    
+    <div class="col-lg-9" id='text'>
+    <p>Derived type containing the useful data for handling command line arguments (CLA).
+ @note If not otherwise declared the action on CLA value is set to "store" a value.</p>
+    <br>
+    
+    <section>
+    <h2>Components</h2>
+    
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Visibility</th>
+
+<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-switch"></a>character(len=:),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>switch</strong></td><td></td><td></td><td><p>Switch name.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-switch_ab"></a>character(len=:),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>switch_ab</strong></td><td></td><td></td><td><p>Abbreviated switch name.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-help"></a>character(len=:),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>help</strong></td><td></td><td></td><td><p>Help message describing the CLA.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-required"></a>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>required</strong></td><td> =</td><td>.false.</td><td><p>Flag for set required argument.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-positional"></a>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>positional</strong></td><td> =</td><td>.false.</td><td><p>Flag for checking if CLA is a positional or a named CLA.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-position"></a>integer(kind=I4P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>position</strong></td><td> =</td><td>0_I4P</td><td><p>Position of positional CLA.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-passed"></a>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>passed</strong></td><td> =</td><td>.false.</td><td><p>Flag for checking if CLA has been passed to CLI.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-act"></a>character(len=:),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>act</strong></td><td></td><td></td><td><p>CLA value action.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-def"></a>character(len=:),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>def</strong></td><td></td><td></td><td><p>Default value.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-nargs"></a>character(len=:),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>nargs</strong></td><td></td><td></td><td><p>Number of arguments consumed by CLA.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-choices"></a>character(len=:),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>choices</strong></td><td></td><td></td><td><p>List (comma separated) of allowable values for the argument.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-val"></a>character(len=:),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>val</strong></td><td></td><td></td><td><p>CLA value.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    </section>
+    <br>
+    
+    
+    
+    
+    
+    <section>
+    <h2>Finalization Procedures</h2>
+	   
+    
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="fp-finalize_cla"></a><h3>final :: finalize_cla</h3></div>
+  <div class="panel-body">
+     
+    
+    <h3>
+private  subroutine <a href='../proc/finalize_cla.html'>finalize_cla</a>(cla)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>type(Type_Command_Line_Argument),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+<dl class="dl-horizontal">
+    
+    
+    
+    
+    
+  </dl>
+
+       <p>Procedure for freeing dynamic memory when finalizing.</p>
+        
+
+  </div>
+</div>
+    
+
+    </section>
+    <br>
+    
+    
+     
+    <section>
+    <h2>Type-Bound Procedures</h2>
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-free"></a><h3>procedure, public :: <strong>free</strong>  => <a href='../proc/free_cla.html'>free_cla</a> 
+    
+  <h3></div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/free_cla.html'>free_cla</a>(cla)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>class(Type_Command_Line_Argument),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+<dl class="dl-horizontal">
+    
+    
+    
+    
+    
+  </dl>
+
+       <p>Procedure for freeing dynamic memory.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-check"></a><h3>procedure, public :: <strong>check</strong>  => <a href='../proc/check_cla.html'>check_cla</a> 
+    
+  <h3></div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/check_cla.html'>check_cla</a>(cla, pref, error)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>class(Type_Command_Line_Argument),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>error</strong></td><td><p>Error trapping flag.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+<dl class="dl-horizontal">
+    
+    
+    
+    
+    
+  </dl>
+
+       <p>Procedure for checking CLA data consistency.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-check_choices"></a><h3>procedure, public :: <strong>check_choices</strong>  => <a href='../proc/check_choices_cla.html'>check_choices_cla</a> 
+    
+  <h3></div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/check_choices_cla.html'>check_choices_cla</a>(cla, val, pref, error)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>class(Type_Command_Line_Argument),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-val"></a>class(),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>val</strong></td><td><p>CLA value.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>error</strong></td><td><p>Error trapping flag.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+<dl class="dl-horizontal">
+    
+    
+    
+    
+    
+  </dl>
+
+       <p>Procedure for checking if CLA value is in allowed choices.
+ @note This procedure can be called if and only if cla%choices has been allocated.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-get"></a><h3>generic, public :: <strong>get</strong>  => <a href='../proc/get_cla.html'>get_cla</a>, <a href='../proc/get_cla_list.html'>get_cla_list</a> 
+    
+  <h3></div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/get_cla.html'>get_cla</a>(cla, pref, val, error)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>class(Type_Command_Line_Argument),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-val"></a>class(),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>val</strong></td><td><p>CLA value.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>error</strong></td><td><p>Error trapping flag.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+<dl class="dl-horizontal">
+    
+    
+    
+    
+    
+  </dl>
+
+       <p>Procedure for getting CLA (single) value.
+ @note For logical type CLA the value is directly read without any robust error trapping.</p>
+        
+
+      </li>
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/get_cla_list.html'>get_cla_list</a>(cla, pref, val, error)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>class(Type_Command_Line_Argument),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-val"></a>class(),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>val</strong>(1:)</td><td><p>CLA values.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>error</strong></td><td><p>Error trapping flag.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+<dl class="dl-horizontal">
+    
+    
+    
+    
+    
+  </dl>
+
+       <p>Procedure for getting CLA (multiple) value.
+ @note For logical type CLA the value is directly read without any robust error trapping.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-print"></a><h3>procedure, public :: <strong>print</strong>  => <a href='../proc/print_cla.html'>print_cla</a> 
+    
+  <h3></div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/print_cla.html'>print_cla</a>(cla, pref, iostat, iomsg, unit)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>class(Type_Command_Line_Argument),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-iostat"></a>integer(kind=I4P),</td>
+  <td>intent(out),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>iostat</strong></td><td><p>IO error.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-iomsg"></a>character(len=*),</td>
+  <td>intent(out),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>iomsg</strong></td><td><p>IO error message.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-unit"></a>integer(kind=I4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>unit</strong></td><td><p>Logic unit.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+<dl class="dl-horizontal">
+    
+    
+    
+    
+    
+  </dl>
+
+       <p>Procedure for printing CLA data with a pretty format.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-add_signature"></a><h3>procedure, public :: <strong>add_signature</strong>  
+    
+  <h3></div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/add_signature.html'>add_signature</a>(cla, signature)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>class(Type_Command_Line_Argument),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-signature"></a>character(len=:),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>signature</strong></td><td><p>CLI signature.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+<dl class="dl-horizontal">
+    
+    
+    
+    
+    
+  </dl>
+
+       <p>Procedure for adding CLA signature to the CLI one.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-assignment(=)"></a><h3>generic, public :: <strong>assignment(=)</strong>  => <a href='../proc/assign_cla.html'>assign_cla</a> 
+    
+  <h3></div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/assign_cla.html'>assign_cla</a>(self1, self2)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-self1"></a>class(Type_Command_Line_Argument),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self1</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-self2"></a>type(Type_Command_Line_Argument),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self2</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+<dl class="dl-horizontal">
+    
+    
+    
+    
+    
+  </dl>
+
+       <p>Procedure for assignment between two selfs.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-get_cla"></a><h3>procedure, private :: <strong>get_cla</strong>  
+    
+  <h3></div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/get_cla.html'>get_cla</a>(cla, pref, val, error)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>class(Type_Command_Line_Argument),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-val"></a>class(),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>val</strong></td><td><p>CLA value.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>error</strong></td><td><p>Error trapping flag.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+<dl class="dl-horizontal">
+    
+    
+    
+    
+    
+  </dl>
+
+       <p>Procedure for getting CLA (single) value.
+ @note For logical type CLA the value is directly read without any robust error trapping.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-get_cla_list"></a><h3>procedure, private :: <strong>get_cla_list</strong>  
+    
+  <h3></div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/get_cla_list.html'>get_cla_list</a>(cla, pref, val, error)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>class(Type_Command_Line_Argument),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-val"></a>class(),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>val</strong>(1:)</td><td><p>CLA values.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>error</strong></td><td><p>Error trapping flag.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+<dl class="dl-horizontal">
+    
+    
+    
+    
+    
+  </dl>
+
+       <p>Procedure for getting CLA (multiple) value.
+ @note For logical type CLA the value is directly read without any robust error trapping.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-assign_cla"></a><h3>procedure, private, pass(self1) :: <strong>assign_cla</strong>  
+    
+  <h3></div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/assign_cla.html'>assign_cla</a>(self1, self2)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-self1"></a>class(Type_Command_Line_Argument),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self1</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-self2"></a>type(Type_Command_Line_Argument),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self2</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+<dl class="dl-horizontal">
+    
+    
+    
+    
+    
+  </dl>
+
+       <p>Procedure for assignment between two selfs.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+    </section>
+    
+    </div>
+  </div>
+
+    <hr>
+    <footer>
+        <div class="row">
+        <div class="col-md-6">&copy; 2015 FLAP was written by Stefano Zaghi. </div>
+        <div class="col-md-6"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a>.</span></div>
+        </div>
+        <br>
+    </footer>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'],
+        'HTML-CSS': { 
+           styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: '#000000 ! important'} }
+        }
+      });
+    </script>
+    <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  </body>
+</html>
