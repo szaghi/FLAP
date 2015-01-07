@@ -181,7 +181,11 @@
       
       <a class="list-group-item" href="../type/type_command_line_interface.html#bp-assignment(=)">assignment(=)</a>
       
+      <a class="list-group-item" href="../type/type_command_line_interface.html#bp-get_cla_cli">get_cla_cli</a>
+      
       <a class="list-group-item" href="../type/type_command_line_interface.html#bp-get_cla_list_cli">get_cla_list_cli</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_interface.html#bp-assign_cli">assign_cli</a>
       
     </div>
   </div>
@@ -192,6 +196,8 @@
   <div class="panel panel-default">
     <div class="panel-heading text-left"><h3 class="panel-title">All Derived Types</h3></div>
     <div class="list-group">
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html">Type_Command_Line_Argument</a>
       
       <a class="list-group-item" href="../type/type_command_line_interface.html">Type_Command_Line_Interface</a>
       
@@ -363,7 +369,7 @@
      
     
     <h3>
-private  subroutine finalize(cli)
+private  subroutine <a href='../proc/finalize.html'>finalize</a>(cli)
 </h3>
     
     <h4>Arguments</h4>
@@ -438,7 +444,7 @@ private  subroutine finalize(cli)
       
     
     <h3>
-private  subroutine free(cli)
+private  subroutine <a href='../proc/free.html'>free</a>(cli)
 </h3>
     
     <h4>Arguments</h4>
@@ -507,7 +513,7 @@ private  subroutine free(cli)
       
     
     <h3>
-private pure subroutine init(cli, progname, version, help, examples, disable_hv)
+private pure subroutine <a href='../proc/init.html'>init</a>(cli, progname, version, help, examples, disable_hv)
 </h3>
     
     <h4>Arguments</h4>
@@ -651,7 +657,7 @@ private pure subroutine init(cli, progname, version, help, examples, disable_hv)
       
     
     <h3>
-private  subroutine add(cli, pref, switch, switch_ab, help, required, positional, position, act, def, nargs, choices, error)
+private  subroutine <a href='../proc/add.html'>add</a>(cli, pref, switch, switch_ab, help, required, positional, position, act, def, nargs, choices, error)
 </h3>
     
     <h4>Arguments</h4>
@@ -902,7 +908,7 @@ private  subroutine add(cli, pref, switch, switch_ab, help, required, positional
       
     
     <h3>
-private  subroutine check(cli, pref, error)
+private  subroutine <a href='../proc/check.html'>check</a>(cli, pref, error)
 </h3>
     
     <h4>Arguments</h4>
@@ -1001,7 +1007,7 @@ private  subroutine check(cli, pref, error)
       
     
     <h3>
-private pure function passed(cli, switch, position)
+private pure function <a href='../proc/passed.html'>passed</a>(cli, switch, position)
 </h3>
     
     <h4>Arguments</h4>
@@ -1109,7 +1115,7 @@ private pure function passed(cli, switch, position)
       
     
     <h3>
-private  subroutine parse(cli, pref, error)
+private  subroutine <a href='../proc/parse.html'>parse</a>(cli, pref, error)
 </h3>
     
     <h4>Arguments</h4>
@@ -1199,7 +1205,7 @@ private  subroutine parse(cli, pref, error)
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="bp-get"></a><h3>generic, public :: <strong>get</strong>  => get_cla_cli, get_cla_list_cli 
+  <div class="panel-heading codesum"><a class="anchor" name="bp-get"></a><h3>generic, public :: <strong>get</strong>  => <a href='../proc/get_cla_cli.html'>get_cla_cli</a>, <a href='../proc/get_cla_list_cli.html'>get_cla_list_cli</a> 
     
   <h3></div>
   
@@ -1209,7 +1215,7 @@ private  subroutine parse(cli, pref, error)
       
     
     <h3>
-private  subroutine get_cla_cli(cli, pref, switch, position, val, error)
+private  subroutine <a href='../proc/get_cla_cli.html'>get_cla_cli</a>(cli, pref, switch, position, val, error)
 </h3>
     
     <h4>Arguments</h4>
@@ -1342,7 +1348,7 @@ private  subroutine get_cla_cli(cli, pref, switch, position, val, error)
       
     
     <h3>
-private  subroutine get_cla_list_cli(cli, pref, switch, position, val, error)
+private  subroutine <a href='../proc/get_cla_list_cli.html'>get_cla_list_cli</a>(cli, pref, switch, position, val, error)
 </h3>
     
     <h4>Arguments</h4>
@@ -1477,7 +1483,7 @@ private  subroutine get_cla_list_cli(cli, pref, switch, position, val, error)
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="bp-assignment(=)"></a><h3>generic, public :: <strong>assignment(=)</strong>  => assign_cli 
+  <div class="panel-heading codesum"><a class="anchor" name="bp-assignment(=)"></a><h3>generic, public :: <strong>assignment(=)</strong>  => <a href='../proc/assign_cli.html'>assign_cli</a> 
     
   <h3></div>
   
@@ -1487,7 +1493,7 @@ private  subroutine get_cla_list_cli(cli, pref, switch, position, val, error)
       
     
     <h3>
-private  subroutine assign_cli(self1, self2)
+private  subroutine <a href='../proc/assign_cli.html'>assign_cli</a>(self1, self2)
 </h3>
     
     <h4>Arguments</h4>
@@ -1561,7 +1567,7 @@ private  subroutine assign_cli(self1, self2)
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="bp-get_cla_list_cli"></a><h3>procedure, private :: <strong>get_cla_list_cli</strong>  =>  
+  <div class="panel-heading codesum"><a class="anchor" name="bp-get_cla_cli"></a><h3>procedure, private :: <strong>get_cla_cli</strong>  
     
   <h3></div>
   
@@ -1571,14 +1577,360 @@ private  subroutine assign_cli(self1, self2)
       
     
     <h3>
-  ()
+private  subroutine <a href='../proc/get_cla_cli.html'>get_cla_cli</a>(cli, pref, switch, position, val, error)
 </h3>
     
     <h4>Arguments</h4>
     
-      <em>None</em>
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cli</strong></td><td><p>CLI data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-switch"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>switch</strong></td><td><p>Switch name.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-position"></a>integer(kind=I4P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>position</strong></td><td><p>Position of positional CLA.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-val"></a>class(*),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>val</strong></td><td><p>CLA value.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>error</strong></td><td><p>Error trapping flag.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
     
     
+    
+    <h4>Description</h4>
+       
+<dl class="dl-horizontal">
+    
+    
+    
+    
+    
+  </dl>
+
+       <p>Procedure for getting CLA (single) value from CLAs list parsed.
+ @note For logical type CLA the value is directly read without any robust error trapping.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-get_cla_list_cli"></a><h3>procedure, private :: <strong>get_cla_list_cli</strong>  
+    
+  <h3></div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/get_cla_list_cli.html'>get_cla_list_cli</a>(cli, pref, switch, position, val, error)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cli</strong></td><td><p>CLI data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-switch"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>switch</strong></td><td><p>Switch name.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-position"></a>integer(kind=I4P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>position</strong></td><td><p>Position of positional CLA.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-val"></a>class(*),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>val</strong>(1:)</td><td><p>CLA values.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>error</strong></td><td><p>Error trapping flag.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+<dl class="dl-horizontal">
+    
+    
+    
+    
+    
+  </dl>
+
+       <p>Procedure for getting CLA multiple values from CLAs list parsed.
+ @note For logical type CLA the value is directly read without any robust error trapping.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-assign_cli"></a><h3>procedure, private, pass(self1) :: <strong>assign_cli</strong>  
+    
+  <h3></div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/assign_cli.html'>assign_cli</a>(self1, self2)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-self1"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self1</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-self2"></a>type(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self2</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+<dl class="dl-horizontal">
+    
+    
+    
+    
+    
+  </dl>
+
+       <p>Procedure for assignment between two selfs.</p>
         
 
       </li>
