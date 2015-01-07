@@ -1,33 +1,10 @@
-!> @ingroup DerivedType
-!> @{
-!> @defgroup Data_Type_Command_Line_InterfaceDerivedType Data_Type_Command_Line_Interface
-!> @}
-
-!> @ingroup Interface
-!> @{
-!> @defgroup Data_Type_Command_Line_InterfaceInterface Data_Type_Command_Line_Interface
-!> Module definition of Type_Command_Line_Interface
-!> @}
-
-!> @ingroup PrivateProcedure
-!> @{
-!> @defgroup Data_Type_Command_Line_InterfacePrivateProcedure Data_Type_Command_Line_Interface
-!> Module definition of Type_Command_Line_Interface
-!> @}
-
-!> @ingroup PublicProcedure
-!> @{
-!> @defgroup Data_Type_Command_Line_InterfacePublicProcedure Data_Type_Command_Line_Interface
-!> Module definition of Type_Command_Line_Interface
-!> @}
-
-!> @brief FLAP is A very simple and stupid tool for building easily nice Command Line Interface for modern Fortran projects.
-!> Type_Command_Line_Interface (CLI) is a derived type implementing a flexible Command Line Interface (CLI).
-!> @author    Stefano Zaghi
-!> @version   0.0.1
-!> @date      2014-10-22
-!> @copyright GNU Public License version 3.
 module Data_Type_Command_Line_Interface
+!< author:  Stefano Zaghi
+!< version: 0.0.1
+!< date:    2014-10-22
+!< license: GNU Public License version 3.
+!< FLAP is A very simple and stupid tool for building easily nice Command Line Interface for modern Fortran projects. It is based
+!< on Type_Command_Line_Interface (CLI), a derived type implementing a flexible Command Line Interface (CLI).
 !-----------------------------------------------------------------------------------------------------------------------------------
 USE IR_Precision                           ! Integers and reals precision definition.
 USE Lib_IO_Misc, only: stdout,stderr       ! Library for IO operations.
@@ -106,11 +83,9 @@ type, public:: Type_Command_Line_Interface
 endtype Type_Command_Line_Interface
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
-  !> @ingroup Data_Type_Command_Line_InterfacePrivateProcedure
-  !> @{
   ! Type_Command_Line_Argument procedures
-  !> @brief Procedure for freeing dynamic memory.
   elemental subroutine free_cla(cla)
+  !< @brief Procedure for freeing dynamic memory.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Argument), intent(INOUT):: cla !< CLA data.
@@ -129,8 +104,8 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine free_cla
 
-  !> @brief Procedure for freeing dynamic memory when finalizing.
   elemental subroutine finalize_cla(cla)
+  !< @brief Procedure for freeing dynamic memory when finalizing.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   type(Type_Command_Line_Argument), intent(INOUT):: cla !< CLA data.
@@ -142,8 +117,8 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine finalize_cla
 
-  !> @brief Procedure for checking CLA data consistency.
   subroutine check_cla(cla,pref,error)
+  !< @brief Procedure for checking CLA data consistency.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Argument), intent(IN)::  cla   !< CLA data.
@@ -178,9 +153,9 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check_cla
 
-  !> @brief Procedure for checking if CLA value is in allowed choices.
-  !> @note This procedure can be called if and only if cla%choices has been allocated.
   subroutine check_choices_cla(cla,val,pref,error)
+  !< @brief Procedure for checking if CLA value is in allowed choices.
+  !< @note This procedure can be called if and only if cla%choices has been allocated.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Argument), intent(IN)::  cla        !< CLA data.
@@ -254,9 +229,9 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check_choices_cla
 
-  !> @brief Procedure for getting CLA (single) value.
-  !> @note For logical type CLA the value is directly read without any robust error trapping.
   subroutine get_cla(cla,pref,val,error)
+  !< @brief Procedure for getting CLA (single) value.
+  !< @note For logical type CLA the value is directly read without any robust error trapping.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Argument), intent(INOUT):: cla     !< CLA data.
@@ -367,9 +342,9 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla
 
-  !> @brief Procedure for getting CLA (multiple) value.
-  !> @note For logical type CLA the value is directly read without any robust error trapping.
   subroutine get_cla_list(cla,pref,val,error)
+  !< @brief Procedure for getting CLA (multiple) value.
+  !< @note For logical type CLA the value is directly read without any robust error trapping.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Argument), intent(INOUT):: cla      !< CLA data.
@@ -556,8 +531,8 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list
 
-  !> @brief Procedure for printing CLA data with a pretty format.
   subroutine print_cla(cla,pref,iostat,iomsg,unit)
+  !< @brief Procedure for printing CLA data with a pretty format.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Argument), intent(IN)::  cla     !< CLA data.
@@ -638,8 +613,8 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine print_cla
 
-  !> @brief Procedure for adding CLA signature to the CLI one.
   subroutine add_signature(cla,signature)
+  !< @brief Procedure for adding CLA signature to the CLI one.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Argument), intent(IN)::    cla       !< CLA data.
@@ -691,8 +666,8 @@ contains
   endsubroutine add_signature
 
   ! Assignment (=)
-  !> @brief Procedure for assignment between two selfs.
   elemental subroutine assign_cla(self1,self2)
+  !< @brief Procedure for assignment between two selfs.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Argument), intent(INOUT):: self1
@@ -717,8 +692,8 @@ contains
   endsubroutine assign_cla
 
   ! Type_Command_Line_Interface procedures
-  !> @brief Procedure for freeing dynamic memory.
   elemental subroutine free(cli)
+  !< @brief Procedure for freeing dynamic memory.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Interface), intent(INOUT):: cli !< CLI data.
@@ -733,8 +708,8 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine free
 
-  !> @brief Procedure for freeing dynamic memory when finalizing.
   elemental subroutine finalize(cli)
+  !< @brief Procedure for freeing dynamic memory when finalizing.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   type(Type_Command_Line_Interface), intent(INOUT):: cli !< CLI data.
@@ -746,8 +721,8 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine finalize
 
-  !> @brief Procedure for initializing CLI.
   pure subroutine init(cli,progname,version,help,examples,disable_hv)
+  !< @brief Procedure for initializing CLI.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Interface), intent(INOUT):: cli          !< CLI data.
@@ -771,10 +746,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init
 
-  !> @brief Procedure for adding CLA to CLAs list.
-  !> @note If not otherwise declared the action on CLA value is set to "store" a value that must be passed after the switch name
-  !> or directly passed in case of positional CLA.
   subroutine add(cli,pref,switch,switch_ab,help,required,positional,position,act,def,nargs,choices,error)
+  !< @brief Procedure for adding CLA to CLAs list.
+  !< @note If not otherwise declared the action on CLA value is set to "store" a value that must be passed after the switch name
+  !< or directly passed in case of positional CLA.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Interface), intent(INOUT):: cli             !< CLI data.
@@ -842,8 +817,8 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine add
 
-  !> @brief Procedure for checking CLAs data consistency.
   subroutine check(cli,pref,error)
+  !< @brief Procedure for checking CLAs data consistency.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Interface), intent(IN)::  cli   !< CLI data.
@@ -878,8 +853,8 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check
 
-  !> @brief Procedure for checking if a CLA has been passed.
   pure function passed(cli,switch,position)
+  !< @brief Procedure for checking if a CLA has been passed.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Interface), intent(IN):: cli      !< CLI data.
@@ -905,9 +880,9 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction passed
 
-  !> @brief Procedure for parsing Command Line Interfaces by means of a previously initialized CLA list.
-  !> @note The leading and trailing white spaces are removed from CLA values.
   subroutine parse(cli,pref,error)
+  !< @brief Procedure for parsing Command Line Interfaces by means of a previously initialized CLA list.
+  !< @note The leading and trailing white spaces are removed from CLA values.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Interface), intent(INOUT):: cli            !< CLI data.
@@ -1078,9 +1053,9 @@ contains
     endsubroutine print_version
   endsubroutine parse
 
-  !> @brief Procedure for getting CLA (single) value from CLAs list parsed.
-  !> @note For logical type CLA the value is directly read without any robust error trapping.
   subroutine get_cla_cli(cli,pref,switch,position,val,error)
+  !< @brief Procedure for getting CLA (single) value from CLAs list parsed.
+  !< @note For logical type CLA the value is directly read without any robust error trapping.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Interface), intent(INOUT):: cli      !< CLI data.
@@ -1123,9 +1098,9 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_cli
 
-  !> @brief Procedure for getting CLA multiple values from CLAs list parsed.
-  !> @note For logical type CLA the value is directly read without any robust error trapping.
   subroutine get_cla_list_cli(cli,pref,switch,position,val,error)
+  !< @brief Procedure for getting CLA multiple values from CLAs list parsed.
+  !< @note For logical type CLA the value is directly read without any robust error trapping.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Interface), intent(INOUT):: cli      !< CLI data.
@@ -1169,8 +1144,8 @@ contains
   endsubroutine get_cla_list_cli
 
   ! Assignment (=)
-  !> @brief Procedure for assignment between two selfs.
   elemental subroutine assign_cli(self1,self2)
+  !< @brief Procedure for assignment between two selfs.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Interface), intent(INOUT):: self1
@@ -1185,9 +1160,4 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine assign_cli
-  !> @}
-
-  !> @ingroup Data_Type_Command_Line_InterfacePublicProcedure
-  !> @{
-  !> @}
 endmodule Data_Type_Command_Line_Interface
