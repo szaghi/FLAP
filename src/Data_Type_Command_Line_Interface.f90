@@ -77,9 +77,8 @@ type:: Type_Command_Line_Argument
     procedure,              private:: get_cla_list
     procedure, pass(self1), private:: assign_cla
 endtype Type_Command_Line_Argument
-!> Derived type implementing a flexible Command Line Interface (CLI).
-!> @ingroup Data_Type_Command_Line_InterfaceDerivedType
 type, public:: Type_Command_Line_Interface
+  !< Derived type implementing a flexible Command Line Interface (CLI).
   integer(I4P)::                                  Na          = 0_I4P !< Number of CLA.
   integer(I4P)::                                  Na_required = 0_I4P !< Number of command line arguments that CLI requires.
   integer(I4P)::                                  Na_optional = 0_I4P !< Number of command line arguments that are optional for CLI.

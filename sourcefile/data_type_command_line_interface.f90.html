@@ -233,9 +233,8 @@
     <span class="k">procedure</span><span class="p">,</span>              <span class="k">private</span><span class="kd">::</span> <span class="n">get_cla_list</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self1</span><span class="p">),</span> <span class="k">private</span><span class="kd">::</span> <span class="n">assign_cla</span>
 <span class="n">endtype</span> <span class="n">Type_Command_Line_Argument</span>
-<span class="c">!&gt; Derived type implementing a flexible Command Line Interface (CLI).</span>
-<span class="c">!&gt; @ingroup Data_Type_Command_Line_InterfaceDerivedType</span>
 <span class="k">type</span><span class="p">,</span> <span class="k">public</span><span class="kd">::</span> <span class="n">Type_Command_Line_Interface</span>
+  <span class="c">!&lt; Derived type implementing a flexible Command Line Interface (CLI).</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                                  <span class="n">Na</span>          <span class="o">=</span> <span class="mi">0_I4P</span> <span class="c">!&lt; Number of CLA.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                                  <span class="n">Na_required</span> <span class="o">=</span> <span class="mi">0_I4P</span> <span class="c">!&lt; Number of command line arguments that CLI requires.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                                  <span class="n">Na_optional</span> <span class="o">=</span> <span class="mi">0_I4P</span> <span class="c">!&lt; Number of command line arguments that are optional for CLI.</span>
