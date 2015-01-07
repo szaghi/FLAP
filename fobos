@@ -1,13 +1,37 @@
-[default]
-compiler=intel
-cflags=-O0 -warn all -check all -debug all -traceback -assume protect_parens -assume realloc_lhs -fp-model source -cpp -c -module ./mod/
-lflags=-O0 -warn all -check all -debug all -traceback -assume protect_parens -assume realloc_lhs -fp-model source
+[modes]
+modes = debug release
+
+[debug]
+help      = Debug mode
+compiler  = intel
+cflags    = -O0 -warn all -check all -debug all -traceback -assume protect_parens -assume realloc_lhs -fp-model source -cpp -c -module ./mod/
+lflags    = -O0 -warn all -check all -debug all -traceback -assume protect_parens -assume realloc_lhs -fp-model source
 mod_dir   = ./mod/
 obj_dir   = ./obj/
 build_dir = ./
 src       = ./src/
-colors=True
-quiet=False
-target=src/flap_test.f90
-output=flap_test
-log=False
+colors    = True
+quiet     = False
+target    = src/flap_test.f90
+output    = flap_test
+log       = False
+
+[release]
+help      = Release mode
+compiler  = intel
+cflags    = -O3 -assume realloc_lhs -fp-model source -cpp -c -module ./mod/
+lflags    = -O3 -assume realloc_lhs -fp-model source
+mod_dir   = ./mod/
+obj_dir   = ./obj/
+build_dir = ./
+src       = ./src/
+colors    = True
+quiet     = False
+target    = src/flap_test.f90
+output    = flap_test
+log       = False
+
+[rule-makedoc]
+help   = Rule for building documentation from source files
+rule_1 = rm -rf doc/html/*
+rule_2 = ford.py doc/main_page.md

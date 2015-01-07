@@ -9,6 +9,11 @@ github: https://github.com/szaghi
 email: stefano.zaghi@gmail.com
 docmark: <
 
+[![Ready in backlog](https://badge.waffle.io/szaghi/FLAP.png?label=ready&title=Ready)](https://waffle.io/szaghi/FLAP)
+[![In Progress](https://badge.waffle.io/szaghi/FLAP.png?label=in%20progress&title=In%20Progress)](https://waffle.io/szaghi/FLAP)
+[![Open bugs](https://badge.waffle.io/szaghi/FLAP.png?label=bug&title=Open%20Bugs)](https://waffle.io/szaghi/FLAP)
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/szaghi/flap/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
 ### <a name="top"></a>FLAP, Fortran command Line Arguments Parser for poor men
 
 A very simple and stupid tool for building easily nice Command Line Interface for modern Fortran projects.
