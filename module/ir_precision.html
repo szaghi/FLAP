@@ -1,0 +1,5148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	 
+	 <meta name="description" content="<p>Fortran command Line Arguments Parser for poor men</p>">
+    
+    <meta name="author" content="Chris MacMackin" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>IR_Precision &ndash; FLAP</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">FLAP </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            
+            <li><a href="../lists/files.html">Source Files</a></li>
+				
+				
+            <li><a href="../lists/modules.html">Modules</a></li>
+				
+				
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+				
+				
+            <li><a href="../lists/types.html">Derived Types</a></li>
+				
+				
+            <li><a href="../program/FLAP_Test.html">Program</a></li>
+								
+          </ul>
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>IR_Precision 
+    <small>Module</small>
+    
+    </h1>
+	 
+<div class="row">
+<div class="col-lg-7">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px">
+     
+     
+     
+     
+    
+    
+    <li><i class="fa fa-code"></i><a href="../src/IR_Precision.f90"> Source File</a></li>
+     
+  </ul>
+  </div>
+  </div>
+  <div class="col-lg-5">
+  <ol class="breadcrumb hierarchy text-right">
+  
+     <li><a href='../sourcefile/ir_precision.f90.html'>IR_Precision.f90</a></li>
+  
+     <li class="active">IR_Precision</li>
+  </ol>
+  </div>
+</div>
+    
+  </div>
+  
+  <div class="row">
+    <div class="col-lg-3">
+    
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-ir_initialized">ir_initialized</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-endianL">endianL</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-endianB">endianB</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-endian">endian</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-R16P">R16P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-R16P">R16P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-R8P">R8P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-R4P">R4P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-R_P">R_P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-I8P">I8P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-I4P">I4P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-I2P">I2P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-I1P">I1P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-I_P">I_P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-FR16P">FR16P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-FR8P">FR8P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-FR4P">FR4P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-FR_P">FR_P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-DR16P">DR16P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-DR8P">DR8P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-DR4P">DR4P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-DR_P">DR_P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-FI8P">FI8P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-FI4P">FI4P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-FI2P">FI2P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-FI1P">FI1P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-FI_P">FI_P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-DI8P">DI8P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-DI4P">DI4P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-DI2P">DI2P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-DI1P">DI1P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-DI_P">DI_P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-NRknd">NRknd</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-RPl">RPl</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-R8P">R8P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-R4P">R4P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-FRl">FRl</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-FR8P">FR8P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-NIknd">NIknd</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-RIl">RIl</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-I4P">I4P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-I2P">I2P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-I1P">I1P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-FIl">FIl</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-FI4P">FI4P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-MinR16P">MinR16P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-MaxR16P">MaxR16P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-MinR8P">MinR8P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-MaxR8P">MaxR8P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-MinR4P">MinR4P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-MaxR4P">MaxR4P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-MinR_P">MinR_P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-MaxR_P">MaxR_P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-BIR16P">BIR16P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-BYR16P">BYR16P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-BIR8P">BIR8P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-BYR8P">BYR8P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-BIR4P">BIR4P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-BYR4P">BYR4P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-BIR_P">BIR_P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-BYR_P">BYR_P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-smallR16P">smallR16P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-smallR8P">smallR8P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-smallR4P">smallR4P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-smallR_P">smallR_P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-MinI8P">MinI8P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-MaxI8P">MaxI8P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-MinI4P">MinI4P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-MaxI4P">MaxI4P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-MinI2P">MinI2P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-MaxI2P">MaxI2P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-MinI1P">MinI1P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-MaxI1P">MaxI1P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-MinI_P">MinI_P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-MaxI_P">MaxI_P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-BII8P">BII8P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-BYI8P">BYI8P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-BII4P">BII4P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-BYI4P">BYI4P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-BII2P">BII2P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-BYI2P">BYI2P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-BII1P">BII1P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-BYI1P">BYI1P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-BII_P">BII_P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-BYI_P">BYI_P</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-ZeroR16">ZeroR16</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-ZeroR8">ZeroR8</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-ZeroR4">ZeroR4</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-ZeroR16">ZeroR16</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-ZeroR8">ZeroR8</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-ZeroR4">ZeroR4</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#var-Zero">Zero</a>
+      
+    </div>
+  </div>
+  
+  
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Interfaces</h3></div>
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/ir_precision.html#intr-bit_size">bit_size</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#intr-byte_size">byte_size</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#intr-str">str</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#intr-strz">strz</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#intr-cton">cton</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#intr-bstr">bstr</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#intr-bcton">bcton</a>
+      
+    </div>
+  </div>
+  
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Subroutine</h3></div>
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/ir_precision.html#proc-check_endian">check_endian</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#proc-IR_init">IR_init</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html#proc-IR_Print">IR_Print</a>
+      
+    </div>
+  </div>
+  
+  
+  
+  
+  <hr>
+  
+  <div class="panel panel-default">
+    <div class="panel-heading text-left"><h3 class="panel-title">All Modules</h3></div>
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/data_type_command_line_interface.html">Data_Type_Command_Line_Interface</a>
+      
+      <a class="list-group-item" href="../module/ir_precision.html">IR_Precision</a>
+      
+      <a class="list-group-item" href="../module/lib_io_misc.html">Lib_IO_Misc</a>
+      
+    </div>
+  </div>
+  
+  
+    </div>
+    
+    <div class="col-lg-9" id='text'>
+    
+  
+
+    
+    
+
+    
+    <section>
+    <h2>Variables</h2>
+    
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Visibility</th>
+
+<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-ir_initialized"></a>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>ir_initialized</strong></td><td> =</td><td>.false.</td><td><p>Flag for chcecking the initialization of some variables that must be initialized by IR_Init.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-endianL"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>endianL</strong></td><td> =</td><td>1</td><td><p>Little endian parameter.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-endianB"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>endianB</strong></td><td> =</td><td>0</td><td><p>Big endian parameter.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-endian"></a>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>endian</strong></td><td> =</td><td>endianL</td><td><p>Bit ordering: Little endian (endianL), or Big endian (endianB).</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-R16P"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>R16P</strong></td><td> =</td><td>selected_real_kind(33,4931)</td><td><p>33  digits, range \f$[10^{-4931}, 10^{+4931} - 1]\f$; 128 bits.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-R16P"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>R16P</strong></td><td> =</td><td>selected_real_kind(15,307)</td><td><p>Defined as R8P; 64 bits.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-R8P"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>R8P</strong></td><td> =</td><td>selected_real_kind(15,307)</td><td><p>15  digits, range \f$[10^{-307} , 10^{+307}  - 1]\f$; 64 bits.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-R4P"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>R4P</strong></td><td> =</td><td>selected_real_kind(6,37)</td><td><p>6   digits, range \f$[10^{-37}  , 10^{+37}   - 1]\f$; 32 bits.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-R_P"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>R_P</strong></td><td> =</td><td>R8P</td><td><p>Default real precision.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-I8P"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>I8P</strong></td><td> =</td><td>selected_int_kind(18)</td><td><p>Range \f$[-2^{63},+2^{63} - 1]\f$, 19 digits plus sign; 64 bits.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-I4P"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>I4P</strong></td><td> =</td><td>selected_int_kind(9)</td><td><p>Range \f$[-2^{31},+2^{31} - 1]\f$, 10 digits plus sign; 32 bits.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-I2P"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>I2P</strong></td><td> =</td><td>selected_int_kind(4)</td><td><p>Range \f$[-2^{15},+2^{15} - 1]\f$, 5  digits plus sign; 16 bits.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-I1P"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>I1P</strong></td><td> =</td><td>selected_int_kind(2)</td><td><p>Range \f$[-2^{7} ,+2^{7}  - 1]\f$, 3  digits plus sign; 8  bits.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-I_P"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>I_P</strong></td><td> =</td><td>I4P</td><td><p>Default integer precision.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-FR16P"></a>character(len=10),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FR16P</strong></td><td> =</td><td>'(E42.33E4)'</td><td><p>Output format for kind=R16P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-FR8P"></a>character(len=10),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FR8P</strong></td><td> =</td><td>'(E23.15E3)'</td><td><p>Output format for kind=R8P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-FR4P"></a>character(len=9),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FR4P</strong></td><td> =</td><td>'(E13.6E2)'</td><td><p>Output format for kind=R4P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-FR_P"></a>character(len=10),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FR_P</strong></td><td> =</td><td>FR8P</td><td><p>Output format for kind=R_P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-DR16P"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>DR16P</strong></td><td> =</td><td>42</td><td><p>Number of digits of output format FR16P.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-DR8P"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>DR8P</strong></td><td> =</td><td>23</td><td><p>Number of digits of output format FR8P.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-DR4P"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>DR4P</strong></td><td> =</td><td>13</td><td><p>Number of digits of output format FR4P.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-DR_P"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>DR_P</strong></td><td> =</td><td>DR8P</td><td><p>Number of digits of output format FR_P.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-FI8P"></a>character(len=5),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FI8P</strong></td><td> =</td><td>'(I20)'</td><td><p>Output format                     for kind=I8P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-FI4P"></a>character(len=5),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FI4P</strong></td><td> =</td><td>'(I11)'</td><td><p>Output format                     for kind=I4P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-FI2P"></a>character(len=4),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FI2P</strong></td><td> =</td><td>'(I6)'</td><td><p>Output format                     for kind=I2P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-FI1P"></a>character(len=4),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FI1P</strong></td><td> =</td><td>'(I4)'</td><td><p>Output format                     for kind=I1P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-FI_P"></a>character(len=5),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FI_P</strong></td><td> =</td><td>FI4P</td><td><p>Output format                     for kind=I_P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-DI8P"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>DI8P</strong></td><td> =</td><td>20</td><td><p>Number of digits of output format I8P.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-DI4P"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>DI4P</strong></td><td> =</td><td>11</td><td><p>Number of digits of output format I4P.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-DI2P"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>DI2P</strong></td><td> =</td><td>6</td><td><p>Number of digits of output format I2P.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-DI1P"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>DI1P</strong></td><td> =</td><td>4</td><td><p>Number of digits of output format I1P.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-DI_P"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>DI_P</strong></td><td> =</td><td>DI4P</td><td><p>Number of digits of output format I_P.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-NRknd"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>NRknd</strong></td><td> =</td><td>4</td><td><p>Number of defined real kinds.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-RPl"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>RPl</strong>(1:NRknd)</td><td> =</td><td>[R16P</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-R8P"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>R8P</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-R4P"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>R4P</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-FRl"></a>character(len=10),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FRl</strong>(1:NRknd)</td><td> =</td><td>[FR16P</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-FR8P"></a>character(len=10),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FR8P</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-NIknd"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>NIknd</strong></td><td> =</td><td>5</td><td><p>Number of defined integer kinds.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-RIl"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>RIl</strong>(1:NIknd)</td><td> =</td><td>[I8P</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-I4P"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>I4P</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-I2P"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>I2P</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-I1P"></a>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>I1P</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-FIl"></a>character(len=5),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FIl</strong>(1:NIknd)</td><td> =</td><td>[FI8P</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-FI4P"></a>character(len=5),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FI4P</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-MinR16P"></a>real(kind=R16P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>MinR16P</strong></td><td> =</td><td>-huge(1._R16P)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-MaxR16P"></a>real(kind=R16P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>MaxR16P</strong></td><td> =</td><td>huge(1._R16P)</td><td><p>Min and max values of kind=R16P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-MinR8P"></a>real(kind=R8P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>MinR8P</strong></td><td> =</td><td>-huge(1._R8P)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-MaxR8P"></a>real(kind=R8P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>MaxR8P</strong></td><td> =</td><td>huge(1._R8P)</td><td><p>Min and max values of kind=R8P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-MinR4P"></a>real(kind=R4P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>MinR4P</strong></td><td> =</td><td>-huge(1._R4P)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-MaxR4P"></a>real(kind=R4P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>MaxR4P</strong></td><td> =</td><td>huge(1._R4P)</td><td><p>Min and max values of kind=R4P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-MinR_P"></a>real(kind=R_P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>MinR_P</strong></td><td> =</td><td>MinR8P</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-MaxR_P"></a>real(kind=R_P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>MaxR_P</strong></td><td> =</td><td>MaxR8P</td><td><p>Min and max values of kind=R_P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-BIR16P"></a>integer(kind=I2P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>BIR16P</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-BYR16P"></a>integer(kind=I2P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>BYR16P</strong></td><td></td><td></td><td><p>Number of bits/bytes of kind=R16P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-BIR8P"></a>integer(kind=I1P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>BIR8P</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-BYR8P"></a>integer(kind=I1P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>BYR8P</strong></td><td></td><td></td><td><p>Number of bits/bytes of kind=R8P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-BIR4P"></a>integer(kind=I1P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>BIR4P</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-BYR4P"></a>integer(kind=I1P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>BYR4P</strong></td><td></td><td></td><td><p>Number of bits/bytes of kind=R4P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-BIR_P"></a>integer(kind=I1P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>BIR_P</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-BYR_P"></a>integer(kind=I1P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>BYR_P</strong></td><td></td><td></td><td><p>Number of bits/bytes of kind=R_P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-smallR16P"></a>real(kind=R16P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>smallR16P</strong></td><td> =</td><td>tiny(1._R16P)</td><td><p>Smallest representable value of kind=R16P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-smallR8P"></a>real(kind=R8P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>smallR8P</strong></td><td> =</td><td>tiny(1._R8P)</td><td><p>Smallest representable value of kind=R8P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-smallR4P"></a>real(kind=R4P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>smallR4P</strong></td><td> =</td><td>tiny(1._R4P)</td><td><p>Smallest representable value of kind=R4P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-smallR_P"></a>real(kind=R_P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>smallR_P</strong></td><td> =</td><td>smallR8P</td><td><p>Smallest representable value of kind=R_P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-MinI8P"></a>integer(kind=I8P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>MinI8P</strong></td><td> =</td><td>-huge(1_I8P)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-MaxI8P"></a>integer(kind=I8P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>MaxI8P</strong></td><td> =</td><td>huge(1_I8P)</td><td><p>Min and max values of kind=I8P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-MinI4P"></a>integer(kind=I4P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>MinI4P</strong></td><td> =</td><td>-huge(1_I4P)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-MaxI4P"></a>integer(kind=I4P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>MaxI4P</strong></td><td> =</td><td>huge(1_I4P)</td><td><p>Min and max values of kind=I4P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-MinI2P"></a>integer(kind=I2P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>MinI2P</strong></td><td> =</td><td>-huge(1_I2P)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-MaxI2P"></a>integer(kind=I2P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>MaxI2P</strong></td><td> =</td><td>huge(1_I2P)</td><td><p>Min and max values of kind=I2P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-MinI1P"></a>integer(kind=I1P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>MinI1P</strong></td><td> =</td><td>-huge(1_I1P)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-MaxI1P"></a>integer(kind=I1P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>MaxI1P</strong></td><td> =</td><td>huge(1_I1P)</td><td><p>Min and max values of kind=I1P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-MinI_P"></a>integer(kind=I_P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>MinI_P</strong></td><td> =</td><td>MinI4P</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-MaxI_P"></a>integer(kind=I_P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>MaxI_P</strong></td><td> =</td><td>MaxI4P</td><td><p>Min and max values of kind=I_P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-BII8P"></a>integer(kind=I8P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>BII8P</strong></td><td> =</td><td>bit_size(MaxI8P)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-BYI8P"></a>integer(kind=I8P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>BYI8P</strong></td><td> =</td><td>bit_size(MaxI8P)/8_I8P</td><td><p>Number of bits/bytes of kind=I8P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-BII4P"></a>integer(kind=I4P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>BII4P</strong></td><td> =</td><td>bit_size(MaxI4P)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-BYI4P"></a>integer(kind=I4P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>BYI4P</strong></td><td> =</td><td>bit_size(MaxI4P)/8_I4P</td><td><p>Number of bits/bytes of kind=I4P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-BII2P"></a>integer(kind=I2P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>BII2P</strong></td><td> =</td><td>bit_size(MaxI2P)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-BYI2P"></a>integer(kind=I2P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>BYI2P</strong></td><td> =</td><td>bit_size(MaxI2P)/8_I2P</td><td><p>Number of bits/bytes of kind=I2P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-BII1P"></a>integer(kind=I1P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>BII1P</strong></td><td> =</td><td>bit_size(MaxI1P)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-BYI1P"></a>integer(kind=I1P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>BYI1P</strong></td><td> =</td><td>bit_size(MaxI1P)/8_I1P</td><td><p>Number of bits/bytes of kind=I1P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-BII_P"></a>integer(kind=I_P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>BII_P</strong></td><td> =</td><td>bit_size(MaxI_P)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-BYI_P"></a>integer(kind=I_P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>BYI_P</strong></td><td> =</td><td>bit_size(MaxI_P)/8_I_P</td><td><p>Number of bits/bytes of kind=I_P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-ZeroR16"></a>real(kind=R16P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>ZeroR16</strong></td><td> =</td><td>0._R16P</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-ZeroR8"></a>real(kind=R8P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>ZeroR8</strong></td><td> =</td><td>0._R8P</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-ZeroR4"></a>real(kind=R4P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>ZeroR4</strong></td><td> =</td><td>0._R4P</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-ZeroR16"></a>real(kind=R16P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>ZeroR16</strong></td><td> =</td><td>nearest(1._R16P,1._R16P)-nearest(1._R16P,-1._R16P)</td><td><p>Smallest representable difference of kind=R16P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-ZeroR8"></a>real(kind=R8P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>ZeroR8</strong></td><td> =</td><td>nearest(1._R8P,1._R8P)-nearest(1._R8P,-1._R8P)</td><td><p>Smallest representable difference of kind=R8P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-ZeroR4"></a>real(kind=R4P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>ZeroR4</strong></td><td> =</td><td>nearest(1._R4P,1._R4P)-nearest(1._R4P,-1._R4P)</td><td><p>Smallest representable difference of kind=R4P variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-Zero"></a>real(kind=R_P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>Zero</strong></td><td> =</td><td>ZeroR8</td><td><p>Smallest representable difference of kind=R_P variable.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    </section>
+    <br>
+    
+    
+    
+	 <h2>Interfaces</h2>
+	 
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="intr-bit_size"></a><h3>public  interface <a href='../interface/bit_size.html'>bit_size</a>
+    
+  </h3></div>
+  
+  <ul class="list-group">
+  
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function bit_size_R16P(r)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-r"></a>real(kind=R16P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>r</strong></td><td><p>Real variable whose number of bits must be computed.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-bits"></a>integer(kind=I2P)
+  </small></h4>
+  <p>Number of bits of r.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function bit_size_R8P(r)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-r"></a>real(kind=R8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>r</strong></td><td><p>Real variable whose number of bits must be computed.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-bits"></a>integer(kind=I1P)
+  </small></h4>
+  <p>Number of bits of r.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function bit_size_R4P(r)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-r"></a>real(kind=R4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>r</strong></td><td><p>Real variable whose number of bits must be computed.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-bits"></a>integer(kind=I1P)
+  </small></h4>
+  <p>Number of bits of r.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function bit_size_chr(c)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-c"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>c</strong></td><td><p>Character variable whose number of bits must be computed.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-bits"></a>integer(kind=I4P)
+  </small></h4>
+  <p>Number of bits of c.</p>
+    
+        
+
+    </li>
+  
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="intr-byte_size"></a><h3>public  interface <a href='../interface/byte_size.html'>byte_size</a>
+    
+  </h3></div>
+  
+  <ul class="list-group">
+  
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function byte_size_I8P(i)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-i"></a>integer(kind=I8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>i</strong></td><td><p>Integer variable whose number of bytes must be computed.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-bytes"></a>integer(kind=I1P)
+  </small></h4>
+  <p>Number of bytes of i.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function byte_size_I4P(i)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-i"></a>integer(kind=I4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>i</strong></td><td><p>Integer variable whose number of bytes must be computed.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-bytes"></a>integer(kind=I1P)
+  </small></h4>
+  <p>Number of bytes of i.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function byte_size_I2P(i)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-i"></a>integer(kind=I2P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>i</strong></td><td><p>Integer variable whose number of bytes must be computed.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-bytes"></a>integer(kind=I1P)
+  </small></h4>
+  <p>Number of bytes of i.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function byte_size_I1P(i)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-i"></a>integer(kind=I1P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>i</strong></td><td><p>Integer variable whose number of bytes must be computed.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-bytes"></a>integer(kind=I1P)
+  </small></h4>
+  <p>Number of bytes of i.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function byte_size_R16P(r)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-r"></a>real(kind=R16P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>r</strong></td><td><p>Real variable whose number of bytes must be computed.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-bytes"></a>integer(kind=I1P)
+  </small></h4>
+  <p>Number of bytes of r.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function byte_size_R8P(r)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-r"></a>real(kind=R8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>r</strong></td><td><p>Real variable whose number of bytes must be computed.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-bytes"></a>integer(kind=I1P)
+  </small></h4>
+  <p>Number of bytes of r.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function byte_size_R4P(r)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-r"></a>real(kind=R4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>r</strong></td><td><p>Real variable whose number of bytes must be computed.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-bytes"></a>integer(kind=I1P)
+  </small></h4>
+  <p>Number of bytes of r.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function byte_size_chr(c)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-c"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>c</strong></td><td><p>Character variable whose number of bytes must be computed.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-bytes"></a>integer(kind=I4P)
+  </small></h4>
+  <p>Number of bytes of c.</p>
+    
+        
+
+    </li>
+  
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="intr-str"></a><h3>public  interface <a href='../interface/str.html'>str</a>
+    
+  </h3></div>
+  
+  <ul class="list-group">
+  
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function strf_R16P(fm, n)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-fm"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>fm</strong></td><td><p>Format different from the standard for the kind.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-n"></a>real(kind=R16P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Real to be converted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-str"></a>character(len=DR16P)
+  </small></h4>
+  <p>Returned string containing input number.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function str_R16P(no_sign, n)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-no_sign"></a>logical,</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>no_sign</strong></td><td><p>Flag for leaving out the sign.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-n"></a>real(kind=R16P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Real to be converted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-str"></a>character(len=DR16P)
+  </small></h4>
+  <p>Returned string containing input number.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function strf_R8P(fm, n)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-fm"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>fm</strong></td><td><p>Format different from the standard for the kind.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-n"></a>real(kind=R8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Real to be converted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-str"></a>character(len=DR8P)
+  </small></h4>
+  <p>Returned string containing input number.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function str_R8P(no_sign, n)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-no_sign"></a>logical,</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>no_sign</strong></td><td><p>Flag for leaving out the sign.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-n"></a>real(kind=R8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Real to be converted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-str"></a>character(len=DR8P)
+  </small></h4>
+  <p>Returned string containing input number.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function strf_R4P(fm, n)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-fm"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>fm</strong></td><td><p>Format different from the standard for the kind.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-n"></a>real(kind=R4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Real to be converted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-str"></a>character(len=DR4P)
+  </small></h4>
+  <p>Returned string containing input number.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function str_R4P(no_sign, n)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-no_sign"></a>logical,</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>no_sign</strong></td><td><p>Flag for leaving out the sign.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-n"></a>real(kind=R4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Real to be converted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-str"></a>character(len=DR4P)
+  </small></h4>
+  <p>Returned string containing input number.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function strf_I8P(fm, n)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-fm"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>fm</strong></td><td><p>Format different from the standard for the kind.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-n"></a>integer(kind=I8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Integer to be converted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-str"></a>character(len=DI8P)
+  </small></h4>
+  <p>Returned string containing input number.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function str_I8P(no_sign, n)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-no_sign"></a>logical,</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>no_sign</strong></td><td><p>Flag for leaving out the sign.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-n"></a>integer(kind=I8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Integer to be converted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-str"></a>character(len=DI8P)
+  </small></h4>
+  <p>Returned string containing input number plus padding zeros.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function strf_I4P(fm, n)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-fm"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>fm</strong></td><td><p>Format different from the standard for the kind.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-n"></a>integer(kind=I4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Integer to be converted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-str"></a>character(len=DI4P)
+  </small></h4>
+  <p>Returned string containing input number.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function str_I4P(no_sign, n)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-no_sign"></a>logical,</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>no_sign</strong></td><td><p>Flag for leaving out the sign.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-n"></a>integer(kind=I4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Integer to be converted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-str"></a>character(len=DI4P)
+  </small></h4>
+  <p>Returned string containing input number plus padding zeros.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function strf_I2P(fm, n)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-fm"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>fm</strong></td><td><p>Format different from the standard for the kind.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-n"></a>integer(kind=I2P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Integer to be converted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-str"></a>character(len=DI2P)
+  </small></h4>
+  <p>Returned string containing input number.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function str_I2P(no_sign, n)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-no_sign"></a>logical,</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>no_sign</strong></td><td><p>Flag for leaving out the sign.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-n"></a>integer(kind=I2P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Integer to be converted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-str"></a>character(len=DI2P)
+  </small></h4>
+  <p>Returned string containing input number plus padding zeros.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function strf_I1P(fm, n)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-fm"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>fm</strong></td><td><p>Format different from the standard for the kind.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-n"></a>integer(kind=I1P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Integer to be converted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-str"></a>character(len=DI1P)
+  </small></h4>
+  <p>Returned string containing input number.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function str_I1P(no_sign, n)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-no_sign"></a>logical,</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>no_sign</strong></td><td><p>Flag for leaving out the sign.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-n"></a>integer(kind=I1P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Integer to be converted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-str"></a>character(len=DI1P)
+  </small></h4>
+  <p>Returned string containing input number plus padding zeros.</p>
+    
+        
+
+    </li>
+  
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="intr-strz"></a><h3>public  interface <a href='../interface/strz.html'>strz</a>
+    
+  </h3></div>
+  
+  <ul class="list-group">
+  
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function strz_I8P(nz_pad, n)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-nz_pad"></a>integer(kind=I4P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>nz_pad</strong></td><td><p>Number of zeros padding.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-n"></a>integer(kind=I8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Integer to be converted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-str"></a>character(len=DI8P)
+  </small></h4>
+  <p>Returned string containing input number plus padding zeros.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function strz_I4P(nz_pad, n)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-nz_pad"></a>integer(kind=I4P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>nz_pad</strong></td><td><p>Number of zeros padding.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-n"></a>integer(kind=I4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Integer to be converted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-str"></a>character(len=DI4P)
+  </small></h4>
+  <p>Returned string containing input number plus padding zeros.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function strz_I2P(nz_pad, n)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-nz_pad"></a>integer(kind=I4P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>nz_pad</strong></td><td><p>Number of zeros padding.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-n"></a>integer(kind=I2P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Integer to be converted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-str"></a>character(len=DI2P)
+  </small></h4>
+  <p>Returned string containing input number plus padding zeros.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function strz_I1P(nz_pad, n)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-nz_pad"></a>integer(kind=I4P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>nz_pad</strong></td><td><p>Number of zeros padding.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-n"></a>integer(kind=I1P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Integer to be converted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-str"></a>character(len=DI1P)
+  </small></h4>
+  <p>Returned string containing input number plus padding zeros.</p>
+    
+        
+
+    </li>
+  
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="intr-cton"></a><h3>public  interface <a href='../interface/cton.html'>cton</a>
+    
+  </h3></div>
+  
+  <ul class="list-group">
+  
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function ctor_R16P(str, knd)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-str"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>str</strong></td><td><p>String containing input number.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-knd"></a>real(kind=R16P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>knd</strong></td><td><p>Number kind.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-n"></a>real(kind=R16P)
+  </small></h4>
+  <p>Number returned.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function ctor_R8P(str, knd)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-str"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>str</strong></td><td><p>String containing input number.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-knd"></a>real(kind=R8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>knd</strong></td><td><p>Number kind.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-n"></a>real(kind=R8P)
+  </small></h4>
+  <p>Number returned.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function ctor_R4P(str, knd)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-str"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>str</strong></td><td><p>String containing input number.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-knd"></a>real(kind=R4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>knd</strong></td><td><p>Number kind.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-n"></a>real(kind=R4P)
+  </small></h4>
+  <p>Number returned.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function ctoi_I8P(str, knd)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-str"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>str</strong></td><td><p>String containing input number.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-knd"></a>integer(kind=I8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>knd</strong></td><td><p>Number kind.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-n"></a>integer(kind=I8P)
+  </small></h4>
+  <p>Number returned.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function ctoi_I4P(str, knd)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-str"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>str</strong></td><td><p>String containing input number.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-knd"></a>integer(kind=I4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>knd</strong></td><td><p>Number kind.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-n"></a>integer(kind=I4P)
+  </small></h4>
+  <p>Number returned.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function ctoi_I2P(str, knd)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-str"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>str</strong></td><td><p>String containing input number.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-knd"></a>integer(kind=I2P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>knd</strong></td><td><p>Number kind.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-n"></a>integer(kind=I2P)
+  </small></h4>
+  <p>Number returned.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function ctoi_I1P(str, knd)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-str"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>str</strong></td><td><p>String containing input number.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-knd"></a>integer(kind=I1P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>knd</strong></td><td><p>Number kind.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-n"></a>integer(kind=I1P)
+  </small></h4>
+  <p>Number returned.</p>
+    
+        
+
+    </li>
+  
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="intr-bstr"></a><h3>public  interface <a href='../interface/bstr.html'>bstr</a>
+    
+  </h3></div>
+  
+  <ul class="list-group">
+  
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function bstr_R16P(n)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-n"></a>real(kind=R8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Real to be converted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-bstr"></a>character(len=128)
+  </small></h4>
+  <p>Returned bit-string containing input number.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function bstr_R8P(n)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-n"></a>real(kind=R8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Real to be converted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-bstr"></a>character(len=64)
+  </small></h4>
+  <p>Returned bit-string containing input number.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function bstr_R4P(n)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-n"></a>real(kind=R4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Real to be converted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-bstr"></a>character(len=32)
+  </small></h4>
+  <p>Returned bit-string containing input number.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function bstr_I8P(n)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-n"></a>integer(kind=I8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Real to be converted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-bstr"></a>character(len=64)
+  </small></h4>
+  <p>Returned bit-string containing input number.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function bstr_I4P(n)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-n"></a>integer(kind=I4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Real to be converted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-bstr"></a>character(len=32)
+  </small></h4>
+  <p>Returned bit-string containing input number.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function bstr_I2P(n)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-n"></a>integer(kind=I2P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Real to be converted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-bstr"></a>character(len=16)
+  </small></h4>
+  <p>Returned bit-string containing input number.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function bstr_I1P(n)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-n"></a>integer(kind=I1P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Real to be converted.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-bstr"></a>character(len=8)
+  </small></h4>
+  <p>Returned bit-string containing input number.</p>
+    
+        
+
+    </li>
+  
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="intr-bcton"></a><h3>public  interface <a href='../interface/bcton.html'>bcton</a>
+    
+  </h3></div>
+  
+  <ul class="list-group">
+  
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+  ()
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      <em>None</em>
+    
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function bctor_R8P(bstr, knd)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-bstr"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>bstr</strong></td><td><p>String containing input number.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-knd"></a>real(kind=R8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>knd</strong></td><td><p>Number kind.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-n"></a>real(kind=R8P)
+  </small></h4>
+  <p>Number returned.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function bctor_R4P(bstr, knd)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-bstr"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>bstr</strong></td><td><p>String containing input number.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-knd"></a>real(kind=R4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>knd</strong></td><td><p>Number kind.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-n"></a>real(kind=R4P)
+  </small></h4>
+  <p>Number returned.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function bctoi_I8P(bstr, knd)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-bstr"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>bstr</strong></td><td><p>String containing input number.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-knd"></a>integer(kind=I8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>knd</strong></td><td><p>Number kind.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-n"></a>integer(kind=I8P)
+  </small></h4>
+  <p>Number returned.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function bctoi_I4P(bstr, knd)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-bstr"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>bstr</strong></td><td><p>String containing input number.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-knd"></a>integer(kind=I4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>knd</strong></td><td><p>Number kind.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-n"></a>integer(kind=I4P)
+  </small></h4>
+  <p>Number returned.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function bctoi_I2P(bstr, knd)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-bstr"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>bstr</strong></td><td><p>String containing input number.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-knd"></a>integer(kind=I2P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>knd</strong></td><td><p>Number kind.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-n"></a>integer(kind=I2P)
+  </small></h4>
+  <p>Number returned.</p>
+    
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private  function bctoi_I1P(bstr, knd)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-bstr"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>bstr</strong></td><td><p>String containing input number.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-knd"></a>integer(kind=I1P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>knd</strong></td><td><p>Number kind.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-n"></a>integer(kind=I1P)
+  </small></h4>
+  <p>Number returned.</p>
+    
+        
+
+    </li>
+  
+  </ul>
+</div>
+
+    
+    </section>
+	 <br>
+    
+    
+    
+    
+    
+
+
+    
+    <section>
+    <h2>Subroutines</h2>
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="proc-check_endian"></a><h3>
+public  subroutine <a href='../proc/check_endian.html'>check_endian</a>()
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      <em>None</em>
+    
+    
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="proc-IR_init"></a><h3>
+public  subroutine <a href='../proc/ir_init.html'>IR_init</a>()
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      <em>None</em>
+    
+    
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="proc-IR_Print"></a><h3>
+public  subroutine <a href='../proc/ir_print.html'>IR_Print</a>(pref, iostat, iomsg, unit)
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-iostat"></a>integer(kind=I4P),</td>
+  <td>intent(out),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>iostat</strong></td><td><p>IO error.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-iomsg"></a>character(len=*),</td>
+  <td>intent(out),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>iomsg</strong></td><td><p>IO error message.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-unit"></a>integer(kind=I4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>unit</strong></td><td><p>Logic unit.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+        
+
+  </div>
+  </div>
+
+    
+    </section>    
+    
+    
+    </div>
+  </div>
+
+    <hr>
+    <footer>
+        <div class="row">
+        <div class="col-md-6">&copy; 2015 FLAP was written by Stefano Zaghi. </div>
+        <div class="col-md-6"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a>.</span></div>
+        </div>
+        <br>
+    </footer>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'],
+        'HTML-CSS': { 
+           styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: '#000000 ! important'} }
+        }
+      });
+    </script>
+    <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  </body>
+</html>
