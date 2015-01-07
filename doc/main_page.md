@@ -1,6 +1,6 @@
 project: FLAP
 project_directory: ./src
-output_dir: ./doc/html
+output_dir: ./doc/html/publish/
 project_github: https://github.com/szaghi/FLAP
 project_website: https://github.com/szaghi/FLAP
 summary: Fortran command Line Arguments Parser for poor men
@@ -9,7 +9,7 @@ github: https://github.com/szaghi
 email: stefano.zaghi@gmail.com
 docmark: <
 
-### <a name="top">FLAP, Fortran command Line Arguments Parser for poor men
+### <a name="top"></a>FLAP, Fortran command Line Arguments Parser for poor men
 
 A very simple and stupid tool for building easily nice Command Line Interface for modern Fortran projects.
 
@@ -87,7 +87,7 @@ call cli%parse(error=error,pref='|-->')
 For a practical example of FLAP usage see [POG](https://github.com/szaghi/OFF/blob/testing/src/POG.f90) source file at line `85`.
 
 Go to [Top](#top) or [Toc](#toc)
-## <a name="toc">Table of Contents
+## <a name="toc"></a>Table of Contents
 
 * [Team Members](#team-members)
 * [What is FLAP?](#what)

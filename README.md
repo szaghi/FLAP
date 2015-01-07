@@ -4,7 +4,7 @@
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/szaghi/flap/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
 # FLAP
-### <a name="top">FLAP, Fortran command Line Arguments Parser for poor men
+### <a name="top"></a>FLAP, Fortran command Line Arguments Parser for poor men
 
 A very simple and stupid tool for building easily nice Command Line Interface for modern Fortran projects.
 
@@ -82,7 +82,7 @@ call cli%parse(error=error,pref='|-->')
 For a practical example of FLAP usage see [POG](https://github.com/szaghi/OFF/blob/testing/src/POG.f90) source file at line `85`.
 
 Go to [Top](#top) or [Toc](#toc)
-## <a name="toc">Table of Contents
+## <a name="toc"></a>Table of Contents
 
 * [Team Members](#team-members)
 * [What is FLAP?](#what)
@@ -141,9 +141,9 @@ FLAP is an open source project, it is distributed under the [GPL v3](http://www.
 Go to [Top](#top) or [Toc](#toc)
 ## <a name="usage"></a>Usage
 FLAP is a module library.
-FLAP is currently composed by one module, namely  __Data_Type_Command_Line_Interface.f90__, where two derived types are defined: 
+FLAP is currently composed by one module, namely  __Data_Type_Command_Line_Interface.f90__, where two derived types are defined:
 1. __Type_Command_Line_Argument__;
-2. __Type_Command_Line_Interface__. 
+2. __Type_Command_Line_Interface__.
 
 The first one is a back-end handling CLAs while the latter is the front-end providing all you need to handle your CLI. Two auxiliary modules, __IR_Precision.f90__ and __Lib_IO_Misc.f90__ are used for minor tasks. Finally, a testing program __flap_test__ is provided showing a basic example of FLAP usage.
 
@@ -157,7 +157,7 @@ type(Type_Command_Line_Interface):: CLI
 ```
 Now that you have your CLI declared you can start using it. The API to handle it follows.
 
-### <a name="API">API
+### <a name="API"></a>API
 The main CLI object, that is the only one you must know, is __Type_Command_Line_Interface__
 ```fortran
 type, public:: Type_Command_Line_Interface
@@ -190,10 +190,10 @@ endtype Type_Command_Line_Interface
 Fews methods are provided within this derived type:
 
 + _free_ for freeing the CLI memory;
-+ _init_ for initializing CLI with user defined help messages; 
-+ _add_ for adding a CLA to the CLI; 
++ _init_ for initializing CLI with user defined help messages;
++ _add_ for adding a CLA to the CLI;
 + _check_ for checking the CLAs definition consistency;
-+ _passed_ for checking is a particular CLA has been actually passed; 
++ _passed_ for checking is a particular CLA has been actually passed;
 + _parse_ for parsing all passed CLAs accordingly to the list previously defined for building up the CLI;
 + _get_ for returning a particular CLA value and storing it into user-defined variable.
 
@@ -217,11 +217,11 @@ more details on parsing method are reported in the followings;
 ```fortran
 call cli%get(switch='-o',val=OutputFilename,error=error)
 ```
-_OutputFilename_ and _error_ being previously defined variables. 
+_OutputFilename_ and _error_ being previously defined variables.
 
 Optionally you can initialize CLI with custom help messages by means of _init_ method.
 
-#### <a name="cli-init">Initializing CLI with personalized help messages
+#### <a name="cli-init"></a>Initializing CLI with personalized help messages
 
 CLI data type can already (quasi-automatically) handle CLAs through its default values (provided from the baseline variable declaration, i.e. `type(Type_Command_Line_Interface):: cli`). However, in order to improve the clearness CLI messages you can personalized help messages by means of _init_ method (that remains an optional step):
 ```fortran
@@ -256,7 +256,7 @@ call cli%init(...,disable_hv=.true.)
 ```
 
 Go to [Top](#top) or [Toc](#toc)
-#### <a name="cla-add">Adding a new CLA to CLI
+#### <a name="cla-add"></a>Adding a new CLA to CLI
 
 CLA cannot be directly defined and modified: to handle a CLA you must use CLI methods. Adding CLA to CLI is performed through the _add_ method:
 ```fortran
@@ -277,7 +277,7 @@ character(*), optional, intent(IN)::  nargs      !< Number of arguments consumed
 character(*), optional, intent(IN)::  choices    !< List of allowable values for the argument.
 integer(I4P),           intent(OUT):: error      !< Error trapping flag.
 ```
-The dummy arguments should be auto-explicative. Note that the _help_ dummy argument is used for printing a pretty help message explaining the CLI usage, thus should be always provided even if CLA is an optional argument. It is also worthy of note that the abbreviated switch is set equal to switch name (if passed) if no otherwise defined. Moreover, one between _switch_ and _position_ must be defined: if _switch_ is defined then a named CLA is initialed, otherwise _position_ must be defined (with _positional=.true._) and a positional CLA is initialized. 
+The dummy arguments should be auto-explicative. Note that the _help_ dummy argument is used for printing a pretty help message explaining the CLI usage, thus should be always provided even if CLA is an optional argument. It is also worthy of note that the abbreviated switch is set equal to switch name (if passed) if no otherwise defined. Moreover, one between _switch_ and _position_ must be defined: if _switch_ is defined then a named CLA is initialed, otherwise _position_ must be defined (with _positional=.true._) and a positional CLA is initialized.
 
 The following rules apply:
 + `pref` string is used as prefixing string for any messages on standard out/err;
@@ -290,13 +290,12 @@ The following rules apply:
     + `act=print_help`, the CLA triggers the printing of the help message that is built with the help messages of all defined CLAs and the help message of CLI;
     + `act=print_version`, the CLA triggers the printing the program version; if the version is not defined when the CLI is initialized the message will contain `version unknown`.
 
-
 When a CLA is added a self-consistency-check is performed, e.g. it is checked if an optional CLA has a default value or if one of _position_ and _switch_ has been passed. In case the self-consistency-check fails an error code is returned and an error message is printed to _stderr_.
 
 Note that _choices_  must be a comma-separated list of allowable values and if it has been specified the passed value is checked to be consistent with this list when the _get_ method is invoked: an error code is returned and if the value is not into the specified range an error message is printed to _stderr_. However the value of CLA is not modified and it is equal to the passed value.
 
 Go to [Top](#top) or [Toc](#toc)
-#### <a name="cli-parse">Parsing the CLI
+#### <a name="cli-parse"></a>Parsing the CLI
 The complete signature of _parse_ method is the following:
 ```fortran
   call cli%parse(pref,error)
@@ -314,7 +313,7 @@ The help messages are print if one of the following issues arise:
 - the number of passed CLAs is less than the required CLAs previously defined.
 
 Go to [Top](#top) or [Toc](#toc)
-#### <a name="cla-get">Getting a CLA value from parsed CLI
+#### <a name="cla-get"></a>Getting a CLA value from parsed CLI
 After the CLI has been parsed, the user is allowed to get any of the defined CLA value. Accordingly to the user-definition, a CLA value can be obtained either by the switch name (for named CLA) or by the CLA position (for positional CLA):
 ```fortran
 call cli%get(switch='-r',val=rval,error=err)
@@ -348,7 +347,7 @@ integer(I4P),           intent(OUT)::   error    !< Error trapping flag.
 however, the _get_ method is invoked exactly with the same signature of single valued CLA as above: _get_ is a generic, user-friendly method that automatically handles both scalar and array _val_ variables.
 
 Go to [Top](#top) or [Toc](#toc)
-### <a name="test">Compile Testing Program
+### <a name="test"></a>Compile Testing Program
 
 As a practical example of FLAP usage a testing program named __flap_test__ is provided. You can compile with Fortran compiler supporting modern standards (2003+). Note that the dependency hierarchy of modules USE statement must be respected in order to successfully compile the program. If you are tired by frustrating usage of makefiles & co. you can try [FoBiS.py](https://github.com/szaghi/FoBiS) for building the program. A _fobos_ file is provided with FLAP. To build it just type into the root directory of FLAP:
 ```bash
@@ -358,8 +357,8 @@ FoBiS.py build
 Go to [Top](#top) or [Toc](#toc)
 ## <a name="versions"></a>Version History
 In the following the changelog of most important releases is reported.
-### v0.0.1 
+### v0.0.1
 ##### Download [ZIP](https://github.com/szaghi/FLAP/archive/v0.0.1.zip) ball or [TAR](https://github.com/szaghi/FLAP/archive/v0.0.1.tar.gz) one
-Stable Release. Fully backward compatible. 
+Stable Release. Fully backward compatible.
 
 Go to [Top](#top) or [Toc](#toc)
