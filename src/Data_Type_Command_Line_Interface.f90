@@ -47,10 +47,9 @@ character(len=*), parameter:: action_store_false = 'STORE_FALSE'   !< CLA that s
 character(len=*), parameter:: action_print_help  = 'PRINT_HELP'    !< CLA that print help message.
 character(len=*), parameter:: action_print_vers  = 'PRINT_VERSION' !< CLA that print version.
 character(len=*), parameter:: args_sep           = '||!||'         !< Arguments separator for multiple valued (list) CLA.
-!> Derived type containing the useful data for handling command line arguments (CLA).
-!> @note If not otherwise declared the action on CLA value is set to "store" a value.
-!> @ingroup Data_Type_Command_Line_InterfaceDerivedType
 type:: Type_Command_Line_Argument
+  !< Derived type containing the useful data for handling command line arguments (CLA).
+  !< @note If not otherwise declared the action on CLA value is set to "store" a value.
   character(len=:), allocatable:: switch             !< Switch name.
   character(len=:), allocatable:: switch_ab          !< Abbreviated switch name.
   character(len=:), allocatable:: help               !< Help message describing the CLA.
