@@ -29,8 +29,9 @@
 !> @copyright GNU Public License version 3.
 module Data_Type_Command_Line_Interface
 !-----------------------------------------------------------------------------------------------------------------------------------
-USE IR_Precision ! Integers and reals precision definition.
-USE Lib_IO_Misc  ! Procedures for IO and strings operations.
+USE IR_Precision                           ! Integers and reals precision definition.
+USE Lib_IO_Misc, only: stdout,stderr       ! Library for IO operations.
+USE Lib_Strings, only: tokenize,Upper_Case ! Library for strings operations.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
