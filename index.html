@@ -90,8 +90,6 @@
 			 
 			 
 			 
-          <a class="btn btn-lg btn-primary" href="https://github.com/szaghi/FLAP" role="button">The Web</a>
-			 
 	         
 			 
         </p>
@@ -298,32 +296,24 @@ FLAP is currently composed by one module, namely  <strong>Data_Type_Command_Line
 <li><em>get</em> for returning a particular CLA value and storing it into user-defined variable.</li>
 </ul>
 <p>Essentially, for building up and using a minimal CLI you should follow the 4 steps:</p>
-<ol>
-<li>declare a CLI variable:</li>
-</ol>
+<h6>1. declare a CLI variable:</h6>
 <div class="codehilite"><pre><span class="k">type</span><span class="p">(</span><span class="n">Type_Command_Line_Interface</span><span class="p">)</span><span class="kd">::</span> <span class="n">cli</span>
 </pre></div>
 
 
-<ol>
-<li>adding one or more CLA definition to the CLI:</li>
-</ol>
+<h6>2. adding one or more CLA definition to the CLI:</h6>
 <div class="codehilite"><pre><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Output file name&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;myfile.md&#39;</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 </pre></div>
 
 
 <p>more details on how declare a CLA are reported in the followings;</p>
-<ol>
-<li>parsing the actually passed command line arguments:</li>
-</ol>
+<h6>3. parsing the actually passed command line arguments:</h6>
 <div class="codehilite"><pre><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">parse</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 </pre></div>
 
 
 <p>more details on parsing method are reported in the followings;</p>
-<ol>
-<li>getting parsed values and storing into user-defined variables:</li>
-</ol>
+<h6>4. getting parsed values and storing into user-defined variables:</h6>
 <div class="codehilite"><pre><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span><span class="n">val</span><span class="o">=</span><span class="n">OutputFilename</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 </pre></div>
 
