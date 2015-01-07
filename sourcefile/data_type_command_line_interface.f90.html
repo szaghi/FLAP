@@ -243,7 +243,7 @@
 <span class="k">contains</span>
   <span class="c">! Type_Command_Line_Argument procedures</span>
   <span class="k">elemental subroutine </span><span class="n">free_cla</span><span class="p">(</span><span class="n">cla</span><span class="p">)</span>
-  <span class="c">!&lt; @brief Procedure for freeing dynamic memory.</span>
+  <span class="c">!&lt; Procedure for freeing dynamic memory.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  class</span><span class="p">(</span><span class="n">Type_Command_Line_Argument</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span><span class="kd">::</span> <span class="n">cla</span> <span class="c">!&lt; CLA data.</span>
@@ -263,7 +263,7 @@
   <span class="n">endsubroutine</span> <span class="n">free_cla</span>
 
   <span class="k">elemental subroutine </span><span class="n">finalize_cla</span><span class="p">(</span><span class="n">cla</span><span class="p">)</span>
-  <span class="c">!&lt; @brief Procedure for freeing dynamic memory when finalizing.</span>
+  <span class="c">!&lt; Procedure for freeing dynamic memory when finalizing.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  type</span><span class="p">(</span><span class="n">Type_Command_Line_Argument</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span><span class="kd">::</span> <span class="n">cla</span> <span class="c">!&lt; CLA data.</span>
@@ -276,7 +276,7 @@
   <span class="n">endsubroutine</span> <span class="n">finalize_cla</span>
 
   <span class="k">subroutine </span><span class="n">check_cla</span><span class="p">(</span><span class="n">cla</span><span class="p">,</span><span class="n">pref</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
-  <span class="c">!&lt; @brief Procedure for checking CLA data consistency.</span>
+  <span class="c">!&lt; Procedure for checking CLA data consistency.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  class</span><span class="p">(</span><span class="n">Type_Command_Line_Argument</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">cla</span>   <span class="c">!&lt; CLA data.</span>
@@ -312,7 +312,7 @@
   <span class="n">endsubroutine</span> <span class="n">check_cla</span>
 
   <span class="k">subroutine </span><span class="n">check_choices_cla</span><span class="p">(</span><span class="n">cla</span><span class="p">,</span><span class="n">val</span><span class="p">,</span><span class="n">pref</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
-  <span class="c">!&lt; @brief Procedure for checking if CLA value is in allowed choices.</span>
+  <span class="c">!&lt; Procedure for checking if CLA value is in allowed choices.</span>
   <span class="c">!&lt; @note This procedure can be called if and only if cla%choices has been allocated.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
@@ -388,7 +388,7 @@
   <span class="n">endsubroutine</span> <span class="n">check_choices_cla</span>
 
   <span class="k">subroutine </span><span class="n">get_cla</span><span class="p">(</span><span class="n">cla</span><span class="p">,</span><span class="n">pref</span><span class="p">,</span><span class="n">val</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
-  <span class="c">!&lt; @brief Procedure for getting CLA (single) value.</span>
+  <span class="c">!&lt; Procedure for getting CLA (single) value.</span>
   <span class="c">!&lt; @note For logical type CLA the value is directly read without any robust error trapping.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
@@ -501,7 +501,7 @@
   <span class="n">endsubroutine</span> <span class="n">get_cla</span>
 
   <span class="k">subroutine </span><span class="n">get_cla_list</span><span class="p">(</span><span class="n">cla</span><span class="p">,</span><span class="n">pref</span><span class="p">,</span><span class="n">val</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
-  <span class="c">!&lt; @brief Procedure for getting CLA (multiple) value.</span>
+  <span class="c">!&lt; Procedure for getting CLA (multiple) value.</span>
   <span class="c">!&lt; @note For logical type CLA the value is directly read without any robust error trapping.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
@@ -690,7 +690,7 @@
   <span class="n">endsubroutine</span> <span class="n">get_cla_list</span>
 
   <span class="k">subroutine </span><span class="n">print_cla</span><span class="p">(</span><span class="n">cla</span><span class="p">,</span><span class="n">pref</span><span class="p">,</span><span class="n">iostat</span><span class="p">,</span><span class="n">iomsg</span><span class="p">,</span><span class="n">unit</span><span class="p">)</span>
-  <span class="c">!&lt; @brief Procedure for printing CLA data with a pretty format.</span>
+  <span class="c">!&lt; Procedure for printing CLA data with a pretty format.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  class</span><span class="p">(</span><span class="n">Type_Command_Line_Argument</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">cla</span>     <span class="c">!&lt; CLA data.</span>
@@ -772,7 +772,7 @@
   <span class="n">endsubroutine</span> <span class="n">print_cla</span>
 
   <span class="k">subroutine </span><span class="n">add_signature</span><span class="p">(</span><span class="n">cla</span><span class="p">,</span><span class="n">signature</span><span class="p">)</span>
-  <span class="c">!&lt; @brief Procedure for adding CLA signature to the CLI one.</span>
+  <span class="c">!&lt; Procedure for adding CLA signature to the CLI one.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  class</span><span class="p">(</span><span class="n">Type_Command_Line_Argument</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>    <span class="n">cla</span>       <span class="c">!&lt; CLA data.</span>
@@ -825,7 +825,7 @@
 
   <span class="c">! Assignment (=)</span>
   <span class="k">elemental subroutine </span><span class="n">assign_cla</span><span class="p">(</span><span class="n">self1</span><span class="p">,</span><span class="n">self2</span><span class="p">)</span>
-  <span class="c">!&lt; @brief Procedure for assignment between two selfs.</span>
+  <span class="c">!&lt; Procedure for assignment between two selfs.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  class</span><span class="p">(</span><span class="n">Type_Command_Line_Argument</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span><span class="kd">::</span> <span class="n">self1</span>
@@ -851,7 +851,7 @@
 
   <span class="c">! Type_Command_Line_Interface procedures</span>
   <span class="k">elemental subroutine </span><span class="n">free</span><span class="p">(</span><span class="n">cli</span><span class="p">)</span>
-  <span class="c">!&lt; @brief Procedure for freeing dynamic memory.</span>
+  <span class="c">!&lt; Procedure for freeing dynamic memory.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  class</span><span class="p">(</span><span class="n">Type_Command_Line_Interface</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span><span class="kd">::</span> <span class="n">cli</span> <span class="c">!&lt; CLI data.</span>
@@ -867,7 +867,7 @@
   <span class="n">endsubroutine</span> <span class="n">free</span>
 
   <span class="k">elemental subroutine </span><span class="n">finalize</span><span class="p">(</span><span class="n">cli</span><span class="p">)</span>
-  <span class="c">!&lt; @brief Procedure for freeing dynamic memory when finalizing.</span>
+  <span class="c">!&lt; Procedure for freeing dynamic memory when finalizing.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  type</span><span class="p">(</span><span class="n">Type_Command_Line_Interface</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span><span class="kd">::</span> <span class="n">cli</span> <span class="c">!&lt; CLI data.</span>
@@ -880,7 +880,7 @@
   <span class="n">endsubroutine</span> <span class="n">finalize</span>
 
   <span class="k">pure subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span><span class="n">progname</span><span class="p">,</span><span class="n">version</span><span class="p">,</span><span class="n">help</span><span class="p">,</span><span class="n">examples</span><span class="p">,</span><span class="n">disable_hv</span><span class="p">)</span>
-  <span class="c">!&lt; @brief Procedure for initializing CLI.</span>
+  <span class="c">!&lt; Procedure for initializing CLI.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  class</span><span class="p">(</span><span class="n">Type_Command_Line_Interface</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span><span class="kd">::</span> <span class="n">cli</span>          <span class="c">!&lt; CLI data.</span>
@@ -905,7 +905,7 @@
   <span class="n">endsubroutine</span> <span class="n">init</span>
 
   <span class="k">subroutine </span><span class="n">add</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span><span class="n">pref</span><span class="p">,</span><span class="n">switch</span><span class="p">,</span><span class="n">switch_ab</span><span class="p">,</span><span class="n">help</span><span class="p">,</span><span class="n">required</span><span class="p">,</span><span class="n">positional</span><span class="p">,</span><span class="n">position</span><span class="p">,</span><span class="n">act</span><span class="p">,</span><span class="n">def</span><span class="p">,</span><span class="n">nargs</span><span class="p">,</span><span class="n">choices</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
-  <span class="c">!&lt; @brief Procedure for adding CLA to CLAs list.</span>
+  <span class="c">!&lt; Procedure for adding CLA to CLAs list.</span>
   <span class="c">!&lt; @note If not otherwise declared the action on CLA value is set to &quot;store&quot; a value that must be passed after the switch name</span>
   <span class="c">!&lt; or directly passed in case of positional CLA.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -976,7 +976,7 @@
   <span class="n">endsubroutine</span> <span class="n">add</span>
 
   <span class="k">subroutine </span><span class="n">check</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span><span class="n">pref</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
-  <span class="c">!&lt; @brief Procedure for checking CLAs data consistency.</span>
+  <span class="c">!&lt; Procedure for checking CLAs data consistency.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  class</span><span class="p">(</span><span class="n">Type_Command_Line_Interface</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">cli</span>   <span class="c">!&lt; CLI data.</span>
@@ -1012,7 +1012,7 @@
   <span class="n">endsubroutine</span> <span class="n">check</span>
 
   <span class="k">pure function </span><span class="n">passed</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span><span class="n">switch</span><span class="p">,</span><span class="n">position</span><span class="p">)</span>
-  <span class="c">!&lt; @brief Procedure for checking if a CLA has been passed.</span>
+  <span class="c">!&lt; Procedure for checking if a CLA has been passed.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  class</span><span class="p">(</span><span class="n">Type_Command_Line_Interface</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">cli</span>      <span class="c">!&lt; CLI data.</span>
@@ -1039,7 +1039,7 @@
   <span class="n">endfunction</span> <span class="n">passed</span>
 
   <span class="k">subroutine </span><span class="n">parse</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span><span class="n">pref</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
-  <span class="c">!&lt; @brief Procedure for parsing Command Line Interfaces by means of a previously initialized CLA list.</span>
+  <span class="c">!&lt; Procedure for parsing Command Line Interfaces by means of a previously initialized CLA list.</span>
   <span class="c">!&lt; @note The leading and trailing white spaces are removed from CLA values.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
@@ -1171,8 +1171,8 @@
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">contains</span>
-    <span class="c">!&gt; @brief Procedure for printing the correct use Command Line Interface accordingly to the cli%cla passed.</span>
-    <span class="k">subroutine </span><span class="n">print_usage</span>
+<span class="k">    subroutine </span><span class="n">print_usage</span>
+    <span class="c">!&lt; Procedure for printing the correct use Command Line Interface accordingly to the cli%cla passed.</span>
     <span class="c">!-------------------------------------------------------------------------------------------------------------------------------</span>
     <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span><span class="kd">::</span> <span class="n">cla_list_sign</span> <span class="c">!&lt; Complete signature of CLA list.</span>
     <span class="c">!-------------------------------------------------------------------------------------------------------------------------------</span>
@@ -1198,8 +1198,8 @@
     <span class="c">!-------------------------------------------------------------------------------------------------------------------------------</span>
     <span class="n">endsubroutine</span> <span class="n">print_usage</span>
 
-    <span class="c">!&gt; @brief Procedure for printing the correct use Command Line Interface accordingly to the cli%cla passed.</span>
     <span class="k">subroutine </span><span class="n">print_version</span>
+    <span class="c">!&lt; Procedure for printing the correct use Command Line Interface accordingly to the cli%cla passed.</span>
     <span class="c">!-------------------------------------------------------------------------------------------------------------------------------</span>
     <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span><span class="kd">::</span> <span class="n">cla_list_sign</span> <span class="c">!&lt; Complete signature of CLA list.</span>
     <span class="c">!-------------------------------------------------------------------------------------------------------------------------------</span>
@@ -1212,7 +1212,7 @@
   <span class="n">endsubroutine</span> <span class="n">parse</span>
 
   <span class="k">subroutine </span><span class="n">get_cla_cli</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span><span class="n">pref</span><span class="p">,</span><span class="n">switch</span><span class="p">,</span><span class="n">position</span><span class="p">,</span><span class="n">val</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
-  <span class="c">!&lt; @brief Procedure for getting CLA (single) value from CLAs list parsed.</span>
+  <span class="c">!&lt; Procedure for getting CLA (single) value from CLAs list parsed.</span>
   <span class="c">!&lt; @note For logical type CLA the value is directly read without any robust error trapping.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
@@ -1257,7 +1257,7 @@
   <span class="n">endsubroutine</span> <span class="n">get_cla_cli</span>
 
   <span class="k">subroutine </span><span class="n">get_cla_list_cli</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span><span class="n">pref</span><span class="p">,</span><span class="n">switch</span><span class="p">,</span><span class="n">position</span><span class="p">,</span><span class="n">val</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
-  <span class="c">!&lt; @brief Procedure for getting CLA multiple values from CLAs list parsed.</span>
+  <span class="c">!&lt; Procedure for getting CLA multiple values from CLAs list parsed.</span>
   <span class="c">!&lt; @note For logical type CLA the value is directly read without any robust error trapping.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
@@ -1303,7 +1303,7 @@
 
   <span class="c">! Assignment (=)</span>
   <span class="k">elemental subroutine </span><span class="n">assign_cli</span><span class="p">(</span><span class="n">self1</span><span class="p">,</span><span class="n">self2</span><span class="p">)</span>
-  <span class="c">!&lt; @brief Procedure for assignment between two selfs.</span>
+  <span class="c">!&lt; Procedure for assignment between two selfs.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  class</span><span class="p">(</span><span class="n">Type_Command_Line_Interface</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span><span class="kd">::</span> <span class="n">self1</span>
