@@ -312,14 +312,18 @@ FLAP is currently composed by one module, namely  <strong>Data_Type_Command_Line
 </pre></div>
 
 
-<p>more details on how declare a CLA are reported in the followings;
-3. parsing the actually passed command line arguments:</p>
+<p>more details on how declare a CLA are reported in the followings;</p>
+<ol>
+<li>parsing the actually passed command line arguments:</li>
+</ol>
 <div class="codehilite"><pre><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">parse</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 </pre></div>
 
 
-<p>more details on parsing method are reported in the followings;
-4. getting parsed values and storing into user-defined variables:</p>
+<p>more details on parsing method are reported in the followings;</p>
+<ol>
+<li>getting parsed values and storing into user-defined variables:</li>
+</ol>
 <div class="codehilite"><pre><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span><span class="n">val</span><span class="o">=</span><span class="n">OutputFilename</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 </pre></div>
 
