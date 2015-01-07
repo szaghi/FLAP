@@ -256,7 +256,7 @@ FLAP is currently composed by one module, namely  <strong>Data_Type_Command_Line
 
 
 <p>Now that you have your CLI declared you can start using it. The API to handle it follows.</p>
-<h3><a name="API">API</h3>
+<h3><a name="API"></a>API</h3>
 <p>The main CLI object, that is the only one you must know, is <strong>Type_Command_Line_Interface</strong></p>
 <div class="codehilite"><pre><span class="k">type</span><span class="p">,</span> <span class="k">public</span><span class="kd">::</span> <span class="n">Type_Command_Line_Interface</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                                  <span class="n">Na</span>          <span class="o">=</span> <span class="mi">0_I4P</span> <span class="c">!&lt; Number of CLA.</span>
@@ -326,7 +326,7 @@ FLAP is currently composed by one module, namely  <strong>Data_Type_Command_Line
 
 <p><em>OutputFilename</em> and <em>error</em> being previously defined variables.</p>
 <p>Optionally you can initialize CLI with custom help messages by means of <em>init</em> method.</p>
-<h4><a name="cli-init">Initializing CLI with personalized help messages</h4>
+<h4><a name="cli-init"></a>Initializing CLI with personalized help messages</h4>
 <p>CLI data type can already (quasi-automatically) handle CLAs through its default values (provided from the baseline variable declaration, i.e. <code>type(Type_Command_Line_Interface):: cli</code>). However, in order to improve the clearness CLI messages you can personalized help messages by means of <em>init</em> method (that remains an optional step):</p>
 <div class="codehilite"><pre><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span><span class="p">,</span><span class="n">version</span><span class="p">,</span><span class="n">help</span><span class="p">,</span><span class="n">examples</span><span class="p">,</span><span class="n">disable_hv</span><span class="p">)</span>
 </pre></div>
@@ -360,7 +360,7 @@ FLAP is currently composed by one module, namely  <strong>Data_Type_Command_Line
 
 
 <p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
-<h4><a name="cla-add">Adding a new CLA to CLI</h4>
+<h4><a name="cla-add"></a>Adding a new CLA to CLI</h4>
 <p>CLA cannot be directly defined and modified: to handle a CLA you must use CLI methods. Adding CLA to CLI is performed through the <em>add</em> method:</p>
 <div class="codehilite"><pre>  <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">pref</span><span class="p">,</span><span class="n">switch</span><span class="p">,</span><span class="n">switch_ab</span><span class="p">,</span><span class="n">help</span><span class="p">,</span><span class="n">required</span><span class="p">,</span><span class="n">positional</span><span class="p">,</span><span class="n">position</span><span class="p">,</span><span class="n">act</span><span class="p">,</span><span class="n">def</span><span class="p">,</span><span class="n">nargs</span><span class="p">,</span><span class="n">choices</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
 </pre></div>
@@ -396,7 +396,7 @@ FLAP is currently composed by one module, namely  <strong>Data_Type_Command_Line
 <p>When a CLA is added a self-consistency-check is performed, e.g. it is checked if an optional CLA has a default value or if one of <em>position</em> and <em>switch</em> has been passed. In case the self-consistency-check fails an error code is returned and an error message is printed to <em>stderr</em>.</p>
 <p>Note that <em>choices</em>  must be a comma-separated list of allowable values and if it has been specified the passed value is checked to be consistent with this list when the <em>get</em> method is invoked: an error code is returned and if the value is not into the specified range an error message is printed to <em>stderr</em>. However the value of CLA is not modified and it is equal to the passed value.</p>
 <p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
-<h4><a name="cli-parse">Parsing the CLI</h4>
+<h4><a name="cli-parse"></a>Parsing the CLI</h4>
 <p>The complete signature of <em>parse</em> method is the following:</p>
 <div class="codehilite"><pre>  <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">parse</span><span class="p">(</span><span class="n">pref</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
 </pre></div>
@@ -414,7 +414,7 @@ FLAP is currently composed by one module, namely  <strong>Data_Type_Command_Line
 - the switch name of unknown CLA is passed;
 - the number of passed CLAs is less than the required CLAs previously defined.</p>
 <p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
-<h4><a name="cla-get">Getting a CLA value from parsed CLI</h4>
+<h4><a name="cla-get"></a>Getting a CLA value from parsed CLI</h4>
 <p>After the CLI has been parsed, the user is allowed to get any of the defined CLA value. Accordingly to the user-definition, a CLA value can be obtained either by the switch name (for named CLA) or by the CLA position (for positional CLA):</p>
 <div class="codehilite"><pre><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span><span class="n">val</span><span class="o">=</span><span class="n">rval</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">err</span><span class="p">)</span>
 </pre></div>
@@ -451,7 +451,7 @@ FLAP is currently composed by one module, namely  <strong>Data_Type_Command_Line
 
 <p>however, the <em>get</em> method is invoked exactly with the same signature of single valued CLA as above: <em>get</em> is a generic, user-friendly method that automatically handles both scalar and array <em>val</em> variables.</p>
 <p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
-<h3><a name="test">Compile Testing Program</h3>
+<h3><a name="test"></a>Compile Testing Program</h3>
 <p>As a practical example of FLAP usage a testing program named <strong>flap_test</strong> is provided. You can compile with Fortran compiler supporting modern standards (2003+). Note that the dependency hierarchy of modules USE statement must be respected in order to successfully compile the program. If you are tired by frustrating usage of makefiles &amp; co. you can try <a href="https://github.com/szaghi/FoBiS">FoBiS.py</a> for building the program. A <em>fobos</em> file is provided with FLAP. To build it just type into the root directory of FLAP:</p>
 <div class="codehilite"><pre>FoBiS.py build
 </pre></div>
