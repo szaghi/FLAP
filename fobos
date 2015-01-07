@@ -35,3 +35,4 @@ log       = False
 help   = Rule for building documentation from source files
 rule_1 = rm -rf doc/html/*
 rule_2 = ford.py doc/main_page.md
+rule_3 = cp -r doc/html/publish/* doc/html/

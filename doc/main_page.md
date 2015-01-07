@@ -2,7 +2,6 @@ project: FLAP
 project_directory: ./src
 output_dir: ./doc/html/publish/
 project_github: https://github.com/szaghi/FLAP
-project_website: https://github.com/szaghi/FLAP
 summary: Fortran command Line Arguments Parser for poor men
 author: Stefano Zaghi
 github: https://github.com/szaghi
@@ -167,7 +166,7 @@ type(Type_Command_Line_Interface):: CLI
 ```
 Now that you have your CLI declared you can start using it. The API to handle it follows.
 
-### <a name="API">API
+### <a name="API"></a>API
 The main CLI object, that is the only one you must know, is __Type_Command_Line_Interface__
 ```fortran
 type, public:: Type_Command_Line_Interface
@@ -209,21 +208,24 @@ Fews methods are provided within this derived type:
 
 Essentially, for building up and using a minimal CLI you should follow the 4 steps:
 
-1. declare a CLI variable:
+###### 1. declare a CLI variable:
 ```fortran
 type(Type_Command_Line_Interface):: cli
 ```
-2. adding one or more CLA definition to the CLI:
+
+###### 2. adding one or more CLA definition to the CLI:
 ```fortran
 call cli%add(switch='-o',help='Output file name',def='myfile.md',error=error)
 ```
 more details on how declare a CLA are reported in the followings;
-3. parsing the actually passed command line arguments:
+
+###### 3. parsing the actually passed command line arguments:
 ```fortran
 call cli%parse(error=error)
 ```
 more details on parsing method are reported in the followings;
-4. getting parsed values and storing into user-defined variables:
+
+###### 4. getting parsed values and storing into user-defined variables:
 ```fortran
 call cli%get(switch='-o',val=OutputFilename,error=error)
 ```
@@ -231,7 +233,7 @@ _OutputFilename_ and _error_ being previously defined variables.
 
 Optionally you can initialize CLI with custom help messages by means of _init_ method.
 
-#### <a name="cli-init">Initializing CLI with personalized help messages
+#### <a name="cli-init"></a>Initializing CLI with personalized help messages
 
 CLI data type can already (quasi-automatically) handle CLAs through its default values (provided from the baseline variable declaration, i.e. `type(Type_Command_Line_Interface):: cli`). However, in order to improve the clearness CLI messages you can personalized help messages by means of _init_ method (that remains an optional step):
 ```fortran
@@ -266,7 +268,7 @@ call cli%init(...,disable_hv=.true.)
 ```
 
 Go to [Top](#top) or [Toc](#toc)
-#### <a name="cla-add">Adding a new CLA to CLI
+#### <a name="cla-add"></a>Adding a new CLA to CLI
 
 CLA cannot be directly defined and modified: to handle a CLA you must use CLI methods. Adding CLA to CLI is performed through the _add_ method:
 ```fortran
@@ -305,7 +307,7 @@ When a CLA is added a self-consistency-check is performed, e.g. it is checked if
 Note that _choices_  must be a comma-separated list of allowable values and if it has been specified the passed value is checked to be consistent with this list when the _get_ method is invoked: an error code is returned and if the value is not into the specified range an error message is printed to _stderr_. However the value of CLA is not modified and it is equal to the passed value.
 
 Go to [Top](#top) or [Toc](#toc)
-#### <a name="cli-parse">Parsing the CLI
+#### <a name="cli-parse"></a>Parsing the CLI
 The complete signature of _parse_ method is the following:
 ```fortran
   call cli%parse(pref,error)
@@ -323,7 +325,7 @@ The help messages are print if one of the following issues arise:
 - the number of passed CLAs is less than the required CLAs previously defined.
 
 Go to [Top](#top) or [Toc](#toc)
-#### <a name="cla-get">Getting a CLA value from parsed CLI
+#### <a name="cla-get"></a>Getting a CLA value from parsed CLI
 After the CLI has been parsed, the user is allowed to get any of the defined CLA value. Accordingly to the user-definition, a CLA value can be obtained either by the switch name (for named CLA) or by the CLA position (for positional CLA):
 ```fortran
 call cli%get(switch='-r',val=rval,error=err)
@@ -357,7 +359,7 @@ integer(I4P),           intent(OUT)::   error    !< Error trapping flag.
 however, the _get_ method is invoked exactly with the same signature of single valued CLA as above: _get_ is a generic, user-friendly method that automatically handles both scalar and array _val_ variables.
 
 Go to [Top](#top) or [Toc](#toc)
-### <a name="test">Compile Testing Program
+### <a name="test"></a>Compile Testing Program
 
 As a practical example of FLAP usage a testing program named __flap_test__ is provided. You can compile with Fortran compiler supporting modern standards (2003+). Note that the dependency hierarchy of modules USE statement must be respected in order to successfully compile the program. If you are tired by frustrating usage of makefiles & co. you can try [FoBiS.py](https://github.com/szaghi/FoBiS) for building the program. A _fobos_ file is provided with FLAP. To build it just type into the root directory of FLAP:
 ```bash
