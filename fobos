@@ -1,35 +1,133 @@
 [modes]
-modes = debug release
+modes = shared static flap-test
+        shared-debug static-debug flap-test-debug
 
-[debug]
-help      = Debug mode
+[common-variables]
+$CFLAGS_SHARED = -cpp -c -assume realloc_lhs -fpic
+$CFLAGS_STATIC = -cpp -c -assume realloc_lhs
+$LFLAGS_SHARED = -shared
+$DEBUG         = -O0 -debug all -check all -warn all -traceback
+$OPTIMIZE      = -O3
+
+# main modes
+[shared]
+template = template-shared
+target   = src/Data_Type_Command_Line_Interface.f90
+output   = FLAP.so
+mklib    = shared
+
+[static]
+template = template-static
+target   = src/Data_Type_Command_Line_Interface.f90
+output   = FLAP.a
+mklib    = static
+
+[flap-test]
+template = template-flap-test
+target   = src/flap_test.f90
+output   = flap_test
+
+[shared-debug]
+template = template-shared-debug
+target   = src/Data_Type_Command_Line_Interface.f90
+output   = FLAP.so
+mklib    = shared
+
+[static-debug]
+template = template-static-debug
+target   = src/Data_Type_Command_Line_Interface.f90
+output   = FLAP.a
+mklib    = static
+
+[flap-test-debug]
+template = template-flap-test-debug
+target   = src/flap_test.f90
+output   = flap_test
+
+#templates
+[template-shared]
+help      = Shared Library
 compiler  = intel
-cflags    = -O0 -warn all -check all -debug all -traceback -assume protect_parens -assume realloc_lhs -fp-model source -cpp -c -module ./mod/
-lflags    = -O0 -warn all -check all -debug all -traceback -assume protect_parens -assume realloc_lhs -fp-model source
+cflags    = $CFLAGS_SHARED $OPTIMIZE
+lflags    = $LFLAGS_SHARED $OPTIMIZE
 mod_dir   = ./mod/
 obj_dir   = ./obj/
-build_dir = ./
+build_dir = ./shared/
 src       = ./src/
 colors    = True
 quiet     = False
-target    = src/flap_test.f90
-output    = flap_test
-log       = False
+log       = True
+jobs      = 2
 
-[release]
-help      = Release mode
+[template-static]
+help      = Static Library
 compiler  = intel
-cflags    = -O3 -assume realloc_lhs -fp-model source -cpp -c -module ./mod/
-lflags    = -O3 -assume realloc_lhs -fp-model source
+cflags    = $CFLAGS_STATIC $OPTIMIZE
+lflags    =                $OPTIMIZE
 mod_dir   = ./mod/
 obj_dir   = ./obj/
-build_dir = ./
+build_dir = ./static/
 src       = ./src/
 colors    = True
 quiet     = False
-target    = src/flap_test.f90
-output    = flap_test
-log       = False
+log       = True
+jobs      = 2
+
+[template-flap-test]
+help      = Test Driver Program
+compiler  = intel
+cflags    = $CFLAGS_STATIC $OPTIMIZE
+lflags    =                $OPTIMIZE
+mod_dir   = ./mod/
+obj_dir   = ./obj/
+build_dir = ./flap_test/
+src       = ./src/
+colors    = True
+quiet     = False
+log       = True
+jobs      = 2
+
+[template-shared-debug]
+help      = Shared Library in debug mode
+compiler  = intel
+cflags    = $CFLAGS_SHARED $DEBUG
+lflags    = $LFLAGS_SHARED $DEBUG
+mod_dir   = ./mod/
+obj_dir   = ./obj/
+build_dir = ./shared/
+src       = ./src/
+colors    = True
+quiet     = False
+log       = True
+jobs      = 2
+
+[template-static-debug]
+help      = Static Library in debug mode
+compiler  = intel
+cflags    = $CFLAGS_STATIC $DEBUG
+lflags    =                $DEBUG
+mod_dir   = ./mod/
+obj_dir   = ./obj/
+build_dir = ./static/
+src       = ./src/
+colors    = True
+quiet     = False
+log       = True
+jobs      = 2
+
+[template-flap-test-debug]
+help      = Test Driver Program in debug mode
+compiler  = intel
+cflags    = $CFLAGS_STATIC $DEBUG
+lflags    =                $DEBUG
+mod_dir   = ./mod/
+obj_dir   = ./obj/
+build_dir = ./flap_test/
+src       = ./src/
+colors    = True
+quiet     = False
+log       = True
+jobs      = 2
 
 [rule-makedoc]
 help   = Rule for building documentation from source files
