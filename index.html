@@ -105,9 +105,9 @@
 <a href="https://waffle.io/szaghi/FLAP"><img alt="Open bugs" src="https://badge.waffle.io/szaghi/FLAP.png?label=bug&amp;title=Open%20Bugs"></a>
 <a href="https://bitdeli.com/free" title="Bitdeli Badge"><img alt="Bitdeli Badge" src="https://d2weczhvl823v0.cloudfront.net/szaghi/flap/trend.png"></a></p>
 <h3><a name="top"></a>FLAP, Fortran command Line Arguments Parser for poor men</h3>
-<p>A very simple and stupid tool for building easily nice Command Line Interface for modern Fortran projects.</p>
+<p>A KISS library for building easily nice Command Line Interfaces (CLI) for modern (2003+) Fortran projects.</p>
 <h3>A Taste of FLAP</h3>
-<p>Running the provided test program, <strong>flap_test</strong>, a taste of FLAP is served:</p>
+<p>Running the provided test program, <code>flap_test -h</code>, a taste of FLAP is served:</p>
 <div class="codehilite"><pre>+--&gt; flap_test, a testing program <span class="k">for</span> FLAP library
 +--&gt; Parsing Command Line Arguments
 <span class="p">|</span>--&gt; The Command Line Interface <span class="o">(</span>CLI<span class="o">)</span> has the following options
@@ -182,276 +182,23 @@
 <p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
 <h2><a name="toc"></a>Table of Contents</h2>
 <ul>
-<li><a href="#team-members">Team Members</a></li>
 <li><a href="#what">What is FLAP?</a></li>
 <li><a href="#main-features">Main features</a></li>
-<li><a href="#todos">Todos</a></li>
-<li><a href="#requirements">Requirements</a></li>
 <li><a href="#copyrights">Copyrights</a></li>
-<li><a href="#usage">Usage</a></li>
-<li><a href="#API">API</a><ul>
-<li><a href="#cli-init">Initializing CLI with personalized help messages</a></li>
-<li><a href="#cla-add">Adding a new CLA to CLI</a></li>
-<li><a href="#cli-parse">Parsing the CLI</a></li>
-<li><a href="#cla-get">Getting a CLA value from parsed CLI</a></li>
-</ul>
-</li>
-<li><a href="#test">Compile Testing Program</a></li>
+<li><a href="#doc">Documentation</a></li>
 <li><a href="#versions">Version History</a></li>
 </ul>
 <p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
-<h2><a name="team-members"></a>Team Members</h2>
-<ul>
-<li>Stefano Zaghi <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#115;&#116;&#101;&#102;&#97;&#110;&#111;&#46;&#122;&#97;&#103;&#104;&#105;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">&#115;&#116;&#101;&#102;&#97;&#110;&#111;&#46;&#122;&#97;&#103;&#104;&#105;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;</a></li>
-</ul>
-<p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
 <h2><a name="what"></a>What is FLAP?</h2>
-<p>Modern Fortran standards (2003+) have introduced support for Command Line Arguments (CLA), thus it is possible to construct nice and effective Command Line Interface (CLI). FLAP is a small library designed to simplify the (repetitive) construction of complicated CLI in pure Fortran (standard 2003+). FLAP has been inspired by the python module <em>argparse</em> trying to mimic it. Once you have defined the arguments are required by means of a user-friendly method of the CLI, FLAP will parse the CLAs for you. It is worthy of note that FLAP, as <em>argparse</em>, also automatically generates help and usage messages and issues errors when users give the program invalid arguments.</p>
+<p>Modern Fortran standards (2003+) have introduced support for Command Line Arguments (CLA), thus it is possible to construct nice and effective Command Line Interfaces (CLI). FLAP is a small library designed to simplify the (repetitive) construction of complicated CLI in pure Fortran (standard 2003+). FLAP has been inspired by the python module <em>argparse</em> trying to mimic it. Once you have defined the arguments that are required by means of a user-friendly method of the CLI, FLAP will parse the CLAs for you. It is worthy of note that FLAP, as <em>argparse</em>, also automatically generates help and usage messages and issues errors when users give the program invalid arguments.</p>
 <p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
 <h2><a name="main-features"></a>Main features</h2>
-<ul>
-<li>User-friendly methods for building flexible and effective Command Line Interfaces (CLI);</li>
-<li>support optional and non optional Command Line Argument (CLA);</li>
-<li>support boolean CLA;</li>
-<li>support positional CLA;</li>
-<li>support list of allowable values for defined CLA with automatic consistency check;</li>
-<li>support multiple valued (list of values) CLA;</li>
-<li>automatic generation of help and usage messages;</li>
-<li>self-consistency-check of CLA definition;</li>
-<li>consistency-check of whole CLI definition;</li>
-<li>errors trapping for invalid CLI usage;</li>
-</ul>
-<p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
-<h2><a name="todos"></a>Todos</h2>
-<ul>
-<li>Try <a href="https://github.com/docopt/docopt">docopt</a> features;</li>
-<li>any feature request is welcome!</li>
-</ul>
-<p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
-<h2><a name="requirements"></a>Requirements</h2>
-<ul>
-<li>Modern Fortran Compiler (standard 2003+);</li>
-<li>a lot of patience with the author.</li>
-</ul>
-<p>FLAP is developed on a GNU/Linux architecture. For Windows architecture there is no support, however it should be work out-of-the-box.</p>
 <p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
 <h2><a name="Copyrights"></a>Copyrights</h2>
 <p>FLAP is an open source project, it is distributed under the <a href="http://www.gnu.org/licenses/gpl-3.0.html">GPL v3</a>. Anyone is interest to use, to develop or to contribute to FLAP is welcome.</p>
 <p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
-<h2><a name="usage"></a>Usage</h2>
-<p>FLAP is a module library.
-FLAP is currently composed by one module, namely  <strong>Data_Type_Command_Line_Interface.f90</strong>, where two derived types are defined:
-1. <strong>Type_Command_Line_Argument</strong>;
-2. <strong>Type_Command_Line_Interface</strong>.</p>
-<p>The first one is a back-end handling CLAs while the latter is the front-end providing all you need to handle your CLI. Two auxiliary modules, <strong>IR_Precision.f90</strong> and <strong>Lib_IO_Misc.f90</strong> are used for minor tasks. Finally, a testing program <strong>flap_test</strong> is provided showing a basic example of FLAP usage.</p>
-<p>To start using FLAP and declaring your CLI, you must import its main module:</p>
-<div class="codehilite"><pre><span class="p">...</span>
-<span class="k">USE </span><span class="n">Data_Type_Command_Line_Interface</span>
-<span class="p">...</span>
-
-<span class="k">type</span><span class="p">(</span><span class="n">Type_Command_Line_Interface</span><span class="p">)</span><span class="kd">::</span> <span class="n">CLI</span>
-</pre></div>
-
-
-<p>Now that you have your CLI declared you can start using it. The API to handle it follows.</p>
-<h3><a name="API"></a>API</h3>
-<p>The main CLI object, that is the only one you must know, is <strong>Type_Command_Line_Interface</strong></p>
-<div class="codehilite"><pre><span class="k">type</span><span class="p">,</span> <span class="k">public</span><span class="kd">::</span> <span class="n">Type_Command_Line_Interface</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                                  <span class="n">Na</span>          <span class="o">=</span> <span class="mi">0_I4P</span> <span class="c">!&lt; Number of CLA.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                                  <span class="n">Na_required</span> <span class="o">=</span> <span class="mi">0_I4P</span> <span class="c">!&lt; Number of command line arguments that CLI requires.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                                  <span class="n">Na_optional</span> <span class="o">=</span> <span class="mi">0_I4P</span> <span class="c">!&lt; Number of command line arguments that are optional for CLI.</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">Type_Command_Line_Argument</span><span class="p">),</span> <span class="k">allocatable</span><span class="kd">::</span> <span class="n">cla</span><span class="p">(:)</span>              <span class="c">!&lt; CLA list [1:Na].</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span><span class="kd">::</span>                 <span class="n">progname</span>            <span class="c">!&lt; Program name.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span><span class="kd">::</span>                 <span class="n">version</span>             <span class="c">!&lt; Program version.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span><span class="kd">::</span>                 <span class="n">help</span>                <span class="c">!&lt; Help message introducing the CLI usage.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span><span class="kd">::</span>                 <span class="n">examples</span><span class="p">(:)</span>         <span class="c">!&lt; Examples of correct usage.</span>
-  <span class="kt">logical</span><span class="kd">::</span>                                       <span class="n">disable_hv</span> <span class="o">=</span> <span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="c">!&lt; Disable automatic inserting of &#39;help&#39; and &#39;version&#39; CLAs.</span>
-  <span class="k">contains</span>
-<span class="k">    procedure</span><span class="kd">::</span> <span class="n">free</span>                                <span class="c">! Procedure for freeing dynamic memory.</span>
-    <span class="k">procedure</span><span class="kd">::</span> <span class="n">init</span>                                <span class="c">! Procedure for initializing CLI.</span>
-    <span class="k">procedure</span><span class="kd">::</span> <span class="n">add</span>                                 <span class="c">! Procedure for adding CLA to CLAs list.</span>
-    <span class="k">procedure</span><span class="kd">::</span> <span class="n">check</span>                               <span class="c">! Procedure for checking CLAs data consistenc.</span>
-    <span class="k">procedure</span><span class="kd">::</span> <span class="n">passed</span>                              <span class="c">! Procedure for checking if a CLA has been passed.</span>
-    <span class="k">procedure</span><span class="kd">::</span> <span class="n">parse</span>                               <span class="c">! Procedure for parsing Command Line Interfaces.</span>
-    <span class="k">generic</span><span class="kd">::</span>   <span class="n">get</span> <span class="o">=&gt;</span> <span class="n">get_cla_cli</span><span class="p">,</span><span class="n">get_cla_list_cli</span> <span class="c">! Procedure for getting CLA value(s) from CLAs list parsed.</span>
-    <span class="k">final</span><span class="kd">::</span>     <span class="n">finalize</span>                            <span class="c">! Procedure for freeing dynamic memory when finalizing.</span>
-    <span class="c">! operators overloading</span>
-    <span class="k">generic</span><span class="kd">::</span> <span class="n">assignment</span><span class="p">(</span><span class="o">=</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">assign_cli</span>
-    <span class="c">! private procedures</span>
-    <span class="k">procedure</span><span class="p">,</span>              <span class="k">private</span><span class="kd">::</span> <span class="n">get_cla_cli</span>
-    <span class="k">procedure</span><span class="p">,</span>              <span class="k">private</span><span class="kd">::</span> <span class="n">get_cla_list_cli</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self1</span><span class="p">),</span> <span class="k">private</span><span class="kd">::</span> <span class="n">assign_cli</span>
-<span class="n">endtype</span> <span class="n">Type_Command_Line_Interface</span>
-</pre></div>
-
-
-<p>Fews methods are provided within this derived type:</p>
-<ul>
-<li><em>free</em> for freeing the CLI memory;</li>
-<li><em>init</em> for initializing CLI with user defined help messages;</li>
-<li><em>add</em> for adding a CLA to the CLI;</li>
-<li><em>check</em> for checking the CLAs definition consistency;</li>
-<li><em>passed</em> for checking is a particular CLA has been actually passed;</li>
-<li><em>parse</em> for parsing all passed CLAs accordingly to the list previously defined for building up the CLI;</li>
-<li><em>get</em> for returning a particular CLA value and storing it into user-defined variable.</li>
-</ul>
-<p>Essentially, for building up and using a minimal CLI you should follow the 4 steps:</p>
-<h6>1. declare a CLI variable:</h6>
-<div class="codehilite"><pre><span class="k">type</span><span class="p">(</span><span class="n">Type_Command_Line_Interface</span><span class="p">)</span><span class="kd">::</span> <span class="n">cli</span>
-</pre></div>
-
-
-<h6>2. adding one or more CLA definition to the CLI:</h6>
-<div class="codehilite"><pre><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Output file name&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;myfile.md&#39;</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
-</pre></div>
-
-
-<p>more details on how declare a CLA are reported in the followings;</p>
-<h6>3. parsing the actually passed command line arguments:</h6>
-<div class="codehilite"><pre><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">parse</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
-</pre></div>
-
-
-<p>more details on parsing method are reported in the followings;</p>
-<h6>4. getting parsed values and storing into user-defined variables:</h6>
-<div class="codehilite"><pre><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span><span class="n">val</span><span class="o">=</span><span class="n">OutputFilename</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
-</pre></div>
-
-
-<p><em>OutputFilename</em> and <em>error</em> being previously defined variables.</p>
-<p>Optionally you can initialize CLI with custom help messages by means of <em>init</em> method.</p>
-<h4><a name="cli-init"></a>Initializing CLI with personalized help messages</h4>
-<p>CLI data type can already (quasi-automatically) handle CLAs through its default values (provided from the baseline variable declaration, i.e. <code>type(Type_Command_Line_Interface):: cli</code>). However, in order to improve the clearness CLI messages you can personalized help messages by means of <em>init</em> method (that remains an optional step):</p>
-<div class="codehilite"><pre><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span><span class="p">,</span><span class="n">version</span><span class="p">,</span><span class="n">help</span><span class="p">,</span><span class="n">examples</span><span class="p">,</span><span class="n">disable_hv</span><span class="p">)</span>
-</pre></div>
-
-
-<p>where</p>
-<div class="codehilite"><pre><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">progname</span>     <span class="c">!&lt; Program name.</span>
-<span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">version</span>      <span class="c">!&lt; Program version.</span>
-<span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">help</span>         <span class="c">!&lt; Help message introducing the CLI usage.</span>
-<span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">examples</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span> <span class="c">!&lt; Examples of correct usage.</span>
-<span class="kt">logical</span><span class="p">,</span>      <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">disable_hv</span>   <span class="c">!&lt; Disable automatic inserting of &#39;help&#39; and &#39;version&#39; CLAs.</span>
-</pre></div>
-
-
-<p>The dummy arguments should be auto-explicative. Note that the <em>help</em> and <em>examples</em> dummy arguments are used for printing a pretty help message explaining the CLI usage, thus should be always provided even if they are optional arguments. Moreover, due the Fortran limitations, the array containing the examples must have character elements with the same length, thus trailing white spaces must padded to short examples.</p>
-<p>The only not so clear argument of <em>init</em> method is <strong>disable_hv</strong>.</p>
-<h6>Disabling automatic Help and Version</h6>
-<p>FLAP automatically add 2 special CLA to CLI:</p>
-<ol>
-<li>a CLA for printing a help message explaining the correct use of the CLI;</li>
-<li>a CLA for printing the version (if defined when the CLI is initialized) of the program.</li>
-</ol>
-<p>This two CLAs has the following default switches:</p>
-<ul>
-<li><em>help</em>: switch <code>--help</code>, abbreviated switch <code>-h</code>;</li>
-<li><em>version</em>: switch <code>--version</code>, abbreviated switch <code>-v</code>;</li>
-</ul>
-<p>However, FLAP before adding these two CLAs to the CLI checks if these switches have been already used and in case does not add them. To disable such an automatic CLAs creation initialized the CLI with:</p>
-<div class="codehilite"><pre><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(...,</span><span class="n">disable_hv</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.)</span>
-</pre></div>
-
-
-<p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
-<h4><a name="cla-add"></a>Adding a new CLA to CLI</h4>
-<p>CLA cannot be directly defined and modified: to handle a CLA you must use CLI methods. Adding CLA to CLI is performed through the <em>add</em> method:</p>
-<div class="codehilite"><pre>  <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">pref</span><span class="p">,</span><span class="n">switch</span><span class="p">,</span><span class="n">switch_ab</span><span class="p">,</span><span class="n">help</span><span class="p">,</span><span class="n">required</span><span class="p">,</span><span class="n">positional</span><span class="p">,</span><span class="n">position</span><span class="p">,</span><span class="n">act</span><span class="p">,</span><span class="n">def</span><span class="p">,</span><span class="n">nargs</span><span class="p">,</span><span class="n">choices</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
-</pre></div>
-
-
-<p>where</p>
-<div class="codehilite"><pre><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">pref</span>       <span class="c">!&lt; Prefixing string.</span>
-<span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">switch</span>     <span class="c">!&lt; Switch name.</span>
-<span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">switch_ab</span>  <span class="c">!&lt; Abbreviated switch name.</span>
-<span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">help</span>       <span class="c">!&lt; Help message describing the CLA.</span>
-<span class="kt">logical</span><span class="p">,</span>      <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">required</span>   <span class="c">!&lt; Flag for set required argument.</span>
-<span class="kt">logical</span><span class="p">,</span>      <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">positional</span> <span class="c">!&lt; Flag for checking if CLA is a positional or a named CLA.</span>
-<span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">position</span>   <span class="c">!&lt; Position of positional CLA.</span>
-<span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">act</span>        <span class="c">!&lt; CLA value action.</span>
-<span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">def</span>        <span class="c">!&lt; Default value.</span>
-<span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">nargs</span>      <span class="c">!&lt; Number of arguments consumed by CLA.</span>
-<span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">choices</span>    <span class="c">!&lt; List of allowable values for the argument.</span>
-<span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span><span class="kd">::</span> <span class="n">error</span>      <span class="c">!&lt; Error trapping flag.</span>
-</pre></div>
-
-
-<p>The dummy arguments should be auto-explicative. Note that the <em>help</em> dummy argument is used for printing a pretty help message explaining the CLI usage, thus should be always provided even if CLA is an optional argument. It is also worthy of note that the abbreviated switch is set equal to switch name (if passed) if no otherwise defined. Moreover, one between <em>switch</em> and <em>position</em> must be defined: if <em>switch</em> is defined then a named CLA is initialed, otherwise <em>position</em> must be defined (with <em>positional=.true.</em>) and a positional CLA is initialized.</p>
-<p>The following rules apply:
-+ <code>pref</code> string is used as prefixing string for any messages on standard out/err;
-+ if <code>required</code> is set to <code>.false.</code> a default value must be defined, even if it is a null string;
-+ no matter the type of CLA value is (real, integer, etc...) the definition of default value for an optional CLA must be always a string, e.g. <code>def='1'</code> or <code>def='1.0'</code>; the actual type casting is performed when the CLA value is gotten by means of the <code>get</code> method: the type casting is performed by means of the actual type (and kind) of the variable used for storing CLA value;
-+ presently the possible actions of CLA are (all actions definitions are case insensitive):
-    + <code>act=store</code>, the CLA stores a value that must be passed after the CLA switch for named CLA;
-    + <code>act=store_true</code>, the CLA stores <code>.true.</code>;
-    + <code>act=store_false</code>, the CLA stores <code>.false.</code>;
-    + <code>act=print_help</code>, the CLA triggers the printing of the help message that is built with the help messages of all defined CLAs and the help message of CLI;
-    + <code>act=print_version</code>, the CLA triggers the printing the program version; if the version is not defined when the CLI is initialized the message will contain <code>version unknown</code>.</p>
-<p>When a CLA is added a self-consistency-check is performed, e.g. it is checked if an optional CLA has a default value or if one of <em>position</em> and <em>switch</em> has been passed. In case the self-consistency-check fails an error code is returned and an error message is printed to <em>stderr</em>.</p>
-<p>Note that <em>choices</em>  must be a comma-separated list of allowable values and if it has been specified the passed value is checked to be consistent with this list when the <em>get</em> method is invoked: an error code is returned and if the value is not into the specified range an error message is printed to <em>stderr</em>. However the value of CLA is not modified and it is equal to the passed value.</p>
-<p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
-<h4><a name="cli-parse"></a>Parsing the CLI</h4>
-<p>The complete signature of <em>parse</em> method is the following:</p>
-<div class="codehilite"><pre>  <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">parse</span><span class="p">(</span><span class="n">pref</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
-</pre></div>
-
-
-<p>where</p>
-<div class="codehilite"><pre><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">pref</span>  <span class="c">!&lt; Prefixing string.</span>
-<span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span><span class="kd">::</span> <span class="n">error</span> <span class="c">!&lt; Error trapping flag.</span>
-</pre></div>
-
-
-<p>The dummy arguments should be auto-explicative. It is worthy of note that when <em>parse</em> method is invoked a consistency-check is performed: in particular it is checked that all named CLAs (the non positional ones having defined the switch name) have a unique switch name in order to avoid ambiguity.</p>
-<p>The help messages are print if one of the following issues arise:
-- the <em>help</em> CLA is passed;
-- the switch name of unknown CLA is passed;
-- the number of passed CLAs is less than the required CLAs previously defined.</p>
-<p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
-<h4><a name="cla-get"></a>Getting a CLA value from parsed CLI</h4>
-<p>After the CLI has been parsed, the user is allowed to get any of the defined CLA value. Accordingly to the user-definition, a CLA value can be obtained either by the switch name (for named CLA) or by the CLA position (for positional CLA):</p>
-<div class="codehilite"><pre><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span><span class="n">val</span><span class="o">=</span><span class="n">rval</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">err</span><span class="p">)</span>
-</pre></div>
-
-
-<p>or</p>
-<div class="codehilite"><pre><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">position</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">val</span><span class="o">=</span><span class="n">prval</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">err</span><span class="p">)</span>
-</pre></div>
-
-
-<p>where <em>rval</em> and <em>prval</em> are two previously defined variables. Currently, the <em>val</em> variable can be only scalar of types <em>integer</em>, <em>real</em>, <em>logical</em> and <em>character</em>. The complete API of <em>cli%get</em> is the following:</p>
-<div class="codehilite"><pre><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">pref</span><span class="p">,</span><span class="n">switch</span><span class="p">,</span><span class="n">position</span><span class="p">,</span><span class="n">val</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
-</pre></div>
-
-
-<p>where the signature of  <em>get</em> is:</p>
-<div class="codehilite"><pre><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>    <span class="n">pref</span>     <span class="c">!&lt; Prefixing string.</span>
-<span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>    <span class="n">switch</span>   <span class="c">!&lt; Switch name.</span>
-<span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>    <span class="n">position</span> <span class="c">!&lt; Position of positional CLA.</span>
-<span class="k">class</span><span class="p">(</span><span class="o">*</span><span class="p">),</span>               <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span><span class="kd">::</span> <span class="n">val</span>      <span class="c">!&lt; CLA value.</span>
-<span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span><span class="kd">::</span>   <span class="n">error</span>    <span class="c">!&lt; Error trapping flag.</span>
-</pre></div>
-
-
-<p>The dummy arguments should be auto-explicative. Note that the <em>switch</em> passed can be also the abbreviated form if defined differently from the extended one. If no <em>switch</em> neither <em>position</em> is passed and error is arisen. Moreover, the type of the value returned is chosen accordingly to actual <em>val</em> argument passed: inside the <em>get</em> method <em>val</em> is an unlimited polymorphic variable which type is defined only when the user passes the actual <em>val</em> container.</p>
-<p>Note that for multiple valued (list) CLA, the <em>get</em> method accept also array <em>val</em>:</p>
-<div class="codehilite"><pre><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>    <span class="n">pref</span>     <span class="c">!&lt; Prefixing string.</span>
-<span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>    <span class="n">switch</span>   <span class="c">!&lt; Switch name.</span>
-<span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>    <span class="n">position</span> <span class="c">!&lt; Position of positional CLA.</span>
-<span class="k">class</span><span class="p">(</span><span class="o">*</span><span class="p">),</span>               <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span><span class="kd">::</span> <span class="n">val</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span>  <span class="c">!&lt; CLA value.</span>
-<span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span><span class="kd">::</span>   <span class="n">error</span>    <span class="c">!&lt; Error trapping flag.</span>
-</pre></div>
-
-
-<p>however, the <em>get</em> method is invoked exactly with the same signature of single valued CLA as above: <em>get</em> is a generic, user-friendly method that automatically handles both scalar and array <em>val</em> variables.</p>
-<p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
-<h3><a name="test"></a>Compile Testing Program</h3>
-<p>As a practical example of FLAP usage a testing program named <strong>flap_test</strong> is provided. You can compile with Fortran compiler supporting modern standards (2003+). Note that the dependency hierarchy of modules USE statement must be respected in order to successfully compile the program. If you are tired by frustrating usage of makefiles &amp; co. you can try <a href="https://github.com/szaghi/FoBiS">FoBiS.py</a> for building the program. A <em>fobos</em> file is provided with FLAP. To build it just type into the root directory of FLAP:</p>
-<div class="codehilite"><pre>FoBiS.py build
-</pre></div>
-
-
-<p>Go to <a href="#top">Top</a> or <a href="#toc">Toc</a></p>
+<h2><a name="doc"></a>Documentation</h2>
+<p>Besides this README file the FLAP documentation is contained into its own <a href="https://github.com/szaghi/FLAP/wiki">wiki</a>. Detailed documentation of the API is contained into the <a href="http://szaghi.github.io/FLAP/index.html">GitHub Pages</a> that can also be created locally by means of <a href="https://github.com/cmacmackin/ford">ford tool</a>.</p>
 <h2><a name="versions"></a>Version History</h2>
 <p>In the following the changelog of most important releases is reported.</p>
 <h3>v0.0.1</h3>
