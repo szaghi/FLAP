@@ -98,6 +98,24 @@ Modern Fortran standards (2003+) have introduced support for Command Line Argume
 Go to [Top](#top) or [Toc](#toc)
 ## <a name="main-features"></a>Main features
 
+FLAP is inspired by the python great module _argparse_, thus many features are taken from it. Here the main features are listed.
+
+* [x] User-friendly methods for building flexible and effective Command Line Interfaces (CLI);
+* [x] comprehensive Command Line Arguments (CLA) support:
+    * [x] support optional and non optional CLA;
+    * [x] support boolean CLA;
+    * [x] support positional CLA;
+    * [x] support list of allowable values for defined CLA with automatic consistency check;
+    * [x] support multiple valued (list of values) CLA;
+    * [x] self-consistency-check of CLA definition;
+* [x] automatic generation of help and usage messages;
+* [x] consistency-check of whole CLI definition;
+* [x] errors trapping for invalid CLI usage;
+* [ ] replicate all the useful features of _argparse_;
+* [ ] implement [docopt](https://github.com/docopt/docopt) features.
+
+Any feature request is welcome.
+
 Go to [Top](#top) or [Toc](#toc)
 
 ## <a name="Copyrights"></a>Copyrights
