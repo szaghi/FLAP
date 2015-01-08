@@ -20,6 +20,54 @@ display: public
 
 A KISS library for building easily nice Command Line Interfaces (CLI) for modern (2003+) Fortran projects.
 
+## <a name="toc"></a>Table of Contents
+
+* [What is FLAP?](#what)
+* [Main features](#main-features)
+* [Copyrights](#copyrights)
+* [Documentation](#doc)
+* [Version History](#versions)
+
+Go to [Top](#top) or [Toc](#toc)
+
+## <a name="what"></a>What is FLAP?
+
+Modern Fortran standards (2003+) have introduced support for Command Line Arguments (CLA), thus it is possible to construct nice and effective Command Line Interfaces (CLI). FLAP is a small library designed to simplify the (repetitive) construction of complicated CLI in pure Fortran (standard 2003+). FLAP has been inspired by the python module _argparse_ trying to mimic it. Once you have defined the arguments that are required by means of a user-friendly method of the CLI, FLAP will parse the CLAs for you. It is worthy of note that FLAP, as _argparse_, also automatically generates help and usage messages and issues errors when users give the program invalid arguments.
+
+Go to [Top](#top) or [Toc](#toc)
+
+## <a name="main-features"></a>Main features
+
+FLAP is inspired by the python great module _argparse_, thus many features are taken from it. Here the main features are listed.
+
+* [x] User-friendly methods for building flexible and effective Command Line Interfaces (CLI);
+* [x] comprehensive Command Line Arguments (CLA) support:
+    * [x] support optional and non optional CLA;
+    * [x] support boolean CLA;
+    * [x] support positional CLA;
+    * [x] support list of allowable values for defined CLA with automatic consistency check;
+    * [x] support multiple valued (list of values) CLA;
+    * [x] self-consistency-check of CLA definition;
+* [x] automatic generation of help and usage messages;
+* [x] consistency-check of whole CLI definition;
+* [x] errors trapping for invalid CLI usage;
+* [ ] replicate all the useful features of _argparse_;
+* [ ] implement [docopt](https://github.com/docopt/docopt) features.
+
+Any feature request is welcome.
+
+Go to [Top](#top) or [Toc](#toc)
+
+## <a name="Copyrights"></a>Copyrights
+
+FLAP is an open source project, it is distributed under the [GPL v3](http://www.gnu.org/licenses/gpl-3.0.html). Anyone is interest to use, to develop or to contribute to FLAP is welcome.
+
+Go to [Top](#top) or [Toc](#toc)
+
+## <a name="doc"></a>Documentation
+
+Besides this README file the FLAP documentation is contained into its own [wiki](https://github.com/szaghi/FLAP/wiki). Detailed documentation of the API is contained into the [GitHub Pages](http://szaghi.github.io/FLAP/index.html) that can also be created locally by means of [ford tool](https://github.com/cmacmackin/ford).
+
 ### A Taste of FLAP
 
 Running the provided test program, `flap_test -h`, a taste of FLAP is served:
@@ -94,52 +142,9 @@ call cli%parse(error=error,pref='|-->')
 For a practical example of FLAP usage see [POG](https://github.com/szaghi/OFF/blob/testing/src/POG.f90) source file at line `85`.
 
 Go to [Top](#top) or [Toc](#toc)
-## <a name="toc"></a>Table of Contents
-
-* [What is FLAP?](#what)
-* [Main features](#main-features)
-* [Copyrights](#copyrights)
-* [Documentation](#doc)
-* [Version History](#versions)
-
-Go to [Top](#top) or [Toc](#toc)
-## <a name="what"></a>What is FLAP?
-
-Modern Fortran standards (2003+) have introduced support for Command Line Arguments (CLA), thus it is possible to construct nice and effective Command Line Interfaces (CLI). FLAP is a small library designed to simplify the (repetitive) construction of complicated CLI in pure Fortran (standard 2003+). FLAP has been inspired by the python module _argparse_ trying to mimic it. Once you have defined the arguments that are required by means of a user-friendly method of the CLI, FLAP will parse the CLAs for you. It is worthy of note that FLAP, as _argparse_, also automatically generates help and usage messages and issues errors when users give the program invalid arguments.
-
-Go to [Top](#top) or [Toc](#toc)
-## <a name="main-features"></a>Main features
-
-FLAP is inspired by the python great module _argparse_, thus many features are taken from it. Here the main features are listed.
-
-* [x] User-friendly methods for building flexible and effective Command Line Interfaces (CLI);
-* [x] comprehensive Command Line Arguments (CLA) support:
-    * [x] support optional and non optional CLA;
-    * [x] support boolean CLA;
-    * [x] support positional CLA;
-    * [x] support list of allowable values for defined CLA with automatic consistency check;
-    * [x] support multiple valued (list of values) CLA;
-    * [x] self-consistency-check of CLA definition;
-* [x] automatic generation of help and usage messages;
-* [x] consistency-check of whole CLI definition;
-* [x] errors trapping for invalid CLI usage;
-* [ ] replicate all the useful features of _argparse_;
-* [ ] implement [docopt](https://github.com/docopt/docopt) features.
-
-Any feature request is welcome.
-
-Go to [Top](#top) or [Toc](#toc)
-
-## <a name="Copyrights"></a>Copyrights
-
-FLAP is an open source project, it is distributed under the [GPL v3](http://www.gnu.org/licenses/gpl-3.0.html). Anyone is interest to use, to develop or to contribute to FLAP is welcome.
-
-Go to [Top](#top) or [Toc](#toc)
-## <a name="doc"></a>Documentation
-
-Besides this README file the FLAP documentation is contained into its own [wiki](https://github.com/szaghi/FLAP/wiki). Detailed documentation of the API is contained into the [GitHub Pages](http://szaghi.github.io/FLAP/index.html) that can also be created locally by means of [ford tool](https://github.com/cmacmackin/ford).
 
 ## <a name="versions"></a>Version History
+
 In the following the changelog of most important releases is reported.
 ### v0.0.1
 ##### Download [ZIP](https://github.com/szaghi/FLAP/archive/v0.0.1.zip) ball or [TAR](https://github.com/szaghi/FLAP/archive/v0.0.1.tar.gz) one
