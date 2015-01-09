@@ -508,8 +508,11 @@
     
   
 
-    
-    
+    <p>Pure Fortran (2003+) library for ensuring codes portability</p>
+<p>The library makes available many portable kind-parameters and many useful procedures to deal with them.
+ <div class="alert alert-info" role="alert"><h4>Note</h4>It is worth noting that the library provides procedures to convert a strings to numbers and vice versa, a function to
+ check the endianism of the running calculator.</div></p>
+    <br>
 
     
     <section>
@@ -534,7 +537,7 @@
   
   <td>public</td>
   <td></td><td>::</td>
-  <td><strong>ir_initialized</strong></td><td> =</td><td>.false.</td><td><p>Flag for chcecking the initialization of some variables that must be initialized by IR_Init.</p></td>
+  <td><strong>ir_initialized</strong></td><td> =</td><td>.false.</td><td><p>Flag for chcecking the initialization of some variables that must be initialized.</p></td>
   
 </tr>
 
@@ -590,7 +593,7 @@
   
   <td>public,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>R16P</strong></td><td> =</td><td>selected_real_kind(33,4931)</td><td><p>33  digits, range \f$[10^{-4931}, 10^{+4931} - 1]\f$; 128 bits.</p></td>
+  <td><strong>R16P</strong></td><td> =</td><td>selected_real_kind(33,4931)</td><td><p>33  digits, range \([10^{-4931}, 10^{+4931} - 1]\); 128 bits.</p></td>
   
 </tr>
 
@@ -618,7 +621,7 @@
   
   <td>public,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>R8P</strong></td><td> =</td><td>selected_real_kind(15,307)</td><td><p>15  digits, range \f$[10^{-307} , 10^{+307}  - 1]\f$; 64 bits.</p></td>
+  <td><strong>R8P</strong></td><td> =</td><td>selected_real_kind(15,307)</td><td><p>15  digits, range \([10^{-307} , 10^{+307}  - 1]\); 64 bits.</p></td>
   
 </tr>
 
@@ -632,7 +635,7 @@
   
   <td>public,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>R4P</strong></td><td> =</td><td>selected_real_kind(6,37)</td><td><p>6   digits, range \f$[10^{-37}  , 10^{+37}   - 1]\f$; 32 bits.</p></td>
+  <td><strong>R4P</strong></td><td> =</td><td>selected_real_kind(6,37)</td><td><p>6   digits, range \([10^{-37}  , 10^{+37}   - 1]\); 32 bits.</p></td>
   
 </tr>
 
@@ -660,7 +663,7 @@
   
   <td>public,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>I8P</strong></td><td> =</td><td>selected_int_kind(18)</td><td><p>Range \f$[-2^{63},+2^{63} - 1]\f$, 19 digits plus sign; 64 bits.</p></td>
+  <td><strong>I8P</strong></td><td> =</td><td>selected_int_kind(18)</td><td><p>Range \([-2^{63},+2^{63} - 1]\), 19 digits plus sign; 64 bits.</p></td>
   
 </tr>
 
@@ -674,7 +677,7 @@
   
   <td>public,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>I4P</strong></td><td> =</td><td>selected_int_kind(9)</td><td><p>Range \f$[-2^{31},+2^{31} - 1]\f$, 10 digits plus sign; 32 bits.</p></td>
+  <td><strong>I4P</strong></td><td> =</td><td>selected_int_kind(9)</td><td><p>Range \([-2^{31},+2^{31} - 1]\), 10 digits plus sign; 32 bits.</p></td>
   
 </tr>
 
@@ -688,7 +691,7 @@
   
   <td>public,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>I2P</strong></td><td> =</td><td>selected_int_kind(4)</td><td><p>Range \f$[-2^{15},+2^{15} - 1]\f$, 5  digits plus sign; 16 bits.</p></td>
+  <td><strong>I2P</strong></td><td> =</td><td>selected_int_kind(4)</td><td><p>Range \([-2^{15},+2^{15} - 1]\), 5  digits plus sign; 16 bits.</p></td>
   
 </tr>
 
@@ -702,7 +705,7 @@
   
   <td>public,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>I1P</strong></td><td> =</td><td>selected_int_kind(2)</td><td><p>Range \f$[-2^{7} ,+2^{7}  - 1]\f$, 3  digits plus sign; 8  bits.</p></td>
+  <td><strong>I1P</strong></td><td> =</td><td>selected_int_kind(2)</td><td><p>Range \([-2^{7} ,+2^{7}  - 1]\), 3  digits plus sign; 8  bits.</p></td>
   
 </tr>
 
@@ -1976,7 +1979,8 @@
   
   <td>public,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>Zero</strong></td><td> =</td><td>ZeroR8</td><td><p>Smallest representable difference of kind=R_P variable.</p></td>
+  <td><strong>Zero</strong></td><td> =</td><td>ZeroR8</td><td><p>Smallest representable difference of kind=R_P variable.
+ @}</p></td>
   
 </tr>
 
@@ -1995,6 +1999,13 @@
   <div class="panel-heading codesum"><a class="anchor" name="intr-bit_size"></a><h3>public  interface <a href='../interface/bit_size.html'>bit_size</a>
     
   </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Overloading of the intrinsic <em>bit_size</em> function for computing the number of bits of (also) real and character variables.</p>
+  </div>
   
   <ul class="list-group">
   
@@ -2049,6 +2060,12 @@ private  function <a href='../proc/bit_size_r16p.html'>bit_size_R16P</a>(r)
   </small></h4>
   <p>Number of bits of r.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for computing the number of bits of a real variable.</p>
         
 
     </li>
@@ -2103,6 +2120,12 @@ private  function <a href='../proc/bit_size_r8p.html'>bit_size_R8P</a>(r)
   </small></h4>
   <p>Number of bits of r.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for computing the number of bits of a real variable.</p>
         
 
     </li>
@@ -2157,6 +2180,12 @@ private  function <a href='../proc/bit_size_r4p.html'>bit_size_R4P</a>(r)
   </small></h4>
   <p>Number of bits of r.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for computing the number of bits of a real variable.</p>
         
 
     </li>
@@ -2211,6 +2240,12 @@ private  function <a href='../proc/bit_size_chr.html'>bit_size_chr</a>(c)
   </small></h4>
   <p>Number of bits of c.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for computing the number of bits of a character variable.</p>
         
 
     </li>
@@ -2224,6 +2259,13 @@ private  function <a href='../proc/bit_size_chr.html'>bit_size_chr</a>(c)
   <div class="panel-heading codesum"><a class="anchor" name="intr-byte_size"></a><h3>public  interface <a href='../interface/byte_size.html'>byte_size</a>
     
   </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Overloading of the <em>byte_size</em> function for computing the number of bytes.</p>
+  </div>
   
   <ul class="list-group">
   
@@ -2278,6 +2320,12 @@ private  function <a href='../proc/byte_size_i8p.html'>byte_size_I8P</a>(i)
   </small></h4>
   <p>Number of bytes of i.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for computing the number of bytes of an integer variable.</p>
         
 
     </li>
@@ -2332,6 +2380,12 @@ private  function <a href='../proc/byte_size_i4p.html'>byte_size_I4P</a>(i)
   </small></h4>
   <p>Number of bytes of i.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for computing the number of bytes of an integer variable.</p>
         
 
     </li>
@@ -2386,6 +2440,12 @@ private  function <a href='../proc/byte_size_i2p.html'>byte_size_I2P</a>(i)
   </small></h4>
   <p>Number of bytes of i.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for computing the number of bytes of an integer variable.</p>
         
 
     </li>
@@ -2440,6 +2500,12 @@ private  function <a href='../proc/byte_size_i1p.html'>byte_size_I1P</a>(i)
   </small></h4>
   <p>Number of bytes of i.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for computing the number of bytes of an integer variable.</p>
         
 
     </li>
@@ -2494,6 +2560,12 @@ private  function <a href='../proc/byte_size_r16p.html'>byte_size_R16P</a>(r)
   </small></h4>
   <p>Number of bytes of r.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for computing the number of bytes of a real variable.</p>
         
 
     </li>
@@ -2548,6 +2620,12 @@ private  function <a href='../proc/byte_size_r8p.html'>byte_size_R8P</a>(r)
   </small></h4>
   <p>Number of bytes of r.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for computing the number of bytes of a real variable.</p>
         
 
     </li>
@@ -2602,6 +2680,12 @@ private  function <a href='../proc/byte_size_r4p.html'>byte_size_R4P</a>(r)
   </small></h4>
   <p>Number of bytes of r.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for computing the number of bytes of a real variable.</p>
         
 
     </li>
@@ -2656,6 +2740,12 @@ private  function <a href='../proc/byte_size_chr.html'>byte_size_chr</a>(c)
   </small></h4>
   <p>Number of bytes of c.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for computing the number of bytes of a character variable.</p>
         
 
     </li>
@@ -2669,6 +2759,13 @@ private  function <a href='../proc/byte_size_chr.html'>byte_size_chr</a>(c)
   <div class="panel-heading codesum"><a class="anchor" name="intr-str"></a><h3>public  interface <a href='../interface/str.html'>str</a>
     
   </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Procedure for converting number, real and integer, to string (number to string type casting).</p>
+  </div>
   
   <ul class="list-group">
   
@@ -2738,6 +2835,12 @@ private  function <a href='../proc/strf_r16p.html'>strf_R16P</a>(fm, n)
   </small></h4>
   <p>Returned string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting real to string. This function achieves casting of real to string.</p>
         
 
     </li>
@@ -2807,6 +2910,12 @@ private  function <a href='../proc/str_r16p.html'>str_R16P</a>(no_sign, n)
   </small></h4>
   <p>Returned string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting real to string. This function achieves casting of real to string.</p>
         
 
     </li>
@@ -2876,6 +2985,12 @@ private  function <a href='../proc/strf_r8p.html'>strf_R8P</a>(fm, n)
   </small></h4>
   <p>Returned string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting real to string. This function achieves casting of real to string.</p>
         
 
     </li>
@@ -2945,6 +3060,12 @@ private  function <a href='../proc/str_r8p.html'>str_R8P</a>(no_sign, n)
   </small></h4>
   <p>Returned string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting real to string. This function achieves casting of real to string.</p>
         
 
     </li>
@@ -3014,6 +3135,12 @@ private  function <a href='../proc/strf_r4p.html'>strf_R4P</a>(fm, n)
   </small></h4>
   <p>Returned string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting real to string. This function achieves casting of real to string.</p>
         
 
     </li>
@@ -3083,6 +3210,12 @@ private  function <a href='../proc/str_r4p.html'>str_R4P</a>(no_sign, n)
   </small></h4>
   <p>Returned string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting real to string. This function achieves casting of real to string.</p>
         
 
     </li>
@@ -3152,6 +3285,12 @@ private  function <a href='../proc/strf_i8p.html'>strf_I8P</a>(fm, n)
   </small></h4>
   <p>Returned string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string. This function achieves casting of integer to string.</p>
         
 
     </li>
@@ -3221,6 +3360,12 @@ private  function <a href='../proc/str_i8p.html'>str_I8P</a>(no_sign, n)
   </small></h4>
   <p>Returned string containing input number plus padding zeros.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string. This function achieves casting of integer to string.</p>
         
 
     </li>
@@ -3290,6 +3435,12 @@ private  function <a href='../proc/strf_i4p.html'>strf_I4P</a>(fm, n)
   </small></h4>
   <p>Returned string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string. This function achieves casting of integer to string.</p>
         
 
     </li>
@@ -3359,6 +3510,12 @@ private  function <a href='../proc/str_i4p.html'>str_I4P</a>(no_sign, n)
   </small></h4>
   <p>Returned string containing input number plus padding zeros.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string. This function achieves casting of integer to string.</p>
         
 
     </li>
@@ -3428,6 +3585,12 @@ private  function <a href='../proc/strf_i2p.html'>strf_I2P</a>(fm, n)
   </small></h4>
   <p>Returned string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string. This function achieves casting of integer to string.</p>
         
 
     </li>
@@ -3497,6 +3660,12 @@ private  function <a href='../proc/str_i2p.html'>str_I2P</a>(no_sign, n)
   </small></h4>
   <p>Returned string containing input number plus padding zeros.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string. This function achieves casting of integer to string.</p>
         
 
     </li>
@@ -3566,6 +3735,12 @@ private  function <a href='../proc/strf_i1p.html'>strf_I1P</a>(fm, n)
   </small></h4>
   <p>Returned string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string. This function achieves casting of integer to string.</p>
         
 
     </li>
@@ -3635,6 +3810,12 @@ private  function <a href='../proc/str_i1p.html'>str_I1P</a>(no_sign, n)
   </small></h4>
   <p>Returned string containing input number plus padding zeros.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string. This function achieves casting of integer to string.</p>
         
 
     </li>
@@ -3648,6 +3829,14 @@ private  function <a href='../proc/str_i1p.html'>str_I1P</a>(no_sign, n)
   <div class="panel-heading codesum"><a class="anchor" name="intr-strz"></a><h3>public  interface <a href='../interface/strz.html'>strz</a>
     
   </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Procedure for converting number, integer, to string, prefixing with the right number of zeros (number to string type
+ casting with zero padding).</p>
+  </div>
   
   <ul class="list-group">
   
@@ -3717,6 +3906,13 @@ private  function <a href='../proc/strz_i8p.html'>strz_I8P</a>(nz_pad, n)
   </small></h4>
   <p>Returned string containing input number plus padding zeros.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string, prefixing with the right number of zeros. This function achieves casting of
+ integer to string.</p>
         
 
     </li>
@@ -3786,6 +3982,13 @@ private  function <a href='../proc/strz_i4p.html'>strz_I4P</a>(nz_pad, n)
   </small></h4>
   <p>Returned string containing input number plus padding zeros.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string, prefixing with the right number of zeros. This function achieves casting of
+ integer to string.</p>
         
 
     </li>
@@ -3855,6 +4058,13 @@ private  function <a href='../proc/strz_i2p.html'>strz_I2P</a>(nz_pad, n)
   </small></h4>
   <p>Returned string containing input number plus padding zeros.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string, prefixing with the right number of zeros. This function achieves casting of
+ integer to string.</p>
         
 
     </li>
@@ -3924,6 +4134,13 @@ private  function <a href='../proc/strz_i1p.html'>strz_I1P</a>(nz_pad, n)
   </small></h4>
   <p>Returned string containing input number plus padding zeros.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string, prefixing with the right number of zeros. This function achieves casting of
+ integer to string.</p>
         
 
     </li>
@@ -3937,6 +4154,13 @@ private  function <a href='../proc/strz_i1p.html'>strz_I1P</a>(nz_pad, n)
   <div class="panel-heading codesum"><a class="anchor" name="intr-cton"></a><h3>public  interface <a href='../interface/cton.html'>cton</a>
     
   </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Procedure for converting string to number, real or initeger, (string to number type casting).</p>
+  </div>
   
   <ul class="list-group">
   
@@ -4006,6 +4230,12 @@ private  function <a href='../proc/ctor_r16p.html'>ctor_R16P</a>(str, knd)
   </small></h4>
   <p>Number returned.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting string to real. This function achieves casting of string to real.</p>
         
 
     </li>
@@ -4075,6 +4305,12 @@ private  function <a href='../proc/ctor_r8p.html'>ctor_R8P</a>(str, knd)
   </small></h4>
   <p>Number returned.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting string to real. This function achieves casting of string to real.</p>
         
 
     </li>
@@ -4144,6 +4380,12 @@ private  function <a href='../proc/ctor_r4p.html'>ctor_R4P</a>(str, knd)
   </small></h4>
   <p>Number returned.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting string to real. This function achieves casting of string to real.</p>
         
 
     </li>
@@ -4213,6 +4455,12 @@ private  function <a href='../proc/ctoi_i8p.html'>ctoi_I8P</a>(str, knd)
   </small></h4>
   <p>Number returned.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting string to integer. This function achieves casting of string to integer.</p>
         
 
     </li>
@@ -4282,6 +4530,12 @@ private  function <a href='../proc/ctoi_i4p.html'>ctoi_I4P</a>(str, knd)
   </small></h4>
   <p>Number returned.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting string to integer. This function achieves casting of string to integer.</p>
         
 
     </li>
@@ -4351,6 +4605,12 @@ private  function <a href='../proc/ctoi_i2p.html'>ctoi_I2P</a>(str, knd)
   </small></h4>
   <p>Number returned.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting string to integer. This function achieves casting of string to integer.</p>
         
 
     </li>
@@ -4420,6 +4680,12 @@ private  function <a href='../proc/ctoi_i1p.html'>ctoi_I1P</a>(str, knd)
   </small></h4>
   <p>Number returned.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting string to integer. This function achieves casting of string to integer.</p>
         
 
     </li>
@@ -4433,6 +4699,13 @@ private  function <a href='../proc/ctoi_i1p.html'>ctoi_I1P</a>(str, knd)
   <div class="panel-heading codesum"><a class="anchor" name="intr-bstr"></a><h3>public  interface <a href='../interface/bstr.html'>bstr</a>
     
   </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Procedure for converting number, real and integer, to bit-string (number to bit-string type casting).</p>
+  </div>
   
   <ul class="list-group">
   
@@ -4487,6 +4760,12 @@ private  function <a href='../proc/bstr_r16p.html'>bstr_R16P</a>(n)
   </small></h4>
   <p>Returned bit-string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting real to string of bits. This function achieves casting of real to bit-string.</p>
         
 
     </li>
@@ -4541,6 +4820,12 @@ private  function <a href='../proc/bstr_r8p.html'>bstr_R8P</a>(n)
   </small></h4>
   <p>Returned bit-string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting real to string of bits. This function achieves casting of real to bit-string.</p>
         
 
     </li>
@@ -4595,6 +4880,12 @@ private  function <a href='../proc/bstr_r4p.html'>bstr_R4P</a>(n)
   </small></h4>
   <p>Returned bit-string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting real to string of bits. This function achieves casting of real to bit-string.</p>
         
 
     </li>
@@ -4649,6 +4940,12 @@ private  function <a href='../proc/bstr_i8p.html'>bstr_I8P</a>(n)
   </small></h4>
   <p>Returned bit-string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string of bits. This function achieves casting of integer to bit-string.</p>
         
 
     </li>
@@ -4703,6 +5000,12 @@ private  function <a href='../proc/bstr_i4p.html'>bstr_I4P</a>(n)
   </small></h4>
   <p>Returned bit-string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string of bits. This function achieves casting of integer to bit-string.</p>
         
 
     </li>
@@ -4757,6 +5060,12 @@ private  function <a href='../proc/bstr_i2p.html'>bstr_I2P</a>(n)
   </small></h4>
   <p>Returned bit-string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string of bits. This function achieves casting of integer to bit-string.</p>
         
 
     </li>
@@ -4811,6 +5120,12 @@ private  function <a href='../proc/bstr_i1p.html'>bstr_I1P</a>(n)
   </small></h4>
   <p>Returned bit-string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string of bits. This function achieves casting of integer to bit-string.</p>
         
 
     </li>
@@ -4824,6 +5139,13 @@ private  function <a href='../proc/bstr_i1p.html'>bstr_I1P</a>(n)
   <div class="panel-heading codesum"><a class="anchor" name="intr-bcton"></a><h3>public  interface <a href='../interface/bcton.html'>bcton</a>
     
   </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Procedure for converting bit-string to number, real or initeger, (bit-string to number type casting).</p>
+  </div>
   
   <ul class="list-group">
   
@@ -4909,6 +5231,12 @@ private  function <a href='../proc/bctor_r8p.html'>bctor_R8P</a>(bstr, knd)
   </small></h4>
   <p>Number returned.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting bit-string to real. This function achieves casting of bit-string to real.</p>
         
 
     </li>
@@ -4978,6 +5306,12 @@ private  function <a href='../proc/bctor_r4p.html'>bctor_R4P</a>(bstr, knd)
   </small></h4>
   <p>Number returned.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting bit-string to real. This function achieves casting of bit-string to real.</p>
         
 
     </li>
@@ -5047,6 +5381,12 @@ private  function <a href='../proc/bctoi_i8p.html'>bctoi_I8P</a>(bstr, knd)
   </small></h4>
   <p>Number returned.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting bit-string to integer. This function achieves casting of bit-string to integer.</p>
         
 
     </li>
@@ -5116,6 +5456,12 @@ private  function <a href='../proc/bctoi_i4p.html'>bctoi_I4P</a>(bstr, knd)
   </small></h4>
   <p>Number returned.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting bit-string to integer. This function achieves casting of bit-string to integer.</p>
         
 
     </li>
@@ -5185,6 +5531,12 @@ private  function <a href='../proc/bctoi_i2p.html'>bctoi_I2P</a>(bstr, knd)
   </small></h4>
   <p>Number returned.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting bit-string to integer. This function achieves casting of bit-string to integer.</p>
         
 
     </li>
@@ -5254,6 +5606,12 @@ private  function <a href='../proc/bctoi_i1p.html'>bctoi_I1P</a>(bstr, knd)
   </small></h4>
   <p>Number returned.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting bit-string to integer. This function achieves casting of bit-string to integer.</p>
         
 
     </li>
@@ -5294,6 +5652,12 @@ private pure function <a href='../proc/is_little_endian.html'>is_little_endian</
   </small></h4>
   <p>Logical output: true is the running architecture uses little endian ordering, false otherwise.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for checking if the type of the bit ordering of the running architecture is little endian.</p>
         
 
   </div>
@@ -5351,6 +5715,12 @@ private  function <a href='../proc/bit_size_r16p.html'>bit_size_R16P</a>(r)
   </small></h4>
   <p>Number of bits of r.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for computing the number of bits of a real variable.</p>
         
 
   </div>
@@ -5408,6 +5778,12 @@ private  function <a href='../proc/bit_size_r8p.html'>bit_size_R8P</a>(r)
   </small></h4>
   <p>Number of bits of r.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for computing the number of bits of a real variable.</p>
         
 
   </div>
@@ -5465,6 +5841,12 @@ private  function <a href='../proc/bit_size_r4p.html'>bit_size_R4P</a>(r)
   </small></h4>
   <p>Number of bits of r.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for computing the number of bits of a real variable.</p>
         
 
   </div>
@@ -5522,6 +5904,12 @@ private  function <a href='../proc/bit_size_chr.html'>bit_size_chr</a>(c)
   </small></h4>
   <p>Number of bits of c.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for computing the number of bits of a character variable.</p>
         
 
   </div>
@@ -5579,6 +5967,12 @@ private  function <a href='../proc/byte_size_i8p.html'>byte_size_I8P</a>(i)
   </small></h4>
   <p>Number of bytes of i.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for computing the number of bytes of an integer variable.</p>
         
 
   </div>
@@ -5636,6 +6030,12 @@ private  function <a href='../proc/byte_size_i4p.html'>byte_size_I4P</a>(i)
   </small></h4>
   <p>Number of bytes of i.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for computing the number of bytes of an integer variable.</p>
         
 
   </div>
@@ -5693,6 +6093,12 @@ private  function <a href='../proc/byte_size_i2p.html'>byte_size_I2P</a>(i)
   </small></h4>
   <p>Number of bytes of i.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for computing the number of bytes of an integer variable.</p>
         
 
   </div>
@@ -5750,6 +6156,12 @@ private  function <a href='../proc/byte_size_i1p.html'>byte_size_I1P</a>(i)
   </small></h4>
   <p>Number of bytes of i.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for computing the number of bytes of an integer variable.</p>
         
 
   </div>
@@ -5807,6 +6219,12 @@ private  function <a href='../proc/byte_size_r16p.html'>byte_size_R16P</a>(r)
   </small></h4>
   <p>Number of bytes of r.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for computing the number of bytes of a real variable.</p>
         
 
   </div>
@@ -5864,6 +6282,12 @@ private  function <a href='../proc/byte_size_r8p.html'>byte_size_R8P</a>(r)
   </small></h4>
   <p>Number of bytes of r.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for computing the number of bytes of a real variable.</p>
         
 
   </div>
@@ -5921,6 +6345,12 @@ private  function <a href='../proc/byte_size_r4p.html'>byte_size_R4P</a>(r)
   </small></h4>
   <p>Number of bytes of r.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for computing the number of bytes of a real variable.</p>
         
 
   </div>
@@ -5978,6 +6408,12 @@ private  function <a href='../proc/byte_size_chr.html'>byte_size_chr</a>(c)
   </small></h4>
   <p>Number of bytes of c.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for computing the number of bytes of a character variable.</p>
         
 
   </div>
@@ -6050,6 +6486,12 @@ private  function <a href='../proc/strf_r16p.html'>strf_R16P</a>(fm, n)
   </small></h4>
   <p>Returned string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting real to string. This function achieves casting of real to string.</p>
         
 
   </div>
@@ -6122,6 +6564,12 @@ private  function <a href='../proc/strf_r8p.html'>strf_R8P</a>(fm, n)
   </small></h4>
   <p>Returned string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting real to string. This function achieves casting of real to string.</p>
         
 
   </div>
@@ -6194,6 +6642,12 @@ private  function <a href='../proc/strf_r4p.html'>strf_R4P</a>(fm, n)
   </small></h4>
   <p>Returned string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting real to string. This function achieves casting of real to string.</p>
         
 
   </div>
@@ -6266,6 +6720,12 @@ private  function <a href='../proc/strf_i8p.html'>strf_I8P</a>(fm, n)
   </small></h4>
   <p>Returned string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string. This function achieves casting of integer to string.</p>
         
 
   </div>
@@ -6338,6 +6798,12 @@ private  function <a href='../proc/strf_i4p.html'>strf_I4P</a>(fm, n)
   </small></h4>
   <p>Returned string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string. This function achieves casting of integer to string.</p>
         
 
   </div>
@@ -6410,6 +6876,12 @@ private  function <a href='../proc/strf_i2p.html'>strf_I2P</a>(fm, n)
   </small></h4>
   <p>Returned string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string. This function achieves casting of integer to string.</p>
         
 
   </div>
@@ -6482,6 +6954,12 @@ private  function <a href='../proc/strf_i1p.html'>strf_I1P</a>(fm, n)
   </small></h4>
   <p>Returned string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string. This function achieves casting of integer to string.</p>
         
 
   </div>
@@ -6554,6 +7032,12 @@ private  function <a href='../proc/str_r16p.html'>str_R16P</a>(no_sign, n)
   </small></h4>
   <p>Returned string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting real to string. This function achieves casting of real to string.</p>
         
 
   </div>
@@ -6626,6 +7110,12 @@ private  function <a href='../proc/str_r8p.html'>str_R8P</a>(no_sign, n)
   </small></h4>
   <p>Returned string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting real to string. This function achieves casting of real to string.</p>
         
 
   </div>
@@ -6698,6 +7188,12 @@ private  function <a href='../proc/str_r4p.html'>str_R4P</a>(no_sign, n)
   </small></h4>
   <p>Returned string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting real to string. This function achieves casting of real to string.</p>
         
 
   </div>
@@ -6770,6 +7266,12 @@ private  function <a href='../proc/str_i8p.html'>str_I8P</a>(no_sign, n)
   </small></h4>
   <p>Returned string containing input number plus padding zeros.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string. This function achieves casting of integer to string.</p>
         
 
   </div>
@@ -6842,6 +7344,12 @@ private  function <a href='../proc/str_i4p.html'>str_I4P</a>(no_sign, n)
   </small></h4>
   <p>Returned string containing input number plus padding zeros.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string. This function achieves casting of integer to string.</p>
         
 
   </div>
@@ -6914,6 +7422,12 @@ private  function <a href='../proc/str_i2p.html'>str_I2P</a>(no_sign, n)
   </small></h4>
   <p>Returned string containing input number plus padding zeros.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string. This function achieves casting of integer to string.</p>
         
 
   </div>
@@ -6986,6 +7500,12 @@ private  function <a href='../proc/str_i1p.html'>str_I1P</a>(no_sign, n)
   </small></h4>
   <p>Returned string containing input number plus padding zeros.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string. This function achieves casting of integer to string.</p>
         
 
   </div>
@@ -7058,6 +7578,13 @@ private  function <a href='../proc/strz_i8p.html'>strz_I8P</a>(nz_pad, n)
   </small></h4>
   <p>Returned string containing input number plus padding zeros.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string, prefixing with the right number of zeros. This function achieves casting of
+ integer to string.</p>
         
 
   </div>
@@ -7130,6 +7657,13 @@ private  function <a href='../proc/strz_i4p.html'>strz_I4P</a>(nz_pad, n)
   </small></h4>
   <p>Returned string containing input number plus padding zeros.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string, prefixing with the right number of zeros. This function achieves casting of
+ integer to string.</p>
         
 
   </div>
@@ -7202,6 +7736,13 @@ private  function <a href='../proc/strz_i2p.html'>strz_I2P</a>(nz_pad, n)
   </small></h4>
   <p>Returned string containing input number plus padding zeros.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string, prefixing with the right number of zeros. This function achieves casting of
+ integer to string.</p>
         
 
   </div>
@@ -7274,6 +7815,13 @@ private  function <a href='../proc/strz_i1p.html'>strz_I1P</a>(nz_pad, n)
   </small></h4>
   <p>Returned string containing input number plus padding zeros.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string, prefixing with the right number of zeros. This function achieves casting of
+ integer to string.</p>
         
 
   </div>
@@ -7346,6 +7894,12 @@ private  function <a href='../proc/ctor_r16p.html'>ctor_R16P</a>(str, knd)
   </small></h4>
   <p>Number returned.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting string to real. This function achieves casting of string to real.</p>
         
 
   </div>
@@ -7418,6 +7972,12 @@ private  function <a href='../proc/ctor_r8p.html'>ctor_R8P</a>(str, knd)
   </small></h4>
   <p>Number returned.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting string to real. This function achieves casting of string to real.</p>
         
 
   </div>
@@ -7490,6 +8050,12 @@ private  function <a href='../proc/ctor_r4p.html'>ctor_R4P</a>(str, knd)
   </small></h4>
   <p>Number returned.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting string to real. This function achieves casting of string to real.</p>
         
 
   </div>
@@ -7562,6 +8128,12 @@ private  function <a href='../proc/ctoi_i8p.html'>ctoi_I8P</a>(str, knd)
   </small></h4>
   <p>Number returned.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting string to integer. This function achieves casting of string to integer.</p>
         
 
   </div>
@@ -7634,6 +8206,12 @@ private  function <a href='../proc/ctoi_i4p.html'>ctoi_I4P</a>(str, knd)
   </small></h4>
   <p>Number returned.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting string to integer. This function achieves casting of string to integer.</p>
         
 
   </div>
@@ -7706,6 +8284,12 @@ private  function <a href='../proc/ctoi_i2p.html'>ctoi_I2P</a>(str, knd)
   </small></h4>
   <p>Number returned.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting string to integer. This function achieves casting of string to integer.</p>
         
 
   </div>
@@ -7778,6 +8362,12 @@ private  function <a href='../proc/ctoi_i1p.html'>ctoi_I1P</a>(str, knd)
   </small></h4>
   <p>Number returned.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting string to integer. This function achieves casting of string to integer.</p>
         
 
   </div>
@@ -7835,6 +8425,12 @@ private  function <a href='../proc/bstr_r16p.html'>bstr_R16P</a>(n)
   </small></h4>
   <p>Returned bit-string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting real to string of bits. This function achieves casting of real to bit-string.</p>
         
 
   </div>
@@ -7892,6 +8488,12 @@ private  function <a href='../proc/bstr_r8p.html'>bstr_R8P</a>(n)
   </small></h4>
   <p>Returned bit-string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting real to string of bits. This function achieves casting of real to bit-string.</p>
         
 
   </div>
@@ -7949,6 +8551,12 @@ private  function <a href='../proc/bstr_r4p.html'>bstr_R4P</a>(n)
   </small></h4>
   <p>Returned bit-string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting real to string of bits. This function achieves casting of real to bit-string.</p>
         
 
   </div>
@@ -8006,6 +8614,12 @@ private  function <a href='../proc/bstr_i8p.html'>bstr_I8P</a>(n)
   </small></h4>
   <p>Returned bit-string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string of bits. This function achieves casting of integer to bit-string.</p>
         
 
   </div>
@@ -8063,6 +8677,12 @@ private  function <a href='../proc/bstr_i4p.html'>bstr_I4P</a>(n)
   </small></h4>
   <p>Returned bit-string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string of bits. This function achieves casting of integer to bit-string.</p>
         
 
   </div>
@@ -8120,6 +8740,12 @@ private  function <a href='../proc/bstr_i2p.html'>bstr_I2P</a>(n)
   </small></h4>
   <p>Returned bit-string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string of bits. This function achieves casting of integer to bit-string.</p>
         
 
   </div>
@@ -8177,6 +8803,12 @@ private  function <a href='../proc/bstr_i1p.html'>bstr_I1P</a>(n)
   </small></h4>
   <p>Returned bit-string containing input number.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting integer to string of bits. This function achieves casting of integer to bit-string.</p>
         
 
   </div>
@@ -8249,6 +8881,12 @@ private  function <a href='../proc/bctor_r8p.html'>bctor_R8P</a>(bstr, knd)
   </small></h4>
   <p>Number returned.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting bit-string to real. This function achieves casting of bit-string to real.</p>
         
 
   </div>
@@ -8321,6 +8959,12 @@ private  function <a href='../proc/bctor_r4p.html'>bctor_R4P</a>(bstr, knd)
   </small></h4>
   <p>Number returned.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting bit-string to real. This function achieves casting of bit-string to real.</p>
         
 
   </div>
@@ -8393,6 +9037,12 @@ private  function <a href='../proc/bctoi_i8p.html'>bctoi_I8P</a>(bstr, knd)
   </small></h4>
   <p>Number returned.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting bit-string to integer. This function achieves casting of bit-string to integer.</p>
         
 
   </div>
@@ -8465,6 +9115,12 @@ private  function <a href='../proc/bctoi_i4p.html'>bctoi_I4P</a>(bstr, knd)
   </small></h4>
   <p>Number returned.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting bit-string to integer. This function achieves casting of bit-string to integer.</p>
         
 
   </div>
@@ -8537,6 +9193,12 @@ private  function <a href='../proc/bctoi_i2p.html'>bctoi_I2P</a>(bstr, knd)
   </small></h4>
   <p>Number returned.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting bit-string to integer. This function achieves casting of bit-string to integer.</p>
         
 
   </div>
@@ -8609,6 +9271,12 @@ private  function <a href='../proc/bctoi_i1p.html'>bctoi_I1P</a>(bstr, knd)
   </small></h4>
   <p>Number returned.</p>
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for converting bit-string to integer. This function achieves casting of bit-string to integer.</p>
         
 
   </div>
@@ -8637,6 +9305,12 @@ public  subroutine <a href='../proc/check_endian.html'>check_endian</a>()
       <em>None</em>
     
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Subroutine for checking the type of bit ordering (big or little endian) of the running architecture.</p>
         
 
   </div>
@@ -8656,6 +9330,12 @@ public  subroutine <a href='../proc/ir_init.html'>IR_init</a>()
       <em>None</em>
     
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for initilizing module's variables that are not initialized into the definition specification.</p>
         
 
   </div>
@@ -8749,6 +9429,12 @@ public  subroutine <a href='../proc/ir_print.html'>IR_Print</a>(pref, iostat, io
       
     
     
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Procedure for printing to the standard output the kind definition of reals and integers and the utility variables.</p>
         
 
   </div>

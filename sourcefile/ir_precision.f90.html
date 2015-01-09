@@ -154,65 +154,16 @@
   
     </div>
     <div class="col-lg-9" id='text'>
-    
-    
-    <div class="highlight"><pre><span class="c">!&gt; @addtogroup GlobalVarPar Global Variables and Parameters</span>
-<span class="c">!&gt; List of global variables and parameters.</span>
-<span class="c">!&gt; @addtogroup Interface Interfaces</span>
-<span class="c">!&gt; List of explicitly defined interface.</span>
-<span class="c">!&gt; @addtogroup Library Modules Libraries</span>
-<span class="c">!&gt; List of modules containing libraries of procedures.</span>
-<span class="c">!&gt; @addtogroup PublicProcedure Public Procedures</span>
-<span class="c">!&gt; List of public procedures.</span>
-<span class="c">!&gt; @addtogroup PrivateProcedure Private Procedures</span>
-<span class="c">!&gt; List of private procedures.</span>
-
-<span class="c">!&gt; @ingroup Library</span>
-<span class="c">!&gt; @{</span>
-<span class="c">!&gt; @defgroup IR_PrecisionLibrary IR_Precision</span>
-<span class="c">!&gt; Portable kind-parameters module</span>
-<span class="c">!&gt; @}</span>
-
-<span class="c">!&gt; @ingroup Interface</span>
-<span class="c">!&gt; @{</span>
-<span class="c">!&gt; @defgroup IR_PrecisionInterface IR_Precision</span>
-<span class="c">!&gt; Portable kind-parameters module</span>
-<span class="c">!&gt; @}</span>
-
-<span class="c">!&gt; @ingroup GlobalVarPar</span>
-<span class="c">!&gt; @{</span>
-<span class="c">!&gt; @defgroup IR_PrecisionGlobalVarPar IR_Precision</span>
-<span class="c">!&gt; Portable kind-parameters module</span>
-<span class="c">!&gt; @}</span>
-
-<span class="c">!&gt; @ingroup PublicProcedure</span>
-<span class="c">!&gt; @{</span>
-<span class="c">!&gt; @defgroup IR_PrecisionPublicProcedure IR_Precision</span>
-<span class="c">!&gt; Portable kind-parameters module</span>
-<span class="c">!&gt; @}</span>
-
-<span class="c">!&gt; @ingroup PrivateProcedure</span>
-<span class="c">!&gt; @{</span>
-<span class="c">!&gt; @defgroup IR_PrecisionPrivateProcedure IR_Precision</span>
-<span class="c">!&gt; Portable kind-parameters module</span>
-<span class="c">!&gt; @}</span>
-
-<span class="c">!&gt; @brief     Module IR_Precision makes available some portable kind-parameters and some useful procedures to deal with them.</span>
-<span class="c">!&gt; @details   It also provides variables that contain the minimum and maximum representable values, smallest real values and</span>
-<span class="c">!&gt;            smallest representable differences by the running calculator.</span>
-<span class="c">!&gt;</span>
-<span class="c">!&gt;            Finally the module provides procedures to convert a string to number and vice versa, a function to check the endianism</span>
-<span class="c">!&gt;            of the running calculator and a procedure to print all the aboves values.</span>
-<span class="c">!&gt; @note The \em quadruple precision R16P could be activated defining \b r16p pre-processor flag (e.g. -Dr16p). Furthermore if</span>
-<span class="c">!&gt; compiling with Portland Group Compiler define the pre-processor flag \b pgf95 to avoid error in computing \em Zero variables:</span>
-<span class="c">!&gt; pgf compiler doesn&#39;t accept \b nearest built-in function in variables initialization.</span>
-<span class="c">!&gt; @author    Stefano Zaghi</span>
-<span class="c">!&gt; @version   1.0</span>
-<span class="c">!&gt; @date      2012-04-24</span>
-<span class="c">!&gt; @copyright GNU Public License version 3.</span>
-<span class="c">!&gt; @todo \b g95_test: Test g95 compiler</span>
-<span class="c">!&gt; @ingroup IR_PrecisionLibrary</span>
+    <p>Pure Fortran (2003+) library for ensuring codes portability</p>
+    <br>
+    <div class="highlight"><pre><span class="c">!&lt; Pure Fortran (2003+) library for ensuring codes portability</span>
 <span class="k">module </span><span class="n">IR_Precision</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="c">!&lt; Pure Fortran (2003+) library for ensuring codes portability</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt; The library makes available many portable kind-parameters and many useful procedures to deal with them.</span>
+<span class="c">!&lt; @note It is worth noting that the library provides procedures to convert a strings to numbers and vice versa, a function to</span>
+<span class="c">!&lt; check the endianism of the running calculator.</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="k">USE</span><span class="p">,</span> <span class="k">intrinsic</span><span class="kd">::</span> <span class="n">ISO_FORTRAN_ENV</span><span class="p">,</span> <span class="n">only</span><span class="p">:</span> <span class="n">stdout</span> <span class="o">=&gt;</span> <span class="n">OUTPUT_UNIT</span><span class="p">,</span> <span class="n">stderr</span> <span class="o">=&gt;</span> <span class="n">ERROR_UNIT</span> <span class="c">! Standard output/error logical units.</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
@@ -240,29 +191,26 @@
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="c">!&gt; @ingroup IR_PrecisionGlobalVarPar</span>
-<span class="c">!&gt; @{</span>
-<span class="kt">logical</span><span class="kd">::</span> <span class="n">ir_initialized</span> <span class="o">=</span> <span class="p">.</span><span class="n">false</span><span class="p">.</span> <span class="c">!&lt; Flag for chcecking the initialization of some variables that must be initialized by IR_Init.</span>
-<span class="c">! Bit ordering of the running architecture:</span>
-<span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">endianL</span> <span class="o">=</span> <span class="mi">1</span>       <span class="c">!&lt; Little endian parameter.</span>
-<span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">endianB</span> <span class="o">=</span> <span class="mi">0</span>       <span class="c">!&lt; Big endian parameter.</span>
-<span class="kt">integer</span><span class="kd">::</span>            <span class="n">endian</span>  <span class="o">=</span> <span class="n">endianL</span> <span class="c">!&lt; Bit ordering: Little endian (endianL), or Big endian (endianB).</span>
+<span class="kt">logical</span><span class="kd">::</span>            <span class="n">ir_initialized</span> <span class="o">=</span> <span class="p">.</span><span class="n">false</span><span class="p">.</span> <span class="c">!&lt; Flag for chcecking the initialization of some variables that must be initialized.</span>
+<span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">endianL</span>        <span class="o">=</span> <span class="mi">1</span>       <span class="c">!&lt; Little endian parameter.</span>
+<span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">endianB</span>        <span class="o">=</span> <span class="mi">0</span>       <span class="c">!&lt; Big endian parameter.</span>
+<span class="kt">integer</span><span class="kd">::</span>            <span class="n">endian</span>         <span class="o">=</span> <span class="n">endianL</span> <span class="c">!&lt; Bit ordering: Little endian (endianL), or Big endian (endianB).</span>
 
 <span class="c">! The following are the portable kind parameters available.</span>
 <span class="c">! Real precision definitions:</span>
 <span class="cp">#ifdef r16p</span>
-<span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">R16P</span> <span class="o">=</span> <span class="nb">selected_real_kind</span><span class="p">(</span><span class="mi">33</span><span class="p">,</span><span class="mi">4931</span><span class="p">)</span> <span class="c">!&lt; 33  digits, range \f$[10^{-4931}, 10^{+4931} - 1]\f$; 128 bits.</span>
+<span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">R16P</span> <span class="o">=</span> <span class="nb">selected_real_kind</span><span class="p">(</span><span class="mi">33</span><span class="p">,</span><span class="mi">4931</span><span class="p">)</span> <span class="c">!&lt; 33  digits, range \([10^{-4931}, 10^{+4931} - 1]\); 128 bits.</span>
 <span class="cp">#else</span>
 <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">R16P</span> <span class="o">=</span> <span class="nb">selected_real_kind</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">307</span><span class="p">)</span>  <span class="c">!&lt; Defined as R8P; 64 bits.</span>
 <span class="cp">#endif</span>
-<span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">R8P</span>  <span class="o">=</span> <span class="nb">selected_real_kind</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">307</span><span class="p">)</span>  <span class="c">!&lt; 15  digits, range \f$[10^{-307} , 10^{+307}  - 1]\f$; 64 bits.</span>
-<span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">R4P</span>  <span class="o">=</span> <span class="nb">selected_real_kind</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">37</span><span class="p">)</span>    <span class="c">!&lt; 6   digits, range \f$[10^{-37}  , 10^{+37}   - 1]\f$; 32 bits.</span>
+<span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">R8P</span>  <span class="o">=</span> <span class="nb">selected_real_kind</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">307</span><span class="p">)</span>  <span class="c">!&lt; 15  digits, range \([10^{-307} , 10^{+307}  - 1]\); 64 bits.</span>
+<span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">R4P</span>  <span class="o">=</span> <span class="nb">selected_real_kind</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">37</span><span class="p">)</span>    <span class="c">!&lt; 6   digits, range \([10^{-37}  , 10^{+37}   - 1]\); 32 bits.</span>
 <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">R_P</span>  <span class="o">=</span> <span class="n">R8P</span>                         <span class="c">!&lt; Default real precision.</span>
 <span class="c">! Integer precision definitions:</span>
-<span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">I8P</span>  <span class="o">=</span> <span class="nb">selected_int_kind</span><span class="p">(</span><span class="mi">18</span><span class="p">)</span> <span class="c">!&lt; Range \f$[-2^{63},+2^{63} - 1]\f$, 19 digits plus sign; 64 bits.</span>
-<span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">I4P</span>  <span class="o">=</span> <span class="nb">selected_int_kind</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>  <span class="c">!&lt; Range \f$[-2^{31},+2^{31} - 1]\f$, 10 digits plus sign; 32 bits.</span>
-<span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">I2P</span>  <span class="o">=</span> <span class="nb">selected_int_kind</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>  <span class="c">!&lt; Range \f$[-2^{15},+2^{15} - 1]\f$, 5  digits plus sign; 16 bits.</span>
-<span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">I1P</span>  <span class="o">=</span> <span class="nb">selected_int_kind</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c">!&lt; Range \f$[-2^{7} ,+2^{7}  - 1]\f$, 3  digits plus sign; 8  bits.</span>
+<span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">I8P</span>  <span class="o">=</span> <span class="nb">selected_int_kind</span><span class="p">(</span><span class="mi">18</span><span class="p">)</span> <span class="c">!&lt; Range \([-2^{63},+2^{63} - 1]\), 19 digits plus sign; 64 bits.</span>
+<span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">I4P</span>  <span class="o">=</span> <span class="nb">selected_int_kind</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>  <span class="c">!&lt; Range \([-2^{31},+2^{31} - 1]\), 10 digits plus sign; 32 bits.</span>
+<span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">I2P</span>  <span class="o">=</span> <span class="nb">selected_int_kind</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>  <span class="c">!&lt; Range \([-2^{15},+2^{15} - 1]\), 5  digits plus sign; 16 bits.</span>
+<span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">I1P</span>  <span class="o">=</span> <span class="nb">selected_int_kind</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c">!&lt; Range \([-2^{7} ,+2^{7}  - 1]\), 3  digits plus sign; 8  bits.</span>
 <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">I_P</span>  <span class="o">=</span> <span class="n">I4P</span>                   <span class="c">!&lt; Default integer precision.</span>
 
 <span class="c">! Format parameters useful for writing in a well-ascii-format numeric variables.</span>
@@ -343,16 +291,13 @@
                                   <span class="nb">nearest</span><span class="p">(</span><span class="mf">1._R4P</span><span class="p">,</span><span class="o">-</span><span class="mf">1._R4P</span><span class="p">)</span>   <span class="c">!&lt; Smallest representable difference of kind=R4P variable.</span>
 <span class="cp">#endif</span>
 <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>  <span class="k">parameter</span><span class="kd">::</span> <span class="n">Zero</span>    <span class="o">=</span> <span class="n">ZeroR8</span>                    <span class="c">!&lt; Smallest representable difference of kind=R_P variable.</span>
-<span class="c">!&gt; @}</span>
+<span class="c">!&lt; @}</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="c">!&gt; @brief Overloading of the intrinsic &quot;bit_size&quot; function for computing the number of bits of (also) real and character variables;</span>
-<span class="c">!&gt; variable,     intent(\b IN)::  &lt;b&gt;\em n&lt;/b&gt; input;</span>
-<span class="c">!&gt; integer(I1P), intent(\b OUT):: &lt;b&gt;\em bits&lt;/b&gt; output number of bits of input number.</span>
-<span class="c">!&gt; @ingroup IR_PrecisionInterface</span>
 <span class="k">interface </span><span class="nb">bit_size</span>
-<span class="nb">  </span><span class="k">module procedure</span>                <span class="p">&amp;</span>
+  <span class="c">!&lt; Overloading of the intrinsic *bit_size* function for computing the number of bits of (also) real and character variables.</span>
+  <span class="k">module procedure</span>                <span class="p">&amp;</span>
 <span class="cp">#ifdef r16p</span>
                    <span class="n">bit_size_R16p</span><span class="p">,</span> <span class="p">&amp;</span>
 <span class="cp">#endif</span>
@@ -360,9 +305,8 @@
                    <span class="n">bit_size_R4P</span><span class="p">,</span>  <span class="p">&amp;</span>
                    <span class="n">bit_size_chr</span>
 <span class="n">endinterface</span>
-<span class="c">!&gt; @brief Overloading of the &quot;byte_size&quot; function for computing the number of bytes.</span>
-<span class="c">!&gt; @ingroup IR_PrecisionInterface</span>
 <span class="k">interface </span><span class="n">byte_size</span>
+  <span class="c">!&lt; Overloading of the *byte_size* function for computing the number of bytes.</span>
   <span class="k">module procedure</span>                 <span class="p">&amp;</span>
                    <span class="n">byte_size_I8P</span><span class="p">,</span>  <span class="p">&amp;</span>
                    <span class="n">byte_size_I4P</span><span class="p">,</span>  <span class="p">&amp;</span>
@@ -375,12 +319,8 @@
                    <span class="n">byte_size_R4P</span><span class="p">,</span>  <span class="p">&amp;</span>
                    <span class="n">byte_size_chr</span>
 <span class="n">endinterface</span>
-<span class="c">!&gt; @brief Procedure for converting number, real and integer, to string (number to string type casting);</span>
-<span class="c">!&gt; logical, intent(\b IN), optional:: &lt;b&gt;\em no_sign&lt;/b&gt; flag for do not write sign;</span>
-<span class="c">!&gt; number,  intent(\b IN)::           &lt;b&gt;\em n&lt;/b&gt; input number;</span>
-<span class="c">!&gt; string,  intent(\b OUT)::          &lt;b&gt;\em str&lt;/b&gt; output string.</span>
-<span class="c">!&gt; @ingroup IR_PrecisionInterface</span>
 <span class="k">interface </span><span class="n">str</span>
+  <span class="c">!&lt; Procedure for converting number, real and integer, to string (number to string type casting).</span>
   <span class="k">module procedure</span>                    <span class="p">&amp;</span>
 <span class="cp">#ifdef r16p</span>
                    <span class="n">strf_R16P</span><span class="p">,</span><span class="n">str_R16P</span><span class="p">,&amp;</span>
@@ -392,23 +332,16 @@
                    <span class="n">strf_I2P</span> <span class="p">,</span><span class="n">str_I2P</span><span class="p">,</span> <span class="p">&amp;</span>
                    <span class="n">strf_I1P</span> <span class="p">,</span><span class="n">str_I1P</span>
 <span class="n">endinterface</span>
-<span class="c">!&gt; @brief Procedure for converting number, integer, to string, prefixing with the right number of zeros (number to string type</span>
-<span class="c">!&gt; casting with zero padding);</span>
-<span class="c">!&gt; number,  intent(\b IN), optional:: &lt;b&gt;\em no_zpad&lt;/b&gt; number of padding zeros;</span>
-<span class="c">!&gt; number,  intent(\b IN)::           &lt;b&gt;\em n  &lt;/b&gt; input number;</span>
-<span class="c">!&gt; string,  intent(\b OUT)::          &lt;b&gt;\em str&lt;/b&gt; output string.</span>
-<span class="c">!&gt; @ingroup IR_PrecisionInterface</span>
 <span class="k">interface </span><span class="n">strz</span>
+  <span class="c">!&lt; Procedure for converting number, integer, to string, prefixing with the right number of zeros (number to string type</span>
+  <span class="c">!&lt; casting with zero padding).</span>
   <span class="k">module procedure </span><span class="n">strz_I8P</span><span class="p">,</span>  <span class="p">&amp;</span>
                    <span class="n">strz_I4P</span><span class="p">,</span>  <span class="p">&amp;</span>
                    <span class="n">strz_I2P</span><span class="p">,</span>  <span class="p">&amp;</span>
                    <span class="n">strz_I1P</span>
 <span class="n">endinterface</span>
-<span class="c">!&gt; @brief Procedure for converting string to number, real or initeger, (string to number type casting);</span>
-<span class="c">!&gt; string,  intent(\b IN)::  &lt;b&gt;\em str&lt;/b&gt; input string;</span>
-<span class="c">!&gt; number,  intent(\b OUT):: &lt;b&gt;\em n  &lt;/b&gt; output number.</span>
-<span class="c">!&gt; @ingroup IR_PrecisionInterface</span>
 <span class="k">interface </span><span class="n">cton</span>
+  <span class="c">!&lt; Procedure for converting string to number, real or initeger, (string to number type casting).</span>
   <span class="k">module procedure</span>            <span class="p">&amp;</span>
 <span class="cp">#ifdef r16p</span>
                    <span class="n">ctor_R16P</span><span class="p">,</span> <span class="p">&amp;</span>
@@ -420,11 +353,8 @@
                    <span class="n">ctoi_I2P</span><span class="p">,</span>  <span class="p">&amp;</span>
                    <span class="n">ctoi_I1P</span>
 <span class="n">endinterface</span>
-<span class="c">!&gt; @brief Procedure for converting number, real and integer, to bit-string (number to bit-string type casting);</span>
-<span class="c">!&gt; number,  intent(\b IN)::  &lt;b&gt;\em n&lt;/b&gt; input number;</span>
-<span class="c">!&gt; string,  intent(\b OUT):: &lt;b&gt;\em bstr&lt;/b&gt; output bit-string.</span>
-<span class="c">!&gt; @ingroup IR_PrecisionInterface</span>
 <span class="k">interface </span><span class="n">bstr</span>
+  <span class="c">!&lt; Procedure for converting number, real and integer, to bit-string (number to bit-string type casting).</span>
   <span class="k">module procedure</span>           <span class="p">&amp;</span>
 <span class="cp">#ifdef r16p</span>
                    <span class="n">bstr_R16P</span><span class="p">,&amp;</span>
@@ -436,11 +366,8 @@
                    <span class="n">bstr_I2P</span><span class="p">,</span> <span class="p">&amp;</span>
                    <span class="n">bstr_I1P</span>
 <span class="n">endinterface</span>
-<span class="c">!&gt; @brief Procedure for converting bit-string to number, real or initeger, (bit-string to number type casting);</span>
-<span class="c">!&gt; string,  intent(\b IN)::  &lt;b&gt;\em bstr&lt;/b&gt; input bit-string;</span>
-<span class="c">!&gt; number,  intent(\b OUT):: &lt;b&gt;\em n&lt;/b&gt; output number.</span>
-<span class="c">!&gt; @ingroup IR_PrecisionInterface</span>
 <span class="k">interface </span><span class="n">bcton</span>
+  <span class="c">!&lt; Procedure for converting bit-string to number, real or initeger, (bit-string to number type casting).</span>
   <span class="k">module procedure</span>            <span class="p">&amp;</span>
 <span class="cp">#ifdef r16p</span>
                    <span class="n">bctor_R16P</span><span class="p">,</span> <span class="p">&amp;</span>
@@ -454,10 +381,9 @@
 <span class="n">endinterface</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="k">contains</span>
-  <span class="c">!&gt; @ingroup IR_PrecisionPublicProcedure</span>
-  <span class="c">!&gt; @{</span>
-  <span class="c">!&gt; @brief Procedure for checking if the type of the bit ordering of the running architecture is little endian.</span>
-  <span class="k">pure function </span><span class="n">is_little_endian</span><span class="p">()</span> <span class="k">result</span><span class="p">(</span><span class="n">is_little</span><span class="p">)</span>
+<span class="k">  pure function </span><span class="n">is_little_endian</span><span class="p">()</span> <span class="k">result</span><span class="p">(</span><span class="n">is_little</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for checking if the type of the bit ordering of the running architecture is little endian.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">logical</span><span class="kd">::</span>      <span class="n">is_little</span> <span class="c">!&lt; Logical output: true is the running architecture uses little endian ordering, false otherwise.</span>
@@ -471,9 +397,11 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">is_little_endian</span>
 
-  <span class="c">!&gt; @brief Subroutine for checking the type of bit ordering (big or little endian) of the running architecture; the result is</span>
-  <span class="c">!&gt; stored into the &quot;endian&quot; global variable.</span>
   <span class="k">subroutine </span><span class="n">check_endian</span><span class="p">()</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Subroutine for checking the type of bit ordering (big or little endian) of the running architecture.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&gt; @note The result is stored into the *endian* global variable.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -487,12 +415,10 @@
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">check_endian</span>
-  <span class="c">!&gt; @}</span>
 
-  <span class="c">!&gt; @ingroup IR_PrecisionPrivateProcedure</span>
-  <span class="c">!&gt; @{</span>
-  <span class="c">!&gt; @brief Procedure for computing the number of bits of a real variable.</span>
   <span class="k">elemental function </span><span class="n">bit_size_R16P</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">bits</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for computing the number of bits of a real variable.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">real</span><span class="p">(</span><span class="n">R16P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">r</span>       <span class="c">!&lt; Real variable whose number of bits must be computed.</span>
@@ -506,8 +432,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">bit_size_R16P</span>
 
-  <span class="c">!&gt; @brief Procedure for computing the number of bits of a real variable.</span>
   <span class="k">elemental function </span><span class="n">bit_size_R8P</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">bits</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for computing the number of bits of a real variable.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">real</span><span class="p">(</span><span class="n">R8P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">r</span>       <span class="c">!&lt; Real variable whose number of bits must be computed.</span>
@@ -521,8 +448,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">bit_size_R8P</span>
 
-  <span class="c">!&gt; @brief Procedure for computing the number of bits of a real variable.</span>
   <span class="k">elemental function </span><span class="n">bit_size_R4P</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">bits</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for computing the number of bits of a real variable.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">real</span><span class="p">(</span><span class="n">R4P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">r</span>       <span class="c">!&lt; Real variable whose number of bits must be computed.</span>
@@ -536,8 +464,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">bit_size_R4P</span>
 
-  <span class="c">!&gt; @brief Procedure for computing the number of bits of a character variable.</span>
   <span class="k">elemental function </span><span class="n">bit_size_chr</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">bits</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for computing the number of bits of a character variable.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">c</span>       <span class="c">!&lt; Character variable whose number of bits must be computed.</span>
@@ -551,8 +480,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">bit_size_chr</span>
 
-  <span class="c">!&gt; @brief Procedure for computing the number of bytes of an integer variable.</span>
   <span class="k">elemental function </span><span class="n">byte_size_I8P</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">bytes</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for computing the number of bytes of an integer variable.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I8P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">i</span>     <span class="c">!&lt; Integer variable whose number of bytes must be computed.</span>
@@ -565,8 +495,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">byte_size_I8P</span>
 
-  <span class="c">!&gt; @brief Procedure for computing the number of bytes of an integer variable.</span>
   <span class="k">elemental function </span><span class="n">byte_size_I4P</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">bytes</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for computing the number of bytes of an integer variable.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">i</span>     <span class="c">!&lt; Integer variable whose number of bytes must be computed.</span>
@@ -579,8 +510,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">byte_size_I4P</span>
 
-  <span class="c">!&gt; @brief Procedure for computing the number of bytes of an integer variable.</span>
   <span class="k">elemental function </span><span class="n">byte_size_I2P</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">bytes</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for computing the number of bytes of an integer variable.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I2P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">i</span>     <span class="c">!&lt; Integer variable whose number of bytes must be computed.</span>
@@ -593,8 +525,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">byte_size_I2P</span>
 
-  <span class="c">!&gt; @brief Procedure for computing the number of bytes of an integer variable.</span>
   <span class="k">elemental function </span><span class="n">byte_size_I1P</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">bytes</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for computing the number of bytes of an integer variable.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I1P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">i</span>     <span class="c">!&lt; Integer variable whose number of bytes must be computed.</span>
@@ -607,8 +540,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">byte_size_I1P</span>
 
-  <span class="c">!&gt; @brief Procedure for computing the number of bytes of a real variable.</span>
   <span class="k">elemental function </span><span class="n">byte_size_R16P</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">bytes</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for computing the number of bytes of a real variable.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">real</span><span class="p">(</span><span class="n">R16P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">r</span>     <span class="c">!&lt; Real variable whose number of bytes must be computed.</span>
@@ -621,8 +555,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">byte_size_R16P</span>
 
-  <span class="c">!&gt; @brief Procedure for computing the number of bytes of a real variable.</span>
   <span class="k">elemental function </span><span class="n">byte_size_R8P</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">bytes</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for computing the number of bytes of a real variable.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">real</span><span class="p">(</span><span class="n">R8P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">r</span>     <span class="c">!&lt; Real variable whose number of bytes must be computed.</span>
@@ -635,8 +570,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">byte_size_R8P</span>
 
-  <span class="c">!&gt; @brief Procedure for computing the number of bytes of a real variable.</span>
   <span class="k">elemental function </span><span class="n">byte_size_R4P</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">bytes</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for computing the number of bytes of a real variable.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">real</span><span class="p">(</span><span class="n">R4P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">r</span>     <span class="c">!&lt; Real variable whose number of bytes must be computed.</span>
@@ -649,8 +585,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">byte_size_R4P</span>
 
-  <span class="c">!&gt; @brief Procedure for computing the number of bytes of a character variable.</span>
   <span class="k">elemental function </span><span class="n">byte_size_chr</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">bytes</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for computing the number of bytes of a character variable.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">c</span>     <span class="c">!&lt; Character variable whose number of bytes must be computed.</span>
@@ -663,8 +600,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">byte_size_chr</span>
 
-  <span class="c">!&gt; @brief Procedure for converting real to string. This function achieves casting of real to string.</span>
   <span class="k">elemental function </span><span class="n">strf_R16P</span><span class="p">(</span><span class="n">fm</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting real to string. This function achieves casting of real to string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">fm</span>  <span class="c">!&lt; Format different from the standard for the kind.</span>
@@ -678,8 +616,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">strf_R16P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting real to string. This function achieves casting of real to string.</span>
   <span class="k">elemental function </span><span class="n">strf_R8P</span><span class="p">(</span><span class="n">fm</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting real to string. This function achieves casting of real to string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">fm</span>  <span class="c">!&lt; Format different from the standard for the kind.</span>
@@ -693,8 +632,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">strf_R8P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting real to string. This function achieves casting of real to string.</span>
   <span class="k">elemental function </span><span class="n">strf_R4P</span><span class="p">(</span><span class="n">fm</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting real to string. This function achieves casting of real to string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">fm</span>  <span class="c">!&lt; Format different from the standard for the kind.</span>
@@ -708,8 +648,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">strf_R4P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting integer to string. This function achieves casting of integer to string.</span>
   <span class="k">elemental function </span><span class="n">strf_I8P</span><span class="p">(</span><span class="n">fm</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting integer to string. This function achieves casting of integer to string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">fm</span>  <span class="c">!&lt; Format different from the standard for the kind.</span>
@@ -723,8 +664,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">strf_I8P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting integer to string. This function achieves casting of integer to string.</span>
   <span class="k">elemental function </span><span class="n">strf_I4P</span><span class="p">(</span><span class="n">fm</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting integer to string. This function achieves casting of integer to string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">fm</span>  <span class="c">!&lt; Format different from the standard for the kind.</span>
@@ -738,8 +680,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">strf_I4P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting integer to string. This function achieves casting of integer to string.</span>
   <span class="k">elemental function </span><span class="n">strf_I2P</span><span class="p">(</span><span class="n">fm</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting integer to string. This function achieves casting of integer to string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">fm</span>  <span class="c">!&lt; Format different from the standard for the kind.</span>
@@ -753,8 +696,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">strf_I2P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting integer to string. This function achieves casting of integer to string.</span>
   <span class="k">elemental function </span><span class="n">strf_I1P</span><span class="p">(</span><span class="n">fm</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting integer to string. This function achieves casting of integer to string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">fm</span>  <span class="c">!&lt; Format different from the standard for the kind.</span>
@@ -768,8 +712,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">strf_I1P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting real to string. This function achieves casting of real to string.</span>
   <span class="k">elemental function </span><span class="n">str_R16P</span><span class="p">(</span><span class="n">no_sign</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting real to string. This function achieves casting of real to string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">logical</span><span class="p">,</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">no_sign</span> <span class="c">!&lt; Flag for leaving out the sign.</span>
@@ -785,8 +730,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">str_R16P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting real to string. This function achieves casting of real to string.</span>
   <span class="k">elemental function </span><span class="n">str_R8P</span><span class="p">(</span><span class="n">no_sign</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting real to string. This function achieves casting of real to string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">logical</span><span class="p">,</span>      <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">no_sign</span> <span class="c">!&lt; Flag for leaving out the sign.</span>
@@ -802,8 +748,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">str_R8P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting real to string. This function achieves casting of real to string.</span>
   <span class="k">elemental function </span><span class="n">str_R4P</span><span class="p">(</span><span class="n">no_sign</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting real to string. This function achieves casting of real to string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">logical</span><span class="p">,</span>   <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">no_sign</span> <span class="c">!&lt; Flag for leaving out the sign.</span>
@@ -819,8 +766,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">str_R4P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting integer to string. This function achieves casting of integer to string.</span>
   <span class="k">elemental function </span><span class="n">str_I8P</span><span class="p">(</span><span class="n">no_sign</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting integer to string. This function achieves casting of integer to string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">logical</span><span class="p">,</span>      <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">no_sign</span> <span class="c">!&lt; Flag for leaving out the sign.</span>
@@ -837,8 +785,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">str_I8P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting integer to string. This function achieves casting of integer to string.</span>
   <span class="k">elemental function </span><span class="n">str_I4P</span><span class="p">(</span><span class="n">no_sign</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting integer to string. This function achieves casting of integer to string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">logical</span><span class="p">,</span>      <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">no_sign</span> <span class="c">!&lt; Flag for leaving out the sign.</span>
@@ -855,8 +804,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">str_I4P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting integer to string. This function achieves casting of integer to string.</span>
   <span class="k">elemental function </span><span class="n">str_I2P</span><span class="p">(</span><span class="n">no_sign</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting integer to string. This function achieves casting of integer to string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">logical</span><span class="p">,</span>      <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">no_sign</span> <span class="c">!&lt; Flag for leaving out the sign.</span>
@@ -873,8 +823,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">str_I2P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting integer to string. This function achieves casting of integer to string.</span>
   <span class="k">elemental function </span><span class="n">str_I1P</span><span class="p">(</span><span class="n">no_sign</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting integer to string. This function achieves casting of integer to string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">logical</span><span class="p">,</span>      <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">no_sign</span> <span class="c">!&lt; Flag for leaving out the sign.</span>
@@ -891,9 +842,10 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">str_I1P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting integer to string, prefixing with the right number of zeros. This function achieves casting of</span>
-  <span class="c">!&gt; integer to string.</span>
   <span class="k">elemental function </span><span class="n">strz_I8P</span><span class="p">(</span><span class="n">nz_pad</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting integer to string, prefixing with the right number of zeros. This function achieves casting of</span>
+  <span class="c">!&lt; integer to string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">nz_pad</span> <span class="c">!&lt; Number of zeros padding.</span>
@@ -909,9 +861,10 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">strz_I8P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting integer to string, prefixing with the right number of zeros. This function achieves casting of</span>
-  <span class="c">!&gt; integer to string.</span>
   <span class="k">elemental function </span><span class="n">strz_I4P</span><span class="p">(</span><span class="n">nz_pad</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting integer to string, prefixing with the right number of zeros. This function achieves casting of</span>
+  <span class="c">!&lt; integer to string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">nz_pad</span> <span class="c">!&lt; Number of zeros padding.</span>
@@ -927,9 +880,10 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">strz_I4P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting integer to string, prefixing with the right number of zeros. This function achieves casting of</span>
-  <span class="c">!&gt; integer to string.</span>
   <span class="k">elemental function </span><span class="n">strz_I2P</span><span class="p">(</span><span class="n">nz_pad</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting integer to string, prefixing with the right number of zeros. This function achieves casting of</span>
+  <span class="c">!&lt; integer to string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">nz_pad</span> <span class="c">!&lt; Number of zeros padding.</span>
@@ -945,9 +899,10 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">strz_I2P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting integer to string, prefixing with the right number of zeros. This function achieves casting of</span>
-  <span class="c">!&gt; integer to string.</span>
   <span class="k">elemental function </span><span class="n">strz_I1P</span><span class="p">(</span><span class="n">nz_pad</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting integer to string, prefixing with the right number of zeros. This function achieves casting of</span>
+  <span class="c">!&lt; integer to string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">nz_pad</span> <span class="c">!&lt; Number of zeros padding.</span>
@@ -963,8 +918,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">strz_I1P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting string to real. This function achieves casting of string to real.</span>
   <span class="k">function </span><span class="n">ctor_R16P</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting string to real. This function achieves casting of string to real.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">str</span> <span class="c">!&lt; String containing input number.</span>
@@ -984,8 +940,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">ctor_R16P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting string to real. This function achieves casting of string to real.</span>
   <span class="k">function </span><span class="n">ctor_R8P</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting string to real. This function achieves casting of string to real.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">str</span> <span class="c">!&lt; String containing input number.</span>
@@ -1005,8 +962,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">ctor_R8P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting string to real. This function achieves casting of string to real.</span>
   <span class="k">function </span><span class="n">ctor_R4P</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting string to real. This function achieves casting of string to real.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">str</span> <span class="c">!&lt; String containing input number.</span>
@@ -1026,8 +984,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">ctor_R4P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting string to integer. This function achieves casting of string to integer.</span>
   <span class="k">function </span><span class="n">ctoi_I8P</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting string to integer. This function achieves casting of string to integer.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">str</span> <span class="c">!&lt; String containing input number.</span>
@@ -1047,8 +1006,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">ctoi_I8P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting string to integer. This function achieves casting of string to integer.</span>
   <span class="k">function </span><span class="n">ctoi_I4P</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting string to integer. This function achieves casting of string to integer.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">str</span> <span class="c">!&lt; String containing input number.</span>
@@ -1068,8 +1028,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">ctoi_I4P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting string to integer. This function achieves casting of string to integer.</span>
   <span class="k">function </span><span class="n">ctoi_I2P</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting string to integer. This function achieves casting of string to integer.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">str</span> <span class="c">!&lt; String containing input number.</span>
@@ -1089,8 +1050,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">ctoi_I2P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting string to integer. This function achieves casting of string to integer.</span>
   <span class="k">function </span><span class="n">ctoi_I1P</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting string to integer. This function achieves casting of string to integer.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">str</span> <span class="c">!&lt; String containing input number.</span>
@@ -1110,9 +1072,11 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">ctoi_I1P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting real to string of bits. This function achieves casting of real to bit-string.</span>
-  <span class="c">!&gt; @note It is assumed that R16P is represented by means of 128 bits, but this is not ensured in all architectures.</span>
   <span class="k">elemental function </span><span class="n">bstr_R16P</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">bstr</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting real to string of bits. This function achieves casting of real to bit-string.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; @note It is assumed that R16P is represented by means of 128 bits, but this is not ensured in all architectures.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">real</span><span class="p">(</span><span class="n">R8P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">n</span>    <span class="c">!&lt; Real to be converted.</span>
@@ -1125,9 +1089,11 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">bstr_R16P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting real to string of bits. This function achieves casting of real to bit-string.</span>
-  <span class="c">!&gt; @note It is assumed that R8P is represented by means of 64 bits, but this is not ensured in all architectures.</span>
   <span class="k">elemental function </span><span class="n">bstr_R8P</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">bstr</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting real to string of bits. This function achieves casting of real to bit-string.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; @note It is assumed that R8P is represented by means of 64 bits, but this is not ensured in all architectures.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">real</span><span class="p">(</span><span class="n">R8P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">n</span>    <span class="c">!&lt; Real to be converted.</span>
@@ -1140,9 +1106,11 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">bstr_R8P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting real to string of bits. This function achieves casting of real to bit-string.</span>
-  <span class="c">!&gt; @note It is assumed that R4P is represented by means of 32 bits, but this is not ensured in all architectures.</span>
   <span class="k">elemental function </span><span class="n">bstr_R4P</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">bstr</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting real to string of bits. This function achieves casting of real to bit-string.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; @note It is assumed that R4P is represented by means of 32 bits, but this is not ensured in all architectures.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">real</span><span class="p">(</span><span class="n">R4P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">n</span>    <span class="c">!&lt; Real to be converted.</span>
@@ -1155,9 +1123,11 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">bstr_R4P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting integer to string of bits. This function achieves casting of integer to bit-string.</span>
-  <span class="c">!&gt; @note It is assumed that I8P is represented by means of 64 bits, but this is not ensured in all architectures.</span>
   <span class="k">elemental function </span><span class="n">bstr_I8P</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">bstr</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting integer to string of bits. This function achieves casting of integer to bit-string.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; @note It is assumed that I8P is represented by means of 64 bits, but this is not ensured in all architectures.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I8P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">n</span>    <span class="c">!&lt; Real to be converted.</span>
@@ -1170,9 +1140,11 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">bstr_I8P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting integer to string of bits. This function achieves casting of integer to bit-string.</span>
-  <span class="c">!&gt; @note It is assumed that I4P is represented by means of 32 bits, but this is not ensured in all architectures.</span>
   <span class="k">elemental function </span><span class="n">bstr_I4P</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">bstr</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting integer to string of bits. This function achieves casting of integer to bit-string.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; @note It is assumed that I4P is represented by means of 32 bits, but this is not ensured in all architectures.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">n</span>    <span class="c">!&lt; Real to be converted.</span>
@@ -1185,9 +1157,11 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">bstr_I4P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting integer to string of bits. This function achieves casting of integer to bit-string.</span>
-  <span class="c">!&gt; @note It is assumed that I2P is represented by means of 16 bits, but this is not ensured in all architectures.</span>
   <span class="k">elemental function </span><span class="n">bstr_I2P</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">bstr</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting integer to string of bits. This function achieves casting of integer to bit-string.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; @note It is assumed that I2P is represented by means of 16 bits, but this is not ensured in all architectures.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I2P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">n</span>    <span class="c">!&lt; Real to be converted.</span>
@@ -1200,9 +1174,11 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">bstr_I2P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting integer to string of bits. This function achieves casting of integer to bit-string.</span>
-  <span class="c">!&gt; @note It is assumed that I1P is represented by means of 8 bits, but this is not ensured in all architectures.</span>
   <span class="k">elemental function </span><span class="n">bstr_I1P</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">bstr</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting integer to string of bits. This function achieves casting of integer to bit-string.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; @note It is assumed that I1P is represented by means of 8 bits, but this is not ensured in all architectures.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I1P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">n</span>    <span class="c">!&lt; Real to be converted.</span>
@@ -1215,8 +1191,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">bstr_I1P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting bit-string to real. This function achieves casting of bit-string to real.</span>
   <span class="k">elemental function </span><span class="n">bctor_R8P</span><span class="p">(</span><span class="n">bstr</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting bit-string to real. This function achieves casting of bit-string to real.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">bstr</span> <span class="c">!&lt; String containing input number.</span>
@@ -1230,8 +1207,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">bctor_R8P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting bit-string to real. This function achieves casting of bit-string to real.</span>
   <span class="k">elemental function </span><span class="n">bctor_R4P</span><span class="p">(</span><span class="n">bstr</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting bit-string to real. This function achieves casting of bit-string to real.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">bstr</span> <span class="c">!&lt; String containing input number.</span>
@@ -1245,8 +1223,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">bctor_R4P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting bit-string to integer. This function achieves casting of bit-string to integer.</span>
   <span class="k">elemental function </span><span class="n">bctoi_I8P</span><span class="p">(</span><span class="n">bstr</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting bit-string to integer. This function achieves casting of bit-string to integer.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">bstr</span> <span class="c">!&lt; String containing input number.</span>
@@ -1260,8 +1239,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">bctoi_I8P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting bit-string to integer. This function achieves casting of bit-string to integer.</span>
   <span class="k">elemental function </span><span class="n">bctoi_I4P</span><span class="p">(</span><span class="n">bstr</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting bit-string to integer. This function achieves casting of bit-string to integer.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">bstr</span> <span class="c">!&lt; String containing input number.</span>
@@ -1275,8 +1255,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">bctoi_I4P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting bit-string to integer. This function achieves casting of bit-string to integer.</span>
   <span class="k">elemental function </span><span class="n">bctoi_I2P</span><span class="p">(</span><span class="n">bstr</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting bit-string to integer. This function achieves casting of bit-string to integer.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">bstr</span> <span class="c">!&lt; String containing input number.</span>
@@ -1290,8 +1271,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">bctoi_I2P</span>
 
-  <span class="c">!&gt; @brief Procedure for converting bit-string to integer. This function achieves casting of bit-string to integer.</span>
   <span class="k">elemental function </span><span class="n">bctoi_I1P</span><span class="p">(</span><span class="n">bstr</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting bit-string to integer. This function achieves casting of bit-string to integer.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">bstr</span> <span class="c">!&lt; String containing input number.</span>
@@ -1304,11 +1286,10 @@
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">bctoi_I1P</span>
-  <span class="c">!&gt; @}</span>
 
-  <span class="c">!&gt; Subroutine for initilizing module&#39;s variables that are not initialized into the definition specification.</span>
-  <span class="c">!&gt; @ingroup IR_PrecisionPublicProcedure</span>
   <span class="k">subroutine </span><span class="n">IR_init</span><span class="p">()</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for initilizing module&#39;s variables that are not initialized into the definition specification.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -1330,9 +1311,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">IR_init</span>
 
-  <span class="c">!&gt;Subroutine for printing to the standard output the kind definition of reals and integers and the utility variables.</span>
-  <span class="c">!&gt; @ingroup IR_PrecisionPublicProcedure</span>
   <span class="k">subroutine </span><span class="n">IR_Print</span><span class="p">(</span><span class="n">pref</span><span class="p">,</span><span class="n">iostat</span><span class="p">,</span><span class="n">iomsg</span><span class="p">,</span><span class="n">unit</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for printing to the standard output the kind definition of reals and integers and the utility variables.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">pref</span>    <span class="c">!&lt; Prefixing string.</span>
