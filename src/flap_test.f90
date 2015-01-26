@@ -1,29 +1,12 @@
-!> @addtogroup Program Programs
-!> List of excutable programs.
-!> @addtogroup DerivedType Derived Types
-!> List of derived data types.
-!> @addtogroup GlobalVarPar Global Variables and Parameters
-!> List of global variables and parameters.
-!> @addtogroup PrivateVarPar Private Variables and Parameters
-!> List of private variables and parameters.
-!> @addtogroup Interface Interfaces
-!> List of explicitly defined interface.
-!> @addtogroup Library Modules Libraries
-!> List of modules containing libraries of procedures.
-!> @addtogroup PublicProcedure Public Procedures
-!> List of public procedures.
-!> @addtogroup PrivateProcedure Private Procedures
-!> List of private procedures.
-
-!> @ingroup Program
-!> @{
-!> @defgroup FLAP_TestProgram FLAP_Test
-!> @}
-
-!> @brief FLAP_Test is a testing program for FLAP library, a user-friendly set of Fortran modules for handling flexible Command
-!> Line Interface.
-!> @ingroup FLAPProgram
+!< A testing program for FLAP library, a user-friendly set of Fortran modules for handling flexible Command Line Interface
 program FLAP_Test
+!< A testing program for FLAP library, a user-friendly set of Fortran modules for handling flexible Command Line Interface
+!<
+!<### Compile
+!< See [compile instructions](https://github.com/szaghi/FLAP/wiki/Download-compile).
+!<
+!<###Usage Compile
+!< See [usage instructions](https://github.com/szaghi/FLAP/wiki/Testing-Program).
 !-----------------------------------------------------------------------------------------------------------------------------------
 USE IR_Precision                                                        ! Integers and reals precision definition.
 USE Data_Type_Command_Line_Interface, only: Type_Command_Line_Interface ! Definition of Type_Command_Line_Interface.

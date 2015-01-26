@@ -154,42 +154,11 @@
   
     </div>
     <div class="col-lg-9" id='text'>
-    
-    
-    <div class="highlight"><pre><span class="c">!&gt; @ingroup Library</span>
-<span class="c">!&gt; @{</span>
-<span class="c">!&gt; @defgroup Lib_StringsLibrary Lib_Strings</span>
-<span class="c">!&gt; Library of miscellanea procedures for strings operations.</span>
-<span class="c">!&gt; @}</span>
-
-<span class="c">!&gt; @ingroup Interface</span>
-<span class="c">!&gt; @{</span>
-<span class="c">!&gt; @defgroup Lib_StringsInterface Lib_Strings</span>
-<span class="c">!&gt; Library of miscellanea procedures for strings operations.</span>
-<span class="c">!&gt; @}</span>
-
-<span class="c">!&gt; @ingroup GlobalVarPar</span>
-<span class="c">!&gt; @{</span>
-<span class="c">!&gt; @defgroup Lib_StringsGlobalVarPar Lib_Strings</span>
-<span class="c">!&gt; Library of miscellanea procedures for strings operations.</span>
-<span class="c">!&gt; @}</span>
-
-<span class="c">!&gt; @ingroup PublicProcedure</span>
-<span class="c">!&gt; @{</span>
-<span class="c">!&gt; @defgroup Lib_StringsPublicProcedure Lib_Strings</span>
-<span class="c">!&gt; Library of miscellanea procedures for strings operations.</span>
-<span class="c">!&gt; @}</span>
-
-<span class="c">!&gt; @ingroup PrivateProcedure</span>
-<span class="c">!&gt; @{</span>
-<span class="c">!&gt; @defgroup Lib_StringsPrivateProcedure Lib_Strings</span>
-<span class="c">!&gt; Library of miscellanea procedures for strings operations.</span>
-<span class="c">!&gt; @}</span>
-
-<span class="c">!&gt; Library of miscellanea procedures for strings operations.</span>
-<span class="c">!&gt; This is a library module.</span>
-<span class="c">!&gt; @ingroup Lib_StringsLibrary</span>
+    <p>Library of miscellanea procedures for strings operations.</p>
+    <br>
+    <div class="highlight"><pre><span class="c">!&lt; Library of miscellanea procedures for strings operations.</span>
 <span class="k">module </span><span class="n">Lib_Strings</span>
+<span class="c">!&lt; Library of miscellanea procedures for strings operations.</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="k">USE </span><span class="n">IR_Precision</span> <span class="c">! Integers and reals precision definition.</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
@@ -211,27 +180,23 @@
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="c">!&gt; @ingroup Lib_StringsGlobalVarPar</span>
-<span class="c">!&gt; @{</span>
 <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">26</span><span class="p">),</span> <span class="k">parameter</span><span class="p">,</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">upper_alphabet</span> <span class="o">=</span> <span class="s1">&#39;ABCDEFGHIJKLMNOPQRSTUVWXYZ&#39;</span>
 <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">26</span><span class="p">),</span> <span class="k">parameter</span><span class="p">,</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">lower_alphabet</span> <span class="o">=</span> <span class="s1">&#39;abcdefghijklmnopqrstuvwxyz&#39;</span>
-<span class="c">!&gt; @}</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="c">!&gt; Overloading intrinsic function count.</span>
-<span class="c">!&gt; @ingroup Lib_StringsInterface</span>
 <span class="k">interface </span><span class="nb">count</span>
-<span class="nb">  </span><span class="k">module procedure </span><span class="n">count_substring</span>
+  <span class="c">!&lt; Overloading intrinsic function count.</span>
+  <span class="k">module procedure </span><span class="n">count_substring</span>
 <span class="n">endinterface</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="k">contains</span>
-  <span class="c">!&gt; @ingroup Lib_StringsPublicProcedure</span>
-  <span class="c">!&gt; @{</span>
-  <span class="c">!&gt; @brief Procedure for regular expression mathcing. Tries to match the given string with the pattern and give .true. if the</span>
-  <span class="c">!&gt; entire string matches the pattern, .false. otherwise.</span>
-  <span class="c">!&gt; @note Trailing blanks are ignored.</span>
-  <span class="k">recursive function </span><span class="n">re_match</span><span class="p">(</span><span class="n">string</span><span class="p">,</span><span class="n">pattern</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">match</span><span class="p">)</span>
+<span class="k">  recursive function </span><span class="n">re_match</span><span class="p">(</span><span class="n">string</span><span class="p">,</span><span class="n">pattern</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">match</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for regular expression matching.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; Tries to match the given string with the pattern and give .true. if the entire string matches the pattern, .false. otherwise.</span>
+  <span class="c">!&lt; @note Trailing blanks are ignored.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="kd">::</span> <span class="n">string</span>  <span class="c">!&lt; Input string.</span>
@@ -321,9 +286,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">re_match</span>
 
-  <span class="c">!&gt; @brief Procedure for converting the lower case characters of a string to upper case one.</span>
-  <span class="c">!&gt;@return \b Upper_Case character(len(string)) variable</span>
   <span class="k">elemental function </span><span class="n">Upper_Case</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting the lower case characters of a string to upper case one.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">string</span>     <span class="c">!&lt; String to be converted.</span>
@@ -341,9 +306,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">Upper_Case</span>
 
-  <span class="c">!&gt; @brief Procedure for converting the upper case characters of a string to lower case one.</span>
-  <span class="c">!&gt;@return \b Lower_Case character(len(string)) variable</span>
   <span class="k">elemental function </span><span class="n">Lower_Case</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting the upper case characters of a string to lower case one.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">string</span>     <span class="c">!&lt; String to be converted.</span>
@@ -361,9 +326,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">Lower_Case</span>
 
-  <span class="c">!&gt; @brief Procedure for deleting substring from a string.</span>
-  <span class="c">!&gt;@return \b newstring character(len(string)-len(substring)) variable</span>
   <span class="k">elemental function </span><span class="n">delete</span><span class="p">(</span><span class="n">string</span><span class="p">,</span><span class="n">substring</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">newstring</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for deleting substring from a string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>              <span class="n">string</span>    <span class="c">!&lt; String to be modified.</span>
@@ -385,9 +350,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">delete</span>
 
-  <span class="c">!&gt; @brief Procedure for inserting substring into a string from a certaing position.</span>
-  <span class="c">!&gt;@return \b newstring character(len(string)+len(substring)) variable</span>
   <span class="k">elemental function </span><span class="n">insert</span><span class="p">(</span><span class="n">string</span><span class="p">,</span><span class="n">substring</span><span class="p">,</span><span class="n">pos</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">newstring</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for inserting substring into a string from a certaing position.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>              <span class="n">string</span>    <span class="c">!&lt; String to be modified.</span>
@@ -404,9 +369,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">insert</span>
 
-  <span class="c">!&gt; @brief Procedure for replacing substring into a string.</span>
-  <span class="c">!&gt;@return \b newstring character(len(string)-len(substring)+len(restring)) variable</span>
   <span class="k">elemental function </span><span class="n">replace</span><span class="p">(</span><span class="n">string</span><span class="p">,</span><span class="n">substring</span><span class="p">,</span><span class="n">restring</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">newstring</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for replacing substring into a string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>              <span class="n">string</span>    <span class="c">!&lt; String to be modified.</span>
@@ -429,11 +394,13 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">replace</span>
 
-  <span class="c">!&gt; @brief Subroutine for tokenizing a string in order to parse it.</span>
-  <span class="c">!&gt; @note The dummy array containing tokens must allocatable and its character elements must have the same length of the input</span>
-  <span class="c">!&gt; string. If the length of the delimiter is higher than the input string one then the output tokens array is allocated with</span>
-  <span class="c">!&gt; only one element set to char(0).</span>
   <span class="k">pure subroutine </span><span class="n">tokenize</span><span class="p">(</span><span class="n">strin</span><span class="p">,</span><span class="n">delimiter</span><span class="p">,</span><span class="n">Nt</span><span class="p">,</span><span class="n">toks</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for tokenizing a string in order to parse it.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; @note The dummy array containing tokens must allocatable and its character elements must have the same length of the input</span>
+  <span class="c">!&lt; string. If the length of the delimiter is higher than the input string one then the output tokens array is allocated with</span>
+  <span class="c">!&lt; only one element set to char(0).</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span>          <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>               <span class="n">strin</span>     <span class="c">!&lt; String to be tokenized.</span>
@@ -474,12 +441,14 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">tokenize</span>
 
-  <span class="c">!&gt; @brief Subroutine for parsing a string providing the substrings matching an enclosing pairs tags.</span>
-  <span class="c">!&gt; @note The dummy array containing matching substrings must allocatable and its character elements must have the same length of</span>
-  <span class="c">!&gt; the input string. If the total length of the tags is higher than the input string one then the output substrings array is</span>
-  <span class="c">!&gt; allocated with only one element set to char(0).</span>
-  <span class="c">!&gt; @note Nested tags are not supported.</span>
   <span class="k">pure subroutine </span><span class="n">tags_match</span><span class="p">(</span><span class="n">strin</span><span class="p">,</span><span class="n">tag_start</span><span class="p">,</span><span class="n">tag_stop</span><span class="p">,</span><span class="n">Ns</span><span class="p">,</span><span class="n">match</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for parsing a string providing the substrings matching an enclosing pairs tags.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; @note The dummy array containing matching substrings must allocatable and its character elements must have the same length of</span>
+  <span class="c">!&lt; the input string. If the total length of the tags is higher than the input string one then the output substrings array is</span>
+  <span class="c">!&lt; allocated with only one element set to char(0).</span>
+  <span class="c">!&lt; @note Nested tags are not supported.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span>                       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">strin</span>                    <span class="c">!&lt; String to be parsed.</span>
@@ -527,10 +496,12 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">tags_match</span>
 
-  <span class="c">!&gt; @brief Procedure for reducing to one (unique) multiple (sequential) occurrences of a characters substring into a string.</span>
-  <span class="c">!&gt; For example the string &#39; ab-cre-cre-ab&#39; is reduce to &#39;ab-cre-ab&#39; if the substring is &#39;-cre&#39;.</span>
-  <span class="c">!&gt; @note Eventual multiple trailing white space are not reduced to one occurrence.</span>
   <span class="k">function </span><span class="n">unique</span><span class="p">(</span><span class="n">string</span><span class="p">,</span><span class="n">substring</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">uniq</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for reducing to one (unique) multiple (sequential) occurrences of a characters substring into a string.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; For example the string &#39; ab-cre-cre-ab&#39; is reduce to &#39;ab-cre-ab&#39; if the substring is &#39;-cre&#39;.</span>
+  <span class="c">!&lt; @note Eventual multiple trailing white space are not reduced to one occurrence.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">string</span>    <span class="c">!&lt; String to be parsed.</span>
@@ -565,12 +536,10 @@
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">unique</span>
-  <span class="c">!&gt; @}</span>
 
-  <span class="c">!&gt; @ingroup Lib_StringsPrivateProcedure</span>
-  <span class="c">!&gt; @{</span>
-  <span class="c">!&gt; @brief Procedure for counting the number of occurences of a substring into a string.</span>
   <span class="k">elemental function </span><span class="n">count_substring</span><span class="p">(</span><span class="n">string</span><span class="p">,</span><span class="n">substring</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">No</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for counting the number of occurences of a substring into a string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">string</span>    <span class="c">!&lt; String.</span>
@@ -589,7 +558,6 @@
     <span class="n">c1</span> <span class="o">=</span> <span class="n">c1</span> <span class="o">+</span> <span class="n">c2</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">substring</span><span class="p">)</span>
   <span class="n">enddo</span>
 <span class="n">endfunction</span> <span class="n">count_substring</span>
-  <span class="c">!&gt; @}</span>
 <span class="n">endmodule</span> <span class="n">Lib_Strings</span>
 </pre></div>
 

@@ -477,6 +477,13 @@ public pure subroutine tags_match(strin, tag_start, tag_stop, Ns, match)
     
     
     
+    <h3>Description</h3>
+    <p>Procedure for parsing a string providing the substrings matching an enclosing pairs tags.</p>
+<p><div class="alert alert-info" role="alert"><h4>Note</h4>The dummy array containing matching substrings must allocatable and its character elements must have the same length of
+ the input string. If the total length of the tags is higher than the input string one then the output substrings array is
+ allocated with only one element set to char(0).
+ <div class="alert alert-info" role="alert"><h4>Note</h4>Nested tags are not supported.</div></div></p>
+    
     <br>
     
     <section>

@@ -1,37 +1,6 @@
-!> @ingroup Library
-!> @{
-!> @defgroup Lib_StringsLibrary Lib_Strings
-!> Library of miscellanea procedures for strings operations.
-!> @}
-
-!> @ingroup Interface
-!> @{
-!> @defgroup Lib_StringsInterface Lib_Strings
-!> Library of miscellanea procedures for strings operations.
-!> @}
-
-!> @ingroup GlobalVarPar
-!> @{
-!> @defgroup Lib_StringsGlobalVarPar Lib_Strings
-!> Library of miscellanea procedures for strings operations.
-!> @}
-
-!> @ingroup PublicProcedure
-!> @{
-!> @defgroup Lib_StringsPublicProcedure Lib_Strings
-!> Library of miscellanea procedures for strings operations.
-!> @}
-
-!> @ingroup PrivateProcedure
-!> @{
-!> @defgroup Lib_StringsPrivateProcedure Lib_Strings
-!> Library of miscellanea procedures for strings operations.
-!> @}
-
-!> Library of miscellanea procedures for strings operations.
-!> This is a library module.
-!> @ingroup Lib_StringsLibrary
+!< Library of miscellanea procedures for strings operations.
 module Lib_Strings
+!< Library of miscellanea procedures for strings operations.
 !-----------------------------------------------------------------------------------------------------------------------------------
 USE IR_Precision ! Integers and reals precision definition.
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -53,27 +22,23 @@ public:: count
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-!> @ingroup Lib_StringsGlobalVarPar
-!> @{
 character(len=26), parameter, private :: upper_alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 character(len=26), parameter, private :: lower_alphabet = 'abcdefghijklmnopqrstuvwxyz'
-!> @}
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-!> Overloading intrinsic function count.
-!> @ingroup Lib_StringsInterface
 interface count
+  !< Overloading intrinsic function count.
   module procedure count_substring
 endinterface
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
-  !> @ingroup Lib_StringsPublicProcedure
-  !> @{
-  !> @brief Procedure for regular expression mathcing. Tries to match the given string with the pattern and give .true. if the
-  !> entire string matches the pattern, .false. otherwise.
-  !> @note Trailing blanks are ignored.
   recursive function re_match(string,pattern) result(match)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for regular expression matching.
+  !<
+  !< Tries to match the given string with the pattern and give .true. if the entire string matches the pattern, .false. otherwise.
+  !< @note Trailing blanks are ignored.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   character(len=*), intent(in):: string  !< Input string.
@@ -163,9 +128,9 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction re_match
 
-  !> @brief Procedure for converting the lower case characters of a string to upper case one.
-  !>@return \b Upper_Case character(len(string)) variable
   elemental function Upper_Case(string)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for converting the lower case characters of a string to upper case one.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   character(len=*), intent(IN):: string     !< String to be converted.
@@ -183,9 +148,9 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction Upper_Case
 
-  !> @brief Procedure for converting the upper case characters of a string to lower case one.
-  !>@return \b Lower_Case character(len(string)) variable
   elemental function Lower_Case(string)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for converting the upper case characters of a string to lower case one.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   character(len=*), intent(IN):: string     !< String to be converted.
@@ -203,9 +168,9 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction Lower_Case
 
-  !> @brief Procedure for deleting substring from a string.
-  !>@return \b newstring character(len(string)-len(substring)) variable
   elemental function delete(string,substring) result(newstring)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for deleting substring from a string.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   character(len=*), intent(IN)::              string    !< String to be modified.
@@ -227,9 +192,9 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction delete
 
-  !> @brief Procedure for inserting substring into a string from a certaing position.
-  !>@return \b newstring character(len(string)+len(substring)) variable
   elemental function insert(string,substring,pos) result(newstring)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for inserting substring into a string from a certaing position.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   character(len=*), intent(IN)::              string    !< String to be modified.
@@ -246,9 +211,9 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction insert
 
-  !> @brief Procedure for replacing substring into a string.
-  !>@return \b newstring character(len(string)-len(substring)+len(restring)) variable
   elemental function replace(string,substring,restring) result(newstring)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for replacing substring into a string.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   character(len=*), intent(IN)::              string    !< String to be modified.
@@ -271,11 +236,13 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction replace
 
-  !> @brief Subroutine for tokenizing a string in order to parse it.
-  !> @note The dummy array containing tokens must allocatable and its character elements must have the same length of the input
-  !> string. If the length of the delimiter is higher than the input string one then the output tokens array is allocated with
-  !> only one element set to char(0).
   pure subroutine tokenize(strin,delimiter,Nt,toks)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for tokenizing a string in order to parse it.
+  !<
+  !< @note The dummy array containing tokens must allocatable and its character elements must have the same length of the input
+  !< string. If the length of the delimiter is higher than the input string one then the output tokens array is allocated with
+  !< only one element set to char(0).
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   character(len=*),          intent(IN)::               strin     !< String to be tokenized.
@@ -316,12 +283,14 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine tokenize
 
-  !> @brief Subroutine for parsing a string providing the substrings matching an enclosing pairs tags.
-  !> @note The dummy array containing matching substrings must allocatable and its character elements must have the same length of
-  !> the input string. If the total length of the tags is higher than the input string one then the output substrings array is
-  !> allocated with only one element set to char(0).
-  !> @note Nested tags are not supported.
   pure subroutine tags_match(strin,tag_start,tag_stop,Ns,match)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for parsing a string providing the substrings matching an enclosing pairs tags.
+  !<
+  !< @note The dummy array containing matching substrings must allocatable and its character elements must have the same length of
+  !< the input string. If the total length of the tags is higher than the input string one then the output substrings array is
+  !< allocated with only one element set to char(0).
+  !< @note Nested tags are not supported.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   character(len=*),                       intent(IN)::  strin                    !< String to be parsed.
@@ -369,10 +338,12 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine tags_match
 
-  !> @brief Procedure for reducing to one (unique) multiple (sequential) occurrences of a characters substring into a string.
-  !> For example the string ' ab-cre-cre-ab' is reduce to 'ab-cre-ab' if the substring is '-cre'.
-  !> @note Eventual multiple trailing white space are not reduced to one occurrence.
   function unique(string,substring) result(uniq)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for reducing to one (unique) multiple (sequential) occurrences of a characters substring into a string.
+  !<
+  !< For example the string ' ab-cre-cre-ab' is reduce to 'ab-cre-ab' if the substring is '-cre'.
+  !< @note Eventual multiple trailing white space are not reduced to one occurrence.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   character(len=*), intent(IN):: string    !< String to be parsed.
@@ -407,12 +378,10 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction unique
-  !> @}
 
-  !> @ingroup Lib_StringsPrivateProcedure
-  !> @{
-  !> @brief Procedure for counting the number of occurences of a substring into a string.
   elemental function count_substring(string,substring) result(No)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for counting the number of occurences of a substring into a string.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   character(*), intent(IN):: string    !< String.
@@ -431,5 +400,4 @@ contains
     c1 = c1 + c2 + len(substring)
   enddo
 endfunction count_substring
-  !> @}
 endmodule Lib_Strings

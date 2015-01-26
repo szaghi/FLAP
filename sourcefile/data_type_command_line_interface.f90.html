@@ -154,15 +154,17 @@
   
     </div>
     <div class="col-lg-9" id='text'>
-    
-    
-    <div class="highlight"><pre><span class="k">module </span><span class="n">Data_Type_Command_Line_Interface</span>
-<span class="c">!&lt; author:  Stefano Zaghi</span>
-<span class="c">!&lt; version: 0.0.1</span>
-<span class="c">!&lt; date:    2014-10-22</span>
-<span class="c">!&lt; license: GNU Public License version 3.</span>
-<span class="c">!&lt; FLAP is A very simple and stupid tool for building easily nice Command Line Interface for modern Fortran projects. It is based</span>
-<span class="c">!&lt; on Type_Command_Line_Interface (CLI), a derived type implementing a flexible Command Line Interface (CLI).</span>
+    <p>FLAP, Fortran command Line Arguments Parser for poor men</p>
+    <br>
+    <div class="highlight"><pre><span class="c">!&lt; FLAP, Fortran command Line Arguments Parser for poor men</span>
+<span class="k">module </span><span class="n">Data_Type_Command_Line_Interface</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="c">!&lt; FLAP, Fortran command Line Arguments Parser for poor men</span>
+<span class="c">!&lt;{!README-FLAP.md!}</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt;### ChangeLog</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt;{!ChangeLog-FLAP.md!}</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="k">USE </span><span class="n">IR_Precision</span>                           <span class="c">! Integers and reals precision definition.</span>
 <span class="k">USE </span><span class="n">Lib_IO_Misc</span><span class="p">,</span> <span class="n">only</span><span class="p">:</span> <span class="n">stdout</span><span class="p">,</span><span class="n">stderr</span>       <span class="c">! Library for IO operations.</span>
@@ -184,6 +186,7 @@
 <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">args_sep</span>           <span class="o">=</span> <span class="s1">&#39;||!||&#39;</span>         <span class="c">!&lt; Arguments separator for multiple valued (list) CLA.</span>
 <span class="k">type</span><span class="kd">::</span> <span class="n">Type_Command_Line_Argument</span>
   <span class="c">!&lt; Derived type containing the useful data for handling command line arguments (CLA).</span>
+  <span class="c">!&lt;</span>
   <span class="c">!&lt; @note If not otherwise declared the action on CLA value is set to &quot;store&quot; a value.</span>
   <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span><span class="kd">::</span> <span class="n">switch</span>             <span class="c">!&lt; Switch name.</span>
   <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span><span class="kd">::</span> <span class="n">switch_ab</span>          <span class="c">!&lt; Abbreviated switch name.</span>
@@ -313,6 +316,7 @@
 
   <span class="k">subroutine </span><span class="n">check_choices_cla</span><span class="p">(</span><span class="n">cla</span><span class="p">,</span><span class="n">val</span><span class="p">,</span><span class="n">pref</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
   <span class="c">!&lt; Procedure for checking if CLA value is in allowed choices.</span>
+  <span class="c">!&lt;</span>
   <span class="c">!&lt; @note This procedure can be called if and only if cla%choices has been allocated.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
@@ -389,6 +393,7 @@
 
   <span class="k">subroutine </span><span class="n">get_cla</span><span class="p">(</span><span class="n">cla</span><span class="p">,</span><span class="n">pref</span><span class="p">,</span><span class="n">val</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
   <span class="c">!&lt; Procedure for getting CLA (single) value.</span>
+  <span class="c">!&lt;</span>
   <span class="c">!&lt; @note For logical type CLA the value is directly read without any robust error trapping.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
@@ -502,6 +507,7 @@
 
   <span class="k">subroutine </span><span class="n">get_cla_list</span><span class="p">(</span><span class="n">cla</span><span class="p">,</span><span class="n">pref</span><span class="p">,</span><span class="n">val</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
   <span class="c">!&lt; Procedure for getting CLA (multiple) value.</span>
+  <span class="c">!&lt;</span>
   <span class="c">!&lt; @note For logical type CLA the value is directly read without any robust error trapping.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
@@ -906,6 +912,7 @@
 
   <span class="k">subroutine </span><span class="n">add</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span><span class="n">pref</span><span class="p">,</span><span class="n">switch</span><span class="p">,</span><span class="n">switch_ab</span><span class="p">,</span><span class="n">help</span><span class="p">,</span><span class="n">required</span><span class="p">,</span><span class="n">positional</span><span class="p">,</span><span class="n">position</span><span class="p">,</span><span class="n">act</span><span class="p">,</span><span class="n">def</span><span class="p">,</span><span class="n">nargs</span><span class="p">,</span><span class="n">choices</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
   <span class="c">!&lt; Procedure for adding CLA to CLAs list.</span>
+  <span class="c">!&lt;</span>
   <span class="c">!&lt; @note If not otherwise declared the action on CLA value is set to &quot;store&quot; a value that must be passed after the switch name</span>
   <span class="c">!&lt; or directly passed in case of positional CLA.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -1040,6 +1047,7 @@
 
   <span class="k">subroutine </span><span class="n">parse</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span><span class="n">pref</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
   <span class="c">!&lt; Procedure for parsing Command Line Interfaces by means of a previously initialized CLA list.</span>
+  <span class="c">!&lt;</span>
   <span class="c">!&lt; @note The leading and trailing white spaces are removed from CLA values.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
@@ -1213,6 +1221,7 @@
 
   <span class="k">subroutine </span><span class="n">get_cla_cli</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span><span class="n">pref</span><span class="p">,</span><span class="n">switch</span><span class="p">,</span><span class="n">position</span><span class="p">,</span><span class="n">val</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
   <span class="c">!&lt; Procedure for getting CLA (single) value from CLAs list parsed.</span>
+  <span class="c">!&lt;</span>
   <span class="c">!&lt; @note For logical type CLA the value is directly read without any robust error trapping.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
@@ -1258,6 +1267,7 @@
 
   <span class="k">subroutine </span><span class="n">get_cla_list_cli</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span><span class="n">pref</span><span class="p">,</span><span class="n">switch</span><span class="p">,</span><span class="n">position</span><span class="p">,</span><span class="n">val</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
   <span class="c">!&lt; Procedure for getting CLA multiple values from CLAs list parsed.</span>
+  <span class="c">!&lt;</span>
   <span class="c">!&lt; @note For logical type CLA the value is directly read without any robust error trapping.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>

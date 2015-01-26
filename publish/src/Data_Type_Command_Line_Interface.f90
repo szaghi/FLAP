@@ -1,10 +1,12 @@
+!< FLAP, Fortran command Line Arguments Parser for poor men
 module Data_Type_Command_Line_Interface
-!< author:  Stefano Zaghi
-!< version: 0.0.1
-!< date:    2014-10-22
-!< license: GNU Public License version 3.
-!< FLAP is A very simple and stupid tool for building easily nice Command Line Interface for modern Fortran projects. It is based
-!< on Type_Command_Line_Interface (CLI), a derived type implementing a flexible Command Line Interface (CLI).
+!-----------------------------------------------------------------------------------------------------------------------------------
+!< FLAP, Fortran command Line Arguments Parser for poor men
+!<{!README-FLAP.md!}
+!<
+!<### ChangeLog
+!<
+!<{!ChangeLog-FLAP.md!}
 !-----------------------------------------------------------------------------------------------------------------------------------
 USE IR_Precision                           ! Integers and reals precision definition.
 USE Lib_IO_Misc, only: stdout,stderr       ! Library for IO operations.
@@ -26,6 +28,7 @@ character(len=*), parameter:: action_print_vers  = 'PRINT_VERSION' !< CLA that p
 character(len=*), parameter:: args_sep           = '||!||'         !< Arguments separator for multiple valued (list) CLA.
 type:: Type_Command_Line_Argument
   !< Derived type containing the useful data for handling command line arguments (CLA).
+  !<
   !< @note If not otherwise declared the action on CLA value is set to "store" a value.
   character(len=:), allocatable:: switch             !< Switch name.
   character(len=:), allocatable:: switch_ab          !< Abbreviated switch name.
@@ -155,6 +158,7 @@ contains
 
   subroutine check_choices_cla(cla,val,pref,error)
   !< Procedure for checking if CLA value is in allowed choices.
+  !<
   !< @note This procedure can be called if and only if cla%choices has been allocated.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
@@ -231,6 +235,7 @@ contains
 
   subroutine get_cla(cla,pref,val,error)
   !< Procedure for getting CLA (single) value.
+  !<
   !< @note For logical type CLA the value is directly read without any robust error trapping.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
@@ -344,6 +349,7 @@ contains
 
   subroutine get_cla_list(cla,pref,val,error)
   !< Procedure for getting CLA (multiple) value.
+  !<
   !< @note For logical type CLA the value is directly read without any robust error trapping.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
@@ -748,6 +754,7 @@ contains
 
   subroutine add(cli,pref,switch,switch_ab,help,required,positional,position,act,def,nargs,choices,error)
   !< Procedure for adding CLA to CLAs list.
+  !<
   !< @note If not otherwise declared the action on CLA value is set to "store" a value that must be passed after the switch name
   !< or directly passed in case of positional CLA.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -882,6 +889,7 @@ contains
 
   subroutine parse(cli,pref,error)
   !< Procedure for parsing Command Line Interfaces by means of a previously initialized CLA list.
+  !<
   !< @note The leading and trailing white spaces are removed from CLA values.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
@@ -1055,6 +1063,7 @@ contains
 
   subroutine get_cla_cli(cli,pref,switch,position,val,error)
   !< Procedure for getting CLA (single) value from CLAs list parsed.
+  !<
   !< @note For logical type CLA the value is directly read without any robust error trapping.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
@@ -1100,6 +1109,7 @@ contains
 
   subroutine get_cla_list_cli(cli,pref,switch,position,val,error)
   !< Procedure for getting CLA multiple values from CLAs list parsed.
+  !<
   !< @note For logical type CLA the value is directly read without any robust error trapping.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none

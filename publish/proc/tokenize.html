@@ -454,6 +454,12 @@ public pure subroutine tokenize(strin, delimiter, Nt, toks)
     
     
     
+    <h3>Description</h3>
+    <p>Procedure for tokenizing a string in order to parse it.</p>
+<p><div class="alert alert-info" role="alert"><h4>Note</h4>The dummy array containing tokens must allocatable and its character elements must have the same length of the input
+ string. If the length of the delimiter is higher than the input string one then the output tokens array is allocated with
+ only one element set to char(0).</div></p>
+    
     <br>
     
     <section>

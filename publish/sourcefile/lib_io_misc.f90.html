@@ -154,36 +154,11 @@
   
     </div>
     <div class="col-lg-9" id='text'>
-    
-    
-    <div class="highlight"><pre><span class="c">!&gt; @ingroup Library</span>
-<span class="c">!&gt; @{</span>
-<span class="c">!&gt; @defgroup Lib_IO_MiscLibrary Lib_IO_Misc</span>
-<span class="c">!&gt; Library of miscellanea procedures for input/output operations.</span>
-<span class="c">!&gt; @}</span>
-
-<span class="c">!&gt; @ingroup Interface</span>
-<span class="c">!&gt; @{</span>
-<span class="c">!&gt; @defgroup Lib_IO_MiscInterface Lib_IO_Misc</span>
-<span class="c">!&gt; Library of miscellanea procedures for input/output operations.</span>
-<span class="c">!&gt; @}</span>
-
-<span class="c">!&gt; @ingroup GlobalVarPar</span>
-<span class="c">!&gt; @{</span>
-<span class="c">!&gt; @defgroup Lib_IO_MiscGlobalVarPar Lib_IO_Misc</span>
-<span class="c">!&gt; Library of miscellanea procedures for input/output operations.</span>
-<span class="c">!&gt; @}</span>
-
-<span class="c">!&gt; @ingroup PublicProcedure</span>
-<span class="c">!&gt; @{</span>
-<span class="c">!&gt; @defgroup Lib_IO_MiscPublicProcedure Lib_IO_Misc</span>
-<span class="c">!&gt; Library of miscellanea procedures for input/output operations.</span>
-<span class="c">!&gt; @}</span>
-
-<span class="c">!&gt; Library of miscellanea procedures for input/output operations.</span>
-<span class="c">!&gt; This is a library module.</span>
-<span class="c">!&gt; @ingroup Lib_IO_MiscLibrary</span>
+    <p>Library of miscellanea procedures for input/output operations.</p>
+    <br>
+    <div class="highlight"><pre><span class="c">!&lt; Library of miscellanea procedures for input/output operations.</span>
 <span class="k">module </span><span class="n">Lib_IO_Misc</span>
+<span class="c">!&lt; Library of miscellanea procedures for input/output operations.</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="k">USE </span><span class="n">IR_Precision</span>                                                                  <span class="c">! Integers and reals precision definition.</span>
 <span class="k">USE </span><span class="n">Lib_Strings</span>                                                                   <span class="c">! Library for strings operations.</span>
@@ -207,18 +182,22 @@
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="c">!&gt; @ingroup Lib_IO_MiscGlobalVarPar</span>
 <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">public</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">err_file_not_found</span>      <span class="o">=</span> <span class="mi">20100</span> <span class="c">!&lt; File not found error ID.</span>
 <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">public</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">err_directory_not_found</span> <span class="o">=</span> <span class="mi">20101</span> <span class="c">!&lt; Directory not found error ID.</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="k">contains</span>
-  <span class="c">!&gt; @ingroup Lib_IO_MiscPublicProcedure</span>
-  <span class="c">!&gt; @{</span>
-  <span class="c">!&gt; @brief The Get_Unit function returns a free logic unit for opening a file. The unit value is returned by the function, and also</span>
-  <span class="c">!&gt; by the optional argument &quot;Free_Unit&quot;. This allows the function to be used directly in an open statement like:</span>
-  <span class="c">!&gt; open(unit=Get_Unit(myunit),...) ; read(myunit)...</span>
-  <span class="c">!&gt; If no units are available, -1 is returned.</span>
-  <span class="kt">integer </span><span class="k">function </span><span class="n">Get_Unit</span><span class="p">(</span><span class="n">Free_Unit</span><span class="p">)</span>
+<span class="k">  </span><span class="kt">integer </span><span class="k">function </span><span class="n">Get_Unit</span><span class="p">(</span><span class="n">Free_Unit</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for obtaining a free logic unit for safely opening a file.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; @note If no units are available, -1 is returned.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt;### On-the-fly usage</span>
+  <span class="c">!&lt; The unit value is returned by the function and also by the optional argument *Free_Unit*. This allows the function to</span>
+  <span class="c">!&lt; be used directly (on-the-fly) in an open statement like</span>
+  <span class="c">!&lt;```fortran</span>
+  <span class="c">!&lt; open(unit=Get_Unit(myunit),...) ; read(myunit)...</span>
+  <span class="c">!&lt;```</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">Free_Unit</span> <span class="c">!&lt; Free logic unit.</span>
@@ -246,9 +225,11 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">Get_Unit</span>
 
-  <span class="c">!&gt; @brief Procedure for extracting the extension of a filename.</span>
-  <span class="c">!&gt; @note The leading and trealing spaces are removed from the file name.</span>
   <span class="k">elemental function </span><span class="n">get_extension</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for extracting the extension of a filename.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; @note The leading and trealing spaces are removed from the file name.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">filename</span>      <span class="c">!&lt; File name.</span>
@@ -261,9 +242,11 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">get_extension</span>
 
-  <span class="c">!&gt; @brief Procedure for setting the extension of a filename.</span>
-  <span class="c">!&gt; @note The leading and trealing spaces are removed from the file name.</span>
   <span class="k">elemental function </span><span class="n">set_extension</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="n">extension</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">newfilename</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for setting the extension of a filename.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; @note The leading and trealing spaces are removed from the file name.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">filename</span>    <span class="c">!&lt; File name.</span>
@@ -288,8 +271,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">set_extension</span>
 
-  <span class="c">!&gt; @brief Procedure for reading a file as single characters stream.</span>
   <span class="k">subroutine </span><span class="n">read_file_as_stream</span><span class="p">(</span><span class="n">pref</span><span class="p">,</span><span class="n">iostat</span><span class="p">,</span><span class="n">iomsg</span><span class="p">,</span><span class="n">delimiter_start</span><span class="p">,</span><span class="n">delimiter_end</span><span class="p">,</span><span class="n">filename</span><span class="p">,</span><span class="n">stream</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for reading a file as single characters stream.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">pref</span>            <span class="c">!&lt; Prefixing string.</span>
@@ -378,16 +362,16 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">read_file_as_stream</span>
 
-  <span class="c">!&gt; @brief Function for calculating the number of lines (records) of a sequential file.</span>
-  <span class="c">!&gt;@return \b n integer(I4P) variable</span>
   <span class="k">function </span><span class="n">lc_file</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for calculating the number of lines (records) of a sequential file.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
-<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">filename</span> <span class="c">! File name.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>             <span class="n">n</span>        <span class="c">! Number of lines (records).</span>
-  <span class="kt">logical</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="kd">::</span>               <span class="n">is_file</span>  <span class="c">! Inquiring flag.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="kd">::</span>            <span class="n">fileform</span> <span class="c">! File format: FORMATTED or UNFORMATTED.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>             <span class="n">unitfile</span> <span class="c">! Logic unit.</span>
+<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">filename</span> <span class="c">!&lt; File name.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>             <span class="n">n</span>        <span class="c">!&lt; Number of lines (records).</span>
+  <span class="kt">logical</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="kd">::</span>               <span class="n">is_file</span>  <span class="c">!&lt; Inquiring flag.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="kd">::</span>            <span class="n">fileform</span> <span class="c">!&lt; File format: FORMATTED or UNFORMATTED.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>             <span class="n">unitfile</span> <span class="c">!&lt; Logic unit.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -419,8 +403,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">lc_file</span>
 
-  <span class="c">!&gt; @brief Procedure for printing to stderr a &quot;file not found error&quot;.</span>
   <span class="k">function </span><span class="n">File_Not_Found</span><span class="p">(</span><span class="n">stderrpref</span><span class="p">,</span><span class="n">filename</span><span class="p">,</span><span class="n">cpn</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for printing to stderr a &quot;file not found error&quot;.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">stderrpref</span> <span class="c">!&lt; Prefixing string for stderr outputs.</span>
@@ -442,8 +427,9 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">File_Not_Found</span>
 
-  <span class="c">!&gt; @brief Subroutine for printing to stderr a &quot;directory not found error&quot;.</span>
   <span class="k">function </span><span class="n">Dir_Not_Found</span><span class="p">(</span><span class="n">stderrpref</span><span class="p">,</span><span class="n">dirname</span><span class="p">,</span><span class="n">cpn</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for printing to stderr a &quot;directory not found error&quot;.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">stderrpref</span> <span class="c">!&lt; Prefixing string for stderr outputs.</span>
@@ -465,9 +451,11 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">Dir_Not_Found</span>
 
-  <span class="c">!&gt; @brief Procedure for inquiring the presence of a file.</span>
-  <span class="c">!&gt; @note The leading and trealing spaces are removed from the directory name.</span>
   <span class="k">subroutine </span><span class="n">inquire_file</span><span class="p">(</span><span class="n">cpn</span><span class="p">,</span><span class="n">pref</span><span class="p">,</span><span class="n">iostat</span><span class="p">,</span><span class="n">iomsg</span><span class="p">,</span><span class="k">file</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for inquiring the presence of a file.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; @note The leading and trealing spaces are removed from the directory name.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">cpn</span>     <span class="c">!&lt; Calling procedure name.</span>
@@ -495,9 +483,11 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">inquire_file</span>
 
-  <span class="c">!&gt; @brief Procedure for inquiring the presence of a directory.</span>
-  <span class="c">!&gt; @note The leading and trealing spaces are removed from the directory name.</span>
   <span class="k">subroutine </span><span class="n">inquire_dir</span><span class="p">(</span><span class="n">cpn</span><span class="p">,</span><span class="n">pref</span><span class="p">,</span><span class="n">iostat</span><span class="p">,</span><span class="n">iomsg</span><span class="p">,</span><span class="n">directory</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for inquiring the presence of a directory.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; @note The leading and trealing spaces are removed from the directory name.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">cpn</span>       <span class="c">!&lt; Calling procedure name.</span>
@@ -528,7 +518,6 @@
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">inquire_dir</span>
-  <span class="c">!&gt; @}</span>
 <span class="n">endmodule</span> <span class="n">Lib_IO_Misc</span>
 </pre></div>
 

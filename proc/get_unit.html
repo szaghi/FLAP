@@ -414,6 +414,15 @@ public  function Get_Unit(Free_Unit)
     
     
     
+    <h3>Description</h3>
+    <p>Procedure for obtaining a free logic unit for safely opening a file.</p>
+<p><div class="alert alert-info" role="alert"><h4>Note</h4>If no units are available, -1 is returned.</div></p>
+<h3>On-the-fly usage</h3>
+<p>The unit value is returned by the function and also by the optional argument <em>Free_Unit</em>. This allows the function to
+ be used directly (on-the-fly) in an open statement like</p>
+<div class="codehilite"><pre> <span class="k">open</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="n">Get_Unit</span><span class="p">(</span><span class="n">myunit</span><span class="p">),...)</span> <span class="p">;</span> <span class="k">read</span><span class="p">(</span><span class="n">myunit</span><span class="p">)...</span>
+</pre></div>
+    
     <br>
     
     <section>
