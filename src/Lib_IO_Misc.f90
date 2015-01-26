@@ -1,31 +1,6 @@
-!> @ingroup Library
-!> @{
-!> @defgroup Lib_IO_MiscLibrary Lib_IO_Misc
-!> Library of miscellanea procedures for input/output operations.
-!> @}
-
-!> @ingroup Interface
-!> @{
-!> @defgroup Lib_IO_MiscInterface Lib_IO_Misc
-!> Library of miscellanea procedures for input/output operations.
-!> @}
-
-!> @ingroup GlobalVarPar
-!> @{
-!> @defgroup Lib_IO_MiscGlobalVarPar Lib_IO_Misc
-!> Library of miscellanea procedures for input/output operations.
-!> @}
-
-!> @ingroup PublicProcedure
-!> @{
-!> @defgroup Lib_IO_MiscPublicProcedure Lib_IO_Misc
-!> Library of miscellanea procedures for input/output operations.
-!> @}
-
-!> Library of miscellanea procedures for input/output operations.
-!> This is a library module.
-!> @ingroup Lib_IO_MiscLibrary
+!< Library of miscellanea procedures for input/output operations.
 module Lib_IO_Misc
+!< Library of miscellanea procedures for input/output operations.
 !-----------------------------------------------------------------------------------------------------------------------------------
 USE IR_Precision                                                                  ! Integers and reals precision definition.
 USE Lib_Strings                                                                   ! Library for strings operations.
@@ -49,18 +24,22 @@ public:: inquire_dir
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-!> @ingroup Lib_IO_MiscGlobalVarPar
 integer(I4P), public, parameter:: err_file_not_found      = 20100 !< File not found error ID.
 integer(I4P), public, parameter:: err_directory_not_found = 20101 !< Directory not found error ID.
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
-  !> @ingroup Lib_IO_MiscPublicProcedure
-  !> @{
-  !> @brief The Get_Unit function returns a free logic unit for opening a file. The unit value is returned by the function, and also
-  !> by the optional argument "Free_Unit". This allows the function to be used directly in an open statement like:
-  !> open(unit=Get_Unit(myunit),...) ; read(myunit)...
-  !> If no units are available, -1 is returned.
   integer function Get_Unit(Free_Unit)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for obtaining a free logic unit for safely opening a file.
+  !<
+  !< @note If no units are available, -1 is returned.
+  !<
+  !<### On-the-fly usage
+  !< The unit value is returned by the function and also by the optional argument *Free_Unit*. This allows the function to
+  !< be used directly (on-the-fly) in an open statement like
+  !<```fortran
+  !< open(unit=Get_Unit(myunit),...) ; read(myunit)...
+  !<```
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   integer, intent(OUT), optional:: Free_Unit !< Free logic unit.
@@ -88,9 +67,11 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction Get_Unit
 
-  !> @brief Procedure for extracting the extension of a filename.
-  !> @note The leading and trealing spaces are removed from the file name.
   elemental function get_extension(filename)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for extracting the extension of a filename.
+  !<
+  !< @note The leading and trealing spaces are removed from the file name.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   character(len=*), intent(IN):: filename      !< File name.
@@ -103,9 +84,11 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction get_extension
 
-  !> @brief Procedure for setting the extension of a filename.
-  !> @note The leading and trealing spaces are removed from the file name.
   elemental function set_extension(filename,extension) result(newfilename)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for setting the extension of a filename.
+  !<
+  !< @note The leading and trealing spaces are removed from the file name.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   character(len=*), intent(IN)::  filename    !< File name.
@@ -130,8 +113,9 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction set_extension
 
-  !> @brief Procedure for reading a file as single characters stream.
   subroutine read_file_as_stream(pref,iostat,iomsg,delimiter_start,delimiter_end,filename,stream)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for reading a file as single characters stream.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   character(*), optional,        intent(IN)::  pref            !< Prefixing string.
@@ -220,16 +204,16 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine read_file_as_stream
 
-  !> @brief Function for calculating the number of lines (records) of a sequential file.
-  !>@return \b n integer(I4P) variable
   function lc_file(filename) result(n)
   !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for calculating the number of lines (records) of a sequential file.
+  !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  character(*), intent(IN):: filename ! File name.
-  integer(I4P)::             n        ! Number of lines (records).
-  logical(4)::               is_file  ! Inquiring flag.
-  character(11)::            fileform ! File format: FORMATTED or UNFORMATTED.
-  integer(I4P)::             unitfile ! Logic unit.
+  character(*), intent(IN):: filename !< File name.
+  integer(I4P)::             n        !< Number of lines (records).
+  logical(4)::               is_file  !< Inquiring flag.
+  character(11)::            fileform !< File format: FORMATTED or UNFORMATTED.
+  integer(I4P)::             unitfile !< Logic unit.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -261,8 +245,9 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction lc_file
 
-  !> @brief Procedure for printing to stderr a "file not found error".
   function File_Not_Found(stderrpref,filename,cpn) result(err)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for printing to stderr a "file not found error".
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   character(*), optional, intent(IN):: stderrpref !< Prefixing string for stderr outputs.
@@ -284,8 +269,9 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction File_Not_Found
 
-  !> @brief Subroutine for printing to stderr a "directory not found error".
   function Dir_Not_Found(stderrpref,dirname,cpn) result(err)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for printing to stderr a "directory not found error".
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   character(*), optional, intent(IN):: stderrpref !< Prefixing string for stderr outputs.
@@ -307,9 +293,11 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction Dir_Not_Found
 
-  !> @brief Procedure for inquiring the presence of a file.
-  !> @note The leading and trealing spaces are removed from the directory name.
   subroutine inquire_file(cpn,pref,iostat,iomsg,file)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for inquiring the presence of a file.
+  !<
+  !< @note The leading and trealing spaces are removed from the directory name.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   character(*), optional, intent(IN)::  cpn     !< Calling procedure name.
@@ -337,9 +325,11 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine inquire_file
 
-  !> @brief Procedure for inquiring the presence of a directory.
-  !> @note The leading and trealing spaces are removed from the directory name.
   subroutine inquire_dir(cpn,pref,iostat,iomsg,directory)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for inquiring the presence of a directory.
+  !<
+  !< @note The leading and trealing spaces are removed from the directory name.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   character(*), optional, intent(IN)::  cpn       !< Calling procedure name.
@@ -370,5 +360,4 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine inquire_dir
-  !> @}
 endmodule Lib_IO_Misc
