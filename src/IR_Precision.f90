@@ -2,10 +2,11 @@
 module IR_Precision
 !-----------------------------------------------------------------------------------------------------------------------------------
 !< Pure Fortran (2003+) library for ensuring codes portability
+!<{!README-IR_Precision.md!}
 !<
-!< The library makes available many portable kind-parameters and many useful procedures to deal with them.
-!< @note It is worth noting that the library provides procedures to convert a strings to numbers and vice versa, a function to
-!< check the endianism of the running calculator.
+!<### ChangeLog
+!<
+!<{!ChangeLog-IR_Precision.md!}
 !-----------------------------------------------------------------------------------------------------------------------------------
 USE, intrinsic:: ISO_FORTRAN_ENV, only: stdout => OUTPUT_UNIT, stderr => ERROR_UNIT ! Standard output/error logical units.
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -28,6 +29,7 @@ public:: NIknd, RIl, FIl
 public:: check_endian
 public:: bit_size,byte_size
 public:: str, strz, cton, bstr, bcton
+public:: digit
 public:: ir_initialized,IR_Init
 public:: IR_Print
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -220,6 +222,10 @@ interface bcton
                    bctoi_I4P,  &
                    bctoi_I2P,  &
                    bctoi_I1P
+endinterface
+interface digit
+  !< Procedure for computing the number of digits in decimal base of the input integer.
+  module procedure digit_I8,digit_I4,digit_I2,digit_I1
 endinterface
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
@@ -1128,6 +1134,74 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction bctoi_I1P
+
+  elemental function digit_I8(n) result(digit)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for computing the number of digits in decimal base of the input integer.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  integer(I8P), intent(IN):: n     !< Input integer.
+  character(DI8P)::          str   !< Returned string containing input number plus padding zeros.
+  integer(I4P)::             digit !< Number of digits.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  write(str,FI8P) abs(n)         ! Casting of n to string.
+  digit = len_trim(adjustl(str)) ! Calculating the digits number of n.
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction digit_I8
+
+  elemental function digit_I4(n) result(digit)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for computing the number of digits in decimal base of the input integer.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  integer(I4P), intent(IN):: n     !< Input integer.
+  character(DI4P)::          str   !< Returned string containing input number plus padding zeros.
+  integer(I4P)::             digit !< Number of digits.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  write(str,FI4P) abs(n)         ! Casting of n to string.
+  digit = len_trim(adjustl(str)) ! Calculating the digits number of n.
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction digit_I4
+
+  elemental function digit_I2(n) result(digit)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for computing the number of digits in decimal base of the input integer.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  integer(I2P), intent(IN):: n     !< Input integer.
+  character(DI2P)::          str   !< Returned string containing input number plus padding zeros.
+  integer(I4P)::             digit !< Number of digits.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  write(str,FI2P) abs(n)         ! Casting of n to string.
+  digit = len_trim(adjustl(str)) ! Calculating the digits number of n.
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction digit_I2
+
+  elemental function digit_I1(n) result(digit)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for computing the number of digits in decimal base of the input integer.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  integer(I1P), intent(IN):: n     !< Input integer.
+  character(DI1P)::          str   !< Returned string containing input number plus padding zeros.
+  integer(I4P)::             digit !< Number of digits.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  write(str,FI1P) abs(n)         ! Casting of n to string.
+  digit = len_trim(adjustl(str)) ! Calculating the digits number of n.
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction digit_I1
 
   subroutine IR_init()
   !---------------------------------------------------------------------------------------------------------------------------------

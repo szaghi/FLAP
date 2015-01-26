@@ -1,29 +1,34 @@
 !> @ingroup Library
 !> @{
 !> @defgroup Lib_IO_MiscLibrary Lib_IO_Misc
+!> Library of miscellanea procedures for input/output operations.
 !> @}
 
 !> @ingroup Interface
 !> @{
 !> @defgroup Lib_IO_MiscInterface Lib_IO_Misc
+!> Library of miscellanea procedures for input/output operations.
 !> @}
 
 !> @ingroup GlobalVarPar
 !> @{
 !> @defgroup Lib_IO_MiscGlobalVarPar Lib_IO_Misc
+!> Library of miscellanea procedures for input/output operations.
 !> @}
 
 !> @ingroup PublicProcedure
 !> @{
 !> @defgroup Lib_IO_MiscPublicProcedure Lib_IO_Misc
+!> Library of miscellanea procedures for input/output operations.
 !> @}
 
-!> This module contains miscellanea procedures for input/output and strings operations.
+!> Library of miscellanea procedures for input/output operations.
 !> This is a library module.
 !> @ingroup Lib_IO_MiscLibrary
 module Lib_IO_Misc
 !-----------------------------------------------------------------------------------------------------------------------------------
 USE IR_Precision                                                                  ! Integers and reals precision definition.
+USE Lib_Strings                                                                   ! Library for strings operations.
 USE, intrinsic:: ISO_FORTRAN_ENV, only: stdout=>OUTPUT_UNIT, stderr=>ERROR_UNIT,& ! Standard output/error logical units.
                                         IOSTAT_END, IOSTAT_EOR                    ! Standard end-of-file/end-of record parameters.
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -35,28 +40,18 @@ private
 public:: stdout,stderr,iostat_end,iostat_eor
 public:: Get_Unit
 public:: get_extension,set_extension
-public:: inquire_dir
+public:: read_file_as_stream
 public:: lc_file
 public:: File_Not_Found
 public:: Dir_Not_Found
-public:: Upper_Case
-public:: Lower_Case
-public:: tokenize
-public:: tags_match
-public:: unique
-public:: count
+public:: inquire_file
+public:: inquire_dir
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-integer(I4P), public, parameter:: err_file_not_found = 10100 !< File not found error ID.
-!-----------------------------------------------------------------------------------------------------------------------------------
-
-!-----------------------------------------------------------------------------------------------------------------------------------
-!> Overloading intrinsic function count.
-!> @ingroup Lib_IO_MiscInterface
-interface count
-  module procedure count_substring
-endinterface
+!> @ingroup Lib_IO_MiscGlobalVarPar
+integer(I4P), public, parameter:: err_file_not_found      = 20100 !< File not found error ID.
+integer(I4P), public, parameter:: err_directory_not_found = 20101 !< Directory not found error ID.
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
   !> @ingroup Lib_IO_MiscPublicProcedure
@@ -135,45 +130,95 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction set_extension
 
-  !> @brief Function for inquiring the presence of a directory.
-  !> @return \b err integer(I_P) variable for error trapping.
-  !> @note The leading and trealing spaces are removed from the directory name.
-  function inquire_dir(myrank,errmsg,directory) result(err)
+  !> @brief Procedure for reading a file as single characters stream.
+  subroutine read_file_as_stream(pref,iostat,iomsg,delimiter_start,delimiter_end,filename,stream)
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  integer(I4P), intent(IN),  optional:: myrank    !< Actual rank process necessary for concurrent multi-processes calls.
-  character(*), intent(OUT), optional:: errmsg    !< Explanatory message if an I/O error occurs.
-  character(*), intent(IN)::            directory !< Name of the directory that must be created.
-  integer(I4P)::                        err       !< Error trapping flag: 0 no errors, >0 error occurs.
-  integer(I4P)::                        UnitFree  !< Free logic unit.
+  character(*), optional,        intent(IN)::  pref            !< Prefixing string.
+  integer(I4P), optional,        intent(OUT):: iostat          !< IO error.
+  character(*), optional,        intent(OUT):: iomsg           !< IO error message.
+  character(*), optional,        intent(IN)::  delimiter_start !< Delimiter from which start the stream.
+  character(*), optional,        intent(IN)::  delimiter_end   !< Delimiter to which end the stream.
+  character(*),                  intent(IN)::  filename        !< File name.
+  character(len=:), allocatable, intent(OUT):: stream          !< Output string containing the file data as a single stream.
+  logical::                                    is_file         !< Flag for inquiring the presence of the file.
+  integer(I4P)::                               unit            !< Unit file.
+  integer(I4P)::                               iostatd         !< IO error.
+  character(500)::                             iomsgd          !< IO error message.
+  character(len=:), allocatable::              prefd           !< Prefixing string.
+  character(1)::                               c1              !< Single character.
+  character(len=:), allocatable::              string          !< Dummy string.
+  logical::                                    cstart,cend     !< Flag for stream capturing trigging.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  ! Creating a test file in the directory for inquiring its presence.
-  if (present(myrank)) then
-    if (present(errmsg)) then
-      open(unit=Get_Unit(UnitFree),file=adjustl(trim(directory))//'ExiSt.p'//trim(strz(5,myrank)),iostat=err,iomsg=errmsg)
-    else
-      open(unit=Get_Unit(UnitFree),file=adjustl(trim(directory))//'ExiSt.p'//trim(strz(5,myrank)),iostat=err)
-    endif
+  prefd = '' ; if (present(pref)) prefd = pref
+  inquire(file=adjustl(trim(filename)),exist=is_file,iostat=iostatd)
+  if (.not.is_file) then
+    iostat = File_Not_Found(filename=adjustl(trim(filename)),cpn=prefd//'read_file_as_stream')
+    return
+  endif
+  open(unit=Get_Unit(unit),file=adjustl(trim(filename)),access='STREAM',form='UNFORMATTED',iostat=iostatd,iomsg=iomsgd)
+  if (iostatd/=0) then
+    write(stderr,'(A)')prefd//' Opening file '//adjustl(trim(filename))//' some errors occurs!'
+    write(stderr,'(A)')prefd//iomsgd
+    write(stderr,'(A)')prefd//' IOSTAT '//str(n=iostatd)
+    return
+  endif
+  stream = ''
+  if (present(delimiter_start).and.present(delimiter_end)) then
+    string = ''
+    Main_Read_Loop: do
+      read(unit=unit,iostat=iostatd,iomsg=iomsgd,end=10)c1
+      if (c1==delimiter_start(1:1)) then
+        cstart = .true.
+        string = c1
+        Start_Read_Loop: do while(len(string)<len(delimiter_start))
+          read(unit=unit,iostat=iostatd,iomsg=iomsgd,end=10)c1
+          string = string//c1
+          if (.not.(index(string=delimiter_start,substring=string)>0)) then
+            cstart = .false.
+            exit Start_Read_Loop
+          endif
+        enddo Start_Read_Loop
+        if (cstart) then
+          cend = .false.
+          stream = string
+          do while(.not.cend)
+            read(unit=unit,iostat=iostatd,iomsg=iomsgd,end=10)c1
+            if (c1==delimiter_end(1:1)) then ! maybe the end
+              string = c1
+              End_Read_Loop: do while(len(string)<len(delimiter_end))
+                read(unit=unit,iostat=iostatd,iomsg=iomsgd,end=10)c1
+                string = string//c1
+                if (.not.(index(string=delimiter_end,substring=string)>0)) then
+                  stream = stream//string
+                  exit End_Read_Loop
+                elseif (len(string)==len(delimiter_end)) then
+                  cend = .true.
+                  stream = stream//string
+                  exit Main_Read_Loop
+                endif
+              enddo End_Read_Loop
+            else
+              stream = stream//c1
+            endif
+          enddo
+        endif
+      endif
+    enddo Main_Read_Loop
   else
-    if (present(errmsg)) then
-      open(unit=Get_Unit(UnitFree),file=adjustl(trim(directory))//'ExiSt.p'//trim(strz(5,0)),iostat=err,iomsg=errmsg)
-    else
-      open(unit=Get_Unit(UnitFree),file=adjustl(trim(directory))//'ExiSt.p'//trim(strz(5,0)),iostat=err)
-    endif
+    Read_Loop: do
+      read(unit=unit,iostat=iostatd,iomsg=iomsgd,end=10)c1
+      stream = stream//c1
+    enddo Read_Loop
   endif
-  ! Deletig the test file if successfully created.
-  if (err==0_I4P) then
-    if (present(errmsg)) then
-      close(UnitFree,status='DELETE',iomsg=errmsg)
-    else
-      close(UnitFree,status='DELETE')
-    endif
-  endif
+  10 close(unit)
+  if (present(iostat)) iostat = iostatd
+  if (present(iomsg))  iomsg  = iomsgd
   return
   !---------------------------------------------------------------------------------------------------------------------------------
-  endfunction inquire_dir
+  endsubroutine read_file_as_stream
 
   !> @brief Function for calculating the number of lines (records) of a sequential file.
   !>@return \b n integer(I4P) variable
@@ -216,208 +261,6 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction lc_file
 
-  !> @brief The Upper_Case function converts the lower case characters of a string to upper case one.
-  !>@return \b Upper_Case character(*) variable
-  elemental function Upper_Case(string)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  character(len=*), intent(IN):: string     !< String to be converted.
-  character(len=len(string))::   Upper_Case !< Converted string.
-  integer::                      n1         !< Characters counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  Upper_Case = string
-  do n1=1,len(string)
-    select case(ichar(string(n1:n1)))
-    case(97:122)
-      Upper_Case(n1:n1)=char(ichar(string(n1:n1))-32) ! upper case conversion
-    endselect
-  enddo
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endfunction Upper_Case
-
-  !> @brief The Lower_Case function converts the upper case characters of a string to lower case one.
-  !>@return \b Lower_Case character(*) variable
-  elemental function Lower_Case(string)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  character(len=*), intent(IN):: string     !< String to be converted.
-  character(len=len(string))::   Lower_Case !< Converted string.
-  integer::                      n1         !< Characters counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  Lower_Case = string
-  do n1=1,len_trim(string)
-    select case(ichar(string(n1:n1)))
-    case(65:90)
-      Lower_Case(n1:n1)=char(ichar(string(n1:n1))+32) ! lower case conversion
-    endselect
-  enddo
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endfunction Lower_Case
-
-  !> @brief Subroutine for tokenizing a string in order to parse it.
-  !> @note The dummy array containing tokens must allocatable and its character elements must have the same length of the input
-  !> string. If the length of the delimiter is higher than the input string one then the output tokens array is allocated with
-  !> only one element set to char(0).
-  pure subroutine tokenize(strin,delimiter,Nt,toks)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  character(len=*),          intent(IN)::               strin     !< String to be tokenized.
-  character(len=*),          intent(IN)::               delimiter !< Delimiter of tokens.
-  integer(I4P),              intent(OUT), optional::    Nt        !< Number of tokens.
-  character(len=len(strin)), intent(OUT), allocatable:: toks(:)   !< Tokens.
-  character(len=len(strin))::                           strsub    !< Temporary string.
-  integer(I4P)::                                        dlen      !< Delimiter length.
-  integer(I4P)::                                        c,n,t     !< Counters.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  ! initialization
-  if (allocated(toks)) deallocate(toks)
-  strsub = strin
-  dlen = len(delimiter)
-  if (dlen>len(strin)) then
-    allocate(toks(1:1)) ; toks(1) = char(0) ; if (present(Nt)) Nt = 1 ; return
-  endif
-  ! computing the number of tokens
-  n = 1
-  do c=1,len(strsub)-dlen ! loop over string characters
-    if (strsub(c:c+dlen-1)==delimiter) n = n + 1
-  enddo
-  allocate(toks(1:n))
-  ! tokenization
-  do t=1,n ! loop over tokens
-    c = index(strsub,delimiter)
-    if (c>0) then
-      toks(t) = strsub(1:c-1)
-      strsub = strsub(c+dlen:)
-    else
-      toks(t) = strsub
-    endif
-  enddo
-  if (present(Nt)) Nt = n
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine tokenize
-
-  !> @brief Subroutine for parsing a string providing the substrings matching an enclosing pairs tags.
-  !> @note The dummy array containing matching substrings must allocatable and its character elements must have the same length of
-  !> the input string. If the total length of the tags is higher than the input string one then the output substrings array is
-  !> allocated with only one element set to char(0).
-  !> @note Nested tags are not supported.
-  pure subroutine tags_match(strin,tag_start,tag_stop,Ns,match)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  character(len=*),                       intent(IN)::  strin                    !< String to be parsed.
-  character(len=*),                       intent(IN)::  tag_start                !< Starting tag for delimiting matching substrings.
-  character(len=*),                       intent(IN)::  tag_stop                 !< Starting tag for delimiting matching substrings.
-  integer(I4P), optional,                 intent(OUT):: Ns                       !< Number of matching substrings.
-  character(len=len(strin)), allocatable, intent(OUT):: match(:)                 !< Matching substrings.
-  character(len=len(strin)), allocatable::              str_start(:),str_stop(:) !< Temporary strings.
-  integer(I4P)::                                        tlen_start               !< Tag start length.
-  integer(I4P)::                                        tlen_stop                !< Tag stop  length.
-  integer(I4P)::                                        tlen                     !< Tags length.
-  integer(I4P)::                                        n_start,n_stop,c,m       !< Counters.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  ! initialization
-  if (allocated(match)) deallocate(match)
-  tlen_start = len(tag_start)
-  tlen_stop  = len(tag_stop )
-  tlen       = tlen_start + tlen_stop
-  if (tlen>len(strin)) then
-    allocate(match(1:1)) ; match(1) = char(0) ; if (present(Ns)) Ns = 1 ; return
-  endif
-  ! computing the number of matching tags
-  n_start = 0
-  do c=1,len(strin)-tlen_start ! loop over string characters
-    if (strin(c:c+tlen_start-1)==tag_start) n_start = n_start + 1
-  enddo
-  n_stop = 0
-  do c=1,len(strin)-tlen_stop ! loop over string characters
-    if (strin(c:c+tlen_stop-1)==tag_stop) n_stop = n_stop + 1
-  enddo
-  if (n_start/=n_stop) then
-    allocate(match(1:1)) ; match(1) = char(0) ; if (present(Ns)) Ns = 1 ; return
-  else
-    allocate(match(1:n_start))
-    call tokenize(strin=strin,delimiter=tag_start,toks=str_start)
-    do m=1,n_start
-      call tokenize(strin=str_start(m+1),delimiter=tag_stop,toks=str_stop)
-      match(m) = str_stop(1)
-    enddo
-  endif
-  if (present(Ns)) Ns = n_start
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine tags_match
-
-  !> @brief Procedure for reducing to one (unique) multiple (sequential) occurrences of a characters substring into a string.
-  !> For example the string ' ab-cre-cre-ab' is reduce to 'ab-cre-ab' if the substring is '-cre'.
-  !> @note Eventual multiple trailing white space are not reduced to one occurrence.
-  function unique(string,substring) result(uniq)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  character(len=*), intent(IN):: string    !< String to be parsed.
-  character(len=*), intent(IN):: substring !< Substring which multiple occurences must be reduced to one.
-  character(len=len(string))::   uniq      !< String parsed.
-  integer(I4P)::                 Lsub      !< Lenght of substring.
-  integer(I4P)::                 c1,c2     !< Counters.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  uniq = string
-  Lsub=len(substring)
-  if (Lsub>len(string)) return
-  c1 = 1
-  Loop1: do
-    if (c1>=len_trim(uniq)) exit Loop1
-    if (uniq(c1:c1+Lsub-1)==substring.and.uniq(c1+Lsub:c1+2*Lsub-1)==substring) then
-      c2 = c1 + Lsub
-      Loop2: do
-        if (c2>=len_trim(uniq)) exit Loop2
-        if (uniq(c2:c2+Lsub-1)==substring) then
-          c2 = c2 + Lsub
-        else
-          exit Loop2
-        endif
-      enddo Loop2
-      uniq = uniq(1:c1)//uniq(c2:)
-    else
-      c1 = c1 + Lsub
-    endif
-  enddo Loop1
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endfunction unique
-
-  !> @brief Procedure for counting the number of occurences of a substring into a string.
-  elemental function count_substring(string,substring) result(No)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  character(*), intent(IN):: string    !< String.
-  character(*), intent(IN):: substring !< Substring.
-  integer(I4P)::             No        !< Number of occurrences.
-  integer(I4P)::             c1,c2     !< Counters.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  No = 0
-  if (len(substring)>len(string)) return
-  c1 = 1
-  do
-    c2 = index(string=string(c1:),substring=substring)
-    if (c2==0) return
-    No = No + 1
-    c1 = c1 + c2 + len(substring)
-  enddo
-endfunction count_substring
-
   !> @brief Procedure for printing to stderr a "file not found error".
   function File_Not_Found(stderrpref,filename,cpn) result(err)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -442,23 +285,90 @@ endfunction count_substring
   endfunction File_Not_Found
 
   !> @brief Subroutine for printing to stderr a "directory not found error".
-  subroutine Dir_Not_Found(myrank,Nproc,dirname,cpn)
+  function Dir_Not_Found(stderrpref,dirname,cpn) result(err)
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  integer(I4P), intent(IN), optional:: myrank      !< Actual rank process.
-  integer(I4P), intent(IN), optional:: Nproc       !< Number of MPI processes used.
-  character(*), intent(IN)::           dirname     !< Name of directory.
-  character(*), intent(IN)::           cpn         !< Calling procedure name.
-  character(DI4P)::                    rks         !< String containing myrank.
-  integer(I4P)::                       rank=0,Np=1 !< Dummy temporary variables.
+  character(*), optional, intent(IN):: stderrpref !< Prefixing string for stderr outputs.
+  character(*),           intent(IN):: dirname    !< Name of directory.
+  character(*),           intent(IN):: cpn        !< Calling procedure name.
+  integer(I4P)::                       err        !< Error trapping flag: 0 no errors, >0 error occurs.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  if (present(myrank)) rank = myrank ; if (present(Nproc)) Np = Nproc ; rks = 'rank'//trim(strz(Np,rank))
-  write(stderr,'(A)')trim(rks)//' Directory '//adjustl(trim(dirname))//' Not Found!'
-  write(stderr,'(A)')trim(rks)//' Calling procedure "'//adjustl(trim(cpn))//'"'
+  if (present(stderrpref)) then
+    write(stderr,'(A)')stderrpref//' Directory '//adjustl(trim(dirname))//' Not Found!'
+    write(stderr,'(A)')stderrpref//' Calling procedure "'//adjustl(trim(cpn))//'"'
+  else
+    write(stderr,'(A)')            ' Directory '//adjustl(trim(dirname))//' Not Found!'
+    write(stderr,'(A)')            ' Calling procedure "'//adjustl(trim(cpn))//'"'
+  endif
+  err = err_directory_not_found
   return
   !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine Dir_Not_Found
+  endfunction Dir_Not_Found
+
+  !> @brief Procedure for inquiring the presence of a file.
+  !> @note The leading and trealing spaces are removed from the directory name.
+  subroutine inquire_file(cpn,pref,iostat,iomsg,file)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  character(*), optional, intent(IN)::  cpn     !< Calling procedure name.
+  character(*), optional, intent(IN)::  pref    !< Prefixing string.
+  integer(I4P), optional, intent(OUT):: iostat  !< IO error.
+  character(*), optional, intent(OUT):: iomsg   !< IO error message.
+  character(*),           intent(IN)::  file    !< Name of the file.
+  integer(I4P)::                        iostatd !< IO error.
+  character(500)::                      iomsgd  !< IO error message.
+  character(len=:), allocatable::       prefd   !< Prefixing string.
+  character(len=:), allocatable::       cpnd    !< Calling procedure name.
+  logical::                             is_file !< Flag for inquiring the presence of file.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  cpnd  = 'inquire_file' ; if (present(cpn )) cpnd  = cpn
+  prefd = ''             ; if (present(pref)) prefd = pref
+  inquire(file=trim(file),exist=is_file,iomsg=iomsgd)
+  if (.not.is_file) then
+    iostatd = File_Not_Found(stderrpref=prefd,filename=file,cpn=cpnd)
+  endif
+  if (present(iostat)) iostat = iostatd
+  if (present(iomsg))  iomsg  = iomsgd
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine inquire_file
+
+  !> @brief Procedure for inquiring the presence of a directory.
+  !> @note The leading and trealing spaces are removed from the directory name.
+  subroutine inquire_dir(cpn,pref,iostat,iomsg,directory)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  character(*), optional, intent(IN)::  cpn       !< Calling procedure name.
+  character(*), optional, intent(IN)::  pref      !< Prefixing string.
+  integer(I4P), optional, intent(OUT):: iostat    !< IO error.
+  character(*), optional, intent(OUT):: iomsg     !< IO error message.
+  character(*),           intent(IN)::  directory !< Name of the directory.
+  integer(I4P)::                        iostatd   !< IO error.
+  character(500)::                      iomsgd    !< IO error message.
+  character(len=:), allocatable::       prefd     !< Prefixing string.
+  character(len=:), allocatable::       cpnd      !< Calling procedure name.
+  integer(I4P)::                        unit      !< Unit file.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  cpnd  = 'inquire_dir' ; if (present(cpn )) cpnd  = cpn
+  prefd = ''            ; if (present(pref)) prefd = pref
+  ! Creating a test file in the directory for inquiring its presence.
+  open(unit=Get_Unit(unit),file=adjustl(trim(directory))//'ExiSt.'//prefd,iostat=iostatd,iomsg=iomsgd)
+  ! Deletig the test file if successfully created.
+  if (iostatd==0_I4P) then
+    close(unit,status='DELETE',iomsg=iomsgd)
+  else
+    iostatd = Dir_Not_Found(stderrpref=prefd,dirname=directory,cpn=cpnd)
+  endif
+  if (present(iostat)) iostat = iostatd
+  if (present(iomsg))  iomsg  = iomsgd
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine inquire_dir
   !> @}
 endmodule Lib_IO_Misc
