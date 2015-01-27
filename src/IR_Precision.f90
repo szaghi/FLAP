@@ -95,47 +95,58 @@ character(5),  parameter:: FIl(1:NIknd)=[FI8P,FI4P,FI2P//' ',FI1P//' ',FI_P] !< 
 
 ! Useful parameters for handling numbers ranges.
 ! Real min and max values:
-real(R16P), parameter:: MinR16P = -huge(1._R16P), MaxR16P = huge(1._R16P) !< Min and max values of kind=R16P variable.
-real(R8P),  parameter:: MinR8P  = -huge(1._R8P ), MaxR8P  = huge(1._R8P ) !< Min and max values of kind=R8P variable.
-real(R4P),  parameter:: MinR4P  = -huge(1._R4P ), MaxR4P  = huge(1._R4P ) !< Min and max values of kind=R4P variable.
-real(R_P),  parameter:: MinR_P  = MinR8P,         MaxR_P  = MaxR8P        !< Min and max values of kind=R_P variable.
+real(R16P), parameter:: MinR16P = -huge(1._R16P) !< Minimum value of kind=R16P variable.
+real(R16P), parameter:: MaxR16P =  huge(1._R16P) !< Maximum value of kind=R16P variable.
+real(R8P),  parameter:: MinR8P  = -huge(1._R8P ) !< Minimum value of kind=R8P variable.
+real(R8P),  parameter:: MaxR8P  =  huge(1._R8P ) !< Maximum value of kind=R8P variable.
+real(R4P),  parameter:: MinR4P  = -huge(1._R4P ) !< Minimum value of kind=R4P variable.
+real(R4P),  parameter:: MaxR4P  =  huge(1._R4P ) !< Maximum value of kind=R4P variable.
+real(R_P),  parameter:: MinR_P  = MinR8P         !< Minimum value of kind=R_P variable.
+real(R_P),  parameter:: MaxR_P  = MaxR8P         !< Maximum value of kind=R_P variable.
 ! Real number of bits/bytes
-integer(I2P):: BIR16P, BYR16P !< Number of bits/bytes of kind=R16P variable.
-integer(I1P):: BIR8P,  BYR8P  !< Number of bits/bytes of kind=R8P variable.
-integer(I1P):: BIR4P,  BYR4P  !< Number of bits/bytes of kind=R4P variable.
-integer(I1P):: BIR_P,  BYR_P  !< Number of bits/bytes of kind=R_P variable.
+integer(I2P):: BIR16P !< Number of bits of kind=R16P variable.
+integer(I1P):: BIR8P  !< Number of bits of kind=R8P variable.
+integer(I1P):: BIR4P  !< Number of bits of kind=R4P variable.
+integer(I1P):: BIR_P  !< Number of bits of kind=R_P variable.
+integer(I2P):: BYR16P !< Number of bytes of kind=R16P variable.
+integer(I1P):: BYR8P  !< Number of bytes of kind=R8P variable.
+integer(I1P):: BYR4P  !< Number of bytes of kind=R4P variable.
+integer(I1P):: BYR_P  !< Number of bytes of kind=R_P variable.
 ! Real smallest values:
-real(R16P), parameter:: smallR16P = tiny(1._R16P) !< Smallest representable value of kind=R16P variable.
-real(R8P),  parameter:: smallR8P  = tiny(1._R8P ) !< Smallest representable value of kind=R8P variable.
-real(R4P),  parameter:: smallR4P  = tiny(1._R4P ) !< Smallest representable value of kind=R4P variable.
-real(R_P),  parameter:: smallR_P  = smallR8P      !< Smallest representable value of kind=R_P variable.
+real(R16P), parameter:: smallR16P = tiny(1._R16P) !< Smallest (module) representable value of kind=R16P variable.
+real(R8P),  parameter:: smallR8P  = tiny(1._R8P ) !< Smallest (module) representable value of kind=R8P variable.
+real(R4P),  parameter:: smallR4P  = tiny(1._R4P ) !< Smallest (module) representable value of kind=R4P variable.
+real(R_P),  parameter:: smallR_P  = smallR8P      !< Smallest (module) representable value of kind=R_P variable.
 ! Integer min and max values:
-integer(I8P), parameter:: MinI8P = -huge(1_I8P), MaxI8P = huge(1_I8P) !< Min and max values of kind=I8P variable.
-integer(I4P), parameter:: MinI4P = -huge(1_I4P), MaxI4P = huge(1_I4P) !< Min and max values of kind=I4P variable.
-integer(I2P), parameter:: MinI2P = -huge(1_I2P), MaxI2P = huge(1_I2P) !< Min and max values of kind=I2P variable.
-integer(I1P), parameter:: MinI1P = -huge(1_I1P), MaxI1P = huge(1_I1P) !< Min and max values of kind=I1P variable.
-integer(I_P), parameter:: MinI_P = MinI4P,       MaxI_P = MaxI4P      !< Min and max values of kind=I_P variable.
+integer(I8P), parameter:: MinI8P = -huge(1_I8P) !< Minimum value of kind=I8P variable.
+integer(I4P), parameter:: MinI4P = -huge(1_I4P) !< Minimum value of kind=I4P variable.
+integer(I2P), parameter:: MinI2P = -huge(1_I2P) !< Minimum value of kind=I2P variable.
+integer(I1P), parameter:: MinI1P = -huge(1_I1P) !< Minimum value of kind=I1P variable.
+integer(I_P), parameter:: MinI_P = MinI4P       !< Minimum value of kind=I_P variable.
+integer(I8P), parameter:: MaxI8P =  huge(1_I8P) !< Maximum value of kind=I8P variable.
+integer(I4P), parameter:: MaxI4P =  huge(1_I4P) !< Maximum value of kind=I4P variable.
+integer(I2P), parameter:: MaxI2P =  huge(1_I2P) !< Maximum value of kind=I2P variable.
+integer(I1P), parameter:: MaxI1P =  huge(1_I1P) !< Maximum value of kind=I1P variable.
+integer(I_P), parameter:: MaxI_P =  MaxI4P      !< Maximum value of kind=I_P variable.
 ! Integer number of bits/bytes:
-integer(I8P), parameter:: BII8P = bit_size(MaxI8P), BYI8P = bit_size(MaxI8P)/8_I8P !< Number of bits/bytes of kind=I8P variable.
-integer(I4P), parameter:: BII4P = bit_size(MaxI4P), BYI4P = bit_size(MaxI4P)/8_I4P !< Number of bits/bytes of kind=I4P variable.
-integer(I2P), parameter:: BII2P = bit_size(MaxI2P), BYI2P = bit_size(MaxI2P)/8_I2P !< Number of bits/bytes of kind=I2P variable.
-integer(I1P), parameter:: BII1P = bit_size(MaxI1P), BYI1P = bit_size(MaxI1P)/8_I1P !< Number of bits/bytes of kind=I1P variable.
-integer(I_P), parameter:: BII_P = bit_size(MaxI_P), BYI_P = bit_size(MaxI_P)/8_I_P !< Number of bits/bytes of kind=I_P variable.
+integer(I8P), parameter:: BII8P = bit_size(MaxI8P)       !< Number of bits of kind=I8P variable.
+integer(I4P), parameter:: BII4P = bit_size(MaxI4P)       !< Number of bits of kind=I4P variable.
+integer(I2P), parameter:: BII2P = bit_size(MaxI2P)       !< Number of bits of kind=I2P variable.
+integer(I1P), parameter:: BII1P = bit_size(MaxI1P)       !< Number of bits of kind=I1P variable.
+integer(I_P), parameter:: BII_P = bit_size(MaxI_P)       !< Number of bits of kind=I_P variable.
+integer(I8P), parameter:: BYI8P = bit_size(MaxI8P)/8_I8P !< Number of bytes of kind=I8P variable.
+integer(I4P), parameter:: BYI4P = bit_size(MaxI4P)/8_I4P !< Number of bytes of kind=I4P variable.
+integer(I2P), parameter:: BYI2P = bit_size(MaxI2P)/8_I2P !< Number of bytes of kind=I2P variable.
+integer(I1P), parameter:: BYI1P = bit_size(MaxI1P)/8_I1P !< Number of bytes of kind=I1P variable.
+integer(I_P), parameter:: BYI_P = bit_size(MaxI_P)/8_I_P !< Number of bytes of kind=I_P variable.
 ! Smallest real representable difference by the running calculator.
-#ifdef pgf95
-real(R16P), parameter:: ZeroR16 = 0._R16P
-real(R8P),  parameter:: ZeroR8  = 0._R8P
-real(R4P),  parameter:: ZeroR4  = 0._R4P
-#else
 real(R16P), parameter:: ZeroR16 = nearest(1._R16P, 1._R16P) - &
                                   nearest(1._R16P,-1._R16P) !< Smallest representable difference of kind=R16P variable.
 real(R8P),  parameter:: ZeroR8  = nearest(1._R8P, 1._R8P) - &
                                   nearest(1._R8P,-1._R8P)   !< Smallest representable difference of kind=R8P variable.
 real(R4P),  parameter:: ZeroR4  = nearest(1._R4P, 1._R4P) - &
                                   nearest(1._R4P,-1._R4P)   !< Smallest representable difference of kind=R4P variable.
-#endif
 real(R_P),  parameter:: Zero    = ZeroR8                    !< Smallest representable difference of kind=R_P variable.
-!< @}
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------

@@ -126,6 +126,8 @@
       
       <a class="list-group-item" href="../proc/re_match.html#var-ptrim">ptrim</a>
       
+      <a class="list-group-item" href="../proc/re_match.html#var-strim">strim</a>
+      
       <a class="list-group-item" href="../proc/re_match.html#var-p">p</a>
       
       <a class="list-group-item" href="../proc/re_match.html#var-k">k</a>
@@ -135,8 +137,6 @@
       <a class="list-group-item" href="../proc/re_match.html#var-method">method</a>
       
       <a class="list-group-item" href="../proc/re_match.html#var-start">start</a>
-      
-      <a class="list-group-item" href="../proc/re_match.html#var-strim">strim</a>
       
       <a class="list-group-item" href="../proc/re_match.html#var-backslash">backslash</a>
       
@@ -474,7 +474,7 @@ public recursive function re_match(string, pattern)
   
   <td>public</td>
   <td></td><td>::</td>
-  <td><strong>literal</strong></td><td></td><td></td><td></td>
+  <td><strong>literal</strong></td><td></td><td></td><td><p>Dummy string.</p></td>
   
 </tr>
 
@@ -488,77 +488,7 @@ public recursive function re_match(string, pattern)
   
   <td>public</td>
   <td></td><td>::</td>
-  <td><strong>ptrim</strong></td><td></td><td></td><td></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-p"></a>integer,</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>p</strong></td><td></td><td></td><td></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-k"></a>integer,</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>k</strong></td><td></td><td></td><td></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-ll"></a>integer,</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>ll</strong></td><td></td><td></td><td></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-method"></a>integer,</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>method</strong></td><td></td><td></td><td></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-start"></a>integer,</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>start</strong></td><td></td><td></td><td></td>
+  <td><strong>ptrim</strong></td><td></td><td></td><td><p>Trimmed length of pattern.</p></td>
   
 </tr>
 
@@ -572,7 +502,77 @@ public recursive function re_match(string, pattern)
   
   <td>public</td>
   <td></td><td>::</td>
-  <td><strong>strim</strong></td><td></td><td></td><td></td>
+  <td><strong>strim</strong></td><td></td><td></td><td><p>Trimmed length of string.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-p"></a>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>p</strong></td><td></td><td></td><td><p>Counter.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-k"></a>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>k</strong></td><td></td><td></td><td><p>Counter.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-ll"></a>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>ll</strong></td><td></td><td></td><td><p>Counter.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-method"></a>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>method</strong></td><td></td><td></td><td><p>Matching methods: 1=&gt;*, 2=&gt;.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-start"></a>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>start</strong></td><td></td><td></td><td><p>Counder</p></td>
   
 </tr>
 
@@ -586,7 +586,7 @@ public recursive function re_match(string, pattern)
   
   <td>public,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>backslash</strong></td><td> =</td><td>'\'</td><td></td>
+  <td><strong>backslash</strong></td><td> =</td><td>'\'</td><td><p>Character "\".</p></td>
   
 </tr>
 
@@ -600,7 +600,7 @@ public recursive function re_match(string, pattern)
   
   <td>public,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>star</strong></td><td> =</td><td>'*'</td><td></td>
+  <td><strong>star</strong></td><td> =</td><td>'*'</td><td><p>Character "*".</p></td>
   
 </tr>
 
@@ -614,7 +614,7 @@ public recursive function re_match(string, pattern)
   
   <td>public,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>question</strong></td><td> =</td><td>'?'</td><td></td>
+  <td><strong>question</strong></td><td> =</td><td>'?'</td><td><p>Character "?".</p></td>
   
 </tr>
 

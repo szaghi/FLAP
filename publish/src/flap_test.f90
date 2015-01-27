@@ -1,6 +1,6 @@
-!< A testing program for FLAP library, a user-friendly set of Fortran modules for handling flexible Command Line Interface
+!< A testing program for FLAP, Fortran command Line Arguments Parser for poor men
 program FLAP_Test
-!< A testing program for FLAP library, a user-friendly set of Fortran modules for handling flexible Command Line Interface
+!< A testing program for FLAP, Fortran command Line Arguments Parser for poor men
 !<
 !<### Compile
 !< See [compile instructions](https://github.com/szaghi/FLAP/wiki/Download-compile).

@@ -213,7 +213,8 @@
     
     <div class="col-lg-9" id='text'>
     <p>Derived type containing the useful data for handling command line arguments (CLA).</p>
-<p><div class="alert alert-info" role="alert"><h4>Note</h4>If not otherwise declared the action on CLA value is set to "store" a value.</div></p>
+<p><div class="alert alert-info" role="alert"><h4>Note</h4>If not otherwise declared the action on CLA value is set to "store" a value.
+ Procedure for freeing dynamic memory when finalizing.</div></p>
     <br>
     
     <section>
@@ -479,6 +480,13 @@ private  subroutine <a href='../proc/finalize_cla.html'>finalize_cla</a>(cla)
     
   <h3></div>
   
+  <div class="panel-body">
+    
+
+
+    <p>Procedure for freeing dynamic memory.</p>
+  </div>
+  
   <ul class="list-group">
     
       <li class="list-group-item">
@@ -541,6 +549,13 @@ private  subroutine <a href='../proc/free_cla.html'>free_cla</a>(cla)
   <div class="panel-heading codesum"><a class="anchor" name="bp-check"></a><h3>procedure, public :: <strong>check</strong>  => <a href='../proc/check_cla.html'>check_cla</a> 
     
   <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Procedure for checking CLA data consistency.</p>
+  </div>
   
   <ul class="list-group">
     
@@ -634,6 +649,13 @@ private  subroutine <a href='../proc/check_cla.html'>check_cla</a>(cla, pref, er
   <div class="panel-heading codesum"><a class="anchor" name="bp-check_choices"></a><h3>procedure, public :: <strong>check_choices</strong>  => <a href='../proc/check_choices_cla.html'>check_choices_cla</a> 
     
   <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Procedure for checking if CLA value is in allowed choices.</p>
+  </div>
   
   <ul class="list-group">
     
@@ -742,6 +764,13 @@ private  subroutine <a href='../proc/check_choices_cla.html'>check_choices_cla</
   <div class="panel-heading codesum"><a class="anchor" name="bp-get"></a><h3>generic, public :: <strong>get</strong>  => <a href='../proc/get_cla.html'>get_cla</a>, <a href='../proc/get_cla_list.html'>get_cla_list</a> 
     
   <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Procedure for getting CLA value(s).</p>
+  </div>
   
   <ul class="list-group">
     
@@ -947,6 +976,13 @@ private  subroutine <a href='../proc/get_cla_list.html'>get_cla_list</a>(cla, pr
     
   <h3></div>
   
+  <div class="panel-body">
+    
+
+
+    <p>Procedure for printing CLA data with a pretty format.</p>
+  </div>
+  
   <ul class="list-group">
     
       <li class="list-group-item">
@@ -1070,6 +1106,13 @@ private  subroutine <a href='../proc/print_cla.html'>print_cla</a>(cla, pref, io
     
   <h3></div>
   
+  <div class="panel-body">
+    
+
+
+    <p>Procedure for adding CLA signature to the CLI one.</p>
+  </div>
+  
   <ul class="list-group">
     
       <li class="list-group-item">
@@ -1148,6 +1191,13 @@ private  subroutine <a href='../proc/add_signature.html'>add_signature</a>(cla, 
     
   <h3></div>
   
+  <div class="panel-body">
+    
+
+
+    <p>Procedure for CLA assignment overloading.</p>
+  </div>
+  
   <ul class="list-group">
     
       <li class="list-group-item">
@@ -1181,7 +1231,7 @@ private  subroutine <a href='../proc/assign_cla.html'>assign_cla</a>(self1, self
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self1</strong></td><td></td>
+  <td><strong>self1</strong></td><td><p>Left hand side.</p></td>
   
 </tr>
 
@@ -1196,7 +1246,7 @@ private  subroutine <a href='../proc/assign_cla.html'>assign_cla</a>(self1, self
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self2</strong></td><td></td>
+  <td><strong>self2</strong></td><td><p>Rigth hand side.</p></td>
   
 </tr>
 
@@ -1225,6 +1275,13 @@ private  subroutine <a href='../proc/assign_cla.html'>assign_cla</a>(self1, self
   <div class="panel-heading codesum"><a class="anchor" name="bp-get_cla"></a><h3>procedure, private :: <strong>get_cla</strong>  
     
   <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Procedure for getting CLA (single) value from CLAs list parsed.</p>
+  </div>
   
   <ul class="list-group">
     
@@ -1334,6 +1391,13 @@ private  subroutine <a href='../proc/get_cla.html'>get_cla</a>(cla, pref, val, e
     
   <h3></div>
   
+  <div class="panel-body">
+    
+
+
+    <p>Procedure for getting CLA multiple values from CLAs list parsed.</p>
+  </div>
+  
   <ul class="list-group">
     
       <li class="list-group-item">
@@ -1442,6 +1506,13 @@ private  subroutine <a href='../proc/get_cla_list.html'>get_cla_list</a>(cla, pr
     
   <h3></div>
   
+  <div class="panel-body">
+    
+
+
+    <p>Procedure for CLA assignment overloading.</p>
+  </div>
+  
   <ul class="list-group">
     
       <li class="list-group-item">
@@ -1475,7 +1546,7 @@ private  subroutine <a href='../proc/assign_cla.html'>assign_cla</a>(self1, self
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self1</strong></td><td></td>
+  <td><strong>self1</strong></td><td><p>Left hand side.</p></td>
   
 </tr>
 
@@ -1490,7 +1561,7 @@ private  subroutine <a href='../proc/assign_cla.html'>assign_cla</a>(self1, self
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self2</strong></td><td></td>
+  <td><strong>self2</strong></td><td><p>Rigth hand side.</p></td>
   
 </tr>
 

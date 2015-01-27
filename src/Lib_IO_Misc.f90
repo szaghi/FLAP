@@ -28,7 +28,7 @@ integer(I4P), public, parameter:: err_file_not_found      = 20100 !< File not fo
 integer(I4P), public, parameter:: err_directory_not_found = 20101 !< Directory not found error ID.
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
-  integer function Get_Unit(Free_Unit)
+  function Get_Unit(Free_Unit) result(funit)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for obtaining a free logic unit for safely opening a file.
   !<
@@ -42,6 +42,7 @@ contains
   !<```
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
+  integer::                        funit     !< Free logic unit.
   integer, intent(OUT), optional:: Free_Unit !< Free logic unit.
   integer::                        n1        !< Counter.
   integer::                        ios       !< Inquiring flag.
@@ -49,14 +50,15 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  Get_Unit = -1
+  funit = -1
+  if (present(Free_Unit)) Free_Unit = funit
   n1=1
   do
     if ((n1/=stdout).AND.(n1/=stderr)) then
       inquire (unit=n1,opened=lopen,iostat=ios)
       if (ios==0) then
         if (.NOT.lopen) then
-          Get_Unit = n1 ; if (present(Free_Unit)) Free_Unit = Get_Unit
+          funit = n1 ; if (present(Free_Unit)) Free_Unit = funit
           return
         endif
       endif
@@ -132,7 +134,8 @@ contains
   character(len=:), allocatable::              prefd           !< Prefixing string.
   character(1)::                               c1              !< Single character.
   character(len=:), allocatable::              string          !< Dummy string.
-  logical::                                    cstart,cend     !< Flag for stream capturing trigging.
+  logical::                                    cstart          !< Flag for stream capturing trigging.
+  logical::                                    cend            !< Flag for stream capturing trigging.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------

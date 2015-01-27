@@ -256,22 +256,22 @@
 <p>Go to <a href="#top">Top</a></p>
 <h2>Main features</h2>
 <p>FLAP is inspired by the python great module <em>argparse</em>, thus many features are taken from it. Here the main features are listed.</p>
-<ul>
-<li>[x] User-friendly methods for building flexible and effective Command Line Interfaces (CLI);</li>
-<li>[x] comprehensive Command Line Arguments (CLA) support:<ul>
-<li>[x] support optional and non optional CLA;</li>
-<li>[x] support boolean CLA;</li>
-<li>[x] support positional CLA;</li>
-<li>[x] support list of allowable values for defined CLA with automatic consistency check;</li>
-<li>[x] support multiple valued (list of values) CLA;</li>
-<li>[x] self-consistency-check of CLA definition;</li>
+<ul class="checklist">
+<li><input type="checkbox" disabled checked> User-friendly methods for building flexible and effective Command Line Interfaces (CLI);</li>
+<li><input type="checkbox" disabled checked> comprehensive Command Line Arguments (CLA) support:<ul class="checklist">
+<li><input type="checkbox" disabled checked> support optional and non optional CLA;</li>
+<li><input type="checkbox" disabled checked> support boolean CLA;</li>
+<li><input type="checkbox" disabled checked> support positional CLA;</li>
+<li><input type="checkbox" disabled checked> support list of allowable values for defined CLA with automatic consistency check;</li>
+<li><input type="checkbox" disabled checked> support multiple valued (list of values) CLA;</li>
+<li><input type="checkbox" disabled checked> self-consistency-check of CLA definition;</li>
 </ul>
 </li>
-<li>[x] automatic generation of help and usage messages;</li>
-<li>[x] consistency-check of whole CLI definition;</li>
-<li>[x] errors trapping for invalid CLI usage;</li>
-<li>[ ] replicate all the useful features of <em>argparse</em>;</li>
-<li>[ ] implement <a href="https://github.com/docopt/docopt">docopt</a> features.</li>
+<li><input type="checkbox" disabled checked> automatic generation of help and usage messages;</li>
+<li><input type="checkbox" disabled checked> consistency-check of whole CLI definition;</li>
+<li><input type="checkbox" disabled checked> errors trapping for invalid CLI usage;</li>
+<li><input type="checkbox" disabled> replicate all the useful features of <em>argparse</em>;</li>
+<li><input type="checkbox" disabled> implement <a href="https://github.com/docopt/docopt">docopt</a> features.</li>
 </ul>
 <p>Any feature request is welcome.</p>
 <p>Go to <a href="#top">Top</a></p>
@@ -695,34 +695,34 @@
       <tbody>
       
        <tr><td>procedure, public :: <strong>free</strong>  => free_cla </td>
-       <td></td></tr>
+       <td><p>Procedure for freeing dynamic memory.</p></td></tr>
       
        <tr><td>procedure, public :: <strong>check</strong>  => check_cla </td>
-       <td></td></tr>
+       <td><p>Procedure for checking CLA data consistency.</p></td></tr>
       
        <tr><td>procedure, public :: <strong>check_choices</strong>  => check_choices_cla </td>
-       <td></td></tr>
+       <td><p>Procedure for checking if CLA value is in allowed choices.</p></td></tr>
       
        <tr><td>generic, public :: <strong>get</strong>  => get_cla, get_cla_list </td>
-       <td></td></tr>
+       <td><p>Procedure for getting CLA value(s).</p></td></tr>
       
        <tr><td>procedure, public :: <strong>print</strong>  => print_cla </td>
-       <td></td></tr>
+       <td><p>Procedure for printing CLA data with a pretty format.</p></td></tr>
       
        <tr><td>procedure, public :: <strong>add_signature</strong>  </td>
-       <td></td></tr>
+       <td><p>Procedure for adding CLA signature to the CLI one.</p></td></tr>
       
        <tr><td>generic, public :: <strong>assignment(=)</strong>  => assign_cla </td>
-       <td></td></tr>
+       <td><p>Procedure for CLA assignment overloading.</p></td></tr>
       
        <tr><td>procedure, private :: <strong>get_cla</strong>  </td>
-       <td></td></tr>
+       <td><p>Procedure for getting CLA (single) value from CLAs list parsed.</p></td></tr>
       
        <tr><td>procedure, private :: <strong>get_cla_list</strong>  </td>
-       <td></td></tr>
+       <td><p>Procedure for getting CLA multiple values from CLAs list parsed.</p></td></tr>
       
        <tr><td>procedure, private, pass(self1) :: <strong>assign_cla</strong>  </td>
-       <td></td></tr>
+       <td><p>Procedure for CLA assignment overloading.</p></td></tr>
       
        </tbody>
        </table>
@@ -903,37 +903,37 @@
       <tbody>
       
        <tr><td>procedure, public :: <strong>free</strong>  </td>
-       <td></td></tr>
+       <td><p>Procedure for freeing dynamic memory.</p></td></tr>
       
        <tr><td>procedure, public :: <strong>init</strong>  </td>
-       <td></td></tr>
+       <td><p>Procedure for initializing CLI.</p></td></tr>
       
        <tr><td>procedure, public :: <strong>add</strong>  </td>
-       <td></td></tr>
+       <td><p>Procedure for adding CLA to CLAs list.</p></td></tr>
       
        <tr><td>procedure, public :: <strong>check</strong>  </td>
-       <td></td></tr>
+       <td><p>Procedure for checking CLAs data consistenc.</p></td></tr>
       
        <tr><td>procedure, public :: <strong>passed</strong>  </td>
-       <td></td></tr>
+       <td><p>Procedure for checking if a CLA has been passed.</p></td></tr>
       
        <tr><td>procedure, public :: <strong>parse</strong>  </td>
-       <td></td></tr>
+       <td><p>Procedure for parsing Command Line Interfaces.</p></td></tr>
       
        <tr><td>generic, public :: <strong>get</strong>  => get_cla_cli, get_cla_list_cli </td>
-       <td></td></tr>
+       <td><p>Procedure for getting CLA value(s) from CLAs list parsed.</p></td></tr>
       
        <tr><td>generic, public :: <strong>assignment(=)</strong>  => assign_cli </td>
-       <td></td></tr>
+       <td><p>Procedure for CLI assignment overloading.</p></td></tr>
       
        <tr><td>procedure, private :: <strong>get_cla_cli</strong>  </td>
-       <td></td></tr>
+       <td><p>Procedure for getting CLA (single) value from CLAs list parsed.</p></td></tr>
       
        <tr><td>procedure, private :: <strong>get_cla_list_cli</strong>  </td>
-       <td></td></tr>
+       <td><p>Procedure for getting CLA multiple values from CLAs list parsed.</p></td></tr>
       
        <tr><td>procedure, private, pass(self1) :: <strong>assign_cli</strong>  </td>
-       <td></td></tr>
+       <td><p>Procedure for CLI assignment overloading.</p></td></tr>
       
        </tbody>
        </table>
@@ -943,7 +943,8 @@
        
 
 
-       <p>Derived type implementing a flexible Command Line Interface (CLI).</p>
+       <p>Derived type implementing a flexible Command Line Interface (CLI).
+ Procedure for freeing dynamic memory when finalizing.</p>
      
   </div>
 </div>
@@ -1763,7 +1764,7 @@ private  subroutine <a href='../proc/assign_cla.html'>assign_cla</a>(self1, self
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self1</strong></td><td></td>
+  <td><strong>self1</strong></td><td><p>Left hand side.</p></td>
   
 </tr>
 
@@ -1778,7 +1779,7 @@ private  subroutine <a href='../proc/assign_cla.html'>assign_cla</a>(self1, self
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self2</strong></td><td></td>
+  <td><strong>self2</strong></td><td><p>Rigth hand side.</p></td>
   
 </tr>
 
@@ -2729,7 +2730,7 @@ private  subroutine <a href='../proc/assign_cli.html'>assign_cli</a>(self1, self
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self1</strong></td><td></td>
+  <td><strong>self1</strong></td><td><p>Left hand side.</p></td>
   
 </tr>
 
@@ -2744,7 +2745,7 @@ private  subroutine <a href='../proc/assign_cli.html'>assign_cli</a>(self1, self
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self2</strong></td><td></td>
+  <td><strong>self2</strong></td><td><p>Right hand side.</p></td>
   
 </tr>
 
