@@ -6,6 +6,7 @@ summary: Fortran command Line Arguments Parser for poor men
 author: Stefano Zaghi
 github: https://github.com/szaghi
 email: stefano.zaghi@gmail.com
+md_extensions: markdown_checklist.extension
 docmark: <
 display: public
          protected

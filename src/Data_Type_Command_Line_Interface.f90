@@ -43,19 +43,19 @@ type:: Type_Command_Line_Argument
   character(len=:), allocatable:: choices            !< List (comma separated) of allowable values for the argument.
   character(len=:), allocatable:: val                !< CLA value.
   contains
-    procedure:: free          => free_cla             ! Procedure for freeing dynamic memory.
-    procedure:: check         => check_cla            ! Procedure for checking CLA data consistency.
-    procedure:: check_choices => check_choices_cla    ! Procedure for checking if CLA value is in allowed choices.
-    generic::   get           => get_cla,get_cla_list ! Procedure for getting CLA value(s).
-    procedure:: print         => print_cla            ! Procedure for printing CLA data with a pretty format.
-    procedure:: add_signature                         ! Procedure for adding CLA signature to the CLI one.
-    final::     finalize_cla                          ! Procedure for freeing dynamic memory when finalizing.
+    procedure:: free          => free_cla             !< Procedure for freeing dynamic memory.
+    procedure:: check         => check_cla            !< Procedure for checking CLA data consistency.
+    procedure:: check_choices => check_choices_cla    !< Procedure for checking if CLA value is in allowed choices.
+    generic::   get           => get_cla,get_cla_list !< Procedure for getting CLA value(s).
+    procedure:: print         => print_cla            !< Procedure for printing CLA data with a pretty format.
+    procedure:: add_signature                         !< Procedure for adding CLA signature to the CLI one.
+    final::     finalize_cla                          !< Procedure for freeing dynamic memory when finalizing.
     ! operators overloading
-    generic:: assignment(=) => assign_cla
+    generic:: assignment(=) => assign_cla             !< Procedure for CLA assignment overloading.
     ! private procedures
-    procedure,              private:: get_cla
-    procedure,              private:: get_cla_list
-    procedure, pass(self1), private:: assign_cla
+    procedure,              private:: get_cla         !< Procedure for getting CLA (single) value from CLAs list parsed.
+    procedure,              private:: get_cla_list    !< Procedure for getting CLA multiple values from CLAs list parsed.
+    procedure, pass(self1), private:: assign_cla      !< Procedure for CLA assignment overloading.
 endtype Type_Command_Line_Argument
 type, public:: Type_Command_Line_Interface
   !< Derived type implementing a flexible Command Line Interface (CLI).
@@ -69,25 +69,26 @@ type, public:: Type_Command_Line_Interface
   character(len=:), allocatable::                 examples(:)         !< Examples of correct usage.
   logical::                                       disable_hv = .false.!< Disable automatic inserting of 'help' and 'version' CLAs.
   contains
-    procedure:: free                                ! Procedure for freeing dynamic memory.
-    procedure:: init                                ! Procedure for initializing CLI.
-    procedure:: add                                 ! Procedure for adding CLA to CLAs list.
-    procedure:: check                               ! Procedure for checking CLAs data consistenc.
-    procedure:: passed                              ! Procedure for checking if a CLA has been passed.
-    procedure:: parse                               ! Procedure for parsing Command Line Interfaces.
-    generic::   get => get_cla_cli,get_cla_list_cli ! Procedure for getting CLA value(s) from CLAs list parsed.
-    final::     finalize                            ! Procedure for freeing dynamic memory when finalizing.
+    procedure:: free                                   !< Procedure for freeing dynamic memory.
+    procedure:: init                                   !< Procedure for initializing CLI.
+    procedure:: add                                    !< Procedure for adding CLA to CLAs list.
+    procedure:: check                                  !< Procedure for checking CLAs data consistenc.
+    procedure:: passed                                 !< Procedure for checking if a CLA has been passed.
+    procedure:: parse                                  !< Procedure for parsing Command Line Interfaces.
+    generic::   get => get_cla_cli,get_cla_list_cli    !< Procedure for getting CLA value(s) from CLAs list parsed.
+    final::     finalize                               !< Procedure for freeing dynamic memory when finalizing.
     ! operators overloading
-    generic:: assignment(=) => assign_cli
+    generic:: assignment(=) => assign_cli              !< Procedure for CLI assignment overloading.
     ! private procedures
-    procedure,              private:: get_cla_cli
-    procedure,              private:: get_cla_list_cli
-    procedure, pass(self1), private:: assign_cli
+    procedure,              private:: get_cla_cli      !< Procedure for getting CLA (single) value from CLAs list parsed.
+    procedure,              private:: get_cla_list_cli !< Procedure for getting CLA multiple values from CLAs list parsed.
+    procedure, pass(self1), private:: assign_cli       !< Procedure for CLI assignment overloading.
 endtype Type_Command_Line_Interface
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
   ! Type_Command_Line_Argument procedures
   elemental subroutine free_cla(cla)
+  !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for freeing dynamic memory.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
@@ -108,6 +109,7 @@ contains
   endsubroutine free_cla
 
   elemental subroutine finalize_cla(cla)
+  !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for freeing dynamic memory when finalizing.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
@@ -121,6 +123,7 @@ contains
   endsubroutine finalize_cla
 
   subroutine check_cla(cla,pref,error)
+  !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for checking CLA data consistency.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
@@ -157,6 +160,7 @@ contains
   endsubroutine check_cla
 
   subroutine check_choices_cla(cla,val,pref,error)
+  !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for checking if CLA value is in allowed choices.
   !<
   !< @note This procedure can be called if and only if cla%choices has been allocated.
@@ -234,6 +238,7 @@ contains
   endsubroutine check_choices_cla
 
   subroutine get_cla(cla,pref,val,error)
+  !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for getting CLA (single) value.
   !<
   !< @note For logical type CLA the value is directly read without any robust error trapping.
@@ -348,6 +353,7 @@ contains
   endsubroutine get_cla
 
   subroutine get_cla_list(cla,pref,val,error)
+  !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for getting CLA (multiple) value.
   !<
   !< @note For logical type CLA the value is directly read without any robust error trapping.
@@ -538,6 +544,7 @@ contains
   endsubroutine get_cla_list
 
   subroutine print_cla(cla,pref,iostat,iomsg,unit)
+  !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for printing CLA data with a pretty format.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
@@ -620,12 +627,14 @@ contains
   endsubroutine print_cla
 
   subroutine add_signature(cla,signature)
+  !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for adding CLA signature to the CLI one.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Argument), intent(IN)::    cla       !< CLA data.
   character(len=:), allocatable,     intent(INOUT):: signature !< CLI signature.
-  character(len=:), allocatable::                    signd,sig !< Temporary CLI signatures.
+  character(len=:), allocatable::                    signd     !< Temporary CLI signature.
+  character(len=:), allocatable::                    sig       !< Temporary CLI signature.
   integer(I4P)::                                     nargs     !< Number of arguments consumed by CLA.
   integer(I4P)::                                     a         !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -673,11 +682,12 @@ contains
 
   ! Assignment (=)
   elemental subroutine assign_cla(self1,self2)
+  !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for assignment between two selfs.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  class(Type_Command_Line_Argument), intent(INOUT):: self1
-  type(Type_Command_Line_Argument),  intent(IN)::    self2
+  class(Type_Command_Line_Argument), intent(INOUT):: self1 !< Left hand side.
+  type(Type_Command_Line_Argument),  intent(IN)::    self2 !< Rigth hand side.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -699,6 +709,7 @@ contains
 
   ! Type_Command_Line_Interface procedures
   elemental subroutine free(cli)
+  !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for freeing dynamic memory.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
@@ -728,6 +739,7 @@ contains
   endsubroutine finalize
 
   pure subroutine init(cli,progname,version,help,examples,disable_hv)
+  !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for initializing CLI.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
@@ -753,6 +765,7 @@ contains
   endsubroutine init
 
   subroutine add(cli,pref,switch,switch_ab,help,required,positional,position,act,def,nargs,choices,error)
+  !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for adding CLA to CLAs list.
   !<
   !< @note If not otherwise declared the action on CLA value is set to "store" a value that must be passed after the switch name
@@ -825,6 +838,7 @@ contains
   endsubroutine add
 
   subroutine check(cli,pref,error)
+  !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for checking CLAs data consistency.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
@@ -832,7 +846,8 @@ contains
   character(*), optional,             intent(IN)::  pref  !< Prefixing string.
   integer(I4P),                       intent(OUT):: error !< Error trapping flag.
   character(len=:), allocatable::                   prefd !< Prefixing string.
-  integer(I4P)::                                    a,aa  !< CLA counters.
+  integer(I4P)::                                    a     !< CLA counter.
+  integer(I4P)::                                    aa    !< CLA counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -861,6 +876,7 @@ contains
   endsubroutine check
 
   pure function passed(cli,switch,position)
+  !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for checking if a CLA has been passed.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
@@ -888,6 +904,7 @@ contains
   endfunction passed
 
   subroutine parse(cli,pref,error)
+  !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for parsing Command Line Interfaces by means of a previously initialized CLA list.
   !<
   !< @note The leading and trailing white spaces are removed from CLA values.
@@ -902,7 +919,9 @@ contains
   logical::                                           found          !< Flag for checking if switch has been found in cli%cla.
   character(len=:), allocatable::                     prefd          !< Prefixing string.
   integer(I4P)::                                      nargs          !< Number of arguments consumed by a CLA.
-  integer(I4P)::                                      a,aa,aaa       !< Counter for command line arguments.
+  integer(I4P)::                                      a              !< Counter for command line arguments.
+  integer(I4P)::                                      aa             !< Counter for command line arguments.
+  integer(I4P)::                                      aaa            !< Counter for command line arguments.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1022,6 +1041,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   contains
     subroutine print_usage
+    !-------------------------------------------------------------------------------------------------------------------------------
     !< Procedure for printing the correct use Command Line Interface accordingly to the cli%cla passed.
     !-------------------------------------------------------------------------------------------------------------------------------
     character(len=:), allocatable:: cla_list_sign !< Complete signature of CLA list.
@@ -1049,6 +1069,7 @@ contains
     endsubroutine print_usage
 
     subroutine print_version
+    !-------------------------------------------------------------------------------------------------------------------------------
     !< Procedure for printing the correct use Command Line Interface accordingly to the cli%cla passed.
     !-------------------------------------------------------------------------------------------------------------------------------
     character(len=:), allocatable:: cla_list_sign !< Complete signature of CLA list.
@@ -1062,6 +1083,7 @@ contains
   endsubroutine parse
 
   subroutine get_cla_cli(cli,pref,switch,position,val,error)
+  !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for getting CLA (single) value from CLAs list parsed.
   !<
   !< @note For logical type CLA the value is directly read without any robust error trapping.
@@ -1108,6 +1130,7 @@ contains
   endsubroutine get_cla_cli
 
   subroutine get_cla_list_cli(cli,pref,switch,position,val,error)
+  !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for getting CLA multiple values from CLAs list parsed.
   !<
   !< @note For logical type CLA the value is directly read without any robust error trapping.
@@ -1155,11 +1178,12 @@ contains
 
   ! Assignment (=)
   elemental subroutine assign_cli(self1,self2)
+  !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for assignment between two selfs.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  class(Type_Command_Line_Interface), intent(INOUT):: self1
-  type(Type_Command_Line_Interface),  intent(IN)::    self2
+  class(Type_Command_Line_Interface), intent(INOUT):: self1 !< Left hand side.
+  type(Type_Command_Line_Interface),  intent(IN)::    self2 !< Right hand side.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------

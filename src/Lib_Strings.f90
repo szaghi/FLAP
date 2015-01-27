@@ -22,13 +22,13 @@ public:: count
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-character(len=26), parameter, private :: upper_alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-character(len=26), parameter, private :: lower_alphabet = 'abcdefghijklmnopqrstuvwxyz'
+character(len=26), parameter, private :: upper_alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' !< Upper case alphabet.
+character(len=26), parameter, private :: lower_alphabet = 'abcdefghijklmnopqrstuvwxyz' !< Lower case alphabet.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 interface count
-  !< Overloading intrinsic function count.
+  !< Overloading intrinsic function count for counting substring occurences into strings.
   module procedure count_substring
 endinterface
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -41,20 +41,20 @@ contains
   !< @note Trailing blanks are ignored.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  character(len=*), intent(in):: string  !< Input string.
-  character(len=*), intent(in):: pattern !< Pattern to search for.
-  logical::                      match   !< Match or not.
-  character(len=len(pattern))::  literal
-  integer::                      ptrim
-  integer::                      p
-  integer::                      k
-  integer::                      ll
-  integer::                      method
-  integer::                      start
-  integer::                      strim
-  character(len=1), parameter::  backslash = '\\'
-  character(len=1), parameter::  star      = '*'
-  character(len=1), parameter::  question  = '?'
+  character(len=*), intent(in):: string           !< Input string.
+  character(len=*), intent(in):: pattern          !< Pattern to search for.
+  logical::                      match            !< Match or not.
+  character(len=len(pattern))::  literal          !< Dummy string.
+  integer::                      ptrim            !< Trimmed length of pattern.
+  integer::                      strim            !< Trimmed length of string.
+  integer::                      p                !< Counter.
+  integer::                      k                !< Counter.
+  integer::                      ll               !< Counter.
+  integer::                      method           !< Matching methods: 1=>*, 2=>\.
+  integer::                      start            !< Counder
+  character(len=1), parameter::  backslash = '\\' !< Character "\".
+  character(len=1), parameter::  star      = '*'  !< Character "*".
+  character(len=1), parameter::  question  = '?'  !< Character "?".
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -135,7 +135,8 @@ contains
   implicit none
   character(len=*), intent(IN):: string     !< String to be converted.
   character(len=len(string))::   Upper_Case !< Converted string.
-  integer::                      n1,n2      !< Characters counters.
+  integer::                      n1         !< Characters counter.
+  integer::                      n2         !< Characters counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -155,7 +156,8 @@ contains
   implicit none
   character(len=*), intent(IN):: string     !< String to be converted.
   character(len=len(string))::   Lower_Case !< Converted string.
-  integer::                      n1,n2      !< Characters counters.
+  integer::                      n1         !< Characters counter.
+  integer::                      n2         !< Characters counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -251,7 +253,9 @@ contains
   character(len=len(strin)), intent(OUT), allocatable:: toks(:)   !< Tokens.
   character(len=len(strin))::                           strsub    !< Temporary string.
   integer(I4P)::                                        dlen      !< Delimiter length.
-  integer(I4P)::                                        c,n,t     !< Counters.
+  integer(I4P)::                                        c         !< Counter.
+  integer(I4P)::                                        n         !< Counter.
+  integer(I4P)::                                        t         !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -293,16 +297,20 @@ contains
   !< @note Nested tags are not supported.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  character(len=*),                       intent(IN)::  strin                    !< String to be parsed.
-  character(len=*),                       intent(IN)::  tag_start                !< Starting tag for delimiting matching substrings.
-  character(len=*),                       intent(IN)::  tag_stop                 !< Starting tag for delimiting matching substrings.
-  integer(I4P), optional,                 intent(OUT):: Ns                       !< Number of matching substrings.
-  character(len=len(strin)), allocatable, intent(OUT):: match(:)                 !< Matching substrings.
-  character(len=len(strin)), allocatable::              str_start(:),str_stop(:) !< Temporary strings.
-  integer(I4P)::                                        tlen_start               !< Tag start length.
-  integer(I4P)::                                        tlen_stop                !< Tag stop  length.
-  integer(I4P)::                                        tlen                     !< Tags length.
-  integer(I4P)::                                        n_start,n_stop,c,m       !< Counters.
+  character(len=*),                       intent(IN)::  strin        !< String to be parsed.
+  character(len=*),                       intent(IN)::  tag_start    !< Starting tag for delimiting matching substrings.
+  character(len=*),                       intent(IN)::  tag_stop     !< Starting tag for delimiting matching substrings.
+  integer(I4P), optional,                 intent(OUT):: Ns           !< Number of matching substrings.
+  character(len=len(strin)), allocatable, intent(OUT):: match(:)     !< Matching substrings.
+  character(len=len(strin)), allocatable::              str_start(:) !< Temporary string.
+  character(len=len(strin)), allocatable::              str_stop(:)  !< Temporary string.
+  integer(I4P)::                                        tlen_start   !< Tag start length.
+  integer(I4P)::                                        tlen_stop    !< Tag stop  length.
+  integer(I4P)::                                        tlen         !< Tags length.
+  integer(I4P)::                                        n_start      !< Counters.
+  integer(I4P)::                                        n_stop       !< Counters.
+  integer(I4P)::                                        c            !< Counters.
+  integer(I4P)::                                        m            !< Counters.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -350,7 +358,8 @@ contains
   character(len=*), intent(IN):: substring !< Substring which multiple occurences must be reduced to one.
   character(len=len(string))::   uniq      !< String parsed.
   integer(I4P)::                 Lsub      !< Lenght of substring.
-  integer(I4P)::                 c1,c2     !< Counters.
+  integer(I4P)::                 c1        !< Counter.
+  integer(I4P)::                 c2        !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -387,7 +396,8 @@ contains
   character(*), intent(IN):: string    !< String.
   character(*), intent(IN):: substring !< Substring.
   integer(I4P)::             No        !< Number of occurrences.
-  integer(I4P)::             c1,c2     !< Counters.
+  integer(I4P)::             c1        !< Counters.
+  integer(I4P)::             c2        !< Counters.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   No = 0
