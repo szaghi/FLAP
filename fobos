@@ -1,133 +1,192 @@
 [modes]
-modes = shared static flap-test
-        shared-debug static-debug flap-test-debug
+modes = shared-gnu static-gnu flap-test-gnu
+        shared-gnu-debug static-gnu-debug flap-test-gnu-debug
+        shared-intel static-intel flap-test-intel
+        shared-intel-debug static-intel-debug flap-test-intel-debug
 
 [common-variables]
-$CFLAGS_SHARED = -cpp -c -assume realloc_lhs -fpic
-$CFLAGS_STATIC = -cpp -c -assume realloc_lhs
-$LFLAGS_SHARED = -shared
-$DEBUG         = -O0 -debug all -check all -warn all -traceback
-$OPTIMIZE      = -O3
+$CSHARED_GNU = -cpp -c -fPIC -frealloc-lhs
+$CSHARED_INT = -cpp -c -fpic -assume realloc_lhs
+$LSHARED     = -shared
+$CSTATIC_GNU = -cpp -c -frealloc-lhs
+$CSTATIC_INT = -cpp -c -assume realloc_lhs
+$DEBUG_GNU   = -O0 -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -Wuninitialized -fcheck=all -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan -std=f2003 -fall-intrinsics
+$DEBUG_INT   = -O0 -debug all -check all -warn all -extend-source 132 -traceback -gen-interfaces#-fpe-all=0 -fp-stack-check -fstack-protector-all -ftrapuv -no-ftz -std03
+$OPTIMIZE    = -O2
 
 # main modes
-[shared]
-template = template-shared
+[shared-gnu]
+template  = template-shared-gnu
+target    = src/Data_Type_Command_Line_Interface.f90
+build_dir = ./shared/
+output    = FLAP.so
+mklib     = shared
+
+[static-gnu]
+template  = template-static-gnu
+target    = src/Data_Type_Command_Line_Interface.f90
+build_dir = ./static/
+output    = FLAP.a
+mklib     = static
+
+[flap-test-gnu]
+template = template-static-gnu
+target   = src/flap_test.f90
+build_dir = ./flap_test/
+output   = flap_test
+
+[shared-gnu-debug]
+template = template-shared-gnu-debug
 target   = src/Data_Type_Command_Line_Interface.f90
 output   = FLAP.so
 mklib    = shared
 
-[static]
-template = template-static
+[static-gnu-debug]
+template = template-static-gnu-debug
 target   = src/Data_Type_Command_Line_Interface.f90
 output   = FLAP.a
 mklib    = static
 
-[flap-test]
-template = template-flap-test
+[flap-test-gnu-debug]
+template  = template-static-gnu-debug
+target    = src/flap_test.f90
+build_dir = ./flap_test/
+output    = flap_test
+
+[shared-intel]
+template  = template-shared-intel
+target    = src/Data_Type_Command_Line_Interface.f90
+build_dir = ./shared/
+output    = FLAP.so
+mklib     = shared
+
+[static-intel]
+template  = template-static-intel
+target    = src/Data_Type_Command_Line_Interface.f90
+build_dir = ./static/
+output    = FLAP.a
+mklib     = static
+
+[flap-test-intel]
+template = template-static-intel
 target   = src/flap_test.f90
+build_dir = ./flap_test/
 output   = flap_test
 
-[shared-debug]
-template = template-shared-debug
+[shared-intel-debug]
+template = template-shared-intel-debug
 target   = src/Data_Type_Command_Line_Interface.f90
 output   = FLAP.so
 mklib    = shared
 
-[static-debug]
-template = template-static-debug
+[static-intel-debug]
+template = template-static-intel-debug
 target   = src/Data_Type_Command_Line_Interface.f90
 output   = FLAP.a
 mklib    = static
 
-[flap-test-debug]
-template = template-flap-test-debug
-target   = src/flap_test.f90
-output   = flap_test
+[flap-test-intel-debug]
+template  = template-static-intel-debug
+target    = src/flap_test.f90
+build_dir = ./flap_test/
+output    = flap_test
 
 #templates
-[template-shared]
-help      = Shared Library
-compiler  = intel
-cflags    = $CFLAGS_SHARED $OPTIMIZE
-lflags    = $LFLAGS_SHARED $OPTIMIZE
-mod_dir   = ./mod/
-obj_dir   = ./obj/
-build_dir = ./shared/
-src       = ./src/
-colors    = True
-quiet     = False
-log       = True
-jobs      = 2
+[template-shared-gnu]
+compiler = gnu
+cflags   = $CSHARED_GNU $OPTIMIZE
+lflags   = $LSHARED_GNU $OPTIMIZE
+mod_dir  = ./mod/
+obj_dir  = ./obj/
+src      = ./src/
+colors   = True
+quiet    = False
+log      = True
+jobs     = 2
 
-[template-static]
-help      = Static Library
-compiler  = intel
-cflags    = $CFLAGS_STATIC $OPTIMIZE
-lflags    =                $OPTIMIZE
-mod_dir   = ./mod/
-obj_dir   = ./obj/
-build_dir = ./static/
-src       = ./src/
-colors    = True
-quiet     = False
-log       = True
-jobs      = 2
+[template-static-gnu]
+compiler = gnu
+cflags   = $CSTATIC_GNU $OPTIMIZE
+lflags   = $OPTIMIZE
+mod_dir  = ./mod/
+obj_dir  = ./obj/
+src      = ./src/
+colors   = True
+quiet    = False
+log      = True
+jobs     = 2
 
-[template-flap-test]
-help      = Test Driver Program
-compiler  = intel
-cflags    = $CFLAGS_STATIC $OPTIMIZE
-lflags    =                $OPTIMIZE
-mod_dir   = ./mod/
-obj_dir   = ./obj/
-build_dir = ./flap_test/
-src       = ./src/
-colors    = True
-quiet     = False
-log       = True
-jobs      = 2
+[template-shared-gnu-debug]
+compiler = gnu
+cflags   = $CSHARED_GNU $DEBUG_GNU
+lflags   = $LSHARED_GNU $DEBUG_GNU
+mod_dir  = ./mod/
+obj_dir  = ./obj/
+src      = ./src/
+colors   = True
+quiet    = False
+log      = True
+jobs     = 2
 
-[template-shared-debug]
-help      = Shared Library in debug mode
-compiler  = intel
-cflags    = $CFLAGS_SHARED $DEBUG
-lflags    = $LFLAGS_SHARED $DEBUG
-mod_dir   = ./mod/
-obj_dir   = ./obj/
-build_dir = ./shared/
-src       = ./src/
-colors    = True
-quiet     = False
-log       = True
-jobs      = 2
+[template-static-gnu-debug]
+compiler = gnu
+cflags   = $CSTATIC_GNU $DEBUG_GNU
+lflags   = $DEBUG_GNU
+mod_dir  = ./mod/
+obj_dir  = ./obj/
+src      = ./src/
+colors   = True
+quiet    = False
+log      = True
+jobs     = 2
 
-[template-static-debug]
-help      = Static Library in debug mode
-compiler  = intel
-cflags    = $CFLAGS_STATIC $DEBUG
-lflags    =                $DEBUG
-mod_dir   = ./mod/
-obj_dir   = ./obj/
-build_dir = ./static/
-src       = ./src/
-colors    = True
-quiet     = False
-log       = True
-jobs      = 2
+[template-shared-intel]
+compiler = intel
+cflags   = $CSHARED_INT $OPTIMIZE
+lflags   = $LSHARED_INT $OPTIMIZE
+mod_dir  = ./mod/
+obj_dir  = ./obj/
+src      = ./src/
+colors   = True
+quiet    = False
+log      = True
+jobs     = 2
 
-[template-flap-test-debug]
-help      = Test Driver Program in debug mode
-compiler  = intel
-cflags    = $CFLAGS_STATIC $DEBUG
-lflags    =                $DEBUG
-mod_dir   = ./mod/
-obj_dir   = ./obj/
-build_dir = ./flap_test/
-src       = ./src/
-colors    = True
-quiet     = False
-log       = True
-jobs      = 2
+[template-static-intel]
+compiler = intel
+cflags   = $CSTATIC_INT $OPTIMIZE
+lflags   = $OPTIMIZE
+mod_dir  = ./mod/
+obj_dir  = ./obj/
+src      = ./src/
+colors   = True
+quiet    = False
+log      = True
+jobs     = 2
+
+[template-shared-intel-debug]
+compiler = intel
+cflags   = $CSHARED_INT $DEBUG_INT
+lflags   = $LSHARED_INT $DEBUG_INT
+mod_dir  = ./mod/
+obj_dir  = ./obj/
+src      = ./src/
+colors   = True
+quiet    = False
+log      = True
+jobs     = 2
+
+[template-static-intel-debug]
+compiler = intel
+cflags   = $CSTATIC_INT $DEBUG_INT
+lflags   = $DEBUG_INT
+mod_dir  = ./mod/
+obj_dir  = ./obj/
+src      = ./src/
+colors   = True
+quiet    = False
+log      = True
+jobs     = 2
 
 [rule-makedoc]
 help   = Rule for building documentation from source files

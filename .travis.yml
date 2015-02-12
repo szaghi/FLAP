@@ -1,0 +1,18 @@
+language: python
+
+python:
+  - 2.7
+
+before_install:
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+  - sudo apt-get update -qq
+  - sudo apt-get install gfortran-4.9
+  - ln -fs /usr/bin/gfortran-4.9 gfortran
+  - pip install FoBiS.py
+  - export PATH=".:$PATH"
+
+before_script:
+  - FoBiS.py build -mode flap-test-gnu
+
+script:
+  - ./flap_test/flap_test -s 'hi travis'

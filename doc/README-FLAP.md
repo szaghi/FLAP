@@ -4,7 +4,10 @@
 [![In Progress](https://badge.waffle.io/szaghi/FLAP.png?label=in%20progress&title=In%20Progress)](https://waffle.io/szaghi/FLAP)
 [![Open bugs](https://badge.waffle.io/szaghi/FLAP.png?label=bug&title=Open%20Bugs)](https://waffle.io/szaghi/FLAP)
 
-A KISS library for building easily nice Command Line Interfaces (CLI) for modern (2003+) Fortran projects.
++ FLAP is a pure Fortran (KISS) library for building easily nice Command Line Interfaces (CLI) for modern Fortran projects;
++ FLAP is Fortran 2003+ standard compliant;
++ FLAP is OOP designed;
++ FLAP is a Free, Open Source Project.
 
 ## What is FLAP?
 
