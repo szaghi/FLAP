@@ -1,5 +1,7 @@
 ### <a name="top"></a>FLAP, Fortran command Line Arguments Parser for poor men
 
+[![GitHub tag](https://img.shields.io/github/tag/szaghi/FLAP.svg)]()
+[![GitHub issues](https://img.shields.io/github/issues/szaghi/FLAP.svg)]()
 [![Ready in backlog](https://badge.waffle.io/szaghi/FLAP.png?label=ready&title=Ready)](https://waffle.io/szaghi/FLAP)
 [![In Progress](https://badge.waffle.io/szaghi/FLAP.png?label=in%20progress&title=In%20Progress)](https://waffle.io/szaghi/FLAP)
 [![Open bugs](https://badge.waffle.io/szaghi/FLAP.png?label=bug&title=Open%20Bugs)](https://waffle.io/szaghi/FLAP)
