@@ -2,7 +2,7 @@
 
 # FLAP [![GitHub tag](https://img.shields.io/github/tag/szaghi/FLAP.svg)]()
 
-[![License](https://img.shields.io/badge/license-GNU%20GeneraL%20Public%20License%20v3%20(GPLv3)-blue.svg)]()
+[![License](https://img.shields.io/badge/license-GNU%20GeneraL%20Public%20License%20v3%20,%20GPLv3-blue.svg)]()
 
 [![Status](https://img.shields.io/badge/status-stable-brightgreen.svg)]()
 
