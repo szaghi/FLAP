@@ -146,12 +146,3 @@ call cli%parse(error=error,pref='|-->')
 For a practical example of FLAP usage see [POG](https://github.com/szaghi/OFF/blob/testing/src/POG.f90) source file at line `85`.
 
 Go to [Top](#top)
-
-## Version History
-
-In the following the changelog of most important releases is reported.
-### v0.0.1
-##### Download [ZIP](https://github.com/szaghi/FLAP/archive/v0.0.1.zip) ball or [TAR](https://github.com/szaghi/FLAP/archive/v0.0.1.tar.gz) one
-Stable Release. Fully backward compatible.
-
-Go to [Top](#top)
