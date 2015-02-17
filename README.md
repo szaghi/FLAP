@@ -23,10 +23,15 @@ A KISS pure Fortran Library for building powerful, easy-to-use, elegant command 
 
 #### Compiler Support
 [![Compiler](https://img.shields.io/badge/GNU%20Gfortran%20Compiler-build%20fail%20with%20v4.9.x-orange.svg)]()
+
 [![Compiler](https://img.shields.io/badge/Intel%20Fortran%20Compiler-build%20pass%20with%20v12.x+-brightgreen.svg)]()
+
 [![Compiler](https://img.shields.io/badge/IBM%20XL%20Fortran%20Compiler-not%20tested-yellow.svg)]()
+
 [![Compiler](https://img.shields.io/badge/g95%20Fortran%20Compiler-not%20tested-yellow.svg)]()
+
 [![Compiler](https://img.shields.io/badge/NAG%20Fortran%20Compiler-not%20tested-yellow.svg)]()
+
 [![Compiler](https://img.shields.io/badge/PGI%20Fortran%20Compiler-not%20tested-yellow.svg)]()
 
 ## What is FLAP?
