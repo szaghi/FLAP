@@ -4,6 +4,8 @@
 
 [![License](https://img.shields.io/badge/license-GNU%20GeneraL%20Public%20License%20v3%20(GPLv3)-blue.svg)]()
 
+[![Status](https://img.shields.io/badge/status-stable-brightgreen.svg)]()
+
 ### FLAP, Fortran command Line Arguments Parser for poor men
 A KISS pure Fortran Library for building powerful, easy-to-use, elegant command line interfaces
 
@@ -11,9 +13,6 @@ A KISS pure Fortran Library for building powerful, easy-to-use, elegant command 
 + FLAP is Fortran 2003+ standard compliant;
 + FLAP is OOP designed;
 + FLAP is a Free, Open Source Project.
-
-### Status
-[![Status](https://img.shields.io/badge/status-stable-brightgreen.svg)]()
 
 #### Issues
 [![GitHub issues](https://img.shields.io/github/issues/szaghi/FLAP.svg)]()
