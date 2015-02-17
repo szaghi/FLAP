@@ -1,10 +1,37 @@
-### <a name="top"></a>IR_Precision, Fortran (standard 2003+) module for achieving portable codes
+<a name="top"></a>
+# IR_Precision [![GitHub tag](https://img.shields.io/github/tag/szaghi/IR_Precision.svg)]()
 
+[![License](https://img.shields.io/badge/license-GNU%20GeneraL%20Public%20License%20v3%20,%20GPLv3-blue.svg)]()
+
+[![Status](https://img.shields.io/badge/status-stable-brightgreen.svg)]()
+[![Build Status](https://travis-ci.org/szaghi/IR_Precision.svg?branch=master)](https://travis-ci.org/szaghi/IR_Precision)
+
+### IR_Precision, Fortran (standard 2003+) module for achieving portable codes
+A KISS library for exploiting codes portability for modern (2003+) Fortran projects.
+
++ IR_Precision is a pure Fortran (KISS) library for achieving portable codes for modern Fortran projects;
++ IR_Precision provides many number-to-string and `viceversa` facilities;
++ IR_Precision is Fortran 2003+ standard compliant;
++ IR_Precision is a Free, Open Source Project.
+
+#### Issues
+[![GitHub issues](https://img.shields.io/github/issues/szaghi/IR_Precision.svg)]()
 [![Ready in backlog](https://badge.waffle.io/szaghi/IR_Precision.png?label=ready&title=Ready)](https://waffle.io/szaghi/IR_Precision)
 [![In Progress](https://badge.waffle.io/szaghi/IR_Precision.png?label=in%20progress&title=In%20Progress)](https://waffle.io/szaghi/IR_Precision)
 [![Open bugs](https://badge.waffle.io/szaghi/IR_Precision.png?label=bug&title=Open%20Bugs)](https://waffle.io/szaghi/IR_Precision)
 
-A KISS library for exploiting codes portability for modern (2003+) Fortran projects.
+#### Compiler Support
+[![Compiler](https://img.shields.io/badge/GNU%20Gfortran%20Compiler-build%20pass%20with%20v4.9.2-brightgreen.svg)]()
+
+[![Compiler](https://img.shields.io/badge/Intel%20Fortran%20Compiler-build%20pass%20with%20v12.x+-brightgreen.svg)]()
+
+[![Compiler](https://img.shields.io/badge/IBM%20XL%20Fortran%20Compiler-not%20tested-yellow.svg)]()
+
+[![Compiler](https://img.shields.io/badge/g95%20Fortran%20Compiler-not%20tested-yellow.svg)]()
+
+[![Compiler](https://img.shields.io/badge/NAG%20Fortran%20Compiler-not%20tested-yellow.svg)]()
+
+[![Compiler](https://img.shields.io/badge/PGI%20Fortran%20Compiler-not%20tested-yellow.svg)]()
 
 ## What is IR_Precision?
 
@@ -43,18 +70,5 @@ Besides this README file the IR_Precision documentation is contained into its ow
 ### A Taste of IR_Precision
 
 To be written.
-
-Go to [Top](#top)
-
-## Version History
-
-In the following the changelog of most important releases is reported.
-### v1.0.1
-##### Download [ZIP](https://github.com/szaghi/IR_Precision/archive/v1.0.1.zip) ball or [TAR](https://github.com/szaghi/IR_Precision/archive/v1.0.1.tar.gz) one
-Stable release. Fully backward compatible. Introduce `digit` function.
-
-### v1.0.0
-##### Download [ZIP](https://github.com/szaghi/IR_Precision/archive/v1.0.0.zip) ball or [TAR](https://github.com/szaghi/IR_Precision/archive/v1.0.0.tar.gz) one
-First Stable Release.
 
 Go to [Top](#top)
