@@ -244,7 +244,7 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">get_extension</span>
 
-  <span class="k">elemental function </span><span class="n">set_extension</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="n">extension</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">newfilename</span><span class="p">)</span>
+  <span class="k">pure function </span><span class="n">set_extension</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="n">extension</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">newfilename</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Procedure for setting the extension of a filename.</span>
   <span class="c">!&lt;</span>
@@ -260,6 +260,7 @@
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">dot</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+  <span class="n">newfilename</span> <span class="o">=</span> <span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">get_extension</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">filename</span><span class="p">)))</span><span class="o">/=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">extension</span><span class="p">)))</span> <span class="k">then</span>
 <span class="k">    </span><span class="n">i</span> <span class="o">=</span> <span class="nb">index</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="n">back</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.)</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>

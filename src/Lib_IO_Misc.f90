@@ -86,7 +86,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction get_extension
 
-  elemental function set_extension(filename,extension) result(newfilename)
+  pure function set_extension(filename,extension) result(newfilename)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for setting the extension of a filename.
   !<
@@ -102,6 +102,7 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   dot=''
+  newfilename = trim(adjustl(filename))
   if (get_extension(trim(adjustl(filename)))/=trim(adjustl(extension))) then
     i = index(filename,'.',back=.true.)
     if (i==0) then
