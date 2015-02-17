@@ -1,15 +1,33 @@
-### <a name="top"></a>FLAP, Fortran command Line Arguments Parser for poor men
+ <a name="top"></a>
 
-[![GitHub tag](https://img.shields.io/github/tag/szaghi/FLAP.svg)]()
-[![GitHub issues](https://img.shields.io/github/issues/szaghi/FLAP.svg)]()
-[![Ready in backlog](https://badge.waffle.io/szaghi/FLAP.png?label=ready&title=Ready)](https://waffle.io/szaghi/FLAP)
-[![In Progress](https://badge.waffle.io/szaghi/FLAP.png?label=in%20progress&title=In%20Progress)](https://waffle.io/szaghi/FLAP)
-[![Open bugs](https://badge.waffle.io/szaghi/FLAP.png?label=bug&title=Open%20Bugs)](https://waffle.io/szaghi/FLAP)
+# FLAP [![GitHub tag](https://img.shields.io/github/tag/szaghi/FLAP.svg)]()
+
+[![License](https://img.shields.io/badge/license-GNU%20GeneraL%20Public%20License%20v3%20(GPLv3)-blue.svg)]()
+
+### FLAP, Fortran command Line Arguments Parser for poor men
+A KISS pure Fortran Library for building powerful, easy-to-use, elegant command line interfaces
 
 + FLAP is a pure Fortran (KISS) library for building easily nice Command Line Interfaces (CLI) for modern Fortran projects;
 + FLAP is Fortran 2003+ standard compliant;
 + FLAP is OOP designed;
 + FLAP is a Free, Open Source Project.
+
+### Status
+[![Status](https://img.shields.io/badge/status-stable-brightgreen.svg)]()
+
+#### Issues
+[![GitHub issues](https://img.shields.io/github/issues/szaghi/FLAP.svg)]()
+[![Ready in backlog](https://badge.waffle.io/szaghi/FLAP.png?label=ready&title=Ready)](https://waffle.io/szaghi/FLAP)
+[![In Progress](https://badge.waffle.io/szaghi/FLAP.png?label=in%20progress&title=In%20Progress)](https://waffle.io/szaghi/FLAP)
+[![Open bugs](https://badge.waffle.io/szaghi/FLAP.png?label=bug&title=Open%20Bugs)](https://waffle.io/szaghi/FLAP)
+
+#### Compiler Support
+[![Compiler](https://img.shields.io/badge/GNU%20Gfortran%20Compiler-build%20fail%20with%20v4.9.x-orange.svg)]()
+[![Compiler](https://img.shields.io/badge/Intel%20Fortran%20Compiler-build%20pass%20with%20v12.x+-brightgreen.svg)]()
+[![Compiler](https://img.shields.io/badge/IBM%20XL%20Fortran%20Compiler-not%20tested-yellow.svg)]()
+[![Compiler](https://img.shields.io/badge/g95%20Fortran%20Compiler-not%20tested-yellow.svg)]()
+[![Compiler](https://img.shields.io/badge/NAG%20Fortran%20Compiler-not%20tested-yellow.svg)]()
+[![Compiler](https://img.shields.io/badge/PGI%20Fortran%20Compiler-not%20tested-yellow.svg)]()
 
 ## What is FLAP?
 
