@@ -1,3 +1,9 @@
+### Version v0.0.3
+
+Stable release. Fully backward compatible.
+
++ improve error trapping of `get` method;
+
 ### Version v0.0.2
 
 Stable release. Fully backward compatible.

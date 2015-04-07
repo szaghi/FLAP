@@ -116,7 +116,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction set_extension
 
-  subroutine read_file_as_stream(pref,iostat,iomsg,delimiter_start,delimiter_end,filename,stream)
+  subroutine read_file_as_stream(pref,iostat,iomsg,delimiter_start,delimiter_end,fast_read,filename,stream)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for reading a file as single characters stream.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -126,6 +126,7 @@ contains
   character(*), optional,        intent(OUT):: iomsg           !< IO error message.
   character(*), optional,        intent(IN)::  delimiter_start !< Delimiter from which start the stream.
   character(*), optional,        intent(IN)::  delimiter_end   !< Delimiter to which end the stream.
+  logical,      optional,        intent(IN)::  fast_read       !< Flag for activating efficient reading with one single read.
   character(*),                  intent(IN)::  filename        !< File name.
   character(len=:), allocatable, intent(OUT):: stream          !< Output string containing the file data as a single stream.
   logical::                                    is_file         !< Flag for inquiring the presence of the file.
@@ -137,10 +138,13 @@ contains
   character(len=:), allocatable::              string          !< Dummy string.
   logical::                                    cstart          !< Flag for stream capturing trigging.
   logical::                                    cend            !< Flag for stream capturing trigging.
+  logical::                                    fast            !< Flag for activating efficient reading with one single read.
+  integer(I4P)::                               filesize        !< Size of the file for fast reading.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   prefd = '' ; if (present(pref)) prefd = pref
+  fast = .false. ; if (present(fast_read)) fast = fast_read
   inquire(file=adjustl(trim(filename)),exist=is_file,iostat=iostatd)
   if (.not.is_file) then
     iostat = File_Not_Found(filename=adjustl(trim(filename)),cpn=prefd//'read_file_as_stream')
@@ -196,10 +200,19 @@ contains
       endif
     enddo Main_Read_Loop
   else
-    Read_Loop: do
-      read(unit=unit,iostat=iostatd,iomsg=iomsgd,end=10)c1
-      stream = stream//c1
-    enddo Read_Loop
+    if (fast) then
+      inquire(file=adjustl(trim(filename)),size=filesize,iostat=iostatd,iomsg=iomsgd)
+      if (iostatd==0) then
+        if (allocated(stream)) deallocate(stream)
+        allocate(character(len=filesize):: stream)
+        read(unit=unit,iostat=iostatd,iomsg=iomsgd,end=10)stream
+      endif
+    else
+      Read_Loop: do
+        read(unit=unit,iostat=iostatd,iomsg=iomsgd,end=10)c1
+        stream = stream//c1
+      enddo Read_Loop
+    endif
   endif
   10 close(unit)
   if (present(iostat)) iostat = iostatd

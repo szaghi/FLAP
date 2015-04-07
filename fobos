@@ -1,8 +1,8 @@
 [modes]
-modes = shared-gnu static-gnu flap-test-gnu
-        shared-gnu-debug static-gnu-debug flap-test-gnu-debug
-        shared-intel static-intel flap-test-intel
-        shared-intel-debug static-intel-debug flap-test-intel-debug
+modes = shared-gnu static-gnu test-driver-gnu
+        shared-gnu-debug static-gnu-debug test-driver-gnu-debug
+        shared-intel static-intel test-driver-intel
+        shared-intel-debug static-intel-debug test-driver-intel-debug
 
 [common-variables]
 $CSHARED_GNU = -cpp -c -fPIC -frealloc-lhs
@@ -29,11 +29,11 @@ build_dir = ./static/
 output    = FLAP.a
 mklib     = static
 
-[flap-test-gnu]
+[test-driver-gnu]
 template = template-static-gnu
-target   = src/flap_test.f90
-build_dir = ./flap_test/
-output   = flap_test
+target   = src/Test_Driver.f90
+build_dir = ./Test_Driver/
+output   = Test_Driver
 
 [shared-gnu-debug]
 template = template-shared-gnu-debug
@@ -47,11 +47,11 @@ target   = src/Data_Type_Command_Line_Interface.f90
 output   = FLAP.a
 mklib    = static
 
-[flap-test-gnu-debug]
+[test-driver-gnu-debug]
 template  = template-static-gnu-debug
-target    = src/flap_test.f90
-build_dir = ./flap_test/
-output    = flap_test
+target    = src/Test_Driver.f90
+build_dir = ./Test_Driver/
+output    = Test_Driver
 
 [shared-intel]
 template  = template-shared-intel
@@ -67,11 +67,11 @@ build_dir = ./static/
 output    = FLAP.a
 mklib     = static
 
-[flap-test-intel]
+[test-driver-intel]
 template = template-static-intel
-target   = src/flap_test.f90
-build_dir = ./flap_test/
-output   = flap_test
+target   = src/Test_Driver.f90
+build_dir = ./Test_Driver/
+output   = Test_Driver
 
 [shared-intel-debug]
 template = template-shared-intel-debug
@@ -85,11 +85,11 @@ target   = src/Data_Type_Command_Line_Interface.f90
 output   = FLAP.a
 mklib    = static
 
-[flap-test-intel-debug]
+[test-driver-intel-debug]
 template  = template-static-intel-debug
-target    = src/flap_test.f90
-build_dir = ./flap_test/
-output    = flap_test
+target    = src/Test_Driver.f90
+build_dir = ./Test_Driver/
+output    = Test_Driver
 
 #templates
 [template-shared-gnu]

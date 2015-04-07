@@ -15,6 +15,7 @@ public:: Lower_Case
 public:: delete
 public:: insert
 public:: replace
+public:: strip
 public:: tokenize
 public:: tags_match
 public:: unique
@@ -176,13 +177,14 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   character(len=*), intent(IN)::              string    !< String to be modified.
-  character(len=*), intent(IN)::              substring !< Substring to be inserted.
+  character(len=*), intent(IN)::              substring !< Substring to be deleted.
   character(len=len(string)-len(substring)):: newstring !< New modified string.
   integer(I4P)::                              pos       !< Position from which delete the substring.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   pos = index(string=string,substring=string)
+  newstring = string
   if (pos>0) then
     if (pos==1) then
       newstring = string(len(substring)+1:)
@@ -218,15 +220,16 @@ contains
   !< Procedure for replacing substring into a string.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  character(len=*), intent(IN)::              string    !< String to be modified.
-  character(len=*), intent(IN)::              substring !< Substring to be replaced.
-  character(len=*), intent(IN)::              restring  !< String to be inserted.
-  character(len=len(string)-len(substring)):: newstring !< New modified string.
-  integer(I4P)::                              pos       !< Position from which replace the substring.
+  character(len=*), intent(IN)::                            string    !< String to be modified.
+  character(len=*), intent(IN)::                            substring !< Substring to be replaced.
+  character(len=*), intent(IN)::                            restring  !< String to be inserted.
+  character(len=len(string)-len(substring)+len(restring)):: newstring !< New modified string.
+  integer(I4P)::                                            pos       !< Position from which replace the substring.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   pos = index(string=string,substring=string)
+  newstring = string
   if (pos>0) then
     if (pos==1) then
       newstring = restring//string(len(substring)+1:)
@@ -237,6 +240,21 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction replace
+
+  elemental function strip(string) result(newstring)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for striping out leading and trailing white spaces from a string.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  character(len=*), intent(IN)::  string    !< String to be modified.
+  character(len=:), allocatable:: newstring !< New modified string.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  allocate(newstring,source=trim(adjustl(string)))
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction strip
 
   pure subroutine tokenize(strin,delimiter,Nt,toks)
   !---------------------------------------------------------------------------------------------------------------------------------

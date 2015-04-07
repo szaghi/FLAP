@@ -185,7 +185,17 @@ interface str
                    strf_I8P ,str_I8P, &
                    strf_I4P ,str_I4P, &
                    strf_I2P ,str_I2P, &
-                   strf_I1P ,str_I1P
+                   strf_I1P ,str_I1P, &
+                             str_bol, &
+#ifdef r16p
+                             str_a_R16P,&
+#endif
+                             str_a_R8P, &
+                             str_a_R4P, &
+                             str_a_I8P, &
+                             str_a_I4P, &
+                             str_a_I2P, &
+                             str_a_I1P
 endinterface
 interface strz
   !< Procedure for converting number, integer, to string, prefixing with the right number of zeros (number to string type
@@ -701,6 +711,252 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction str_I1P
 
+  elemental function str_bol(n) result(str)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for converting logical to string. This function achieves casting of logical to string.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  logical, intent(IN):: n   !< Logical to be converted.
+  character(1)::        str !< Returned string containing input number plus padding zeros.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  write(str,'(L1)') n
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction str_bol
+
+  pure function str_a_R16P(no_sign,delimiters,n) result(str)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for converting real (array) to string. This function achieves casting of real to string.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  logical,      intent(IN), optional:: no_sign         !< Flag for leaving out the sign.
+  character(*), intent(IN), optional:: delimiters(1:2) !< Eventual delimiters of array values.
+  real(R16P),   intent(IN)::           n(:)            !< Real array to be converted.
+  character(len=:), allocatable::      str             !< Returned string containing input number.
+  character(DR16P)::                   strn            !< String containing of element of input array number.
+  integer::                            i               !< Counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  if (present(no_sign)) then
+    str = ''
+    do i=1,size(n)
+      strn = str_R16P(no_sign=no_sign, n=n(i))
+      str = str//','//trim(strn)
+    enddo
+  else
+    str = ''
+    do i=1,size(n)
+      strn = str_R16P(n=n(i))
+      str = str//','//trim(strn)
+    enddo
+  endif
+  str = trim(str(2:))
+  if (present(delimiters)) str = delimiters(1)//str//delimiters(2)
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction str_a_R16P
+
+  pure function str_a_R8P(no_sign,delimiters,n) result(str)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for converting real (array) to string. This function achieves casting of real to string.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  logical,      intent(IN), optional:: no_sign         !< Flag for leaving out the sign.
+  character(*), intent(IN), optional:: delimiters(1:2) !< Eventual delimiters of array values.
+  real(R8P),    intent(IN)::           n(:)            !< Real array to be converted.
+  character(len=:), allocatable::      str             !< Returned string containing input number.
+  character(DR8P)::                    strn            !< String containing of element of input array number.
+  integer::                            i               !< Counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  if (present(no_sign)) then
+    str = ''
+    do i=1,size(n)
+      strn = str_R8P(no_sign=no_sign, n=n(i))
+      str = str//','//trim(strn)
+    enddo
+  else
+    str = ''
+    do i=1,size(n)
+      strn = str_R8P(n=n(i))
+      str = str//','//trim(strn)
+    enddo
+  endif
+  str = trim(str(2:))
+  if (present(delimiters)) str = delimiters(1)//str//delimiters(2)
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction str_a_R8P
+
+  pure function str_a_R4P(no_sign,delimiters,n) result(str)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for converting real (array) to string. This function achieves casting of real to string.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  logical,      intent(IN), optional:: no_sign         !< Flag for leaving out the sign.
+  character(*), intent(IN), optional:: delimiters(1:2) !< Eventual delimiters of array values.
+  real(R4P),    intent(IN)::           n(:)            !< Real array to be converted.
+  character(len=:), allocatable::      str             !< Returned string containing input number.
+  character(DR4P)::                    strn            !< String containing of element of input array number.
+  integer::                            i               !< Counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  if (present(no_sign)) then
+    str = ''
+    do i=1,size(n)
+      strn = str_R4P(no_sign=no_sign, n=n(i))
+      str = str//','//trim(strn)
+    enddo
+  else
+    str = ''
+    do i=1,size(n)
+      strn = str_R4P(n=n(i))
+      str = str//','//trim(strn)
+    enddo
+  endif
+  str = trim(str(2:))
+  if (present(delimiters)) str = delimiters(1)//str//delimiters(2)
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction str_a_R4P
+
+  pure function str_a_I8P(no_sign,delimiters,n) result(str)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for converting integer (array) to string. This function achieves casting of integer to string.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  logical,      intent(IN), optional:: no_sign         !< Flag for leaving out the sign.
+  character(*), intent(IN), optional:: delimiters(1:2) !< Eventual delimiters of array values.
+  integer(I8P), intent(IN)::           n(:)            !< Integer array to be converted.
+  character(len=:), allocatable::      str             !< Returned string containing input number.
+  character(DI8P)::                    strn            !< String containing of element of input array number.
+  integer::                            i               !< Counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  if (present(no_sign)) then
+    str = ''
+    do i=1,size(n)
+      strn = str_I8P(no_sign=no_sign, n=n(i))
+      str = str//','//trim(strn)
+    enddo
+  else
+    str = ''
+    do i=1,size(n)
+      strn = str_I8P(n=n(i))
+      str = str//','//trim(strn)
+    enddo
+  endif
+  str = trim(str(2:))
+  if (present(delimiters)) str = delimiters(1)//str//delimiters(2)
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction str_a_I8P
+
+  pure function str_a_I4P(no_sign,delimiters,n) result(str)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for converting integer (array) to string. This function achieves casting of integer to string.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  logical,      intent(IN), optional:: no_sign         !< Flag for leaving out the sign.
+  character(*), intent(IN), optional:: delimiters(1:2) !< Eventual delimiters of array values.
+  integer(I4P), intent(IN)::           n(:)            !< Integer array to be converted.
+  character(len=:), allocatable::      str             !< Returned string containing input number.
+  character(DI4P)::                    strn            !< String containing of element of input array number.
+  integer::                            i               !< Counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  if (present(no_sign)) then
+    str = ''
+    do i=1,size(n)
+      strn = str_I4P(no_sign=no_sign, n=n(i))
+      str = str//','//trim(strn)
+    enddo
+  else
+    str = ''
+    do i=1,size(n)
+      strn = str_I4P(n=n(i))
+      str = str//','//trim(strn)
+    enddo
+  endif
+  str = trim(str(2:))
+  if (present(delimiters)) str = delimiters(1)//str//delimiters(2)
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction str_a_I4P
+
+  pure function str_a_I2P(no_sign,delimiters,n) result(str)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for converting integer (array) to string. This function achieves casting of integer to string.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  logical,      intent(IN), optional:: no_sign         !< Flag for leaving out the sign.
+  character(*), intent(IN), optional:: delimiters(1:2) !< Eventual delimiters of array values.
+  integer(I2P), intent(IN)::           n(:)            !< Integer array to be converted.
+  character(len=:), allocatable::      str             !< Returned string containing input number.
+  character(DI2P)::                    strn            !< String containing of element of input array number.
+  integer::                            i               !< Counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  if (present(no_sign)) then
+    str = ''
+    do i=1,size(n)
+      strn = str_I2P(no_sign=no_sign, n=n(i))
+      str = str//','//trim(strn)
+    enddo
+  else
+    str = ''
+    do i=1,size(n)
+      strn = str_I2P(n=n(i))
+      str = str//','//trim(strn)
+    enddo
+  endif
+  str = trim(str(2:))
+  if (present(delimiters)) str = delimiters(1)//str//delimiters(2)
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction str_a_I2P
+
+  pure function str_a_I1P(no_sign,delimiters,n) result(str)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for converting integer (array) to string. This function achieves casting of integer to string.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  logical,      intent(IN), optional:: no_sign         !< Flag for leaving out the sign.
+  character(*), intent(IN), optional:: delimiters(1:2) !< Eventual delimiters of array values.
+  integer(I1P), intent(IN)::           n(:)            !< Integer array to be converted.
+  character(len=:), allocatable::      str             !< Returned string containing input number.
+  character(DI1P)::                    strn            !< String containing of element of input array number.
+  integer::                            i               !< Counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  if (present(no_sign)) then
+    str = ''
+    do i=1,size(n)
+      strn = str_I1P(no_sign=no_sign, n=n(i))
+      str = str//','//trim(strn)
+    enddo
+  else
+    str = ''
+    do i=1,size(n)
+      strn = str_I1P(n=n(i))
+      str = str//','//trim(strn)
+    enddo
+  endif
+  str = trim(str(2:))
+  if (present(delimiters)) str = delimiters(1)//str//delimiters(2)
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction str_a_I1P
+
   elemental function strz_I8P(nz_pad,n) result(str)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for converting integer to string, prefixing with the right number of zeros. This function achieves casting of
@@ -777,156 +1033,177 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction strz_I1P
 
-  function ctor_R16P(str,knd) result(n)
+  function ctor_R16P(pref,error,str,knd) result(n)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for converting string to real. This function achieves casting of string to real.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  character(*), intent(IN):: str !< String containing input number.
-  real(R16P),   intent(IN):: knd !< Number kind.
-  real(R16P)::               n   !< Number returned.
-  integer(I4P)::             err !< Error trapping flag: 0 no errors, >0 error occurs.
+  character(*), optional, intent(IN)::  pref  !< Prefixing string.
+  integer(I4P), optional, intent(OUT):: error !< Error trapping flag: 0 no errors, >0 error occurs.
+  character(*),           intent(IN)::  str   !< String containing input number.
+  real(R16P),             intent(IN)::  knd   !< Number kind.
+  real(R16P)::                          n     !< Number returned.
+  integer(I4P)::                        err   !< Error trapping flag: 0 no errors, >0 error occurs.
+  character(len=:), allocatable::       prefd !< Prefixing string.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   read(str,*,iostat=err) n ! Casting of str to n.
   if (err/=0) then
-    write(stderr,'(A)')             'Conversion of string "'//str//'" to real failed'
-    write(stderr,'(A,'//FR16P//')') 'Kind parameter ',knd
-    write(stderr,'(A)')             'Function used "ctor_R16P"'
+    prefd = '' ; if (present(pref)) prefd = pref
+    write(stderr,'(A,I1,A)') prefd//' Error: conversion of string "'//str//'" to real failed! real(',kind(knd),')'
   endif
+  if (present(error)) error = err
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction ctor_R16P
 
-  function ctor_R8P(str,knd) result(n)
+  function ctor_R8P(pref,error,str,knd) result(n)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for converting string to real. This function achieves casting of string to real.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  character(*), intent(IN):: str !< String containing input number.
-  real(R8P),    intent(IN):: knd !< Number kind.
-  real(R8P)::                n   !< Number returned.
-  integer(I4P)::             err !< Error trapping flag: 0 no errors, >0 error occurs.
+  character(*), optional, intent(IN)::  pref  !< Prefixing string.
+  integer(I4P), optional, intent(OUT):: error !< Error trapping flag: 0 no errors, >0 error occurs.
+  character(*),           intent(IN)::  str   !< String containing input number.
+  real(R8P),              intent(IN)::  knd   !< Number kind.
+  real(R8P)::                           n     !< Number returned.
+  integer(I4P)::                        err   !< Error trapping flag: 0 no errors, >0 error occurs.
+  character(len=:), allocatable::       prefd !< Prefixing string.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   read(str,*,iostat=err) n ! Casting of str to n.
   if (err/=0) then
-    write(stderr,'(A)')            'Conversion of string "'//str//'" to real failed'
-    write(stderr,'(A,'//FR8P//')') 'Kind parameter ',knd
-    write(stderr,'(A)')            'Function used "ctor_R8P"'
+    prefd = '' ; if (present(pref)) prefd = pref
+    write(stderr,'(A,I1,A)') prefd//' Error: conversion of string "'//str//'" to real failed! real(',kind(knd),')'
   endif
+  if (present(error)) error = err
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction ctor_R8P
 
-  function ctor_R4P(str,knd) result(n)
+  function ctor_R4P(pref,error,str,knd) result(n)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for converting string to real. This function achieves casting of string to real.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  character(*), intent(IN):: str !< String containing input number.
-  real(R4P),    intent(IN):: knd !< Number kind.
-  real(R4P)::                n   !< Number returned.
-  integer(I4P)::             err !< Error trapping flag: 0 no errors, >0 error occurs.
+  character(*), optional, intent(IN)::  pref  !< Prefixing string.
+  integer(I4P), optional, intent(OUT):: error !< Error trapping flag: 0 no errors, >0 error occurs.
+  character(*),           intent(IN)::  str   !< String containing input number.
+  real(R4P),              intent(IN)::  knd   !< Number kind.
+  real(R4P)::                           n     !< Number returned.
+  integer(I4P)::                        err   !< Error trapping flag: 0 no errors, >0 error occurs.
+  character(len=:), allocatable::       prefd !< Prefixing string.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   read(str,*,iostat=err) n ! Casting of str to n.
   if (err/=0) then
-    write(stderr,'(A)')            'Conversion of string "'//str//'" to real failed'
-    write(stderr,'(A,'//FR4P//')') 'Kind parameter ',knd
-    write(stderr,'(A)')            'Function used "ctor_R4P"'
+    prefd = '' ; if (present(pref)) prefd = pref
+    write(stderr,'(A,I1,A)') prefd//' Error: conversion of string "'//str//'" to real failed! real(',kind(knd),')'
   endif
+  if (present(error)) error = err
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction ctor_R4P
 
-  function ctoi_I8P(str,knd) result(n)
+  function ctoi_I8P(pref,error,str,knd) result(n)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for converting string to integer. This function achieves casting of string to integer.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  character(*), intent(IN):: str !< String containing input number.
-  integer(I8P), intent(IN):: knd !< Number kind.
-  integer(I8P)::             n   !< Number returned.
-  integer(I4P)::             err !< Error trapping flag: 0 no errors, >0 error occurs.
+  character(*), optional, intent(IN)::  pref  !< Prefixing string.
+  integer(I4P), optional, intent(OUT):: error !< Error trapping flag: 0 no errors, >0 error occurs.
+  character(*),           intent(IN)::  str   !< String containing input number.
+  integer(I8P),           intent(IN)::  knd   !< Number kind.
+  integer(I8P)::                        n     !< Number returned.
+  integer(I4P)::                        err   !< Error trapping flag: 0 no errors, >0 error occurs.
+  character(len=:), allocatable::       prefd !< Prefixing string.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   read(str,*,iostat=err) n ! Casting of str to n.
   if (err/=0) then
-    write(stderr,'(A)')            'Conversion of string "'//str//'" to integer failed'
-    write(stderr,'(A,'//FI8P//')') 'Kind parameter ',knd
-    write(stderr,'(A)')            'Function used "ctoi_I8P"'
+    prefd = '' ; if (present(pref)) prefd = pref
+    write(stderr,'(A,I1,A)') prefd//' Error: conversion of string "'//str//'" to real failed! integer(',kind(knd),')'
   endif
+  if (present(error)) error = err
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction ctoi_I8P
 
-  function ctoi_I4P(str,knd) result(n)
+  function ctoi_I4P(pref,error,str,knd) result(n)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for converting string to integer. This function achieves casting of string to integer.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  character(*), intent(IN):: str !< String containing input number.
-  integer(I4P), intent(IN):: knd !< Number kind.
-  integer(I4P)::             n   !< Number returned.
-  integer(I4P)::             err !< Error trapping flag: 0 no errors, >0 error occurs.
+  character(*), optional, intent(IN)::  pref  !< Prefixing string.
+  integer(I4P), optional, intent(OUT):: error !< Error trapping flag: 0 no errors, >0 error occurs.
+  character(*),           intent(IN)::  str   !< String containing input number.
+  integer(I4P),           intent(IN)::  knd   !< Number kind.
+  integer(I4P)::                        n     !< Number returned.
+  integer(I4P)::                        err   !< Error trapping flag: 0 no errors, >0 error occurs.
+  character(len=:), allocatable::       prefd !< Prefixing string.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   read(str,*,iostat=err) n ! Casting of str to n.
   if (err/=0) then
-    write(stderr,'(A)')            'Conversion of string "'//str//'" to integer failed'
-    write(stderr,'(A,'//FI4P//')') 'Kind parameter ',knd
-    write(stderr,'(A)')            'Function used "ctoi_I4P"'
+    prefd = '' ; if (present(pref)) prefd = pref
+    write(stderr,'(A,I1,A)') prefd//' Error: conversion of string "'//str//'" to real failed! integer(',kind(knd),')'
   endif
+  if (present(error)) error = err
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction ctoi_I4P
 
-  function ctoi_I2P(str,knd) result(n)
+  function ctoi_I2P(pref,error,str,knd) result(n)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for converting string to integer. This function achieves casting of string to integer.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  character(*), intent(IN):: str !< String containing input number.
-  integer(I2P), intent(IN):: knd !< Number kind.
-  integer(I2P)::             n   !< Number returned.
-  integer(I4P)::             err !< Error trapping flag: 0 no errors, >0 error occurs.
+  character(*), optional, intent(IN)::  pref  !< Prefixing string.
+  integer(I4P), optional, intent(OUT):: error !< Error trapping flag: 0 no errors, >0 error occurs.
+  character(*),           intent(IN)::  str   !< String containing input number.
+  integer(I2P),           intent(IN)::  knd   !< Number kind.
+  integer(I2P)::                        n     !< Number returned.
+  integer(I4P)::                        err   !< Error trapping flag: 0 no errors, >0 error occurs.
+  character(len=:), allocatable::       prefd !< Prefixing string.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   read(str,*,iostat=err) n ! Casting of str to n.
   if (err/=0) then
-    write(stderr,'(A)')            'Conversion of string "'//str//'" to integer failed'
-    write(stderr,'(A,'//FI2P//')') 'Kind parameter ',knd
-    write(stderr,'(A)')            'Function used "ctoi_I2P"'
+    prefd = '' ; if (present(pref)) prefd = pref
+    write(stderr,'(A,I1,A)') prefd//' Error: conversion of string "'//str//'" to real failed! integer(',kind(knd),')'
   endif
+  if (present(error)) error = err
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction ctoi_I2P
 
-  function ctoi_I1P(str,knd) result(n)
+  function ctoi_I1P(pref,error,str,knd) result(n)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for converting string to integer. This function achieves casting of string to integer.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  character(*), intent(IN):: str !< String containing input number.
-  integer(I1P), intent(IN):: knd !< Number kind.
-  integer(I1P)::             n   !< Number returned.
-  integer(I4P)::             err !< Error trapping flag: 0 no errors, >0 error occurs.
+  character(*), optional, intent(IN)::  pref  !< Prefixing string.
+  integer(I4P), optional, intent(OUT):: error !< Error trapping flag: 0 no errors, >0 error occurs.
+  character(*),           intent(IN)::  str   !< String containing input number.
+  integer(I1P),           intent(IN)::  knd   !< Number kind.
+  integer(I1P)::                        n     !< Number returned.
+  integer(I4P)::                        err   !< Error trapping flag: 0 no errors, >0 error occurs.
+  character(len=:), allocatable::       prefd !< Prefixing string.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   read(str,*,iostat=err) n ! Casting of str to n.
   if (err/=0) then
-    write(stderr,'(A)')            'Conversion of string "'//str//'" to integer failed'
-    write(stderr,'(A,'//FI1P//')') 'Kind parameter ',knd
-    write(stderr,'(A)')            'Function used "ctoi_I1P"'
+    prefd = '' ; if (present(pref)) prefd = pref
+    write(stderr,'(A,I1,A)') prefd//' Error: conversion of string "'//str//'" to real failed! integer(',kind(knd),')'
   endif
+  if (present(error)) error = err
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction ctoi_I1P

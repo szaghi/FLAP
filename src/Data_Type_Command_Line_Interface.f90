@@ -96,14 +96,14 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  if (allocated( cla%switch   )) deallocate(cla%switch   )
-  if (allocated( cla%switch_ab)) deallocate(cla%switch_ab)
-  if (allocated( cla%help     )) deallocate(cla%help     )
-  if (allocated( cla%act      )) deallocate(cla%act      )
-  if (allocated( cla%def      )) deallocate(cla%def      )
-  if (allocated( cla%nargs    )) deallocate(cla%nargs    )
-  if (allocated( cla%choices  )) deallocate(cla%choices  )
-  if (allocated( cla%val      )) deallocate(cla%val      )
+  if (allocated(cla%switch   )) deallocate(cla%switch   )
+  if (allocated(cla%switch_ab)) deallocate(cla%switch_ab)
+  if (allocated(cla%help     )) deallocate(cla%help     )
+  if (allocated(cla%act      )) deallocate(cla%act      )
+  if (allocated(cla%def      )) deallocate(cla%def      )
+  if (allocated(cla%nargs    )) deallocate(cla%nargs    )
+  if (allocated(cla%choices  )) deallocate(cla%choices  )
+  if (allocated(cla%val      )) deallocate(cla%val      )
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine free_cla
@@ -166,23 +166,25 @@ contains
   !< @note This procedure can be called if and only if cla%choices has been allocated.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  class(Type_Command_Line_Argument), intent(IN)::  cla        !< CLA data.
-  class(*),                          intent(IN)::  val        !< CLA value.
-  character(*), optional,            intent(IN)::  pref       !< Prefixing string.
-  integer(I4P),                      intent(OUT):: error      !< Error trapping flag.
-  character(len=:), allocatable::                  prefd      !< Prefixing string.
-  character(len(cla%choices)), allocatable::       toks(:)    !< Tokens for parsing choices list.
-  integer(I4P)::                                   Nc         !< Number of choices.
-  logical::                                        val_in     !< Flag for checking if val is in the choosen range.
-  character(len=:), allocatable::                  val_str    !< Value in string form.
-  integer(I4P)::                                   c          !< Counter.
+  class(Type_Command_Line_Argument), intent(IN)::  cla     !< CLA data.
+  class(*),                          intent(IN)::  val     !< CLA value.
+  character(*), optional,            intent(IN)::  pref    !< Prefixing string.
+  integer(I4P),                      intent(OUT):: error   !< Error trapping flag.
+  character(len=:), allocatable::                  prefd   !< Prefixing string.
+  character(len(cla%choices)), allocatable::       toks(:) !< Tokens for parsing choices list.
+  integer(I4P)::                                   Nc      !< Number of choices.
+  logical::                                        val_in  !< Flag for checking if val is in the choosen range.
+  character(len=:), allocatable::                  val_str !< Value in string form.
+  character(len=:), allocatable::                  tmp     !< Temporary string for avoiding GNU gfrotran bug.
+  integer(I4P)::                                   c       !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   error = 0
   val_in = .false.
   val_str = ''
-  call tokenize(strin=cla%choices,delimiter=',',Nt=Nc,toks=toks)
+  tmp = cla%choices
+  call tokenize(strin=tmp,delimiter=',',Nt=Nc,toks=toks)
   select type(val)
 #ifdef r16p
   type is(real(R16P))
@@ -230,8 +232,13 @@ contains
   if (.not.val_in) then
     error = 1
     prefd = '' ; if (present(pref)) prefd = pref
-    write(stderr,'(A)')prefd//' Error: the value of CLA "'//cla%switch//'" must be chosen in: ('//cla%choices//') but "'//&
-                              trim(val_str)//'" has been passed!'
+    if (cla%positional) then
+      write(stderr,'(A)')prefd//' Error: the value of positional CLA "'//trim(str(n=cla%position))//'-th" must be chosen in:'
+      write(stderr,'(A)')prefd//' ('//cla%choices//') but "'//trim(val_str)//'" has been passed!'
+    else
+      write(stderr,'(A)')prefd//' Error: the value of CLA "'//cla%switch//'" must be chosen in:'
+      write(stderr,'(A)')prefd//' ('//cla%choices//') but "'//trim(val_str)//'" has been passed!'
+    endif
   endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -264,65 +271,54 @@ contains
       select type(val)
 #ifdef r16p
       type is(real(R16P))
-        val = cton(str=trim(adjustl(cla%val)),knd=1._R16P)
-        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
+        val = cton(pref=prefd,error=error,str=trim(adjustl(cla%val)),knd=1._R16P)
 #endif
       type is(real(R8P))
-        val = cton(str=trim(adjustl(cla%val)),knd=1._R8P)
-        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
+        val = cton(pref=prefd,error=error,str=trim(adjustl(cla%val)),knd=1._R8P)
       type is(real(R4P))
-        val = cton(str=trim(adjustl(cla%val)),knd=1._R4P)
-        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
+        val = cton(pref=prefd,error=error,str=trim(adjustl(cla%val)),knd=1._R4P)
       type is(integer(I8P))
-        val = cton(str=trim(adjustl(cla%val)),knd=1_I8P)
-        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
+        val = cton(pref=prefd,error=error,str=trim(adjustl(cla%val)),knd=1_I8P)
       type is(integer(I4P))
-        val = cton(str=trim(adjustl(cla%val)),knd=1_I4P)
-        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
+        val = cton(pref=prefd,error=error,str=trim(adjustl(cla%val)),knd=1_I4P)
       type is(integer(I2P))
-        val = cton(str=trim(adjustl(cla%val)),knd=1_I2P)
-        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
+        val = cton(pref=prefd,error=error,str=trim(adjustl(cla%val)),knd=1_I2P)
       type is(integer(I1P))
-        val = cton(str=trim(adjustl(cla%val)),knd=1_I1P)
-        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
+        val = cton(pref=prefd,error=error,str=trim(adjustl(cla%val)),knd=1_I1P)
       type is(logical)
-        read(cla%val,*)val
+        read(cla%val,*,iostat=error)val
+        if (error/=0) write(stderr,'(A)')prefd//' Error: cannot convert "'//trim(adjustl(cla%val))// &
+                      '" of CLA "'//cla%switch//'" to boolean!'
       type is(character(*))
         val = cla%val
-        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
       endselect
-    else
+    else ! using default value
       select type(val)
 #ifdef r16p
       type is(real(R16P))
-        val = cton(str=trim(adjustl(cla%def)),knd=1._R16P)
-        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
+        val = cton(pref=prefd,error=error,str=trim(adjustl(cla%def)),knd=1._R16P)
 #endif
       type is(real(R8P))
-        val = cton(str=trim(adjustl(cla%def)),knd=1._R8P)
-        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
+        val = cton(pref=prefd,error=error,str=trim(adjustl(cla%def)),knd=1._R8P)
       type is(real(R4P))
-        val = cton(str=trim(adjustl(cla%def)),knd=1._R4P)
-        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
+        val = cton(pref=prefd,error=error,str=trim(adjustl(cla%def)),knd=1._R4P)
       type is(integer(I8P))
-        val = cton(str=trim(adjustl(cla%def)),knd=1_I8P)
-        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
+        val = cton(pref=prefd,error=error,str=trim(adjustl(cla%def)),knd=1_I8P)
       type is(integer(I4P))
-        val = cton(str=trim(adjustl(cla%def)),knd=1_I4P)
-        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
+        val = cton(pref=prefd,error=error,str=trim(adjustl(cla%def)),knd=1_I4P)
       type is(integer(I2P))
-        val = cton(str=trim(adjustl(cla%def)),knd=1_I2P)
-        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
+        val = cton(pref=prefd,error=error,str=trim(adjustl(cla%def)),knd=1_I2P)
       type is(integer(I1P))
-        val = cton(str=trim(adjustl(cla%def)),knd=1_I1P)
-        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
+        val = cton(pref=prefd,error=error,str=trim(adjustl(cla%def)),knd=1_I1P)
       type is(logical)
-        read(cla%def,*)val
+        read(cla%def,*,iostat=error)val
+        if (error/=0) write(stderr,'(A)')prefd//' Error: cannot convert "'//trim(adjustl(cla%def))// &
+                      '" of CLA "'//cla%switch//'" to boolean!'
       type is(character(*))
         val = cla%def
-        if (allocated(cla%choices)) call cla%check_choices(val=val,pref=prefd,error=error)
       endselect
     endif
+    if (allocated(cla%choices).and.error==0) call cla%check_choices(val=val,pref=prefd,error=error)
   elseif (cla%act==action_store_true) then
     if (cla%passed) then
       select type(val)
@@ -401,110 +397,118 @@ contains
 #ifdef r16p
       type is(real(R16P))
         do v=1,Nv
-          val(v) = cton(str=trim(adjustl(valsV(v))),knd=1._R16P)
-          if (allocated(cla%choices)) call cla%check_choices(val=val(v),pref=prefd,error=error)
+          val(v) = cton(pref=prefd,error=error,str=trim(adjustl(valsV(v))),knd=1._R16P)
+          if (allocated(cla%choices).and.error==0) call cla%check_choices(val=val(v),pref=prefd,error=error)
           if (error/=0) exit
         enddo
 #endif
       type is(real(R8P))
         do v=1,Nv
-          val(v) = cton(str=trim(adjustl(valsV(v))),knd=1._R8P)
-          if (allocated(cla%choices)) call cla%check_choices(val=val(v),pref=prefd,error=error)
+          val(v) = cton(pref=prefd,error=error,str=trim(adjustl(valsV(v))),knd=1._R8P)
+          if (allocated(cla%choices).and.error==0) call cla%check_choices(val=val(v),pref=prefd,error=error)
           if (error/=0) exit
         enddo
       type is(real(R4P))
         do v=1,Nv
-          val(v) = cton(str=trim(adjustl(valsV(v))),knd=1._R4P)
-          if (allocated(cla%choices)) call cla%check_choices(val=val(v),pref=prefd,error=error)
+          val(v) = cton(pref=prefd,error=error,str=trim(adjustl(valsV(v))),knd=1._R4P)
+          if (allocated(cla%choices).and.error==0) call cla%check_choices(val=val(v),pref=prefd,error=error)
           if (error/=0) exit
         enddo
       type is(integer(I8P))
         do v=1,Nv
-          val(v) = cton(str=trim(adjustl(valsV(v))),knd=1_I8P)
-          if (allocated(cla%choices)) call cla%check_choices(val=val(v),pref=prefd,error=error)
+          val(v) = cton(pref=prefd,error=error,str=trim(adjustl(valsV(v))),knd=1_I8P)
+          if (allocated(cla%choices).and.error==0) call cla%check_choices(val=val(v),pref=prefd,error=error)
           if (error/=0) exit
         enddo
       type is(integer(I4P))
         do v=1,Nv
-          val(v) = cton(str=trim(adjustl(valsV(v))),knd=1_I4P)
-          if (allocated(cla%choices)) call cla%check_choices(val=val(v),pref=prefd,error=error)
+          val(v) = cton(pref=prefd,error=error,str=trim(adjustl(valsV(v))),knd=1_I4P)
+          if (allocated(cla%choices).and.error==0) call cla%check_choices(val=val(v),pref=prefd,error=error)
           if (error/=0) exit
         enddo
       type is(integer(I2P))
         do v=1,Nv
-          val(v) = cton(str=trim(adjustl(valsV(v))),knd=1_I2P)
-          if (allocated(cla%choices)) call cla%check_choices(val=val(v),pref=prefd,error=error)
+          val(v) = cton(pref=prefd,error=error,str=trim(adjustl(valsV(v))),knd=1_I2P)
+          if (allocated(cla%choices).and.error==0) call cla%check_choices(val=val(v),pref=prefd,error=error)
           if (error/=0) exit
         enddo
       type is(integer(I1P))
         do v=1,Nv
-          val(v) = cton(str=trim(adjustl(valsV(v))),knd=1_I1P)
-          if (allocated(cla%choices)) call cla%check_choices(val=val(v),pref=prefd,error=error)
+          val(v) = cton(pref=prefd,error=error,str=trim(adjustl(valsV(v))),knd=1_I1P)
+          if (allocated(cla%choices).and.error==0) call cla%check_choices(val=val(v),pref=prefd,error=error)
           if (error/=0) exit
         enddo
       type is(logical)
         do v=1,Nv
-          read(valsV(v),*)val(v)
+          read(valsV(v),*,iostat=error)val(v)
         enddo
+        if (error/=0) write(stderr,'(A)')prefd//' Error: cannot convert "'//trim(adjustl(cla%val))// &
+                      '" of CLA "'//cla%switch//'" to boolean!'
       type is(character(*))
         do v=1,Nv
           val(v)=valsV(v)
+          if (allocated(cla%choices).and.error==0) call cla%check_choices(val=val(v),pref=prefd,error=error)
+          if (error/=0) exit
         enddo
       endselect
-    else
+    else ! using default value
       call tokenize(strin=cla%def,delimiter=' ',Nt=Nv,toks=valsD)
       select type(val)
 #ifdef r16p
       type is(real(R16P))
         do v=1,Nv
-          val(v) = cton(str=trim(adjustl(valsD(v))),knd=1._R16P)
-          if (allocated(cla%choices)) call cla%check_choices(val=val(v),pref=prefd,error=error)
+          val(v) = cton(pref=prefd,error=error,str=trim(adjustl(valsD(v))),knd=1._R16P)
+          if (allocated(cla%choices).and.error==0) call cla%check_choices(val=val(v),pref=prefd,error=error)
           if (error/=0) exit
         enddo
 #endif
       type is(real(R8P))
         do v=1,Nv
-          val(v) = cton(str=trim(adjustl(valsD(v))),knd=1._R8P)
-          if (allocated(cla%choices)) call cla%check_choices(val=val(v),pref=prefd,error=error)
+          val(v) = cton(pref=prefd,error=error,str=trim(adjustl(valsD(v))),knd=1._R8P)
+          if (allocated(cla%choices).and.error==0) call cla%check_choices(val=val(v),pref=prefd,error=error)
           if (error/=0) exit
         enddo
       type is(real(R4P))
         do v=1,Nv
-          val(v) = cton(str=trim(adjustl(valsD(v))),knd=1._R4P)
-          if (allocated(cla%choices)) call cla%check_choices(val=val(v),pref=prefd,error=error)
+          val(v) = cton(pref=prefd,error=error,str=trim(adjustl(valsD(v))),knd=1._R4P)
+          if (allocated(cla%choices).and.error==0) call cla%check_choices(val=val(v),pref=prefd,error=error)
           if (error/=0) exit
         enddo
       type is(integer(I8P))
         do v=1,Nv
-          val(v) = cton(str=trim(adjustl(valsD(v))),knd=1_I8P)
-          if (allocated(cla%choices)) call cla%check_choices(val=val(v),pref=prefd,error=error)
+          val(v) = cton(pref=prefd,error=error,str=trim(adjustl(valsD(v))),knd=1_I8P)
+          if (allocated(cla%choices).and.error==0) call cla%check_choices(val=val(v),pref=prefd,error=error)
           if (error/=0) exit
         enddo
       type is(integer(I4P))
         do v=1,Nv
-          val(v) = cton(str=trim(adjustl(valsD(v))),knd=1_I4P)
-          if (allocated(cla%choices)) call cla%check_choices(val=val(v),pref=prefd,error=error)
+          val(v) = cton(pref=prefd,error=error,str=trim(adjustl(valsD(v))),knd=1_I4P)
+          if (allocated(cla%choices).and.error==0) call cla%check_choices(val=val(v),pref=prefd,error=error)
           if (error/=0) exit
         enddo
       type is(integer(I2P))
         do v=1,Nv
-          val(v) = cton(str=trim(adjustl(valsD(v))),knd=1_I2P)
-          if (allocated(cla%choices)) call cla%check_choices(val=val(v),pref=prefd,error=error)
+          val(v) = cton(pref=prefd,error=error,str=trim(adjustl(valsD(v))),knd=1_I2P)
+          if (allocated(cla%choices).and.error==0) call cla%check_choices(val=val(v),pref=prefd,error=error)
           if (error/=0) exit
         enddo
       type is(integer(I1P))
         do v=1,Nv
-          val(v) = cton(str=trim(adjustl(valsD(v))),knd=1_I1P)
-          if (allocated(cla%choices)) call cla%check_choices(val=val(v),pref=prefd,error=error)
+          val(v) = cton(pref=prefd,error=error,str=trim(adjustl(valsD(v))),knd=1_I1P)
+          if (allocated(cla%choices).and.error==0) call cla%check_choices(val=val(v),pref=prefd,error=error)
           if (error/=0) exit
         enddo
       type is(logical)
         do v=1,Nv
-          read(valsD(v),*)val(v)
+          read(valsD(v),*,iostat=error)val(v)
         enddo
+        if (error/=0) write(stderr,'(A)')prefd//' Error: cannot convert "'//trim(adjustl(cla%def))// &
+                      '" of CLA "'//cla%switch//'" to boolean!'
       type is(character(*))
         do v=1,Nv
           val(v)=valsD(v)
+          if (allocated(cla%choices).and.error==0) call cla%check_choices(val=val(v),pref=prefd,error=error)
+          if (error/=0) exit
         enddo
       endselect
     endif
@@ -645,8 +649,10 @@ contains
     if (.not.cla%positional) then
       if (allocated(cla%nargs)) then
         select case(cla%nargs)
-        case('+') ! not yet implemented
+        case('+')
+          sig = sig//' value#1 [value#2 value#3...]'
         case('*') ! not yet implemented
+          sig = sig//' [value#1 value#2 value#3...]'
         case default
           nargs = cton(str=trim(adjustl(cla%nargs)),knd=1_I4P)
           do a=1,nargs
