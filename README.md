@@ -73,12 +73,12 @@ Besides this README file the FLAP documentation is contained into its own [wiki]
 
 ### A Taste of FLAP
 
-Running the provided test program, `flap_test -h`, a taste of FLAP is served:
+Running the provided test program, `Test_Driver -h`, a taste of FLAP is served:
 ```shell
-+--> flap_test, a testing program for FLAP library
++--> Test_Driver, a testing program for FLAP library
 +--> Parsing Command Line Arguments
 |--> The Command Line Interface (CLI) has the following options
-|-->   flap_test  [value] --string value [--integer value] [--real value] [--boolean] [--boolean_val value] [--integer_list value#1 value#2 value#3] [--help] [--version]
+|-->   Test_Driver  [value] --string value [--integer value] [--real value] [--boolean] [--boolean_val value] [--integer_list value#1 value#2 value#3] [--help] [--version]
 |--> Each Command Line Argument (CLA) has the following meaning:
 |-->   [value]
 |-->     Positional real input
@@ -109,26 +109,26 @@ Running the provided test program, `flap_test -h`, a taste of FLAP is served:
 |-->     Print version
 |-->     It is a optional CLA
 |--> Usage examples:
-|-->   -) flap_test -s 'Hello FLAP'
-|-->   -) flap_test -s 'Hello FLAP' -i -2 # printing error...
-|-->   -) flap_test -s 'Hello FLAP' -i 3 -r 33.d0
-|-->   -) flap_test -s 'Hello FLAP' -integer_list 10 -3 87
-|-->   -) flap_test 33.0 -s 'Hello FLAP' -i 5
-|-->   -) flap_test -string 'Hello FLAP' -boolean
+|-->   -) Test_Driver -s 'Hello FLAP'
+|-->   -) Test_Driver -s 'Hello FLAP' -i -2 # printing error...
+|-->   -) Test_Driver -s 'Hello FLAP' -i 3 -r 33.d0
+|-->   -) Test_Driver -s 'Hello FLAP' -integer_list 10 -3 87
+|-->   -) Test_Driver 33.0 -s 'Hello FLAP' -i 5
+|-->   -) Test_Driver -string 'Hello FLAP' -boolean
 ```
 Not so bad for just a very few statements as the following:
 ```fortran
 ...
-write(stdout,'(A)')'+--> flap_test, a testing program for FLAP library'
+write(stdout,'(A)')'+--> Test_Driver, a testing program for FLAP library'
 ! initializing CLI
-call cli%init(progname='flap_test',                                           &
-              version ='v0.0.1',                                              &
-              examples=["flap_test -s 'Hello FLAP'                          ",&
-                        "flap_test -s 'Hello FLAP' -i -2 # printing error...",&
-                        "flap_test -s 'Hello FLAP' -i 3 -r 33.d0            ",&
-                        "flap_test -s 'Hello FLAP' -integer_list 10 -3 87   ",&
-                        "flap_test 33.0 -s 'Hello FLAP' -i 5                ",&
-                        "flap_test -string 'Hello FLAP' -boolean            "])
+call cli%init(progname='Test_Driver',                                           &
+              version ='v0.0.1',                                                &
+              examples=["Test_Driver -s 'Hello FLAP'                          ",&
+                        "Test_Driver -s 'Hello FLAP' -i -2 # printing error...",&
+                        "Test_Driver -s 'Hello FLAP' -i 3 -r 33.d0            ",&
+                        "Test_Driver -s 'Hello FLAP' -integer_list 10 -3 87   ",&
+                        "Test_Driver 33.0 -s 'Hello FLAP' -i 5                ",&
+                        "Test_Driver -string 'Hello FLAP' -boolean            "])
 ! setting CLAs
 call cli%add(pref='|-->',switch='--string',      switch_ab='-s', help='String input',                  required=.true., act='store',                                  error=error)
 call cli%add(pref='|-->',switch='--integer',     switch_ab='-i', help='Integer input with fixed range',required=.false.,act='store',          def='1',choices='1,3,5',error=error)
