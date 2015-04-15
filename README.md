@@ -5,6 +5,8 @@
 [![License](https://img.shields.io/badge/license-GNU%20GeneraL%20Public%20License%20v3%20,%20GPLv3-blue.svg)]()
 
 [![Status](https://img.shields.io/badge/status-stable-brightgreen.svg)]()
+[![Build Status](https://travis-ci.org/szaghi/FLAP.svg?branch=master)](https://travis-ci.org/szaghi/FLAP)
+[![Coverage Status](https://coveralls.io/repos/szaghi/FLAP/badge.svg?branch=master)](https://coveralls.io/r/szaghi/FLAP?branch=master)
 
 ### FLAP, Fortran command Line Arguments Parser for poor men
 A KISS pure Fortran Library for building powerful, easy-to-use, elegant command line interfaces
@@ -21,7 +23,7 @@ A KISS pure Fortran Library for building powerful, easy-to-use, elegant command 
 [![Open bugs](https://badge.waffle.io/szaghi/FLAP.png?label=bug&title=Open%20Bugs)](https://waffle.io/szaghi/FLAP)
 
 #### Compiler Support
-[![Compiler](https://img.shields.io/badge/GNU%20Gfortran%20Compiler-build%20fail%20with%20v4.9.x-orange.svg)]()
+[![Compiler](https://img.shields.io/badge/GNU%20Gfortran%20Compiler-build%20pass%20with%20v4.9.2+-brightgreen.svg)]()
 
 [![Compiler](https://img.shields.io/badge/Intel%20Fortran%20Compiler-build%20pass%20with%20v12.x+-brightgreen.svg)]()
 
