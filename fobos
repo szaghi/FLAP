@@ -5,12 +5,12 @@ modes = shared-gnu static-gnu test-driver-gnu
         shared-intel-debug static-intel-debug test-driver-intel-debug
 
 [common-variables]
-$CSHARED_GNU = -cpp -c -fPIC -frealloc-lhs
+$CSHARED_GNU = -DGNU -cpp -c -fPIC -frealloc-lhs
 $CSHARED_INT = -cpp -c -fpic -assume realloc_lhs
 $LSHARED     = -shared
-$CSTATIC_GNU = -cpp -c -frealloc-lhs
+$CSTATIC_GNU = -DGNU -cpp -c -frealloc-lhs -fcheck=all
 $CSTATIC_INT = -cpp -c -assume realloc_lhs
-$DEBUG_GNU   = -O0 -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -Wuninitialized -fcheck=all -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan -std=f2003 -fall-intrinsics
+$DEBUG_GNU   = -DGNU -O0 -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -Wuninitialized -fcheck=all -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan -std=f2003 -fall-intrinsics
 $DEBUG_INT   = -O0 -debug all -check all -warn all -extend-source 132 -traceback -gen-interfaces#-fpe-all=0 -fp-stack-check -fstack-protector-all -ftrapuv -no-ftz -std03
 $OPTIMIZE    = -O2
 
@@ -36,16 +36,18 @@ build_dir = ./Test_Driver/
 output   = Test_Driver
 
 [shared-gnu-debug]
-template = template-shared-gnu-debug
-target   = src/Data_Type_Command_Line_Interface.f90
-output   = FLAP.so
-mklib    = shared
+template  = template-shared-gnu-debug
+target    = src/Data_Type_Command_Line_Interface.f90
+build_dir = ./shared/
+output    = FLAP.so
+mklib     = shared
 
 [static-gnu-debug]
-template = template-static-gnu-debug
-target   = src/Data_Type_Command_Line_Interface.f90
-output   = FLAP.a
-mklib    = static
+template  = template-static-gnu-debug
+target    = src/Data_Type_Command_Line_Interface.f90
+build_dir = ./static/
+output    = FLAP.a
+mklib     = static
 
 [test-driver-gnu-debug]
 template  = template-static-gnu-debug
@@ -74,16 +76,18 @@ build_dir = ./Test_Driver/
 output   = Test_Driver
 
 [shared-intel-debug]
-template = template-shared-intel-debug
-target   = src/Data_Type_Command_Line_Interface.f90
-output   = FLAP.so
-mklib    = shared
+template  = template-shared-intel-debug
+target    = src/Data_Type_Command_Line_Interface.f90
+build_dir = ./shared/
+output    = FLAP.so
+mklib     = shared
 
 [static-intel-debug]
-template = template-static-intel-debug
-target   = src/Data_Type_Command_Line_Interface.f90
-output   = FLAP.a
-mklib    = static
+template  = template-static-intel-debug
+target    = src/Data_Type_Command_Line_Interface.f90
+build_dir = ./static/
+output    = FLAP.a
+mklib     = static
 
 [test-driver-intel-debug]
 template  = template-static-intel-debug
@@ -95,7 +99,7 @@ output    = Test_Driver
 [template-shared-gnu]
 compiler = gnu
 cflags   = $CSHARED_GNU $OPTIMIZE
-lflags   = $LSHARED_GNU $OPTIMIZE
+lflags   = $LSHARED $OPTIMIZE
 mod_dir  = ./mod/
 obj_dir  = ./obj/
 src      = ./src/
@@ -106,8 +110,7 @@ jobs     = 2
 
 [template-static-gnu]
 compiler = gnu
-cflags   = $CSTATIC_GNU $OPTIMIZE
-lflags   = $OPTIMIZE
+cflags   = $CSTATIC_GNU
 mod_dir  = ./mod/
 obj_dir  = ./obj/
 src      = ./src/
@@ -119,7 +122,7 @@ jobs     = 2
 [template-shared-gnu-debug]
 compiler = gnu
 cflags   = $CSHARED_GNU $DEBUG_GNU
-lflags   = $LSHARED_GNU $DEBUG_GNU
+lflags   = $LSHARED $DEBUG_GNU
 mod_dir  = ./mod/
 obj_dir  = ./obj/
 src      = ./src/
@@ -143,7 +146,7 @@ jobs     = 2
 [template-shared-intel]
 compiler = intel
 cflags   = $CSHARED_INT $OPTIMIZE
-lflags   = $LSHARED_INT $OPTIMIZE
+lflags   = $LSHARED $OPTIMIZE
 mod_dir  = ./mod/
 obj_dir  = ./obj/
 src      = ./src/
@@ -167,7 +170,7 @@ jobs     = 2
 [template-shared-intel-debug]
 compiler = intel
 cflags   = $CSHARED_INT $DEBUG_INT
-lflags   = $LSHARED_INT $DEBUG_INT
+lflags   = $LSHARED $DEBUG_INT
 mod_dir  = ./mod/
 obj_dir  = ./obj/
 src      = ./src/
@@ -193,3 +196,23 @@ help   = Rule for building documentation from source files
 rule_1 = rm -rf doc/html/*
 rule_2 = ford doc/main_page.md
 rule_3 = cp -r doc/html/publish/* doc/html/
+
+[rule-deldoc]
+help = Rule for deleting documentation
+rule = rm -rf doc/html/*
+
+[rule-maketar]
+help = Rule for making tar archive of the project
+rule = tar -czf FLAP.tar.gz *
+
+[rule-coverage-analysis]
+help   = Rule for performing coverage analysis and saving reports in markdown
+rule_1 = FoBiS.py clean -mode test-driver-gnu
+rule_2 = FoBiS.py build -mode test-driver-gnu -coverage
+rule_3 = ./Test_Driver/Test_Driver
+rule_4 = ./Test_Driver/Test_Driver -v
+rule_5 = ./Test_Driver/Test_Driver -s 'Hello FLAP' -i 2
+rule_6 = ./Test_Driver/Test_Driver 33.0 -s 'Hello FLAP' --integer_list 10 -3 87 -i 3 -r 64.123d0  --boolean --boolean_val .false.
+rule_7 = gcov -o Test_Driver/obj/ src/*
+rule_8 = FoBiS.py rule -gcov_analyzer wiki/ Coverage-Analysis
+rule_9 = rm -f *.gcov

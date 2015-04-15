@@ -6,13 +6,35 @@ python:
 before_install:
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo apt-get update -qq
-  - sudo apt-get install gfortran-4.9
+  - sudo apt-get install gfortran-4.9 binutils
+  - sudo pip install FoBiS.py
+  - sudo pip install markdown-checklist
+  - sudo pip install ford
+  - sudo pip install cpp-coveralls
   - ln -fs /usr/bin/gfortran-4.9 gfortran
-  - pip install FoBiS.py
+  - ln -fs /usr/bin/gcov-4.9 gcov
   - export PATH=".:$PATH"
 
 before_script:
-  - FoBiS.py build -mode flap-test-gnu
+  - FoBiS.py build -mode test-driver-gnu -coverage
 
 script:
-  - ./flap_test/flap_test -s 'hi travis'
+  - FoBiS.py rule -ex coverage-analysis
+
+after_success:
+  # coverage analysis
+  - cd $TRAVIS_BUILD_DIR
+  - rm -f ./Test_Driver/obj/IR_Precision.gc*
+  - rm -f ./Test_Driver/obj/Lib_IO_Misc.gc*
+  - rm -f ./Test_Driver/obj/Lib_Strings.gc*
+  - rm -f ./Test_Driver/obj/Test_Driver.gc*
+  - coveralls -b .
+  # deploy documentation
+  - git config --global user.name "Stefano Zaghi"
+  - git config --global user.email "stefano.zaghi@gmail.com"
+  - git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/szaghi/FLAP doc/html
+  - FoBiS.py rule -ex makedoc
+  - cd doc/html
+  - git add -f --all *
+  - git commit -m "Travis CI autocommit from travis build ${TRAVIS_BUILD_NUMBER}"
+  - git push -fq origin gh-pages

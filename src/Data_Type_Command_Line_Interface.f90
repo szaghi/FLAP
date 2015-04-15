@@ -48,7 +48,7 @@ type:: Type_Command_Line_Argument
     procedure:: check_choices => check_choices_cla    !< Procedure for checking if CLA value is in allowed choices.
     generic::   get           => get_cla,get_cla_list !< Procedure for getting CLA value(s).
     procedure:: print         => print_cla            !< Procedure for printing CLA data with a pretty format.
-    procedure:: add_signature                         !< Procedure for adding CLA signature to the CLI one.
+    procedure:: signature                             !< Get CLA signature for adding to the CLI one.
     final::     finalize_cla                          !< Procedure for freeing dynamic memory when finalizing.
     ! operators overloading
     generic:: assignment(=) => assign_cla             !< Procedure for CLA assignment overloading.
@@ -66,7 +66,11 @@ type, public:: Type_Command_Line_Interface
   character(len=:), allocatable::                 progname            !< Program name.
   character(len=:), allocatable::                 version             !< Program version.
   character(len=:), allocatable::                 help                !< Help message introducing the CLI usage.
-  character(len=:), allocatable::                 examples(:)         !< Examples of correct usage.
+#ifdef GNU
+  character(100  ), allocatable::                 examples(:)         !< Examples of correct usage.
+#else
+  character(len=:), allocatable::                 examples(:)         !< Examples of correct usage (does not work with gfortran).
+#endif
   logical::                                       disable_hv = .false.!< Disable automatic inserting of 'help' and 'version' CLAs.
   contains
     procedure:: free                                   !< Procedure for freeing dynamic memory.
@@ -630,21 +634,20 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine print_cla
 
-  subroutine add_signature(cla,signature)
+  function signature(cla) result(signd)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Procedure for adding CLA signature to the CLI one.
+  !< Get CLA signature for adding to the CLI one.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  class(Type_Command_Line_Argument), intent(IN)::    cla       !< CLA data.
-  character(len=:), allocatable,     intent(INOUT):: signature !< CLI signature.
-  character(len=:), allocatable::                    signd     !< Temporary CLI signature.
-  character(len=:), allocatable::                    sig       !< Temporary CLI signature.
-  integer(I4P)::                                     nargs     !< Number of arguments consumed by CLA.
-  integer(I4P)::                                     a         !< Counter.
+  class(Type_Command_Line_Argument), intent(IN):: cla   !< CLA data.
+  character(len=:), allocatable::                 signd !< Temporary CLI signature.
+  character(len=:), allocatable::                 sig   !< Temporary CLI signature.
+  integer(I4P)::                                  nargs !< Number of arguments consumed by CLA.
+  integer(I4P)::                                  a     !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  signd = '' ; if (allocated(signature)) signd = signature
+  signd = ''
   if (cla%act==action_store) then
     if (.not.cla%positional) then
       if (allocated(cla%nargs)) then
@@ -681,10 +684,9 @@ contains
       signd = signd//' ['//trim(adjustl(cla%switch))//']'
     endif
   endif
-  signature = signd
   return
   !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine add_signature
+  endfunction signature
 
   ! Assignment (=)
   elemental subroutine assign_cla(self1,self2)
@@ -763,7 +765,11 @@ contains
   cli%help     = ' The Command Line Interface (CLI) has the following options' ; if (present(help    )) cli%help     = help
   if (present(disable_hv)) cli%disable_hv = .true.
   if (present(examples)) then
-    allocate(character(len=len(examples(1))):: cli%examples(1:size(examples)))
+#ifdef GNU
+    allocate(cli%examples(1:size(examples)))
+#else
+    allocate(character(len=len(examples(1))):: cli%examples(1:size(examples))) ! does not work with gfortran 4.9.2
+#endif
     cli%examples = examples
   endif
   return
@@ -986,11 +992,13 @@ contains
                                               '" requires '//trim(str(.true.,nargs))//' arguments but no enough ones remain!'
                     error = 2
                   endif
-                  do aaa=a+1,a+nargs
+                  ! do aaa=a+1,a+nargs ! increasing loop
+                  do aaa=a+nargs,a+1,-1 ! decreasing loop due to gfortran bug
                     call get_command_argument(aaa,val)
-                    cli%cla(aa)%val = cli%cla(aa)%val//args_sep//trim(adjustl(val))
+                    ! cli%cla(aa)%val = cli%cla(aa)%val//args_sep//trim(adjustl(val)) ! increasing loop
+                    cli%cla(aa)%val = trim(adjustl(val))//args_sep//trim(cli%cla(aa)%val) ! decreasing loop due to gfortran bug
                   enddo
-                  cli%cla(aa)%val = cli%cla(aa)%val(1+len(args_sep):)
+                  ! cli%cla(aa)%val = cli%cla(aa)%val(1+len(args_sep):) ! does not work with gfortran 4.9.2
                   a = a + nargs
                 endselect
               else
@@ -1050,13 +1058,15 @@ contains
     !-------------------------------------------------------------------------------------------------------------------------------
     !< Procedure for printing the correct use Command Line Interface accordingly to the cli%cla passed.
     !-------------------------------------------------------------------------------------------------------------------------------
+    character(len=:), allocatable:: cla_sign      !< Signature of current CLA.
     character(len=:), allocatable:: cla_list_sign !< Complete signature of CLA list.
     !-------------------------------------------------------------------------------------------------------------------------------
 
     !-------------------------------------------------------------------------------------------------------------------------------
     cla_list_sign = '   '//cli%progname//' '
     do a=1,cli%Na
-      call cli%cla(a)%add_signature(signature=cla_list_sign)
+      cla_sign = cli%cla(a)%signature()
+      cla_list_sign = cla_list_sign//cla_sign
     enddo
     write(stdout,'(A)')prefd//cli%help
     write(stdout,'(A)')prefd//cla_list_sign
