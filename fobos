@@ -8,7 +8,7 @@ modes = shared-gnu static-gnu test-driver-gnu
 $CSHARED_GNU = -DGNU -cpp -c -fPIC -frealloc-lhs
 $CSHARED_INT = -cpp -c -fpic -assume realloc_lhs
 $LSHARED     = -shared
-$CSTATIC_GNU = -DGNU -cpp -c -frealloc-lhs -fcheck=all
+$CSTATIC_GNU = -DGNU -cpp -c -frealloc-lhs -fcheck=all -O0
 $CSTATIC_INT = -cpp -c -assume realloc_lhs
 $DEBUG_GNU   = -DGNU -O0 -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -Wuninitialized -fcheck=all -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan -std=f2003 -fall-intrinsics
 $DEBUG_INT   = -O0 -debug all -check all -warn all -extend-source 132 -traceback -gen-interfaces#-fpe-all=0 -fp-stack-check -fstack-protector-all -ftrapuv -no-ftz -std03
