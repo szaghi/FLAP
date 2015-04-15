@@ -8,7 +8,7 @@ modes = shared-gnu static-gnu test-driver-gnu
 $CSHARED_GNU = -DGNU -cpp -c -fPIC -frealloc-lhs
 $CSHARED_INT = -cpp -c -fpic -assume realloc_lhs
 $LSHARED     = -shared
-$CSTATIC_GNU = -DGNU -cpp -c -frealloc-lhs -fcheck=all -O0
+$CSTATIC_GNU = -DGNU -cpp -c -frealloc-lhs
 $CSTATIC_INT = -cpp -c -assume realloc_lhs
 $DEBUG_GNU   = -DGNU -O0 -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -Wuninitialized -fcheck=all -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan -std=f2003 -fall-intrinsics
 $DEBUG_INT   = -O0 -debug all -check all -warn all -extend-source 132 -traceback -gen-interfaces#-fpe-all=0 -fp-stack-check -fstack-protector-all -ftrapuv -no-ftz -std03
@@ -110,7 +110,7 @@ jobs     = 2
 
 [template-static-gnu]
 compiler = gnu
-cflags   = $CSTATIC_GNU
+cflags   = $CSTATIC_GNU $OPTIMIZE
 mod_dir  = ./mod/
 obj_dir  = ./obj/
 src      = ./src/
@@ -210,7 +210,7 @@ help    = Rule for performing coverage analysis and saving reports in markdown
 verbose = True
 rule_1  = FoBiS.py clean -mode test-driver-gnu
 rule_2  = FoBiS.py build -mode test-driver-gnu -coverage
-rule_3  = ./Test_Driver/Test_Driver -h
+rule_3  = ./Test_Driver/Test_Driver
 rule_4  = ./Test_Driver/Test_Driver -v
 rule_5  = ./Test_Driver/Test_Driver -s 'Hello FLAP' -i 2
 rule_6  = ./Test_Driver/Test_Driver 33.0 -s 'Hello FLAP' --integer_list 10 -3 87 -i 3 -r 64.123d0  --boolean --boolean_val .false.

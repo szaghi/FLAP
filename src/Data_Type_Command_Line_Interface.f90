@@ -641,47 +641,46 @@ contains
   implicit none
   class(Type_Command_Line_Argument), intent(IN):: cla   !< CLA data.
   character(len=:), allocatable::                 signd !< Temporary CLI signature.
-  character(len=:), allocatable::                 sig   !< Temporary CLI signature.
   integer(I4P)::                                  nargs !< Number of arguments consumed by CLA.
   integer(I4P)::                                  a     !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  signd = ''
   if (cla%act==action_store) then
     if (.not.cla%positional) then
       if (allocated(cla%nargs)) then
         select case(cla%nargs)
         case('+')
-          sig = sig//' value#1 [value#2 value#3...]'
+          signd = ' value#1 [value#2 value#3...]'
         case('*') ! not yet implemented
-          sig = sig//' [value#1 value#2 value#3...]'
+          signd = ' [value#1 value#2 value#3...]'
         case default
           nargs = cton(str=trim(adjustl(cla%nargs)),knd=1_I4P)
+          signd = ''
           do a=1,nargs
-            sig = sig//' value#'//trim(str(.true.,a))
+            signd = signd//' value#'//trim(str(.true.,a))
           enddo
         endselect
       else
-        sig = ' value'
+        signd = ' value'
       endif
       if (cla%required) then
-        signd = signd//' '//trim(adjustl(cla%switch))//sig
+        signd = ' '//trim(adjustl(cla%switch))//signd
       else
-        signd = signd//' ['//trim(adjustl(cla%switch))//sig//']'
+        signd = ' ['//trim(adjustl(cla%switch))//signd//']'
       endif
     else
       if (cla%required) then
-        signd = signd//' value'
+        signd = ' value'
       else
-        signd = signd//' [value]'
+        signd = ' [value]'
       endif
     endif
   else
     if (cla%required) then
-      signd = signd//' '//trim(adjustl(cla%switch))
+      signd = ' '//trim(adjustl(cla%switch))
     else
-      signd = signd//' ['//trim(adjustl(cla%switch))//']'
+      signd = ' ['//trim(adjustl(cla%switch))//']'
     endif
   endif
   return
