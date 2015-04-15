@@ -19,7 +19,7 @@ before_script:
   - FoBiS.py build -mode test-driver-gnu -coverage
 
 script:
-  - FoBiS.py rule -ex coverage-analysis
+  - FoBiS.py rule -ex makecoverage
 
 after_success:
   # coverage analysis
