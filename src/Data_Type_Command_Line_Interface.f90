@@ -66,6 +66,7 @@ type, public:: Type_Command_Line_Interface
   character(len=:), allocatable::                 progname            !< Program name.
   character(len=:), allocatable::                 version             !< Program version.
   character(len=:), allocatable::                 help                !< Help message introducing the CLI usage.
+  character(len=:), allocatable::                 description         !< Detailed description message introducing the program.
 #ifdef GNU
   character(100  ), allocatable::                 examples(:)         !< Examples of correct usage.
 #else
@@ -585,49 +586,48 @@ contains
           enddo
         endselect
         if (trim(adjustl(cla%switch))/=trim(adjustl(cla%switch_ab))) then
-          sig = '   ['//trim(adjustl(cla%switch))//sig//'] or ['//trim(adjustl(cla%switch_ab))//sig//']'
+          sig = '   '//trim(adjustl(cla%switch))//sig//', '//trim(adjustl(cla%switch_ab))//sig
         else
-          sig = '   ['//trim(adjustl(cla%switch))//sig//']'
+          sig = '   '//trim(adjustl(cla%switch))//sig
         endif
       else
         if (trim(adjustl(cla%switch))/=trim(adjustl(cla%switch_ab))) then
-          sig = '   ['//trim(adjustl(cla%switch))//' value] or ['//trim(adjustl(cla%switch_ab))//' value]'
+          sig = '   '//trim(adjustl(cla%switch))//' value, '//trim(adjustl(cla%switch_ab))//' value'
         else
-          sig = '   ['//trim(adjustl(cla%switch))//' value]'
+          sig = '   '//trim(adjustl(cla%switch))//' value'
         endif
       endif
       if (allocated(cla%choices)) then
-        sig = sig//' with value chosen in: ('//cla%choices//')'
+        sig = sig//', value in: ('//cla%choices//')'
       endif
     else
-      sig = '   [value]'
+      sig = '   value'
       if (allocated(cla%choices)) then
-        sig = sig//' with value chosen in: ('//cla%choices//')'
+        sig = sig//', value in: ('//cla%choices//')'
       endif
     endif
   else
     if (trim(adjustl(cla%switch))/=trim(adjustl(cla%switch_ab))) then
-      sig = '   ['//trim(adjustl(cla%switch))//'] or ['//trim(adjustl(cla%switch_ab))//']'
+      sig = '   '//trim(adjustl(cla%switch))//', '//trim(adjustl(cla%switch_ab))
     else
-      sig = '   ['//trim(adjustl(cla%switch))//']'
+      sig = '   '//trim(adjustl(cla%switch))
     endif
   endif
   write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd)prefd//sig
-  write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd)prefd//'     '//trim(adjustl(cla%help))
+  sig = '       '//trim(adjustl(cla%help))
   if (cla%positional) then
-    write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd)prefd//'     It is a positional CLA having position "'//&
-                                                                 trim(str(.true.,cla%position))//'-th"'
+    sig = sig//'; '//trim(str(.true.,cla%position))//'-th positional CLA'
   endif
   if (cla%required) then
-    write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd)prefd//'     It is a non optional CLA thus must be passed to CLI'
+    sig = sig//'; required'
   else
     if (cla%def /= '') then
-      write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd)prefd//'     It is a optional CLA which default value is "'//&
-                                                                   trim(adjustl(cla%def))//'"'
+      sig = sig//'; optional, default value '//trim(adjustl(cla%def))
     else
-      write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd)prefd//'     It is a optional CLA'
+      sig = sig//'; optional'
     endif
   endif
+  write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd)prefd//sig
   if (present(iostat)) iostat = iostatd
   if (present(iomsg))  iomsg  = iomsgd
   return
@@ -721,13 +721,25 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Interface), intent(INOUT):: cli !< CLI data.
+  integer(I4P)::                                      a   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  if (allocated(cli%cla)) deallocate(cli%cla)
+  if (allocated(cli%cla)) then
+    do a=a,size(cli%cla,dim=1)
+      call cli%cla(a)%free
+    enddo
+    deallocate(cli%cla)
+  endif
   cli%Na          = 0_I4P
   cli%Na_required = 0_I4P
   cli%Na_optional = 0_I4P
+  if (allocated(cli%progname   ))  deallocate(cli%progname   )
+  if (allocated(cli%version    ))  deallocate(cli%version    )
+  if (allocated(cli%help       ))  deallocate(cli%help       )
+  if (allocated(cli%description))  deallocate(cli%description)
+  if (allocated(cli%examples   ))  deallocate(cli%examples   )
+  cli%disable_hv = .false.
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine free
@@ -745,7 +757,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine finalize
 
-  pure subroutine init(cli,progname,version,help,examples,disable_hv)
+  pure subroutine init(cli,progname,version,help,description,examples,disable_hv)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for initializing CLI.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -754,14 +766,16 @@ contains
   character(*), optional,             intent(IN)::    progname     !< Program name.
   character(*), optional,             intent(IN)::    version      !< Program version.
   character(*), optional,             intent(IN)::    help         !< Help message introducing the CLI usage.
+  character(*), optional,             intent(IN)::    description  !< Detailed description message introducing the program.
   character(*), optional,             intent(IN)::    examples(1:) !< Examples of correct usage.
   logical,      optional,             intent(IN)::    disable_hv   !< Disable automatic inserting of 'help' and 'version' CLAs.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  cli%progname = 'program'                                                     ; if (present(progname)) cli%progname = progname
-  cli%version  = 'unknown'                                                     ; if (present(version )) cli%version  = version
-  cli%help     = ' The Command Line Interface (CLI) has the following options' ; if (present(help    )) cli%help     = help
+  cli%progname    = 'program' ; if (present(progname   )) cli%progname    = progname
+  cli%version     = 'unknown' ; if (present(version    )) cli%version     = version
+  cli%help        = 'usage: ' ; if (present(help       )) cli%help        = help
+  cli%description = ''        ; if (present(description)) cli%description = description
   if (present(disable_hv)) cli%disable_hv = .true.
   if (present(examples)) then
 #ifdef GNU
@@ -960,8 +974,8 @@ contains
   ! counting the passed CLA
   Na = command_argument_count()
   if (Na<cli%Na_required) then
-    write(stderr,'(A)')prefd//' Error: the Command Line Interface requires at least '//trim(str(.true.,cli%Na_required))//&
-                              ' arguments to be passed whereas only '//trim(str(.true.,Na))//' have been!'
+    write(stderr,'(A)')prefd//cli%progname//': error: too few arguments ('//trim(str(.true.,Na))//')'//&
+                       ' respect the required ('//trim(str(.true.,cli%Na_required))//')'
     call print_usage
     error = 1
     return
@@ -987,8 +1001,8 @@ contains
                 case default
                   nargs = cton(str=trim(adjustl(cli%cla(aa)%nargs)),knd=1_I4P)
                   if (a+nargs>Na) then
-                    write(stderr,'(A)')prefd//' Error: CLA "'//trim(adjustl(cli%cla(aa)%switch))//&
-                                              '" requires '//trim(str(.true.,nargs))//' arguments but no enough ones remain!'
+                    write(stderr,'(A)')prefd//cli%progname//' error: CLA "'//trim(adjustl(cli%cla(aa)%switch))//&
+                                       '" requires '//trim(str(.true.,nargs))//' arguments but no enough ones remain!'
                     error = 2
                   endif
                   ! do aaa=a+1,a+nargs ! increasing loop
@@ -1062,19 +1076,29 @@ contains
     !-------------------------------------------------------------------------------------------------------------------------------
 
     !-------------------------------------------------------------------------------------------------------------------------------
-    cla_list_sign = '   '//cli%progname//' '
+    cla_list_sign = cli%progname//' '
     do a=1,cli%Na
       cla_sign = cli%cla(a)%signature()
       cla_list_sign = cla_list_sign//cla_sign
     enddo
-    write(stdout,'(A)')prefd//cli%help
-    write(stdout,'(A)')prefd//cla_list_sign
-    write(stdout,'(A)')prefd//' Each Command Line Argument (CLA) has the following meaning:'
-    do a=1,Cli%Na
-      call cli%cla(a)%print(pref=prefd,unit=stdout)
-    enddo
+    write(stdout,'(A)')prefd//cli%help//' '//cla_list_sign
+    if (cli%Na_required>0) then
+      write(stdout,'(A)')
+      write(stdout,'(A)')prefd//' Required options:'
+      do a=1,cli%Na
+        if (cli%cla(a)%required) call cli%cla(a)%print(pref=prefd,unit=stdout)
+      enddo
+    endif
+    if (cli%Na_optional>0) then
+      write(stdout,'(A)')
+      write(stdout,'(A)')prefd//' Optional options:'
+      do a=1,cli%Na
+        if (.not.cli%cla(a)%required) call cli%cla(a)%print(pref=prefd,unit=stdout)
+      enddo
+    endif
     if (allocated(cli%examples)) then
-      write(stdout,'(A)')prefd//' Usage examples:'
+      write(stdout,'(A)')
+      write(stdout,'(A)')prefd//' Examples:'
       do a=1,size(cli%examples,dim=1)
         write(stdout,'(A)')prefd//'   -) '//trim(cli%examples(a))
       enddo
@@ -1202,10 +1226,14 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  if (allocated(self2%cla)) self1%cla          =  self2%cla
-                            self1%Na           =  self2%Na
-                            self1%Na_required  =  self2%Na_required
-                            self1%Na_optional  =  self2%Na_optional
+  if (allocated(self2%progname   )) self1%progname    = self2%progname
+  if (allocated(self2%version    )) self1%version     = self2%version
+  if (allocated(self2%help       )) self1%help        = self2%help
+  if (allocated(self2%description)) self1%description = self2%description
+  if (allocated(self2%cla))         self1%cla         = self2%cla
+                                    self1%Na          = self2%Na
+                                    self1%Na_required = self2%Na_required
+                                    self1%Na_optional = self2%Na_optional
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine assign_cli

@@ -3,6 +3,7 @@
 # FLAP [![GitHub tag](https://img.shields.io/github/tag/szaghi/FLAP.svg)]()
 
 [![License](https://img.shields.io/badge/license-GNU%20GeneraL%20Public%20License%20v3%20,%20GPLv3-blue.svg)]()
+[![License](https://img.shields.io/badge/license-MIT-red.svg)]()
 
 [![Status](https://img.shields.io/badge/status-stable-brightgreen.svg)]()
 [![Build Status](https://travis-ci.org/szaghi/FLAP.svg?branch=master)](https://travis-ci.org/szaghi/FLAP)
@@ -69,7 +70,7 @@ Go to [Top](#top)
 
 ## Copyrights
 
-FLAP is an open source project, it is distributed under the [GPL v3](http://www.gnu.org/licenses/gpl-3.0.html). Anyone is interest to use, to develop or to contribute to FLAP is welcome.
+FLAP is an open source project, it is distributed under a dual licensing system: the [GPL v3](http://www.gnu.org/licenses/gpl-3.0.html) and the [MIT](http://opensource.org/licenses/MIT) licenses. Anyone is interest to use, to develop or to contribute to FLAP is welcome: you are free to select the GPL license for FOSS projects or the MIT one for commercial softwares.
 
 Go to [Top](#top)
 
