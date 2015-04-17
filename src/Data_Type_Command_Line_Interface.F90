@@ -1,16 +1,15 @@
-!< FLAP, Fortran command Line Arguments Parser for poor men
+!< FLAP, Fortran command Line Arguments Parser for poor people
 module Data_Type_Command_Line_Interface
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< FLAP, Fortran command Line Arguments Parser for poor men
+!< FLAP, Fortran command Line Arguments Parser for poor people
 !<{!README-FLAP.md!}
 !<
 !<### ChangeLog
 !<
 !<{!ChangeLog-FLAP.md!}
 !-----------------------------------------------------------------------------------------------------------------------------------
-USE IR_Precision                           ! Integers and reals precision definition.
-USE Lib_IO_Misc, only: stdout,stderr       ! Library for IO operations.
-USE Lib_Strings, only: tokenize,Upper_Case ! Library for strings operations.
+USE IR_Precision                                                                ! Integers and reals precision definition.
+USE, intrinsic:: ISO_FORTRAN_ENV, only: stdout=>OUTPUT_UNIT, stderr=>ERROR_UNIT ! Standard output/error logical units.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -109,6 +108,83 @@ character(len=*), parameter:: action_print_vers  = 'PRINT_VERSION' !< CLA that p
 character(len=*), parameter:: args_sep           = '||!||'         !< Arguments separator for multiple valued (list) CLA.
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
+  ! auxiliary procedures
+  elemental function Upper_Case(string)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for converting the lower case characters of a string to upper case one.
+  !<
+  !< @note This is taken form Lib_Strings.f90: chek into it for any updates.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  character(len=*), intent(IN):: string                                        !< String to be converted.
+  character(len=len(string))::   Upper_Case                                    !< Converted string.
+  integer::                      n1                                            !< Characters counter.
+  integer::                      n2                                            !< Characters counter.
+  character(len=26), parameter:: upper_alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' !< Upper case alphabet.
+  character(len=26), parameter:: lower_alphabet = 'abcdefghijklmnopqrstuvwxyz' !< Lower case alphabet.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  Upper_Case = string
+  do n1=1,len(string)
+    n2 = index(lower_alphabet,string(n1:n1))
+    if (n2>0) Upper_Case(n1:n1) = upper_alphabet(n2:n2)
+  enddo
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction Upper_Case
+
+  pure subroutine tokenize(strin,delimiter,Nt,toks)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Procedure for tokenizing a string in order to parse it.
+  !<
+  !< @note The dummy array containing tokens must allocatable and its character elements must have the same length of the input
+  !< string. If the length of the delimiter is higher than the input string one then the output tokens array is allocated with
+  !< only one element set to char(0).
+  !<
+  !< @note This is taken form Lib_Strings.f90: chek into it for any updates.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  character(len=*),          intent(IN)::               strin     !< String to be tokenized.
+  character(len=*),          intent(IN)::               delimiter !< Delimiter of tokens.
+  integer(I4P),              intent(OUT), optional::    Nt        !< Number of tokens.
+  character(len=len(strin)), intent(OUT), allocatable:: toks(:)   !< Tokens.
+  character(len=len(strin))::                           strsub    !< Temporary string.
+  integer(I4P)::                                        dlen      !< Delimiter length.
+  integer(I4P)::                                        c         !< Counter.
+  integer(I4P)::                                        n         !< Counter.
+  integer(I4P)::                                        t         !< Counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  ! initialization
+  if (allocated(toks)) deallocate(toks)
+  strsub = strin
+  dlen = len(delimiter)
+  if (dlen>len(strin)) then
+    allocate(toks(1:1)) ; toks(1) = char(0) ; if (present(Nt)) Nt = 1 ; return
+  endif
+  ! computing the number of tokens
+  n = 1
+  do c=1,len(strsub)-dlen ! loop over string characters
+    if (strsub(c:c+dlen-1)==delimiter) n = n + 1
+  enddo
+  allocate(toks(1:n))
+  ! tokenization
+  do t=1,n ! loop over tokens
+    c = index(strsub,delimiter)
+    if (c>0) then
+      toks(t) = strsub(1:c-1)
+      strsub = strsub(c+dlen:)
+    else
+      toks(t) = strsub
+    endif
+  enddo
+  if (present(Nt)) Nt = n
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine tokenize
+
   ! Type_Command_Line_Argument procedures
   elemental subroutine free_cla(cla)
   !---------------------------------------------------------------------------------------------------------------------------------

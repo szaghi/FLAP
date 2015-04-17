@@ -9,7 +9,7 @@
 [![Build Status](https://travis-ci.org/szaghi/FLAP.svg?branch=master)](https://travis-ci.org/szaghi/FLAP)
 [![Coverage Status](https://coveralls.io/repos/szaghi/FLAP/badge.svg?branch=master)](https://coveralls.io/r/szaghi/FLAP?branch=master)
 
-### FLAP, Fortran command Line Arguments Parser for poor men
+### FLAP, Fortran command Line Arguments Parser for poor people
 A KISS pure Fortran Library for building powerful, easy-to-use, elegant command line interfaces
 
 + FLAP is a pure Fortran (KISS) library for building easily nice Command Line Interfaces (CLI) for modern Fortran projects;

@@ -1,6 +1,6 @@
-!< A testing program for FLAP, Fortran command Line Arguments Parser for poor men
+!< A testing program for FLAP, Fortran command Line Arguments Parser for poor people
 program Test_Driver
-!< A testing program for FLAP, Fortran command Line Arguments Parser for poor men
+!< A testing program for FLAP, Fortran command Line Arguments Parser for poor people
 !<
 !<### Compile
 !< See [compile instructions](https://github.com/szaghi/FLAP/wiki/Download-compile).
@@ -10,7 +10,6 @@ program Test_Driver
 !-----------------------------------------------------------------------------------------------------------------------------------
 USE IR_Precision                                                        ! Integers and reals precision definition.
 USE Data_Type_Command_Line_Interface, only: Type_Command_Line_Interface ! Definition of Type_Command_Line_Interface.
-USE Lib_IO_Misc                                                         ! Procedures for IO and strings operations.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -61,16 +60,16 @@ call cli%get(switch='-b',    val=bval,  error=error) ; if (error/=0) stop
 call cli%get(switch='-bv',   val=vbval, error=error) ; if (error/=0) stop
 call cli%get(switch='-il',   val=ilist, error=error) ; if (error/=0) stop
 call cli%get(position=1_I4P, val=prval, error=error) ; if (error/=0) stop
-write(stdout,'(A)'   )'Test_Driver has been called with the following arguments values:'
-write(stdout,'(A)'   )'String          input = '//trim(adjustl(sval))
-write(stdout,'(A)'   )'Real            input = '//str(n=rval)
-write(stdout,'(A)'   )'Integer         input = '//str(n=ival)
-write(stdout,'(A,L1)')'Boolean         input = ',bval
-write(stdout,'(A,L1)')'Valued boolean  input = ',vbval
-write(stdout,'(A)'   )'Positional real input = '//str(n=prval)
-write(stdout,'(A)'   )'Integer list inputs:'
+print '(A)'   ,'Test_Driver has been called with the following arguments values:'
+print '(A)'   ,'String          input = '//trim(adjustl(sval))
+print '(A)'   ,'Real            input = '//str(n=rval)
+print '(A)'   ,'Integer         input = '//str(n=ival)
+print '(A,L1)','Boolean         input = ',bval
+print '(A,L1)','Valued boolean  input = ',vbval
+print '(A)'   ,'Positional real input = '//str(n=prval)
+print '(A)'   ,'Integer list inputs:'
 do l=1,3
-  write(stdout,'(A)' )'Input('//trim(str(.true.,l))//') = '//trim(str(n=ilist(l)))
+  print '(A)' ,'Input('//trim(str(.true.,l))//') = '//trim(str(n=ilist(l)))
 enddo
 stop
 !-----------------------------------------------------------------------------------------------------------------------------------
