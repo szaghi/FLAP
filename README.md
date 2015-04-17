@@ -59,7 +59,7 @@ FLAP is inspired by the python great module _argparse_, thus many features are t
 * [x] errors trapping for invalid CLI usage;
 * [ ] support nested subcommands;
 * [ ] support environment variables;
-* [ ] POSIX style compliant;
+* [x] POSIX style compliant;
 * [ ] replicate all the useful features of _argparse_;
 * [ ] implement [docopt](https://github.com/docopt/docopt) features.
 * [ ] implement [click](http://click.pocoo.org/4/) features.
@@ -82,71 +82,64 @@ Besides this README file the FLAP documentation is contained into its own [wiki]
 
 Running the provided test program, `Test_Driver -h`, a taste of FLAP is served:
 ```shell
-+--> Test_Driver, a testing program for FLAP library
-+--> Parsing Command Line Arguments
-|--> The Command Line Interface (CLI) has the following options
-|-->   Test_Driver  [value] --string value [--integer value] [--real value] [--boolean] [--boolean_val value] [--integer_list value#1 value#2 value#3] [--help] [--version]
-|--> Each Command Line Argument (CLA) has the following meaning:
-|-->   [value]
-|-->     Positional real input
-|-->     It is a positional CLA having position "1-th"
-|-->     It is a optional CLA which default value is "1.0"
-|-->   [--string value] or [-s value]
-|-->     String input
-|-->     It is a non optional CLA thus must be passed to CLI
-|-->   [--integer value] or [-i value] with value chosen in: (1,3,5)
-|-->     Integer input with fixed range
-|-->     It is a optional CLA which default value is "1"
-|-->   [--real value] or [-r value]
-|-->     Real input
-|-->     It is a optional CLA which default value is "1.0"
-|-->   [--boolean] or [-b]
-|-->     Boolean input
-|-->     It is a optional CLA which default value is ".false."
-|-->   [--boolean_val value] or [-bv value]
-|-->     Valued boolean input
-|-->     It is a optional CLA which default value is ".true."
-|-->   [--integer_list value#1 value#2 value#3] or [-il value#1 value#2 value#3]
-|-->     Integer list input
-|-->     It is a optional CLA which default value is "1 8 32"
-|-->   [--help] or [-h]
-|-->     Print this help message
-|-->     It is a optional CLA
-|-->   [--version] or [-v]
-|-->     Print version
-|-->     It is a optional CLA
-|--> Usage examples:
-|-->   -) Test_Driver -s 'Hello FLAP'
-|-->   -) Test_Driver -s 'Hello FLAP' -i -2 # printing error...
-|-->   -) Test_Driver -s 'Hello FLAP' -i 3 -r 33.d0
-|-->   -) Test_Driver -s 'Hello FLAP' -integer_list 10 -3 87
-|-->   -) Test_Driver 33.0 -s 'Hello FLAP' -i 5
-|-->   -) Test_Driver -string 'Hello FLAP' -boolean
+usage:  Test_Driver  [value] --string value [--integer value] [--real value] [--boolean] [--boolean_val value] [--integer_list value#1 value#2 value#3] [--help] [--version]
+
+ Required options:
+   --string value, -s value
+       String input; required
+
+ Optional options:
+   value
+       Positional real input; 1-th positional CLA; optional, default value 1.0
+   --integer value, -i value, value in: (1,3,5)
+       Integer input with fixed range; optional, default value 1
+   --real value, -r value
+       Real input; optional, default value 1.0
+   --boolean, -b
+       Boolean input; optional, default value .false.
+   --boolean_val value, -bv value
+       Valued boolean input; optional, default value .true.
+   --integer_list value#1 value#2 value#3, -il value#1 value#2 value#3
+       Integer list input; optional, default value 1 8 32
+   --help, -h
+       Print this help message; optional
+   --version, -v
+       Print version; optional
+
+ Examples:
+   -) Test_Driver -s 'Hello FLAP'
+   -) Test_Driver -s 'Hello FLAP' -i -2 # printing error...
+   -) Test_Driver -s 'Hello FLAP' -i 3 -r 33.d0
+   -) Test_Driver -s 'Hello FLAP' --integer_list 10 -3 87
+   -) Test_Driver 33.0 -s 'Hello FLAP' -i 5
+   -) Test_Driver --string 'Hello FLAP' --boolean
 ```
 Not so bad for just a very few statements as the following:
 ```fortran
 ...
-write(stdout,'(A)')'+--> Test_Driver, a testing program for FLAP library'
 ! initializing CLI
 call cli%init(progname='Test_Driver',                                           &
-              version ='v0.0.1',                                                &
+              version ='v0.0.5',                                                &
               examples=["Test_Driver -s 'Hello FLAP'                          ",&
                         "Test_Driver -s 'Hello FLAP' -i -2 # printing error...",&
                         "Test_Driver -s 'Hello FLAP' -i 3 -r 33.d0            ",&
-                        "Test_Driver -s 'Hello FLAP' -integer_list 10 -3 87   ",&
+                        "Test_Driver -s 'Hello FLAP' --integer_list 10 -3 87  ",&
                         "Test_Driver 33.0 -s 'Hello FLAP' -i 5                ",&
-                        "Test_Driver -string 'Hello FLAP' -boolean            "])
+                        "Test_Driver --string 'Hello FLAP' --boolean          "])
 ! setting CLAs
-call cli%add(pref='|-->',switch='--string',      switch_ab='-s', help='String input',                  required=.true., act='store',                                  error=error)
-call cli%add(pref='|-->',switch='--integer',     switch_ab='-i', help='Integer input with fixed range',required=.false.,act='store',          def='1',choices='1,3,5',error=error)
-call cli%add(pref='|-->',switch='--real',        switch_ab='-r', help='Real input',                    required=.false.,act='store',          def='1.0',              error=error)
-call cli%add(pref='|-->',switch='--boolean',     switch_ab='-b', help='Boolean input',                 required=.false.,act='store_true',     def='.false.',          error=error)
-call cli%add(pref='|-->',switch='--boolean_val', switch_ab='-bv',help='Valued boolean input',          required=.false.,act='store',          def='.true.',           error=error)
-call cli%add(pref='|-->',switch='--integer_list',switch_ab='-il',help='Integer list input',            required=.false.,act='store',nargs='3',def='1 8 32',           error=error)
-call cli%add(pref='|-->',positional=.true.,position=1,           help='Positional real input',         required=.false.,                      def='1.0',              error=error)
+call cli%add(switch='--string',switch_ab='-s',help='String input',required=.true.,act='store',error=error)
+call cli%add(switch='--integer',switch_ab='-i',help='Integer input with fixed range',required=.false.,act='store',&
+             def='1',choices='1,3,5',error=error)
+call cli%add(switch='--real',switch_ab='-r',help='Real input',required=.false.,act='store',def='1.0',error=error)
+call cli%add(switch='--boolean',switch_ab='-b',help='Boolean input',required=.false.,act='store_true',def='.false.',&
+             error=error)
+call cli%add(switch='--boolean_val',switch_ab='-bv',help='Valued boolean input',required=.false., act='store',&
+             def='.true.',error=error)
+call cli%add(switch='--integer_list',switch_ab='-il',help='Integer list input',required=.false.,act='store',&
+             nargs='3',def='1 8 32',error=error)
+call cli%add(positional=.true.,position=1,help='Positional real input',required=.false.,def='1.0',error=error)
 ! parsing CLI
-write(stdout,'(A)')'+--> Parsing Command Line Arguments'
-call cli%parse(error=error,pref='|-->')
+call cli%parse(error=error)
 ...
 ```
 For a practical example of FLAP usage see [POG](https://github.com/szaghi/OFF/blob/testing/src/POG.f90) source file at line `85`.

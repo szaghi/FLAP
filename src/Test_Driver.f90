@@ -29,14 +29,15 @@ integer(I4P)::                      l          !< Counter.
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! initializing CLI
-call cli%init(progname='Test_Driver',                                           &
-              version ='v0.0.4',                                                &
-              examples=["Test_Driver -s 'Hello FLAP'                          ",&
-                        "Test_Driver -s 'Hello FLAP' -i -2 # printing error...",&
-                        "Test_Driver -s 'Hello FLAP' -i 3 -r 33.d0            ",&
-                        "Test_Driver -s 'Hello FLAP' --integer_list 10 -3 87  ",&
-                        "Test_Driver 33.0 -s 'Hello FLAP' -i 5                ",&
-                        "Test_Driver --string 'Hello FLAP' --boolean          "])
+call cli%init(progname    = 'Test_Driver',                                           &
+              version     = 'v0.0.5',                                                &
+              description = 'Toy program for testing FLAP',                          &
+              examples    = ["Test_Driver -s 'Hello FLAP'                          ",&
+                             "Test_Driver -s 'Hello FLAP' -i -2 # printing error...",&
+                             "Test_Driver -s 'Hello FLAP' -i 3 -r 33.d0            ",&
+                             "Test_Driver -s 'Hello FLAP' --integer_list 10 -3 87  ",&
+                             "Test_Driver 33.0 -s 'Hello FLAP' -i 5                ",&
+                             "Test_Driver --string 'Hello FLAP' --boolean          "])
 ! setting CLAs
 call cli%add(switch='--string',switch_ab='-s',help='String input',required=.true.,act='store',error=error)
 call cli%add(switch='--integer',switch_ab='-i',help='Integer input with fixed range',required=.false.,act='store',&

@@ -19,17 +19,11 @@ private
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-integer(I4P),     parameter:: max_val_len        = 1000            !< Maximum number of characters of CLA value.
-character(len=*), parameter:: action_store       = 'STORE'         !< CLA that stores a value associated to its switch.
-character(len=*), parameter:: action_store_true  = 'STORE_TRUE'    !< CLA that stores .true. without the necessity of a value.
-character(len=*), parameter:: action_store_false = 'STORE_FALSE'   !< CLA that stores .false. without the necessity of a value.
-character(len=*), parameter:: action_print_help  = 'PRINT_HELP'    !< CLA that print help message.
-character(len=*), parameter:: action_print_vers  = 'PRINT_VERSION' !< CLA that print version.
-character(len=*), parameter:: args_sep           = '||!||'         !< Arguments separator for multiple valued (list) CLA.
 type:: Type_Command_Line_Argument
-  !< Derived type containing the useful data for handling command line arguments (CLA).
+  !< Command line arguments (CLA).
   !<
   !< @note If not otherwise declared the action on CLA value is set to "store" a value.
+  private
   character(len=:), allocatable:: switch             !< Switch name.
   character(len=:), allocatable:: switch_ab          !< Abbreviated switch name.
   character(len=:), allocatable:: help               !< Help message describing the CLA.
@@ -43,22 +37,38 @@ type:: Type_Command_Line_Argument
   character(len=:), allocatable:: choices            !< List (comma separated) of allowable values for the argument.
   character(len=:), allocatable:: val                !< CLA value.
   contains
-    procedure:: free          => free_cla             !< Procedure for freeing dynamic memory.
-    procedure:: check         => check_cla            !< Procedure for checking CLA data consistency.
-    procedure:: check_choices => check_choices_cla    !< Procedure for checking if CLA value is in allowed choices.
-    generic::   get           => get_cla,get_cla_list !< Procedure for getting CLA value(s).
-    procedure:: print         => print_cla            !< Procedure for printing CLA data with a pretty format.
-    procedure:: signature                             !< Get CLA signature for adding to the CLI one.
-    final::     finalize_cla                          !< Procedure for freeing dynamic memory when finalizing.
-    ! operators overloading
-    generic:: assignment(=) => assign_cla             !< Procedure for CLA assignment overloading.
-    ! private procedures
-    procedure,              private:: get_cla         !< Procedure for getting CLA (single) value from CLAs list parsed.
-    procedure,              private:: get_cla_list    !< Procedure for getting CLA multiple values from CLAs list parsed.
-    procedure, pass(self1), private:: assign_cla      !< Procedure for CLA assignment overloading.
+    ! public methods
+    procedure, public:: free          => free_cla             !< Free dynamic memory.
+    procedure, public:: check         => check_cla            !< Check CLA data consistency.
+    procedure, public:: check_choices => check_choices_cla    !< Check if CLA value is in allowed choices.
+    generic,   public:: get           => get_cla,get_cla_list !< Get CLA value(s).
+    procedure, public:: print         => print_cla            !< Print CLA data with a pretty format.
+    procedure, public:: signature                             !< Get CLA signature for adding to the CLI one.
+    ! private methods
+    procedure, private:: get_cla                     !< Get CLA (single) value from CLAs list parsed.
+    procedure, private:: get_cla_list                !< Get CLA multiple values from CLAs list parsed.
+    procedure, private:: assign_cla                  !< CLA assignment overloading.
+    generic,   private:: assignment(=) => assign_cla !< CLA assignment overloading.
+    final::              finalize_cla                !< Free dynamic memory when finalizing.
 endtype Type_Command_Line_Argument
+
+type:: Type_Command_Line_Arguments_Group
+  !< Group of CLAs for building nested commands.
+  private
+  integer(I4P)::                                  Na          = 0_I4P !< Number of CLA.
+  integer(I4P)::                                  Na_required = 0_I4P !< Number of command line arguments that CLI requires.
+  integer(I4P)::                                  Na_optional = 0_I4P !< Number of command line arguments that are optional for CLI.
+  type(Type_Command_Line_Argument), allocatable:: cla(:)              !< CLA list [1:Na].
+  character(len=:), allocatable::                 help                !< Help message introducing the CLAs group.
+  character(len=:), allocatable::                 description         !< Detailed description message introducing the CLAs group.
+  contains
+    ! public methods
+    procedure, public:: free => free_clasg !< Free dynamic memory.
+endtype Type_Command_Line_Arguments_Group
+
 type, public:: Type_Command_Line_Interface
-  !< Derived type implementing a flexible Command Line Interface (CLI).
+  !< Command Line Interface (CLI).
+  private
   integer(I4P)::                                  Na          = 0_I4P !< Number of CLA.
   integer(I4P)::                                  Na_required = 0_I4P !< Number of command line arguments that CLI requires.
   integer(I4P)::                                  Na_optional = 0_I4P !< Number of command line arguments that are optional for CLI.
@@ -74,27 +84,35 @@ type, public:: Type_Command_Line_Interface
 #endif
   logical::                                       disable_hv = .false.!< Disable automatic inserting of 'help' and 'version' CLAs.
   contains
-    procedure:: free                                   !< Procedure for freeing dynamic memory.
-    procedure:: init                                   !< Procedure for initializing CLI.
-    procedure:: add                                    !< Procedure for adding CLA to CLAs list.
-    procedure:: check                                  !< Procedure for checking CLAs data consistenc.
-    procedure:: passed                                 !< Procedure for checking if a CLA has been passed.
-    procedure:: parse                                  !< Procedure for parsing Command Line Interfaces.
-    generic::   get => get_cla_cli,get_cla_list_cli    !< Procedure for getting CLA value(s) from CLAs list parsed.
-    final::     finalize                               !< Procedure for freeing dynamic memory when finalizing.
-    ! operators overloading
-    generic:: assignment(=) => assign_cli              !< Procedure for CLI assignment overloading.
-    ! private procedures
-    procedure,              private:: get_cla_cli      !< Procedure for getting CLA (single) value from CLAs list parsed.
-    procedure,              private:: get_cla_list_cli !< Procedure for getting CLA multiple values from CLAs list parsed.
-    procedure, pass(self1), private:: assign_cli       !< Procedure for CLI assignment overloading.
+    ! public methods
+    procedure, public:: free                                !< Free dynamic memory.
+    procedure, public:: init                                !< Initialize CLI.
+    procedure, public:: add                                 !< Add CLA to CLAs list.
+    procedure, public:: check                               !< Check CLAs data consistenc.
+    procedure, public:: passed                              !< Check if a CLA has been passed.
+    procedure, public:: parse                               !< Parse Command Line Interfaces.
+    generic,   public:: get => get_cla_cli,get_cla_list_cli !< Get CLA value(s) from CLAs list parsed.
+    ! private methods
+    procedure, private:: get_cla_cli                 !< Get CLA (single) value from CLAs list parsed.
+    procedure, private:: get_cla_list_cli            !< Get CLA multiple values from CLAs list parsed.
+    procedure, private:: assign_cli                  !< CLI assignment overloading.
+    generic,   private:: assignment(=) => assign_cli !< CLI assignment overloading.
+    final::              finalize                    !< Free dynamic memory when finalizing.
 endtype Type_Command_Line_Interface
+
+integer(I4P),     parameter:: max_val_len        = 1000            !< Maximum number of characters of CLA value.
+character(len=*), parameter:: action_store       = 'STORE'         !< CLA that stores a value associated to its switch.
+character(len=*), parameter:: action_store_true  = 'STORE_TRUE'    !< CLA that stores .true. without the necessity of a value.
+character(len=*), parameter:: action_store_false = 'STORE_FALSE'   !< CLA that stores .false. without the necessity of a value.
+character(len=*), parameter:: action_print_help  = 'PRINT_HELP'    !< CLA that print help message.
+character(len=*), parameter:: action_print_vers  = 'PRINT_VERSION' !< CLA that print version.
+character(len=*), parameter:: args_sep           = '||!||'         !< Arguments separator for multiple valued (list) CLA.
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
   ! Type_Command_Line_Argument procedures
   elemental subroutine free_cla(cla)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Procedure for freeing dynamic memory.
+  !< Free dynamic memory.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Argument), intent(INOUT):: cla !< CLA data.
@@ -109,13 +127,17 @@ contains
   if (allocated(cla%nargs    )) deallocate(cla%nargs    )
   if (allocated(cla%choices  )) deallocate(cla%choices  )
   if (allocated(cla%val      )) deallocate(cla%val      )
+  cla%required   = .false.
+  cla%positional = .false.
+  cla%position   =  0_I4P
+  cla%passed     = .false.
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine free_cla
 
   elemental subroutine finalize_cla(cla)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Procedure for freeing dynamic memory when finalizing.
+  !< Free dynamic memory when finalizing.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   type(Type_Command_Line_Argument), intent(INOUT):: cla !< CLA data.
@@ -129,7 +151,7 @@ contains
 
   subroutine check_cla(cla,pref,error)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Procedure for checking CLA data consistency.
+  !< Check CLA data consistency.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Argument), intent(IN)::  cla   !< CLA data.
@@ -166,7 +188,7 @@ contains
 
   subroutine check_choices_cla(cla,val,pref,error)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Procedure for checking if CLA value is in allowed choices.
+  !< Check if CLA value is in allowed choices.
   !<
   !< @note This procedure can be called if and only if cla%choices has been allocated.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -251,7 +273,7 @@ contains
 
   subroutine get_cla(cla,pref,val,error)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Procedure for getting CLA (single) value.
+  !< Get CLA (single) value.
   !<
   !< @note For logical type CLA the value is directly read without any robust error trapping.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -355,7 +377,7 @@ contains
 
   subroutine get_cla_list(cla,pref,val,error)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Procedure for getting CLA (multiple) value.
+  !< Get CLA (multiple) value.
   !<
   !< @note For logical type CLA the value is directly read without any robust error trapping.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -554,7 +576,7 @@ contains
 
   subroutine print_cla(cla,pref,iostat,iomsg,unit)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Procedure for printing CLA data with a pretty format.
+  !< Print CLA data with a pretty format.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Argument), intent(IN)::  cla     !< CLA data.
@@ -687,10 +709,9 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction signature
 
-  ! Assignment (=)
   elemental subroutine assign_cla(self1,self2)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Procedure for assignment between two selfs.
+  !< Assignment between two CLAs.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Argument), intent(INOUT):: self1 !< Left hand side.
@@ -714,6 +735,43 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine assign_cla
 
+  ! Type_Command_Line_Argument procedures
+  elemental subroutine free_clasg(clasg)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Free dynamic memory.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  class(Type_Command_Line_Arguments_Group), intent(INOUT):: clasg !< CLAs group data.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  if (allocated(clasg%help       )) deallocate(clasg%help       )
+  if (allocated(clasg%description)) deallocate(clasg%description)
+  if (allocated(clasg%cla)) then
+    call clasg%cla%free
+    deallocate(clasg%cla)
+  endif
+  clasg%Na          = 0_I4P
+  clasg%Na_required = 0_I4P
+  clasg%Na_optional = 0_I4P
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine free_clasg
+
+  elemental subroutine finalize_cla(clasg)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Free dynamic memory when finalizing.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  type(Type_Command_Line_Arguments_Group), intent(INOUT):: clasg !< CLAs group data.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  call cla%free
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine finalize_clasg
+
   ! Type_Command_Line_Interface procedures
   elemental subroutine free(cli)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -726,7 +784,7 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   if (allocated(cli%cla)) then
-    do a=a,size(cli%cla,dim=1)
+    do a=1,size(cli%cla,dim=1)
       call cli%cla(a)%free
     enddo
     deallocate(cli%cla)
@@ -1215,7 +1273,6 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_cli
 
-  ! Assignment (=)
   elemental subroutine assign_cli(self1,self2)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for assignment between two selfs.
