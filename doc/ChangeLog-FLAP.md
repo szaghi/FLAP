@@ -1,5 +1,25 @@
 # Change Log
 
+## [Unreleased](https://github.com/szaghi/FLAP/tree/HEAD)
+
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.0.6...HEAD)
+
+**Closed issues:**
+
+- Rename files extension for the ones requiring preprocessing [\#17](https://github.com/szaghi/FLAP/issues/17)
+
+- Add makefile [\#16](https://github.com/szaghi/FLAP/issues/16)
+
+- Correct politically incorrect references to "Fortran poor men"... [\#14](https://github.com/szaghi/FLAP/issues/14)
+
+## [v0.0.6](https://github.com/szaghi/FLAP/tree/v0.0.6) (2015-04-17)
+
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.0.5...v0.0.6)
+
+**Closed issues:**
+
+- Put auxiliary procedures directly into FLAP [\#18](https://github.com/szaghi/FLAP/issues/18)
+
 ## [v0.0.5](https://github.com/szaghi/FLAP/tree/v0.0.5) (2015-04-15)
 
 [Full Changelog](https://github.com/szaghi/FLAP/compare/v0.0.4...v0.0.5)

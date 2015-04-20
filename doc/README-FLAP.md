@@ -17,6 +17,13 @@ A KISS pure Fortran Library for building powerful, easy-to-use, elegant command 
 + FLAP is OOP designed;
 + FLAP is a Free, Open Source Project.
 
+#### Table of Contents
+    - [What is FLAP?](#what-is-flap)
+    - [Main features](#main-features)
+    - [Copyrights](#copyrights)
+    - [Documentation](#documentation)
+        - [A Taste of FLAP](#a-taste-of-flap)
+
 #### Issues
 [![GitHub issues](https://img.shields.io/github/issues/szaghi/FLAP.svg)]()
 [![Ready in backlog](https://badge.waffle.io/szaghi/FLAP.png?label=ready&title=Ready)](https://waffle.io/szaghi/FLAP)
@@ -24,17 +31,12 @@ A KISS pure Fortran Library for building powerful, easy-to-use, elegant command 
 [![Open bugs](https://badge.waffle.io/szaghi/FLAP.png?label=bug&title=Open%20Bugs)](https://waffle.io/szaghi/FLAP)
 
 #### Compiler Support
-[![Compiler](https://img.shields.io/badge/GNU%20Gfortran%20Compiler-build%20pass%20with%20v4.9.2+-brightgreen.svg)]()
-
-[![Compiler](https://img.shields.io/badge/Intel%20Fortran%20Compiler-build%20pass%20with%20v12.x+-brightgreen.svg)]()
-
-[![Compiler](https://img.shields.io/badge/IBM%20XL%20Fortran%20Compiler-not%20tested-yellow.svg)]()
-
-[![Compiler](https://img.shields.io/badge/g95%20Fortran%20Compiler-not%20tested-yellow.svg)]()
-
-[![Compiler](https://img.shields.io/badge/NAG%20Fortran%20Compiler-not%20tested-yellow.svg)]()
-
-[![Compiler](https://img.shields.io/badge/PGI%20Fortran%20Compiler-not%20tested-yellow.svg)]()
+[![Compiler](https://img.shields.io/badge/GNU-pass%20(v4.9.2+)-brightgreen.svg)]()
+[![Compiler](https://img.shields.io/badge/Intel-pass%20(v12.x+)-brightgreen.svg)]()
+[![Compiler](https://img.shields.io/badge/IBM%20XL-not%20tested-yellow.svg)]()
+[![Compiler](https://img.shields.io/badge/g95-not%20tested-yellow.svg)]()
+[![Compiler](https://img.shields.io/badge/NAG-not%20tested-yellow.svg)]()
+[![Compiler](https://img.shields.io/badge/PGI-not%20tested-yellow.svg)]()
 
 ## What is FLAP?
 

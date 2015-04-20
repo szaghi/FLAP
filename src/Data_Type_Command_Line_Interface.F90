@@ -62,7 +62,10 @@ type:: Type_Command_Line_Arguments_Group
   character(len=:), allocatable::                 description         !< Detailed description message introducing the CLAs group.
   contains
     ! public methods
-    procedure, public:: free => free_clasg !< Free dynamic memory.
+    procedure, public:: free  => free_clasg  !< Free dynamic memory.
+    procedure, public:: check => check_clasg !< Check CLAs data consistency.
+    ! private methods
+    final::              finalize_clasg !< Free dynamic memory when finalizing.
 endtype Type_Command_Line_Arguments_Group
 
 type, public:: Type_Command_Line_Interface
@@ -847,6 +850,30 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine finalize_clasg
+
+  subroutine check_clasg(clasg,pref,error)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Check CLA data consistency.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  class(Type_Command_Line_Arguments_Group), intent(IN)::  clasg !< CLAs group data.
+  character(*), optional,                   intent(IN)::  pref  !< Prefixing string.
+  integer(I4P),                             intent(OUT):: error !< Error trapping flag.
+  character(len=:), allocatable::                         prefd !< Prefixing string.
+  integer(I4P)::                                          a     !< Counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  error = 0
+  if (clasg%Na>0) then
+    prefd = '' ; if (present(pref)) prefd = pref
+    do a=1,clasg%Na
+      call clasg%cla(a)%check(pref=prefd,error=error)
+    enddo
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine check_clasg
 
   ! Type_Command_Line_Interface procedures
   elemental subroutine free(cli)
