@@ -18,11 +18,11 @@ A KISS pure Fortran Library for building powerful, easy-to-use, elegant command 
 + FLAP is a Free, Open Source Project.
 
 #### Table of Contents
-    - [What is FLAP?](#what-is-flap)
-    - [Main features](#main-features)
-    - [Copyrights](#copyrights)
-    - [Documentation](#documentation)
-        - [A Taste of FLAP](#a-taste-of-flap)
+- [What is FLAP?](#what-is-flap)
+- [Main features](#main-features)
+- [Copyrights](#copyrights)
+- [Documentation](#documentation)
+    - [A Taste of FLAP](#a-taste-of-flap)
 
 #### Issues
 [![GitHub issues](https://img.shields.io/github/issues/szaghi/FLAP.svg)]()
