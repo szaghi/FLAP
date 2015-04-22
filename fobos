@@ -10,7 +10,7 @@ $CSHARED_INT = -cpp -c -fpic -assume realloc_lhs
 $LSHARED     = -shared
 $CSTATIC_GNU = -DGNU -cpp -c -frealloc-lhs
 $CSTATIC_INT = -cpp -c -assume realloc_lhs
-$DEBUG_GNU   = -DGNU -O0 -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -Wuninitialized -fcheck=all -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan -std=f2003 -fall-intrinsics
+$DEBUG_GNU   = -DGNU -O0 -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -fcheck=all -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan -std=f2003 -fall-intrinsics
 $DEBUG_INT   = -O0 -debug all -check all -warn all -extend-source 132 -traceback -gen-interfaces#-fpe-all=0 -fp-stack-check -fstack-protector-all -ftrapuv -no-ftz -std03
 $OPTIMIZE    = -O2
 
