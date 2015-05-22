@@ -87,7 +87,7 @@ FLAP is an open source project, it is distributed under a multi-licensing system
   - [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause);
   - [MIT](http://opensource.org/licenses/MIT).
 
-Anyone is interest to use, to develop or to contribute to FLAP is welcome, feel free to select the license that best match your soul!
+Anyone is interest to use, to develop or to contribute to FLAP is welcome, feel free to select the license that best matches your soul!
 
 More details can be found on [wiki](https://github.com/szaghi/FLAP/wiki/Copyrights).
 
