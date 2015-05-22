@@ -65,7 +65,7 @@ FLAP is inspired by the python great module _argparse_, thus many features are t
 * [x] automatic generation of help and usage messages;
 * [x] consistency-check of whole CLI definition;
 * [x] errors trapping for invalid CLI usage;
-* [ ] support nested subcommands;
+* [x] support nested subcommands;
 * [ ] support environment variables;
 * [x] POSIX style compliant;
 * [ ] replicate all the useful features of _argparse_;
