@@ -27,9 +27,11 @@ integer(I4P)::                      l          !< Counter.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-! initializing CLI
+! initializing Command Line Interface
 call cli%init(progname    = 'Test_Driver',                                           &
-              version     = 'v0.0.5',                                                &
+              version     = 'v2.1.5',                                                &
+              authors     = 'Stefano Zaghi',                                         &
+              license     = 'MIT',                                                   &
               description = 'Toy program for testing FLAP',                          &
               examples    = ["Test_Driver -s 'Hello FLAP'                          ",&
                              "Test_Driver -s 'Hello FLAP' -i -2 # printing error...",&
@@ -37,7 +39,7 @@ call cli%init(progname    = 'Test_Driver',                                      
                              "Test_Driver -s 'Hello FLAP' --integer_list 10 -3 87  ",&
                              "Test_Driver 33.0 -s 'Hello FLAP' -i 5                ",&
                              "Test_Driver --string 'Hello FLAP' --boolean          "])
-! setting CLAs
+! setting Command Line Argumenst
 call cli%add(switch='--string',switch_ab='-s',help='String input',required=.true.,act='store',error=error)
 call cli%add(switch='--integer',switch_ab='-i',help='Integer input with fixed range',required=.false.,act='store',&
              def='1',choices='1,3,5',error=error)
@@ -49,10 +51,10 @@ call cli%add(switch='--boolean_val',switch_ab='-bv',help='Valued boolean input',
 call cli%add(switch='--integer_list',switch_ab='-il',help='Integer list input',required=.false.,act='store',&
              nargs='3',def='1 8 32',error=error)
 call cli%add(positional=.true.,position=1,help='Positional real input',required=.false.,def='1.0',error=error)
-! parsing CLI
+! parsing Command Line Interface
 call cli%parse(error=error)
 if (error/=0) stop
-! using CLI data to set Test_Driver behaviour
+! using Command Line Interface data to set Test_Driver behaviour
 call cli%get(switch='-s',    val=sval,  error=error) ; if (error/=0) stop
 call cli%get(switch='-r',    val=rval,  error=error) ; if (error/=0) stop
 call cli%get(switch='-i',    val=ival,  error=error) ; if (error/=0) stop

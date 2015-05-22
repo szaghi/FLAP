@@ -19,16 +19,17 @@ private
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 type, abstract:: Type_Object
-  character(len=:), allocatable:: progname      !< Program name.
-  character(len=:), allocatable:: version       !< Program version.
-  character(len=:), allocatable:: help          !< Help message.
-  character(len=:), allocatable:: description   !< Detailed description.
-  character(len=:), allocatable:: license       !< License description.
-  character(len=:), allocatable:: authors       !< Authors list.
-  integer(I4P)::                  error = 0_I4P !< Error traping flag.
+  character(len=:), public, allocatable:: progname      !< Program name.
+  character(len=:), public, allocatable:: version       !< Program version.
+  character(len=:), public, allocatable:: help          !< Help message.
+  character(len=:), public, allocatable:: description   !< Detailed description.
+  character(len=:), public, allocatable:: license       !< License description.
+  character(len=:), public, allocatable:: authors       !< Authors list.
+  integer(I4P),     public::              error = 0_I4P !< Error traping flag.
   contains
     procedure:: free_object   !< Free dynamic memory.
     procedure:: errored       !< Trig error occurence and print meaningful message.
+    procedure:: print_version !< Print version.
     procedure:: assign_object !< Assignment overloading.
 endtype Type_Object
 
@@ -55,7 +56,7 @@ type, extends(Type_Object):: Type_Command_Line_Argument
     procedure, public:: check_choices => check_choices_cla    !< Check if CLA value is in allowed choices.
     generic,   public:: get           => get_cla,get_cla_list !< Get CLA value(s).
     procedure, public:: print         => print_cla            !< Print CLA data with a pretty format.
-    procedure, public:: signature                             !< Get CLA signature for adding to the CLI one.
+    procedure, public:: signature     => signature_cla        !< Get CLA signature for adding to the CLI one.
     ! private methods
     procedure, private:: get_cla                     !< Get CLA (single) value from CLAs list parsed.
     procedure, private:: get_cla_list                !< Get CLA multiple values from CLAs list parsed.
@@ -72,17 +73,19 @@ type, extends(Type_Object):: Type_Command_Line_Arguments_Group
   integer(I4P)::                                  Na_required = 0_I4P !< Number of command line arguments that CLI requires.
   integer(I4P)::                                  Na_optional = 0_I4P !< Number of command line arguments that are optional for CLI.
   type(Type_Command_Line_Argument), allocatable:: cla(:)              !< CLA list [1:Na].
+  logical::                                       called      =.false.!< Flag for checking if CLAs group has been passed to CLI.
   contains
     ! public methods
-    procedure, public:: free          => free_clasg          !< Free dynamic memory.
-    procedure, public:: init          => init_clasg          !< Initialize CLAs group.
-    procedure, public:: check         => check_clasg         !< Check CLAs data consistency.
-    procedure, public:: add           => add_cla_clasg       !< Add CLA to CLAs group.
-    procedure, public:: passed        => passed_clasg        !< Check if a CLA has been passed.
-    procedure, public:: defined       => defined_clasg       !< Check if a CLA has been defined.
-    procedure, public:: parse_switch  => parse_switch_clasg  !< Parse a switch checking if it is a defined CLA.
-    procedure, public:: print_usage   => print_usage_clasg   !< Print correct usage of CLAs group.
-    procedure, public:: print_version => print_version_clasg !< Print version.
+    procedure, public:: free             => free_clasg             !< Free dynamic memory.
+    procedure, public:: check            => check_clasg            !< Check CLAs data consistency.
+    procedure, public:: check_required   => check_required_clasg   !< Check if required CLAs are passed.
+    procedure, public:: add              => add_cla_clasg          !< Add CLA to CLAs group.
+    procedure, public:: passed           => passed_clasg           !< Check if a CLA has been passed.
+    procedure, public:: defined          => defined_clasg          !< Check if a CLA has been defined.
+    procedure, public:: parse            => parse_clasg            !< Parse CLAs group.
+    procedure, public:: print_usage_clas => print_usage_clas_clasg !< Print correct usage of CLAs group without header.
+    procedure, public:: print_usage      => print_usage_clasg      !< Print correct usage of CLAs group.
+    procedure, public:: signature        => signature_clasg        !< Get CLAs group signature for adding to the CLI one.
     ! private methods
     procedure, private:: assign_clasg                  !< CLAs group assignment overloading.
     generic,   private:: assignment(=) => assign_clasg !< CLAs group assignment overloading.
@@ -109,12 +112,13 @@ type, extends(Type_Object), public:: Type_Command_Line_Interface
     procedure, public:: passed                              !< Check if a CLA has been passed.
     procedure, public:: defined                             !< Check if a CLA has been defined.
     procedure, public:: defined_group                       !< Check if a CLAs group has been defined.
+    procedure, public:: run_command => called_group         !< Check if a CLAs group has been runned.
     procedure, public:: parse                               !< Parse Command Line Interfaces.
     generic,   public:: get => get_cla_cli,get_cla_list_cli !< Get CLA value(s) from CLAs list parsed.
     procedure, public:: print_usage                         !< Print correct usage of CLI.
     procedure, public:: print_examples                      !< Print examples of correct usage of CLI.
-    procedure, public:: print_version                       !< Print version.
     ! private methods
+    procedure, private:: get_clasg_indexes           !< Get CLAs groups indexes.
     procedure, private:: get_cla_cli                 !< Get CLA (single) value from CLAs list parsed.
     procedure, private:: get_cla_list_cli            !< Get CLA multiple values from CLAs list parsed.
     procedure, private:: assign_cli                  !< CLI assignment overloading.
@@ -129,7 +133,7 @@ character(len=*), parameter:: action_store_false = 'STORE_FALSE'   !< CLA that s
 character(len=*), parameter:: action_print_help  = 'PRINT_HELP'    !< CLA that print help message.
 character(len=*), parameter:: action_print_vers  = 'PRINT_VERSION' !< CLA that print version.
 character(len=*), parameter:: args_sep           = '||!||'         !< Arguments separator for multiple valued (list) CLA.
-! code errors
+! code errors and status
 integer(I4P), parameter:: error_cla_optional_no_def        = 1  !< Optional CLA without default value.
 integer(I4P), parameter:: error_cla_named_no_name          = 2  !< Named CLA without switch name.
 integer(I4P), parameter:: error_cla_positional_no_position = 3  !< Positional CLA without position.
@@ -142,8 +146,11 @@ integer(I4P), parameter:: error_cla_nargs_insufficient     = 9  !< Multi-valued 
 integer(I4P), parameter:: error_cla_unknown                = 10 !< Unknown CLA (switch name).
 integer(I4P), parameter:: error_clasg_consistency          = 11 !< CLAs group consistency error.
 integer(I4P), parameter:: error_cli_missing_cla            = 12 !< CLA not found in CLI.
-integer(I4P), parameter:: error_cli_missing_selection_cla  = 13 !< CLA selection in CLI failing.
-integer(I4P), parameter:: error_cli_too_few_clas           = 14 !< Insufficient arguments for CLI.
+integer(I4P), parameter:: error_cli_missing_group          = 13 !< Group not found in CLI.
+integer(I4P), parameter:: error_cli_missing_selection_cla  = 14 !< CLA selection in CLI failing.
+integer(I4P), parameter:: error_cli_too_few_clas           = 15 !< Insufficient arguments for CLI.
+integer(I4P), parameter:: status_clasg_print_v             = -1 !< Print version status.
+integer(I4P), parameter:: status_clasg_print_h             = -2 !< Print help status.
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
   ! auxiliary procedures
@@ -244,7 +251,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine free_object
 
-  subroutine errored(obj,pref,Na,switch,val_str,log_value,a1,a2,error)
+  subroutine errored(obj,pref,Na,group,switch,val_str,log_value,a1,a2,error)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Trig error occurence and print meaningful message.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -252,6 +259,7 @@ contains
   class(Type_Object),     intent(INOUT):: obj       !< Object data.
   character(*), optional, intent(IN)::    pref      !< Prefixing string.
   integer(I4P), optional, intent(IN)::    Na        !< Number of CLA passed.
+  character(*), optional, intent(IN)::    group     !< Group name.
   character(*), optional, intent(IN)::    switch    !< CLA switch name.
   character(*), optional, intent(IN)::    val_str   !< Value string.
   character(*), optional, intent(IN)::    log_value !< Logical value to be casted.
@@ -270,63 +278,66 @@ contains
       case(error_cla_optional_no_def)
         if (obj%positional) then
           write(stderr,'(A)')prefd//obj%progname//': error: "'//trim(str(n=obj%position))//&
-                             '-th" optional CLA has not a default value!'
+                             '-th" positional option has not a default value!'
         else
-          write(stderr,'(A)')prefd//obj%progname//': error: optional "'//obj%switch//'" CLA has not a default value!'
+          write(stderr,'(A)')prefd//obj%progname//': error: named option "'//obj%switch//'" has not a default value!'
         endif
       case(error_cla_named_no_name)
-        write(stderr,'(A)')prefd//obj%progname//': error: a non positional CLA must have a switch name!'
+        write(stderr,'(A)')prefd//obj%progname//': error: a non positional optiona must have a switch name!'
       case(error_cla_positional_no_position)
-        write(stderr,'(A)')prefd//obj%progname//': error: a positional CLA must have a position number different from 0!'
+        write(stderr,'(A)')prefd//obj%progname//': error: a positional option must have a position number different from 0!'
       case(error_cla_positional_no_store)
-        write(stderr,'(A)')prefd//obj%progname//': error: a positional CLA must have action set to "'//action_store//'"!'
+        write(stderr,'(A)')prefd//obj%progname//': error: a positional option must have action set to "'//action_store//'"!'
       case(error_cla_not_in_choices)
         if (obj%positional) then
-          write(stderr,'(A)')prefd//obj%progname//': error: "'//trim(str(n=obj%position))//'-th" CLA value must be chosen in:'
-          write(stderr,'(A)')prefd//' ('//obj%choices//') but "'//trim(val_str)//'" has been passed!'
+          write(stderr,'(A)')prefd//obj%progname//': error: value of "'//trim(str(n=obj%position))//&
+            '-th" positional option must be chosen in:'
         else
-          write(stderr,'(A)')prefd//obj%progname//': error: "'//obj%switch//'" CLA value must be chosen in:'
-          write(stderr,'(A)')prefd//' ('//obj%choices//') but "'//trim(val_str)//'" has been passed!'
+          write(stderr,'(A)')prefd//obj%progname//': error: value of named option "'//obj%switch//'" must be chosen in:'
         endif
+        write(stderr,'(A)')prefd//'('//obj%choices//')'
+        write(stderr,'(A)')prefd//'"'//trim(val_str)//'" has been passed!'
       case(error_cla_missing_required)
         if (.not.obj%positional) then
-          write(stderr,'(A)')prefd//obj%progname//': error: "'//trim(adjustl(obj%switch))//'" CLA is required!'
+          write(stderr,'(A)')prefd//obj%progname//': error: named option "'//trim(adjustl(obj%switch))//'" is required!'
         else
-          write(stderr,'(A)')prefd//obj%progname//': error: "'//trim(str(.true.,obj%position))//'-th" CLA is required!'
+          write(stderr,'(A)')prefd//obj%progname//': error: "'//trim(str(.true.,obj%position))//&
+            '-th" positional option is required!'
         endif
       case(error_cla_casting_logical)
-        write(stderr,'(A)')prefd//obj%progname//': error: cannot convert "'//log_value//'" of CLA "'//obj%switch//&
+        write(stderr,'(A)')prefd//obj%progname//': error: cannot convert "'//log_value//'" of option "'//obj%switch//&
                            '" to logical type!'
       case(error_cla_no_list)
         if (.not.obj%positional) then
-          write(stderr,'(A)')prefd//obj%progname//': error: "'//trim(adjustl(obj%switch))//'" CLA has not "nargs" value'//&
+          write(stderr,'(A)')prefd//obj%progname//': error: named option "'//trim(adjustl(obj%switch))//'" has not "nargs" value'//&
                              ' but an array has been passed to "get" method!'
         else
-          write(stderr,'(A)')prefd//obj%progname//': error: "'//trim(str(.true.,obj%position))//'-th" CLA '//&
+          write(stderr,'(A)')prefd//obj%progname//': error: "'//trim(str(.true.,obj%position))//'-th" positional option '//&
                                     'has not "nargs" value but an array has been passed to "get" method!'
         endif
       case(error_cla_nargs_insufficient)
         if (.not.obj%positional) then
-          write(stderr,'(A)')prefd//obj%progname//': error: "'//trim(adjustl(obj%switch))//'" CLA requires '//&
+          write(stderr,'(A)')prefd//obj%progname//': error: named option "'//trim(adjustl(obj%switch))//'" requires '//&
             trim(adjustl(obj%nargs))//' arguments but no enough ones remain!'
         else
-          write(stderr,'(A)')prefd//obj%progname//': error: "'//trim(str(.true.,obj%position))//'-th" CLA requires '//&
+          write(stderr,'(A)')prefd//obj%progname//': error: "'//trim(str(.true.,obj%position))//&
+            '-th" positional option requires '//&
             trim(adjustl(obj%nargs))//' arguments but no enough ones remain!'
         endif
       case(error_cla_unknown)
-        write(stderr,'(A)')prefd//obj%progname//' error: switch "'//trim(adjustl(switch))//'" is unknown!'
+        write(stderr,'(A)')prefd//obj%progname//': error: switch "'//trim(adjustl(switch))//'" is unknown!'
       endselect
 
     class is(Type_Command_Line_Arguments_Group)
       select case(obj%error)
       case(error_clasg_consistency)
-        if (allocated(obj%group)) then
-          write(stderr,'(A)')prefd//obj%progname//': error: group (command) name: "'//obj%group//'" CLAs consistency error:'
+        if (obj%group /= '') then
+          write(stderr,'(A)')prefd//obj%progname//': error: group (command) name: "'//obj%group//'" consistency error:'
         else
-          write(stderr,'(A)')prefd//obj%progname//': error: CLAs consistency error:'
+          write(stderr,'(A)')prefd//obj%progname//': error: consistency error:'
         endif
-        write(stderr,'(A)')prefd//' "'//trim(str(.true.,a1))//'-th" CLA has the same switch or abbreviated switch of "'&
-                           //trim(str(.true.,a2))//'-th" CLA:'
+        write(stderr,'(A)')prefd//' "'//trim(str(.true.,a1))//'-th" option has the same switch or abbreviated switch of "'&
+                           //trim(str(.true.,a2))//'-th" option:'
         write(stderr,'(A)')prefd//' CLA('//trim(str(.true.,a1)) //') switches = '//obj%cla(a1)%switch //' '//&
                            obj%cla(a1)%switch_ab
         write(stderr,'(A)')prefd//' CLA('//trim(str(.true.,a2))//') switches = '//obj%cla(a2)%switch//' '//&
@@ -336,9 +347,12 @@ contains
     class is(Type_Command_Line_Interface)
       select case(obj%error)
       case(error_cli_missing_cla)
-        write(stderr,'(A)')prefd//obj%progname//': error: there is no CLA into CLI named "'//trim(adjustl(switch))//'"'
+        write(stderr,'(A)')prefd//obj%progname//': error: there is no option "'//trim(adjustl(switch))//'"!'
       case(error_cli_missing_selection_cla)
-        write(stderr,'(A)')prefd//obj%progname//': error: to get a CLA value one of switch "name" or "position" must be provided!'
+        write(stderr,'(A)')prefd//obj%progname//&
+          ': error: to get an option value one of switch "name" or "position" must be provided!'
+      case(error_cli_missing_group)
+        write(stderr,'(A)')prefd//obj%progname//': error: ther is no group (command) named "'//trim(adjustl(group))//'"!'
       case(error_cli_too_few_clas)
         ! write(stderr,'(A)')prefd//obj%progname//': error: too few arguments ('//trim(str(.true.,Na))//')'//&
                            ! ' respect the required ('//trim(str(.true.,obj%Na_required))//')'
@@ -348,6 +362,29 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine errored
+
+  subroutine print_version(obj,pref)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Print version.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  class(Type_Object),     intent(IN):: obj   !< Object data.
+  character(*), optional, intent(IN):: pref  !< Prefixing string.
+  character(len=:), allocatable::      prefd !< Prefixing string.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  prefd = '' ; if (present(pref)) prefd = pref
+  write(stdout,'(A)')prefd//obj%progname//' version '//obj%version
+  if (obj%license /= '') then
+    write(stdout,'(A)')prefd//obj%license
+  endif
+  if (obj%authors /= '') then
+    write(stdout,'(A)')prefd//obj%authors
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine print_version
 
   elemental subroutine assign_object(lhs,rhs)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -858,27 +895,22 @@ contains
     endif
   endif
   write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd)prefd//sig
-  sig = '       '//trim(adjustl(cla%help))
-  if (cla%positional) then
-    sig = sig//'; '//trim(str(.true.,cla%position))//'-th positional CLA'
-  endif
-  if (cla%required) then
-    sig = sig//'; required'
-  else
+  sig = ''
+  if (cla%positional) sig = prefd//repeat(' ',10)//trim(str(.true.,cla%position))//'-th argument'//new_line('a')
+  if (.not.cla%required) then
     if (cla%def /= '') then
-      sig = sig//'; optional, default value '//trim(adjustl(cla%def))
-    else
-      sig = sig//'; optional'
+      sig = sig//prefd//repeat(' ',10)//'default value '//trim(adjustl(cla%def))//new_line('a')
     endif
   endif
-  write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd)prefd//sig
+  sig = sig//prefd//repeat(' ',10)//trim(adjustl(cla%help))
+  write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd)sig
   if (present(iostat)) iostat = iostatd
   if (present(iomsg))  iomsg  = iomsgd
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine print_cla
 
-  function signature(cla) result(signd)
+  function signature_cla(cla) result(signd)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA signature for adding to the CLI one.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -929,7 +961,7 @@ contains
   endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
-  endfunction signature
+  endfunction signature_cla
 
   elemental subroutine assign_cla(lhs,rhs)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -978,6 +1010,7 @@ contains
   clasg%Na          = 0_I4P
   clasg%Na_required = 0_I4P
   clasg%Na_optional = 0_I4P
+  clasg%called      = .false.
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine free_clasg
@@ -995,34 +1028,6 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine finalize_clasg
-
-  pure subroutine init_clasg(clasg,progname,version,group,help,description,license,authors)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Procedure for initializing CLI.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Arguments_Group), intent(INOUT):: clasg       !< CLAs group data.
-  character(*), optional,                   intent(IN)::    progname    !< Program name.
-  character(*), optional,                   intent(IN)::    version     !< Program version.
-  character(*), optional,                   intent(IN)::    help        !< Help message introducing the CLI usage.
-  character(*), optional,                   intent(IN)::    description !< Detailed description message introducing the program.
-  character(*), optional,                   intent(IN)::    license     !< License description.
-  character(*), optional,                   intent(IN)::    authors     !< Authors list.
-  character(*), optional,                   intent(IN)::    group       !< Group name (command).
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  call clasg%free
-  clasg%progname    = 'program' ; if (present(progname   )) clasg%progname    = progname
-  clasg%version     = 'unknown' ; if (present(version    )) clasg%version     = version
-  clasg%help        = 'usage:'  ; if (present(help       )) clasg%help        = help
-  clasg%description = ''        ; if (present(description)) clasg%description = description
-  clasg%license     = ''        ; if (present(license    )) clasg%license     = license
-  clasg%authors     = ''        ; if (present(authors    )) clasg%authors     = authors
-                                  if (present(group      )) clasg%group       = group
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine init_clasg
 
   subroutine check_clasg(clasg,pref)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1054,6 +1059,34 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check_clasg
+
+  subroutine check_required_clasg(clasg,pref)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Check if required CLAs are passed.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  class(Type_Command_Line_Arguments_Group), intent(INOUT):: clasg !< CLAs group data.
+  character(*), optional,                   intent(IN)::    pref  !< Prefixing string.
+  character(len=:), allocatable::                           prefd !< Prefixing string.
+  integer(I4P)::                                            a     !< Counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  prefd = '' ; if (present(pref)) prefd = pref
+  if (clasg%called) then
+    do a=1,clasg%Na
+      if (clasg%cla(a)%required) then
+        if (.not.clasg%cla(a)%passed) then
+          call clasg%cla(a)%errored(pref=prefd,error=error_cla_missing_required)
+          call clasg%print_usage(pref=prefd)
+          return
+        endif
+      endif
+    enddo
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine check_required_clasg
 
   subroutine add_cla_clasg(clasg,pref,cla)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1155,67 +1188,120 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction defined_clasg
 
-  subroutine parse_switch_clasg(clasg,pref,Na,switch,arg,found)
+  subroutine parse_clasg(clasg,pref,ai)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Parse a switch checking if it is a defined CLA.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Arguments_Group), intent(INOUT):: clasg   !< CLAs group data.
   character(*), optional,                   intent(IN)::    pref    !< Prefixing string.
-  integer(I4P),                             intent(IN)::    Na      !< Number of arguments actually passed.
-  character(*),                             intent(IN)::    switch  !< Switch name.
-  integer(I4P),                             intent(INOUT):: arg     !< Actual argument number.
-  logical,                                  intent(OUT)::   found   !< Flag for checking if switch is a defined CLA.
-  integer(I4P)::                                            nargs   !< Number of arguments consumed by a CLA.
+  integer(I4P),                             intent(IN)::    ai(:)   !< Indexes of the CLAs belonging to the group.
+  character(max_val_len)::                                  switch  !< Switch name.
   character(max_val_len)::                                  val     !< Switch value.
-  integer(I4P)::                                            a,aa    !< Counters.
+  integer(I4P)::                                            arg     !< Argument counter.
+  integer(I4P)::                                            a       !< Counter.
+  integer(I4P)::                                            aa      !< Counter.
+  integer(I4P)::                                            nargs   !< Number of arguments consumed by a CLA.
   character(len=:), allocatable::                           prefd   !< Prefixing string.
+  logical::                                                 found   !< Flag for checking if switch is a defined CLA.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  if (clasg%called.and.(ai(2)<=command_argument_count())) then
+    prefd = '' ; if (present(pref)) prefd = pref
+    arg = ai(1) - 1
+    do while (arg < ai(2)) ! loop over CLAs group clas passed
+      arg = arg + 1
+      call get_command_argument(arg,switch)
+      found = .false.
+      do a=1,clasg%Na ! loop ver CLAs group clas defined
+        if (.not.clasg%cla(a)%positional) then
+          if (trim(adjustl(clasg%cla(a)%switch   ))==trim(adjustl(switch)).or.&
+              trim(adjustl(clasg%cla(a)%switch_ab))==trim(adjustl(switch))) then
+            if (clasg%cla(a)%act==action_store) then
+              if (allocated(clasg%cla(a)%nargs)) then
+                clasg%cla(a)%val = ''
+                select case(clasg%cla(a)%nargs)
+                case('+') ! not yet implemented
+                case('*') ! not yet implemented
+                case default
+                  nargs = cton(str=trim(adjustl(clasg%cla(a)%nargs)),knd=1_I4P)
+                  if (a + nargs > ai(2) - ai(1) + 1) then
+                    call clasg%cla(a)%errored(pref=prefd,error = error_cla_nargs_insufficient)
+                    clasg%error = clasg%cla(a)%error
+                    return
+                  endif
+                  do aa=arg+nargs,arg+1,-1 ! decreasing loop due to gfortran bug
+                    call get_command_argument(aa,val)
+                    clasg%cla(a)%val = trim(adjustl(val))//args_sep//trim(clasg%cla(a)%val) ! decreasing loop due to gfortran bug
+                  enddo
+                  arg = arg + nargs
+                endselect
+              else
+                arg = arg + 1
+                call get_command_argument(arg,val)
+                clasg%cla(a)%val = trim(adjustl(val))
+              endif
+            elseif (clasg%cla(a)%act==action_print_help) then
+              ! call clasg%print_usage(pref=prefd) ; clasg%error = status_clasg_print_h
+              clasg%error = status_clasg_print_h
+            elseif (clasg%cla(a)%act==action_print_vers) then
+              ! call clasg%print_version(pref=prefd) ; clasg%error = status_clasg_print_v
+              clasg%error = status_clasg_print_v
+            endif
+            clasg%cla(a)%passed = .true.
+            found = .true.
+            exit
+          endif
+        endif
+      enddo
+      if (.not.found) then
+        if (.not.clasg%cla(arg-ai(1)+1)%positional) then
+          call clasg%cla(arg-ai(1)+1)%errored(pref=prefd,error=error_cla_unknown,switch=trim(adjustl(switch)))
+          clasg%error = clasg%cla(arg-ai(1)+1)%error
+          return
+        else
+          ! positional CLA always stores a value
+          clasg%cla(arg-ai(1)+1)%val = trim(adjustl(switch))
+          clasg%cla(arg-ai(1)+1)%passed = .true.
+        endif
+      endif
+    enddo
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine parse_clasg
+
+  subroutine print_usage_clas_clasg(clasg,pref)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Print correct usage of CLAs group without header.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  class(Type_Command_Line_Arguments_Group), intent(IN):: clasg         !< CLAs group data.
+  character(*), optional,                   intent(IN):: pref          !< Prefixing string.
+  integer(I4P)::                                         a             !< Counters.
+  character(len=:), allocatable::                        prefd         !< Prefixing string.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   prefd = '' ; if (present(pref)) prefd = pref
-  found = .false.
-  do a=1,clasg%Na
-    if (.not.clasg%cla(a)%positional) then
-      if (trim(adjustl(clasg%cla(a)%switch   ))==trim(adjustl(switch)).or.&
-          trim(adjustl(clasg%cla(a)%switch_ab))==trim(adjustl(switch))) then
-        if (clasg%cla(a)%act==action_store) then
-          if (allocated(clasg%cla(a)%nargs)) then
-            clasg%cla(a)%val = ''
-            select case(clasg%cla(a)%nargs)
-            case('+') ! not yet implemented
-            case('*') ! not yet implemented
-            case default
-              nargs = cton(str=trim(adjustl(clasg%cla(a)%nargs)),knd=1_I4P)
-              if (arg+nargs>Na) then
-                call clasg%cla(a)%errored(pref=prefd,error = error_cla_nargs_insufficient)
-                clasg%error = clasg%cla(a)%error
-              endif
-              do aa=arg+nargs,arg+1,-1 ! decreasing loop due to gfortran bug
-                call get_command_argument(aa,val)
-                clasg%cla(a)%val = trim(adjustl(val))//args_sep//trim(clasg%cla(a)%val) ! decreasing loop due to gfortran bug
-              enddo
-              arg = arg + nargs
-            endselect
-          else
-            arg = arg + 1
-            call get_command_argument(arg,val)
-            clasg%cla(a)%val = trim(adjustl(val))
-          endif
-        elseif (clasg%cla(a)%act==action_print_help) then
-          call clasg%print_usage(pref=prefd)
-        elseif (clasg%cla(a)%act==action_print_vers) then
-          call clasg%print_version(pref=prefd)
-        endif
-        clasg%cla(a)%passed = .true.
-        found = .true.
-        exit
-      endif
-    endif
-  enddo
+  if (clasg%Na_required>0) then
+    write(stdout,'(A)')
+    write(stdout,'(A)')prefd//'Required switches:'
+    do a=1,clasg%Na
+      if (clasg%cla(a)%required) call clasg%cla(a)%print(pref=prefd,unit=stdout)
+    enddo
+  endif
+  if (clasg%Na_optional>0) then
+    write(stdout,'(A)')
+    write(stdout,'(A)')prefd//'Optional switches:'
+    do a=1,clasg%Na
+      if (.not.clasg%cla(a)%required) call clasg%cla(a)%print(pref=prefd,unit=stdout)
+    enddo
+  endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine parse_switch_clasg
+  endsubroutine print_usage_clas_clasg
 
   subroutine print_usage_clasg(clasg,pref)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1232,46 +1318,37 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   prefd = '' ; if (present(pref)) prefd = pref
-  cla_list_sign = clasg%progname ; if (allocated(clasg%group)) cla_list_sign = clasg%progname//' '//clasg%group
-  do a=1,clasg%Na
-    cla_sign = clasg%cla(a)%signature()
-    cla_list_sign = cla_list_sign//cla_sign
-  enddo
+  cla_list_sign = clasg%progname ; if (clasg%group/='') cla_list_sign = clasg%progname//' '//clasg%group
+  cla_sign = clasg%signature()
+  cla_list_sign = cla_list_sign//cla_sign
   write(stdout,'(A)')prefd//clasg%help//' '//cla_list_sign
-  if (clasg%Na_required>0) then
+  if (clasg%description/='') then
     write(stdout,'(A)')
-    write(stdout,'(A)')prefd//' Required options:'
-    do a=1,clasg%Na
-      if (clasg%cla(a)%required) call clasg%cla(a)%print(pref=prefd,unit=stdout)
-    enddo
+    write(stdout,'(A)')prefd//clasg%description
   endif
-  if (clasg%Na_optional>0) then
-    write(stdout,'(A)')
-    write(stdout,'(A)')prefd//' Optional options:'
-    do a=1,clasg%Na
-      if (.not.clasg%cla(a)%required) call clasg%cla(a)%print(pref=prefd,unit=stdout)
-    enddo
-  endif
+  call clasg%print_usage_clas(pref=prefd)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine print_usage_clasg
 
-  subroutine print_version_clasg(clasg,pref)
+  function signature_clasg(clasg) result(signd)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Print version.
+  !< Get CLAs group signature for adding to the CLI one.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  class(Type_Command_Line_Arguments_Group), intent(IN):: clasg !< CLAs group data.
-  character(*), optional,                   intent(IN):: pref  !< Prefixing string.
-  character(len=:), allocatable::                        prefd !< Prefixing string.
+  class(Type_Command_Line_Arguments_Group), intent(IN):: clasg         !< CLAs group data.
+  character(len=:), allocatable::                        signd         !< Temporary CLI signature.
+  integer(I4P)::                                         a             !< Counters.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  prefd = '' ; if (present(pref)) prefd = pref
-  write(stdout,'(A)')prefd//' '//clasg%progname//' version '//clasg%version
+  signd = ''
+  do a=1,clasg%Na
+    signd = signd//clasg%cla(a)%signature()
+  enddo
   return
   !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine print_version_clasg
+  endfunction signature_clasg
 
   elemental subroutine assign_clasg(lhs,rhs)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1284,11 +1361,14 @@ contains
   ! Type_Object members
   call lhs%assign_object(rhs)
   ! Type_Command_Line_Arguments_Group members
-  if (allocated(rhs%group)) lhs%group       = rhs%group
-  if (allocated(rhs%cla  )) lhs%cla         = rhs%cla
-                            lhs%Na          = rhs%Na
-                            lhs%Na_required = rhs%Na_required
-                            lhs%Na_optional = rhs%Na_optional
+  if (allocated(rhs%group)) lhs%group = rhs%group
+  if (allocated(rhs%cla  )) then
+    if (allocated(lhs%cla)) deallocate(lhs%cla) ; allocate(lhs%cla(1:size(rhs%cla,dim=1)),source=rhs%cla)
+  endif
+  lhs%Na          = rhs%Na
+  lhs%Na_required = rhs%Na_required
+  lhs%Na_optional = rhs%Na_optional
+  lhs%called      = rhs%called
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine assign_clasg
@@ -1367,12 +1447,8 @@ contains
   endif
   ! initialize only the first default group
   allocate(cli%clasg(0:0))
-  call cli%clasg(0)%init(progname    = cli%progname,    &
-                         version     = cli%version,     &
-                         help        = cli%help,        &
-                         description = cli%description, &
-                         license     = cli%license,     &
-                         authors     = cli%authors)
+  call cli%clasg(0)%assign_object(cli)
+  cli%clasg(0)%group = ''
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init
@@ -1385,33 +1461,32 @@ contains
   class(Type_Command_Line_Interface), intent(INOUT)::    cli               !< CLI data.
   character(*), optional,             intent(IN)::       help              !< Help message.
   character(*), optional,             intent(IN)::       description       !< Detailed description.
-  character(*), optional,             intent(IN)::       group             !< Name of the grouped CLAs.
+  character(*),                       intent(IN)::       group             !< Name of the grouped CLAs.
   type(Type_Command_Line_Arguments_Group), allocatable:: clasg_list_new(:) !< New (extended) CLAs group list.
   character(len=:), allocatable::                        helpd             !< Help message.
   character(len=:), allocatable::                        descriptiond      !< Detailed description.
+  integer(I4P)::                                         Ng                !< Number of groups.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  allocate(clasg_list_new(0:size(cli%clasg,dim=1)))
-  clasg_list_new(0:size(cli%clasg,dim=1)-1)=cli%clasg
   helpd        = 'usage: ' ; if (present(help       )) helpd        = help
   descriptiond = ''        ; if (present(description)) descriptiond = description
-  call clasg_list_new(size(cli%clasg,dim=1))%init(progname    = cli%progname, &
-                                                  version     = cli%version,  &
-                                                  license     = cli%license,  &
-                                                  help        = helpd,        &
-                                                  description = descriptiond, &
-                                                  authors     = cli%authors,  &
-                                                  group       = group)
+  Ng = size(cli%clasg,dim=1)
+  allocate(clasg_list_new(0:Ng))
+  clasg_list_new(0:Ng-1) = cli%clasg(0:Ng-1)
+  call clasg_list_new(Ng)%assign_object(cli)
+  clasg_list_new(Ng)%help        = helpd
+  clasg_list_new(Ng)%description = descriptiond
+  clasg_list_new(Ng)%group       = group
   deallocate(cli%clasg)
-  allocate(cli%clasg(0:size(clasg_list_new,dim=1)-1))
+  allocate(cli%clasg(0:Ng))
   cli%clasg = clasg_list_new
   deallocate(clasg_list_new)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine add_group
 
-  subroutine add(cli,pref,group,switch,switch_ab,help,required,positional,position,act,def,nargs,choices,error)
+  subroutine add(cli,pref,group,group_index,switch,switch_ab,help,required,positional,position,act,def,nargs,choices,error)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Add CLA to CLI.
   !<
@@ -1423,27 +1498,29 @@ contains
   !< @note If CLA belongs to a not yet present group it is created on the fly.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  class(Type_Command_Line_Interface), intent(INOUT):: cli        !< CLI data.
-  character(*), optional,             intent(IN)::    pref       !< Prefixing string.
-  character(*), optional,             intent(IN)::    group      !< Name of the grouped CLAs.
-  character(*), optional,             intent(IN)::    switch     !< Switch name.
-  character(*), optional,             intent(IN)::    switch_ab  !< Abbreviated switch name.
-  character(*), optional,             intent(IN)::    help       !< Help message describing the CLA.
-  logical,      optional,             intent(IN)::    required   !< Flag for set required argument.
-  logical,      optional,             intent(IN)::    positional !< Flag for checking if CLA is a positional or a named CLA.
-  integer(I4P), optional,             intent(IN)::    position   !< Position of positional CLA.
-  character(*), optional,             intent(IN)::    act        !< CLA value action.
-  character(*), optional,             intent(IN)::    def        !< Default value.
-  character(*), optional,             intent(IN)::    nargs      !< Number of arguments consumed by CLA.
-  character(*), optional,             intent(IN)::    choices    !< List of allowable values for the argument.
-  integer(I4P), optional,             intent(OUT)::   error      !< Error trapping flag.
-  type(Type_Command_Line_Argument)::                  cla        !< CLA data.
-  character(len=:), allocatable::                     prefd      !< Prefixing string.
-  integer(I4P)::                                      g          !< Counter.
+  class(Type_Command_Line_Interface), intent(INOUT):: cli         !< CLI data.
+  character(*), optional,             intent(IN)::    pref        !< Prefixing string.
+  character(*), optional,             intent(IN)::    group       !< Name of the grouped CLAs.
+  integer(I4P), optional,             intent(IN)::    group_index !< Index of the grouped CLAs.
+  character(*), optional,             intent(IN)::    switch      !< Switch name.
+  character(*), optional,             intent(IN)::    switch_ab   !< Abbreviated switch name.
+  character(*), optional,             intent(IN)::    help        !< Help message describing the CLA.
+  logical,      optional,             intent(IN)::    required    !< Flag for set required argument.
+  logical,      optional,             intent(IN)::    positional  !< Flag for checking if CLA is a positional or a named CLA.
+  integer(I4P), optional,             intent(IN)::    position    !< Position of positional CLA.
+  character(*), optional,             intent(IN)::    act         !< CLA value action.
+  character(*), optional,             intent(IN)::    def         !< Default value.
+  character(*), optional,             intent(IN)::    nargs       !< Number of arguments consumed by CLA.
+  character(*), optional,             intent(IN)::    choices     !< List of allowable values for the argument.
+  integer(I4P), optional,             intent(OUT)::   error       !< Error trapping flag.
+  type(Type_Command_Line_Argument)::                  cla         !< CLA data.
+  character(len=:), allocatable::                     prefd       !< Prefixing string.
+  integer(I4P)::                                      g           !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   ! initializing CLA
+  call cla%assign_object(cli)
   if (present(switch)) then
     cla%switch    = switch
     cla%switch_ab = switch
@@ -1460,14 +1537,18 @@ contains
   prefd = '' ; if (present(pref)) prefd = pref
   call cla%check(pref=prefd) ; cli%error = cla%error
   ! adding CLA to CLI
-  if (.not.present(group)) then
+  if ((.not.present(group)).and.(.not.present(group_index))) then
     call cli%clasg(0)%add(pref=prefd,cla=cla) ; cli%error = cli%clasg(0)%error
-  else
+  elseif (present(group)) then
     if (cli%defined_group(group=group,g=g)) then
       call cli%clasg(g)%add(pref=prefd,cla=cla) ; cli%error = cli%clasg(g)%error
     else
       call cli%add_group(group=group)
       call cli%clasg(size(cli%clasg,dim=1)-1)%add(pref=prefd,cla=cla) ; cli%error = cli%clasg(size(cli%clasg,dim=1)-1)%error
+    endif
+  elseif (present(group_index)) then
+    if (group_index<=size(cli%clasg,dim=1)-1) then
+      call cli%clasg(group_index)%add(pref=prefd,cla=cla) ; cli%error = cli%clasg(group_index)%error
     endif
   endif
   if (present(error)) error = cli%error
@@ -1541,7 +1622,7 @@ contains
   class(Type_Command_Line_Interface), intent(IN)::  cli     !< CLI data.
   integer(I4P), optional,             intent(OUT):: g       !< Index of group.
   character(*),                       intent(IN)::  group   !< Name of group (command) of CLA.
-  logical::                                         defined !< Check if a CLA has been defined.
+  logical::                                         defined !< Check if a CLAs group has been defined.
   integer(I4P)::                                    gg,ggg  !< Counters.
   !---------------------------------------------------------------------------------------------------------------------------------
 
@@ -1556,6 +1637,24 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction defined_group
+
+  function called_group(cli,group) result(called)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Check if a CLAs group has been runned.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  class(Type_Command_Line_Interface), intent(IN)::  cli    !< CLI data.
+  character(*),                       intent(IN)::  group  !< Name of group (command) of CLA.
+  logical::                                         called !< Check if a CLAs group has been runned.
+  integer(I4P)::                                    g      !< Counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  called = .false.
+  if (cli%defined_group(group=group,g=g)) called = cli%clasg(g)%called
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction called_group
 
   function defined(cli,group,switch)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1594,8 +1693,9 @@ contains
   character(max_val_len)::                            switch !< Switch name.
   logical::                                           found  !< Flag for checking if switch has been found in cli%cla.
   character(len=:), allocatable::                     prefd  !< Prefixing string.
-  integer(I4P)::                                      a      !< Counter for CLAs.
+  integer(I4P)::                                      a,aa   !< Counter for CLAs.
   integer(I4P)::                                      g      !< Counter for CLAs group.
+  integer(I4P), allocatable::                         ai(:,:)!< Counter for CLAs grouped.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1603,22 +1703,30 @@ contains
 
   ! adding help and version switches if not done by user
   if (.not.cli%disable_hv) then
-    if (.not.(cli%defined(switch='--help').and.cli%defined(switch='-h'))) &
-      call cli%add(pref=prefd,switch='--help',switch_ab='-h',&
-                   help='Print this help message',required=.false.,def='',act='print_help')
-    if (.not.(cli%defined(switch='--version').and.cli%defined(switch='-v'))) &
-      call cli%add(pref=prefd,switch='--version',switch_ab='-v',&
-                   help='Print version',required=.false.,def='',act='print_version')
+    do g=0,size(cli%clasg,dim=1)-1
+      if (.not.(cli%defined(group=cli%clasg(g)%group,switch='--help').and.cli%defined(group=cli%clasg(g)%group,switch='-h'))) &
+        call cli%add(pref        = prefd,                     &
+                     group_index = g,                         &
+                     switch      = '--help',                  &
+                     switch_ab   = '-h',                      &
+                     help        = 'Print this help message', &
+                     required    = .false.,                   &
+                     def         = '',                        &
+                     act         = 'print_help')
+      if (.not.(cli%defined(group=cli%clasg(g)%group,switch='--version').and.cli%defined(group=cli%clasg(g)%group,switch='-v'))) &
+        call cli%add(pref        = prefd,           &
+                     group_index = g,               &
+                     switch      = '--version',     &
+                     switch_ab   = '-v',            &
+                     help        = 'Print version', &
+                     required    = .false.,         &
+                     def         = '',              &
+                     act         = 'print_version')
+    enddo
   endif
 
-  ! counting the passed CLA
-  Na = command_argument_count()
-  ! if (Na<cli%Na_required) then
-  !   call cli%errored(pref=prefd,error=error_cli_too_few_clas,Na=na)
-  !   call cli%print_usage(pref=prefd)
-  !   if (present(error)) error = cli%error
-  !   return
-  ! endif
+  ! parsing passed CLAs grouping in indexes
+  call cli%get_clasg_indexes(ai=ai)
 
   ! checking CLI consistency
   call cli%check(pref=prefd)
@@ -1627,97 +1735,150 @@ contains
     return
   endif
 
-  ! checking if a group of CLAs (command) has been invoked
-  call get_command_argument(1,switch)
-  if (cli%defined_group(group=trim(adjustl(switch)),g=g)) then
-    a = 1 ! parsing from the second switch passed
-  else
-    a = 0 ! parsing from the first switch passed
-    g = 0 ! use the default group zero
+  ! if (ai(g,2)-ai(g,1)+1<cli%clasg(g)%Na_required) then
+  !   call cli%errored(pref=prefd,error=error_cli_too_few_clas,Na=Na)
+  !   call cli%print_usage(pref=prefd,g=g)
+  !   if (present(error)) error = cli%error
+  !   return
+  ! endif
+
+  ! parsing cli
+  do g=0,size(ai,dim=1)-1
+    call cli%clasg(g)%parse(pref=prefd, ai=ai(g,1:2))
+    cli%error = cli%clasg(g)%error
+    if (cli%error /= 0) exit
+  enddo
+
+  ! trapping the special cases of version/help printing
+  if (cli%error == status_clasg_print_v) then
+    call cli%print_version(pref=prefd)
+    stop
+  elseif (cli%error == status_clasg_print_h) then
+    call cli%print_usage(pref=prefd,g=g)
+    stop
   endif
 
-  ! parsing switch
-  do while (a<Na)
-    a = a + 1
-    call get_command_argument(a,switch)
-    call cli%clasg(g)%parse_switch(Na=Na,switch=trim(adjustl(switch)),arg=a,found=found) ; cli%error = cli%clasg(g)%error
-    if (.not.found) then
-      if (.not.cli%clasg(g)%cla(a)%positional) then
-        call cli%clasg(g)%cla(a)%errored(pref=prefd,error=error_cla_unknown,switch=trim(adjustl(switch)))
-        cli%error = cli%clasg(g)%cla(a)%error
-        if (present(error)) error = cli%error
-        return
-      else
-        ! positional CLA always stores a value
-        cli%clasg(g)%cla(a)%val = trim(adjustl(switch))
-        cli%clasg(g)%cla(a)%passed = .true.
-      endif
-    endif
+  ! checking if all required CLAs have been passed
+  do g=0,size(ai,dim=1)-1
+    call cli%clasg(g)%check_required(pref=prefd) ; cli%error = cli%clasg(g)%error
   enddo
 
-  ! checking if all required CLAs have been passed
-  do a=1,cli%clasg(g)%Na
-    if (cli%clasg(g)%cla(a)%required) then
-      if (.not.cli%clasg(g)%cla(a)%passed) then
-        call cli%clasg(g)%cla(a)%errored(pref=prefd,error=error_cla_missing_required)
-        call cli%print_usage(pref=prefd)
-        cli%error = cli%clasg(g)%cla(a)%error
-        if (present(error)) error = cli%error
-        return
-      endif
-    endif
-  enddo
+  if (present(error)) error = cli%error
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine parse
 
-  subroutine get_cla_cli(cli,pref,switch,position,error,val)
+  subroutine get_clasg_indexes(cli,ai)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Procedure for getting CLA (single) value from CLAs list parsed.
+  !< Get the argument indexes of CLAs groups defined parsing the actual passed CLAs.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  class(Type_Command_Line_Interface), intent(INOUT):: cli    !< CLI data.
+  integer(I4P), allocatable,          intent(OUT)::   ai(:,:)!< CLAs grouped indexes.
+  integer(I4P)::                                      Na     !< Number of command line arguments passed.
+  character(max_val_len)::                            switch !< Switch name.
+  integer(I4P)::                                      a      !< Counter for CLAs.
+  integer(I4P)::                                      aa     !< Counter for CLAs.
+  integer(I4P)::                                      g      !< Counter for CLAs group.
+  logical::                                           found  !< Flag for inquiring if a named group is found.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  allocate(ai(0:size(cli%clasg,dim=1)-1,1:2))
+  ai = 0
+  Na = command_argument_count()
+  a = 0
+  found = .false.
+  search_named: do while(a<Na)
+    a = a + 1
+    call get_command_argument(a,switch)
+    if (cli%defined_group(group=trim(adjustl(switch)),g=g)) then
+      found = .true.
+      cli%clasg(g)%called = .true.
+      ai(g,1) = a + 1
+      ai(g,2) = a + 1
+      aa = a + 1
+      do while(aa<Na)
+        aa = aa + 1
+        call get_command_argument(aa,switch)
+        if (cli%defined_group(group=trim(adjustl(switch)))) then
+          a = aa - 1
+          ai(g,2) = a
+          exit
+        else
+          ai(g,2) = aa
+        endif
+      enddo
+    elseif (.not.found) then
+      ai(0,2) = a
+    endif
+  enddo search_named
+  if (ai(0,2)>0) then
+    ai(0,1) = 1
+    cli%clasg(0)%called = .true.
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine get_clasg_indexes
+
+  subroutine get_cla_cli(cli,pref,group,switch,position,error,val)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Get CLA (single) value from CLAs list parsed.
   !<
   !< @note For logical type CLA the value is directly read without any robust error trapping.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Interface), intent(INOUT):: cli      !< CLI data.
   character(*), optional,             intent(IN)::    pref     !< Prefixing string.
+  character(*), optional,             intent(IN)::    group    !< Name of group (command) of CLA.
   character(*), optional,             intent(IN)::    switch   !< Switch name.
   integer(I4P), optional,             intent(IN)::    position !< Position of positional CLA.
   integer(I4P), optional,             intent(OUT)::   error    !< Error trapping flag.
   class(*),                           intent(INOUT):: val      !< CLA value.
   character(len=:), allocatable::                     prefd    !< Prefixing string.
   logical::                                           found    !< Flag for checking if CLA containing switch has been found.
+  integer(I4P)::                                      g        !< Group counter.
   integer(I4P)::                                      a        !< Argument counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   prefd = '' ; if (present(pref)) prefd = pref
-  if (present(switch)) then
-    ! searching for the CLA corresponding to switch
-    found = .false.
-    do a=1,cli%clasg(0)%Na
-      if (.not.cli%clasg(0)%cla(a)%positional) then
-        if ((cli%clasg(0)%cla(a)%switch==switch).or.(cli%clasg(0)%cla(a)%switch_ab==switch)) then
-          found = .true.
-          exit
-        endif
-      endif
-    enddo
-    if (.not.found) then
-      call cli%errored(pref=prefd,error=error_cli_missing_cla,switch=switch)
-    else
-      call cli%clasg(0)%cla(a)%get(pref=prefd,val=val) ; cli%error =  cli%clasg(0)%cla(a)%error
+  if (present(group)) then
+    if (.not.cli%defined_group(group=group,g=g)) then
+      call cli%errored(pref=prefd,error=error_cli_missing_group,group=group)
     endif
-  elseif (present(position)) then
-    call cli%clasg(0)%cla(position)%get(pref=prefd,val=val) ; cli%error = cli%clasg(0)%cla(position)%error
   else
-    call cli%errored(pref=prefd,error=error_cli_missing_selection_cla)
+    g = 0
+  endif
+  if (cli%error == 0 .and. cli%clasg(g)%called) then
+    if (present(switch)) then
+      ! searching for the CLA corresponding to switch
+      found = .false.
+      do a=1,cli%clasg(g)%Na
+        if (.not.cli%clasg(g)%cla(a)%positional) then
+          if ((cli%clasg(g)%cla(a)%switch==switch).or.(cli%clasg(g)%cla(a)%switch_ab==switch)) then
+            found = .true.
+            exit
+          endif
+        endif
+      enddo
+      if (.not.found) then
+        call cli%errored(pref=prefd,error=error_cli_missing_cla,switch=switch)
+      else
+        call cli%clasg(g)%cla(a)%get(pref=prefd,val=val) ; cli%error = cli%clasg(g)%cla(a)%error
+      endif
+    elseif (present(position)) then
+      call cli%clasg(g)%cla(position)%get(pref=prefd,val=val) ; cli%error = cli%clasg(g)%cla(position)%error
+    else
+      call cli%errored(pref=prefd,error=error_cli_missing_selection_cla)
+    endif
   endif
   if (present(error)) error = cli%error
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_cli
 
-  subroutine get_cla_list_cli(cli,pref,switch,position,error,val)
+  subroutine get_cla_list_cli(cli,pref,group,switch,position,error,val)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for getting CLA multiple values from CLAs list parsed.
   !<
@@ -1726,24 +1887,32 @@ contains
   implicit none
   class(Type_Command_Line_Interface), intent(INOUT):: cli      !< CLI data.
   character(*), optional,             intent(IN)::    pref     !< Prefixing string.
+  character(*), optional,             intent(IN)::    group    !< Name of group (command) of CLA.
   character(*), optional,             intent(IN)::    switch   !< Switch name.
   integer(I4P), optional,             intent(IN)::    position !< Position of positional CLA.
   integer(I4P), optional,             intent(OUT)::   error    !< Error trapping flag.
   class(*),                           intent(INOUT):: val(1:)  !< CLA values.
   character(len=:), allocatable::                     prefd    !< Prefixing string.
   logical::                                           found    !< Flag for checking if CLA containing switch has been found.
+  integer(I4P)::                                      g        !< Group counter.
   integer(I4P)::                                      a        !< Argument counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  error = 0
   prefd = '' ; if (present(pref)) prefd = pref
+  if (present(group)) then
+    if (.not.cli%defined_group(group=group,g=g)) then
+      call cli%errored(pref=prefd,error=error_cli_missing_group,group=group)
+    endif
+  else
+    g = 0
+  endif
   if (present(switch)) then
     ! searching for the CLA corresponding to switch
     found = .false.
-    do a=1,cli%clasg(0)%Na
-      if (.not.cli%clasg(0)%cla(a)%positional) then
-        if ((cli%clasg(0)%cla(a)%switch==switch).or.(cli%clasg(0)%cla(a)%switch_ab==switch)) then
+    do a=1,cli%clasg(g)%Na
+      if (.not.cli%clasg(g)%cla(a)%positional) then
+        if ((cli%clasg(g)%cla(a)%switch==switch).or.(cli%clasg(g)%cla(a)%switch_ab==switch)) then
           found = .true.
           exit
         endif
@@ -1752,10 +1921,10 @@ contains
     if (.not.found) then
       call cli%errored(pref=prefd,error=error_cli_missing_cla,switch=switch)
     else
-      call cli%clasg(0)%cla(a)%get(pref=prefd,val=val) ; cli%error = cli%clasg(0)%cla(a)%error
+      call cli%clasg(g)%cla(a)%get(pref=prefd,val=val) ; cli%error = cli%clasg(g)%cla(a)%error
     endif
   elseif (present(position)) then
-    call cli%clasg(0)%cla(position)%get(pref=prefd,val=val) ; cli%error = error
+    call cli%clasg(g)%cla(position)%get(pref=prefd,val=val) ; cli%error = error
   else
     call cli%errored(pref=prefd,error=error_cli_missing_selection_cla)
   endif
@@ -1764,22 +1933,55 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_cli
 
-  subroutine print_usage(cli,pref)
+  subroutine print_usage(cli,pref,g)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Print correct usage of CLI.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Interface), intent(IN):: cli   !< CLI data.
   character(*), optional,             intent(IN):: pref  !< Prefixing string.
+  integer(I4P),                       intent(IN):: g     !< Group index.
   character(len=:), allocatable::                  prefd !< Prefixing string.
-  integer(I4P)::                                   g     !< Counter.
+  character(len=:), allocatable::                  usage !< Usage string.
+  integer(I4P)::                                   gi    !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   prefd = '' ; if (present(pref)) prefd = pref
-  do g=0,size(cli%clasg)-1
+  if (g>0) then
     call cli%clasg(g)%print_usage(pref=prefd)
-  enddo
+  else
+    if (size(cli%clasg,dim=1)>1) then
+      ! usage = cli%help//cli%progname//' {'//cli%clasg(1)%group
+      usage = cli%help//cli%progname//' '//cli%clasg(0)%signature()
+      usage = usage//' {'//cli%clasg(1)%group
+      do gi=2,size(cli%clasg,dim=1)-1
+        usage = usage//','//cli%clasg(gi)%group
+      enddo
+      usage = usage//'} ...'
+      write(stdout,'(A)')prefd//usage
+      if (cli%description/='') then
+        write(stdout,'(A)')
+        write(stdout,'(A)')prefd//cli%description
+      endif
+      if (cli%clasg(0)%Na > 0) then
+        call cli%clasg(0)%print_usage_clas(pref=prefd)
+      endif
+      write(stdout,'(A)')
+      write(stdout,'(A)')prefd//'Commands:'
+      do gi=1,size(cli%clasg,dim=1)-1
+        write(stdout,'(A)')prefd//'  '//cli%clasg(gi)%group
+        write(stdout,'(A)')prefd//repeat(' ',10)//cli%clasg(gi)%description
+      enddo
+      write(stdout,'(A)')
+      write(stdout,'(A)')prefd//'For more detailed commands help try:'
+      do gi=1,size(cli%clasg,dim=1)-1
+        write(stdout,'(A)')prefd//'  '//cli%progname//' '//cli%clasg(gi)%group//' -h,--help'
+      enddo
+    else
+      call cli%clasg(g)%print_usage(pref=prefd)
+    endif
+  endif
   call cli%print_examples(pref=prefd)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1800,31 +2002,14 @@ contains
   if (allocated(cli%examples)) then
     prefd = '' ; if (present(pref)) prefd = pref
     write(stdout,'(A)')
-    write(stdout,'(A)')prefd//' Examples:'
+    write(stdout,'(A)')prefd//'Examples:'
     do e=1,size(cli%examples,dim=1)
-      write(stdout,'(A)')prefd//'   -) '//trim(cli%examples(e))
+      write(stdout,'(A)')prefd//'   '//trim(cli%examples(e))
     enddo
   endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine print_examples
-
-  subroutine print_version(cli,pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Print version.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Interface), intent(IN):: cli   !< CLI data.
-  character(*), optional,             intent(IN):: pref  !< Prefixing string.
-  character(len=:), allocatable::                  prefd !< Prefixing string.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  prefd = '' ; if (present(pref)) prefd = pref
-  write(stdout,'(A)')prefd//' '//cli%progname//' version '//cli%version
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine print_version
 
   elemental subroutine assign_cli(lhs,rhs)
   !---------------------------------------------------------------------------------------------------------------------------------

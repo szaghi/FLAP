@@ -1,6 +1,6 @@
 [modes]
-modes = shared-gnu static-gnu test-driver-gnu
-        shared-gnu-debug static-gnu-debug test-driver-gnu-debug
+modes = shared-gnu static-gnu test-driver-gnu test-driver-nested-gnu
+        shared-gnu-debug static-gnu-debug test-driver-gnu-debug test-driver-nested-gnu-debug
         shared-intel static-intel test-driver-intel
         shared-intel-debug static-intel-debug test-driver-intel-debug
 
@@ -30,10 +30,16 @@ output    = FLAP.a
 mklib     = static
 
 [test-driver-gnu]
-template = template-static-gnu
-target   = src/Test_Driver.f90
+template  = template-static-gnu
+target    = src/Test_Driver.f90
 build_dir = ./Test_Driver/
-output   = Test_Driver
+output    = Test_Driver
+
+[test-driver-nested-gnu]
+template  = template-static-gnu
+target    = src/Test_Driver_Nested.f90
+build_dir = ./Test_Driver_Nested/
+output    = Test_Driver_Nested
 
 [shared-gnu-debug]
 template  = template-shared-gnu-debug
@@ -54,6 +60,12 @@ template  = template-static-gnu-debug
 target    = src/Test_Driver.f90
 build_dir = ./Test_Driver/
 output    = Test_Driver
+
+[test-driver-nested-gnu-debug]
+template  = template-static-gnu-debug
+target    = src/Test_Driver_Nested.f90
+build_dir = ./Test_Driver_Nested/
+output    = Test_Driver_Nested
 
 [shared-intel]
 template  = template-shared-intel
