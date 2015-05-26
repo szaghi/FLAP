@@ -21,6 +21,7 @@ integer(I4P)::                      error         !< Error trapping flag.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
+authors_print = .false.
 ! initializing Command Line Interface
 call cli%init(progname    = 'Test_Driver_Nested',                                    &
               version     = 'v2.1.5',                                                &
@@ -38,6 +39,7 @@ call cli%add(switch='--authors',switch_ab='-a',help='Print authors names',requir
 call cli%add_group(group='init',description='fake init versioning')
 call cli%add_group(group='commit',description='fake commit changes to current branch')
 call cli%add_group(group='tag',description='fake tag current commit')
+call cli%set_mutually_exclusive_groups(group1='init',group2='commit')
 ! set Command Line Arguments of commit command
 call cli%add(group='commit',switch='--message',switch_ab='-m',help='Commit message',required=.false.,act='store',def='')
 ! set Command Line Arguments of commit command

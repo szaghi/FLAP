@@ -25,6 +25,8 @@ type, abstract:: Type_Object
   character(len=:), public, allocatable:: description   !< Detailed description.
   character(len=:), public, allocatable:: license       !< License description.
   character(len=:), public, allocatable:: authors       !< Authors list.
+  character(len=:), public, allocatable:: epilog        !< Epilog message.
+  character(len=:), public, allocatable:: m_exclude     !< Mutually exclude other CLA(s group).
   integer(I4P),     public::              error = 0_I4P !< Error traping flag.
   contains
     procedure:: free_object   !< Free dynamic memory.
@@ -76,16 +78,17 @@ type, extends(Type_Object):: Type_Command_Line_Arguments_Group
   logical::                                       called      =.false.!< Flag for checking if CLAs group has been passed to CLI.
   contains
     ! public methods
-    procedure, public:: free             => free_clasg             !< Free dynamic memory.
-    procedure, public:: check            => check_clasg            !< Check CLAs data consistency.
-    procedure, public:: check_required   => check_required_clasg   !< Check if required CLAs are passed.
-    procedure, public:: add              => add_cla_clasg          !< Add CLA to CLAs group.
-    procedure, public:: passed           => passed_clasg           !< Check if a CLA has been passed.
-    procedure, public:: defined          => defined_clasg          !< Check if a CLA has been defined.
-    procedure, public:: parse            => parse_clasg            !< Parse CLAs group.
-    procedure, public:: print_usage_clas => print_usage_clas_clasg !< Print correct usage of CLAs group without header.
-    procedure, public:: print_usage      => print_usage_clasg      !< Print correct usage of CLAs group.
-    procedure, public:: signature        => signature_clasg        !< Get CLAs group signature for adding to the CLI one.
+    procedure, public:: free              => free_clasg              !< Free dynamic memory.
+    procedure, public:: check             => check_clasg             !< Check CLAs data consistency.
+    procedure, public:: check_required    => check_required_clasg    !< Check if required CLAs are passed.
+    procedure, public:: check_m_exclusive => check_m_exclusive_clasg !< Check if two mutually exclusive CLAs have been passed.
+    procedure, public:: add               => add_cla_clasg           !< Add CLA to CLAs group.
+    procedure, public:: passed            => passed_clasg            !< Check if a CLA has been passed.
+    procedure, public:: defined           => defined_clasg           !< Check if a CLA has been defined.
+    procedure, public:: parse             => parse_clasg             !< Parse CLAs group.
+    procedure, public:: print_usage_clas  => print_usage_clas_clasg  !< Print correct usage of CLAs group without header.
+    procedure, public:: print_usage       => print_usage_clasg       !< Print correct usage of CLAs group.
+    procedure, public:: signature         => signature_clasg         !< Get CLAs group signature for adding to the CLI one.
     ! private methods
     procedure, private:: assign_clasg                  !< CLAs group assignment overloading.
     generic,   private:: assignment(=) => assign_clasg !< CLAs group assignment overloading.
@@ -109,9 +112,11 @@ type, extends(Type_Object), public:: Type_Command_Line_Interface
     procedure, public:: add_group                           !< Add CLAs group CLI.
     procedure, public:: add                                 !< Add CLA to CLI.
     procedure, public:: check                               !< Check CLAs data consistenc.
+    procedure, public:: check_m_exclusive                   !< Check if two mutually exclusive CLAs group have been called.
     procedure, public:: passed                              !< Check if a CLA has been passed.
     procedure, public:: defined                             !< Check if a CLA has been defined.
     procedure, public:: defined_group                       !< Check if a CLAs group has been defined.
+    procedure, public:: set_mutually_exclusive_groups       !< Set two CLAs group as mutually exclusive.
     procedure, public:: run_command => called_group         !< Check if a CLAs group has been runned.
     procedure, public:: parse                               !< Parse Command Line Interfaces.
     generic,   public:: get => get_cla_cli,get_cla_list_cli !< Get CLA value(s) from CLAs list parsed.
@@ -135,20 +140,24 @@ character(len=*), parameter:: action_print_vers  = 'PRINT_VERSION' !< CLA that p
 character(len=*), parameter:: args_sep           = '||!||'         !< Arguments separator for multiple valued (list) CLA.
 ! code errors and status
 integer(I4P), parameter:: error_cla_optional_no_def        = 1  !< Optional CLA without default value.
-integer(I4P), parameter:: error_cla_named_no_name          = 2  !< Named CLA without switch name.
-integer(I4P), parameter:: error_cla_positional_no_position = 3  !< Positional CLA without position.
-integer(I4P), parameter:: error_cla_positional_no_store    = 4  !< Positional CLA without action_store.
-integer(I4P), parameter:: error_cla_not_in_choices         = 5  !< CLA value out of a specified choices.
-integer(I4P), parameter:: error_cla_missing_required       = 6  !< Missing required CLA.
-integer(I4P), parameter:: error_cla_casting_logical        = 7  !< Error casting CLA value to logical type.
-integer(I4P), parameter:: error_cla_no_list                = 8  !< Actual CLA is not list-values.
-integer(I4P), parameter:: error_cla_nargs_insufficient     = 9  !< Multi-valued CLA with insufficient arguments.
-integer(I4P), parameter:: error_cla_unknown                = 10 !< Unknown CLA (switch name).
-integer(I4P), parameter:: error_clasg_consistency          = 11 !< CLAs group consistency error.
-integer(I4P), parameter:: error_cli_missing_cla            = 12 !< CLA not found in CLI.
-integer(I4P), parameter:: error_cli_missing_group          = 13 !< Group not found in CLI.
-integer(I4P), parameter:: error_cli_missing_selection_cla  = 14 !< CLA selection in CLI failing.
-integer(I4P), parameter:: error_cli_too_few_clas           = 15 !< Insufficient arguments for CLI.
+integer(I4P), parameter:: error_cla_required_m_exclude     = 2  !< Required CLA cannot exclude others.
+integer(I4P), parameter:: error_cla_positional_m_exclude   = 3  !< Positional CLA cannot exclude others.
+integer(I4P), parameter:: error_cla_named_no_name          = 4  !< Named CLA without switch name.
+integer(I4P), parameter:: error_cla_positional_no_position = 5  !< Positional CLA without position.
+integer(I4P), parameter:: error_cla_positional_no_store    = 6  !< Positional CLA without action_store.
+integer(I4P), parameter:: error_cla_not_in_choices         = 7  !< CLA value out of a specified choices.
+integer(I4P), parameter:: error_cla_missing_required       = 8  !< Missing required CLA.
+integer(I4P), parameter:: error_cla_m_exclude              = 9  !< Two mutually exclusive CLAs have been passed.
+integer(I4P), parameter:: error_cla_casting_logical        = 10 !< Error casting CLA value to logical type.
+integer(I4P), parameter:: error_cla_no_list                = 11 !< Actual CLA is not list-values.
+integer(I4P), parameter:: error_cla_nargs_insufficient     = 12 !< Multi-valued CLA with insufficient arguments.
+integer(I4P), parameter:: error_cla_unknown                = 13 !< Unknown CLA (switch name).
+integer(I4P), parameter:: error_clasg_consistency          = 14 !< CLAs group consistency error.
+integer(I4P), parameter:: error_clasg_m_exclude            = 15 !< Two mutually exclusive CLAs group have been called.
+integer(I4P), parameter:: error_cli_missing_cla            = 16 !< CLA not found in CLI.
+integer(I4P), parameter:: error_cli_missing_group          = 17 !< Group not found in CLI.
+integer(I4P), parameter:: error_cli_missing_selection_cla  = 18 !< CLA selection in CLI failing.
+integer(I4P), parameter:: error_cli_too_few_clas           = 19 !< Insufficient arguments for CLI.
 integer(I4P), parameter:: status_clasg_print_v             = -1 !< Print version status.
 integer(I4P), parameter:: status_clasg_print_h             = -2 !< Print help status.
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -246,6 +255,8 @@ contains
   if (allocated(obj%description)) deallocate(obj%description)
   if (allocated(obj%license    )) deallocate(obj%license    )
   if (allocated(obj%authors    )) deallocate(obj%authors    )
+  if (allocated(obj%epilog     )) deallocate(obj%epilog     )
+  if (allocated(obj%m_exclude  )) deallocate(obj%m_exclude  )
   obj%error = 0_I4P
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -282,12 +293,21 @@ contains
         else
           write(stderr,'(A)')prefd//obj%progname//': error: named option "'//obj%switch//'" has not a default value!'
         endif
+      case(error_cla_required_m_exclude)
+        write(stderr,'(A)')prefd//obj%progname//': error: named option "'//obj%switch//'" cannot exclude others'//&
+          ', it being requiredi, only optional ones can!'
+      case(error_cla_positional_m_exclude)
+        write(stderr,'(A)')prefd//obj%progname//': error: "'//trim(str(n=obj%position))//&
+                           '-th" positional option cannot exclude others, only optional named options can!'
       case(error_cla_named_no_name)
         write(stderr,'(A)')prefd//obj%progname//': error: a non positional optiona must have a switch name!'
       case(error_cla_positional_no_position)
         write(stderr,'(A)')prefd//obj%progname//': error: a positional option must have a position number different from 0!'
       case(error_cla_positional_no_store)
         write(stderr,'(A)')prefd//obj%progname//': error: a positional option must have action set to "'//action_store//'"!'
+      case(error_cla_m_exclude)
+        write(stderr,'(A)')prefd//obj%progname//': error: the options "'//obj%switch//'" and "'//obj%m_exclude//'" are mutually'//&
+         ' exclusive, but both have been passed!'
       case(error_cla_not_in_choices)
         if (obj%positional) then
           write(stderr,'(A)')prefd//obj%progname//': error: value of "'//trim(str(n=obj%position))//&
@@ -342,6 +362,9 @@ contains
                            obj%cla(a1)%switch_ab
         write(stderr,'(A)')prefd//' CLA('//trim(str(.true.,a2))//') switches = '//obj%cla(a2)%switch//' '//&
                            obj%cla(a2)%switch_ab
+      case(error_clasg_m_exclude)
+        write(stderr,'(A)')prefd//obj%progname//': error: the group "'//obj%group//'" and "'//obj%m_exclude//'" are mutually'//&
+         ' exclusive, but both have been called!'
       endselect
 
     class is(Type_Command_Line_Interface)
@@ -401,6 +424,8 @@ contains
   if (allocated(rhs%description)) lhs%description = rhs%description
   if (allocated(rhs%license    )) lhs%license     = rhs%license
   if (allocated(rhs%authors    )) lhs%authors     = rhs%authors
+  if (allocated(rhs%epilog     )) lhs%epilog      = rhs%epilog
+  if (allocated(rhs%m_exclude  )) lhs%m_exclude   = rhs%m_exclude
                                   lhs%error       = rhs%error
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -462,6 +487,12 @@ contains
   prefd = '' ; if (present(pref)) prefd = pref
   if ((.not.cla%required).and.(.not.allocated(cla%def))) then
     call cla%errored(pref=prefd,error=error_cla_optional_no_def)
+  endif
+  if ((cla%required).and.(cla%m_exclude/='')) then
+    call cla%errored(pref=prefd,error=error_cla_required_m_exclude)
+  endif
+  if ((cla%positional).and.(cla%m_exclude/='')) then
+    call cla%errored(pref=prefd,error=error_cla_positional_m_exclude)
   endif
   if ((.not.cla%positional).and.(.not.allocated(cla%switch))) then
     call cla%errored(pref=prefd,error=error_cla_named_no_name)
@@ -902,6 +933,7 @@ contains
       sig = sig//prefd//repeat(' ',10)//'default value '//trim(adjustl(cla%def))//new_line('a')
     endif
   endif
+  if (cla%m_exclude/='') sig = sig//prefd//repeat(' ',10)//'mutually exclude "'//cla%m_exclude//'"'//new_line('a')
   sig = sig//prefd//repeat(' ',10)//trim(adjustl(cla%help))
   write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd)sig
   if (present(iostat)) iostat = iostatd
@@ -1056,6 +1088,16 @@ contains
       enddo
     endif
   enddo CLA_unique
+  ! updating mutually exclusive relations
+  CLA_exclude: do a=1,clasg%Na
+    if (.not.clasg%cla(a)%positional) then
+      if (clasg%cla(a)%m_exclude/='') then
+        if (clasg%defined(switch=clasg%cla(a)%m_exclude,pos=aa)) then
+          clasg%cla(aa)%m_exclude = clasg%cla(a)%switch
+        endif
+      endif
+    endif
+  enddo CLA_exclude
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check_clasg
@@ -1087,6 +1129,36 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check_required_clasg
+
+  subroutine check_m_exclusive_clasg(clasg,pref)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Check if two mutually exclusive CLAs have been passed.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  class(Type_Command_Line_Arguments_Group), intent(INOUT):: clasg !< CLAs group data.
+  character(*), optional,                   intent(IN)::    pref  !< Prefixing string.
+  character(len=:), allocatable::                           prefd !< Prefixing string.
+  integer(I4P)::                                            a     !< Counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  if (clasg%called) then
+    prefd = '' ; if (present(pref)) prefd = pref
+    do a=1,clasg%Na
+      if (clasg%cla(a)%passed) then
+        if (clasg%cla(a)%m_exclude/='') then
+          if (clasg%passed(switch=clasg%cla(a)%m_exclude)) then
+            call clasg%cla(a)%errored(pref=prefd,error=error_cla_m_exclude)
+            clasg%error = clasg%cla(a)%error
+            return
+          endif
+        endif
+      endif
+    enddo
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine check_m_exclusive_clasg
 
   subroutine add_cla_clasg(clasg,pref,cla)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1163,23 +1235,26 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction passed_clasg
 
-  pure function defined_clasg(clasg,switch) result(defined)
+  function defined_clasg(clasg,switch,pos) result(defined)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if a CLA has been defined.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  class(Type_Command_Line_Arguments_Group), intent(IN):: clasg   !< CLAs group data.
-  character(*),                             intent(IN):: switch  !< Switch name.
-  logical::                                              defined !< Check if a CLA has been defined.
-  integer(I4P)::                                         a       !< CLA counter.
+  class(Type_Command_Line_Arguments_Group), intent(IN)::  clasg   !< CLAs group data.
+  character(*),                             intent(IN)::  switch  !< Switch name.
+  integer(I4P), optional,                   intent(OUT):: pos     !< CLA position.
+  logical::                                               defined !< Check if a CLA has been defined.
+  integer(I4P)::                                          a       !< CLA counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   defined = .false.
+  if (present(pos)) pos = 0
   if (clasg%Na>0) then
     do a=1,clasg%Na
       if ((clasg%cla(a)%switch==switch).or.(clasg%cla(a)%switch_ab==switch)) then
         defined = .true.
+        if (present(pos)) pos = a
         exit
       endif
     enddo
@@ -1267,6 +1342,7 @@ contains
         endif
       endif
     enddo
+    call clasg%check_m_exclusive(pref=prefd)
   endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1453,7 +1529,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init
 
-  subroutine add_group(cli,help,description,group)
+  subroutine add_group(cli,help,description,exclude,group)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Add CLAs group to CLI.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1461,32 +1537,58 @@ contains
   class(Type_Command_Line_Interface), intent(INOUT)::    cli               !< CLI data.
   character(*), optional,             intent(IN)::       help              !< Help message.
   character(*), optional,             intent(IN)::       description       !< Detailed description.
+  character(*), optional,             intent(IN)::       exclude           !< Group name of the mutually exclusive group.
   character(*),                       intent(IN)::       group             !< Name of the grouped CLAs.
   type(Type_Command_Line_Arguments_Group), allocatable:: clasg_list_new(:) !< New (extended) CLAs group list.
   character(len=:), allocatable::                        helpd             !< Help message.
   character(len=:), allocatable::                        descriptiond      !< Detailed description.
+  character(len=:), allocatable::                        excluded          !< Group name of the mutually exclusive group.
   integer(I4P)::                                         Ng                !< Number of groups.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  helpd        = 'usage: ' ; if (present(help       )) helpd        = help
-  descriptiond = ''        ; if (present(description)) descriptiond = description
-  Ng = size(cli%clasg,dim=1)
-  allocate(clasg_list_new(0:Ng))
-  clasg_list_new(0:Ng-1) = cli%clasg(0:Ng-1)
-  call clasg_list_new(Ng)%assign_object(cli)
-  clasg_list_new(Ng)%help        = helpd
-  clasg_list_new(Ng)%description = descriptiond
-  clasg_list_new(Ng)%group       = group
-  deallocate(cli%clasg)
-  allocate(cli%clasg(0:Ng))
-  cli%clasg = clasg_list_new
-  deallocate(clasg_list_new)
+  if (.not.cli%defined_group(group=group)) then
+    helpd        = 'usage: ' ; if (present(help       )) helpd        = help
+    descriptiond = ''        ; if (present(description)) descriptiond = description
+    excluded     = ''        ; if (present(exclude    )) excluded     = exclude
+    Ng = size(cli%clasg,dim=1)
+    allocate(clasg_list_new(0:Ng))
+    clasg_list_new(0:Ng-1) = cli%clasg(0:Ng-1)
+    call clasg_list_new(Ng)%assign_object(cli)
+    clasg_list_new(Ng)%help        = helpd
+    clasg_list_new(Ng)%description = descriptiond
+    clasg_list_new(Ng)%group       = group
+    clasg_list_new(Ng)%m_exclude   = excluded
+    deallocate(cli%clasg)
+    allocate(cli%clasg(0:Ng))
+    cli%clasg = clasg_list_new
+    deallocate(clasg_list_new)
+  endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine add_group
 
-  subroutine add(cli,pref,group,group_index,switch,switch_ab,help,required,positional,position,act,def,nargs,choices,error)
+  subroutine set_mutually_exclusive_groups(cli,group1,group2)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Set two CLAs group ad mutually exclusive.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  class(Type_Command_Line_Interface), intent(INOUT):: cli    !< CLI data.
+  character(*),                       intent(IN)::    group1 !< Name of the first grouped CLAs.
+  character(*),                       intent(IN)::    group2 !< Name of the second grouped CLAs.
+  integer(I4P)::                                      g1,g2  !< Counters.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  if (cli%defined_group(group=group1,g=g1).and.cli%defined_group(group=group2,g=g2)) then
+    cli%clasg(g1)%m_exclude = group2
+    cli%clasg(g2)%m_exclude = group1
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine set_mutually_exclusive_groups
+
+  subroutine add(cli,pref,group,group_index,switch,switch_ab,help,required,positional,position,act,def,nargs,choices,exclude,error)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Add CLA to CLI.
   !<
@@ -1512,6 +1614,7 @@ contains
   character(*), optional,             intent(IN)::    def         !< Default value.
   character(*), optional,             intent(IN)::    nargs       !< Number of arguments consumed by CLA.
   character(*), optional,             intent(IN)::    choices     !< List of allowable values for the argument.
+  character(*), optional,             intent(IN)::    exclude     !< Switch name of the mutually exclusive CLA.
   integer(I4P), optional,             intent(OUT)::   error       !< Error trapping flag.
   type(Type_Command_Line_Argument)::                  cla         !< CLA data.
   character(len=:), allocatable::                     prefd       !< Prefixing string.
@@ -1534,6 +1637,7 @@ contains
                                              if (present(def       )) cla%def        = def
                                              if (present(nargs     )) cla%nargs      = nargs
                                              if (present(choices   )) cla%choices    = choices
+  cla%m_exclude  = ''                      ; if (present(exclude   )) cla%m_exclude  = exclude
   prefd = '' ; if (present(pref)) prefd = pref
   call cla%check(pref=prefd) ; cli%error = cla%error
   ! adding CLA to CLI
@@ -1565,20 +1669,54 @@ contains
   character(*), optional,             intent(IN)::    pref  !< Prefixing string.
   integer(I4P), optional,             intent(OUT)::   error !< Error trapping flag.
   character(len=:), allocatable::                     prefd !< Prefixing string.
-  integer(I4P)::                                      g     !< CLA counter.
+  integer(I4P)::                                      g,gg  !< Counters.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   prefd = '' ; if (present(pref)) prefd = pref
   do g=0,size(cli%clasg,dim=1)-1
+    ! check group consistency
     call cli%clasg(g)%check(pref=prefd)
     cli%error = cli%clasg(g)%error
     if (present(error)) error = cli%error
     if (cli%error/=0) exit
+    ! check mutually exclusive interaction
+    if (g>0) then
+      if (cli%clasg(g)%m_exclude/='') then
+        if (cli%defined_group(group=cli%clasg(g)%m_exclude,g=gg)) cli%clasg(gg)%m_exclude = cli%clasg(g)%group
+      endif
+    endif
   enddo
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check
+
+  subroutine check_m_exclusive(cli,pref)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Check if two mutually exclusive CLAs group have been called.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  class(Type_Command_Line_Interface), intent(INOUT):: cli   !< CLI data.
+  character(*), optional,             intent(IN)::    pref  !< Prefixing string.
+  character(len=:), allocatable::                     prefd !< Prefixing string.
+  integer(I4P)::                                      g,gg  !< Counters.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  do g=1,size(cli%clasg,dim=1)-1
+    if (cli%clasg(g)%called.and.(cli%clasg(g)%m_exclude/='')) then
+      if (cli%defined_group(group=cli%clasg(g)%m_exclude,g=gg)) then
+        if (cli%clasg(gg)%called) then
+          call cli%clasg(g)%errored(error=error_clasg_m_exclude)
+          cli%error = cli%clasg(g)%error
+          exit
+        endif
+      endif
+    endif
+  enddo
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine check_m_exclusive
 
   function passed(cli,group,switch,position)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1735,13 +1873,6 @@ contains
     return
   endif
 
-  ! if (ai(g,2)-ai(g,1)+1<cli%clasg(g)%Na_required) then
-  !   call cli%errored(pref=prefd,error=error_cli_too_few_clas,Na=Na)
-  !   call cli%print_usage(pref=prefd,g=g)
-  !   if (present(error)) error = cli%error
-  !   return
-  ! endif
-
   ! parsing cli
   do g=0,size(ai,dim=1)-1
     call cli%clasg(g)%parse(pref=prefd, ai=ai(g,1:2))
@@ -1762,6 +1893,9 @@ contains
   do g=0,size(ai,dim=1)-1
     call cli%clasg(g)%check_required(pref=prefd) ; cli%error = cli%clasg(g)%error
   enddo
+
+  ! check mutually exclusive interaction
+  call cli%check_m_exclusive(pref=prefd)
 
   if (present(error)) error = cli%error
   return
@@ -1796,8 +1930,9 @@ contains
       found = .true.
       cli%clasg(g)%called = .true.
       ai(g,1) = a + 1
-      ai(g,2) = a + 1
-      aa = a + 1
+      ! ai(g,2) = a + 1
+      ! aa = a + 1
+      aa = a
       do while(aa<Na)
         aa = aa + 1
         call get_command_argument(aa,switch)
@@ -1815,6 +1950,8 @@ contains
   enddo search_named
   if (ai(0,2)>0) then
     ai(0,1) = 1
+    cli%clasg(0)%called = .true.
+  elseif (all(ai==0)) then
     cli%clasg(0)%called = .true.
   endif
   return

@@ -24,11 +24,12 @@ script:
 after_success:
   # coverage analysis
   - cd $TRAVIS_BUILD_DIR
-  - rm -f ./Test_Driver/obj/IR_Precision.gc*
-  - rm -f ./Test_Driver/obj/Lib_IO_Misc.gc*
-  - rm -f ./Test_Driver/obj/Lib_Strings.gc*
-  - rm -f ./Test_Driver/obj/Test_Driver.gc*
-  - coveralls -b .
+  # - rm -f ./Test_Driver/obj/IR_Precision.gc*
+  # - rm -f ./Test_Driver/obj/Lib_IO_Misc.gc*
+  # - rm -f ./Test_Driver/obj/Lib_Strings.gc*
+  # - rm -f ./Test_Driver/obj/Test_Driver.gc*
+  # - coveralls -b .
+  - coveralls -n -b .
   # deploy documentation
   - git config --global user.name "Stefano Zaghi"
   - git config --global user.email "stefano.zaghi@gmail.com"

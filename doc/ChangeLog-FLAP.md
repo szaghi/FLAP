@@ -2,7 +2,43 @@
 
 ## [Unreleased](https://github.com/szaghi/FLAP/tree/HEAD)
 
-[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.0.6...HEAD)
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.1.0...HEAD)
+
+**Implemented enhancements:**
+
+- Add mutually exsclusive option for groups of CLAs [\#29](https://github.com/szaghi/FLAP/issues/29)
+
+- Support nested subcommands or groups of commands or [\#10](https://github.com/szaghi/FLAP/issues/10)
+
+**Closed issues:**
+
+- Travis issue  [\#26](https://github.com/szaghi/FLAP/issues/26)
+
+- Bug when parsing? [\#24](https://github.com/szaghi/FLAP/issues/24)
+
+- Reduce the number cycles when parsing [\#23](https://github.com/szaghi/FLAP/issues/23)
+
+- Correct the taste wiki page [\#20](https://github.com/szaghi/FLAP/issues/20)
+
+- Correct requirements wiki page [\#19](https://github.com/szaghi/FLAP/issues/19)
+
+- Change licensing system [\#15](https://github.com/szaghi/FLAP/issues/15)
+
+## [v0.1.0](https://github.com/szaghi/FLAP/tree/v0.1.0) (2015-05-22)
+
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.0.7...v0.1.0)
+
+**Closed issues:**
+
+- Make a more uniform errors trapping mechanism [\#21](https://github.com/szaghi/FLAP/issues/21)
+
+## [v0.0.7](https://github.com/szaghi/FLAP/tree/v0.0.7) (2015-04-22)
+
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.0.6...v0.0.7)
+
+**Implemented enhancements:**
+
+- Make FLAP CLI Posix compliant [\#13](https://github.com/szaghi/FLAP/issues/13)
 
 **Closed issues:**
 
