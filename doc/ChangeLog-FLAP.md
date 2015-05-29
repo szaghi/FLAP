@@ -1,5 +1,25 @@
 # Change Log
 
+## [Unreleased](https://github.com/szaghi/FLAP/tree/HEAD)
+
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.3.0...HEAD)
+
+**Implemented enhancements:**
+
+- Implement fake arguments parsed from string input [\#28](https://github.com/szaghi/FLAP/issues/28)
+
+**Fixed bugs:**
+
+- Bug for list-value CLA [\#30](https://github.com/szaghi/FLAP/issues/30)
+
+## [v0.3.0](https://github.com/szaghi/FLAP/tree/v0.3.0) (2015-05-29)
+
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.2.0...v0.3.0)
+
+**Implemented enhancements:**
+
+- Implement argparse epilog [\#27](https://github.com/szaghi/FLAP/issues/27)
+
 ## [v0.2.0](https://github.com/szaghi/FLAP/tree/v0.2.0) (2015-05-26)
 
 [Full Changelog](https://github.com/szaghi/FLAP/compare/v0.1.0...v0.2.0)
