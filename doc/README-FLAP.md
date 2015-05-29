@@ -61,11 +61,15 @@ FLAP is inspired by the python great module _argparse_, thus many features are t
   * [x] support positional CLA;
   * [x] support list of allowable values for defined CLA with automatic consistency check;
   * [x] support multiple valued (list of values) CLA;
+  * [x] support mutually exclusive CLAs;
   * [x] self-consistency-check of CLA definition;
+* [x] comprehensive *command* (group of CLAs) support:
+  * [x] support nested subcommands;
+  * [x] support mutually exclusive commands;
+  * [x] self-consistency-check of command definition;
 * [x] automatic generation of help and usage messages;
 * [x] consistency-check of whole CLI definition;
 * [x] errors trapping for invalid CLI usage;
-* [x] support nested subcommands;
 * [ ] support environment variables;
 * [x] POSIX style compliant;
 * [ ] replicate all the useful features of _argparse_;

@@ -100,8 +100,10 @@ type, extends(Type_Object), public:: Type_Command_Line_Interface
   private
   type(Type_Command_Line_Arguments_Group), allocatable:: clasg(:)            !< CLA list [1:Na].
 #ifdef GNU
+  character(100  ), allocatable::                        args(:)             !< Actually passed command line arguments.
   character(100  ), allocatable::                        examples(:)         !< Examples of correct usage.
 #else
+  character(len=:), allocatable::                        args(:)             !< Actually passed command line arguments.
   character(len=:), allocatable::                        examples(:)         !< Examples of correct usage (not work with gfortran).
 #endif
   logical::                                              disable_hv = .false.!< Disable automatic 'help' and 'version' CLAs.
@@ -111,8 +113,6 @@ type, extends(Type_Object), public:: Type_Command_Line_Interface
     procedure, public:: init                                !< Initialize CLI.
     procedure, public:: add_group                           !< Add CLAs group CLI.
     procedure, public:: add                                 !< Add CLA to CLI.
-    procedure, public:: check                               !< Check CLAs data consistenc.
-    procedure, public:: check_m_exclusive                   !< Check if two mutually exclusive CLAs group have been called.
     procedure, public:: passed                              !< Check if a CLA has been passed.
     procedure, public:: defined                             !< Check if a CLA has been defined.
     procedure, public:: defined_group                       !< Check if a CLAs group has been defined.
@@ -122,13 +122,20 @@ type, extends(Type_Object), public:: Type_Command_Line_Interface
     generic,   public:: get => get_cla_cli,get_cla_list_cli !< Get CLA value(s) from CLAs list parsed.
     procedure, public:: print_usage                         !< Print correct usage of CLI.
     procedure, public:: print_examples                      !< Print examples of correct usage of CLI.
+    procedure, public:: print_epilog                        !< Print epilog message, if any.
     ! private methods
-    procedure, private:: get_clasg_indexes           !< Get CLAs groups indexes.
-    procedure, private:: get_cla_cli                 !< Get CLA (single) value from CLAs list parsed.
-    procedure, private:: get_cla_list_cli            !< Get CLA multiple values from CLAs list parsed.
-    procedure, private:: assign_cli                  !< CLI assignment overloading.
-    generic,   private:: assignment(=) => assign_cli !< CLI assignment overloading.
-    final::              finalize                    !< Free dynamic memory when finalizing.
+    procedure, private:: check                                !< Check CLAs data consistenc.
+    procedure, private:: check_m_exclusive                    !< Check if two mutually exclusive CLAs group have been called.
+    procedure, private:: get_clasg_indexes                    !< Get CLAs groups indexes.
+    generic,   private:: get_args => get_args_from_string,&   !< Get CLAs from string.
+                                     get_args_from_invocation !< Get CLAs from CLI invocation.
+    procedure, private:: get_args_from_string                 !< Get CLAs from string.
+    procedure, private:: get_args_from_invocation             !< Get CLAs from CLI invocation.
+    procedure, private:: get_cla_cli                          !< Get CLA (single) value from CLAs list parsed.
+    procedure, private:: get_cla_list_cli                     !< Get CLA multiple values from CLAs list parsed.
+    procedure, private:: assign_cli                           !< CLI assignment overloading.
+    generic,   private:: assignment(=) => assign_cli          !< CLI assignment overloading.
+    final::              finalize                             !< Free dynamic memory when finalizing.
 endtype Type_Command_Line_Interface
 
 integer(I4P),     parameter:: max_val_len        = 1000            !< Maximum number of characters of CLA value.
@@ -1301,7 +1308,7 @@ contains
                 case('*') ! not yet implemented
                 case default
                   nargs = cton(str=trim(adjustl(clasg%cla(a)%nargs)),knd=1_I4P)
-                  if (a + nargs > ai(2) - ai(1) + 1) then
+                  if (arg + nargs > ai(2) - ai(1) + 1) then
                     call clasg%cla(a)%errored(pref=prefd,error = error_cla_nargs_insufficient)
                     clasg%error = clasg%cla(a)%error
                     return
@@ -1488,7 +1495,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine finalize
 
-  pure subroutine init(cli,progname,version,help,description,license,authors,examples,disable_hv)
+  pure subroutine init(cli,progname,version,help,description,license,authors,examples,epilog,disable_hv)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for initializing CLI.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1501,6 +1508,7 @@ contains
   character(*), optional,             intent(IN)::    license      !< License description.
   character(*), optional,             intent(IN)::    authors      !< Authors list.
   character(*), optional,             intent(IN)::    examples(1:) !< Examples of correct usage.
+  character(*), optional,             intent(IN)::    epilog       !< Epilog message.
   logical,      optional,             intent(IN)::    disable_hv   !< Disable automatic inserting of 'help' and 'version' CLAs.
   !---------------------------------------------------------------------------------------------------------------------------------
 
@@ -1512,6 +1520,7 @@ contains
   cli%description = ''        ; if (present(description)) cli%description = description
   cli%license     = ''        ; if (present(license    )) cli%license     = license
   cli%authors     = ''        ; if (present(authors    )) cli%authors     = authors
+  cli%epilog      = ''        ; if (present(epilog     )) cli%epilog      = epilog
   if (present(disable_hv)) cli%disable_hv = .true.
   if (present(examples)) then
 #ifdef GNU
@@ -1817,15 +1826,19 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction defined
 
-  subroutine parse(cli,pref,error)
+  subroutine parse(cli,pref,args,error)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Parse Command Line Interfaces by means of a previously initialized CLAs groups list.
   !<
   !< @note The leading and trailing white spaces are removed from CLA values.
+  !<
+  !< @note If the *args* argument is passed the command line arguments are taken from it and not from the actual program CLI
+  !< invocations.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Interface), intent(INOUT):: cli    !< CLI data.
   character(*), optional,             intent(IN)::    pref   !< Prefixing string.
+  character(*), optional,             intent(IN)::    args   !< String containing command line arguments.
   integer(I4P), optional,             intent(OUT)::   error  !< Error trapping flag.
   integer(I4P)::                                      Na     !< Number of command line arguments passed.
   character(max_val_len)::                            switch !< Switch name.
@@ -1864,7 +1877,11 @@ contains
   endif
 
   ! parsing passed CLAs grouping in indexes
-  call cli%get_clasg_indexes(ai=ai)
+  if (present(args)) then
+    call cli%get_args(args=args,ai=ai)
+  else
+    call cli%get_args(ai=ai)
+  endif
 
   ! checking CLI consistency
   call cli%check(pref=prefd)
@@ -1910,7 +1927,6 @@ contains
   class(Type_Command_Line_Interface), intent(INOUT):: cli    !< CLI data.
   integer(I4P), allocatable,          intent(OUT)::   ai(:,:)!< CLAs grouped indexes.
   integer(I4P)::                                      Na     !< Number of command line arguments passed.
-  character(max_val_len)::                            switch !< Switch name.
   integer(I4P)::                                      a      !< Counter for CLAs.
   integer(I4P)::                                      aa     !< Counter for CLAs.
   integer(I4P)::                                      g      !< Counter for CLAs group.
@@ -1920,23 +1936,19 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   allocate(ai(0:size(cli%clasg,dim=1)-1,1:2))
   ai = 0
-  Na = command_argument_count()
+  Na = size(cli%args,dim=1)
   a = 0
   found = .false.
   search_named: do while(a<Na)
     a = a + 1
-    call get_command_argument(a,switch)
-    if (cli%defined_group(group=trim(adjustl(switch)),g=g)) then
+    if (cli%defined_group(group=trim(cli%args(a)),g=g)) then
       found = .true.
       cli%clasg(g)%called = .true.
       ai(g,1) = a + 1
-      ! ai(g,2) = a + 1
-      ! aa = a + 1
       aa = a
       do while(aa<Na)
         aa = aa + 1
-        call get_command_argument(aa,switch)
-        if (cli%defined_group(group=trim(adjustl(switch)))) then
+        if (cli%defined_group(group=trim(cli%args(aa)))) then
           a = aa - 1
           ai(g,2) = a
           exit
@@ -1957,6 +1969,81 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_clasg_indexes
+
+  subroutine get_args_from_string(cli,args,ai)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Get CLAs from string.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  class(Type_Command_Line_Interface), intent(INOUT):: cli    !< CLI data.
+  character(*),                       intent(IN)::    args   !< String containing command line arguments.
+  integer(I4P), allocatable,          intent(OUT)::   ai(:,:)!< CLAs grouped indexes.
+  character(len=len_trim(args)), allocatable::        toks(:)!< CLAs tokenized.
+  integer(I4P)::                                      Na     !< Number of command line arguments passed.
+  character(max_val_len)::                            switch !< Switch name.
+  integer(I4P)::                                      a      !< Counter for CLAs.
+  integer(I4P)::                                      aa     !< Counter for CLAs.
+  integer(I4P)::                                      g      !< Counter for CLAs group.
+  logical::                                           found  !< Flag for inquiring if a named group is found.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  if (allocated(cli%args)) deallocate(cli%args)
+  call tokenize(strin=trim(args),delimiter=' ',Nt=Na,toks=toks)
+#ifdef GNU
+  allocate(cli%args(1:Na))
+#else
+  aa = 0
+  find_longest_arg: do a=1,Na
+    aa = max(aa,len_trim(toks(a)))
+  enddo find_longest_arg
+  allocate(character(aa):: cli%args(1:Na))
+#endif
+  get_args: do a=1,Na
+    cli%args(a) = trim(adjustl(toks(a)))
+  enddo get_args
+  call cli%get_clasg_indexes(ai=ai)
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine get_args_from_string
+
+  subroutine get_args_from_invocation(cli,ai)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Get CLAs from CLI invocation.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  class(Type_Command_Line_Interface), intent(INOUT):: cli    !< CLI data.
+  integer(I4P), allocatable,          intent(OUT)::   ai(:,:)!< CLAs grouped indexes.
+  integer(I4P)::                                      Na     !< Number of command line arguments passed.
+  character(max_val_len)::                            switch !< Switch name.
+  integer(I4P)::                                      a      !< Counter for CLAs.
+  integer(I4P)::                                      aa     !< Counter for CLAs.
+  integer(I4P)::                                      g      !< Counter for CLAs group.
+  logical::                                           found  !< Flag for inquiring if a named group is found.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  if (allocated(cli%args)) deallocate(cli%args)
+  Na = command_argument_count()
+#ifdef GNU
+  allocate(cli%args(1:Na))
+#else
+  aa = 0
+  find_longest_arg: do a=1,Na
+    call get_command_argument(a,switch)
+    aa = max(aa,len_trim(switch))
+  enddo find_longest_arg
+  allocate(character(aa):: cli%args(1:Na))
+#endif
+  get_args: do a=1,Na
+    call get_command_argument(a,switch)
+    cli%args(a) = trim(adjustl(switch))
+  enddo get_args
+
+  call cli%get_clasg_indexes(ai=ai)
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine get_args_from_invocation
 
   subroutine get_cla_cli(cli,pref,group,switch,position,error,val)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -2120,6 +2207,7 @@ contains
     endif
   endif
   call cli%print_examples(pref=prefd)
+  call cli%print_epilog(pref=prefd)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine print_usage
@@ -2147,6 +2235,25 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine print_examples
+
+  subroutine print_epilog(cli,pref)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Print epilog message if any.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  class(Type_Command_Line_Interface), intent(IN):: cli   !< CLI data.
+  character(*), optional,             intent(IN):: pref  !< Prefixing string.
+  character(len=:), allocatable::                  prefd !< Prefixing string.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  if (cli%epilog/='') then
+    prefd = '' ; if (present(pref)) prefd = pref
+    write(stdout,'(A)')prefd//cli%epilog
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine print_epilog
 
   elemental subroutine assign_cli(lhs,rhs)
   !---------------------------------------------------------------------------------------------------------------------------------

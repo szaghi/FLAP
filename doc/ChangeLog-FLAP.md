@@ -1,8 +1,8 @@
 # Change Log
 
-## [Unreleased](https://github.com/szaghi/FLAP/tree/HEAD)
+## [v0.2.0](https://github.com/szaghi/FLAP/tree/v0.2.0) (2015-05-26)
 
-[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.1.0...HEAD)
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.1.0...v0.2.0)
 
 **Implemented enhancements:**
 

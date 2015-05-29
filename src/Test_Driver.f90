@@ -29,18 +29,19 @@ integer(I4P)::                      l          !< Counter.
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! initializing Command Line Interface
-call cli%init(progname    = 'Test_Driver',                                                &
-              version     = 'v2.1.5',                                                     &
-              authors     = 'Stefano Zaghi',                                              &
-              license     = 'MIT',                                                        &
-              description = 'Toy program for testing FLAP',                               &
-              examples    = ["Test_Driver -s 'Hello FLAP'                               ",&
-                             "Test_Driver -s 'Hello FLAP' -i -2 # printing error...     ",&
-                             "Test_Driver -s 'Hello FLAP' -i 3 -ie 1 # printing error...",&
-                             "Test_Driver -s 'Hello FLAP' -i 3 -r 33.d0                 ",&
-                             "Test_Driver -s 'Hello FLAP' --integer_list 10 -3 87       ",&
-                             "Test_Driver 33.0 -s 'Hello FLAP' -i 5                     ",&
-                             "Test_Driver --string 'Hello FLAP' --boolean               "])
+call cli%init(progname    = 'Test_Driver',                                                 &
+              version     = 'v2.1.5',                                                      &
+              authors     = 'Stefano Zaghi',                                               &
+              license     = 'MIT',                                                         &
+              description = 'Toy program for testing FLAP',                                &
+              examples    = ["Test_Driver -s 'Hello FLAP'                               ", &
+                             "Test_Driver -s 'Hello FLAP' -i -2 # printing error...     ", &
+                             "Test_Driver -s 'Hello FLAP' -i 3 -ie 1 # printing error...", &
+                             "Test_Driver -s 'Hello FLAP' -i 3 -r 33.d0                 ", &
+                             "Test_Driver -s 'Hello FLAP' --integer_list 10 -3 87       ", &
+                             "Test_Driver 33.0 -s 'Hello FLAP' -i 5                     ", &
+                             "Test_Driver --string 'Hello FLAP' --boolean               "],&
+              epilog      = new_line('a')//"And that's how to FLAP your life")
 ! setting Command Line Argumenst
 call cli%add(switch='--string',switch_ab='-s',help='String input',required=.true.,act='store',error=error)
 call cli%add(switch='--integer_ex',switch_ab='-ie',help='Exclusive integer input',required=.false.,act='store',def='-1',error=error)
@@ -55,7 +56,8 @@ call cli%add(switch='--integer_list',switch_ab='-il',help='Integer list input',r
              nargs='3',def='1 8 32',error=error)
 call cli%add(positional=.true.,position=1,help='Positional real input',required=.false.,def='1.0',error=error)
 ! parsing Command Line Interface
-call cli%parse(error=error)
+! call cli%parse(error=error)
+call cli%parse(args="-s 'Hello' --integer_list 10 -3 87",error=error)
 if (error/=0) stop
 ! using Command Line Interface data to set Test_Driver behaviour
 call cli%get(switch='-s',    val=sval,  error=error) ; if (error/=0) stop
