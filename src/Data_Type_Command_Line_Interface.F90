@@ -85,7 +85,7 @@ type, extends(Type_Object):: Type_Command_Line_Arguments_Group
     procedure, public:: add               => add_cla_clasg           !< Add CLA to CLAs group.
     procedure, public:: passed            => passed_clasg            !< Check if a CLA has been passed.
     procedure, public:: defined           => defined_clasg           !< Check if a CLA has been defined.
-    procedure, public:: parse             => parse_clasg             !< Parse CLAs group.
+    procedure, public:: parse             => parse_clasg             !< Parse CLAs group arguments.
     procedure, public:: print_usage_clas  => print_usage_clas_clasg  !< Print correct usage of CLAs group without header.
     procedure, public:: print_usage       => print_usage_clasg       !< Print correct usage of CLAs group.
     procedure, public:: signature         => signature_clasg         !< Get CLAs group signature for adding to the CLI one.
@@ -1270,16 +1270,14 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction defined_clasg
 
-  subroutine parse_clasg(clasg,pref,ai)
+  subroutine parse_clasg(clasg,pref,args)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Parse a switch checking if it is a defined CLA.
+  !< Parse CLAs group arguments.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Arguments_Group), intent(INOUT):: clasg   !< CLAs group data.
   character(*), optional,                   intent(IN)::    pref    !< Prefixing string.
-  integer(I4P),                             intent(IN)::    ai(:)   !< Indexes of the CLAs belonging to the group.
-  character(max_val_len)::                                  switch  !< Switch name.
-  character(max_val_len)::                                  val     !< Switch value.
+  character(*),                             intent(IN)::    args(:) !< Command line arguments.
   integer(I4P)::                                            arg     !< Argument counter.
   integer(I4P)::                                            a       !< Counter.
   integer(I4P)::                                            aa      !< Counter.
@@ -1289,17 +1287,16 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  if (clasg%called.and.(ai(2)<=command_argument_count())) then
+  if (clasg%called.and.(clasg%Na >= size(args,dim=1))) then
     prefd = '' ; if (present(pref)) prefd = pref
-    arg = ai(1) - 1
-    do while (arg < ai(2)) ! loop over CLAs group clas passed
+    arg = 0
+    do while (arg < size(args,dim=1)) ! loop over CLAs group arguments passed
       arg = arg + 1
-      call get_command_argument(arg,switch)
       found = .false.
-      do a=1,clasg%Na ! loop ver CLAs group clas defined
+      do a=1,clasg%Na ! loop ver CLAs group clas named options
         if (.not.clasg%cla(a)%positional) then
-          if (trim(adjustl(clasg%cla(a)%switch   ))==trim(adjustl(switch)).or.&
-              trim(adjustl(clasg%cla(a)%switch_ab))==trim(adjustl(switch))) then
+          if (trim(adjustl(clasg%cla(a)%switch   ))==trim(adjustl(args(arg))).or.&
+              trim(adjustl(clasg%cla(a)%switch_ab))==trim(adjustl(args(arg)))) then
             if (clasg%cla(a)%act==action_store) then
               if (allocated(clasg%cla(a)%nargs)) then
                 clasg%cla(a)%val = ''
@@ -1308,27 +1305,23 @@ contains
                 case('*') ! not yet implemented
                 case default
                   nargs = cton(str=trim(adjustl(clasg%cla(a)%nargs)),knd=1_I4P)
-                  if (arg + nargs > ai(2) - ai(1) + 1) then
+                  if (arg + nargs > size(args,dim=1)) then
                     call clasg%cla(a)%errored(pref=prefd,error = error_cla_nargs_insufficient)
                     clasg%error = clasg%cla(a)%error
                     return
                   endif
                   do aa=arg+nargs,arg+1,-1 ! decreasing loop due to gfortran bug
-                    call get_command_argument(aa,val)
-                    clasg%cla(a)%val = trim(adjustl(val))//args_sep//trim(clasg%cla(a)%val) ! decreasing loop due to gfortran bug
+                    clasg%cla(a)%val = trim(adjustl(args(aa)))//args_sep//trim(clasg%cla(a)%val)
                   enddo
                   arg = arg + nargs
                 endselect
               else
                 arg = arg + 1
-                call get_command_argument(arg,val)
-                clasg%cla(a)%val = trim(adjustl(val))
+                clasg%cla(a)%val = trim(adjustl(args(arg)))
               endif
             elseif (clasg%cla(a)%act==action_print_help) then
-              ! call clasg%print_usage(pref=prefd) ; clasg%error = status_clasg_print_h
               clasg%error = status_clasg_print_h
             elseif (clasg%cla(a)%act==action_print_vers) then
-              ! call clasg%print_version(pref=prefd) ; clasg%error = status_clasg_print_v
               clasg%error = status_clasg_print_v
             endif
             clasg%cla(a)%passed = .true.
@@ -1337,15 +1330,15 @@ contains
           endif
         endif
       enddo
-      if (.not.found) then
-        if (.not.clasg%cla(arg-ai(1)+1)%positional) then
-          call clasg%cla(arg-ai(1)+1)%errored(pref=prefd,error=error_cla_unknown,switch=trim(adjustl(switch)))
-          clasg%error = clasg%cla(arg-ai(1)+1)%error
+      if (.not.found) then ! current argument (arg-th) does not correspond to a named option
+        if (.not.clasg%cla(arg)%positional) then ! current argument (arg-th) is not positional... there is a problem!
+          call clasg%cla(arg)%errored(pref=prefd,error=error_cla_unknown,switch=trim(adjustl(args(arg))))
+          clasg%error = clasg%cla(arg)%error
           return
         else
           ! positional CLA always stores a value
-          clasg%cla(arg-ai(1)+1)%val = trim(adjustl(switch))
-          clasg%cla(arg-ai(1)+1)%passed = .true.
+          clasg%cla(arg)%val = trim(adjustl(args(arg)))
+          clasg%cla(arg)%passed = .true.
         endif
       endif
     enddo
@@ -1892,7 +1885,7 @@ contains
 
   ! parsing cli
   do g=0,size(ai,dim=1)-1
-    call cli%clasg(g)%parse(pref=prefd, ai=ai(g,1:2))
+    if (ai(g,1)>0) call cli%clasg(g)%parse(pref=prefd, args=cli%args(ai(g,1):ai(g,2)))
     cli%error = cli%clasg(g)%error
     if (cli%error /= 0) exit
   enddo
@@ -1936,34 +1929,38 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   allocate(ai(0:size(cli%clasg,dim=1)-1,1:2))
   ai = 0
-  Na = size(cli%args,dim=1)
-  a = 0
-  found = .false.
-  search_named: do while(a<Na)
-    a = a + 1
-    if (cli%defined_group(group=trim(cli%args(a)),g=g)) then
-      found = .true.
-      cli%clasg(g)%called = .true.
-      ai(g,1) = a + 1
-      aa = a
-      do while(aa<Na)
-        aa = aa + 1
-        if (cli%defined_group(group=trim(cli%args(aa)))) then
-          a = aa - 1
-          ai(g,2) = a
-          exit
-        else
-          ai(g,2) = aa
-        endif
-      enddo
-    elseif (.not.found) then
-      ai(0,2) = a
+  if (allocated(cli%args)) then
+    Na = size(cli%args,dim=1)
+    a = 0
+    found = .false.
+    search_named: do while(a<Na)
+      a = a + 1
+      if (cli%defined_group(group=trim(cli%args(a)),g=g)) then
+        found = .true.
+        cli%clasg(g)%called = .true.
+        ai(g,1) = a + 1
+        aa = a
+        do while(aa<Na)
+          aa = aa + 1
+          if (cli%defined_group(group=trim(cli%args(aa)))) then
+            a = aa - 1
+            ai(g,2) = a
+            exit
+          else
+            ai(g,2) = aa
+          endif
+        enddo
+      elseif (.not.found) then
+        ai(0,2) = a
+      endif
+    enddo search_named
+    if (ai(0,2)>0) then
+      ai(0,1) = 1
+      cli%clasg(0)%called = .true.
+    elseif (all(ai==0)) then
+      cli%clasg(0)%called = .true.
     endif
-  enddo search_named
-  if (ai(0,2)>0) then
-    ai(0,1) = 1
-    cli%clasg(0)%called = .true.
-  elseif (all(ai==0)) then
+  else
     cli%clasg(0)%called = .true.
   endif
   return
@@ -1978,33 +1975,104 @@ contains
   class(Type_Command_Line_Interface), intent(INOUT):: cli    !< CLI data.
   character(*),                       intent(IN)::    args   !< String containing command line arguments.
   integer(I4P), allocatable,          intent(OUT)::   ai(:,:)!< CLAs grouped indexes.
+  character(len=len_trim(args))::                     argsd  !< Dummy string containing command line arguments.
   character(len=len_trim(args)), allocatable::        toks(:)!< CLAs tokenized.
+  integer(I4P)::                                      Nt     !< Number of tokens.
   integer(I4P)::                                      Na     !< Number of command line arguments passed.
   character(max_val_len)::                            switch !< Switch name.
   integer(I4P)::                                      a      !< Counter for CLAs.
-  integer(I4P)::                                      aa     !< Counter for CLAs.
-  integer(I4P)::                                      g      !< Counter for CLAs group.
+  integer(I4P)::                                      t      !< Counter for tokens.
+  integer(I4P)::                                      c      !< Counter for characters inside tokens.
+#ifndef GNU
+  integer(I4P)::                                      length !< Maxium lenght of arguments string.
+#endif
   logical::                                           found  !< Flag for inquiring if a named group is found.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  ! prepare cli arguments list
   if (allocated(cli%args)) deallocate(cli%args)
-  call tokenize(strin=trim(args),delimiter=' ',Nt=Na,toks=toks)
+
+  ! sanitize arguments string
+  argsd = trim(args)
+  if (index(args,"'")>0) then
+    argsd = sanitize_args(argsin=argsd,delimiter="'")
+  elseif (index(args,'"')>0) then
+    argsd = sanitize_args(argsin=argsd,delimiter='"')
+  endif
+
+  ! tokenize arguments string; the previously sanitized white spaces inside tokens are restored
+  call tokenize(strin=argsd,delimiter=' ',Nt=Nt,toks=toks)
+  Na = 0
+  find_number_of_valid_arguments: do t=1,Nt
+    if (trim(adjustl(toks(t)))/='') then
+      Na = Na + 1
+      do c=1,len(toks(t))
+        if (toks(t)(c:c)=="'") toks(t)(c:c)=" "
+      enddo
+    endif
+  enddo find_number_of_valid_arguments
+
+  if (Na > 0) then
+    ! allocate cli arguments list
 #ifdef GNU
-  allocate(cli%args(1:Na))
+    allocate(cli%args(1:Na))
 #else
-  aa = 0
-  find_longest_arg: do a=1,Na
-    aa = max(aa,len_trim(toks(a)))
-  enddo find_longest_arg
-  allocate(character(aa):: cli%args(1:Na))
+    length = 0
+    find_longest_arg: do t=1,Nt
+      if (trim(adjustl(toks(t)))/='') length = max(length,len_trim(adjustl(toks(t))))
+    enddo find_longest_arg
+    allocate(character(lenght):: cli%args(1:Na))
 #endif
-  get_args: do a=1,Na
-    cli%args(a) = trim(adjustl(toks(a)))
-  enddo get_args
+
+    ! construct arguments list
+    a = 0
+    get_args: do t=1,Nt
+      if (trim(adjustl(toks(t)))/='') then
+        a = a + 1
+        cli%args(a) = trim(adjustl(toks(t)))
+      endif
+    enddo get_args
+  endif
+
   call cli%get_clasg_indexes(ai=ai)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
+  contains
+    function sanitize_args(argsin,delimiter) result(sanitized)
+    !-------------------------------------------------------------------------------------------------------------------------------
+    !< Sanitize arguments string.
+    !<
+    !< Substitute white spaces enclosed into string-arguments, i.e. 'string argument with spaces...' or
+    !< "string argument with spaces..." with a safe equivalent for tokenization against white spaces, i.e. the finally tokenized
+    !< string is string'argument'with'spaces...
+    !<
+    !< @note The white spaces are reintroduce later.
+    !-------------------------------------------------------------------------------------------------------------------------------
+    implicit none
+    character(*),               intent(IN)::       argsin    !< Arguments string.
+    character(*),               intent(IN)::       delimiter !< Delimiter enclosing string argument.
+    character(len=len_trim(argsin))::              sanitized !< Arguments string sanitized.
+    character(len=len_trim(argsin)), allocatable:: tok(:)    !< Arguments string tokens.
+    integer(I4P)::                                 Nt        !< Number of command line arguments passed.
+    integer(I4P)::                                 t,tt      !< Counters.
+    !-------------------------------------------------------------------------------------------------------------------------------
+
+    !-------------------------------------------------------------------------------------------------------------------------------
+    call tokenize(strin=trim(argsin),delimiter=delimiter,Nt=Nt,toks=tok)
+    do t=2,Nt,2
+      do tt=1,len_trim(adjustl(tok(t)))
+        if (tok(t)(tt:tt)==' ') tok(t)(tt:tt) = "'"
+      enddo
+    enddo
+    sanitized = ''
+    do t=1,Nt
+      sanitized = trim(sanitized)//" "//trim(adjustl(tok(t)))
+    enddo
+    sanitized = trim(adjustl(sanitized))
+    return
+    !-------------------------------------------------------------------------------------------------------------------------------
+    endfunction sanitize_args
   endsubroutine get_args_from_string
 
   subroutine get_args_from_invocation(cli,ai)
@@ -2025,20 +2093,22 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   if (allocated(cli%args)) deallocate(cli%args)
   Na = command_argument_count()
+  if (Na > 0) then
 #ifdef GNU
-  allocate(cli%args(1:Na))
+    allocate(cli%args(1:Na))
 #else
-  aa = 0
-  find_longest_arg: do a=1,Na
-    call get_command_argument(a,switch)
-    aa = max(aa,len_trim(switch))
-  enddo find_longest_arg
-  allocate(character(aa):: cli%args(1:Na))
+    aa = 0
+    find_longest_arg: do a=1,Na
+      call get_command_argument(a,switch)
+      aa = max(aa,len_trim(switch))
+    enddo find_longest_arg
+    allocate(character(aa):: cli%args(1:Na))
 #endif
-  get_args: do a=1,Na
-    call get_command_argument(a,switch)
-    cli%args(a) = trim(adjustl(switch))
-  enddo get_args
+    get_args: do a=1,Na
+      call get_command_argument(a,switch)
+      cli%args(a) = trim(adjustl(switch))
+    enddo get_args
+  endif
 
   call cli%get_clasg_indexes(ai=ai)
   return

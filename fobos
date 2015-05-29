@@ -1,8 +1,12 @@
 [modes]
-modes = shared-gnu static-gnu test-driver-gnu test-driver-nested-gnu  test-driver-nested-gnu-coverage
-        shared-gnu-debug static-gnu-debug test-driver-gnu-debug test-driver-nested-gnu-debug
-        shared-intel static-intel test-driver-intel
-        shared-intel-debug static-intel-debug test-driver-intel-debug
+modes = shared-gnu static-gnu shared-gnu-debug static-gnu-debug
+        test-driver-gnu test-driver-nested-gnu test-driver-string-gnu
+        test-driver-gnu-debug test-driver-nested-gnu-debug test-driver-string-gnu-debug
+        shared-intel static-intel shared-intel-debug static-intel-debug
+        test-driver-intel
+        test-driver-intel-debug
+        test-driver-nested-gnu-coverage
+        test-driver-string-gnu-coverage
 
 [common-variables]
 $CSHARED_GNU = -DGNU -cpp -c -fPIC -frealloc-lhs
@@ -15,6 +19,7 @@ $DEBUG_INT   = -O0 -debug all -check all -warn all -extend-source 132 -traceback
 $OPTIMIZE    = -O2
 
 # main modes
+# GNU
 [shared-gnu]
 template  = template-shared-gnu
 target    = src/Data_Type_Command_Line_Interface.f90
@@ -24,6 +29,20 @@ mklib     = shared
 
 [static-gnu]
 template  = template-static-gnu
+target    = src/Data_Type_Command_Line_Interface.f90
+build_dir = ./static/
+output    = FLAP.a
+mklib     = static
+
+[shared-gnu-debug]
+template  = template-shared-gnu-debug
+target    = src/Data_Type_Command_Line_Interface.f90
+build_dir = ./shared/
+output    = FLAP.so
+mklib     = shared
+
+[static-gnu-debug]
+template  = template-static-gnu-debug
 target    = src/Data_Type_Command_Line_Interface.f90
 build_dir = ./static/
 output    = FLAP.a
@@ -41,26 +60,11 @@ target    = src/Test_Driver_Nested.f90
 build_dir = ./Test_Driver_Nested/
 output    = Test_Driver_Nested
 
-[test-driver-nested-gnu-coverage]
+[test-driver-string-gnu]
 template  = template-static-gnu
-target    = src/Test_Driver_Nested.f90
-build_dir = ./Test_Driver/
-output    = Test_Driver_Nested
-coverage  = True
-
-[shared-gnu-debug]
-template  = template-shared-gnu-debug
-target    = src/Data_Type_Command_Line_Interface.f90
-build_dir = ./shared/
-output    = FLAP.so
-mklib     = shared
-
-[static-gnu-debug]
-template  = template-static-gnu-debug
-target    = src/Data_Type_Command_Line_Interface.f90
-build_dir = ./static/
-output    = FLAP.a
-mklib     = static
+target    = src/Test_Driver_Args_From_String.f90
+build_dir = ./Test_Driver_String/
+output    = Test_Driver_String
 
 [test-driver-gnu-debug]
 template  = template-static-gnu-debug
@@ -74,6 +78,13 @@ target    = src/Test_Driver_Nested.f90
 build_dir = ./Test_Driver_Nested/
 output    = Test_Driver_Nested
 
+[test-driver-string-gnu-debug]
+template  = template-static-gnu-debug
+target    = src/Test_Driver_Args_From_String.f90
+build_dir = ./Test_Driver_String/
+output    = Test_Driver_String
+
+# Intel
 [shared-intel]
 template  = template-shared-intel
 target    = src/Data_Type_Command_Line_Interface.f90
@@ -87,12 +98,6 @@ target    = src/Data_Type_Command_Line_Interface.f90
 build_dir = ./static/
 output    = FLAP.a
 mklib     = static
-
-[test-driver-intel]
-template = template-static-intel
-target   = src/Test_Driver.f90
-build_dir = ./Test_Driver/
-output   = Test_Driver
 
 [shared-intel-debug]
 template  = template-shared-intel-debug
@@ -108,11 +113,32 @@ build_dir = ./static/
 output    = FLAP.a
 mklib     = static
 
+[test-driver-intel]
+template = template-static-intel
+target   = src/Test_Driver.f90
+build_dir = ./Test_Driver/
+output   = Test_Driver
+
 [test-driver-intel-debug]
 template  = template-static-intel-debug
 target    = src/Test_Driver.f90
 build_dir = ./Test_Driver/
 output    = Test_Driver
+
+# coverage
+[test-driver-nested-gnu-coverage]
+template  = template-static-gnu
+target    = src/Test_Driver_Nested.f90
+build_dir = ./Test_Driver/
+output    = Test_Driver_Nested
+coverage  = True
+
+[test-driver-string-gnu-coverage]
+template  = template-static-gnu
+target    = src/Test_Driver_Args_From_String.f90
+build_dir = ./Test_Driver/
+output    = Test_Driver_String
+coverage  = True
 
 #templates
 [template-shared-gnu]
@@ -229,39 +255,43 @@ help    = Rule for performing coverage analysis
 rule_1  = FoBiS.py clean -mode test-driver-gnu
 rule_2  = FoBiS.py build -mode test-driver-gnu -coverage
 rule_3  = FoBiS.py build -mode test-driver-nested-gnu-coverage
-rule_4  = ./Test_Driver/Test_Driver
-rule_5  = ./Test_Driver/Test_Driver -v
-rule_6  = ./Test_Driver/Test_Driver -h
-rule_7  = ./Test_Driver/Test_Driver -s 'Hello FLAP' -i 2
-rule_8  = ./Test_Driver/Test_Driver -s 'Hello FLAP' -i 3 -ie 11
-rule_9  = ./Test_Driver/Test_Driver 33.0 -s 'Hello FLAP' --integer_list 10 -3 87 -i 3 -r 64.123d0  --boolean --boolean_val .false.
-rule_10 = ./Test_Driver/Test_Driver_Nested
-rule_11 = ./Test_Driver/Test_Driver_Nested -h
-rule_12 = ./Test_Driver/Test_Driver_Nested -a
-rule_13 = ./Test_Driver/Test_Driver_Nested init
-rule_14 = ./Test_Driver/Test_Driver_Nested init commit -m 'hello'
-rule_15 = ./Test_Driver/Test_Driver_Nested commit -m 'hello'
-rule_16 = ./Test_Driver/Test_Driver_Nested tag -a 'hello'
-rule_17 = gcov -o Test_Driver/obj/ src/Data_Type_Command_Line_Interface.F90
+rule_4  = FoBiS.py build -mode test-driver-string-gnu-coverage
+rule_5  = ./Test_Driver/Test_Driver
+rule_6  = ./Test_Driver/Test_Driver -v
+rule_7  = ./Test_Driver/Test_Driver -h
+rule_8  = ./Test_Driver/Test_Driver -s 'Hello FLAP' -i 2
+rule_9  = ./Test_Driver/Test_Driver -s 'Hello FLAP' -i 3 -ie 11
+rule_10 = ./Test_Driver/Test_Driver 33.0 -s 'Hello FLAP' --integer_list 10 -3 87 -i 3 -r 64.123d0  --boolean --boolean_val .false.
+rule_11 = ./Test_Driver/Test_Driver_Nested
+rule_12 = ./Test_Driver/Test_Driver_Nested -h
+rule_13 = ./Test_Driver/Test_Driver_Nested -a
+rule_14 = ./Test_Driver/Test_Driver_Nested init
+rule_15 = ./Test_Driver/Test_Driver_Nested init commit -m 'hello'
+rule_16 = ./Test_Driver/Test_Driver_Nested commit -m 'hello'
+rule_17 = ./Test_Driver/Test_Driver_Nested tag -a 'hello'
+rule_18 = ./Test_Driver/Test_Driver_String
+rule_19 = gcov -o Test_Driver/obj/ src/Data_Type_Command_Line_Interface.F90
 
 [rule-coverage-analysis]
 help    = Rule for performing coverage analysis and saving reports in markdown
 rule_1  = FoBiS.py clean -mode test-driver-gnu
 rule_2  = FoBiS.py build -mode test-driver-gnu -coverage
 rule_3  = FoBiS.py build -mode test-driver-nested-gnu-coverage
-rule_4  = ./Test_Driver/Test_Driver
-rule_5  = ./Test_Driver/Test_Driver -v
-rule_6  = ./Test_Driver/Test_Driver -h
-rule_7  = ./Test_Driver/Test_Driver -s 'Hello FLAP' -i 2
-rule_8  = ./Test_Driver/Test_Driver -s 'Hello FLAP' -i 3 -ie 11
-rule_9  = ./Test_Driver/Test_Driver 33.0 -s 'Hello FLAP' --integer_list 10 -3 87 -i 3 -r 64.123d0  --boolean --boolean_val .false.
-rule_10 = ./Test_Driver/Test_Driver_Nested
-rule_11 = ./Test_Driver/Test_Driver_Nested -h
-rule_12 = ./Test_Driver/Test_Driver_Nested -a
-rule_13 = ./Test_Driver/Test_Driver_Nested init
-rule_14 = ./Test_Driver/Test_Driver_Nested init commit -m 'hello'
-rule_15 = ./Test_Driver/Test_Driver_Nested commit -m 'hello'
-rule_16 = ./Test_Driver/Test_Driver_Nested tag -a 'hello'
-rule_17 = gcov -o Test_Driver/obj/ src/*
-rule_18 = FoBiS.py rule -gcov_analyzer wiki/ Coverage-Analysis
-rule_19 = rm -f *.gcov
+rule_4  = FoBiS.py build -mode test-driver-string-gnu-coverage
+rule_5  = ./Test_Driver/Test_Driver
+rule_6  = ./Test_Driver/Test_Driver -v
+rule_7  = ./Test_Driver/Test_Driver -h
+rule_8  = ./Test_Driver/Test_Driver -s 'Hello FLAP' -i 2
+rule_9  = ./Test_Driver/Test_Driver -s 'Hello FLAP' -i 3 -ie 11
+rule_10 = ./Test_Driver/Test_Driver 33.0 -s 'Hello FLAP' --integer_list 10 -3 87 -i 3 -r 64.123d0  --boolean --boolean_val .false.
+rule_11 = ./Test_Driver/Test_Driver_Nested
+rule_12 = ./Test_Driver/Test_Driver_Nested -h
+rule_13 = ./Test_Driver/Test_Driver_Nested -a
+rule_14 = ./Test_Driver/Test_Driver_Nested init
+rule_15 = ./Test_Driver/Test_Driver_Nested init commit -m 'hello'
+rule_16 = ./Test_Driver/Test_Driver_Nested commit -m 'hello'
+rule_17 = ./Test_Driver/Test_Driver_Nested tag -a 'hello'
+rule_18 = ./Test_Driver/Test_Driver_String
+rule_19 = gcov -o Test_Driver/obj/ src/*
+rule_20 = FoBiS.py rule -gcov_analyzer wiki/ Coverage-Analysis
+rule_21 = rm -f *.gcov

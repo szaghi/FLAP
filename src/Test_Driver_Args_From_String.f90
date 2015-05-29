@@ -56,7 +56,7 @@ call cli%add(switch='--integer_list',switch_ab='-il',help='Integer list input',r
              nargs='3',def='1 8 32',error=error)
 call cli%add(positional=.true.,position=1,help='Positional real input',required=.false.,def='1.0',error=error)
 ! parsing Command Line Interface
-call cli%parse(error=error)
+call cli%parse(args="-s 'FAKE INVOCATION FROM STRING' --integer_list 10 -3 87",error=error)
 if (error/=0) stop
 ! using Command Line Interface data to set Test_Driver behaviour
 call cli%get(switch='-s',    val=sval,  error=error) ; if (error/=0) stop
