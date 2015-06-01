@@ -20,6 +20,7 @@ real(R8P)::                         rval       !< Real value.
 real(R8P)::                         prval      !< Positional real value.
 integer(I4P)::                      ival       !< Integer value.
 integer(I4P)::                      ieval      !< Exclusive integer value.
+integer(I4P)::                      envi       !< Environment set integer value.
 logical::                           bval       !< Boolean value.
 logical::                           vbval      !< Valued-boolean value.
 integer(I8P)::                      ilist(1:3) !< Integer list values.
@@ -55,6 +56,8 @@ call cli%add(switch='--boolean_val',switch_ab='-bv',help='Valued boolean input',
 call cli%add(switch='--integer_list',switch_ab='-il',help='Integer list input',required=.false.,act='store',&
              nargs='3',def='1 8 32',error=error)
 call cli%add(positional=.true.,position=1,help='Positional real input',required=.false.,def='1.0',error=error)
+call cli%add(switch='--env',switch_ab='-e',help='Environment input',required=.false.,act='store',def='-1',envvar='FLAP_NUM_INT',&
+             error=error)
 ! parsing Command Line Interface
 call cli%parse(error=error)
 if (error/=0) stop
@@ -66,15 +69,17 @@ call cli%get(switch='-ie',   val=ieval, error=error) ; if (error/=0) stop
 call cli%get(switch='-b',    val=bval,  error=error) ; if (error/=0) stop
 call cli%get(switch='-bv',   val=vbval, error=error) ; if (error/=0) stop
 call cli%get(switch='-il',   val=ilist, error=error) ; if (error/=0) stop
+call cli%get(switch='-e',    val=envi,  error=error) ; if (error/=0) stop
 call cli%get(position=1_I4P, val=prval, error=error) ; if (error/=0) stop
 print '(A)'   ,'Test_Driver has been called with the following arguments values:'
-print '(A)'   ,'String            input = '//trim(adjustl(sval))
-print '(A)'   ,'Real              input = '//str(n=rval)
-print '(A)'   ,'Integer           input = '//str(n=ival)
-print '(A)'   ,'Exclusive integer input = '//str(n=ieval)
-print '(A,L1)','Boolean           input = ',bval
-print '(A,L1)','Valued boolean    input = ',vbval
-print '(A)'   ,'Positional real   input = '//str(n=prval)
+print '(A)'   ,'String              input = '//trim(adjustl(sval))
+print '(A)'   ,'Real                input = '//str(n=rval)
+print '(A)'   ,'Integer             input = '//str(n=ival)
+print '(A)'   ,'Exclusive   integer input = '//str(n=ieval)
+print '(A)'   ,'Environment integer input = '//str(n=envi)
+print '(A,L1)','Boolean             input = ',bval
+print '(A,L1)','Valued boolean      input = ',vbval
+print '(A)'   ,'Positional real     input = '//str(n=prval)
 print '(A)'   ,'Integer list inputs:'
 do l=1,3
   print '(A)' ,'Input('//trim(str(.true.,l))//') = '//trim(str(n=ilist(l)))

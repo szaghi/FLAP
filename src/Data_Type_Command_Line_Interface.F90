@@ -51,6 +51,7 @@ type, extends(Type_Object):: Type_Command_Line_Argument
   character(len=:), allocatable:: nargs              !< Number of arguments consumed by CLA.
   character(len=:), allocatable:: choices            !< List (comma separated) of allowable values for the argument.
   character(len=:), allocatable:: val                !< CLA value.
+  character(len=:), allocatable:: envvar             !< Environment variable from which take value.
   contains
     ! public methods
     procedure, public:: free          => free_cla             !< Free dynamic memory.
@@ -458,6 +459,7 @@ contains
   if (allocated(cla%nargs    )) deallocate(cla%nargs    )
   if (allocated(cla%choices  )) deallocate(cla%choices  )
   if (allocated(cla%val      )) deallocate(cla%val      )
+  if (allocated(cla%envvar   )) deallocate(cla%envvar   )
   cla%required   = .false.
   cla%positional = .false.
   cla%position   =  0_I4P
@@ -1020,6 +1022,7 @@ contains
   if (allocated(rhs%nargs    )) lhs%nargs      = rhs%nargs
   if (allocated(rhs%choices  )) lhs%choices    = rhs%choices
   if (allocated(rhs%val      )) lhs%val        = rhs%val
+  if (allocated(rhs%envvar   )) lhs%envvar     = rhs%envvar
                                 lhs%required   = rhs%required
                                 lhs%positional = rhs%positional
                                 lhs%position   = rhs%position
@@ -1298,7 +1301,29 @@ contains
           if (trim(adjustl(clasg%cla(a)%switch   ))==trim(adjustl(args(arg))).or.&
               trim(adjustl(clasg%cla(a)%switch_ab))==trim(adjustl(args(arg)))) then
             if (clasg%cla(a)%act==action_store) then
-              if (allocated(clasg%cla(a)%nargs)) then
+              if (allocated(clasg%cla(a)%envvar)) then
+                if (arg + 1 <= size(args,dim=1)) then ! verify if the value has been passed directly to cli
+                  ! there are still other arguments to check
+                  if (.not.clasg%defined(switch=trim(adjustl(args(arg+1))))) then
+                    ! argument seem good...
+                    arg = arg + 1
+                    clasg%cla(a)%val = trim(adjustl(args(arg)))
+                    found = .true.
+                  endif
+                endif
+                ! check if found into arguments passed
+                if (.not.found) then
+                  ! not found, try to take val from environment
+                  if (allocated(clasg%cla(a)%val)) deallocate(clasg%cla(a)%val) ; allocate(character(100):: clasg%cla(a)%val)
+                  call get_environment_variable(name=clasg%cla(a)%envvar,value=clasg%cla(a)%val,status=aa)
+                  if (aa==0) then
+                    clasg%cla(a)%val = trim(adjustl(clasg%cla(a)%val))
+                  else
+                    ! flush default to val if environment is not set and default is set
+                    if (allocated(clasg%cla(a)%def)) clasg%cla(a)%val = clasg%cla(a)%def
+                  endif
+                endif
+              elseif (allocated(clasg%cla(a)%nargs)) then
                 clasg%cla(a)%val = ''
                 select case(clasg%cla(a)%nargs)
                 case('+') ! not yet implemented
@@ -1590,7 +1615,8 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine set_mutually_exclusive_groups
 
-  subroutine add(cli,pref,group,group_index,switch,switch_ab,help,required,positional,position,act,def,nargs,choices,exclude,error)
+  subroutine add(cli,pref,group,group_index,switch,switch_ab,help,required,positional,position,act,def,nargs,choices,exclude,&
+                 envvar,error)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Add CLA to CLI.
   !<
@@ -1617,6 +1643,7 @@ contains
   character(*), optional,             intent(IN)::    nargs       !< Number of arguments consumed by CLA.
   character(*), optional,             intent(IN)::    choices     !< List of allowable values for the argument.
   character(*), optional,             intent(IN)::    exclude     !< Switch name of the mutually exclusive CLA.
+  character(*), optional,             intent(IN)::    envvar      !< Environment variable from which take value.
   integer(I4P), optional,             intent(OUT)::   error       !< Error trapping flag.
   type(Type_Command_Line_Argument)::                  cla         !< CLA data.
   character(len=:), allocatable::                     prefd       !< Prefixing string.
@@ -1640,6 +1667,7 @@ contains
                                              if (present(nargs     )) cla%nargs      = nargs
                                              if (present(choices   )) cla%choices    = choices
   cla%m_exclude  = ''                      ; if (present(exclude   )) cla%m_exclude  = exclude
+                                             if (present(envvar    )) cla%envvar     = envvar
   prefd = '' ; if (present(pref)) prefd = pref
   call cla%check(pref=prefd) ; cli%error = cla%error
   ! adding CLA to CLI

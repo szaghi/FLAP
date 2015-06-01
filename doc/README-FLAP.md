@@ -64,6 +64,7 @@ FLAP is inspired by the python great module _argparse_, thus many features are t
   * [x] support mutually exclusive CLAs;
   * [x] self-consistency-check of CLA definition;
   * [x] support fake CLAs input from a string;
+  * [x] support fake CLAs input from environment variables;
 * [x] comprehensive *command* (group of CLAs) support:
   * [x] support nested subcommands;
   * [x] support mutually exclusive commands;
@@ -71,7 +72,6 @@ FLAP is inspired by the python great module _argparse_, thus many features are t
 * [x] automatic generation of help and usage messages;
 * [x] consistency-check of whole CLI definition;
 * [x] errors trapping for invalid CLI usage;
-* [ ] support environment variables;
 * [x] POSIX style compliant;
 * [ ] replicate all the useful features of _argparse_;
 * [ ] implement [docopt](https://github.com/docopt/docopt) features.
