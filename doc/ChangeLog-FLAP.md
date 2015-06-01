@@ -1,12 +1,14 @@
 # Change Log
 
-## [Unreleased](https://github.com/szaghi/FLAP/tree/HEAD)
+## [v0.4.0](https://github.com/szaghi/FLAP/tree/v0.4.0) (2015-06-01)
 
-[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.3.0...HEAD)
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.3.0...v0.4.0)
 
 **Implemented enhancements:**
 
 - Implement fake arguments parsed from string input [\#28](https://github.com/szaghi/FLAP/issues/28)
+
+- Support environment variables [\#12](https://github.com/szaghi/FLAP/issues/12)
 
 **Fixed bugs:**
 
