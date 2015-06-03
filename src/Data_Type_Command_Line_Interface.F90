@@ -19,9 +19,10 @@ private
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 type, abstract:: Type_Object
+  private
   character(len=:), public, allocatable:: progname      !< Program name.
   character(len=:), public, allocatable:: version       !< Program version.
-  character(len=:), public, allocatable:: help          !< Help message.
+  character(len=:),         allocatable:: help          !< Help message.
   character(len=:), public, allocatable:: description   !< Detailed description.
   character(len=:), public, allocatable:: license       !< License description.
   character(len=:), public, allocatable:: authors       !< Authors list.
@@ -1794,7 +1795,7 @@ contains
   implicit none
   class(Type_Command_Line_Interface), intent(IN)::  cli     !< CLI data.
   integer(I4P), optional,             intent(OUT):: g       !< Index of group.
-  character(*),                       intent(IN)::  group   !< Name of group (command) of CLA.
+  character(*),                       intent(IN)::  group   !< Name of group (command) of CLAs.
   logical::                                         defined !< Check if a CLAs group has been defined.
   integer(I4P)::                                    gg,ggg  !< Counters.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1817,7 +1818,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Interface), intent(IN)::  cli    !< CLI data.
-  character(*),                       intent(IN)::  group  !< Name of group (command) of CLA.
+  character(*),                       intent(IN)::  group  !< Name of group (command) of CLAs.
   logical::                                         called !< Check if a CLAs group has been runned.
   integer(I4P)::                                    g      !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1835,7 +1836,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Interface), intent(IN):: cli     !< CLI data.
-  character(*), optional,             intent(IN):: group   !< Name of group (command) of CLA.
+  character(*), optional,             intent(IN):: group   !< Name of group (command) of CLAs.
   character(*),                       intent(IN):: switch  !< Switch name.
   logical::                                        defined !< Check if a CLA has been defined.
   integer(I4P)::                                   g       !< Counter.
