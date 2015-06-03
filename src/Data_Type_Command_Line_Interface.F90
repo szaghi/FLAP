@@ -937,6 +937,11 @@ contains
   write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd)prefd//sig
   sig = ''
   if (cla%positional) sig = prefd//repeat(' ',10)//trim(str(.true.,cla%position))//'-th argument'//new_line('a')
+  if (allocated(cla%envvar)) then
+    if (cla%envvar /= '') then
+      sig = sig//prefd//repeat(' ',10)//'environment variable name "'//trim(adjustl(cla%envvar))//'"'//new_line('a')
+    endif
+  endif
   if (.not.cla%required) then
     if (cla%def /= '') then
       sig = sig//prefd//repeat(' ',10)//'default value '//trim(adjustl(cla%def))//new_line('a')
@@ -1281,6 +1286,7 @@ contains
   class(Type_Command_Line_Arguments_Group), intent(INOUT):: clasg   !< CLAs group data.
   character(*), optional,                   intent(IN)::    pref    !< Prefixing string.
   character(*),                             intent(IN)::    args(:) !< Command line arguments.
+  character(500)::                                          envvar  !< Environment variables buffer.
   integer(I4P)::                                            arg     !< Argument counter.
   integer(I4P)::                                            a       !< Counter.
   integer(I4P)::                                            aa      !< Counter.
@@ -1314,10 +1320,9 @@ contains
                 ! check if found into arguments passed
                 if (.not.found) then
                   ! not found, try to take val from environment
-                  if (allocated(clasg%cla(a)%val)) deallocate(clasg%cla(a)%val) ; allocate(character(100):: clasg%cla(a)%val)
-                  call get_environment_variable(name=clasg%cla(a)%envvar,value=clasg%cla(a)%val,status=aa)
+                  call get_environment_variable(name=clasg%cla(a)%envvar,value=envvar,status=aa)
                   if (aa==0) then
-                    clasg%cla(a)%val = trim(adjustl(clasg%cla(a)%val))
+                    clasg%cla(a)%val = trim(adjustl(envvar))
                   else
                     ! flush default to val if environment is not set and default is set
                     if (allocated(clasg%cla(a)%def)) clasg%cla(a)%val = clasg%cla(a)%def
