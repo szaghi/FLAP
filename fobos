@@ -14,7 +14,7 @@ $CSHARED_INT = -cpp -c -fpic -assume realloc_lhs
 $LSHARED     = -shared
 $CSTATIC_GNU = -DGNU -cpp -c -frealloc-lhs
 $CSTATIC_INT = -cpp -c -assume realloc_lhs
-$DEBUG_GNU   = -DGNU -O0 -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -fcheck=all -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan -std=f2003 -fall-intrinsics
+$DEBUG_GNU   = -DGNU -O0 -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -fcheck=all -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan -std=f2008 -fall-intrinsics
 $DEBUG_INT   = -O0 -debug all -check all -warn all -extend-source 132 -traceback -gen-interfaces#-fpe-all=0 -fp-stack-check -fstack-protector-all -ftrapuv -no-ftz -std03
 $OPTIMIZE    = -O2
 
@@ -262,15 +262,16 @@ rule_7  = ./Test_Driver/Test_Driver -h
 rule_8  = ./Test_Driver/Test_Driver -s 'Hello FLAP' -i 2
 rule_9  = ./Test_Driver/Test_Driver -s 'Hello FLAP' -i 3 -ie 11
 rule_10 = ./Test_Driver/Test_Driver 33.0 -s 'Hello FLAP' --integer_list 10 -3 87 -i 3 -r 64.123d0  --boolean --boolean_val .false.
-rule_11 = ./Test_Driver/Test_Driver_Nested
-rule_12 = ./Test_Driver/Test_Driver_Nested -h
-rule_13 = ./Test_Driver/Test_Driver_Nested -a
-rule_14 = ./Test_Driver/Test_Driver_Nested init
-rule_15 = ./Test_Driver/Test_Driver_Nested init commit -m 'hello'
-rule_16 = ./Test_Driver/Test_Driver_Nested commit -m 'hello'
-rule_17 = ./Test_Driver/Test_Driver_Nested tag -a 'hello'
-rule_18 = ./Test_Driver/Test_Driver_String
-rule_19 = gcov -o Test_Driver/obj/ src/Data_Type_Command_Line_Interface.F90
+rule_11 = ./Test_Driver/Test_Driver -s 'Hello FLAP' --man_file FLAP.1
+rule_12 = ./Test_Driver/Test_Driver_Nested
+rule_13 = ./Test_Driver/Test_Driver_Nested -h
+rule_14 = ./Test_Driver/Test_Driver_Nested -a
+rule_15 = ./Test_Driver/Test_Driver_Nested init
+rule_16 = ./Test_Driver/Test_Driver_Nested init commit -m 'hello'
+rule_17 = ./Test_Driver/Test_Driver_Nested commit -m 'hello'
+rule_18 = ./Test_Driver/Test_Driver_Nested tag -a 'hello'
+rule_19 = ./Test_Driver/Test_Driver_String
+rule_20 = gcov -o Test_Driver/obj/ src/Data_Type_Command_Line_Interface.F90
 
 [rule-coverage-analysis]
 help    = Rule for performing coverage analysis and saving reports in markdown
@@ -284,14 +285,15 @@ rule_7  = ./Test_Driver/Test_Driver -h
 rule_8  = ./Test_Driver/Test_Driver -s 'Hello FLAP' -i 2
 rule_9  = ./Test_Driver/Test_Driver -s 'Hello FLAP' -i 3 -ie 11
 rule_10 = ./Test_Driver/Test_Driver 33.0 -s 'Hello FLAP' --integer_list 10 -3 87 -i 3 -r 64.123d0  --boolean --boolean_val .false.
-rule_11 = ./Test_Driver/Test_Driver_Nested
-rule_12 = ./Test_Driver/Test_Driver_Nested -h
-rule_13 = ./Test_Driver/Test_Driver_Nested -a
-rule_14 = ./Test_Driver/Test_Driver_Nested init
-rule_15 = ./Test_Driver/Test_Driver_Nested init commit -m 'hello'
-rule_16 = ./Test_Driver/Test_Driver_Nested commit -m 'hello'
-rule_17 = ./Test_Driver/Test_Driver_Nested tag -a 'hello'
-rule_18 = ./Test_Driver/Test_Driver_String
-rule_19 = gcov -o Test_Driver/obj/ src/*
-rule_20 = FoBiS.py rule -gcov_analyzer wiki/ Coverage-Analysis
-rule_21 = rm -f *.gcov
+rule_11 = ./Test_Driver/Test_Driver -s 'Hello FLAP' --man_file FLAP.1
+rule_12 = ./Test_Driver/Test_Driver_Nested
+rule_13 = ./Test_Driver/Test_Driver_Nested -h
+rule_14 = ./Test_Driver/Test_Driver_Nested -a
+rule_15 = ./Test_Driver/Test_Driver_Nested init
+rule_16 = ./Test_Driver/Test_Driver_Nested init commit -m 'hello'
+rule_17 = ./Test_Driver/Test_Driver_Nested commit -m 'hello'
+rule_18 = ./Test_Driver/Test_Driver_Nested tag -a 'hello'
+rule_19 = ./Test_Driver/Test_Driver_String
+rule_20 = gcov -o Test_Driver/obj/ src/*
+rule_21 = FoBiS.py rule -gcov_analyzer wiki/ Coverage-Analysis
+rule_22 = rm -f *.gcov FLAP.1

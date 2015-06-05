@@ -59,7 +59,7 @@ type, extends(Type_Object):: Type_Command_Line_Argument
     procedure, public:: check         => check_cla            !< Check CLA data consistency.
     procedure, public:: check_choices => check_choices_cla    !< Check if CLA value is in allowed choices.
     generic,   public:: get           => get_cla,get_cla_list !< Get CLA value(s).
-    procedure, public:: print         => print_cla            !< Print CLA data with a pretty format.
+    procedure, public:: usage         => usage_cla            !< Get correct CLA usage.
     procedure, public:: signature     => signature_cla        !< Get CLA signature for adding to the CLI one.
     ! private methods
     procedure, private:: get_cla                     !< Get CLA (single) value from CLAs list parsed.
@@ -88,8 +88,7 @@ type, extends(Type_Object):: Type_Command_Line_Arguments_Group
     procedure, public:: passed            => passed_clasg            !< Check if a CLA has been passed.
     procedure, public:: defined           => defined_clasg           !< Check if a CLA has been defined.
     procedure, public:: parse             => parse_clasg             !< Parse CLAs group arguments.
-    procedure, public:: print_usage_clas  => print_usage_clas_clasg  !< Print correct usage of CLAs group without header.
-    procedure, public:: print_usage       => print_usage_clasg       !< Print correct usage of CLAs group.
+    procedure, public:: usage             => usage_clasg             !< Get correct CLAs group usage.
     procedure, public:: signature         => signature_clasg         !< Get CLAs group signature for adding to the CLI one.
     ! private methods
     procedure, private:: assign_clasg                  !< CLAs group assignment overloading.
@@ -122,9 +121,10 @@ type, extends(Type_Object), public:: Type_Command_Line_Interface
     procedure, public:: run_command => called_group         !< Check if a CLAs group has been runned.
     procedure, public:: parse                               !< Parse Command Line Interfaces.
     generic,   public:: get => get_cla_cli,get_cla_list_cli !< Get CLA value(s) from CLAs list parsed.
+    procedure, public:: usage                               !< Get CLI usage.
+    procedure, public:: signature                           !< Get CLI signature.
     procedure, public:: print_usage                         !< Print correct usage of CLI.
-    procedure, public:: print_examples                      !< Print examples of correct usage of CLI.
-    procedure, public:: print_epilog                        !< Print epilog message, if any.
+    procedure, public:: save_man_page                       !< Save man page build on CLI.
     ! private methods
     procedure, private:: check                                !< Check CLAs data consistenc.
     procedure, private:: check_m_exclusive                    !< Check if two mutually exclusive CLAs group have been called.
@@ -390,6 +390,7 @@ contains
                            ! ' respect the required ('//trim(str(.true.,obj%Na_required))//')'
       endselect
     endselect
+    write(stderr,'(A)')
   endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -874,22 +875,16 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list
 
-  subroutine print_cla(cla,pref,iostat,iomsg,unit)
+  function usage_cla(cla,pref) result(usage)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Print CLA data with a pretty format.
+  !< Get correct CLA usage.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  class(Type_Command_Line_Argument), intent(IN)::  cla     !< CLA data.
-  character(*), optional,            intent(IN)::  pref    !< Prefixing string.
-  integer(I4P), optional,            intent(OUT):: iostat  !< IO error.
-  character(*), optional,            intent(OUT):: iomsg   !< IO error message.
-  integer(I4P),                      intent(IN)::  unit    !< Logic unit.
-  character(len=:), allocatable::                  prefd   !< Prefixing string.
-  integer(I4P)::                                   iostatd !< IO error.
-  character(500)::                                 iomsgd  !< Temporary variable for IO error message.
-  character(len=:), allocatable::                  sig     !< CLA signature.
-  integer(I4P)::                                   nargs   !< Number of arguments consumed by CLA.
-  integer(I4P)::                                   a       !< Counter.
+  class(Type_Command_Line_Argument), intent(IN):: cla   !< CLAs group data.
+  character(*), optional,            intent(IN):: pref  !< Prefixing string.
+  character(len=:), allocatable::                 usage !< Usage string.
+  character(len=:), allocatable::                 prefd !< Prefixing string.
+  integer(I4P)::                                  a     !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -897,65 +892,57 @@ contains
   if (cla%act==action_store) then
     if (.not.cla%positional) then
       if (allocated(cla%nargs)) then
-        sig = ''
+        usage = ''
         select case(cla%nargs)
         case('+') ! not yet implemented
         case('*') ! not yet implemented
         case default
-          nargs = cton(str=trim(adjustl(cla%nargs)),knd=1_I4P)
-          do a=1,nargs
-            sig = sig//' value#'//trim(str(.true.,a))
+          do a=1,cton(str=trim(adjustl(cla%nargs)),knd=1_I4P)
+            usage = usage//' value#'//trim(str(.true.,a))
           enddo
         endselect
         if (trim(adjustl(cla%switch))/=trim(adjustl(cla%switch_ab))) then
-          sig = '   '//trim(adjustl(cla%switch))//sig//', '//trim(adjustl(cla%switch_ab))//sig
+          usage = '   '//trim(adjustl(cla%switch))//usage//', '//trim(adjustl(cla%switch_ab))//usage
         else
-          sig = '   '//trim(adjustl(cla%switch))//sig
+          usage = '   '//trim(adjustl(cla%switch))//usage
         endif
       else
         if (trim(adjustl(cla%switch))/=trim(adjustl(cla%switch_ab))) then
-          sig = '   '//trim(adjustl(cla%switch))//' value, '//trim(adjustl(cla%switch_ab))//' value'
+          usage = '   '//trim(adjustl(cla%switch))//' value, '//trim(adjustl(cla%switch_ab))//' value'
         else
-          sig = '   '//trim(adjustl(cla%switch))//' value'
+          usage = '   '//trim(adjustl(cla%switch))//' value'
         endif
       endif
-      if (allocated(cla%choices)) then
-        sig = sig//', value in: ('//cla%choices//')'
-      endif
     else
-      sig = '   value'
-      if (allocated(cla%choices)) then
-        sig = sig//', value in: ('//cla%choices//')'
-      endif
+      usage = '  value'
+    endif
+    if (allocated(cla%choices)) then
+      usage = usage//', value in: ('//cla%choices//')'
     endif
   else
     if (trim(adjustl(cla%switch))/=trim(adjustl(cla%switch_ab))) then
-      sig = '   '//trim(adjustl(cla%switch))//', '//trim(adjustl(cla%switch_ab))
+      usage = '   '//trim(adjustl(cla%switch))//', '//trim(adjustl(cla%switch_ab))
     else
-      sig = '   '//trim(adjustl(cla%switch))
+      usage = '   '//trim(adjustl(cla%switch))
     endif
   endif
-  write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd)prefd//sig
-  sig = ''
-  if (cla%positional) sig = prefd//repeat(' ',10)//trim(str(.true.,cla%position))//'-th argument'//new_line('a')
+  usage = prefd//usage
+  if (cla%positional) usage = usage//new_line('a')//prefd//repeat(' ',10)//trim(str(.true.,cla%position))//'-th argument'
   if (allocated(cla%envvar)) then
     if (cla%envvar /= '') then
-      sig = sig//prefd//repeat(' ',10)//'environment variable name "'//trim(adjustl(cla%envvar))//'"'//new_line('a')
+      usage = usage//new_line('a')//prefd//repeat(' ',10)//'environment variable name "'//trim(adjustl(cla%envvar))//'"'
     endif
   endif
   if (.not.cla%required) then
     if (cla%def /= '') then
-      sig = sig//prefd//repeat(' ',10)//'default value '//trim(adjustl(cla%def))//new_line('a')
+      usage = usage//new_line('a')//prefd//repeat(' ',10)//'default value '//trim(adjustl(cla%def))
     endif
   endif
-  if (cla%m_exclude/='') sig = sig//prefd//repeat(' ',10)//'mutually exclude "'//cla%m_exclude//'"'//new_line('a')
-  sig = sig//prefd//repeat(' ',10)//trim(adjustl(cla%help))
-  write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd)sig
-  if (present(iostat)) iostat = iostatd
-  if (present(iomsg))  iomsg  = iomsgd
+  if (cla%m_exclude/='') usage = usage//new_line('a')//prefd//repeat(' ',10)//'mutually exclude "'//cla%m_exclude//'"'
+  usage = usage//new_line('a')//prefd//repeat(' ',10)//trim(adjustl(cla%help))
   return
   !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine print_cla
+  endfunction usage_cla
 
   function signature_cla(cla) result(signd)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1136,7 +1123,8 @@ contains
       if (clasg%cla(a)%required) then
         if (.not.clasg%cla(a)%passed) then
           call clasg%cla(a)%errored(pref=prefd,error=error_cla_missing_required)
-          call clasg%print_usage(pref=prefd)
+          clasg%error = clasg%cla(a)%error
+          write(stdout,'(A)') clasg%usage(pref=prefd)
           return
         endif
       endif
@@ -1379,64 +1367,42 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine parse_clasg
 
-  subroutine print_usage_clas_clasg(clasg,pref)
+  function usage_clasg(clasg,pref,no_header) result(usage)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Print correct usage of CLAs group without header.
+  !< Get correct CLAs group usage.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  class(Type_Command_Line_Arguments_Group), intent(IN):: clasg         !< CLAs group data.
-  character(*), optional,                   intent(IN):: pref          !< Prefixing string.
-  integer(I4P)::                                         a             !< Counters.
-  character(len=:), allocatable::                        prefd         !< Prefixing string.
+  class(Type_Command_Line_Arguments_Group), intent(IN):: clasg     !< CLAs group data.
+  character(*), optional,                   intent(IN):: pref      !< Prefixing string.
+  logical,      optional,                   intent(IN):: no_header !< Avoid insert header to usage.
+  character(len=:), allocatable::                        usage     !< Usage string.
+  integer(I4P)::                                         a         !< Counters.
+  character(len=:), allocatable::                        prefd     !< Prefixing string.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   prefd = '' ; if (present(pref)) prefd = pref
+  usage = clasg%progname ; if (clasg%group/='') usage = clasg%progname//' '//clasg%group
+  usage = prefd//clasg%help//' '//usage//clasg%signature()
+  if (clasg%description/='') usage = usage//new_line('a')//new_line('a')//prefd//clasg%description
+  if (present(no_header)) then
+    if (no_header) usage = ''
+  endif
   if (clasg%Na_required>0) then
-    write(stdout,'(A)')
-    write(stdout,'(A)')prefd//'Required switches:'
+    usage = usage//new_line('a')//new_line('a')//prefd//'Required switches:'
     do a=1,clasg%Na
-      if (clasg%cla(a)%required) call clasg%cla(a)%print(pref=prefd,unit=stdout)
+      if (clasg%cla(a)%required) usage = usage//new_line('a')//clasg%cla(a)%usage(pref=prefd)
     enddo
   endif
   if (clasg%Na_optional>0) then
-    write(stdout,'(A)')
-    write(stdout,'(A)')prefd//'Optional switches:'
+    usage = usage//new_line('a')//new_line('a')//prefd//'Optional switches:'
     do a=1,clasg%Na
-      if (.not.clasg%cla(a)%required) call clasg%cla(a)%print(pref=prefd,unit=stdout)
+      if (.not.clasg%cla(a)%required) usage = usage//new_line('a')//clasg%cla(a)%usage(pref=prefd)
     enddo
   endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine print_usage_clas_clasg
-
-  subroutine print_usage_clasg(clasg,pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Print correct usage of CLAs group.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Arguments_Group), intent(IN):: clasg         !< CLAs group data.
-  character(*), optional,                   intent(IN):: pref          !< Prefixing string.
-  character(len=:), allocatable::                        cla_sign      !< Signature of current CLA.
-  character(len=:), allocatable::                        cla_list_sign !< Complete signature of CLA list.
-  integer(I4P)::                                         a             !< Counters.
-  character(len=:), allocatable::                        prefd         !< Prefixing string.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  prefd = '' ; if (present(pref)) prefd = pref
-  cla_list_sign = clasg%progname ; if (clasg%group/='') cla_list_sign = clasg%progname//' '//clasg%group
-  cla_sign = clasg%signature()
-  cla_list_sign = cla_list_sign//cla_sign
-  write(stdout,'(A)')prefd//clasg%help//' '//cla_list_sign
-  if (clasg%description/='') then
-    write(stdout,'(A)')
-    write(stdout,'(A)')prefd//clasg%description
-  endif
-  call clasg%print_usage_clas(pref=prefd)
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine print_usage_clasg
+  endfunction usage_clasg
 
   function signature_clasg(clasg) result(signd)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1912,7 +1878,7 @@ contains
 
   ! checking CLI consistency
   call cli%check(pref=prefd)
-  if (cli%error/=0) then
+  if (cli%error>0) then
     if (present(error)) error = cli%error
     return
   endif
@@ -1923,20 +1889,30 @@ contains
     cli%error = cli%clasg(g)%error
     if (cli%error /= 0) exit
   enddo
+  if (cli%error>0) then
+    if (present(error)) error = cli%error
+    return
+  endif
 
   ! trapping the special cases of version/help printing
   if (cli%error == status_clasg_print_v) then
     call cli%print_version(pref=prefd)
     stop
   elseif (cli%error == status_clasg_print_h) then
-    call cli%print_usage(pref=prefd,g=g)
+    write(stdout,'(A)') cli%usage(pref=prefd,g=g)
     stop
   endif
 
   ! checking if all required CLAs have been passed
   do g=0,size(ai,dim=1)-1
-    call cli%clasg(g)%check_required(pref=prefd) ; cli%error = cli%clasg(g)%error
+    call cli%clasg(g)%check_required(pref=prefd)
+    cli%error = cli%clasg(g)%error
+    if (cli%error>0) exit
   enddo
+  if (cli%error>0) then
+    if (present(error)) error = cli%error
+    return
+  endif
 
   ! check mutually exclusive interaction
   call cli%check_m_exclusive(pref=prefd)
@@ -2261,103 +2237,166 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_cli
 
-  subroutine print_usage(cli,pref,g)
+  function usage(cli,pref,no_header,no_examples,no_epilog,g) result(usaged)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Print correct usage of CLI.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  class(Type_Command_Line_Interface), intent(IN):: cli          !< CLI data.
+  character(*), optional,             intent(IN):: pref         !< Prefixing string.
+  logical,      optional,             intent(IN):: no_header    !< Avoid insert header to usage.
+  logical,      optional,             intent(IN):: no_examples  !< Avoid insert examples to usage.
+  logical,      optional,             intent(IN):: no_epilog    !< Avoid insert epilogue to usage.
+  integer(I4P),                       intent(IN):: g            !< Group index.
+  character(len=:), allocatable::                  prefd        !< Prefixing string.
+  character(len=:), allocatable::                  usaged       !< Usage string.
+  logical::                                        no_headerd   !< Avoid insert header to usage.
+  logical::                                        no_examplesd !< Avoid insert examples to usage.
+  logical::                                        no_epilogd   !< Avoid insert epilogue to usage.
+  integer(I4P)::                                   gi           !< Counter.
+  integer(I4P)::                                   e            !< Counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  no_headerd = .false. ; if (present(no_header)) no_headerd = no_header
+  no_examplesd = .false. ; if (present(no_examples)) no_examplesd = no_examples
+  no_epilogd = .false. ; if (present(no_epilog)) no_epilogd = no_epilog
+  prefd = '' ; if (present(pref)) prefd = pref
+  if (g>0) then ! usage of a specific command
+    usaged = cli%clasg(g)%usage(pref=prefd,no_header=no_headerd)
+  else ! usage of whole CLI
+    if (no_headerd) then
+      usaged = ''
+    else
+      usaged = prefd//cli%help//cli%progname//' '//cli%signature()
+      if (cli%description/='') usaged = usaged//new_line('a')//new_line('a')//prefd//cli%description
+    endif
+    if (cli%clasg(0)%Na>0) usaged = usaged//new_line('a')//cli%clasg(0)%usage(pref=prefd,no_header=.true.)
+    if (size(cli%clasg,dim=1)>1) then
+      usaged = usaged//new_line('a')//new_line('a')//prefd//'Commands:'
+      do gi=1,size(cli%clasg,dim=1)-1
+        usaged = usaged//new_line('a')//prefd//'  '//cli%clasg(gi)%group
+        usaged = usaged//new_line('a')//prefd//repeat(' ',10)//cli%clasg(gi)%description
+      enddo
+      usaged = usaged//new_line('a')//new_line('a')//prefd//'For more detailed commands help try:'
+      do gi=1,size(cli%clasg,dim=1)-1
+        usaged = usaged//new_line('a')//prefd//'  '//cli%progname//' '//cli%clasg(gi)%group//' -h,--help'
+      enddo
+    endif
+  endif
+  if (allocated(cli%examples).and.(.not.no_examplesd)) then
+    usaged = usaged//new_line('a')//new_line('a')//prefd//'Examples:'
+    do e=1,size(cli%examples,dim=1)
+      usaged = usaged//new_line('a')//prefd//'   '//trim(cli%examples(e))
+    enddo
+  endif
+  if (cli%epilog/=''.and.(.not.no_epilogd)) usaged = usaged//new_line('a')//prefd//cli%epilog
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction usage
+
+  function signature(cli) result(signd)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Get CLI signature.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  implicit none
+  class(Type_Command_Line_Interface), intent(IN)::  cli   !< CLI data.
+  character(len=:), allocatable::                   signd !< Temporary CLI signature.
+  integer(I4P)::                                    g     !< Counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  signd = cli%clasg(0)%signature()
+  if (size(cli%clasg,dim=1)>1) then
+    signd = signd//' {'//cli%clasg(1)%group
+    do g=2,size(cli%clasg,dim=1)-1
+      signd = signd//','//cli%clasg(g)%group
+    enddo
+    signd = signd//'} ...'
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction signature
+
+  subroutine print_usage(cli,pref)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Print correct usage of CLI.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Command_Line_Interface), intent(IN):: cli   !< CLI data.
   character(*), optional,             intent(IN):: pref  !< Prefixing string.
-  integer(I4P),                       intent(IN):: g     !< Group index.
   character(len=:), allocatable::                  prefd !< Prefixing string.
-  character(len=:), allocatable::                  usage !< Usage string.
-  integer(I4P)::                                   gi    !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   prefd = '' ; if (present(pref)) prefd = pref
-  if (g>0) then
-    call cli%clasg(g)%print_usage(pref=prefd)
-  else
-    if (size(cli%clasg,dim=1)>1) then
-      ! usage = cli%help//cli%progname//' {'//cli%clasg(1)%group
-      usage = cli%help//cli%progname//' '//cli%clasg(0)%signature()
-      usage = usage//' {'//cli%clasg(1)%group
-      do gi=2,size(cli%clasg,dim=1)-1
-        usage = usage//','//cli%clasg(gi)%group
-      enddo
-      usage = usage//'} ...'
-      write(stdout,'(A)')prefd//usage
-      if (cli%description/='') then
-        write(stdout,'(A)')
-        write(stdout,'(A)')prefd//cli%description
-      endif
-      if (cli%clasg(0)%Na > 0) then
-        call cli%clasg(0)%print_usage_clas(pref=prefd)
-      endif
-      write(stdout,'(A)')
-      write(stdout,'(A)')prefd//'Commands:'
-      do gi=1,size(cli%clasg,dim=1)-1
-        write(stdout,'(A)')prefd//'  '//cli%clasg(gi)%group
-        write(stdout,'(A)')prefd//repeat(' ',10)//cli%clasg(gi)%description
-      enddo
-      write(stdout,'(A)')
-      write(stdout,'(A)')prefd//'For more detailed commands help try:'
-      do gi=1,size(cli%clasg,dim=1)-1
-        write(stdout,'(A)')prefd//'  '//cli%progname//' '//cli%clasg(gi)%group//' -h,--help'
-      enddo
-    else
-      call cli%clasg(g)%print_usage(pref=prefd)
-    endif
-  endif
-  call cli%print_examples(pref=prefd)
-  call cli%print_epilog(pref=prefd)
+  write(stdout,'(A)')cli%usage(pref=prefd,g=0)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine print_usage
 
-  subroutine print_examples(cli,pref)
+  subroutine save_man_page(cli,error,man_file)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Print correct usage examples of CLI.
+  !< Save man page build on the CLI.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
-  class(Type_Command_Line_Interface), intent(IN):: cli   !< CLI data.
-  character(*), optional,             intent(IN):: pref  !< Prefixing string.
-  character(len=:), allocatable::                  prefd !< Prefixing string.
-  integer(I4P)::                                   e     !< Counter.
+  class(Type_Command_Line_Interface), intent(IN)::  cli        !< CLI data.
+  integer(I4P), optional,             intent(OUT):: error      !< Error trapping flag.
+  character(*),                       intent(IN)::  man_file   !< Output file name for saving man page.
+  character(len=:), allocatable::                   man        !< Man page.
+  integer(I4P)::                                    idate(1:8) !< Integer array for handling the date.
+  integer(I4P)::                                    e          !< Counter.
+  integer(I4P)::                                    u          !< Unit file handler.
+  character(*), parameter:: month(12) = ["Jan",&
+                                         "Feb",&
+                                         "Mar",&
+                                         "Apr",&
+                                         "May",&
+                                         "Jun",&
+                                         "Jul",&
+                                         "Aug",&
+                                         "Sep",&
+                                         "Oct",&
+                                         "Nov",&
+                                         "Dec"]
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  call date_and_time(values=idate)
+  man = '.TH '//cli%progname//' "1" "'//month(idate(2))//' '//trim(adjustl(strz(4,idate(1))))//'" "version '//cli%version//&
+    '" "'//cli%progname//' Manual"'
+  man = man//new_line('a')//'.SH NAME'
+  man = man//new_line('a')//cli%progname//' - manual page for '//cli%progname//' version '//cli%version
+  man = man//new_line('a')//'.SH SYNOPSIS'
+  man = man//new_line('a')//'.B '//cli%progname//new_line('a')//trim(adjustl(cli%signature()))
+  if (cli%description /= '') man = man//new_line('a')//'.SH DESCRIPTION'//new_line('a')//cli%description
+  if (cli%clasg(0)%Na>0) then
+    man = man//new_line('a')//'.SH OPTIONS'
+    man = man//new_line('a')//cli%usage(no_header=.true.,no_examples=.true.,no_epilog=.true.,g=0)
+  endif
   if (allocated(cli%examples)) then
-    prefd = '' ; if (present(pref)) prefd = pref
-    write(stdout,'(A)')
-    write(stdout,'(A)')prefd//'Examples:'
+    man = man//new_line('a')//'.SH EXAMPLES'
+    man = man//new_line('a')//'.PP'
+    man = man//new_line('a')//'.nf'
+    man = man//new_line('a')//'.RS'
     do e=1,size(cli%examples,dim=1)
-      write(stdout,'(A)')prefd//'   '//trim(cli%examples(e))
+      man = man//new_line('a')//trim(cli%examples(e))
     enddo
+    man = man//new_line('a')//'.RE'
+    man = man//new_line('a')//'.fi'
+    man = man//new_line('a')//'.PP'
+  endif
+  if (cli%authors /= '') man = man//new_line('a')//'.SH AUTHOR'//new_line('a')//cli%authors
+  if (cli%license /= '') man = man//new_line('a')//'.SH COPYRIGHT'//new_line('a')//cli%license
+  open(newunit=u,file=trim(adjustl(man_file)))
+  if (present(error)) then
+    write(u,"(A)",iostat=error)man
+  else
+    write(u,"(A)")man
   endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine print_examples
-
-  subroutine print_epilog(cli,pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Print epilog message if any.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Interface), intent(IN):: cli   !< CLI data.
-  character(*), optional,             intent(IN):: pref  !< Prefixing string.
-  character(len=:), allocatable::                  prefd !< Prefixing string.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  if (cli%epilog/='') then
-    prefd = '' ; if (present(pref)) prefd = pref
-    write(stdout,'(A)')prefd//cli%epilog
-  endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine print_epilog
+  endsubroutine save_man_page
 
   elemental subroutine assign_cli(lhs,rhs)
   !---------------------------------------------------------------------------------------------------------------------------------

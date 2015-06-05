@@ -73,6 +73,7 @@ FLAP is inspired by the python great module _argparse_, thus many features are t
 * [x] consistency-check of whole CLI definition;
 * [x] errors trapping for invalid CLI usage;
 * [x] POSIX style compliant;
+* [x] automatic generation of MAN PAGE using your CLI definition!;
 * [ ] replicate all the useful features of _argparse_;
 * [ ] implement [docopt](https://github.com/docopt/docopt) features.
 * [ ] implement [click](http://click.pocoo.org/4/) features.

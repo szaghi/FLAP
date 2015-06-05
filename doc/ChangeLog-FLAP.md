@@ -1,5 +1,19 @@
 # Change Log
 
+## [Unreleased](https://github.com/szaghi/FLAP/tree/HEAD)
+
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.4.0...HEAD)
+
+**Implemented enhancements:**
+
+- Generate man pages [\#22](https://github.com/szaghi/FLAP/issues/22)
+
+**Closed issues:**
+
+- Correct WIKI: Requirement page wrong number of modules shipped [\#32](https://github.com/szaghi/FLAP/issues/32)
+
+- Update WIKI: Requirements [\#31](https://github.com/szaghi/FLAP/issues/31)
+
 ## [v0.4.0](https://github.com/szaghi/FLAP/tree/v0.4.0) (2015-06-01)
 
 [Full Changelog](https://github.com/szaghi/FLAP/compare/v0.3.0...v0.4.0)

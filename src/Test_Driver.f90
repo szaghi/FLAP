@@ -34,12 +34,14 @@ call cli%init(progname    = 'Test_Driver',                                      
               version     = 'v2.1.5',                                                      &
               authors     = 'Stefano Zaghi',                                               &
               license     = 'MIT',                                                         &
+              help        = 'Usage: ',                                                     &
               description = 'Toy program for testing FLAP',                                &
               examples    = ["Test_Driver -s 'Hello FLAP'                               ", &
                              "Test_Driver -s 'Hello FLAP' -i -2 # printing error...     ", &
                              "Test_Driver -s 'Hello FLAP' -i 3 -ie 1 # printing error...", &
                              "Test_Driver -s 'Hello FLAP' -i 3 -r 33.d0                 ", &
                              "Test_Driver -s 'Hello FLAP' --integer_list 10 -3 87       ", &
+                             "Test_Driver -s 'Hello FLAP' --man_file FLAP.1             ", &
                              "Test_Driver 33.0 -s 'Hello FLAP' -i 5                     ", &
                              "Test_Driver --string 'Hello FLAP' --boolean               "],&
               epilog      = new_line('a')//"And that's how to FLAP your life")
@@ -58,6 +60,7 @@ call cli%add(switch='--integer_list',switch_ab='-il',help='Integer list input',r
 call cli%add(positional=.true.,position=1,help='Positional real input',required=.false.,def='1.0',error=error)
 call cli%add(switch='--env',switch_ab='-e',help='Environment input',required=.false.,act='store',def='-1',envvar='FLAP_NUM_INT',&
              error=error)
+call cli%add(switch='--man_file',help='Save manual into man_file',required=.false.,act='store',def='Test_Driver.1',error=error)
 ! parsing Command Line Interface
 call cli%parse(error=error)
 if (error/=0) stop
@@ -84,6 +87,11 @@ print '(A)'   ,'Integer list inputs:'
 do l=1,3
   print '(A)' ,'Input('//trim(str(.true.,l))//') = '//trim(str(n=ilist(l)))
 enddo
+if (cli%passed(switch='--man_file')) then
+  call cli%get(switch='--man_file',val=sval,error=error) ; if (error/=0) stop
+  print '(A)','Saving man page'
+  call cli%save_man_page(error=error,man_file=trim(adjustl(sval)))
+endif
 stop
 !-----------------------------------------------------------------------------------------------------------------------------------
 endprogram Test_Driver
