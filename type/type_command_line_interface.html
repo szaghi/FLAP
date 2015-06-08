@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	 
-	 <meta name="description" content="<p>Fortran command Line Arguments Parser for poor men</p>">
+	 <meta name="description" content="<p>Fortran command Line Arguments Parser for poor people</p>">
     
     <meta name="author" content="Chris MacMackin" >
     <link rel="icon" href="../favicon.png">
@@ -48,7 +48,8 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            
+				
+                
             <li><a href="../lists/files.html">Source Files</a></li>
 				
 				
@@ -57,12 +58,12 @@
 				
             <li><a href="../lists/procedures.html">Procedures</a></li>
 				
-				
+								
             <li><a href="../lists/types.html">Derived Types</a></li>
 				
 				
-            <li><a href="../program/flap_test.html">Program</a></li>
-								
+            <li><a href="../lists/programs.html">Programs</a></li>
+				
           </ul>
         <form action="../search.html" class="navbar-form navbar-right" role="search">
         <div class="form-group">
@@ -81,29 +82,26 @@
   
   <div class="row">
     <h1>Type_Command_Line_Interface
-    <small>Derived Type</small>
+    <small>Derived Type, Extends(<a href='../type/type_object.html'>Type_Object</a>)</small>
     
     </h1>
 	 
 <div class="row">
-<div class="col-lg-7">
+<div class="col-lg-12">
 <div class="well well-sm">
-  <ul class="list-inline" style="margin-bottom:0px">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
      
      
      
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/Data_Type_Command_Line_Interface.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/Data_Type_Command_Line_Interface.F90"> Source File</a></li>
      
   </ul>
-  </div>
-  </div>
-  <div class="col-lg-5">
-  <ol class="breadcrumb hierarchy text-right">
+  <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/data_type_command_line_interface.f90.html'>Data_Type_Command_Line_Interface.f90</a></li>
+     <li><a href='../sourcefile/data_type_command_line_interface.f90.html'>Data_Type_Command_Line_Interface.F90</a></li>
   
      <li><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></li>
   
@@ -118,23 +116,19 @@
     <div class="col-lg-3">
     
   
+  
+  
   <div class="panel panel-primary">
     <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../type/type_command_line_interface.html#var-Na">Na</a>
+      <a class="list-group-item" href="../type/type_command_line_interface.html#var-clasg">clasg</a>
       
-      <a class="list-group-item" href="../type/type_command_line_interface.html#var-Na_required">Na_required</a>
+      <a class="list-group-item" href="../type/type_command_line_interface.html#var-args">args</a>
       
-      <a class="list-group-item" href="../type/type_command_line_interface.html#var-Na_optional">Na_optional</a>
+      <a class="list-group-item" href="../type/type_command_line_interface.html#var-examples">examples</a>
       
-      <a class="list-group-item" href="../type/type_command_line_interface.html#var-cla">cla</a>
-      
-      <a class="list-group-item" href="../type/type_command_line_interface.html#var-progname">progname</a>
-      
-      <a class="list-group-item" href="../type/type_command_line_interface.html#var-version">version</a>
-      
-      <a class="list-group-item" href="../type/type_command_line_interface.html#var-help">help</a>
+      <a class="list-group-item" href="../type/type_command_line_interface.html#var-args">args</a>
       
       <a class="list-group-item" href="../type/type_command_line_interface.html#var-examples">examples</a>
       
@@ -142,6 +136,8 @@
       
     </div>
   </div>
+  
+  
   
   
   
@@ -161,6 +157,7 @@
   </div>
   
   
+  
   <div class="panel panel-primary">
     <div class="panel-heading text-left"><h3 class="panel-title">Type-Bound Procedures</h3></div>
     <div class="list-group">
@@ -169,23 +166,51 @@
       
       <a class="list-group-item" href="../type/type_command_line_interface.html#bp-init">init</a>
       
+      <a class="list-group-item" href="../type/type_command_line_interface.html#bp-add_group">add_group</a>
+      
       <a class="list-group-item" href="../type/type_command_line_interface.html#bp-add">add</a>
       
-      <a class="list-group-item" href="../type/type_command_line_interface.html#bp-check">check</a>
-      
       <a class="list-group-item" href="../type/type_command_line_interface.html#bp-passed">passed</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_interface.html#bp-defined">defined</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_interface.html#bp-defined_group">defined_group</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_interface.html#bp-set_mutually_exclusive_groups">set_mutually_exclusive_groups</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_interface.html#bp-run_command">run_command</a>
       
       <a class="list-group-item" href="../type/type_command_line_interface.html#bp-parse">parse</a>
       
       <a class="list-group-item" href="../type/type_command_line_interface.html#bp-get">get</a>
       
-      <a class="list-group-item" href="../type/type_command_line_interface.html#bp-assignment(=)">assignment(=)</a>
+      <a class="list-group-item" href="../type/type_command_line_interface.html#bp-usage">usage</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_interface.html#bp-signature">signature</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_interface.html#bp-print_usage">print_usage</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_interface.html#bp-save_man_page">save_man_page</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_interface.html#bp-check">check</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_interface.html#bp-check_m_exclusive">check_m_exclusive</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_interface.html#bp-get_clasg_indexes">get_clasg_indexes</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_interface.html#bp-get_args">get_args</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_interface.html#bp-get_args_from_string">get_args_from_string</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_interface.html#bp-get_args_from_invocation">get_args_from_invocation</a>
       
       <a class="list-group-item" href="../type/type_command_line_interface.html#bp-get_cla_cli">get_cla_cli</a>
       
       <a class="list-group-item" href="../type/type_command_line_interface.html#bp-get_cla_list_cli">get_cla_list_cli</a>
       
       <a class="list-group-item" href="../type/type_command_line_interface.html#bp-assign_cli">assign_cli</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_interface.html#bp-assignment(=)">assignment(=)</a>
       
     </div>
   </div>
@@ -199,7 +224,11 @@
       
       <a class="list-group-item" href="../type/type_command_line_argument.html">Type_Command_Line_Argument</a>
       
+      <a class="list-group-item" href="../type/type_command_line_arguments_group.html">Type_Command_Line_Arguments_Group</a>
+      
       <a class="list-group-item" href="../type/type_command_line_interface.html">Type_Command_Line_Interface</a>
+      
+      <a class="list-group-item" href="../type/type_object.html">Type_Object</a>
       
     </div>
   </div>
@@ -208,8 +237,8 @@
     </div>
     
     <div class="col-lg-9" id='text'>
-    <p>Derived type implementing a flexible Command Line Interface (CLI).
- Procedure for freeing dynamic memory when finalizing.</p>
+    <p>Command Line Interface (CLI).
+ Free dynamic memory when finalizing.</p>
     <br>
     
     <section>
@@ -230,53 +259,11 @@
   
 <tr>
   
-  <td><a class="anchor" name="var-Na"></a>integer(kind=I4P),</td>
+  <td><a class="anchor" name="var-clasg"></a>type(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
   
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>Na</strong></td><td> =</td><td>0_I4P</td><td><p>Number of CLA.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-Na_required"></a>integer(kind=I4P),</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>Na_required</strong></td><td> =</td><td>0_I4P</td><td><p>Number of command line arguments that CLI requires.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-Na_optional"></a>integer(kind=I4P),</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>Na_optional</strong></td><td> =</td><td>0_I4P</td><td><p>Number of command line arguments that are optional for CLI.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-cla"></a>type(Type_Command_Line_Argument),</td>
-  
-  <td>public,</td>
+  <td>private,</td>
   <td>allocatable</td><td>::</td>
-  <td><strong>cla</strong>(:)</td><td></td><td></td><td><p>CLA list [1:Na].</p></td>
+  <td><strong>clasg</strong>(:)</td><td></td><td></td><td><p>CLA list [1:Na].</p></td>
   
 </tr>
 
@@ -286,11 +273,11 @@
   
 <tr>
   
-  <td><a class="anchor" name="var-progname"></a>character(len=:),</td>
+  <td><a class="anchor" name="var-args"></a>character(len=100),</td>
   
-  <td>public,</td>
+  <td>private,</td>
   <td>allocatable</td><td>::</td>
-  <td><strong>progname</strong></td><td></td><td></td><td><p>Program name.</p></td>
+  <td><strong>args</strong>(:)</td><td></td><td></td><td><p>Actually passed command line arguments.</p></td>
   
 </tr>
 
@@ -300,37 +287,9 @@
   
 <tr>
   
-  <td><a class="anchor" name="var-version"></a>character(len=:),</td>
+  <td><a class="anchor" name="var-examples"></a>character(len=100),</td>
   
-  <td>public,</td>
-  <td>allocatable</td><td>::</td>
-  <td><strong>version</strong></td><td></td><td></td><td><p>Program version.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-help"></a>character(len=:),</td>
-  
-  <td>public,</td>
-  <td>allocatable</td><td>::</td>
-  <td><strong>help</strong></td><td></td><td></td><td><p>Help message introducing the CLI usage.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-examples"></a>character(len=:),</td>
-  
-  <td>public,</td>
+  <td>private,</td>
   <td>allocatable</td><td>::</td>
   <td><strong>examples</strong>(:)</td><td></td><td></td><td><p>Examples of correct usage.</p></td>
   
@@ -342,11 +301,39 @@
   
 <tr>
   
+  <td><a class="anchor" name="var-args"></a>character(len=:),</td>
+  
+  <td>private,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>args</strong>(:)</td><td></td><td></td><td><p>Actually passed command line arguments.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-examples"></a>character(len=:),</td>
+  
+  <td>private,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>examples</strong>(:)</td><td></td><td></td><td><p>Examples of correct usage (not work with gfortran).</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
   <td><a class="anchor" name="var-disable_hv"></a>logical,</td>
   
-  <td>public</td>
+  <td>private</td>
   <td></td><td>::</td>
-  <td><strong>disable_hv</strong></td><td> =</td><td>.false.</td><td><p>Disable automatic inserting of 'help' and 'version' CLAs.</p></td>
+  <td><strong>disable_hv</strong></td><td> =</td><td>.false.</td><td><p>Disable automatic 'help' and 'version' CLAs.</p></td>
   
 </tr>
 
@@ -370,7 +357,7 @@
      
     
     <h3>
-private  subroutine <a href='../proc/finalize.html'>finalize</a>(cli)
+private elemental subroutine <a href='../proc/finalize.html'>finalize</a>(cli)
 </h3>
     
     <h4>Arguments</h4>
@@ -392,7 +379,7 @@ private  subroutine <a href='../proc/finalize.html'>finalize</a>(cli)
   
 <tr>
   
-  <td><a class="anchor" name="var-cli"></a>type(Type_Command_Line_Interface),</td>
+  <td><a class="anchor" name="var-cli"></a>type(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -437,7 +424,7 @@ private  subroutine <a href='../proc/finalize.html'>finalize</a>(cli)
     
 
 
-    <p>Procedure for freeing dynamic memory.</p>
+    <p>Free dynamic memory.</p>
   </div>
   
   <ul class="list-group">
@@ -446,7 +433,7 @@ private  subroutine <a href='../proc/finalize.html'>finalize</a>(cli)
       
     
     <h3>
-private  subroutine <a href='../proc/free.html'>free</a>(cli)
+private elemental subroutine <a href='../proc/free.html'>free</a>(cli)
 </h3>
     
     <h4>Arguments</h4>
@@ -468,7 +455,7 @@ private  subroutine <a href='../proc/free.html'>free</a>(cli)
   
 <tr>
   
-  <td><a class="anchor" name="var-cli"></a>class(Type_Command_Line_Interface),</td>
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -507,7 +494,7 @@ private  subroutine <a href='../proc/free.html'>free</a>(cli)
     
 
 
-    <p>Procedure for initializing CLI.</p>
+    <p>Initialize CLI.</p>
   </div>
   
   <ul class="list-group">
@@ -516,7 +503,7 @@ private  subroutine <a href='../proc/free.html'>free</a>(cli)
       
     
     <h3>
-private pure subroutine <a href='../proc/init.html'>init</a>(cli, progname, version, help, examples, disable_hv)
+private pure subroutine <a href='../proc/init.html'>init</a>(cli, progname, version, help, description, license, authors, examples, epilog, disable_hv)
 </h3>
     
     <h4>Arguments</h4>
@@ -538,7 +525,7 @@ private pure subroutine <a href='../proc/init.html'>init</a>(cli, progname, vers
   
 <tr>
   
-  <td><a class="anchor" name="var-cli"></a>class(Type_Command_Line_Interface),</td>
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -598,12 +585,72 @@ private pure subroutine <a href='../proc/init.html'>init</a>(cli, progname, vers
   
 <tr>
   
+  <td><a class="anchor" name="var-description"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>description</strong></td><td><p>Detailed description message introducing the program.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-license"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>license</strong></td><td><p>License description.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-authors"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>authors</strong></td><td><p>Authors list.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
   <td><a class="anchor" name="var-examples"></a>character(len=*),</td>
   <td>intent(in),</td>
   <td>optional</td>
   
   <td></td><td>::</td>
   <td><strong>examples</strong>(1:)</td><td><p>Examples of correct usage.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-epilog"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>epilog</strong></td><td><p>Epilog message.</p></td>
   
 </tr>
 
@@ -644,7 +691,7 @@ private pure subroutine <a href='../proc/init.html'>init</a>(cli, progname, vers
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="bp-add"></a><h3>procedure, public :: <strong>add</strong>  
+  <div class="panel-heading codesum"><a class="anchor" name="bp-add_group"></a><h3>procedure, public :: <strong>add_group</strong>  
     
   <h3></div>
   
@@ -652,7 +699,7 @@ private pure subroutine <a href='../proc/init.html'>init</a>(cli, progname, vers
     
 
 
-    <p>Procedure for adding CLA to CLAs list.</p>
+    <p>Add CLAs group CLI.</p>
   </div>
   
   <ul class="list-group">
@@ -661,7 +708,7 @@ private pure subroutine <a href='../proc/init.html'>init</a>(cli, progname, vers
       
     
     <h3>
-private  subroutine <a href='../proc/add.html'>add</a>(cli, pref, switch, switch_ab, help, required, positional, position, act, def, nargs, choices, error)
+private  subroutine <a href='../proc/add_group.html'>add_group</a>(cli, help, description, exclude, group)
 </h3>
     
     <h4>Arguments</h4>
@@ -683,7 +730,137 @@ private  subroutine <a href='../proc/add.html'>add</a>(cli, pref, switch, switch
   
 <tr>
   
-  <td><a class="anchor" name="var-cli"></a>class(Type_Command_Line_Interface),</td>
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cli</strong></td><td><p>CLI data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-help"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>help</strong></td><td><p>Help message.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-description"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>description</strong></td><td><p>Detailed description.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-exclude"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>exclude</strong></td><td><p>Group name of the mutually exclusive group.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-group"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>group</strong></td><td><p>Name of the grouped CLAs.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Add CLAs group to CLI.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-add"></a><h3>procedure, public :: <strong>add</strong>  
+    
+  <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Add CLA to CLI.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/add.html'>add</a>(cli, pref, group, group_index, switch, switch_ab, help, required, positional, position, act, def, nargs, choices, exclude, envvar, error)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -704,6 +881,36 @@ private  subroutine <a href='../proc/add.html'>add</a>(cli, pref, switch, switch
   
   <td></td><td>::</td>
   <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-group"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>group</strong></td><td><p>Name of the grouped CLAs.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-group_index"></a>integer(kind=I4P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>group_index</strong></td><td><p>Index of the grouped CLAs.</p></td>
   
 </tr>
 
@@ -863,97 +1070,27 @@ private  subroutine <a href='../proc/add.html'>add</a>(cli, pref, switch, switch
   
 <tr>
   
-  <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
-  <td>intent(out)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>error</strong></td><td><p>Error trapping flag.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-    
-    <h4>Description</h4>
-       
-
-
-       <p>Procedure for adding CLA to CLAs list.</p>
-        
-
-      </li>
-    
-  </ul>
-</div>
-
-    
-	   
-<div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="bp-check"></a><h3>procedure, public :: <strong>check</strong>  
-    
-  <h3></div>
-  
-  <div class="panel-body">
-    
-
-
-    <p>Procedure for checking CLAs data consistenc.</p>
-  </div>
-  
-  <ul class="list-group">
-    
-      <li class="list-group-item">
-      
-    
-    <h3>
-private  subroutine <a href='../proc/check.html'>check</a>(cli, pref, error)
-</h3>
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-cli"></a>class(Type_Command_Line_Interface),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>cli</strong></td><td><p>CLI data.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td><a class="anchor" name="var-exclude"></a>character(len=*),</td>
   <td>intent(in),</td>
   <td>optional</td>
   
   <td></td><td>::</td>
-  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  <td><strong>exclude</strong></td><td><p>Switch name of the mutually exclusive CLA.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-envvar"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>envvar</strong></td><td><p>Environment variable from which take value.</p></td>
   
 </tr>
 
@@ -964,8 +1101,8 @@ private  subroutine <a href='../proc/check.html'>check</a>(cli, pref, error)
 <tr>
   
   <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
-  <td>intent(out)</td>
-  <td></td>
+  <td>intent(out),</td>
+  <td>optional</td>
   
   <td></td><td>::</td>
   <td><strong>error</strong></td><td><p>Error trapping flag.</p></td>
@@ -983,7 +1120,7 @@ private  subroutine <a href='../proc/check.html'>check</a>(cli, pref, error)
        
 
 
-       <p>Procedure for checking CLAs data consistency.</p>
+       <p>Add CLA to CLI.</p>
         
 
       </li>
@@ -1002,7 +1139,7 @@ private  subroutine <a href='../proc/check.html'>check</a>(cli, pref, error)
     
 
 
-    <p>Procedure for checking if a CLA has been passed.</p>
+    <p>Check if a CLA has been passed.</p>
   </div>
   
   <ul class="list-group">
@@ -1011,7 +1148,7 @@ private  subroutine <a href='../proc/check.html'>check</a>(cli, pref, error)
       
     
     <h3>
-private pure function <a href='../proc/passed.html'>passed</a>(cli, switch, position)
+private  function <a href='../proc/passed.html'>passed</a>(cli, group, switch, position)
 </h3>
     
     <h4>Arguments</h4>
@@ -1033,12 +1170,27 @@ private pure function <a href='../proc/passed.html'>passed</a>(cli, switch, posi
   
 <tr>
   
-  <td><a class="anchor" name="var-cli"></a>class(Type_Command_Line_Interface),</td>
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
   <td><strong>cli</strong></td><td><p>CLI data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-group"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>group</strong></td><td><p>Name of group (command) of CLA.</p></td>
   
 </tr>
 
@@ -1092,7 +1244,419 @@ private pure function <a href='../proc/passed.html'>passed</a>(cli, switch, posi
        
 
 
-       <p>Procedure for checking if a CLA has been passed.</p>
+       <p>Check if a CLA has been passed.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-defined"></a><h3>procedure, public :: <strong>defined</strong>  
+    
+  <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Check if a CLA has been defined.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  function <a href='../proc/defined.html'>defined</a>(cli, group, switch)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cli</strong></td><td><p>CLI data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-group"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>group</strong></td><td><p>Name of group (command) of CLAs.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-switch"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>switch</strong></td><td><p>Switch name.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-defined"></a>logical
+  </small></h4>
+  <p>Check if a CLA has been defined.</p>
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Check if a CLA has been defined.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-defined_group"></a><h3>procedure, public :: <strong>defined_group</strong>  
+    
+  <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Check if a CLAs group has been defined.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  function <a href='../proc/defined_group.html'>defined_group</a>(cli, g, group)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cli</strong></td><td><p>CLI data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-g"></a>integer(kind=I4P),</td>
+  <td>intent(out),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>g</strong></td><td><p>Index of group.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-group"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>group</strong></td><td><p>Name of group (command) of CLAs.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-defined"></a>logical
+  </small></h4>
+  <p>Check if a CLAs group has been defined.</p>
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Check if a CLAs group has been defined.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-set_mutually_exclusive_groups"></a><h3>procedure, public :: <strong>set_mutually_exclusive_groups</strong>  
+    
+  <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Set two CLAs group as mutually exclusive.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/set_mutually_exclusive_groups.html'>set_mutually_exclusive_groups</a>(cli, group1, group2)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cli</strong></td><td><p>CLI data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-group1"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>group1</strong></td><td><p>Name of the first grouped CLAs.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-group2"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>group2</strong></td><td><p>Name of the second grouped CLAs.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Set two CLAs group ad mutually exclusive.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-run_command"></a><h3>procedure, public :: <strong>run_command</strong>  => <a href='../proc/called_group.html'>called_group</a> 
+    
+  <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Check if a CLAs group has been runned.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  function <a href='../proc/called_group.html'>called_group</a>(cli, group)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cli</strong></td><td><p>CLI data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-group"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>group</strong></td><td><p>Name of group (command) of CLAs.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-called"></a>logical
+  </small></h4>
+  <p>Check if a CLAs group has been runned.</p>
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Check if a CLAs group has been runned.</p>
         
 
       </li>
@@ -1111,7 +1675,7 @@ private pure function <a href='../proc/passed.html'>passed</a>(cli, switch, posi
     
 
 
-    <p>Procedure for parsing Command Line Interfaces.</p>
+    <p>Parse Command Line Interfaces.</p>
   </div>
   
   <ul class="list-group">
@@ -1120,7 +1684,7 @@ private pure function <a href='../proc/passed.html'>passed</a>(cli, switch, posi
       
     
     <h3>
-private  subroutine <a href='../proc/parse.html'>parse</a>(cli, pref, error)
+private  subroutine <a href='../proc/parse.html'>parse</a>(cli, pref, args, error)
 </h3>
     
     <h4>Arguments</h4>
@@ -1142,7 +1706,7 @@ private  subroutine <a href='../proc/parse.html'>parse</a>(cli, pref, error)
   
 <tr>
   
-  <td><a class="anchor" name="var-cli"></a>class(Type_Command_Line_Interface),</td>
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -1172,9 +1736,24 @@ private  subroutine <a href='../proc/parse.html'>parse</a>(cli, pref, error)
   
 <tr>
   
+  <td><a class="anchor" name="var-args"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>args</strong></td><td><p>String containing command line arguments.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
   <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
-  <td>intent(out)</td>
-  <td></td>
+  <td>intent(out),</td>
+  <td>optional</td>
   
   <td></td><td>::</td>
   <td><strong>error</strong></td><td><p>Error trapping flag.</p></td>
@@ -1192,7 +1771,7 @@ private  subroutine <a href='../proc/parse.html'>parse</a>(cli, pref, error)
        
 
 
-       <p>Procedure for parsing Command Line Interfaces by means of a previously initialized CLA list.</p>
+       <p>Parse Command Line Interfaces by means of a previously initialized CLAs groups list.</p>
         
 
       </li>
@@ -1211,7 +1790,7 @@ private  subroutine <a href='../proc/parse.html'>parse</a>(cli, pref, error)
     
 
 
-    <p>Procedure for getting CLA value(s) from CLAs list parsed.</p>
+    <p>Get CLA value(s) from CLAs list parsed.</p>
   </div>
   
   <ul class="list-group">
@@ -1220,7 +1799,7 @@ private  subroutine <a href='../proc/parse.html'>parse</a>(cli, pref, error)
       
     
     <h3>
-private  subroutine <a href='../proc/get_cla_cli.html'>get_cla_cli</a>(cli, pref, switch, position, val, error)
+private  subroutine <a href='../proc/get_cla_cli.html'>get_cla_cli</a>(cli, pref, group, switch, position, error, val)
 </h3>
     
     <h4>Arguments</h4>
@@ -1242,7 +1821,7 @@ private  subroutine <a href='../proc/get_cla_cli.html'>get_cla_cli</a>(cli, pref
   
 <tr>
   
-  <td><a class="anchor" name="var-cli"></a>class(Type_Command_Line_Interface),</td>
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -1263,6 +1842,21 @@ private  subroutine <a href='../proc/get_cla_cli.html'>get_cla_cli</a>(cli, pref
   
   <td></td><td>::</td>
   <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-group"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>group</strong></td><td><p>Name of group (command) of CLA.</p></td>
   
 </tr>
 
@@ -1302,12 +1896,12 @@ private  subroutine <a href='../proc/get_cla_cli.html'>get_cla_cli</a>(cli, pref
   
 <tr>
   
-  <td><a class="anchor" name="var-val"></a>class(),</td>
-  <td>intent(inout)</td>
-  <td></td>
+  <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
+  <td>intent(out),</td>
+  <td>optional</td>
   
   <td></td><td>::</td>
-  <td><strong>val</strong></td><td><p>CLA value.</p></td>
+  <td><strong>error</strong></td><td><p>Error trapping flag.</p></td>
   
 </tr>
 
@@ -1317,12 +1911,12 @@ private  subroutine <a href='../proc/get_cla_cli.html'>get_cla_cli</a>(cli, pref
   
 <tr>
   
-  <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
-  <td>intent(out)</td>
+  <td><a class="anchor" name="var-val"></a>class(*),</td>
+  <td>intent(inout)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>error</strong></td><td><p>Error trapping flag.</p></td>
+  <td><strong>val</strong></td><td><p>CLA value.</p></td>
   
 </tr>
 
@@ -1337,7 +1931,7 @@ private  subroutine <a href='../proc/get_cla_cli.html'>get_cla_cli</a>(cli, pref
        
 
 
-       <p>Procedure for getting CLA (single) value from CLAs list parsed.</p>
+       <p>Get CLA (single) value from CLAs list parsed.</p>
         
 
       </li>
@@ -1346,7 +1940,7 @@ private  subroutine <a href='../proc/get_cla_cli.html'>get_cla_cli</a>(cli, pref
       
     
     <h3>
-private  subroutine <a href='../proc/get_cla_list_cli.html'>get_cla_list_cli</a>(cli, pref, switch, position, val, error)
+private  subroutine <a href='../proc/get_cla_list_cli.html'>get_cla_list_cli</a>(cli, pref, group, switch, position, error, val)
 </h3>
     
     <h4>Arguments</h4>
@@ -1368,7 +1962,7 @@ private  subroutine <a href='../proc/get_cla_list_cli.html'>get_cla_list_cli</a>
   
 <tr>
   
-  <td><a class="anchor" name="var-cli"></a>class(Type_Command_Line_Interface),</td>
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -1389,6 +1983,21 @@ private  subroutine <a href='../proc/get_cla_list_cli.html'>get_cla_list_cli</a>
   
   <td></td><td>::</td>
   <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-group"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>group</strong></td><td><p>Name of group (command) of CLA.</p></td>
   
 </tr>
 
@@ -1428,12 +2037,12 @@ private  subroutine <a href='../proc/get_cla_list_cli.html'>get_cla_list_cli</a>
   
 <tr>
   
-  <td><a class="anchor" name="var-val"></a>class(),</td>
-  <td>intent(inout)</td>
-  <td></td>
+  <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
+  <td>intent(out),</td>
+  <td>optional</td>
   
   <td></td><td>::</td>
-  <td><strong>val</strong>(1:)</td><td><p>CLA values.</p></td>
+  <td><strong>error</strong></td><td><p>Error trapping flag.</p></td>
   
 </tr>
 
@@ -1443,12 +2052,12 @@ private  subroutine <a href='../proc/get_cla_list_cli.html'>get_cla_list_cli</a>
   
 <tr>
   
-  <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
-  <td>intent(out)</td>
+  <td><a class="anchor" name="var-val"></a>class(*),</td>
+  <td>intent(inout)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>error</strong></td><td><p>Error trapping flag.</p></td>
+  <td><strong>val</strong>(1:)</td><td><p>CLA values.</p></td>
   
 </tr>
 
@@ -1474,7 +2083,7 @@ private  subroutine <a href='../proc/get_cla_list_cli.html'>get_cla_list_cli</a>
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="bp-assignment(=)"></a><h3>generic, public :: <strong>assignment(=)</strong>  => <a href='../proc/assign_cli.html'>assign_cli</a> 
+  <div class="panel-heading codesum"><a class="anchor" name="bp-usage"></a><h3>procedure, public :: <strong>usage</strong>  
     
   <h3></div>
   
@@ -1482,7 +2091,7 @@ private  subroutine <a href='../proc/get_cla_list_cli.html'>get_cla_list_cli</a>
     
 
 
-    <p>Procedure for CLI assignment overloading.</p>
+    <p>Get CLI usage.</p>
   </div>
   
   <ul class="list-group">
@@ -1491,7 +2100,7 @@ private  subroutine <a href='../proc/get_cla_list_cli.html'>get_cla_list_cli</a>
       
     
     <h3>
-private  subroutine <a href='../proc/assign_cli.html'>assign_cli</a>(self1, self2)
+private  function <a href='../proc/usage.html'>usage</a>(cli, pref, no_header, no_examples, no_epilog, g)
 </h3>
     
     <h4>Arguments</h4>
@@ -1513,12 +2122,12 @@ private  subroutine <a href='../proc/assign_cli.html'>assign_cli</a>(self1, self
   
 <tr>
   
-  <td><a class="anchor" name="var-self1"></a>class(Type_Command_Line_Interface),</td>
-  <td>intent(inout)</td>
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self1</strong></td><td><p>Left hand side.</p></td>
+  <td><strong>cli</strong></td><td><p>CLI data.</p></td>
   
 </tr>
 
@@ -1528,12 +2137,245 @@ private  subroutine <a href='../proc/assign_cli.html'>assign_cli</a>(self1, self
   
 <tr>
   
-  <td><a class="anchor" name="var-self2"></a>type(Type_Command_Line_Interface),</td>
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-no_header"></a>logical,</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>no_header</strong></td><td><p>Avoid insert header to usage.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-no_examples"></a>logical,</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>no_examples</strong></td><td><p>Avoid insert examples to usage.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-no_epilog"></a>logical,</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>no_epilog</strong></td><td><p>Avoid insert epilogue to usage.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-g"></a>integer(kind=I4P),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self2</strong></td><td><p>Right hand side.</p></td>
+  <td><strong>g</strong></td><td><p>Group index.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-usaged"></a>character(len=:),
+  allocatable</small></h4>
+  <p>Usage string.</p>
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Print correct usage of CLI.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-signature"></a><h3>procedure, public :: <strong>signature</strong>  
+    
+  <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Get CLI signature.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  function <a href='../proc/signature.html'>signature</a>(cli)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cli</strong></td><td><p>CLI data.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-signd"></a>character(len=:),
+  allocatable</small></h4>
+  <p>Temporary CLI signature.</p>
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Get CLI signature.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-print_usage"></a><h3>procedure, public :: <strong>print_usage</strong>  
+    
+  <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Print correct usage of CLI.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/print_usage.html'>print_usage</a>(cli, pref)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cli</strong></td><td><p>CLI data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
   
 </tr>
 
@@ -1548,7 +2390,729 @@ private  subroutine <a href='../proc/assign_cli.html'>assign_cli</a>(self1, self
        
 
 
-       <p>Procedure for assignment between two selfs.</p>
+       <p>Print correct usage of CLI.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-save_man_page"></a><h3>procedure, public :: <strong>save_man_page</strong>  
+    
+  <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Save man page build on CLI.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/save_man_page.html'>save_man_page</a>(cli, error, man_file)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cli</strong></td><td><p>CLI data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
+  <td>intent(out),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>error</strong></td><td><p>Error trapping flag.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-man_file"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>man_file</strong></td><td><p>Output file name for saving man page.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Save man page build on the CLI.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-check"></a><h3>procedure, private :: <strong>check</strong>  
+    
+  <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Check CLAs data consistenc.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/check.html'>check</a>(cli, pref, error)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cli</strong></td><td><p>CLI data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
+  <td>intent(out),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>error</strong></td><td><p>Error trapping flag.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Check CLAs data consistency.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-check_m_exclusive"></a><h3>procedure, private :: <strong>check_m_exclusive</strong>  
+    
+  <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Check if two mutually exclusive CLAs group have been called.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/check_m_exclusive.html'>check_m_exclusive</a>(cli, pref)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cli</strong></td><td><p>CLI data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Check if two mutually exclusive CLAs group have been called.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-get_clasg_indexes"></a><h3>procedure, private :: <strong>get_clasg_indexes</strong>  
+    
+  <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Get CLAs groups indexes.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/get_clasg_indexes.html'>get_clasg_indexes</a>(cli, ai)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cli</strong></td><td><p>CLI data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-ai"></a>integer(kind=I4P),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>ai</strong>(:,:)</td><td><p>CLAs grouped indexes.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Get the argument indexes of CLAs groups defined parsing the actual passed CLAs.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-get_args"></a><h3>generic, private :: <strong>get_args</strong>  => <a href='../proc/get_args_from_string.html'>get_args_from_string</a>, <a href='../proc/get_args_from_invocation.html'>get_args_from_invocation</a> 
+    
+  <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Get CLAs from string.
+ Get CLAs from CLI invocation.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/get_args_from_string.html'>get_args_from_string</a>(cli, args, ai)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cli</strong></td><td><p>CLI data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-args"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>args</strong></td><td><p>String containing command line arguments.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-ai"></a>integer(kind=I4P),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>ai</strong>(:,:)</td><td><p>CLAs grouped indexes.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Get CLAs from string.</p>
+        
+
+      </li>
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/get_args_from_invocation.html'>get_args_from_invocation</a>(cli, ai)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cli</strong></td><td><p>CLI data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-ai"></a>integer(kind=I4P),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>ai</strong>(:,:)</td><td><p>CLAs grouped indexes.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Get CLAs from CLI invocation.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-get_args_from_string"></a><h3>procedure, private :: <strong>get_args_from_string</strong>  
+    
+  <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Get CLAs from string.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/get_args_from_string.html'>get_args_from_string</a>(cli, args, ai)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cli</strong></td><td><p>CLI data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-args"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>args</strong></td><td><p>String containing command line arguments.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-ai"></a>integer(kind=I4P),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>ai</strong>(:,:)</td><td><p>CLAs grouped indexes.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Get CLAs from string.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-get_args_from_invocation"></a><h3>procedure, private :: <strong>get_args_from_invocation</strong>  
+    
+  <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Get CLAs from CLI invocation.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/get_args_from_invocation.html'>get_args_from_invocation</a>(cli, ai)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cli</strong></td><td><p>CLI data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-ai"></a>integer(kind=I4P),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>ai</strong>(:,:)</td><td><p>CLAs grouped indexes.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Get CLAs from CLI invocation.</p>
         
 
       </li>
@@ -1567,7 +3131,7 @@ private  subroutine <a href='../proc/assign_cli.html'>assign_cli</a>(self1, self
     
 
 
-    <p>Procedure for getting CLA (single) value from CLAs list parsed.</p>
+    <p>Get CLA (single) value from CLAs list parsed.</p>
   </div>
   
   <ul class="list-group">
@@ -1576,7 +3140,7 @@ private  subroutine <a href='../proc/assign_cli.html'>assign_cli</a>(self1, self
       
     
     <h3>
-private  subroutine <a href='../proc/get_cla_cli.html'>get_cla_cli</a>(cli, pref, switch, position, val, error)
+private  subroutine <a href='../proc/get_cla_cli.html'>get_cla_cli</a>(cli, pref, group, switch, position, error, val)
 </h3>
     
     <h4>Arguments</h4>
@@ -1598,7 +3162,7 @@ private  subroutine <a href='../proc/get_cla_cli.html'>get_cla_cli</a>(cli, pref
   
 <tr>
   
-  <td><a class="anchor" name="var-cli"></a>class(Type_Command_Line_Interface),</td>
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -1619,6 +3183,21 @@ private  subroutine <a href='../proc/get_cla_cli.html'>get_cla_cli</a>(cli, pref
   
   <td></td><td>::</td>
   <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-group"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>group</strong></td><td><p>Name of group (command) of CLA.</p></td>
   
 </tr>
 
@@ -1658,12 +3237,12 @@ private  subroutine <a href='../proc/get_cla_cli.html'>get_cla_cli</a>(cli, pref
   
 <tr>
   
-  <td><a class="anchor" name="var-val"></a>class(),</td>
-  <td>intent(inout)</td>
-  <td></td>
+  <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
+  <td>intent(out),</td>
+  <td>optional</td>
   
   <td></td><td>::</td>
-  <td><strong>val</strong></td><td><p>CLA value.</p></td>
+  <td><strong>error</strong></td><td><p>Error trapping flag.</p></td>
   
 </tr>
 
@@ -1673,12 +3252,12 @@ private  subroutine <a href='../proc/get_cla_cli.html'>get_cla_cli</a>(cli, pref
   
 <tr>
   
-  <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
-  <td>intent(out)</td>
+  <td><a class="anchor" name="var-val"></a>class(*),</td>
+  <td>intent(inout)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>error</strong></td><td><p>Error trapping flag.</p></td>
+  <td><strong>val</strong></td><td><p>CLA value.</p></td>
   
 </tr>
 
@@ -1693,7 +3272,7 @@ private  subroutine <a href='../proc/get_cla_cli.html'>get_cla_cli</a>(cli, pref
        
 
 
-       <p>Procedure for getting CLA (single) value from CLAs list parsed.</p>
+       <p>Get CLA (single) value from CLAs list parsed.</p>
         
 
       </li>
@@ -1712,7 +3291,7 @@ private  subroutine <a href='../proc/get_cla_cli.html'>get_cla_cli</a>(cli, pref
     
 
 
-    <p>Procedure for getting CLA multiple values from CLAs list parsed.</p>
+    <p>Get CLA multiple values from CLAs list parsed.</p>
   </div>
   
   <ul class="list-group">
@@ -1721,7 +3300,7 @@ private  subroutine <a href='../proc/get_cla_cli.html'>get_cla_cli</a>(cli, pref
       
     
     <h3>
-private  subroutine <a href='../proc/get_cla_list_cli.html'>get_cla_list_cli</a>(cli, pref, switch, position, val, error)
+private  subroutine <a href='../proc/get_cla_list_cli.html'>get_cla_list_cli</a>(cli, pref, group, switch, position, error, val)
 </h3>
     
     <h4>Arguments</h4>
@@ -1743,7 +3322,7 @@ private  subroutine <a href='../proc/get_cla_list_cli.html'>get_cla_list_cli</a>
   
 <tr>
   
-  <td><a class="anchor" name="var-cli"></a>class(Type_Command_Line_Interface),</td>
+  <td><a class="anchor" name="var-cli"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -1764,6 +3343,21 @@ private  subroutine <a href='../proc/get_cla_list_cli.html'>get_cla_list_cli</a>
   
   <td></td><td>::</td>
   <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-group"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>group</strong></td><td><p>Name of group (command) of CLA.</p></td>
   
 </tr>
 
@@ -1803,12 +3397,12 @@ private  subroutine <a href='../proc/get_cla_list_cli.html'>get_cla_list_cli</a>
   
 <tr>
   
-  <td><a class="anchor" name="var-val"></a>class(),</td>
-  <td>intent(inout)</td>
-  <td></td>
+  <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
+  <td>intent(out),</td>
+  <td>optional</td>
   
   <td></td><td>::</td>
-  <td><strong>val</strong>(1:)</td><td><p>CLA values.</p></td>
+  <td><strong>error</strong></td><td><p>Error trapping flag.</p></td>
   
 </tr>
 
@@ -1818,12 +3412,12 @@ private  subroutine <a href='../proc/get_cla_list_cli.html'>get_cla_list_cli</a>
   
 <tr>
   
-  <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
-  <td>intent(out)</td>
+  <td><a class="anchor" name="var-val"></a>class(*),</td>
+  <td>intent(inout)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>error</strong></td><td><p>Error trapping flag.</p></td>
+  <td><strong>val</strong>(1:)</td><td><p>CLA values.</p></td>
   
 </tr>
 
@@ -1849,7 +3443,7 @@ private  subroutine <a href='../proc/get_cla_list_cli.html'>get_cla_list_cli</a>
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="bp-assign_cli"></a><h3>procedure, private, pass(self1) :: <strong>assign_cli</strong>  
+  <div class="panel-heading codesum"><a class="anchor" name="bp-assign_cli"></a><h3>procedure, private :: <strong>assign_cli</strong>  
     
   <h3></div>
   
@@ -1857,7 +3451,7 @@ private  subroutine <a href='../proc/get_cla_list_cli.html'>get_cla_list_cli</a>
     
 
 
-    <p>Procedure for CLI assignment overloading.</p>
+    <p>CLI assignment overloading.</p>
   </div>
   
   <ul class="list-group">
@@ -1866,7 +3460,7 @@ private  subroutine <a href='../proc/get_cla_list_cli.html'>get_cla_list_cli</a>
       
     
     <h3>
-private  subroutine <a href='../proc/assign_cli.html'>assign_cli</a>(self1, self2)
+private elemental subroutine <a href='../proc/assign_cli.html'>assign_cli</a>(lhs, rhs)
 </h3>
     
     <h4>Arguments</h4>
@@ -1888,12 +3482,12 @@ private  subroutine <a href='../proc/assign_cli.html'>assign_cli</a>(self1, self
   
 <tr>
   
-  <td><a class="anchor" name="var-self1"></a>class(Type_Command_Line_Interface),</td>
+  <td><a class="anchor" name="var-lhs"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self1</strong></td><td><p>Left hand side.</p></td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
   
 </tr>
 
@@ -1903,12 +3497,12 @@ private  subroutine <a href='../proc/assign_cli.html'>assign_cli</a>(self1, self
   
 <tr>
   
-  <td><a class="anchor" name="var-self2"></a>type(Type_Command_Line_Interface),</td>
+  <td><a class="anchor" name="var-rhs"></a>type(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self2</strong></td><td><p>Right hand side.</p></td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
   
 </tr>
 
@@ -1918,12 +3512,85 @@ private  subroutine <a href='../proc/assign_cli.html'>assign_cli</a>(self1, self
       
     
     
+        
+
+      </li>
     
-    <h4>Description</h4>
-       
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-assignment(=)"></a><h3>generic, private :: <strong>assignment(=)</strong>  => <a href='../proc/assign_cli.html'>assign_cli</a> 
+    
+  <h3></div>
+  
+  <div class="panel-body">
+    
 
 
-       <p>Procedure for assignment between two selfs.</p>
+    <p>CLI assignment overloading.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private elemental subroutine <a href='../proc/assign_cli.html'>assign_cli</a>(lhs, rhs)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-lhs"></a>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-rhs"></a>type(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
         
 
       </li>

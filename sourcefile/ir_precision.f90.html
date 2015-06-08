@@ -5,12 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	 
-	 <meta name="description" content="<p>Fortran command Line Arguments Parser for poor men</p>">
+	 <meta name="description" content="<p>Fortran command Line Arguments Parser for poor people</p>">
     
     <meta name="author" content="Chris MacMackin" >
     <link rel="icon" href="../favicon.png">
 
-    <title>IR_Precision.f90 &ndash; FLAP</title>
+    <title>IR_Precision.F90 &ndash; FLAP</title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -48,7 +48,8 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            
+				
+                
             <li><a href="../lists/files.html">Source Files</a></li>
 				
 				
@@ -57,12 +58,12 @@
 				
             <li><a href="../lists/procedures.html">Procedures</a></li>
 				
-				
+								
             <li><a href="../lists/types.html">Derived Types</a></li>
 				
 				
-            <li><a href="../program/flap_test.html">Program</a></li>
-								
+            <li><a href="../lists/programs.html">Programs</a></li>
+				
           </ul>
         <form action="../search.html" class="navbar-form navbar-right" role="search">
         <div class="form-group">
@@ -80,30 +81,27 @@
     
   
   <div class="row">
-    <h1>IR_Precision.f90
+    <h1>IR_Precision.F90
     <small>Source File</small>
     
     </h1>
 	 
 <div class="row">
-<div class="col-lg-7">
+<div class="col-lg-12">
 <div class="well well-sm">
-  <ul class="list-inline" style="margin-bottom:0px">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
      
      
      
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/IR_Precision.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/IR_Precision.F90"> Source File</a></li>
      
   </ul>
-  </div>
-  </div>
-  <div class="col-lg-5">
-  <ol class="breadcrumb hierarchy text-right">
+  <ol class="breadcrumb in-well text-right">
   
-     <li class="active">IR_Precision.f90</li>
+     <li class="active">IR_Precision.F90</li>
   </ol>
   </div>
 </div>
@@ -112,6 +110,8 @@
   <div class="row">
     <div class="col-lg-3">
     
+  
+  
   
   
   
@@ -132,21 +132,22 @@
   
   
   
+  
   <hr>
   
   <div class="panel panel-default">
     <div class="panel-heading text-left"><h3 class="panel-title">All Source Files</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../sourcefile/data_type_command_line_interface.f90.html">Data_Type_Command_Line_Interface.f90</a>
+      <a class="list-group-item" href="../sourcefile/data_type_command_line_interface.f90.html">Data_Type_Command_Line_Interface.F90</a>
       
-      <a class="list-group-item" href="../sourcefile/flap_test.f90.html">flap_test.f90</a>
+      <a class="list-group-item" href="../sourcefile/ir_precision.f90.html">IR_Precision.F90</a>
       
-      <a class="list-group-item" href="../sourcefile/ir_precision.f90.html">IR_Precision.f90</a>
+      <a class="list-group-item" href="../sourcefile/test_driver.f90.html">Test_Driver.f90</a>
       
-      <a class="list-group-item" href="../sourcefile/lib_io_misc.f90.html">Lib_IO_Misc.f90</a>
+      <a class="list-group-item" href="../sourcefile/test_driver_args_from_string.f90.html">Test_Driver_Args_From_String.f90</a>
       
-      <a class="list-group-item" href="../sourcefile/lib_strings.f90.html">Lib_Strings.f90</a>
+      <a class="list-group-item" href="../sourcefile/test_driver_nested.f90.html">Test_Driver_Nested.f90</a>
       
     </div>
   </div>
@@ -343,7 +344,17 @@
                    <span class="n">strf_I8P</span> <span class="p">,</span><span class="n">str_I8P</span><span class="p">,</span> <span class="p">&amp;</span>
                    <span class="n">strf_I4P</span> <span class="p">,</span><span class="n">str_I4P</span><span class="p">,</span> <span class="p">&amp;</span>
                    <span class="n">strf_I2P</span> <span class="p">,</span><span class="n">str_I2P</span><span class="p">,</span> <span class="p">&amp;</span>
-                   <span class="n">strf_I1P</span> <span class="p">,</span><span class="n">str_I1P</span>
+                   <span class="n">strf_I1P</span> <span class="p">,</span><span class="n">str_I1P</span><span class="p">,</span> <span class="p">&amp;</span>
+                             <span class="n">str_bol</span><span class="p">,</span> <span class="p">&amp;</span>
+<span class="cp">#ifdef r16p</span>
+                             <span class="n">str_a_R16P</span><span class="p">,&amp;</span>
+<span class="cp">#endif</span>
+                             <span class="n">str_a_R8P</span><span class="p">,</span> <span class="p">&amp;</span>
+                             <span class="n">str_a_R4P</span><span class="p">,</span> <span class="p">&amp;</span>
+                             <span class="n">str_a_I8P</span><span class="p">,</span> <span class="p">&amp;</span>
+                             <span class="n">str_a_I4P</span><span class="p">,</span> <span class="p">&amp;</span>
+                             <span class="n">str_a_I2P</span><span class="p">,</span> <span class="p">&amp;</span>
+                             <span class="n">str_a_I1P</span>
 <span class="n">endinterface</span>
 <span class="k">interface </span><span class="n">strz</span>
   <span class="c">!&lt; Procedure for converting number, integer, to string, prefixing with the right number of zeros (number to string type</span>
@@ -859,6 +870,252 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">str_I1P</span>
 
+  <span class="k">elemental function </span><span class="n">str_bol</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting logical to string. This function achieves casting of logical to string.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">implicit none</span>
+<span class="k">  </span><span class="kt">logical</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">n</span>   <span class="c">!&lt; Logical to be converted.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="kd">::</span>        <span class="n">str</span> <span class="c">!&lt; Returned string containing input number plus padding zeros.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">write</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="s1">&#39;(L1)&#39;</span><span class="p">)</span> <span class="n">n</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endfunction</span> <span class="n">str_bol</span>
+
+  <span class="k">pure function </span><span class="n">str_a_R16P</span><span class="p">(</span><span class="n">no_sign</span><span class="p">,</span><span class="n">delimiters</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting real (array) to string. This function achieves casting of real to string.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">implicit none</span>
+<span class="k">  </span><span class="kt">logical</span><span class="p">,</span>      <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">no_sign</span>         <span class="c">!&lt; Flag for leaving out the sign.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">delimiters</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span> <span class="c">!&lt; Eventual delimiters of array values.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R16P</span><span class="p">),</span>   <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>           <span class="n">n</span><span class="p">(:)</span>            <span class="c">!&lt; Real array to be converted.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span><span class="kd">::</span>      <span class="n">str</span>             <span class="c">!&lt; Returned string containing input number.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="n">DR16P</span><span class="p">)</span><span class="kd">::</span>                   <span class="n">strn</span>            <span class="c">!&lt; String containing of element of input array number.</span>
+  <span class="kt">integer</span><span class="kd">::</span>                            <span class="n">i</span>               <span class="c">!&lt; Counter.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">no_sign</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">    </span><span class="n">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+      <span class="n">strn</span> <span class="o">=</span> <span class="n">str_R16P</span><span class="p">(</span><span class="n">no_sign</span><span class="o">=</span><span class="n">no_sign</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+      <span class="n">str</span> <span class="o">=</span> <span class="n">str</span><span class="o">//</span><span class="s1">&#39;,&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strn</span><span class="p">)</span>
+    <span class="n">enddo</span>
+  <span class="k">else</span>
+<span class="k">    </span><span class="n">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+      <span class="n">strn</span> <span class="o">=</span> <span class="n">str_R16P</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+      <span class="n">str</span> <span class="o">=</span> <span class="n">str</span><span class="o">//</span><span class="s1">&#39;,&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strn</span><span class="p">)</span>
+    <span class="n">enddo</span>
+  <span class="n">endif</span>
+  <span class="n">str</span> <span class="o">=</span> <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="mi">2</span><span class="p">:))</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">delimiters</span><span class="p">))</span> <span class="n">str</span> <span class="o">=</span> <span class="n">delimiters</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="n">str</span><span class="o">//</span><span class="n">delimiters</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endfunction</span> <span class="n">str_a_R16P</span>
+
+  <span class="k">pure function </span><span class="n">str_a_R8P</span><span class="p">(</span><span class="n">no_sign</span><span class="p">,</span><span class="n">delimiters</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting real (array) to string. This function achieves casting of real to string.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">implicit none</span>
+<span class="k">  </span><span class="kt">logical</span><span class="p">,</span>      <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">no_sign</span>         <span class="c">!&lt; Flag for leaving out the sign.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">delimiters</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span> <span class="c">!&lt; Eventual delimiters of array values.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R8P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>           <span class="n">n</span><span class="p">(:)</span>            <span class="c">!&lt; Real array to be converted.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span><span class="kd">::</span>      <span class="n">str</span>             <span class="c">!&lt; Returned string containing input number.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="n">DR8P</span><span class="p">)</span><span class="kd">::</span>                    <span class="n">strn</span>            <span class="c">!&lt; String containing of element of input array number.</span>
+  <span class="kt">integer</span><span class="kd">::</span>                            <span class="n">i</span>               <span class="c">!&lt; Counter.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">no_sign</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">    </span><span class="n">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+      <span class="n">strn</span> <span class="o">=</span> <span class="n">str_R8P</span><span class="p">(</span><span class="n">no_sign</span><span class="o">=</span><span class="n">no_sign</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+      <span class="n">str</span> <span class="o">=</span> <span class="n">str</span><span class="o">//</span><span class="s1">&#39;,&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strn</span><span class="p">)</span>
+    <span class="n">enddo</span>
+  <span class="k">else</span>
+<span class="k">    </span><span class="n">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+      <span class="n">strn</span> <span class="o">=</span> <span class="n">str_R8P</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+      <span class="n">str</span> <span class="o">=</span> <span class="n">str</span><span class="o">//</span><span class="s1">&#39;,&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strn</span><span class="p">)</span>
+    <span class="n">enddo</span>
+  <span class="n">endif</span>
+  <span class="n">str</span> <span class="o">=</span> <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="mi">2</span><span class="p">:))</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">delimiters</span><span class="p">))</span> <span class="n">str</span> <span class="o">=</span> <span class="n">delimiters</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="n">str</span><span class="o">//</span><span class="n">delimiters</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endfunction</span> <span class="n">str_a_R8P</span>
+
+  <span class="k">pure function </span><span class="n">str_a_R4P</span><span class="p">(</span><span class="n">no_sign</span><span class="p">,</span><span class="n">delimiters</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting real (array) to string. This function achieves casting of real to string.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">implicit none</span>
+<span class="k">  </span><span class="kt">logical</span><span class="p">,</span>      <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">no_sign</span>         <span class="c">!&lt; Flag for leaving out the sign.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">delimiters</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span> <span class="c">!&lt; Eventual delimiters of array values.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R4P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>           <span class="n">n</span><span class="p">(:)</span>            <span class="c">!&lt; Real array to be converted.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span><span class="kd">::</span>      <span class="n">str</span>             <span class="c">!&lt; Returned string containing input number.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="n">DR4P</span><span class="p">)</span><span class="kd">::</span>                    <span class="n">strn</span>            <span class="c">!&lt; String containing of element of input array number.</span>
+  <span class="kt">integer</span><span class="kd">::</span>                            <span class="n">i</span>               <span class="c">!&lt; Counter.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">no_sign</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">    </span><span class="n">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+      <span class="n">strn</span> <span class="o">=</span> <span class="n">str_R4P</span><span class="p">(</span><span class="n">no_sign</span><span class="o">=</span><span class="n">no_sign</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+      <span class="n">str</span> <span class="o">=</span> <span class="n">str</span><span class="o">//</span><span class="s1">&#39;,&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strn</span><span class="p">)</span>
+    <span class="n">enddo</span>
+  <span class="k">else</span>
+<span class="k">    </span><span class="n">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+      <span class="n">strn</span> <span class="o">=</span> <span class="n">str_R4P</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+      <span class="n">str</span> <span class="o">=</span> <span class="n">str</span><span class="o">//</span><span class="s1">&#39;,&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strn</span><span class="p">)</span>
+    <span class="n">enddo</span>
+  <span class="n">endif</span>
+  <span class="n">str</span> <span class="o">=</span> <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="mi">2</span><span class="p">:))</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">delimiters</span><span class="p">))</span> <span class="n">str</span> <span class="o">=</span> <span class="n">delimiters</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="n">str</span><span class="o">//</span><span class="n">delimiters</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endfunction</span> <span class="n">str_a_R4P</span>
+
+  <span class="k">pure function </span><span class="n">str_a_I8P</span><span class="p">(</span><span class="n">no_sign</span><span class="p">,</span><span class="n">delimiters</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting integer (array) to string. This function achieves casting of integer to string.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">implicit none</span>
+<span class="k">  </span><span class="kt">logical</span><span class="p">,</span>      <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">no_sign</span>         <span class="c">!&lt; Flag for leaving out the sign.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">delimiters</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span> <span class="c">!&lt; Eventual delimiters of array values.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I8P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>           <span class="n">n</span><span class="p">(:)</span>            <span class="c">!&lt; Integer array to be converted.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span><span class="kd">::</span>      <span class="n">str</span>             <span class="c">!&lt; Returned string containing input number.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="n">DI8P</span><span class="p">)</span><span class="kd">::</span>                    <span class="n">strn</span>            <span class="c">!&lt; String containing of element of input array number.</span>
+  <span class="kt">integer</span><span class="kd">::</span>                            <span class="n">i</span>               <span class="c">!&lt; Counter.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">no_sign</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">    </span><span class="n">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+      <span class="n">strn</span> <span class="o">=</span> <span class="n">str_I8P</span><span class="p">(</span><span class="n">no_sign</span><span class="o">=</span><span class="n">no_sign</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+      <span class="n">str</span> <span class="o">=</span> <span class="n">str</span><span class="o">//</span><span class="s1">&#39;,&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strn</span><span class="p">)</span>
+    <span class="n">enddo</span>
+  <span class="k">else</span>
+<span class="k">    </span><span class="n">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+      <span class="n">strn</span> <span class="o">=</span> <span class="n">str_I8P</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+      <span class="n">str</span> <span class="o">=</span> <span class="n">str</span><span class="o">//</span><span class="s1">&#39;,&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strn</span><span class="p">)</span>
+    <span class="n">enddo</span>
+  <span class="n">endif</span>
+  <span class="n">str</span> <span class="o">=</span> <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="mi">2</span><span class="p">:))</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">delimiters</span><span class="p">))</span> <span class="n">str</span> <span class="o">=</span> <span class="n">delimiters</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="n">str</span><span class="o">//</span><span class="n">delimiters</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endfunction</span> <span class="n">str_a_I8P</span>
+
+  <span class="k">pure function </span><span class="n">str_a_I4P</span><span class="p">(</span><span class="n">no_sign</span><span class="p">,</span><span class="n">delimiters</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting integer (array) to string. This function achieves casting of integer to string.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">implicit none</span>
+<span class="k">  </span><span class="kt">logical</span><span class="p">,</span>      <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">no_sign</span>         <span class="c">!&lt; Flag for leaving out the sign.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">delimiters</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span> <span class="c">!&lt; Eventual delimiters of array values.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>           <span class="n">n</span><span class="p">(:)</span>            <span class="c">!&lt; Integer array to be converted.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span><span class="kd">::</span>      <span class="n">str</span>             <span class="c">!&lt; Returned string containing input number.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="n">DI4P</span><span class="p">)</span><span class="kd">::</span>                    <span class="n">strn</span>            <span class="c">!&lt; String containing of element of input array number.</span>
+  <span class="kt">integer</span><span class="kd">::</span>                            <span class="n">i</span>               <span class="c">!&lt; Counter.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">no_sign</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">    </span><span class="n">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+      <span class="n">strn</span> <span class="o">=</span> <span class="n">str_I4P</span><span class="p">(</span><span class="n">no_sign</span><span class="o">=</span><span class="n">no_sign</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+      <span class="n">str</span> <span class="o">=</span> <span class="n">str</span><span class="o">//</span><span class="s1">&#39;,&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strn</span><span class="p">)</span>
+    <span class="n">enddo</span>
+  <span class="k">else</span>
+<span class="k">    </span><span class="n">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+      <span class="n">strn</span> <span class="o">=</span> <span class="n">str_I4P</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+      <span class="n">str</span> <span class="o">=</span> <span class="n">str</span><span class="o">//</span><span class="s1">&#39;,&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strn</span><span class="p">)</span>
+    <span class="n">enddo</span>
+  <span class="n">endif</span>
+  <span class="n">str</span> <span class="o">=</span> <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="mi">2</span><span class="p">:))</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">delimiters</span><span class="p">))</span> <span class="n">str</span> <span class="o">=</span> <span class="n">delimiters</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="n">str</span><span class="o">//</span><span class="n">delimiters</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endfunction</span> <span class="n">str_a_I4P</span>
+
+  <span class="k">pure function </span><span class="n">str_a_I2P</span><span class="p">(</span><span class="n">no_sign</span><span class="p">,</span><span class="n">delimiters</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting integer (array) to string. This function achieves casting of integer to string.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">implicit none</span>
+<span class="k">  </span><span class="kt">logical</span><span class="p">,</span>      <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">no_sign</span>         <span class="c">!&lt; Flag for leaving out the sign.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">delimiters</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span> <span class="c">!&lt; Eventual delimiters of array values.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I2P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>           <span class="n">n</span><span class="p">(:)</span>            <span class="c">!&lt; Integer array to be converted.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span><span class="kd">::</span>      <span class="n">str</span>             <span class="c">!&lt; Returned string containing input number.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="n">DI2P</span><span class="p">)</span><span class="kd">::</span>                    <span class="n">strn</span>            <span class="c">!&lt; String containing of element of input array number.</span>
+  <span class="kt">integer</span><span class="kd">::</span>                            <span class="n">i</span>               <span class="c">!&lt; Counter.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">no_sign</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">    </span><span class="n">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+      <span class="n">strn</span> <span class="o">=</span> <span class="n">str_I2P</span><span class="p">(</span><span class="n">no_sign</span><span class="o">=</span><span class="n">no_sign</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+      <span class="n">str</span> <span class="o">=</span> <span class="n">str</span><span class="o">//</span><span class="s1">&#39;,&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strn</span><span class="p">)</span>
+    <span class="n">enddo</span>
+  <span class="k">else</span>
+<span class="k">    </span><span class="n">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+      <span class="n">strn</span> <span class="o">=</span> <span class="n">str_I2P</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+      <span class="n">str</span> <span class="o">=</span> <span class="n">str</span><span class="o">//</span><span class="s1">&#39;,&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strn</span><span class="p">)</span>
+    <span class="n">enddo</span>
+  <span class="n">endif</span>
+  <span class="n">str</span> <span class="o">=</span> <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="mi">2</span><span class="p">:))</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">delimiters</span><span class="p">))</span> <span class="n">str</span> <span class="o">=</span> <span class="n">delimiters</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="n">str</span><span class="o">//</span><span class="n">delimiters</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endfunction</span> <span class="n">str_a_I2P</span>
+
+  <span class="k">pure function </span><span class="n">str_a_I1P</span><span class="p">(</span><span class="n">no_sign</span><span class="p">,</span><span class="n">delimiters</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for converting integer (array) to string. This function achieves casting of integer to string.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">implicit none</span>
+<span class="k">  </span><span class="kt">logical</span><span class="p">,</span>      <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">no_sign</span>         <span class="c">!&lt; Flag for leaving out the sign.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span><span class="kd">::</span> <span class="n">delimiters</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span> <span class="c">!&lt; Eventual delimiters of array values.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I1P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>           <span class="n">n</span><span class="p">(:)</span>            <span class="c">!&lt; Integer array to be converted.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span><span class="kd">::</span>      <span class="n">str</span>             <span class="c">!&lt; Returned string containing input number.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="n">DI1P</span><span class="p">)</span><span class="kd">::</span>                    <span class="n">strn</span>            <span class="c">!&lt; String containing of element of input array number.</span>
+  <span class="kt">integer</span><span class="kd">::</span>                            <span class="n">i</span>               <span class="c">!&lt; Counter.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">no_sign</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">    </span><span class="n">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+      <span class="n">strn</span> <span class="o">=</span> <span class="n">str_I1P</span><span class="p">(</span><span class="n">no_sign</span><span class="o">=</span><span class="n">no_sign</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+      <span class="n">str</span> <span class="o">=</span> <span class="n">str</span><span class="o">//</span><span class="s1">&#39;,&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strn</span><span class="p">)</span>
+    <span class="n">enddo</span>
+  <span class="k">else</span>
+<span class="k">    </span><span class="n">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+      <span class="n">strn</span> <span class="o">=</span> <span class="n">str_I1P</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+      <span class="n">str</span> <span class="o">=</span> <span class="n">str</span><span class="o">//</span><span class="s1">&#39;,&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strn</span><span class="p">)</span>
+    <span class="n">enddo</span>
+  <span class="n">endif</span>
+  <span class="n">str</span> <span class="o">=</span> <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="mi">2</span><span class="p">:))</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">delimiters</span><span class="p">))</span> <span class="n">str</span> <span class="o">=</span> <span class="n">delimiters</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="n">str</span><span class="o">//</span><span class="n">delimiters</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endfunction</span> <span class="n">str_a_I1P</span>
+
   <span class="k">elemental function </span><span class="n">strz_I8P</span><span class="p">(</span><span class="n">nz_pad</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Procedure for converting integer to string, prefixing with the right number of zeros. This function achieves casting of</span>
@@ -935,156 +1192,177 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">strz_I1P</span>
 
-  <span class="k">function </span><span class="n">ctor_R16P</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+  <span class="k">function </span><span class="n">ctor_R16P</span><span class="p">(</span><span class="n">pref</span><span class="p">,</span><span class="n">error</span><span class="p">,</span><span class="n">str</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Procedure for converting string to real. This function achieves casting of string to real.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
-<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">str</span> <span class="c">!&lt; String containing input number.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R16P</span><span class="p">),</span>   <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">knd</span> <span class="c">!&lt; Number kind.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R16P</span><span class="p">)</span><span class="kd">::</span>               <span class="n">n</span>   <span class="c">!&lt; Number returned.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>             <span class="n">err</span> <span class="c">!&lt; Error trapping flag: 0 no errors, &gt;0 error occurs.</span>
+<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">pref</span>  <span class="c">!&lt; Prefixing string.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span><span class="kd">::</span> <span class="n">error</span> <span class="c">!&lt; Error trapping flag: 0 no errors, &gt;0 error occurs.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">str</span>   <span class="c">!&lt; String containing input number.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R16P</span><span class="p">),</span>             <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">knd</span>   <span class="c">!&lt; Number kind.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R16P</span><span class="p">)</span><span class="kd">::</span>                          <span class="n">n</span>     <span class="c">!&lt; Number returned.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                        <span class="n">err</span>   <span class="c">!&lt; Error trapping flag: 0 no errors, &gt;0 error occurs.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span><span class="kd">::</span>       <span class="n">prefd</span> <span class="c">!&lt; Prefixing string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">read</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="o">*</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">err</span><span class="p">)</span> <span class="n">n</span> <span class="c">! Casting of str to n.</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">err</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">    write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span>             <span class="s1">&#39;Conversion of string &quot;&#39;</span><span class="o">//</span><span class="n">str</span><span class="o">//</span><span class="s1">&#39;&quot; to real failed&#39;</span>
-    <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A,&#39;</span><span class="o">//</span><span class="n">FR16P</span><span class="o">//</span><span class="s1">&#39;)&#39;</span><span class="p">)</span> <span class="s1">&#39;Kind parameter &#39;</span><span class="p">,</span><span class="n">knd</span>
-    <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span>             <span class="s1">&#39;Function used &quot;ctor_R16P&quot;&#39;</span>
+<span class="k">    </span><span class="n">prefd</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">pref</span><span class="p">))</span> <span class="n">prefd</span> <span class="o">=</span> <span class="n">pref</span>
+    <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A,I1,A)&#39;</span><span class="p">)</span> <span class="n">prefd</span><span class="o">//</span><span class="s1">&#39; Error: conversion of string &quot;&#39;</span><span class="o">//</span><span class="n">str</span><span class="o">//</span><span class="s1">&#39;&quot; to real failed! real(&#39;</span><span class="p">,</span><span class="nb">kind</span><span class="p">(</span><span class="n">knd</span><span class="p">),</span><span class="s1">&#39;)&#39;</span>
   <span class="n">endif</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">error</span><span class="p">))</span> <span class="n">error</span> <span class="o">=</span> <span class="n">err</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">ctor_R16P</span>
 
-  <span class="k">function </span><span class="n">ctor_R8P</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+  <span class="k">function </span><span class="n">ctor_R8P</span><span class="p">(</span><span class="n">pref</span><span class="p">,</span><span class="n">error</span><span class="p">,</span><span class="n">str</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Procedure for converting string to real. This function achieves casting of string to real.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
-<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">str</span> <span class="c">!&lt; String containing input number.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R8P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">knd</span> <span class="c">!&lt; Number kind.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R8P</span><span class="p">)</span><span class="kd">::</span>                <span class="n">n</span>   <span class="c">!&lt; Number returned.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>             <span class="n">err</span> <span class="c">!&lt; Error trapping flag: 0 no errors, &gt;0 error occurs.</span>
+<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">pref</span>  <span class="c">!&lt; Prefixing string.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span><span class="kd">::</span> <span class="n">error</span> <span class="c">!&lt; Error trapping flag: 0 no errors, &gt;0 error occurs.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">str</span>   <span class="c">!&lt; String containing input number.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R8P</span><span class="p">),</span>              <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">knd</span>   <span class="c">!&lt; Number kind.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R8P</span><span class="p">)</span><span class="kd">::</span>                           <span class="n">n</span>     <span class="c">!&lt; Number returned.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                        <span class="n">err</span>   <span class="c">!&lt; Error trapping flag: 0 no errors, &gt;0 error occurs.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span><span class="kd">::</span>       <span class="n">prefd</span> <span class="c">!&lt; Prefixing string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">read</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="o">*</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">err</span><span class="p">)</span> <span class="n">n</span> <span class="c">! Casting of str to n.</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">err</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">    write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span>            <span class="s1">&#39;Conversion of string &quot;&#39;</span><span class="o">//</span><span class="n">str</span><span class="o">//</span><span class="s1">&#39;&quot; to real failed&#39;</span>
-    <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A,&#39;</span><span class="o">//</span><span class="n">FR8P</span><span class="o">//</span><span class="s1">&#39;)&#39;</span><span class="p">)</span> <span class="s1">&#39;Kind parameter &#39;</span><span class="p">,</span><span class="n">knd</span>
-    <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span>            <span class="s1">&#39;Function used &quot;ctor_R8P&quot;&#39;</span>
+<span class="k">    </span><span class="n">prefd</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">pref</span><span class="p">))</span> <span class="n">prefd</span> <span class="o">=</span> <span class="n">pref</span>
+    <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A,I1,A)&#39;</span><span class="p">)</span> <span class="n">prefd</span><span class="o">//</span><span class="s1">&#39; Error: conversion of string &quot;&#39;</span><span class="o">//</span><span class="n">str</span><span class="o">//</span><span class="s1">&#39;&quot; to real failed! real(&#39;</span><span class="p">,</span><span class="nb">kind</span><span class="p">(</span><span class="n">knd</span><span class="p">),</span><span class="s1">&#39;)&#39;</span>
   <span class="n">endif</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">error</span><span class="p">))</span> <span class="n">error</span> <span class="o">=</span> <span class="n">err</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">ctor_R8P</span>
 
-  <span class="k">function </span><span class="n">ctor_R4P</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+  <span class="k">function </span><span class="n">ctor_R4P</span><span class="p">(</span><span class="n">pref</span><span class="p">,</span><span class="n">error</span><span class="p">,</span><span class="n">str</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Procedure for converting string to real. This function achieves casting of string to real.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
-<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">str</span> <span class="c">!&lt; String containing input number.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R4P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">knd</span> <span class="c">!&lt; Number kind.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R4P</span><span class="p">)</span><span class="kd">::</span>                <span class="n">n</span>   <span class="c">!&lt; Number returned.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>             <span class="n">err</span> <span class="c">!&lt; Error trapping flag: 0 no errors, &gt;0 error occurs.</span>
+<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">pref</span>  <span class="c">!&lt; Prefixing string.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span><span class="kd">::</span> <span class="n">error</span> <span class="c">!&lt; Error trapping flag: 0 no errors, &gt;0 error occurs.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">str</span>   <span class="c">!&lt; String containing input number.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R4P</span><span class="p">),</span>              <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">knd</span>   <span class="c">!&lt; Number kind.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R4P</span><span class="p">)</span><span class="kd">::</span>                           <span class="n">n</span>     <span class="c">!&lt; Number returned.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                        <span class="n">err</span>   <span class="c">!&lt; Error trapping flag: 0 no errors, &gt;0 error occurs.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span><span class="kd">::</span>       <span class="n">prefd</span> <span class="c">!&lt; Prefixing string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">read</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="o">*</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">err</span><span class="p">)</span> <span class="n">n</span> <span class="c">! Casting of str to n.</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">err</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">    write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span>            <span class="s1">&#39;Conversion of string &quot;&#39;</span><span class="o">//</span><span class="n">str</span><span class="o">//</span><span class="s1">&#39;&quot; to real failed&#39;</span>
-    <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A,&#39;</span><span class="o">//</span><span class="n">FR4P</span><span class="o">//</span><span class="s1">&#39;)&#39;</span><span class="p">)</span> <span class="s1">&#39;Kind parameter &#39;</span><span class="p">,</span><span class="n">knd</span>
-    <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span>            <span class="s1">&#39;Function used &quot;ctor_R4P&quot;&#39;</span>
+<span class="k">    </span><span class="n">prefd</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">pref</span><span class="p">))</span> <span class="n">prefd</span> <span class="o">=</span> <span class="n">pref</span>
+    <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A,I1,A)&#39;</span><span class="p">)</span> <span class="n">prefd</span><span class="o">//</span><span class="s1">&#39; Error: conversion of string &quot;&#39;</span><span class="o">//</span><span class="n">str</span><span class="o">//</span><span class="s1">&#39;&quot; to real failed! real(&#39;</span><span class="p">,</span><span class="nb">kind</span><span class="p">(</span><span class="n">knd</span><span class="p">),</span><span class="s1">&#39;)&#39;</span>
   <span class="n">endif</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">error</span><span class="p">))</span> <span class="n">error</span> <span class="o">=</span> <span class="n">err</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">ctor_R4P</span>
 
-  <span class="k">function </span><span class="n">ctoi_I8P</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+  <span class="k">function </span><span class="n">ctoi_I8P</span><span class="p">(</span><span class="n">pref</span><span class="p">,</span><span class="n">error</span><span class="p">,</span><span class="n">str</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Procedure for converting string to integer. This function achieves casting of string to integer.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
-<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">str</span> <span class="c">!&lt; String containing input number.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I8P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">knd</span> <span class="c">!&lt; Number kind.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I8P</span><span class="p">)</span><span class="kd">::</span>             <span class="n">n</span>   <span class="c">!&lt; Number returned.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>             <span class="n">err</span> <span class="c">!&lt; Error trapping flag: 0 no errors, &gt;0 error occurs.</span>
+<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">pref</span>  <span class="c">!&lt; Prefixing string.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span><span class="kd">::</span> <span class="n">error</span> <span class="c">!&lt; Error trapping flag: 0 no errors, &gt;0 error occurs.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">str</span>   <span class="c">!&lt; String containing input number.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I8P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">knd</span>   <span class="c">!&lt; Number kind.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I8P</span><span class="p">)</span><span class="kd">::</span>                        <span class="n">n</span>     <span class="c">!&lt; Number returned.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                        <span class="n">err</span>   <span class="c">!&lt; Error trapping flag: 0 no errors, &gt;0 error occurs.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span><span class="kd">::</span>       <span class="n">prefd</span> <span class="c">!&lt; Prefixing string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">read</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="o">*</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">err</span><span class="p">)</span> <span class="n">n</span> <span class="c">! Casting of str to n.</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">err</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">    write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span>            <span class="s1">&#39;Conversion of string &quot;&#39;</span><span class="o">//</span><span class="n">str</span><span class="o">//</span><span class="s1">&#39;&quot; to integer failed&#39;</span>
-    <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A,&#39;</span><span class="o">//</span><span class="n">FI8P</span><span class="o">//</span><span class="s1">&#39;)&#39;</span><span class="p">)</span> <span class="s1">&#39;Kind parameter &#39;</span><span class="p">,</span><span class="n">knd</span>
-    <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span>            <span class="s1">&#39;Function used &quot;ctoi_I8P&quot;&#39;</span>
+<span class="k">    </span><span class="n">prefd</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">pref</span><span class="p">))</span> <span class="n">prefd</span> <span class="o">=</span> <span class="n">pref</span>
+    <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A,I1,A)&#39;</span><span class="p">)</span> <span class="n">prefd</span><span class="o">//</span><span class="s1">&#39; Error: conversion of string &quot;&#39;</span><span class="o">//</span><span class="n">str</span><span class="o">//</span><span class="s1">&#39;&quot; to real failed! integer(&#39;</span><span class="p">,</span><span class="nb">kind</span><span class="p">(</span><span class="n">knd</span><span class="p">),</span><span class="s1">&#39;)&#39;</span>
   <span class="n">endif</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">error</span><span class="p">))</span> <span class="n">error</span> <span class="o">=</span> <span class="n">err</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">ctoi_I8P</span>
 
-  <span class="k">function </span><span class="n">ctoi_I4P</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+  <span class="k">function </span><span class="n">ctoi_I4P</span><span class="p">(</span><span class="n">pref</span><span class="p">,</span><span class="n">error</span><span class="p">,</span><span class="n">str</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Procedure for converting string to integer. This function achieves casting of string to integer.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
-<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">str</span> <span class="c">!&lt; String containing input number.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">knd</span> <span class="c">!&lt; Number kind.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>             <span class="n">n</span>   <span class="c">!&lt; Number returned.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>             <span class="n">err</span> <span class="c">!&lt; Error trapping flag: 0 no errors, &gt;0 error occurs.</span>
+<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">pref</span>  <span class="c">!&lt; Prefixing string.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span><span class="kd">::</span> <span class="n">error</span> <span class="c">!&lt; Error trapping flag: 0 no errors, &gt;0 error occurs.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">str</span>   <span class="c">!&lt; String containing input number.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">knd</span>   <span class="c">!&lt; Number kind.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                        <span class="n">n</span>     <span class="c">!&lt; Number returned.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                        <span class="n">err</span>   <span class="c">!&lt; Error trapping flag: 0 no errors, &gt;0 error occurs.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span><span class="kd">::</span>       <span class="n">prefd</span> <span class="c">!&lt; Prefixing string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">read</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="o">*</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">err</span><span class="p">)</span> <span class="n">n</span> <span class="c">! Casting of str to n.</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">err</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">    write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span>            <span class="s1">&#39;Conversion of string &quot;&#39;</span><span class="o">//</span><span class="n">str</span><span class="o">//</span><span class="s1">&#39;&quot; to integer failed&#39;</span>
-    <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A,&#39;</span><span class="o">//</span><span class="n">FI4P</span><span class="o">//</span><span class="s1">&#39;)&#39;</span><span class="p">)</span> <span class="s1">&#39;Kind parameter &#39;</span><span class="p">,</span><span class="n">knd</span>
-    <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span>            <span class="s1">&#39;Function used &quot;ctoi_I4P&quot;&#39;</span>
+<span class="k">    </span><span class="n">prefd</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">pref</span><span class="p">))</span> <span class="n">prefd</span> <span class="o">=</span> <span class="n">pref</span>
+    <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A,I1,A)&#39;</span><span class="p">)</span> <span class="n">prefd</span><span class="o">//</span><span class="s1">&#39; Error: conversion of string &quot;&#39;</span><span class="o">//</span><span class="n">str</span><span class="o">//</span><span class="s1">&#39;&quot; to real failed! integer(&#39;</span><span class="p">,</span><span class="nb">kind</span><span class="p">(</span><span class="n">knd</span><span class="p">),</span><span class="s1">&#39;)&#39;</span>
   <span class="n">endif</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">error</span><span class="p">))</span> <span class="n">error</span> <span class="o">=</span> <span class="n">err</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">ctoi_I4P</span>
 
-  <span class="k">function </span><span class="n">ctoi_I2P</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+  <span class="k">function </span><span class="n">ctoi_I2P</span><span class="p">(</span><span class="n">pref</span><span class="p">,</span><span class="n">error</span><span class="p">,</span><span class="n">str</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Procedure for converting string to integer. This function achieves casting of string to integer.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
-<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">str</span> <span class="c">!&lt; String containing input number.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I2P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">knd</span> <span class="c">!&lt; Number kind.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I2P</span><span class="p">)</span><span class="kd">::</span>             <span class="n">n</span>   <span class="c">!&lt; Number returned.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>             <span class="n">err</span> <span class="c">!&lt; Error trapping flag: 0 no errors, &gt;0 error occurs.</span>
+<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">pref</span>  <span class="c">!&lt; Prefixing string.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span><span class="kd">::</span> <span class="n">error</span> <span class="c">!&lt; Error trapping flag: 0 no errors, &gt;0 error occurs.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">str</span>   <span class="c">!&lt; String containing input number.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I2P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">knd</span>   <span class="c">!&lt; Number kind.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I2P</span><span class="p">)</span><span class="kd">::</span>                        <span class="n">n</span>     <span class="c">!&lt; Number returned.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                        <span class="n">err</span>   <span class="c">!&lt; Error trapping flag: 0 no errors, &gt;0 error occurs.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span><span class="kd">::</span>       <span class="n">prefd</span> <span class="c">!&lt; Prefixing string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">read</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="o">*</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">err</span><span class="p">)</span> <span class="n">n</span> <span class="c">! Casting of str to n.</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">err</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">    write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span>            <span class="s1">&#39;Conversion of string &quot;&#39;</span><span class="o">//</span><span class="n">str</span><span class="o">//</span><span class="s1">&#39;&quot; to integer failed&#39;</span>
-    <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A,&#39;</span><span class="o">//</span><span class="n">FI2P</span><span class="o">//</span><span class="s1">&#39;)&#39;</span><span class="p">)</span> <span class="s1">&#39;Kind parameter &#39;</span><span class="p">,</span><span class="n">knd</span>
-    <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span>            <span class="s1">&#39;Function used &quot;ctoi_I2P&quot;&#39;</span>
+<span class="k">    </span><span class="n">prefd</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">pref</span><span class="p">))</span> <span class="n">prefd</span> <span class="o">=</span> <span class="n">pref</span>
+    <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A,I1,A)&#39;</span><span class="p">)</span> <span class="n">prefd</span><span class="o">//</span><span class="s1">&#39; Error: conversion of string &quot;&#39;</span><span class="o">//</span><span class="n">str</span><span class="o">//</span><span class="s1">&#39;&quot; to real failed! integer(&#39;</span><span class="p">,</span><span class="nb">kind</span><span class="p">(</span><span class="n">knd</span><span class="p">),</span><span class="s1">&#39;)&#39;</span>
   <span class="n">endif</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">error</span><span class="p">))</span> <span class="n">error</span> <span class="o">=</span> <span class="n">err</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">ctoi_I2P</span>
 
-  <span class="k">function </span><span class="n">ctoi_I1P</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+  <span class="k">function </span><span class="n">ctoi_I1P</span><span class="p">(</span><span class="n">pref</span><span class="p">,</span><span class="n">error</span><span class="p">,</span><span class="n">str</span><span class="p">,</span><span class="n">knd</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Procedure for converting string to integer. This function achieves casting of string to integer.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">implicit none</span>
-<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">str</span> <span class="c">!&lt; String containing input number.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I1P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">knd</span> <span class="c">!&lt; Number kind.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I1P</span><span class="p">)</span><span class="kd">::</span>             <span class="n">n</span>   <span class="c">!&lt; Number returned.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>             <span class="n">err</span> <span class="c">!&lt; Error trapping flag: 0 no errors, &gt;0 error occurs.</span>
+<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">pref</span>  <span class="c">!&lt; Prefixing string.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span><span class="kd">::</span> <span class="n">error</span> <span class="c">!&lt; Error trapping flag: 0 no errors, &gt;0 error occurs.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">str</span>   <span class="c">!&lt; String containing input number.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I1P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span>  <span class="n">knd</span>   <span class="c">!&lt; Number kind.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I1P</span><span class="p">)</span><span class="kd">::</span>                        <span class="n">n</span>     <span class="c">!&lt; Number returned.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                        <span class="n">err</span>   <span class="c">!&lt; Error trapping flag: 0 no errors, &gt;0 error occurs.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span><span class="kd">::</span>       <span class="n">prefd</span> <span class="c">!&lt; Prefixing string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">read</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="o">*</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">err</span><span class="p">)</span> <span class="n">n</span> <span class="c">! Casting of str to n.</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">err</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">    write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span>            <span class="s1">&#39;Conversion of string &quot;&#39;</span><span class="o">//</span><span class="n">str</span><span class="o">//</span><span class="s1">&#39;&quot; to integer failed&#39;</span>
-    <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A,&#39;</span><span class="o">//</span><span class="n">FI1P</span><span class="o">//</span><span class="s1">&#39;)&#39;</span><span class="p">)</span> <span class="s1">&#39;Kind parameter &#39;</span><span class="p">,</span><span class="n">knd</span>
-    <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span>            <span class="s1">&#39;Function used &quot;ctoi_I1P&quot;&#39;</span>
+<span class="k">    </span><span class="n">prefd</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">pref</span><span class="p">))</span> <span class="n">prefd</span> <span class="o">=</span> <span class="n">pref</span>
+    <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A,I1,A)&#39;</span><span class="p">)</span> <span class="n">prefd</span><span class="o">//</span><span class="s1">&#39; Error: conversion of string &quot;&#39;</span><span class="o">//</span><span class="n">str</span><span class="o">//</span><span class="s1">&#39;&quot; to real failed! integer(&#39;</span><span class="p">,</span><span class="nb">kind</span><span class="p">(</span><span class="n">knd</span><span class="p">),</span><span class="s1">&#39;)&#39;</span>
   <span class="n">endif</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">error</span><span class="p">))</span> <span class="n">error</span> <span class="o">=</span> <span class="n">err</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">ctoi_I1P</span>

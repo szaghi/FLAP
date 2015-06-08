@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	 
-	 <meta name="description" content="<p>Fortran command Line Arguments Parser for poor men</p>">
+	 <meta name="description" content="<p>Fortran command Line Arguments Parser for poor people</p>">
     
     <meta name="author" content="Chris MacMackin" >
     <link rel="icon" href="../favicon.png">
@@ -48,7 +48,8 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            
+				
+                
             <li><a href="../lists/files.html">Source Files</a></li>
 				
 				
@@ -57,12 +58,12 @@
 				
             <li><a href="../lists/procedures.html">Procedures</a></li>
 				
-				
+								
             <li><a href="../lists/types.html">Derived Types</a></li>
 				
 				
-            <li><a href="../program/flap_test.html">Program</a></li>
-								
+            <li><a href="../lists/programs.html">Programs</a></li>
+				
           </ul>
         <form action="../search.html" class="navbar-form navbar-right" role="search">
         <div class="form-group">
@@ -86,24 +87,21 @@
     </h1>
 	 
 <div class="row">
-<div class="col-lg-7">
+<div class="col-lg-12">
 <div class="well well-sm">
-  <ul class="list-inline" style="margin-bottom:0px">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
      
      
      
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/IR_Precision.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/IR_Precision.F90"> Source File</a></li>
      
   </ul>
-  </div>
-  </div>
-  <div class="col-lg-5">
-  <ol class="breadcrumb hierarchy text-right">
+  <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/ir_precision.f90.html'>IR_Precision.f90</a></li>
+     <li><a href='../sourcefile/ir_precision.f90.html'>IR_Precision.F90</a></li>
   
      <li><a href='../module/ir_precision.html'>IR_Precision</a></li>
   
@@ -128,7 +126,9 @@
   
   
   
-  <hr>
+  
+  
+  
   
   <div class="panel panel-default">
     <div class="panel-heading text-left"><h3 class="panel-title">All Procedures</h3></div>
@@ -136,11 +136,17 @@
       
       <a class="list-group-item" href="../proc/add.html">add</a>
       
-      <a class="list-group-item" href="../proc/add_signature.html">add_signature</a>
+      <a class="list-group-item" href="../proc/add_cla_clasg.html">add_cla_clasg</a>
+      
+      <a class="list-group-item" href="../proc/add_group.html">add_group</a>
       
       <a class="list-group-item" href="../proc/assign_cla.html">assign_cla</a>
       
+      <a class="list-group-item" href="../proc/assign_clasg.html">assign_clasg</a>
+      
       <a class="list-group-item" href="../proc/assign_cli.html">assign_cli</a>
+      
+      <a class="list-group-item" href="../proc/assign_object.html">assign_object</a>
       
       <a class="list-group-item" href="../proc/bctoi_i1p.html">bctoi_I1P</a>
       
@@ -200,17 +206,23 @@
       
       <a class="list-group-item" href="../proc/byte_size_r8p.html">byte_size_R8P</a>
       
+      <a class="list-group-item" href="../proc/called_group.html">called_group</a>
+      
       <a class="list-group-item" href="../proc/check.html">check</a>
       
       <a class="list-group-item" href="../proc/check_choices_cla.html">check_choices_cla</a>
       
       <a class="list-group-item" href="../proc/check_cla.html">check_cla</a>
       
+      <a class="list-group-item" href="../proc/check_clasg.html">check_clasg</a>
+      
       <a class="list-group-item" href="../proc/check_endian.html">check_endian</a>
       
-      <a class="list-group-item" href="../interface/count.html">count</a>
+      <a class="list-group-item" href="../proc/check_m_exclusive.html">check_m_exclusive</a>
       
-      <a class="list-group-item" href="../proc/count_substring.html">count_substring</a>
+      <a class="list-group-item" href="../proc/check_m_exclusive_clasg.html">check_m_exclusive_clasg</a>
+      
+      <a class="list-group-item" href="../proc/check_required_clasg.html">check_required_clasg</a>
       
       <a class="list-group-item" href="../proc/ctoi_i1p.html">ctoi_I1P</a>
       
@@ -228,7 +240,11 @@
       
       <a class="list-group-item" href="../proc/ctor_r8p.html">ctor_R8P</a>
       
-      <a class="list-group-item" href="../proc/delete.html">delete</a>
+      <a class="list-group-item" href="../proc/defined.html">defined</a>
+      
+      <a class="list-group-item" href="../proc/defined_clasg.html">defined_clasg</a>
+      
+      <a class="list-group-item" href="../proc/defined_group.html">defined_group</a>
       
       <a class="list-group-item" href="../interface/digit.html">digit</a>
       
@@ -240,17 +256,25 @@
       
       <a class="list-group-item" href="../proc/digit_i8.html">digit_I8</a>
       
-      <a class="list-group-item" href="../proc/dir_not_found.html">Dir_Not_Found</a>
-      
-      <a class="list-group-item" href="../proc/file_not_found.html">File_Not_Found</a>
+      <a class="list-group-item" href="../proc/errored.html">errored</a>
       
       <a class="list-group-item" href="../proc/finalize.html">finalize</a>
       
       <a class="list-group-item" href="../proc/finalize_cla.html">finalize_cla</a>
       
+      <a class="list-group-item" href="../proc/finalize_clasg.html">finalize_clasg</a>
+      
       <a class="list-group-item" href="../proc/free.html">free</a>
       
       <a class="list-group-item" href="../proc/free_cla.html">free_cla</a>
+      
+      <a class="list-group-item" href="../proc/free_clasg.html">free_clasg</a>
+      
+      <a class="list-group-item" href="../proc/free_object.html">free_object</a>
+      
+      <a class="list-group-item" href="../proc/get_args_from_invocation.html">get_args_from_invocation</a>
+      
+      <a class="list-group-item" href="../proc/get_args_from_string.html">get_args_from_string</a>
       
       <a class="list-group-item" href="../proc/get_cla.html">get_cla</a>
       
@@ -260,17 +284,9 @@
       
       <a class="list-group-item" href="../proc/get_cla_list_cli.html">get_cla_list_cli</a>
       
-      <a class="list-group-item" href="../proc/get_extension.html">get_extension</a>
-      
-      <a class="list-group-item" href="../proc/get_unit.html">Get_Unit</a>
+      <a class="list-group-item" href="../proc/get_clasg_indexes.html">get_clasg_indexes</a>
       
       <a class="list-group-item" href="../proc/init.html">init</a>
-      
-      <a class="list-group-item" href="../proc/inquire_dir.html">inquire_dir</a>
-      
-      <a class="list-group-item" href="../proc/inquire_file.html">inquire_file</a>
-      
-      <a class="list-group-item" href="../proc/insert.html">insert</a>
       
       <a class="list-group-item" href="../proc/ir_init.html">IR_init</a>
       
@@ -278,25 +294,45 @@
       
       <a class="list-group-item" href="../proc/is_little_endian.html">is_little_endian</a>
       
-      <a class="list-group-item" href="../proc/lc_file.html">lc_file</a>
-      
-      <a class="list-group-item" href="../proc/lower_case.html">Lower_Case</a>
-      
       <a class="list-group-item" href="../proc/parse.html">parse</a>
+      
+      <a class="list-group-item" href="../proc/parse_clasg.html">parse_clasg</a>
       
       <a class="list-group-item" href="../proc/passed.html">passed</a>
       
-      <a class="list-group-item" href="../proc/print_cla.html">print_cla</a>
+      <a class="list-group-item" href="../proc/passed_clasg.html">passed_clasg</a>
       
-      <a class="list-group-item" href="../proc/re_match.html">re_match</a>
+      <a class="list-group-item" href="../proc/print_usage.html">print_usage</a>
       
-      <a class="list-group-item" href="../proc/read_file_as_stream.html">read_file_as_stream</a>
+      <a class="list-group-item" href="../proc/print_version.html">print_version</a>
       
-      <a class="list-group-item" href="../proc/replace.html">replace</a>
+      <a class="list-group-item" href="../proc/save_man_page.html">save_man_page</a>
       
-      <a class="list-group-item" href="../proc/set_extension.html">set_extension</a>
+      <a class="list-group-item" href="../proc/set_mutually_exclusive_groups.html">set_mutually_exclusive_groups</a>
+      
+      <a class="list-group-item" href="../proc/signature.html">signature</a>
+      
+      <a class="list-group-item" href="../proc/signature_cla.html">signature_cla</a>
+      
+      <a class="list-group-item" href="../proc/signature_clasg.html">signature_clasg</a>
       
       <a class="list-group-item" href="../interface/str.html">str</a>
+      
+      <a class="list-group-item" href="../proc/str_a_i1p.html">str_a_I1P</a>
+      
+      <a class="list-group-item" href="../proc/str_a_i2p.html">str_a_I2P</a>
+      
+      <a class="list-group-item" href="../proc/str_a_i4p.html">str_a_I4P</a>
+      
+      <a class="list-group-item" href="../proc/str_a_i8p.html">str_a_I8P</a>
+      
+      <a class="list-group-item" href="../proc/str_a_r16p.html">str_a_R16P</a>
+      
+      <a class="list-group-item" href="../proc/str_a_r4p.html">str_a_R4P</a>
+      
+      <a class="list-group-item" href="../proc/str_a_r8p.html">str_a_R8P</a>
+      
+      <a class="list-group-item" href="../proc/str_bol.html">str_bol</a>
       
       <a class="list-group-item" href="../proc/str_i1p.html">str_I1P</a>
       
@@ -336,13 +372,15 @@
       
       <a class="list-group-item" href="../proc/strz_i8p.html">strz_I8P</a>
       
-      <a class="list-group-item" href="../proc/tags_match.html">tags_match</a>
-      
       <a class="list-group-item" href="../proc/tokenize.html">tokenize</a>
       
-      <a class="list-group-item" href="../proc/unique.html">unique</a>
-      
       <a class="list-group-item" href="../proc/upper_case.html">Upper_Case</a>
+      
+      <a class="list-group-item" href="../proc/usage.html">usage</a>
+      
+      <a class="list-group-item" href="../proc/usage_cla.html">usage_cla</a>
+      
+      <a class="list-group-item" href="../proc/usage_clasg.html">usage_clasg</a>
       
     </div>
   </div>
@@ -352,7 +390,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-private  function strf_R8P(fm, n)
+private elemental function strf_R8P(fm, n)
 </h2>
     
   
@@ -422,6 +460,8 @@ private  function strf_R8P(fm, n)
     <br>
     
     
+    
+
     
     
     

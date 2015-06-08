@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	 
-	 <meta name="description" content="<p>Fortran command Line Arguments Parser for poor men</p>">
+	 <meta name="description" content="<p>Fortran command Line Arguments Parser for poor people</p>">
     
     <meta name="author" content="Chris MacMackin" >
     <link rel="icon" href="./favicon.png">
@@ -48,7 +48,8 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            
+				
+                
             <li><a href="./lists/files.html">Source Files</a></li>
 				
 				
@@ -57,12 +58,12 @@
 				
             <li><a href="./lists/procedures.html">Procedures</a></li>
 				
-				
+								
             <li><a href="./lists/types.html">Derived Types</a></li>
 				
 				
-            <li><a href="./program/flap_test.html">Program</a></li>
-								
+            <li><a href="./lists/programs.html">Programs</a></li>
+				
           </ul>
         <form action="./search.html" class="navbar-form navbar-right" role="search">
         <div class="form-group">
@@ -80,7 +81,7 @@
     
       <!-- Main component for a primary marketing message or call to action -->
       <div class="jumbotron">
-        <p>Fortran command Line Arguments Parser for poor men</p>
+        <p>Fortran command Line Arguments Parser for poor people</p>
         	 
 	<p> Find us on&hellip;</p>
         <p>
@@ -102,9 +103,14 @@
           <h1>FLAP</h1>
           <p><a name="top"></a></p>
 <h1>FLAP <a href=""><img alt="GitHub tag" src="https://img.shields.io/github/tag/szaghi/FLAP.svg"></a></h1>
-<p><a href=""><img alt="License" src="https://img.shields.io/badge/license-GNU%20GeneraL%20Public%20License%20v3%20,%20GPLv3-blue.svg"></a></p>
-<p><a href=""><img alt="Status" src="https://img.shields.io/badge/status-stable-brightgreen.svg"></a></p>
-<h3>FLAP, Fortran command Line Arguments Parser for poor men</h3>
+<p><a href=""><img alt="License" src="https://img.shields.io/badge/license-GNU%20GeneraL%20Public%20License%20v3,%20GPLv3-blue.svg"></a>
+<a href=""><img alt="License" src="https://img.shields.io/badge/license-BSD2-red.svg"></a>
+<a href=""><img alt="License" src="https://img.shields.io/badge/license-BSD3-red.svg"></a>
+<a href=""><img alt="License" src="https://img.shields.io/badge/license-MIT-red.svg"></a></p>
+<p><a href=""><img alt="Status" src="https://img.shields.io/badge/status-stable-brightgreen.svg"></a>
+<a href="https://travis-ci.org/szaghi/FLAP"><img alt="Build Status" src="https://travis-ci.org/szaghi/FLAP.svg?branch=master"></a>
+<a href="https://coveralls.io/r/szaghi/FLAP?branch=master"><img alt="Coverage Status" src="https://coveralls.io/repos/szaghi/FLAP/badge.svg?branch=master"></a></p>
+<h3>FLAP, Fortran command Line Arguments Parser for poor people</h3>
 <p>A KISS pure Fortran Library for building powerful, easy-to-use, elegant command line interfaces</p>
 <ul>
 <li>FLAP is a pure Fortran (KISS) library for building easily nice Command Line Interfaces (CLI) for modern Fortran projects;</li>
@@ -112,18 +118,26 @@
 <li>FLAP is OOP designed;</li>
 <li>FLAP is a Free, Open Source Project.</li>
 </ul>
+<h4>Table of Contents</h4>
+<ul>
+<li><a href="#what-is-flap">What is FLAP?</a></li>
+<li><a href="#main-features">Main features</a></li>
+<li><a href="#copyrights">Copyrights</a></li>
+<li><a href="#documentation">Documentation</a></li>
+<li><a href="#a-taste-of-flap">A Taste of FLAP</a></li>
+</ul>
 <h4>Issues</h4>
 <p><a href=""><img alt="GitHub issues" src="https://img.shields.io/github/issues/szaghi/FLAP.svg"></a>
 <a href="https://waffle.io/szaghi/FLAP"><img alt="Ready in backlog" src="https://badge.waffle.io/szaghi/FLAP.png?label=ready&amp;title=Ready"></a>
 <a href="https://waffle.io/szaghi/FLAP"><img alt="In Progress" src="https://badge.waffle.io/szaghi/FLAP.png?label=in%20progress&amp;title=In%20Progress"></a>
 <a href="https://waffle.io/szaghi/FLAP"><img alt="Open bugs" src="https://badge.waffle.io/szaghi/FLAP.png?label=bug&amp;title=Open%20Bugs"></a></p>
 <h4>Compiler Support</h4>
-<p><a href=""><img alt="Compiler" src="https://img.shields.io/badge/GNU%20Gfortran%20Compiler-build%20fail%20with%20v4.9.x-orange.svg"></a></p>
-<p><a href=""><img alt="Compiler" src="https://img.shields.io/badge/Intel%20Fortran%20Compiler-build%20pass%20with%20v12.x+-brightgreen.svg"></a></p>
-<p><a href=""><img alt="Compiler" src="https://img.shields.io/badge/IBM%20XL%20Fortran%20Compiler-not%20tested-yellow.svg"></a></p>
-<p><a href=""><img alt="Compiler" src="https://img.shields.io/badge/g95%20Fortran%20Compiler-not%20tested-yellow.svg"></a></p>
-<p><a href=""><img alt="Compiler" src="https://img.shields.io/badge/NAG%20Fortran%20Compiler-not%20tested-yellow.svg"></a></p>
-<p><a href=""><img alt="Compiler" src="https://img.shields.io/badge/PGI%20Fortran%20Compiler-not%20tested-yellow.svg"></a></p>
+<p><a href=""><img alt="Compiler" src="https://img.shields.io/badge/GNU-pass%20(v4.9.2+">-brightgreen.svg)</a>
+<a href=""><img alt="Compiler" src="https://img.shields.io/badge/Intel-pass%20(v12.x+">-brightgreen.svg)</a>
+<a href=""><img alt="Compiler" src="https://img.shields.io/badge/IBM%20XL-not%20tested-yellow.svg"></a>
+<a href=""><img alt="Compiler" src="https://img.shields.io/badge/g95-not%20tested-yellow.svg"></a>
+<a href=""><img alt="Compiler" src="https://img.shields.io/badge/NAG-not%20tested-yellow.svg"></a>
+<a href=""><img alt="Compiler" src="https://img.shields.io/badge/PGI-not%20tested-yellow.svg"></a></p>
 <h2>What is FLAP?</h2>
 <p>Modern Fortran standards (2003+) have introduced support for Command Line Arguments (CLA), thus it is possible to construct nice and effective Command Line Interfaces (CLI). FLAP is a small library designed to simplify the (repetitive) construction of complicated CLI in pure Fortran (standard 2003+). FLAP has been inspired by the python module <em>argparse</em> trying to mimic it. Once you have defined the arguments that are required by means of a user-friendly method of the CLI, FLAP will parse the CLAs for you. It is worthy of note that FLAP, as <em>argparse</em>, also automatically generates help and usage messages and issues errors when users give the program invalid arguments.</p>
 <p>Go to <a href="#top">Top</a></p>
@@ -131,110 +145,352 @@
 <p>FLAP is inspired by the python great module <em>argparse</em>, thus many features are taken from it. Here the main features are listed.</p>
 <ul class="checklist">
 <li><input type="checkbox" disabled checked> User-friendly methods for building flexible and effective Command Line Interfaces (CLI);</li>
-<li><input type="checkbox" disabled checked> comprehensive Command Line Arguments (CLA) support:<ul class="checklist">
+<li><input type="checkbox" disabled checked> comprehensive Command Line Arguments (CLA) support:</li>
 <li><input type="checkbox" disabled checked> support optional and non optional CLA;</li>
 <li><input type="checkbox" disabled checked> support boolean CLA;</li>
 <li><input type="checkbox" disabled checked> support positional CLA;</li>
 <li><input type="checkbox" disabled checked> support list of allowable values for defined CLA with automatic consistency check;</li>
 <li><input type="checkbox" disabled checked> support multiple valued (list of values) CLA;</li>
+<li><input type="checkbox" disabled checked> support mutually exclusive CLAs;</li>
 <li><input type="checkbox" disabled checked> self-consistency-check of CLA definition;</li>
-</ul>
-</li>
+<li><input type="checkbox" disabled checked> support fake CLAs input from a string;</li>
+<li><input type="checkbox" disabled checked> support fake CLAs input from environment variables;</li>
+<li><input type="checkbox" disabled checked> comprehensive <em>command</em> (group of CLAs) support:</li>
+<li><input type="checkbox" disabled checked> support nested subcommands;</li>
+<li><input type="checkbox" disabled checked> support mutually exclusive commands;</li>
+<li><input type="checkbox" disabled checked> self-consistency-check of command definition;</li>
 <li><input type="checkbox" disabled checked> automatic generation of help and usage messages;</li>
 <li><input type="checkbox" disabled checked> consistency-check of whole CLI definition;</li>
 <li><input type="checkbox" disabled checked> errors trapping for invalid CLI usage;</li>
+<li><input type="checkbox" disabled checked> POSIX style compliant;</li>
+<li><input type="checkbox" disabled checked> automatic generation of MAN PAGE using your CLI definition!;</li>
 <li><input type="checkbox" disabled> replicate all the useful features of <em>argparse</em>;</li>
 <li><input type="checkbox" disabled> implement <a href="https://github.com/docopt/docopt">docopt</a> features.</li>
+<li><input type="checkbox" disabled> implement <a href="http://click.pocoo.org/4/">click</a> features.</li>
 </ul>
 <p>Any feature request is welcome.</p>
 <p>Go to <a href="#top">Top</a></p>
 <h2>Copyrights</h2>
-<p>FLAP is an open source project, it is distributed under the <a href="http://www.gnu.org/licenses/gpl-3.0.html">GPL v3</a>. Anyone is interest to use, to develop or to contribute to FLAP is welcome.</p>
+<p>FLAP is an open source project, it is distributed under a multi-licensing system:</p>
+<ul>
+<li>for FOSS projects:</li>
+<li><a href="http://www.gnu.org/licenses/gpl-3.0.html">GPL v3</a>;</li>
+<li>for closed source/commercial projects:</li>
+<li><a href="http://opensource.org/licenses/BSD-2-Clause">BSD 2-Clause</a>;</li>
+<li><a href="http://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause</a>;</li>
+<li><a href="http://opensource.org/licenses/MIT">MIT</a>.</li>
+</ul>
+<p>Anyone is interest to use, to develop or to contribute to FLAP is welcome, feel free to select the license that best matches your soul!</p>
+<p>More details can be found on <a href="https://github.com/szaghi/FLAP/wiki/Copyrights">wiki</a>.</p>
 <p>Go to <a href="#top">Top</a></p>
 <h2>Documentation</h2>
 <p>Besides this README file the FLAP documentation is contained into its own <a href="https://github.com/szaghi/FLAP/wiki">wiki</a>. Detailed documentation of the API is contained into the <a href="http://szaghi.github.io/FLAP/index.html">GitHub Pages</a> that can also be created locally by means of <a href="https://github.com/cmacmackin/ford">ford tool</a>.</p>
 <h3>A Taste of FLAP</h3>
-<p>Running the provided test program, <code>flap_test -h</code>, a taste of FLAP is served:</p>
-<div class="codehilite"><pre>+--&gt; flap_test, a testing program <span class="k">for</span> FLAP library
-+--&gt; Parsing Command Line Arguments
-<span class="p">|</span>--&gt; The Command Line Interface <span class="o">(</span>CLI<span class="o">)</span> has the following options
-<span class="p">|</span>--&gt;   flap_test  <span class="o">[</span>value<span class="o">]</span> --string value <span class="o">[</span>--integer value<span class="o">]</span> <span class="o">[</span>--real value<span class="o">]</span> <span class="o">[</span>--boolean<span class="o">]</span> <span class="o">[</span>--boolean_val value<span class="o">]</span> <span class="o">[</span>--integer_list value#1 value#2 value#3<span class="o">]</span> <span class="o">[</span>--help<span class="o">]</span> <span class="o">[</span>--version<span class="o">]</span>
-<span class="p">|</span>--&gt; Each Command Line Argument <span class="o">(</span>CLA<span class="o">)</span> has the following meaning:
-<span class="p">|</span>--&gt;   <span class="o">[</span>value<span class="o">]</span>
-<span class="p">|</span>--&gt;     Positional real input
-<span class="p">|</span>--&gt;     It is a positional CLA having position <span class="s2">&quot;1-th&quot;</span>
-<span class="p">|</span>--&gt;     It is a optional CLA which default value is <span class="s2">&quot;1.0&quot;</span>
-<span class="p">|</span>--&gt;   <span class="o">[</span>--string value<span class="o">]</span> or <span class="o">[</span>-s value<span class="o">]</span>
-<span class="p">|</span>--&gt;     String input
-<span class="p">|</span>--&gt;     It is a non optional CLA thus must be passed to CLI
-<span class="p">|</span>--&gt;   <span class="o">[</span>--integer value<span class="o">]</span> or <span class="o">[</span>-i value<span class="o">]</span> with value chosen in: <span class="o">(</span>1,3,5<span class="o">)</span>
-<span class="p">|</span>--&gt;     Integer input with fixed range
-<span class="p">|</span>--&gt;     It is a optional CLA which default value is <span class="s2">&quot;1&quot;</span>
-<span class="p">|</span>--&gt;   <span class="o">[</span>--real value<span class="o">]</span> or <span class="o">[</span>-r value<span class="o">]</span>
-<span class="p">|</span>--&gt;     Real input
-<span class="p">|</span>--&gt;     It is a optional CLA which default value is <span class="s2">&quot;1.0&quot;</span>
-<span class="p">|</span>--&gt;   <span class="o">[</span>--boolean<span class="o">]</span> or <span class="o">[</span>-b<span class="o">]</span>
-<span class="p">|</span>--&gt;     Boolean input
-<span class="p">|</span>--&gt;     It is a optional CLA which default value is <span class="s2">&quot;.false.&quot;</span>
-<span class="p">|</span>--&gt;   <span class="o">[</span>--boolean_val value<span class="o">]</span> or <span class="o">[</span>-bv value<span class="o">]</span>
-<span class="p">|</span>--&gt;     Valued boolean input
-<span class="p">|</span>--&gt;     It is a optional CLA which default value is <span class="s2">&quot;.true.&quot;</span>
-<span class="p">|</span>--&gt;   <span class="o">[</span>--integer_list value#1 value#2 value#3<span class="o">]</span> or <span class="o">[</span>-il value#1 value#2 value#3<span class="o">]</span>
-<span class="p">|</span>--&gt;     Integer list input
-<span class="p">|</span>--&gt;     It is a optional CLA which default value is <span class="s2">&quot;1 8 32&quot;</span>
-<span class="p">|</span>--&gt;   <span class="o">[</span>--help<span class="o">]</span> or <span class="o">[</span>-h<span class="o">]</span>
-<span class="p">|</span>--&gt;     Print this <span class="nb">help </span>message
-<span class="p">|</span>--&gt;     It is a optional CLA
-<span class="p">|</span>--&gt;   <span class="o">[</span>--version<span class="o">]</span> or <span class="o">[</span>-v<span class="o">]</span>
-<span class="p">|</span>--&gt;     Print version
-<span class="p">|</span>--&gt;     It is a optional CLA
-<span class="p">|</span>--&gt; Usage examples:
-<span class="p">|</span>--&gt;   -<span class="o">)</span> flap_test -s <span class="s1">&#39;Hello FLAP&#39;</span>
-<span class="p">|</span>--&gt;   -<span class="o">)</span> flap_test -s <span class="s1">&#39;Hello FLAP&#39;</span> -i -2 <span class="c"># printing error...</span>
-<span class="p">|</span>--&gt;   -<span class="o">)</span> flap_test -s <span class="s1">&#39;Hello FLAP&#39;</span> -i <span class="m">3</span> -r 33.d0
-<span class="p">|</span>--&gt;   -<span class="o">)</span> flap_test -s <span class="s1">&#39;Hello FLAP&#39;</span> -integer_list <span class="m">10</span> -3 87
-<span class="p">|</span>--&gt;   -<span class="o">)</span> flap_test 33.0 -s <span class="s1">&#39;Hello FLAP&#39;</span> -i 5
-<span class="p">|</span>--&gt;   -<span class="o">)</span> flap_test -string <span class="s1">&#39;Hello FLAP&#39;</span> -boolean
+<p>Running the provided test program, <code>Test_Driver -h</code>, a taste of FLAP is served:</p>
+<div class="codehilite"><pre>usage:  Test_Driver [value] --string value [--integer value] [--real value] [--boolean] [--boolean_val value] [--integer_list value#1 value#2 value#3] [--help] [--version]
+
+Toy program for testing FLAP
+
+Required switches:
+   --string value, -s value
+          String input
+
+Optional switches:
+   value
+          1-th argument
+          default value 1.0
+          Positional real input
+   --integer value, -i value, value in: (1,3,5)
+          default value 1
+          Integer input with fixed range
+   --real value, -r value
+          default value 1.0
+          Real input
+   --boolean, -b
+          default value .false.
+          Boolean input
+   --boolean_val value, -bv value
+          default value .true.
+          Valued boolean input
+   --integer_list value#1 value#2 value#3, -il value#1 value#2 value#3
+          default value 1 8 32
+          Integer list input
+   --help, -h
+          Print this help message
+   --version, -v
+          Print version
+
+Examples:
+   Test_Driver -s &#39;Hello FLAP&#39;
+   Test_Driver -s &#39;Hello FLAP&#39; -i -2 # printing error...
+   Test_Driver -s &#39;Hello FLAP&#39; -i 3 -r 33.d0
+   Test_Driver -s &#39;Hello FLAP&#39; --integer_list 10 -3 87
+   Test_Driver 33.0 -s &#39;Hello FLAP&#39; -i 5
+   Test_Driver --string &#39;Hello FLAP&#39; --boolean
 </pre></div>
 
 
 <p>Not so bad for just a very few statements as the following:</p>
-<div class="codehilite"><pre><span class="p">...</span>
-<span class="k">write</span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="s1">&#39;+--&gt; flap_test, a testing program for FLAP library&#39;</span>
-<span class="c">! initializing CLI</span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span><span class="o">=</span><span class="s1">&#39;flap_test&#39;</span><span class="p">,</span>                                           <span class="p">&amp;</span>
-              <span class="n">version</span> <span class="o">=</span><span class="s1">&#39;v0.0.1&#39;</span><span class="p">,</span>                                              <span class="p">&amp;</span>
-              <span class="n">examples</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;flap_test -s &#39;Hello FLAP&#39;                          &quot;</span><span class="p">,&amp;</span>
-                        <span class="s2">&quot;flap_test -s &#39;Hello FLAP&#39; -i -2 # printing error...&quot;</span><span class="p">,&amp;</span>
-                        <span class="s2">&quot;flap_test -s &#39;Hello FLAP&#39; -i 3 -r 33.d0            &quot;</span><span class="p">,&amp;</span>
-                        <span class="s2">&quot;flap_test -s &#39;Hello FLAP&#39; -integer_list 10 -3 87   &quot;</span><span class="p">,&amp;</span>
-                        <span class="s2">&quot;flap_test 33.0 -s &#39;Hello FLAP&#39; -i 5                &quot;</span><span class="p">,&amp;</span>
-                        <span class="s2">&quot;flap_test -string &#39;Hello FLAP&#39; -boolean            &quot;</span><span class="p">])</span>
-<span class="c">! setting CLAs</span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="s1">&#39;|--&gt;&#39;</span><span class="p">,</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--string&#39;</span><span class="p">,</span>      <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;String input&#39;</span><span class="p">,</span>                  <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span>                                  <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="s1">&#39;|--&gt;&#39;</span><span class="p">,</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--integer&#39;</span><span class="p">,</span>     <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-i&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Integer input with fixed range&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span>          <span class="n">def</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">,</span><span class="n">choices</span><span class="o">=</span><span class="s1">&#39;1,3,5&#39;</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="s1">&#39;|--&gt;&#39;</span><span class="p">,</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--real&#39;</span><span class="p">,</span>        <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Real input&#39;</span><span class="p">,</span>                    <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span>          <span class="n">def</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span>              <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="s1">&#39;|--&gt;&#39;</span><span class="p">,</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--boolean&#39;</span><span class="p">,</span>     <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-b&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Boolean input&#39;</span><span class="p">,</span>                 <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>     <span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">,</span>          <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="s1">&#39;|--&gt;&#39;</span><span class="p">,</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--boolean_val&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-bv&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Valued boolean input&#39;</span><span class="p">,</span>          <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span>          <span class="n">def</span><span class="o">=</span><span class="s1">&#39;.true.&#39;</span><span class="p">,</span>           <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="s1">&#39;|--&gt;&#39;</span><span class="p">,</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--integer_list&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-il&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Integer list input&#39;</span><span class="p">,</span>            <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;3&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;1 8 32&#39;</span><span class="p">,</span>           <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="s1">&#39;|--&gt;&#39;</span><span class="p">,</span><span class="n">positional</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="n">position</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>           <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Positional real input&#39;</span><span class="p">,</span>         <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span>                      <span class="n">def</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span>              <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
-<span class="c">! parsing CLI</span>
-<span class="k">write</span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="s1">&#39;+--&gt; Parsing Command Line Arguments&#39;</span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">parse</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">,</span><span class="n">pref</span><span class="o">=</span><span class="s1">&#39;|--&gt;&#39;</span><span class="p">)</span>
-<span class="p">...</span>
+<div class="codehilite"><pre><span class="c">! initializing Command Line Interface</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span>    <span class="o">=</span> <span class="s1">&#39;Test_Driver&#39;</span><span class="p">,</span>                                           <span class="p">&amp;</span>
+              <span class="n">version</span>     <span class="o">=</span> <span class="s1">&#39;v2.1.5&#39;</span><span class="p">,</span>                                                <span class="p">&amp;</span>
+              <span class="n">authors</span>     <span class="o">=</span> <span class="s1">&#39;Stefano Zaghi&#39;</span><span class="p">,</span>                                         <span class="p">&amp;</span>
+              <span class="n">license</span>     <span class="o">=</span> <span class="s1">&#39;MIT&#39;</span><span class="p">,</span>                                                   <span class="p">&amp;</span>
+              <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Toy program for testing FLAP&#39;</span><span class="p">,</span>                          <span class="p">&amp;</span>
+              <span class="n">examples</span>    <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Test_Driver -s &#39;Hello FLAP&#39;                          &quot;</span><span class="p">,&amp;</span>
+                             <span class="s2">&quot;Test_Driver -s &#39;Hello FLAP&#39; -i -2 # printing error...&quot;</span><span class="p">,&amp;</span>
+                             <span class="s2">&quot;Test_Driver -s &#39;Hello FLAP&#39; -i 3 -r 33.d0            &quot;</span><span class="p">,&amp;</span>
+                             <span class="s2">&quot;Test_Driver -s &#39;Hello FLAP&#39; --integer_list 10 -3 87  &quot;</span><span class="p">,&amp;</span>
+                             <span class="s2">&quot;Test_Driver 33.0 -s &#39;Hello FLAP&#39; -i 5                &quot;</span><span class="p">,&amp;</span>
+                             <span class="s2">&quot;Test_Driver --string &#39;Hello FLAP&#39; --boolean          &quot;</span><span class="p">])</span>
+<span class="c">! setting Command Line Argumenst</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--string&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;String input&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--integer&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-i&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Integer input with fixed range&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,&amp;</span>
+             <span class="n">def</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">,</span><span class="n">choices</span><span class="o">=</span><span class="s1">&#39;1,3,5&#39;</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--real&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Real input&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--boolean&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-b&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Boolean input&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">,&amp;</span>
+             <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--boolean_val&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-bv&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Valued boolean input&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,&amp;</span>
+             <span class="n">def</span><span class="o">=</span><span class="s1">&#39;.true.&#39;</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--integer_list&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-il&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Integer list input&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,&amp;</span>
+             <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;3&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;1 8 32&#39;</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">positional</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="n">position</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Positional real input&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="c">! parsing Command Line Interface</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">parse</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 </pre></div>
 
 
+<p>For more details, see the provided <a href="https://github.com/szaghi/FLAP/blob/master/src/Test_Driver.f90">example</a>.</p>
 <p>For a practical example of FLAP usage see <a href="https://github.com/szaghi/OFF/blob/testing/src/POG.f90">POG</a> source file at line <code>85</code>.</p>
+<h4>Nested (sub)commands</h4>
+<p>FLAP fully supports nested (sub)commands or groups of command line arguments. For example a fake <code>git</code> toy remake can be coded as</p>
+<div class="codehilite"><pre><span class="c">! initializing Command Line Interface</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span>    <span class="o">=</span> <span class="s1">&#39;Test_Driver_Nested&#39;</span><span class="p">,</span>                                    <span class="p">&amp;</span>
+              <span class="n">version</span>     <span class="o">=</span> <span class="s1">&#39;v2.1.5&#39;</span><span class="p">,</span>                                                <span class="p">&amp;</span>
+              <span class="n">authors</span>     <span class="o">=</span> <span class="s1">&#39;Stefano Zaghi&#39;</span><span class="p">,</span>                                         <span class="p">&amp;</span>
+              <span class="n">license</span>     <span class="o">=</span> <span class="s1">&#39;MIT&#39;</span><span class="p">,</span>                                                   <span class="p">&amp;</span>
+              <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Toy program for testing FLAP with nested commands&#39;</span><span class="p">,</span>     <span class="p">&amp;</span>
+              <span class="n">examples</span>    <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Test_Driver_Nested                      &#39;</span><span class="p">,&amp;</span>
+                             <span class="s1">&#39;Test_Driver_Nested -h                   &#39;</span><span class="p">,&amp;</span>
+                             <span class="s1">&#39;Test_Driver_Nested init                 &#39;</span><span class="p">,&amp;</span>
+                             <span class="s1">&#39;Test_Driver_Nested commit -m &quot;fix bug-1&quot;&#39;</span><span class="p">,&amp;</span>
+                             <span class="s1">&#39;Test_Driver_Nested tag -a &quot;v2.1.5&quot;      &#39;</span><span class="p">])</span>
+<span class="c">! set a Command Line Argument without a group to trigger authors names printing</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--authors&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-a&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Print authors names&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">)</span>
+<span class="c">! set Command Line Arguments Groups, i.e. commands</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add_group</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;init&#39;</span><span class="p">,</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;fake init versioning&#39;</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add_group</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;commit&#39;</span><span class="p">,</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;fake commit changes to current branch&#39;</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add_group</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;tag&#39;</span><span class="p">,</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;fake tag current commit&#39;</span><span class="p">)</span>
+<span class="c">! set Command Line Arguments of commit command</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;commit&#39;</span><span class="p">,</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--message&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-m&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Commit message&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">! set Command Line Arguments of commit command</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;tag&#39;</span><span class="p">,</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--annotate&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-a&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Tag annotation&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">! parsing Command Line Interface</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">parse</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">  print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span> <span class="s1">&#39;Error code: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">error</span><span class="p">))</span>
+  <span class="k">stop</span>
+<span class="n">endif</span>
+<span class="c">! using Command Line Interface data to trigger program behaviour</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-a&#39;</span><span class="p">,</span><span class="n">val</span><span class="o">=</span><span class="n">authors_print</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">authors_print</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">  print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="s1">&#39;Authors: &#39;</span><span class="o">//</span><span class="n">cli</span><span class="p">%</span><span class="n">authors</span>
+<span class="n">elseif</span> <span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">run_command</span><span class="p">(</span><span class="s1">&#39;init&#39;</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">  print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="s1">&#39;init (fake) versioning&#39;</span>
+<span class="n">elseif</span> <span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">run_command</span><span class="p">(</span><span class="s1">&#39;commit&#39;</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">  call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;commit&#39;</span><span class="p">,</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-m&#39;</span><span class="p">,</span><span class="n">val</span><span class="o">=</span><span class="n">message</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">  print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="s1">&#39;commit changes to current branch with message &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;&quot;&#39;</span>
+<span class="n">elseif</span> <span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">run_command</span><span class="p">(</span><span class="s1">&#39;tag&#39;</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">  call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;tag&#39;</span><span class="p">,</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-a&#39;</span><span class="p">,</span><span class="n">val</span><span class="o">=</span><span class="n">message</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">  print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="s1">&#39;tag current branch with message &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;&quot;&#39;</span>
+<span class="k">else</span>
+<span class="k">  print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="s1">&#39;cowardly you are doing nothing... try at least &quot;-h&quot; option!&#39;</span>
+<span class="n">endif</span>
+</pre></div>
+
+
+<p>that when invoked without arguments prompts:</p>
+<div class="codehilite"><pre>cowardly you are doing nothing... try at least <span class="s2">&quot;-h&quot;</span> option!
+</pre></div>
+
+
+<p>and invoked with <code>-h</code> option gives:</p>
+<div class="codehilite"><pre>usage: Test_Driver_Nested  <span class="o">[</span>--authors<span class="o">]</span> <span class="o">[</span>--help<span class="o">]</span> <span class="o">[</span>--version<span class="o">]</span> <span class="o">{</span>init,commit,tag<span class="o">}</span> ...
+
+Toy program <span class="k">for</span> testing FLAP with nested commands
+
+Optional switches:
+   --authors, -a
+          default value .false.
+          Print authors names
+   --help, -h
+          Print this <span class="nb">help </span>message
+   --version, -v
+          Print version
+
+Commands:
+  init
+          fake init versioning
+  commit
+          fake commit changes to current branch
+  tag
+          fake tag current commit
+
+For more detailed commands <span class="nb">help </span>try:
+  Test_Driver_Nested init -h,--help
+  Test_Driver_Nested commit -h,--help
+  Test_Driver_Nested tag -h,--help
+
+Examples:
+   Test_Driver_Nested
+   Test_Driver_Nested -h
+   Test_Driver_Nested init
+   Test_Driver_Nested commit -m <span class="s2">&quot;fix bug-1&quot;</span>
+   Test_Driver_Nested tag -a <span class="s2">&quot;v2.1.5&quot;</span>
+</pre></div>
+
+
+<p>For more details, see the provided <a href="https://github.com/szaghi/FLAP/blob/master/src/Test_Driver_Nested.f90">example</a>.</p>
 <p>Go to <a href="#top">Top</a></p>
 <h3>ChangeLog</h3>
-<h3>Version v0.0.2</h3>
-<p>Stable release. Fully backward compatible.</p>
+<h1>Change Log</h1>
+<h2><a href="https://github.com/szaghi/FLAP/tree/HEAD">Unreleased</a></h2>
+<p><a href="https://github.com/szaghi/FLAP/compare/v0.4.0...HEAD">Full Changelog</a></p>
+<p><strong>Implemented enhancements:</strong></p>
 <ul>
-<li>fix bug on set_extension function of Lib_IO_Misc;</li>
+<li>Generate man pages <a href="https://github.com/szaghi/FLAP/issues/22">#22</a></li>
 </ul>
-<h3>Version v0.0.1</h3>
-<p>First stable release.</p>
+<p><strong>Closed issues:</strong></p>
+<ul>
+<li>
+<p>Correct WIKI: Requirement page wrong number of modules shipped <a href="https://github.com/szaghi/FLAP/issues/32">#32</a></p>
+</li>
+<li>
+<p>Update WIKI: Requirements <a href="https://github.com/szaghi/FLAP/issues/31">#31</a></p>
+</li>
+</ul>
+<h2><a href="https://github.com/szaghi/FLAP/tree/v0.4.0">v0.4.0</a> (2015-06-01)</h2>
+<p><a href="https://github.com/szaghi/FLAP/compare/v0.3.0...v0.4.0">Full Changelog</a></p>
+<p><strong>Implemented enhancements:</strong></p>
+<ul>
+<li>
+<p>Implement fake arguments parsed from string input <a href="https://github.com/szaghi/FLAP/issues/28">#28</a></p>
+</li>
+<li>
+<p>Support environment variables <a href="https://github.com/szaghi/FLAP/issues/12">#12</a></p>
+</li>
+</ul>
+<p><strong>Fixed bugs:</strong></p>
+<ul>
+<li>Bug for list-value CLA <a href="https://github.com/szaghi/FLAP/issues/30">#30</a></li>
+</ul>
+<h2><a href="https://github.com/szaghi/FLAP/tree/v0.3.0">v0.3.0</a> (2015-05-29)</h2>
+<p><a href="https://github.com/szaghi/FLAP/compare/v0.2.0...v0.3.0">Full Changelog</a></p>
+<p><strong>Implemented enhancements:</strong></p>
+<ul>
+<li>Implement argparse epilog <a href="https://github.com/szaghi/FLAP/issues/27">#27</a></li>
+</ul>
+<h2><a href="https://github.com/szaghi/FLAP/tree/v0.2.0">v0.2.0</a> (2015-05-26)</h2>
+<p><a href="https://github.com/szaghi/FLAP/compare/v0.1.0...v0.2.0">Full Changelog</a></p>
+<p><strong>Implemented enhancements:</strong></p>
+<ul>
+<li>
+<p>Add mutually exsclusive option for groups of CLAs <a href="https://github.com/szaghi/FLAP/issues/29">#29</a></p>
+</li>
+<li>
+<p>Support nested subcommands or groups of commands or <a href="https://github.com/szaghi/FLAP/issues/10">#10</a></p>
+</li>
+</ul>
+<p><strong>Closed issues:</strong></p>
+<ul>
+<li>
+<p>Travis issue  <a href="https://github.com/szaghi/FLAP/issues/26">#26</a></p>
+</li>
+<li>
+<p>Bug when parsing? <a href="https://github.com/szaghi/FLAP/issues/24">#24</a></p>
+</li>
+<li>
+<p>Reduce the number cycles when parsing <a href="https://github.com/szaghi/FLAP/issues/23">#23</a></p>
+</li>
+<li>
+<p>Correct the taste wiki page <a href="https://github.com/szaghi/FLAP/issues/20">#20</a></p>
+</li>
+<li>
+<p>Correct requirements wiki page <a href="https://github.com/szaghi/FLAP/issues/19">#19</a></p>
+</li>
+<li>
+<p>Change licensing system <a href="https://github.com/szaghi/FLAP/issues/15">#15</a></p>
+</li>
+</ul>
+<h2><a href="https://github.com/szaghi/FLAP/tree/v0.1.0">v0.1.0</a> (2015-05-22)</h2>
+<p><a href="https://github.com/szaghi/FLAP/compare/v0.0.7...v0.1.0">Full Changelog</a></p>
+<p><strong>Closed issues:</strong></p>
+<ul>
+<li>Make a more uniform errors trapping mechanism <a href="https://github.com/szaghi/FLAP/issues/21">#21</a></li>
+</ul>
+<h2><a href="https://github.com/szaghi/FLAP/tree/v0.0.7">v0.0.7</a> (2015-04-22)</h2>
+<p><a href="https://github.com/szaghi/FLAP/compare/v0.0.6...v0.0.7">Full Changelog</a></p>
+<p><strong>Implemented enhancements:</strong></p>
+<ul>
+<li>Make FLAP CLI Posix compliant <a href="https://github.com/szaghi/FLAP/issues/13">#13</a></li>
+</ul>
+<p><strong>Closed issues:</strong></p>
+<ul>
+<li>
+<p>Rename files extension for the ones requiring preprocessing <a href="https://github.com/szaghi/FLAP/issues/17">#17</a></p>
+</li>
+<li>
+<p>Add makefile <a href="https://github.com/szaghi/FLAP/issues/16">#16</a></p>
+</li>
+<li>
+<p>Correct politically incorrect references to "Fortran poor men"... <a href="https://github.com/szaghi/FLAP/issues/14">#14</a></p>
+</li>
+</ul>
+<h2><a href="https://github.com/szaghi/FLAP/tree/v0.0.6">v0.0.6</a> (2015-04-17)</h2>
+<p><a href="https://github.com/szaghi/FLAP/compare/v0.0.5...v0.0.6">Full Changelog</a></p>
+<p><strong>Closed issues:</strong></p>
+<ul>
+<li>Put auxiliary procedures directly into FLAP <a href="https://github.com/szaghi/FLAP/issues/18">#18</a></li>
+</ul>
+<h2><a href="https://github.com/szaghi/FLAP/tree/v0.0.5">v0.0.5</a> (2015-04-15)</h2>
+<p><a href="https://github.com/szaghi/FLAP/compare/v0.0.4...v0.0.5">Full Changelog</a></p>
+<p><strong>Closed issues:</strong></p>
+<ul>
+<li>gfortran support <a href="https://github.com/szaghi/FLAP/issues/5">#5</a></li>
+</ul>
+<h2><a href="https://github.com/szaghi/FLAP/tree/v0.0.4">v0.0.4</a> (2015-04-15)</h2>
+<p><a href="https://github.com/szaghi/FLAP/compare/v0.0.3...v0.0.4">Full Changelog</a></p>
+<p><strong>Closed issues:</strong></p>
+<ul>
+<li>No error control parsing boolean values <a href="https://github.com/szaghi/FLAP/issues/9">#9</a></li>
+</ul>
+<h2><a href="https://github.com/szaghi/FLAP/tree/v0.0.3">v0.0.3</a> (2015-04-07)</h2>
+<p><a href="https://github.com/szaghi/FLAP/compare/v0.0.2...v0.0.3">Full Changelog</a></p>
+<p><strong>Closed issues:</strong></p>
+<ul>
+<li>
+<p>FLAP compilation system <a href="https://github.com/szaghi/FLAP/issues/7">#7</a></p>
+</li>
+<li>
+<p>elemental function result must not be allocatable <a href="https://github.com/szaghi/FLAP/issues/6">#6</a></p>
+</li>
+</ul>
+<h2><a href="https://github.com/szaghi/FLAP/tree/v0.0.2">v0.0.2</a> (2015-02-17)</h2>
+<p><a href="https://github.com/szaghi/FLAP/compare/v0.0.1...v0.0.2">Full Changelog</a></p>
+<p><strong>Closed issues:</strong></p>
+<ul>
+<li>
+<p>Check-boxes in documentation <a href="https://github.com/szaghi/FLAP/issues/4">#4</a></p>
+</li>
+<li>
+<p>Doc refactoring: WIKI! <a href="https://github.com/szaghi/FLAP/issues/3">#3</a></p>
+</li>
+<li>
+<p>Make the module a library <a href="https://github.com/szaghi/FLAP/issues/2">#2</a></p>
+</li>
+</ul>
+<h2><a href="https://github.com/szaghi/FLAP/tree/v0.0.1">v0.0.1</a> (2014-10-24)</h2>
+<p>* *This Change Log was automatically generated by <a href="https://github.com/skywinder/Github-Changelog-Generator">github_changelog_generator</a></p>
         </div>
 		  
         <div class="col-lg-4">
@@ -274,23 +530,23 @@
               <ul>
                 
                   
-                    <li><a href='./sourcefile/data_type_command_line_interface.f90.html'>Data_Type_Command_Line_Interface.f90</a></li>
+                    <li><a href='./sourcefile/data_type_command_line_interface.f90.html'>Data_Type_Command_Line_Interface.F90</a></li>
                   
                 
                   
-                    <li><a href='./sourcefile/flap_test.f90.html'>flap_test.f90</a></li>
+                    <li><a href='./sourcefile/ir_precision.f90.html'>IR_Precision.F90</a></li>
                   
                 
                   
-                    <li><a href='./sourcefile/ir_precision.f90.html'>IR_Precision.f90</a></li>
+                    <li><a href='./sourcefile/test_driver.f90.html'>Test_Driver.f90</a></li>
                   
                 
                   
-                    <li><a href='./sourcefile/lib_io_misc.f90.html'>Lib_IO_Misc.f90</a></li>
+                    <li><a href='./sourcefile/test_driver_args_from_string.f90.html'>Test_Driver_Args_From_String.f90</a></li>
                   
                 
                   
-                    <li><a href='./sourcefile/lib_strings.f90.html'>Lib_Strings.f90</a></li>
+                    <li><a href='./sourcefile/test_driver_nested.f90.html'>Test_Driver_Nested.f90</a></li>
                   
                 
               </ul>
@@ -308,14 +564,6 @@
                     <li><a href='./module/ir_precision.html'>IR_Precision</a></li>
                   
                 
-                  
-                    <li><a href='./module/lib_io_misc.html'>Lib_IO_Misc</a></li>
-                  
-                
-                  
-                    <li><a href='./module/lib_strings.html'>Lib_Strings</a></li>
-                  
-                
               </ul>
           </div>
           
@@ -329,7 +577,11 @@
                   
                 
                   
-                    <li><a href='./proc/add_signature.html'>add_signature</a></li>
+                    <li><a href='./proc/add_cla_clasg.html'>add_cla_clasg</a></li>
+                  
+                
+                  
+                    <li><a href='./proc/add_group.html'>add_group</a></li>
                   
                 
                   
@@ -337,7 +589,15 @@
                   
                 
                   
+                    <li><a href='./proc/assign_clasg.html'>assign_clasg</a></li>
+                  
+                
+                  
                     <li><a href='./proc/assign_cli.html'>assign_cli</a></li>
+                  
+                
+                  
+                    <li><a href='./proc/assign_object.html'>assign_object</a></li>
                   
                 
                   
@@ -353,19 +613,45 @@
                   
                 
                   
-                    <li><a href='./proc/bctoi_i8p.html'>bctoi_I8P</a></li>
-                  
-                
-                  
-                    <li><a href='./interface/bcton.html'>bcton</a></li>
-                  
-                
-                  
-                    <li><a href='./proc/bctor_r4p.html'>bctor_R4P</a></li>
-                  
-                
-                  
                     <li><a href="./lists/procedures.html"><em>All procedures&hellip;</em></a></li>
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
                   
                 
                   
@@ -569,7 +855,15 @@
                   
                 
                   
+                    <li><a href='./type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a></li>
+                  
+                
+                  
                     <li><a href='./type/type_command_line_interface.html'>Type_Command_Line_Interface</a></li>
+                  
+                
+                  
+                    <li><a href='./type/type_object.html'>Type_Object</a></li>
                   
                 
               </ul>
