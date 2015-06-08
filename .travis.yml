@@ -1,41 +1,32 @@
 language: python
-
 python:
-  - 2.7
-
+- 2.7
 before_install:
-  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-  - sudo apt-get update -qq
-  - sudo apt-get install gfortran-4.9 binutils
-  - sudo pip install FoBiS.py
-  - sudo pip install markdown-checklist
-  - sudo pip install ford
-  - sudo pip install cpp-coveralls
-  - ln -fs /usr/bin/gfortran-4.9 gfortran
-  - ln -fs /usr/bin/gcov-4.9 gcov
-  - export PATH=".:$PATH"
-
+- sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+- sudo apt-get update -qq
+- sudo apt-get install gfortran-4.9 binutils
+- sudo pip install FoBiS.py
+- sudo pip install markdown-checklist
+- sudo pip install ford
+- sudo pip install cpp-coveralls
+- ln -fs /usr/bin/gfortran-4.9 gfortran
+- ln -fs /usr/bin/gcov-4.9 gcov
+- export PATH=".:$PATH"
 before_script:
-  - FoBiS.py build -mode test-driver-gnu -coverage
-
+- FoBiS.py build -mode test-driver-gnu -coverage
 script:
-  - FoBiS.py rule -ex makecoverage
-
+- FoBiS.py rule -ex makecoverage
 after_success:
-  # coverage analysis
-  - cd $TRAVIS_BUILD_DIR
-  # - rm -f ./Test_Driver/obj/IR_Precision.gc*
-  # - rm -f ./Test_Driver/obj/Lib_IO_Misc.gc*
-  # - rm -f ./Test_Driver/obj/Lib_Strings.gc*
-  # - rm -f ./Test_Driver/obj/Test_Driver.gc*
-  # - coveralls -b .
-  - coveralls -n -b .
-  # deploy documentation
-  - git config --global user.name "Stefano Zaghi"
-  - git config --global user.email "stefano.zaghi@gmail.com"
-  - git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/szaghi/FLAP doc/html
-  - FoBiS.py rule -ex makedoc
-  - cd doc/html
-  - git add -f --all *
-  - git commit -m "Travis CI autocommit from travis build ${TRAVIS_BUILD_NUMBER}"
-  - git push -fq origin gh-pages
+- cd $TRAVIS_BUILD_DIR
+- coveralls -n -b .
+- git config --global user.name "Stefano Zaghi"
+- git config --global user.email "stefano.zaghi@gmail.com"
+- git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/szaghi/FLAP doc/html
+- FoBiS.py rule -ex makedoc
+- cd doc/html
+- git add -f --all *
+- git commit -m "Travis CI autocommit from travis build ${TRAVIS_BUILD_NUMBER}"
+- git push -fq origin gh-pages
+env:
+  global:
+    secure: ZfUM5EuWFnPXgyw7M/dz4deW8qmxGsrCZTSeeLUeJj6lQ/zhM9Dn259IL4SuA3Neji6WOLqm6Z7SmXjm7ieFmn2/Fshuz1KWsGe8XdHDm8PUsfj1XVOpZBKqyPLUv2CPxR+V22fDaAUX3UlWdaFhsWYJzVo3GYX2fJtshFjKDJw=
