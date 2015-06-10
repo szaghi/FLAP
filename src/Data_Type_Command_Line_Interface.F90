@@ -271,14 +271,14 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine free_object
 
-  subroutine errored(obj,pref,Na,group,switch,val_str,log_value,a1,a2,error)
+  subroutine errored(obj,pref,group,switch,val_str,log_value,a1,a2,error)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Trig error occurence and print meaningful message.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(Type_Object),     intent(INOUT):: obj       !< Object data.
   character(*), optional, intent(IN)::    pref      !< Prefixing string.
-  integer(I4P), optional, intent(IN)::    Na        !< Number of CLA passed.
+  ! integer(I4P), optional, intent(IN)::    Na        !< Number of CLA passed.
   character(*), optional, intent(IN)::    group     !< Group name.
   character(*), optional, intent(IN)::    switch    !< CLA switch name.
   character(*), optional, intent(IN)::    val_str   !< Value string.
@@ -1285,7 +1285,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  if (clasg%called.and.(clasg%Na >= size(args,dim=1))) then
+  if (clasg%called) then
     prefd = '' ; if (present(pref)) prefd = pref
     arg = 0
     do while (arg < size(args,dim=1)) ! loop over CLAs group arguments passed
@@ -1709,7 +1709,8 @@ contains
     if (cli%clasg(g)%called.and.(cli%clasg(g)%m_exclude/='')) then
       if (cli%defined_group(group=cli%clasg(g)%m_exclude,g=gg)) then
         if (cli%clasg(gg)%called) then
-          call cli%clasg(g)%errored(error=error_clasg_m_exclude)
+          prefd = '' ; if (present(pref)) prefd = pref
+          call cli%clasg(g)%errored(pref=prefd,error=error_clasg_m_exclude)
           cli%error = cli%clasg(g)%error
           exit
         endif
@@ -1833,11 +1834,7 @@ contains
   character(*), optional,             intent(IN)::    pref   !< Prefixing string.
   character(*), optional,             intent(IN)::    args   !< String containing command line arguments.
   integer(I4P), optional,             intent(OUT)::   error  !< Error trapping flag.
-  integer(I4P)::                                      Na     !< Number of command line arguments passed.
-  character(max_val_len)::                            switch !< Switch name.
-  logical::                                           found  !< Flag for checking if switch has been found in cli%cla.
   character(len=:), allocatable::                     prefd  !< Prefixing string.
-  integer(I4P)::                                      a,aa   !< Counter for CLAs.
   integer(I4P)::                                      g      !< Counter for CLAs group.
   integer(I4P), allocatable::                         ai(:,:)!< Counter for CLAs grouped.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1989,14 +1986,12 @@ contains
   character(len=len_trim(args)), allocatable::        toks(:)!< CLAs tokenized.
   integer(I4P)::                                      Nt     !< Number of tokens.
   integer(I4P)::                                      Na     !< Number of command line arguments passed.
-  character(max_val_len)::                            switch !< Switch name.
   integer(I4P)::                                      a      !< Counter for CLAs.
   integer(I4P)::                                      t      !< Counter for tokens.
   integer(I4P)::                                      c      !< Counter for characters inside tokens.
 #ifndef GNU
   integer(I4P)::                                      length !< Maxium lenght of arguments string.
 #endif
-  logical::                                           found  !< Flag for inquiring if a named group is found.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -2032,7 +2027,7 @@ contains
     find_longest_arg: do t=1,Nt
       if (trim(adjustl(toks(t)))/='') length = max(length,len_trim(adjustl(toks(t))))
     enddo find_longest_arg
-    allocate(character(lenght):: cli%args(1:Na))
+    allocate(character(length):: cli%args(1:Na))
 #endif
 
     ! construct arguments list
@@ -2096,8 +2091,6 @@ contains
   character(max_val_len)::                            switch !< Switch name.
   integer(I4P)::                                      a      !< Counter for CLAs.
   integer(I4P)::                                      aa     !< Counter for CLAs.
-  integer(I4P)::                                      g      !< Counter for CLAs group.
-  logical::                                           found  !< Flag for inquiring if a named group is found.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
