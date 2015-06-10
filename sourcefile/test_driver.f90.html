@@ -5,12 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	 
-	 <meta name="description" content="<p>A KISS library for base64 encoding/decoding for modern (2003+) Fortran projects</p>">
+	 <meta name="description" content="<p>Fortran command Line Arguments Parser for poor people</p>">
     
     <meta name="author" content="Chris MacMackin" >
     <link rel="icon" href="../favicon.png">
 
-    <title>Test_Driver.f90 &ndash; BeFoR64</title>
+    <title>Test_Driver.f90 &ndash; FLAP</title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -44,7 +44,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="../index.html">BeFoR64 </a>
+          <a class="navbar-brand" href="../index.html">FLAP </a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
@@ -59,8 +59,10 @@
             <li><a href="../lists/procedures.html">Procedures</a></li>
 				
 								
+            <li><a href="../lists/types.html">Derived Types</a></li>
 				
-            <li><a href="../program/test_driver.html">Program</a></li>
+				
+            <li><a href="../lists/programs.html">Programs</a></li>
 				
           </ul>
         <form action="../search.html" class="navbar-form navbar-right" role="search">
@@ -137,13 +139,15 @@
     <div class="panel-heading text-left"><h3 class="panel-title">All Source Files</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../sourcefile/ir_precision.f90.html">IR_Precision.f90</a>
+      <a class="list-group-item" href="../sourcefile/data_type_command_line_interface.f90.html">Data_Type_Command_Line_Interface.F90</a>
       
-      <a class="list-group-item" href="../sourcefile/lib_base64.f90.html">Lib_Base64.f90</a>
-      
-      <a class="list-group-item" href="../sourcefile/lib_pack_data.f90.html">Lib_Pack_Data.f90</a>
+      <a class="list-group-item" href="../sourcefile/ir_precision.f90.html">IR_Precision.F90</a>
       
       <a class="list-group-item" href="../sourcefile/test_driver.f90.html">Test_Driver.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/test_driver_args_from_string.f90.html">Test_Driver_Args_From_String.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/test_driver_nested.f90.html">Test_Driver_Nested.f90</a>
       
     </div>
   </div>
@@ -151,29 +155,102 @@
   
     </div>
     <div class="col-lg-9" id='text'>
-    <p>Testing program for BeFoR64, Base64 encoding/decoding library for FoRtran poor men</p>
+    <p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p>
     <br>
-    <div class="highlight"><pre><span class="c">!&lt; Testing program for BeFoR64, Base64 encoding/decoding library for FoRtran poor men</span>
+    <div class="highlight"><pre><span class="c">!&lt; A testing program for FLAP, Fortran command Line Arguments Parser for poor people</span>
 <span class="k">program </span><span class="n">Test_Driver</span>
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="c">!&lt; Testing program for BeFoR64, Base64 encoding/decoding library for FoRtran poor men</span>
+<span class="c">!&lt; A testing program for FLAP, Fortran command Line Arguments Parser for poor people</span>
 <span class="c">!&lt;</span>
-<span class="c">!&lt;### Usage</span>
-<span class="c">!&lt;```bash</span>
-<span class="c">!&lt; ./Test_Driver</span>
-<span class="c">!&lt;```</span>
+<span class="c">!&lt;### Compile</span>
+<span class="c">!&lt; See [compile instructions](https://github.com/szaghi/FLAP/wiki/Download-compile).</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt;###Usage Compile</span>
+<span class="c">!&lt; See [usage instructions](https://github.com/szaghi/FLAP/wiki/Testing-Programs).</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="k">USE </span><span class="n">IR_Precision</span>               <span class="c">! Integers and reals precision definition.</span>
-<span class="k">USE </span><span class="n">Lib_Base64</span><span class="p">,</span> <span class="n">only</span><span class="p">:</span> <span class="n">autotest</span> <span class="c">! Autotesting procedure.</span>
+<span class="k">USE </span><span class="n">IR_Precision</span>                                                        <span class="c">! Integers and reals precision definition.</span>
+<span class="k">USE </span><span class="n">Data_Type_Command_Line_Interface</span><span class="p">,</span> <span class="n">only</span><span class="p">:</span> <span class="n">Type_Command_Line_Interface</span> <span class="c">! Definition of Type_Command_Line_Interface.</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="k">implicit none</span>
+<span class="k">type</span><span class="p">(</span><span class="n">Type_Command_Line_Interface</span><span class="p">)</span><span class="kd">::</span> <span class="n">cli</span>        <span class="c">!&lt; Command Line Interface (CLI).</span>
+<span class="kt">character</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span><span class="kd">::</span>                     <span class="n">sval</span>       <span class="c">!&lt; String value.</span>
+<span class="kt">real</span><span class="p">(</span><span class="n">R8P</span><span class="p">)</span><span class="kd">::</span>                         <span class="n">rval</span>       <span class="c">!&lt; Real value.</span>
+<span class="kt">real</span><span class="p">(</span><span class="n">R8P</span><span class="p">)</span><span class="kd">::</span>                         <span class="n">prval</span>      <span class="c">!&lt; Positional real value.</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                      <span class="n">ival</span>       <span class="c">!&lt; Integer value.</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                      <span class="n">ieval</span>      <span class="c">!&lt; Exclusive integer value.</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                      <span class="n">envi</span>       <span class="c">!&lt; Environment set integer value.</span>
+<span class="kt">logical</span><span class="kd">::</span>                           <span class="n">bval</span>       <span class="c">!&lt; Boolean value.</span>
+<span class="kt">logical</span><span class="kd">::</span>                           <span class="n">vbval</span>      <span class="c">!&lt; Valued-boolean value.</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I8P</span><span class="p">)</span><span class="kd">::</span>                      <span class="n">ilist</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">)</span> <span class="c">!&lt; Integer list values.</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                      <span class="n">error</span>      <span class="c">!&lt; Error trapping flag.</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                      <span class="n">l</span>          <span class="c">!&lt; Counter.</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Testing BeFoR64&#39;</span>
-<span class="k">call </span><span class="n">autotest</span>
+<span class="c">! initializing Command Line Interface</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span>    <span class="o">=</span> <span class="s1">&#39;Test_Driver&#39;</span><span class="p">,</span>                                                 <span class="p">&amp;</span>
+              <span class="n">version</span>     <span class="o">=</span> <span class="s1">&#39;v2.1.5&#39;</span><span class="p">,</span>                                                      <span class="p">&amp;</span>
+              <span class="n">authors</span>     <span class="o">=</span> <span class="s1">&#39;Stefano Zaghi&#39;</span><span class="p">,</span>                                               <span class="p">&amp;</span>
+              <span class="n">license</span>     <span class="o">=</span> <span class="s1">&#39;MIT&#39;</span><span class="p">,</span>                                                         <span class="p">&amp;</span>
+              <span class="n">help</span>        <span class="o">=</span> <span class="s1">&#39;Usage: &#39;</span><span class="p">,</span>                                                     <span class="p">&amp;</span>
+              <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Toy program for testing FLAP&#39;</span><span class="p">,</span>                                <span class="p">&amp;</span>
+              <span class="n">examples</span>    <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Test_Driver -s &#39;Hello FLAP&#39;                               &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
+                             <span class="s2">&quot;Test_Driver -s &#39;Hello FLAP&#39; -i -2 # printing error...     &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
+                             <span class="s2">&quot;Test_Driver -s &#39;Hello FLAP&#39; -i 3 -ie 1 # printing error...&quot;</span><span class="p">,</span> <span class="p">&amp;</span>
+                             <span class="s2">&quot;Test_Driver -s &#39;Hello FLAP&#39; -i 3 -r 33.d0                 &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
+                             <span class="s2">&quot;Test_Driver -s &#39;Hello FLAP&#39; --integer_list 10 -3 87       &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
+                             <span class="s2">&quot;Test_Driver -s &#39;Hello FLAP&#39; --man_file FLAP.1             &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
+                             <span class="s2">&quot;Test_Driver 33.0 -s &#39;Hello FLAP&#39; -i 5                     &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
+                             <span class="s2">&quot;Test_Driver --string &#39;Hello FLAP&#39; --boolean               &quot;</span><span class="p">],&amp;</span>
+              <span class="n">epilog</span>      <span class="o">=</span> <span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s2">&quot;And that&#39;s how to FLAP your life&quot;</span><span class="p">)</span>
+<span class="c">! setting Command Line Argumenst</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--string&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;String input&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--integer_ex&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-ie&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Exclusive integer input&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;-1&#39;</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--integer&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-i&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Integer input with fixed range&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,&amp;</span>
+             <span class="n">def</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">,</span><span class="n">choices</span><span class="o">=</span><span class="s1">&#39;1,3,5&#39;</span><span class="p">,</span><span class="n">exclude</span><span class="o">=</span><span class="s1">&#39;-ie&#39;</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--real&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Real input&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--boolean&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-b&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Boolean input&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">,&amp;</span>
+             <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--boolean_val&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-bv&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Valued boolean input&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,&amp;</span>
+             <span class="n">def</span><span class="o">=</span><span class="s1">&#39;.true.&#39;</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--integer_list&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-il&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Integer list input&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,&amp;</span>
+             <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;3&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;1 8 32&#39;</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">positional</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="n">position</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Positional real input&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--env&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-e&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Environment input&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;-1&#39;</span><span class="p">,</span><span class="n">envvar</span><span class="o">=</span><span class="s1">&#39;FLAP_NUM_INT&#39;</span><span class="p">,&amp;</span>
+             <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--man_file&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Save manual into man_file&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;Test_Driver.1&#39;</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="c">! parsing Command Line Interface</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">parse</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="c">! using Command Line Interface data to set Test_Driver behaviour</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span>    <span class="n">val</span><span class="o">=</span><span class="n">sval</span><span class="p">,</span>  <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span>    <span class="n">val</span><span class="o">=</span><span class="n">rval</span><span class="p">,</span>  <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-i&#39;</span><span class="p">,</span>    <span class="n">val</span><span class="o">=</span><span class="n">ival</span><span class="p">,</span>  <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-ie&#39;</span><span class="p">,</span>   <span class="n">val</span><span class="o">=</span><span class="n">ieval</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-b&#39;</span><span class="p">,</span>    <span class="n">val</span><span class="o">=</span><span class="n">bval</span><span class="p">,</span>  <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-bv&#39;</span><span class="p">,</span>   <span class="n">val</span><span class="o">=</span><span class="n">vbval</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-il&#39;</span><span class="p">,</span>   <span class="n">val</span><span class="o">=</span><span class="n">ilist</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-e&#39;</span><span class="p">,</span>    <span class="n">val</span><span class="o">=</span><span class="n">envi</span><span class="p">,</span>  <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">position</span><span class="o">=</span><span class="mi">1_I4P</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">prval</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">print</span> <span class="s1">&#39;(A)&#39;</span>   <span class="p">,</span><span class="s1">&#39;Test_Driver has been called with the following arguments values:&#39;</span>
+<span class="k">print</span> <span class="s1">&#39;(A)&#39;</span>   <span class="p">,</span><span class="s1">&#39;String              input = &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">sval</span><span class="p">))</span>
+<span class="k">print</span> <span class="s1">&#39;(A)&#39;</span>   <span class="p">,</span><span class="s1">&#39;Real                input = &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">rval</span><span class="p">)</span>
+<span class="k">print</span> <span class="s1">&#39;(A)&#39;</span>   <span class="p">,</span><span class="s1">&#39;Integer             input = &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">ival</span><span class="p">)</span>
+<span class="k">print</span> <span class="s1">&#39;(A)&#39;</span>   <span class="p">,</span><span class="s1">&#39;Exclusive   integer input = &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">ieval</span><span class="p">)</span>
+<span class="k">print</span> <span class="s1">&#39;(A)&#39;</span>   <span class="p">,</span><span class="s1">&#39;Environment integer input = &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">envi</span><span class="p">)</span>
+<span class="k">print</span> <span class="s1">&#39;(A,L1)&#39;</span><span class="p">,</span><span class="s1">&#39;Boolean             input = &#39;</span><span class="p">,</span><span class="n">bval</span>
+<span class="k">print</span> <span class="s1">&#39;(A,L1)&#39;</span><span class="p">,</span><span class="s1">&#39;Valued boolean      input = &#39;</span><span class="p">,</span><span class="n">vbval</span>
+<span class="k">print</span> <span class="s1">&#39;(A)&#39;</span>   <span class="p">,</span><span class="s1">&#39;Positional real     input = &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">prval</span><span class="p">)</span>
+<span class="k">print</span> <span class="s1">&#39;(A)&#39;</span>   <span class="p">,</span><span class="s1">&#39;Integer list inputs:&#39;</span>
+<span class="k">do </span><span class="n">l</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span>
+  <span class="k">print</span> <span class="s1">&#39;(A)&#39;</span> <span class="p">,</span><span class="s1">&#39;Input(&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">l</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;) = &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">ilist</span><span class="p">(</span><span class="n">l</span><span class="p">)))</span>
+<span class="n">enddo</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">passed</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--man_file&#39;</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">  call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--man_file&#39;</span><span class="p">,</span><span class="n">val</span><span class="o">=</span><span class="n">sval</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">  print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="s1">&#39;Saving man page&#39;</span>
+  <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">save_man_page</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">,</span><span class="n">man_file</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">sval</span><span class="p">)))</span>
+<span class="n">endif</span>
 <span class="k">stop</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="n">endprogram</span> <span class="n">Test_Driver</span>
@@ -185,7 +262,7 @@
     <hr>
     <footer>
         <div class="row">
-        <div class="col-md-6">&copy; 2015 BeFoR64 was written by Stefano Zaghi. </div>
+        <div class="col-md-6">&copy; 2015 FLAP was written by Stefano Zaghi. </div>
         <div class="col-md-6"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a>.</span></div>
         </div>
         <br>
