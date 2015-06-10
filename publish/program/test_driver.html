@@ -5,12 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	 
-	 <meta name="description" content="<p>Fortran command Line Arguments Parser for poor people</p>">
+	 <meta name="description" content="<p>A KISS library for base64 encoding/decoding for modern (2003+) Fortran projects</p>">
     
     <meta name="author" content="Chris MacMackin" >
     <link rel="icon" href="../favicon.png">
 
-    <title>Test_Driver &ndash; FLAP</title>
+    <title>Test_Driver &ndash; BeFoR64</title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -44,7 +44,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="../index.html">FLAP </a>
+          <a class="navbar-brand" href="../index.html">BeFoR64 </a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
@@ -59,10 +59,8 @@
             <li><a href="../lists/procedures.html">Procedures</a></li>
 				
 								
-            <li><a href="../lists/types.html">Derived Types</a></li>
 				
-				
-            <li><a href="../lists/programs.html">Programs</a></li>
+            <li><a href="../program/test_driver.html">Program</a></li>
 				
           </ul>
         <form action="../search.html" class="navbar-form navbar-right" role="search">
@@ -116,36 +114,6 @@
   
   
   
-  <div class="panel panel-primary">
-    <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
-    <div class="list-group">
-      
-      <a class="list-group-item" href="../program/test_driver.html#var-cli">cli</a>
-      
-      <a class="list-group-item" href="../program/test_driver.html#var-sval">sval</a>
-      
-      <a class="list-group-item" href="../program/test_driver.html#var-rval">rval</a>
-      
-      <a class="list-group-item" href="../program/test_driver.html#var-prval">prval</a>
-      
-      <a class="list-group-item" href="../program/test_driver.html#var-ival">ival</a>
-      
-      <a class="list-group-item" href="../program/test_driver.html#var-ieval">ieval</a>
-      
-      <a class="list-group-item" href="../program/test_driver.html#var-envi">envi</a>
-      
-      <a class="list-group-item" href="../program/test_driver.html#var-bval">bval</a>
-      
-      <a class="list-group-item" href="../program/test_driver.html#var-vbval">vbval</a>
-      
-      <a class="list-group-item" href="../program/test_driver.html#var-ilist">ilist</a>
-      
-      <a class="list-group-item" href="../program/test_driver.html#var-error">error</a>
-      
-      <a class="list-group-item" href="../program/test_driver.html#var-l">l</a>
-      
-    </div>
-  </div>
   
   
   
@@ -157,18 +125,12 @@
   
   
   
-  
-  <hr>
   
   <div class="panel panel-default">
     <div class="panel-heading text-left"><h3 class="panel-title">All Programs</h3></div>
     <div class="list-group">
       
       <a class="list-group-item" href="../program/test_driver.html">Test_Driver</a>
-      
-      <a class="list-group-item" href="../program/test_driver.html">Test_Driver</a>
-      
-      <a class="list-group-item" href="../program/test_driver_nested.html">Test_Driver_Nested</a>
       
     </div>
   </div>
@@ -184,204 +146,17 @@
       
       <li><a href='../module/ir_precision.html'>IR_Precision</a></li>
       
-      <li><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></li>
+      <li><a href='../module/lib_base64.html'>Lib_Base64</a></li>
       
     </ul>
   
 
-    <p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p>
-<h3>Compile</h3>
-<p>See <a href="https://github.com/szaghi/FLAP/wiki/Download-compile">compile instructions</a>.</p>
-<h3>Usage Compile</h3>
-<p>See <a href="https://github.com/szaghi/FLAP/wiki/Testing-Programs">usage instructions</a>.</p>
+    <p>Testing program for BeFoR64, Base64 encoding/decoding library for FoRtran poor men</p>
+<h3>Usage</h3>
+<div class="codehilite"><pre> ./Test_Driver
+</pre></div>
     <br>
 
-    
-    <section>
-    <h2>Variables</h2>
-    
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-
-<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-cli"></a>type(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>)</td>
-  
-  
-  <td></td><td>::</td>
-  <td><strong>cli</strong></td><td></td><td></td><td><p>Command Line Interface (CLI).</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-sval"></a>character(len=99)</td>
-  
-  
-  <td></td><td>::</td>
-  <td><strong>sval</strong></td><td></td><td></td><td><p>String value.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-rval"></a>real(kind=R8P)</td>
-  
-  
-  <td></td><td>::</td>
-  <td><strong>rval</strong></td><td></td><td></td><td><p>Real value.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-prval"></a>real(kind=R8P)</td>
-  
-  
-  <td></td><td>::</td>
-  <td><strong>prval</strong></td><td></td><td></td><td><p>Positional real value.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-ival"></a>integer(kind=I4P)</td>
-  
-  
-  <td></td><td>::</td>
-  <td><strong>ival</strong></td><td></td><td></td><td><p>Integer value.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-ieval"></a>integer(kind=I4P)</td>
-  
-  
-  <td></td><td>::</td>
-  <td><strong>ieval</strong></td><td></td><td></td><td><p>Exclusive integer value.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-envi"></a>integer(kind=I4P)</td>
-  
-  
-  <td></td><td>::</td>
-  <td><strong>envi</strong></td><td></td><td></td><td><p>Environment set integer value.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-bval"></a>logical</td>
-  
-  
-  <td></td><td>::</td>
-  <td><strong>bval</strong></td><td></td><td></td><td><p>Boolean value.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-vbval"></a>logical</td>
-  
-  
-  <td></td><td>::</td>
-  <td><strong>vbval</strong></td><td></td><td></td><td><p>Valued-boolean value.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-ilist"></a>integer(kind=I8P)</td>
-  
-  
-  <td></td><td>::</td>
-  <td><strong>ilist</strong>(1:3)</td><td></td><td></td><td><p>Integer list values.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-error"></a>integer(kind=I4P)</td>
-  
-  
-  <td></td><td>::</td>
-  <td><strong>error</strong></td><td></td><td></td><td><p>Error trapping flag.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-l"></a>integer(kind=I4P)</td>
-  
-  
-  <td></td><td>::</td>
-  <td><strong>l</strong></td><td></td><td></td><td><p>Counter.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-    </section>
-    <br>
     
     
     
@@ -401,7 +176,7 @@
     <hr>
     <footer>
         <div class="row">
-        <div class="col-md-6">&copy; 2015 FLAP was written by Stefano Zaghi. </div>
+        <div class="col-md-6">&copy; 2015 BeFoR64 was written by Stefano Zaghi. </div>
         <div class="col-md-6"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a>.</span></div>
         </div>
         <br>

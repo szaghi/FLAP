@@ -5,13 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	 
-	 <meta name="description" content="<p>Fortran command Line Arguments Parser for poor people</p>">
+	 <meta name="description" content="<p>A KISS library for base64 encoding/decoding for modern (2003+) Fortran projects</p>">
     
     <meta name="author" content="Chris MacMackin" >
     <link rel="icon" href="../favicon.png">
 
     <title>
-All Procedures &ndash; FLAP
+All Procedures &ndash; BeFoR64
 </title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
@@ -46,7 +46,7 @@ All Procedures &ndash; FLAP
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="../index.html">FLAP </a>
+          <a class="navbar-brand" href="../index.html">BeFoR64 </a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
@@ -61,10 +61,8 @@ All Procedures &ndash; FLAP
             <li><a href="../lists/procedures.html">Procedures</a></li>
 				
 								
-            <li><a href="../lists/types.html">Derived Types</a></li>
 				
-				
-            <li><a href="../lists/programs.html">Programs</a></li>
+            <li><a href="../program/test_driver.html">Program</a></li>
 				
           </ul>
         <form action="../search.html" class="navbar-form navbar-right" role="search">
@@ -88,19 +86,89 @@ All Procedures &ndash; FLAP
 			 <thead><tr><th>Procedure</th><th>Location</th><th>Procedure Type</th><th>Description</th></tr></thead>
 			 <tbody>
 			 
-			   <tr><td><a href='../proc/add.html'>add</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Add CLA to CLI.</p></td></tr>
+			   <tr><td><a href='../proc/autotest.html'>autotest</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for autotesting the library functionalities.</p></td></tr>
 			 
-			   <tr><td><a href='../proc/add_cla_clasg.html'>add_cla_clasg</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Add CLA to CLAs list.</p></td></tr>
+			   <tr><td><a href='../interface/b64_decode.html'>b64_decode</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Interface</td><td><p>Procedure for decoding numbers (integer and real) from base64.</p></td></tr>
 			 
-			   <tr><td><a href='../proc/add_group.html'>add_group</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Add CLAs group to CLI.</p></td></tr>
+			   <tr><td><a href='../proc/b64_decode_i1.html'>b64_decode_I1</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for decoding a base64 code into a scalar number (I1P).</p></td></tr>
 			 
-			   <tr><td><a href='../proc/assign_cla.html'>assign_cla</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td></td></tr>
+			   <tr><td><a href='../proc/b64_decode_i1_a.html'>b64_decode_I1_a</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for decoding a base64 code into an array numbers (I1P).</p></td></tr>
 			 
-			   <tr><td><a href='../proc/assign_clasg.html'>assign_clasg</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td></td></tr>
+			   <tr><td><a href='../proc/b64_decode_i2.html'>b64_decode_I2</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for decoding a base64 code into a scalar number (I2P).</p></td></tr>
 			 
-			   <tr><td><a href='../proc/assign_cli.html'>assign_cli</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td></td></tr>
+			   <tr><td><a href='../proc/b64_decode_i2_a.html'>b64_decode_I2_a</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for decoding a base64 code into an array numbers (I2P).</p></td></tr>
 			 
-			   <tr><td><a href='../proc/assign_object.html'>assign_object</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td></td></tr>
+			   <tr><td><a href='../proc/b64_decode_i4.html'>b64_decode_I4</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for decoding a base64 code into a scalar number (I4P).</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_decode_i4_a.html'>b64_decode_I4_a</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for decoding a base64 code into an array numbers (I4P).</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_decode_i8.html'>b64_decode_I8</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for decoding a base64 code into a scalar number (I8P).</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_decode_i8_a.html'>b64_decode_I8_a</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for decoding a base64 code into an array numbers (I8P).</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_decode_r16.html'>b64_decode_R16</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for decoding a base64 code into a scalar number (R16P).</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_decode_r16_a.html'>b64_decode_R16_a</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for decoding a base64 code into an array numbers (R16P).</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_decode_r4.html'>b64_decode_R4</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for decoding a base64 code into a scalar number (R4P).</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_decode_r4_a.html'>b64_decode_R4_a</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for decoding a base64 code into an array numbers (R4P).</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_decode_r8.html'>b64_decode_R8</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for decoding a base64 code into a scalar number (R8P).</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_decode_r8_a.html'>b64_decode_R8_a</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for decoding a base64 code into an array numbers (R8P).</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_decode_string.html'>b64_decode_string</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for decoding a base64 code into a scalar string.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_decode_string_a.html'>b64_decode_string_a</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for decoding a base64 code into an array of strings.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_decode_up.html'>b64_decode_up</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for decoding an unlimited polymorphic scalar from base64.</p></td></tr>
+			 
+			   <tr><td><a href='../interface/b64_decode_up.html'>b64_decode_up</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Interface</td><td><p>Procedure for decoding unlimited polymorphic variable from base64.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_decode_up_a.html'>b64_decode_up_a</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for decoding an unlimited polymorphic array from base64.</p></td></tr>
+			 
+			   <tr><td><a href='../interface/b64_encode.html'>b64_encode</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Interface</td><td><p>Procedure for encoding numbers (integer and real) to base64.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_encode_i1.html'>b64_encode_I1</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for encoding scalar number to base64 (I1P).</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_encode_i1_a.html'>b64_encode_I1_a</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for encoding array numbers to base64 (I1P).</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_encode_i2.html'>b64_encode_I2</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for encoding scalar number to base64 (I2P).</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_encode_i2_a.html'>b64_encode_I2_a</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for encoding array numbers to base64 (I2P).</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_encode_i4.html'>b64_encode_I4</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for encoding scalar number to base64 (I4P).</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_encode_i4_a.html'>b64_encode_I4_a</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for encoding array numbers to base64 (I4P).</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_encode_i8.html'>b64_encode_I8</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for encoding scalar number to base64 (I8P).</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_encode_i8_a.html'>b64_encode_I8_a</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for encoding array numbers to base64 (I8P).</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_encode_r16.html'>b64_encode_R16</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for encoding scalar number to base64 (R16P).</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_encode_r16_a.html'>b64_encode_R16_a</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for encoding array numbers to base64 (R16P).</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_encode_r4.html'>b64_encode_R4</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for encoding scalar number to base64 (R4P).</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_encode_r4_a.html'>b64_encode_R4_a</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for encoding array numbers to base64 (R4P).</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_encode_r8.html'>b64_encode_R8</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for encoding scalar number to base64 (R8P).</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_encode_r8_a.html'>b64_encode_R8_a</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for encoding array numbers to base64 (R8P).</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_encode_string.html'>b64_encode_string</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for encoding scalar string to base64.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_encode_string_a.html'>b64_encode_string_a</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for encoding array string to base64.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_encode_up.html'>b64_encode_up</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for encoding an unlimited polymorphic scalar to base64.</p></td></tr>
+			 
+			   <tr><td><a href='../interface/b64_encode_up.html'>b64_encode_up</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Interface</td><td><p>Procedure for encoding unlimited polymorphic variable to base64.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_encode_up_a.html'>b64_encode_up_a</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for encoding an unlimited polymorphic array to base64.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/b64_init.html'>b64_init</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for initializing the BeFoR64 library.</p></td></tr>
 			 
 			   <tr><td><a href='../proc/bctoi_i1p.html'>bctoi_I1P</a></td><td><a href='../module/ir_precision.html'>IR_Precision</a></td><td>Function</td><td><p>Procedure for converting bit-string to integer. This function achieves casting of bit-string to integer.</p></td></tr>
 			 
@@ -160,23 +228,7 @@ All Procedures &ndash; FLAP
 			 
 			   <tr><td><a href='../proc/byte_size_r8p.html'>byte_size_R8P</a></td><td><a href='../module/ir_precision.html'>IR_Precision</a></td><td>Function</td><td><p>Procedure for computing the number of bytes of a real variable.</p></td></tr>
 			 
-			   <tr><td><a href='../proc/called_group.html'>called_group</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Function</td><td><p>Check if a CLAs group has been runned.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/check.html'>check</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Check CLAs data consistency.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/check_choices_cla.html'>check_choices_cla</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Check if CLA value is in allowed choices.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/check_cla.html'>check_cla</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Check CLA data consistency.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/check_clasg.html'>check_clasg</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Check CLA data consistency.</p></td></tr>
-			 
 			   <tr><td><a href='../proc/check_endian.html'>check_endian</a></td><td><a href='../module/ir_precision.html'>IR_Precision</a></td><td>Subroutine</td><td><p>Subroutine for checking the type of bit ordering (big or little endian) of the running architecture.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/check_m_exclusive.html'>check_m_exclusive</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Check if two mutually exclusive CLAs group have been called.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/check_m_exclusive_clasg.html'>check_m_exclusive_clasg</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Check if two mutually exclusive CLAs have been passed.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/check_required_clasg.html'>check_required_clasg</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Check if required CLAs are passed.</p></td></tr>
 			 
 			   <tr><td><a href='../proc/ctoi_i1p.html'>ctoi_I1P</a></td><td><a href='../module/ir_precision.html'>IR_Precision</a></td><td>Function</td><td><p>Procedure for converting string to integer. This function achieves casting of string to integer.</p></td></tr>
 			 
@@ -194,11 +246,7 @@ All Procedures &ndash; FLAP
 			 
 			   <tr><td><a href='../proc/ctor_r8p.html'>ctor_R8P</a></td><td><a href='../module/ir_precision.html'>IR_Precision</a></td><td>Function</td><td><p>Procedure for converting string to real. This function achieves casting of string to real.</p></td></tr>
 			 
-			   <tr><td><a href='../proc/defined.html'>defined</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Function</td><td><p>Check if a CLA has been defined.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/defined_clasg.html'>defined_clasg</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Function</td><td><p>Check if a CLA has been defined.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/defined_group.html'>defined_group</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Function</td><td><p>Check if a CLAs group has been defined.</p></td></tr>
+			   <tr><td><a href='../proc/decode_bits.html'>decode_bits</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for decoding a base64 string into a sequence of bits stream.</p></td></tr>
 			 
 			   <tr><td><a href='../interface/digit.html'>digit</a></td><td><a href='../module/ir_precision.html'>IR_Precision</a></td><td>Interface</td><td><p>Procedure for computing the number of digits in decimal base of the input integer.</p></td></tr>
 			 
@@ -210,37 +258,7 @@ All Procedures &ndash; FLAP
 			 
 			   <tr><td><a href='../proc/digit_i8.html'>digit_I8</a></td><td><a href='../module/ir_precision.html'>IR_Precision</a></td><td>Function</td><td><p>Procedure for computing the number of digits in decimal base of the input integer.</p></td></tr>
 			 
-			   <tr><td><a href='../proc/errored.html'>errored</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Trig error occurence and print meaningful message.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/finalize.html'>finalize</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Procedure for freeing dynamic memory when finalizing.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/finalize_cla.html'>finalize_cla</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Free dynamic memory when finalizing.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/finalize_clasg.html'>finalize_clasg</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Free dynamic memory when finalizing.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/free.html'>free</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Procedure for freeing dynamic memory.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/free_cla.html'>free_cla</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Free dynamic memory.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/free_clasg.html'>free_clasg</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Free dynamic memory.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/free_object.html'>free_object</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Free dynamic memory.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/get_args_from_invocation.html'>get_args_from_invocation</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Get CLAs from CLI invocation.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/get_args_from_string.html'>get_args_from_string</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Get CLAs from string.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/get_cla.html'>get_cla</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Get CLA (single) value.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/get_cla_cli.html'>get_cla_cli</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Get CLA (single) value from CLAs list parsed.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/get_cla_list.html'>get_cla_list</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Get CLA (multiple) value.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/get_cla_list_cli.html'>get_cla_list_cli</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Procedure for getting CLA multiple values from CLAs list parsed.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/get_clasg_indexes.html'>get_clasg_indexes</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Get the argument indexes of CLAs groups defined parsing the actual passed CLAs.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/init.html'>init</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Procedure for initializing CLI.</p></td></tr>
+			   <tr><td><a href='../proc/encode_bits.html'>encode_bits</a></td><td><a href='../module/lib_base64.html'>Lib_Base64</a></td><td>Subroutine</td><td><p>Procedure for encoding a bits stream (must be multiple of 24 bits) into base64 charcaters code (of length multiple of 4).</p></td></tr>
 			 
 			   <tr><td><a href='../proc/ir_init.html'>IR_init</a></td><td><a href='../module/ir_precision.html'>IR_Precision</a></td><td>Subroutine</td><td><p>Procedure for initilizing module's variables that are not initialized into the definition specification.</p></td></tr>
 			 
@@ -248,27 +266,67 @@ All Procedures &ndash; FLAP
 			 
 			   <tr><td><a href='../proc/is_little_endian.html'>is_little_endian</a></td><td><a href='../module/ir_precision.html'>IR_Precision</a></td><td>Function</td><td><p>Procedure for checking if the type of the bit ordering of the running architecture is little endian.</p></td></tr>
 			 
-			   <tr><td><a href='../proc/parse.html'>parse</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Parse Command Line Interfaces by means of a previously initialized CLAs groups list.</p></td></tr>
+			   <tr><td><a href='../interface/pack_data.html'>pack_data</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Interface</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
 			 
-			   <tr><td><a href='../proc/parse_clasg.html'>parse_clasg</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Parse CLAs group arguments.</p></td></tr>
+			   <tr><td><a href='../proc/pack_data_i1_i2.html'>pack_data_I1_I2</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
 			 
-			   <tr><td><a href='../proc/passed.html'>passed</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Function</td><td><p>Check if a CLA has been passed.</p></td></tr>
+			   <tr><td><a href='../proc/pack_data_i1_i4.html'>pack_data_I1_I4</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
 			 
-			   <tr><td><a href='../proc/passed_clasg.html'>passed_clasg</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Function</td><td><p>Check if a CLA has been passed.</p></td></tr>
+			   <tr><td><a href='../proc/pack_data_i1_i8.html'>pack_data_I1_I8</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
 			 
-			   <tr><td><a href='../proc/print_usage.html'>print_usage</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Print correct usage of CLI.</p></td></tr>
+			   <tr><td><a href='../proc/pack_data_i1_r4.html'>pack_data_I1_R4</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
 			 
-			   <tr><td><a href='../proc/print_version.html'>print_version</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Print version.</p></td></tr>
+			   <tr><td><a href='../proc/pack_data_i1_r8.html'>pack_data_I1_R8</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
 			 
-			   <tr><td><a href='../proc/save_man_page.html'>save_man_page</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Save man page build on the CLI.</p></td></tr>
+			   <tr><td><a href='../proc/pack_data_i2_i1.html'>pack_data_I2_I1</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
 			 
-			   <tr><td><a href='../proc/set_mutually_exclusive_groups.html'>set_mutually_exclusive_groups</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Set two CLAs group ad mutually exclusive.</p></td></tr>
+			   <tr><td><a href='../proc/pack_data_i2_i4.html'>pack_data_I2_I4</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
 			 
-			   <tr><td><a href='../proc/signature.html'>signature</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Function</td><td><p>Get CLI signature.</p></td></tr>
+			   <tr><td><a href='../proc/pack_data_i2_i8.html'>pack_data_I2_I8</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
 			 
-			   <tr><td><a href='../proc/signature_cla.html'>signature_cla</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Function</td><td><p>Get CLA signature for adding to the CLI one.</p></td></tr>
+			   <tr><td><a href='../proc/pack_data_i2_r4.html'>pack_data_I2_R4</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
 			 
-			   <tr><td><a href='../proc/signature_clasg.html'>signature_clasg</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Function</td><td><p>Get CLAs group signature for adding to the CLI one.</p></td></tr>
+			   <tr><td><a href='../proc/pack_data_i2_r8.html'>pack_data_I2_R8</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/pack_data_i4_i1.html'>pack_data_I4_I1</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/pack_data_i4_i2.html'>pack_data_I4_I2</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/pack_data_i4_i8.html'>pack_data_I4_I8</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/pack_data_i4_r4.html'>pack_data_I4_R4</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/pack_data_i4_r8.html'>pack_data_I4_R8</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/pack_data_i8_i1.html'>pack_data_I8_I1</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/pack_data_i8_i2.html'>pack_data_I8_I2</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/pack_data_i8_i4.html'>pack_data_I8_I4</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/pack_data_i8_r4.html'>pack_data_I8_R4</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/pack_data_i8_r8.html'>pack_data_I8_R8</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/pack_data_r4_i1.html'>pack_data_R4_I1</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/pack_data_r4_i2.html'>pack_data_R4_I2</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/pack_data_r4_i4.html'>pack_data_R4_I4</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/pack_data_r4_i8.html'>pack_data_R4_I8</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/pack_data_r4_r8.html'>pack_data_R4_R8</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/pack_data_r8_i1.html'>pack_data_R8_I1</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/pack_data_r8_i2.html'>pack_data_R8_I2</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/pack_data_r8_i4.html'>pack_data_R8_I4</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/pack_data_r8_i8.html'>pack_data_R8_I8</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
+			 
+			   <tr><td><a href='../proc/pack_data_r8_r4.html'>pack_data_R8_R4</a></td><td><a href='../module/lib_pack_data.html'>Lib_Pack_Data</a></td><td>Subroutine</td><td><p>Procedure for packing different kinds of data into single I1P array.</p></td></tr>
 			 
 			   <tr><td><a href='../interface/str.html'>str</a></td><td><a href='../module/ir_precision.html'>IR_Precision</a></td><td>Interface</td><td><p>Procedure for converting number, real and integer, to string (number to string type casting).</p></td></tr>
 			 
@@ -331,16 +389,6 @@ All Procedures &ndash; FLAP
 			   <tr><td><a href='../proc/strz_i8p.html'>strz_I8P</a></td><td><a href='../module/ir_precision.html'>IR_Precision</a></td><td>Function</td><td><p>Procedure for converting integer to string, prefixing with the right number of zeros. This function achieves casting of
  integer to string.</p></td></tr>
 			 
-			   <tr><td><a href='../proc/tokenize.html'>tokenize</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Subroutine</td><td><p>Procedure for tokenizing a string in order to parse it.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/upper_case.html'>Upper_Case</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Function</td><td><p>Procedure for converting the lower case characters of a string to upper case one.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/usage.html'>usage</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Function</td><td><p>Print correct usage of CLI.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/usage_cla.html'>usage_cla</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Function</td><td><p>Get correct CLA usage.</p></td></tr>
-			 
-			   <tr><td><a href='../proc/usage_clasg.html'>usage_clasg</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>Function</td><td><p>Get correct CLAs group usage.</p></td></tr>
-			 
 			 </tbody></table>
         </div>
       </div>
@@ -348,7 +396,7 @@ All Procedures &ndash; FLAP
     <hr>
     <footer>
         <div class="row">
-        <div class="col-md-6">&copy; 2015 FLAP was written by Stefano Zaghi. </div>
+        <div class="col-md-6">&copy; 2015 BeFoR64 was written by Stefano Zaghi. </div>
         <div class="col-md-6"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a>.</span></div>
         </div>
         <br>
