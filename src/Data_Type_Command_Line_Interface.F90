@@ -1526,7 +1526,7 @@ contains
   cli%license     = ''        ; if (present(license    )) cli%license     = license
   cli%authors     = ''        ; if (present(authors    )) cli%authors     = authors
   cli%epilog      = ''        ; if (present(epilog     )) cli%epilog      = epilog
-  if (present(disable_hv)) cli%disable_hv = .true.
+  if (present(disable_hv)) cli%disable_hv = disable_hv
   if (present(examples)) then
 #ifdef __GFORTRAN__
     allocate(cli%examples(1:size(examples)))
