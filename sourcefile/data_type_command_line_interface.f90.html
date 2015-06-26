@@ -120,7 +120,7 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Modules</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../sourcefile/data_type_command_line_interface.f90.html#mod-Data_Type_Command_Line_Interface">Data_Type_Command_Line_Interface</a>
+      <a class="list-group-item" href="../module/data_type_command_line_interface.html">Data_Type_Command_Line_Interface</a>
       
     </div>
   </div>
@@ -132,6 +132,15 @@
   
   
   
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+    <div class="list-group">
+      <a class="list-group-item" href="../sourcefile/data_type_command_line_interface.f90.html#src">Data_Type_Command_Line_Interface.F90</a>
+    </div>
+  </div>
   
   <hr>
   
@@ -157,6 +166,8 @@
     <div class="col-lg-9" id='text'>
     <p>FLAP, Fortran command Line Arguments Parser for poor people</p>
     <br>
+    <section>
+    <h2><a class="anchor" name="src"></a>Source Code</h2>
     <div class="highlight"><pre><span class="c">!&lt; FLAP, Fortran command Line Arguments Parser for poor people</span>
 <span class="k">module </span><span class="n">Data_Type_Command_Line_Interface</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
@@ -259,7 +270,7 @@
   <span class="c">!&lt; Command Line Interface (CLI).</span>
   <span class="k">private</span>
 <span class="k">  type</span><span class="p">(</span><span class="n">Type_Command_Line_Arguments_Group</span><span class="p">),</span> <span class="k">allocatable</span><span class="kd">::</span> <span class="n">clasg</span><span class="p">(:)</span>            <span class="c">!&lt; CLA list [1:Na].</span>
-<span class="cp">#ifdef GNU</span>
+<span class="cp">#ifdef __GFORTRAN__</span>
   <span class="kt">character</span><span class="p">(</span><span class="mi">100</span>  <span class="p">),</span> <span class="k">allocatable</span><span class="kd">::</span>                        <span class="n">args</span><span class="p">(:)</span>             <span class="c">!&lt; Actually passed command line arguments.</span>
   <span class="kt">character</span><span class="p">(</span><span class="mi">100</span>  <span class="p">),</span> <span class="k">allocatable</span><span class="kd">::</span>                        <span class="n">examples</span><span class="p">(:)</span>         <span class="c">!&lt; Examples of correct usage.</span>
 <span class="cp">#else</span>
@@ -1672,7 +1683,7 @@
   <span class="n">cli</span><span class="p">%</span><span class="n">epilog</span>      <span class="o">=</span> <span class="s1">&#39;&#39;</span>        <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">epilog</span>     <span class="p">))</span> <span class="n">cli</span><span class="p">%</span><span class="n">epilog</span>      <span class="o">=</span> <span class="n">epilog</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">disable_hv</span><span class="p">))</span> <span class="n">cli</span><span class="p">%</span><span class="n">disable_hv</span> <span class="o">=</span> <span class="p">.</span><span class="n">true</span><span class="p">.</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">examples</span><span class="p">))</span> <span class="k">then</span>
-<span class="cp">#ifdef GNU</span>
+<span class="cp">#ifdef __GFORTRAN__</span>
     <span class="k">allocate</span><span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">examples</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">size</span><span class="p">(</span><span class="n">examples</span><span class="p">)))</span>
 <span class="cp">#else</span>
     <span class="k">allocate</span><span class="p">(</span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">examples</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span><span class="kd">::</span> <span class="n">cli</span><span class="p">%</span><span class="n">examples</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">size</span><span class="p">(</span><span class="n">examples</span><span class="p">)))</span> <span class="c">! does not work with gfortran 4.9.2</span>
@@ -2148,7 +2159,7 @@
   <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                                      <span class="n">a</span>      <span class="c">!&lt; Counter for CLAs.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                                      <span class="n">t</span>      <span class="c">!&lt; Counter for tokens.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                                      <span class="n">c</span>      <span class="c">!&lt; Counter for characters inside tokens.</span>
-<span class="cp">#ifndef GNU</span>
+<span class="cp">#ifndef __GFORTRAN__</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                                      <span class="n">length</span> <span class="c">!&lt; Maxium lenght of arguments string.</span>
 <span class="cp">#endif</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -2179,7 +2190,7 @@
 
   <span class="k">if</span> <span class="p">(</span><span class="n">Na</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
     <span class="c">! allocate cli arguments list</span>
-<span class="cp">#ifdef GNU</span>
+<span class="cp">#ifdef __GFORTRAN__</span>
     <span class="k">allocate</span><span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">args</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Na</span><span class="p">))</span>
 <span class="cp">#else</span>
     <span class="n">length</span> <span class="o">=</span> <span class="mi">0</span>
@@ -2256,7 +2267,7 @@
   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">args</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">args</span><span class="p">)</span>
   <span class="n">Na</span> <span class="o">=</span> <span class="nb">command_argument_count</span><span class="p">()</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">Na</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
-<span class="cp">#ifdef GNU</span>
+<span class="cp">#ifdef __GFORTRAN__</span>
     <span class="k">allocate</span><span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">args</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Na</span><span class="p">))</span>
 <span class="cp">#else</span>
     <span class="n">aa</span> <span class="o">=</span> <span class="mi">0</span>
@@ -2570,6 +2581,7 @@
 <span class="n">endmodule</span> <span class="n">Data_Type_Command_Line_Interface</span>
 </pre></div>
 
+    </section>
     </div>
   </div>
 

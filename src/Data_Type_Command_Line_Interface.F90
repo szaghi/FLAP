@@ -100,7 +100,7 @@ type, extends(Type_Object), public:: Type_Command_Line_Interface
   !< Command Line Interface (CLI).
   private
   type(Type_Command_Line_Arguments_Group), allocatable:: clasg(:)            !< CLA list [1:Na].
-#ifdef GNU
+#ifdef __GFORTRAN__
   character(100  ), allocatable::                        args(:)             !< Actually passed command line arguments.
   character(100  ), allocatable::                        examples(:)         !< Examples of correct usage.
 #else
@@ -1513,7 +1513,7 @@ contains
   cli%epilog      = ''        ; if (present(epilog     )) cli%epilog      = epilog
   if (present(disable_hv)) cli%disable_hv = .true.
   if (present(examples)) then
-#ifdef GNU
+#ifdef __GFORTRAN__
     allocate(cli%examples(1:size(examples)))
 #else
     allocate(character(len=len(examples(1))):: cli%examples(1:size(examples))) ! does not work with gfortran 4.9.2
@@ -1989,7 +1989,7 @@ contains
   integer(I4P)::                                      a      !< Counter for CLAs.
   integer(I4P)::                                      t      !< Counter for tokens.
   integer(I4P)::                                      c      !< Counter for characters inside tokens.
-#ifndef GNU
+#ifndef __GFORTRAN__
   integer(I4P)::                                      length !< Maxium lenght of arguments string.
 #endif
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -2020,7 +2020,7 @@ contains
 
   if (Na > 0) then
     ! allocate cli arguments list
-#ifdef GNU
+#ifdef __GFORTRAN__
     allocate(cli%args(1:Na))
 #else
     length = 0
@@ -2097,7 +2097,7 @@ contains
   if (allocated(cli%args)) deallocate(cli%args)
   Na = command_argument_count()
   if (Na > 0) then
-#ifdef GNU
+#ifdef __GFORTRAN__
     allocate(cli%args(1:Na))
 #else
     aa = 0

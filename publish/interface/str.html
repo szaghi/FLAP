@@ -133,10 +133,6 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Module Procedures</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../interface/str.html#proc-strf_R16P">strf_R16P</a>
-      
-      <a class="list-group-item" href="../interface/str.html#proc-str_R16P">str_R16P</a>
-      
       <a class="list-group-item" href="../interface/str.html#proc-strf_R8P">strf_R8P</a>
       
       <a class="list-group-item" href="../interface/str.html#proc-str_R8P">str_R8P</a>
@@ -163,8 +159,6 @@
       
       <a class="list-group-item" href="../interface/str.html#proc-str_bol">str_bol</a>
       
-      <a class="list-group-item" href="../interface/str.html#proc-str_a_R16P">str_a_R16P</a>
-      
       <a class="list-group-item" href="../interface/str.html#proc-str_a_R8P">str_a_R8P</a>
       
       <a class="list-group-item" href="../interface/str.html#proc-str_a_R4P">str_a_R4P</a>
@@ -179,6 +173,7 @@
       
     </div>
   </div>
+  
   
   <hr>
   
@@ -452,162 +447,6 @@
 	
 	 <h2>Module Procedures</h2>
 	 
-    
-  <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="proc-strf_R16P"></a><h3>
-private elemental function <a href='../proc/strf_r16p.html'>strf_R16P</a>(fm, n)
-</h3></div>
-  <div class="panel-body">
-       
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-fm"></a>character(len=*),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>fm</strong></td><td><p>Format different from the standard for the kind.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-n"></a>real(kind=R16P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>n</strong></td><td><p>Real to be converted.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-
-  
-  
-  
-  
-     <h4>Return Value <small><a class="anchor" name="var-str"></a>character(len=DR16P)
-  </small></h4>
-  <p>Returned string containing input number.</p>
-    
-    
-    <h4>Description</h4>
-       
-
-
-       <p>Procedure for converting real to string. This function achieves casting of real to string.</p>
-        
-
-  </div>
-  </div>
-
- 	 
-    
-  <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="proc-str_R16P"></a><h3>
-private elemental function <a href='../proc/str_r16p.html'>str_R16P</a>(no_sign, n)
-</h3></div>
-  <div class="panel-body">
-       
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-no_sign"></a>logical,</td>
-  <td>intent(in),</td>
-  <td>optional</td>
-  
-  <td></td><td>::</td>
-  <td><strong>no_sign</strong></td><td><p>Flag for leaving out the sign.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-n"></a>real(kind=R16P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>n</strong></td><td><p>Real to be converted.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-
-  
-  
-  
-  
-     <h4>Return Value <small><a class="anchor" name="var-str"></a>character(len=DR16P)
-  </small></h4>
-  <p>Returned string containing input number.</p>
-    
-    
-    <h4>Description</h4>
-       
-
-
-       <p>Procedure for converting real to string. This function achieves casting of real to string.</p>
-        
-
-  </div>
-  </div>
-
- 	 
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><a class="anchor" name="proc-strf_R8P"></a><h3>
@@ -1601,99 +1440,6 @@ private elemental function <a href='../proc/str_bol.html'>str_bol</a>(n)
 
 
        <p>Procedure for converting logical to string. This function achieves casting of logical to string.</p>
-        
-
-  </div>
-  </div>
-
- 	 
-    
-  <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="proc-str_a_R16P"></a><h3>
-private pure function <a href='../proc/str_a_r16p.html'>str_a_R16P</a>(no_sign, delimiters, n)
-</h3></div>
-  <div class="panel-body">
-       
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-no_sign"></a>logical,</td>
-  <td>intent(in),</td>
-  <td>optional</td>
-  
-  <td></td><td>::</td>
-  <td><strong>no_sign</strong></td><td><p>Flag for leaving out the sign.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-delimiters"></a>character(len=*),</td>
-  <td>intent(in),</td>
-  <td>optional</td>
-  
-  <td></td><td>::</td>
-  <td><strong>delimiters</strong>(1:2)</td><td><p>Eventual delimiters of array values.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-n"></a>real(kind=R16P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>n</strong>(:)</td><td><p>Real array to be converted.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-
-  
-  
-  
-  
-     <h4>Return Value <small><a class="anchor" name="var-str"></a>character(len=:),
-  allocatable</small></h4>
-  <p>Returned string containing input number.</p>
-    
-    
-    <h4>Description</h4>
-       
-
-
-       <p>Procedure for converting real (array) to string. This function achieves casting of real to string.</p>
         
 
   </div>
