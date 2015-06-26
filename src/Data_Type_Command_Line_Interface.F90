@@ -1485,7 +1485,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine finalize
 
-  pure subroutine init(cli,progname,version,help,description,license,authors,examples,epilog,disable_hv)
+  subroutine init(cli,progname,version,help,description,license,authors,examples,epilog,disable_hv)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for initializing CLI.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1500,11 +1500,26 @@ contains
   character(*), optional,             intent(IN)::    examples(1:) !< Examples of correct usage.
   character(*), optional,             intent(IN)::    epilog       !< Epilog message.
   logical,      optional,             intent(IN)::    disable_hv   !< Disable automatic inserting of 'help' and 'version' CLAs.
+
+  character(len=:) ,allocatable                 ::    prog_invocation
+  integer                                       ::    invocation_length, retrieval_status
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   call cli%free
-  cli%progname    = 'program' ; if (present(progname   )) cli%progname    = progname
+  if(present(progname)) then
+     cli%progname    = progname
+  else
+     ! try to set the default progname to the 0th command line entry a-la unix $0
+     call get_command_argument(0,length=invocation_length)
+     allocate(character(len=invocation_length) :: prog_invocation)
+     call get_command_argument(0,value=prog_invocation,status=retrieval_status)
+     if (retrieval_status == 0) then
+        cli%progname = prog_invocation
+     else
+        cli%progname    = 'program'
+     end if
+  end if
   cli%version     = 'unknown' ; if (present(version    )) cli%version     = version
   cli%help        = 'usage: ' ; if (present(help       )) cli%help        = help
   cli%description = ''        ; if (present(description)) cli%description = description
