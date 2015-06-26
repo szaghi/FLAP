@@ -1,5 +1,7 @@
 language: python
 
+sudo: required
+
 python:
   - 2.7
 
@@ -8,11 +10,7 @@ env:
     - secure: ZfUM5EuWFnPXgyw7M/dz4deW8qmxGsrCZTSeeLUeJj6lQ/zhM9Dn259IL4SuA3Neji6WOLqm6Z7SmXjm7ieFmn2/Fshuz1KWsGe8XdHDm8PUsfj1XVOpZBKqyPLUv2CPxR+V22fDaAUX3UlWdaFhsWYJzVo3GYX2fJtshFjKDJw=
     - APT_DEPENDS="gfortran-4.9 binutils"
     - PIP_DEPENDS="FoBiS.py markdown-checklist ford"
-  matrix:
     - SCRIPT="FoBiS.py rule -ex makecoverage"
-      ACTION="COVERAGE"
-    - SCRIPT="./makedoc.sh FLAP"
-      ACTION="MAKEDOC"
 
 before_install:
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
@@ -30,4 +28,5 @@ script:
 
 after_success:
   - cd $TRAVIS_BUILD_DIR
-  - if [[ $ACTION == COVERAGE ]]; then bash <(curl -s https://codecov.io/bash); fi
+  - bash <(curl -s https://codecov.io/bash)
+  - ./makedoc.sh FLAP
