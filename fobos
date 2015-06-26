@@ -22,28 +22,28 @@ $OPTIMIZE    = -O2
 # GNU
 [shared-gnu]
 template  = template-shared-gnu
-target    = src/Data_Type_Command_Line_Interface.f90
+target    = src/Data_Type_Command_Line_Interface.F90
 build_dir = ./shared/
 output    = FLAP.so
 mklib     = shared
 
 [static-gnu]
 template  = template-static-gnu
-target    = src/Data_Type_Command_Line_Interface.f90
+target    = src/Data_Type_Command_Line_Interface.F90
 build_dir = ./static/
 output    = FLAP.a
 mklib     = static
 
 [shared-gnu-debug]
 template  = template-shared-gnu-debug
-target    = src/Data_Type_Command_Line_Interface.f90
+target    = src/Data_Type_Command_Line_Interface.F90
 build_dir = ./shared/
 output    = FLAP.so
 mklib     = shared
 
 [static-gnu-debug]
 template  = template-static-gnu-debug
-target    = src/Data_Type_Command_Line_Interface.f90
+target    = src/Data_Type_Command_Line_Interface.F90
 build_dir = ./static/
 output    = FLAP.a
 mklib     = static
@@ -87,28 +87,28 @@ output    = Test_Driver_String
 # Intel
 [shared-intel]
 template  = template-shared-intel
-target    = src/Data_Type_Command_Line_Interface.f90
+target    = src/Data_Type_Command_Line_Interface.F90
 build_dir = ./shared/
 output    = FLAP.so
 mklib     = shared
 
 [static-intel]
 template  = template-static-intel
-target    = src/Data_Type_Command_Line_Interface.f90
+target    = src/Data_Type_Command_Line_Interface.F90
 build_dir = ./static/
 output    = FLAP.a
 mklib     = static
 
 [shared-intel-debug]
 template  = template-shared-intel-debug
-target    = src/Data_Type_Command_Line_Interface.f90
+target    = src/Data_Type_Command_Line_Interface.F90
 build_dir = ./shared/
 output    = FLAP.so
 mklib     = shared
 
 [static-intel-debug]
 template  = template-static-intel-debug
-target    = src/Data_Type_Command_Line_Interface.f90
+target    = src/Data_Type_Command_Line_Interface.F90
 build_dir = ./static/
 output    = FLAP.a
 mklib     = static
