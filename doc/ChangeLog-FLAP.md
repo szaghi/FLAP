@@ -2,7 +2,27 @@
 
 ## [Unreleased](https://github.com/szaghi/FLAP/tree/HEAD)
 
-[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.4.0...HEAD)
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.5.2...HEAD)
+
+**Closed issues:**
+
+- fobs file doesn’t actually build anything [\#34](https://github.com/szaghi/FLAP/issues/34)
+
+## [v0.5.2](https://github.com/szaghi/FLAP/tree/v0.5.2) (2015-06-26)
+
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.5.1...v0.5.2)
+
+**Merged pull requests:**
+
+- use \_\_GFORTRAN\_\_ rather than -DGNU [\#35](https://github.com/szaghi/FLAP/pull/35) ([zbeekman](https://github.com/zbeekman))
+
+## [v0.5.1](https://github.com/szaghi/FLAP/tree/v0.5.1) (2015-06-10)
+
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.5.0...v0.5.1)
+
+## [v0.5.0](https://github.com/szaghi/FLAP/tree/v0.5.0) (2015-06-05)
+
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.4.0...v0.5.0)
 
 **Implemented enhancements:**
 
