@@ -15,168 +15,167 @@ USE, intrinsic:: ISO_FORTRAN_ENV, only: stdout=>OUTPUT_UNIT, stderr=>ERROR_UNIT 
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 private
+save
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-type, abstract:: Type_Object
+type, abstract :: Type_Object
   private
-  character(len=:), public, allocatable:: progname      !< Program name.
-  character(len=:), public, allocatable:: version       !< Program version.
-  character(len=:),         allocatable:: help          !< Help message.
-  character(len=:), public, allocatable:: description   !< Detailed description.
-  character(len=:), public, allocatable:: license       !< License description.
-  character(len=:), public, allocatable:: authors       !< Authors list.
-  character(len=:), public, allocatable:: epilog        !< Epilog message.
-  character(len=:), public, allocatable:: m_exclude     !< Mutually exclude other CLA(s group).
-  integer(I4P),     public::              error = 0_I4P !< Error traping flag.
+  character(len=:), public, allocatable :: progname    !< Program name.
+  character(len=:), public, allocatable :: version     !< Program version.
+  character(len=:),         allocatable :: help        !< Help message.
+  character(len=:), public, allocatable :: description !< Detailed description.
+  character(len=:), public, allocatable :: license     !< License description.
+  character(len=:), public, allocatable :: authors     !< Authors list.
+  character(len=:), public, allocatable :: epilog      !< Epilog message.
+  character(len=:), public, allocatable :: m_exclude   !< Mutually exclude other CLA(s group).
+  integer(I4P),     public              :: error=0_I4P !< Error traping flag.
   contains
-    procedure:: free_object   !< Free dynamic memory.
-    procedure:: errored       !< Trig error occurence and print meaningful message.
-    procedure:: print_version !< Print version.
-    procedure:: assign_object !< Assignment overloading.
+    procedure :: free_object   !< Free dynamic memory.
+    procedure :: errored       !< Trig error occurence and print meaningful message.
+    procedure :: print_version !< Print version.
+    procedure :: assign_object !< Assignment overloading.
 endtype Type_Object
 
-type, extends(Type_Object):: Type_Command_Line_Argument
+type, extends(Type_Object) :: Type_Command_Line_Argument
   !< Command line arguments (CLA).
   !<
   !< @note If not otherwise declared the action on CLA value is set to "store" a value.
   private
-  character(len=:), allocatable:: switch             !< Switch name.
-  character(len=:), allocatable:: switch_ab          !< Abbreviated switch name.
-  logical::                       required  =.false. !< Flag for set required argument.
-  logical::                       positional=.false. !< Flag for checking if CLA is a positional or a named CLA.
-  integer(I4P)::                  position  = 0_I4P  !< Position of positional CLA.
-  logical::                       passed    =.false. !< Flag for checking if CLA has been passed to CLI.
-  character(len=:), allocatable:: act                !< CLA value action.
-  character(len=:), allocatable:: def                !< Default value.
-  character(len=:), allocatable:: nargs              !< Number of arguments consumed by CLA.
-  character(len=:), allocatable:: choices            !< List (comma separated) of allowable values for the argument.
-  character(len=:), allocatable:: val                !< CLA value.
-  character(len=:), allocatable:: envvar             !< Environment variable from which take value.
+  character(len=:), allocatable :: switch             !< Switch name.
+  character(len=:), allocatable :: switch_ab          !< Abbreviated switch name.
+  logical                       :: required=.false.   !< Flag for set required argument.
+  logical                       :: positional=.false. !< Flag for checking if CLA is a positional or a named CLA.
+  integer(I4P)                  :: position= 0_I4P    !< Position of positional CLA.
+  logical                       :: passed=.false.     !< Flag for checking if CLA has been passed to CLI.
+  character(len=:), allocatable :: act                !< CLA value action.
+  character(len=:), allocatable :: def                !< Default value.
+  character(len=:), allocatable :: nargs              !< Number of arguments consumed by CLA.
+  character(len=:), allocatable :: choices            !< List (comma separated) of allowable values for the argument.
+  character(len=:), allocatable :: val                !< CLA value.
+  character(len=:), allocatable :: envvar             !< Environment variable from which take value.
   contains
     ! public methods
-    procedure, public:: free          => free_cla             !< Free dynamic memory.
-    procedure, public:: check         => check_cla            !< Check CLA data consistency.
-    procedure, public:: check_choices => check_choices_cla    !< Check if CLA value is in allowed choices.
-    generic,   public:: get           => get_cla,get_cla_list !< Get CLA value(s).
-    procedure, public:: usage         => usage_cla            !< Get correct CLA usage.
-    procedure, public:: signature     => signature_cla        !< Get CLA signature for adding to the CLI one.
+    procedure, public :: free          => free_cla             !< Free dynamic memory.
+    procedure, public :: check         => check_cla            !< Check CLA data consistency.
+    procedure, public :: check_choices => check_choices_cla    !< Check if CLA value is in allowed choices.
+    generic,   public :: get           => get_cla,get_cla_list !< Get CLA value(s).
+    procedure, public :: usage         => usage_cla            !< Get correct CLA usage.
+    procedure, public :: signature     => signature_cla        !< Get CLA signature for adding to the CLI one.
     ! private methods
-    procedure, private:: get_cla                     !< Get CLA (single) value from CLAs list parsed.
-    procedure, private:: get_cla_list                !< Get CLA multiple values from CLAs list parsed.
-    procedure, private:: assign_cla                  !< CLA assignment overloading.
-    generic,   private:: assignment(=) => assign_cla !< CLA assignment overloading.
-    final::              finalize_cla                !< Free dynamic memory when finalizing.
+    procedure, private :: get_cla                     !< Get CLA (single) value from CLAs list parsed.
+    procedure, private :: get_cla_list                !< Get CLA multiple values from CLAs list parsed.
+    procedure, private :: assign_cla                  !< CLA assignment overloading.
+    generic,   private :: assignment(=) => assign_cla !< CLA assignment overloading.
+    final              :: finalize_cla                !< Free dynamic memory when finalizing.
 endtype Type_Command_Line_Argument
 
-type, extends(Type_Object):: Type_Command_Line_Arguments_Group
+type, extends(Type_Object) :: Type_Command_Line_Arguments_Group
   !< Group of CLAs for building nested commands.
   private
-  character(len=:), allocatable::                 group               !< Group name (command).
-  integer(I4P)::                                  Na          = 0_I4P !< Number of CLA.
-  integer(I4P)::                                  Na_required = 0_I4P !< Number of command line arguments that CLI requires.
-  integer(I4P)::                                  Na_optional = 0_I4P !< Number of command line arguments that are optional for CLI.
-  type(Type_Command_Line_Argument), allocatable:: cla(:)              !< CLA list [1:Na].
-  logical::                                       called      =.false.!< Flag for checking if CLAs group has been passed to CLI.
+  character(len=:), allocatable                 :: group             !< Group name (command).
+  integer(I4P)                                  :: Na=0_I4P          !< Number of CLA.
+  integer(I4P)                                  :: Na_required=0_I4P !< Number of command line arguments that CLI requires.
+  integer(I4P)                                  :: Na_optional=0_I4P !< Number of command line arguments that are optional for CLI.
+  type(Type_Command_Line_Argument), allocatable :: cla(:)            !< CLA list [1:Na].
+  logical                                       :: called=.false.    !< Flag for checking if CLAs group has been passed to CLI.
   contains
     ! public methods
-    procedure, public:: free              => free_clasg              !< Free dynamic memory.
-    procedure, public:: check             => check_clasg             !< Check CLAs data consistency.
-    procedure, public:: check_required    => check_required_clasg    !< Check if required CLAs are passed.
-    procedure, public:: check_m_exclusive => check_m_exclusive_clasg !< Check if two mutually exclusive CLAs have been passed.
-    procedure, public:: add               => add_cla_clasg           !< Add CLA to CLAs group.
-    procedure, public:: passed            => passed_clasg            !< Check if a CLA has been passed.
-    procedure, public:: defined           => defined_clasg           !< Check if a CLA has been defined.
-    procedure, public:: parse             => parse_clasg             !< Parse CLAs group arguments.
-    procedure, public:: usage             => usage_clasg             !< Get correct CLAs group usage.
-    procedure, public:: signature         => signature_clasg         !< Get CLAs group signature for adding to the CLI one.
+    procedure, public :: free              => free_clasg              !< Free dynamic memory.
+    procedure, public :: check             => check_clasg             !< Check CLAs data consistency.
+    procedure, public :: check_required    => check_required_clasg    !< Check if required CLAs are passed.
+    procedure, public :: check_m_exclusive => check_m_exclusive_clasg !< Check if two mutually exclusive CLAs have been passed.
+    procedure, public :: add               => add_cla_clasg           !< Add CLA to CLAs group.
+    procedure, public :: passed            => passed_clasg            !< Check if a CLA has been passed.
+    procedure, public :: defined           => defined_clasg           !< Check if a CLA has been defined.
+    procedure, public :: parse             => parse_clasg             !< Parse CLAs group arguments.
+    procedure, public :: usage             => usage_clasg             !< Get correct CLAs group usage.
+    procedure, public :: signature         => signature_clasg         !< Get CLAs group signature for adding to the CLI one.
     ! private methods
-    procedure, private:: assign_clasg                  !< CLAs group assignment overloading.
-    generic,   private:: assignment(=) => assign_clasg !< CLAs group assignment overloading.
-    final::              finalize_clasg                !< Free dynamic memory when finalizing.
+    procedure, private :: assign_clasg                  !< CLAs group assignment overloading.
+    generic,   private :: assignment(=) => assign_clasg !< CLAs group assignment overloading.
+    final              :: finalize_clasg                !< Free dynamic memory when finalizing.
 endtype Type_Command_Line_Arguments_Group
 
-type, extends(Type_Object), public:: Type_Command_Line_Interface
+type, extends(Type_Object), public :: Type_Command_Line_Interface
   !< Command Line Interface (CLI).
   private
-  type(Type_Command_Line_Arguments_Group), allocatable:: clasg(:)            !< CLA list [1:Na].
+  type(Type_Command_Line_Arguments_Group), allocatable :: clasg(:)          !< CLA list [1:Na].
 #ifdef __GFORTRAN__
-  character(100  ), allocatable::                        args(:)             !< Actually passed command line arguments.
-  character(100  ), allocatable::                        examples(:)         !< Examples of correct usage.
+  character(100  ), allocatable                        :: args(:)           !< Actually passed command line arguments.
+  character(100  ), allocatable                        :: examples(:)       !< Examples of correct usage.
 #else
-  character(len=:), allocatable::                        args(:)             !< Actually passed command line arguments.
-  character(len=:), allocatable::                        examples(:)         !< Examples of correct usage (not work with gfortran).
+  character(len=:), allocatable                        :: args(:)           !< Actually passed command line arguments.
+  character(len=:), allocatable                        :: examples(:)       !< Examples of correct usage (not work with gfortran).
 #endif
-  logical::                                              disable_hv = .false.!< Disable automatic 'help' and 'version' CLAs.
+  logical                                              :: disable_hv=.false.!< Disable automatic 'help' and 'version' CLAs.
   contains
     ! public methods
-    procedure, public:: free                                !< Free dynamic memory.
-    procedure, public:: init                                !< Initialize CLI.
-    procedure, public:: add_group                           !< Add CLAs group CLI.
-    procedure, public:: add                                 !< Add CLA to CLI.
-    procedure, public:: passed                              !< Check if a CLA has been passed.
-    procedure, public:: defined                             !< Check if a CLA has been defined.
-    procedure, public:: defined_group                       !< Check if a CLAs group has been defined.
-    procedure, public:: set_mutually_exclusive_groups       !< Set two CLAs group as mutually exclusive.
-    procedure, public:: run_command => called_group         !< Check if a CLAs group has been runned.
-    procedure, public:: parse                               !< Parse Command Line Interfaces.
-    generic,   public:: get => get_cla_cli,get_cla_list_cli !< Get CLA value(s) from CLAs list parsed.
-    procedure, public:: usage                               !< Get CLI usage.
-    procedure, public:: signature                           !< Get CLI signature.
-    procedure, public:: print_usage                         !< Print correct usage of CLI.
-    procedure, public:: save_man_page                       !< Save man page build on CLI.
+    procedure, public :: free                                !< Free dynamic memory.
+    procedure, public :: init                                !< Initialize CLI.
+    procedure, public :: add_group                           !< Add CLAs group CLI.
+    procedure, public :: add                                 !< Add CLA to CLI.
+    procedure, public :: passed                              !< Check if a CLA has been passed.
+    procedure, public :: defined                             !< Check if a CLA has been defined.
+    procedure, public :: defined_group                       !< Check if a CLAs group has been defined.
+    procedure, public :: set_mutually_exclusive_groups       !< Set two CLAs group as mutually exclusive.
+    procedure, public :: run_command => called_group         !< Check if a CLAs group has been runned.
+    procedure, public :: parse                               !< Parse Command Line Interfaces.
+    generic,   public :: get => get_cla_cli,get_cla_list_cli !< Get CLA value(s) from CLAs list parsed.
+    procedure, public :: usage                               !< Get CLI usage.
+    procedure, public :: signature                           !< Get CLI signature.
+    procedure, public :: print_usage                         !< Print correct usage of CLI.
+    procedure, public :: save_man_page                       !< Save man page build on CLI.
     ! private methods
-    procedure, private:: check                                !< Check CLAs data consistenc.
-    procedure, private:: check_m_exclusive                    !< Check if two mutually exclusive CLAs group have been called.
-    procedure, private:: get_clasg_indexes                    !< Get CLAs groups indexes.
-    generic,   private:: get_args => get_args_from_string,&   !< Get CLAs from string.
-                                     get_args_from_invocation !< Get CLAs from CLI invocation.
-    procedure, private:: get_args_from_string                 !< Get CLAs from string.
-    procedure, private:: get_args_from_invocation             !< Get CLAs from CLI invocation.
-    procedure, private:: get_cla_cli                          !< Get CLA (single) value from CLAs list parsed.
-    procedure, private:: get_cla_list_cli                     !< Get CLA multiple values from CLAs list parsed.
-    procedure, private:: assign_cli                           !< CLI assignment overloading.
-    generic,   private:: assignment(=) => assign_cli          !< CLI assignment overloading.
-    final::              finalize                             !< Free dynamic memory when finalizing.
+    procedure, private :: check                                !< Check CLAs data consistenc.
+    procedure, private :: check_m_exclusive                    !< Check if two mutually exclusive CLAs group have been called.
+    procedure, private :: get_clasg_indexes                    !< Get CLAs groups indexes.
+    generic,   private :: get_args => get_args_from_string,&   !< Get CLAs from string.
+                                      get_args_from_invocation !< Get CLAs from CLI invocation.
+    procedure, private :: get_args_from_string                 !< Get CLAs from string.
+    procedure, private :: get_args_from_invocation             !< Get CLAs from CLI invocation.
+    procedure, private :: get_cla_cli                          !< Get CLA (single) value from CLAs list parsed.
+    procedure, private :: get_cla_list_cli                     !< Get CLA multiple values from CLAs list parsed.
+    procedure, private :: assign_cli                           !< CLI assignment overloading.
+    generic,   private :: assignment(=) => assign_cli          !< CLI assignment overloading.
+    final              :: finalize                             !< Free dynamic memory when finalizing.
 endtype Type_Command_Line_Interface
-
-integer(I4P),     parameter:: max_val_len        = 1000            !< Maximum number of characters of CLA value.
-character(len=*), parameter:: action_store       = 'STORE'         !< CLA that stores a value associated to its switch.
-character(len=*), parameter:: action_store_true  = 'STORE_TRUE'    !< CLA that stores .true. without the necessity of a value.
-character(len=*), parameter:: action_store_false = 'STORE_FALSE'   !< CLA that stores .false. without the necessity of a value.
-character(len=*), parameter:: action_print_help  = 'PRINT_HELP'    !< CLA that print help message.
-character(len=*), parameter:: action_print_vers  = 'PRINT_VERSION' !< CLA that print version.
-character(len=*), parameter:: args_sep           = '||!||'         !< Arguments separator for multiple valued (list) CLA.
+! parameters
+integer(I4P),     parameter :: max_val_len        = 1000            !< Maximum number of characters of CLA value.
+character(len=*), parameter :: action_store       = 'STORE'         !< CLA that stores a value associated to its switch.
+character(len=*), parameter :: action_store_true  = 'STORE_TRUE'    !< CLA that stores .true. without the necessity of a value.
+character(len=*), parameter :: action_store_false = 'STORE_FALSE'   !< CLA that stores .false. without the necessity of a value.
+character(len=*), parameter :: action_print_help  = 'PRINT_HELP'    !< CLA that print help message.
+character(len=*), parameter :: action_print_vers  = 'PRINT_VERSION' !< CLA that print version.
+character(len=*), parameter :: args_sep           = '||!||'         !< Arguments separator for multiple valued (list) CLA.
 ! code errors and status
-integer(I4P), parameter:: error_cla_optional_no_def        = 1  !< Optional CLA without default value.
-integer(I4P), parameter:: error_cla_required_m_exclude     = 2  !< Required CLA cannot exclude others.
-integer(I4P), parameter:: error_cla_positional_m_exclude   = 3  !< Positional CLA cannot exclude others.
-integer(I4P), parameter:: error_cla_named_no_name          = 4  !< Named CLA without switch name.
-integer(I4P), parameter:: error_cla_positional_no_position = 5  !< Positional CLA without position.
-integer(I4P), parameter:: error_cla_positional_no_store    = 6  !< Positional CLA without action_store.
-integer(I4P), parameter:: error_cla_not_in_choices         = 7  !< CLA value out of a specified choices.
-integer(I4P), parameter:: error_cla_missing_required       = 8  !< Missing required CLA.
-integer(I4P), parameter:: error_cla_m_exclude              = 9  !< Two mutually exclusive CLAs have been passed.
-integer(I4P), parameter:: error_cla_casting_logical        = 10 !< Error casting CLA value to logical type.
-integer(I4P), parameter:: error_cla_no_list                = 11 !< Actual CLA is not list-values.
-integer(I4P), parameter:: error_cla_nargs_insufficient     = 12 !< Multi-valued CLA with insufficient arguments.
-integer(I4P), parameter:: error_cla_unknown                = 13 !< Unknown CLA (switch name).
-integer(I4P), parameter:: error_clasg_consistency          = 14 !< CLAs group consistency error.
-integer(I4P), parameter:: error_clasg_m_exclude            = 15 !< Two mutually exclusive CLAs group have been called.
-integer(I4P), parameter:: error_cli_missing_cla            = 16 !< CLA not found in CLI.
-integer(I4P), parameter:: error_cli_missing_group          = 17 !< Group not found in CLI.
-integer(I4P), parameter:: error_cli_missing_selection_cla  = 18 !< CLA selection in CLI failing.
-integer(I4P), parameter:: error_cli_too_few_clas           = 19 !< Insufficient arguments for CLI.
-integer(I4P), parameter:: status_clasg_print_v             = -1 !< Print version status.
-integer(I4P), parameter:: status_clasg_print_h             = -2 !< Print help status.
+integer(I4P), parameter :: error_cla_optional_no_def        = 1  !< Optional CLA without default value.
+integer(I4P), parameter :: error_cla_required_m_exclude     = 2  !< Required CLA cannot exclude others.
+integer(I4P), parameter :: error_cla_positional_m_exclude   = 3  !< Positional CLA cannot exclude others.
+integer(I4P), parameter :: error_cla_named_no_name          = 4  !< Named CLA without switch name.
+integer(I4P), parameter :: error_cla_positional_no_position = 5  !< Positional CLA without position.
+integer(I4P), parameter :: error_cla_positional_no_store    = 6  !< Positional CLA without action_store.
+integer(I4P), parameter :: error_cla_not_in_choices         = 7  !< CLA value out of a specified choices.
+integer(I4P), parameter :: error_cla_missing_required       = 8  !< Missing required CLA.
+integer(I4P), parameter :: error_cla_m_exclude              = 9  !< Two mutually exclusive CLAs have been passed.
+integer(I4P), parameter :: error_cla_casting_logical        = 10 !< Error casting CLA value to logical type.
+integer(I4P), parameter :: error_cla_no_list                = 11 !< Actual CLA is not list-values.
+integer(I4P), parameter :: error_cla_nargs_insufficient     = 12 !< Multi-valued CLA with insufficient arguments.
+integer(I4P), parameter :: error_cla_unknown                = 13 !< Unknown CLA (switch name).
+integer(I4P), parameter :: error_clasg_consistency          = 14 !< CLAs group consistency error.
+integer(I4P), parameter :: error_clasg_m_exclude            = 15 !< Two mutually exclusive CLAs group have been called.
+integer(I4P), parameter :: error_cli_missing_cla            = 16 !< CLA not found in CLI.
+integer(I4P), parameter :: error_cli_missing_group          = 17 !< Group not found in CLI.
+integer(I4P), parameter :: error_cli_missing_selection_cla  = 18 !< CLA selection in CLI failing.
+integer(I4P), parameter :: error_cli_too_few_clas           = 19 !< Insufficient arguments for CLI.
+integer(I4P), parameter :: status_clasg_print_v             = -1 !< Print version status.
+integer(I4P), parameter :: status_clasg_print_h             = -2 !< Print help status.
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
   ! auxiliary procedures
   elemental function Upper_Case(string)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Procedure for converting the lower case characters of a string to upper case one.
-  !<
-  !< @note This is taken form Lib_Strings.f90: chek into it for any updates.
+  !< Convert the lower case characters of a string to upper case one.
   !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   character(len=*), intent(IN):: string                                        !< String to be converted.
@@ -197,26 +196,23 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction Upper_Case
 
-  pure subroutine tokenize(strin,delimiter,Nt,toks)
+  pure subroutine tokenize(strin, delimiter, toks, Nt)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Procedure for tokenizing a string in order to parse it.
+  !< Tokenize a string in order to parse it.
   !<
   !< @note The dummy array containing tokens must allocatable and its character elements must have the same length of the input
   !< string. If the length of the delimiter is higher than the input string one then the output tokens array is allocated with
   !< only one element set to char(0).
-  !<
-  !< @note This is taken form Lib_Strings.f90: chek into it for any updates.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  character(len=*),          intent(IN)::               strin     !< String to be tokenized.
-  character(len=*),          intent(IN)::               delimiter !< Delimiter of tokens.
-  integer(I4P),              intent(OUT), optional::    Nt        !< Number of tokens.
-  character(len=len(strin)), intent(OUT), allocatable:: toks(:)   !< Tokens.
-  character(len=len(strin))::                           strsub    !< Temporary string.
-  integer(I4P)::                                        dlen      !< Delimiter length.
-  integer(I4P)::                                        c         !< Counter.
-  integer(I4P)::                                        n         !< Counter.
-  integer(I4P)::                                        t         !< Counter.
+  character(len=*),          intent(IN)               :: strin     !< String to be tokenized.
+  character(len=*),          intent(IN)               :: delimiter !< Delimiter of tokens.
+  character(len=len(strin)), intent(OUT), allocatable :: toks(:)   !< Tokens.
+  integer(I4P),              intent(OUT), optional    :: Nt        !< Number of tokens.
+  character(len=len(strin))                           :: strsub    !< Temporary string.
+  integer(I4P)                                        :: dlen      !< Delimiter length.
+  integer(I4P)                                        :: c         !< Counter.
+  integer(I4P)                                        :: n         !< Counter.
+  integer(I4P)                                        :: t         !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -227,7 +223,7 @@ contains
   if (dlen>len(strin)) then
     allocate(toks(1:1)) ; toks(1) = char(0) ; if (present(Nt)) Nt = 1 ; return
   endif
-  ! computing the number of tokens
+  ! compute the number of tokens
   n = 1
   do c=1,len(strsub)-dlen ! loop over string characters
     if (strsub(c:c+dlen-1)==delimiter) n = n + 1
@@ -253,8 +249,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Free dynamic memory.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Object), intent(INOUT):: obj !< Object data.
+  class(Type_Object), intent(INOUT) :: obj !< Object data.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -271,21 +266,19 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine free_object
 
-  subroutine errored(obj,pref,group,switch,val_str,log_value,a1,a2,error)
+  subroutine errored(obj, error, pref, group, switch, val_str, log_value, a1, a2)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Trig error occurence and print meaningful message.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Object),     intent(INOUT):: obj       !< Object data.
-  character(*), optional, intent(IN)::    pref      !< Prefixing string.
-  ! integer(I4P), optional, intent(IN)::    Na        !< Number of CLA passed.
-  character(*), optional, intent(IN)::    group     !< Group name.
-  character(*), optional, intent(IN)::    switch    !< CLA switch name.
-  character(*), optional, intent(IN)::    val_str   !< Value string.
-  character(*), optional, intent(IN)::    log_value !< Logical value to be casted.
-  integer(I4P), optional, intent(IN)::    a1,a2     !< CLAs group inconsistent indexes.
-  integer(I4P),           intent(IN)::    error     !< Error occurred.
-  character(len=:), allocatable::         prefd     !< Prefixing string.
+  class(Type_Object),     intent(INOUT) :: obj       !< Object data.
+  integer(I4P),           intent(IN)    :: error     !< Error occurred.
+  character(*), optional, intent(IN)    :: pref      !< Prefixing string.
+  character(*), optional, intent(IN)    :: group     !< Group name.
+  character(*), optional, intent(IN)    :: switch    !< CLA switch name.
+  character(*), optional, intent(IN)    :: val_str   !< Value string.
+  character(*), optional, intent(IN)    :: log_value !< Logical value to be casted.
+  integer(I4P), optional, intent(IN)    :: a1,a2     !< CLAs group inconsistent indexes.
+  character(len=:), allocatable         :: prefd     !< Prefixing string.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -396,14 +389,13 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine errored
 
-  subroutine print_version(obj,pref)
+  subroutine print_version(obj, pref)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Print version.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Object),     intent(IN):: obj   !< Object data.
-  character(*), optional, intent(IN):: pref  !< Prefixing string.
-  character(len=:), allocatable::      prefd !< Prefixing string.
+  class(Type_Object),     intent(IN) :: obj   !< Object data.
+  character(*), optional, intent(IN) :: pref  !< Prefixing string.
+  character(len=:), allocatable      :: prefd !< Prefixing string.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -419,11 +411,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine print_version
 
-  elemental subroutine assign_object(lhs,rhs)
+  elemental subroutine assign_object(lhs, rhs)
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Object), intent(INOUT):: lhs !< Left hand side.
-  class(Type_Object), intent(IN)::    rhs !< Rigth hand side.
+  class(Type_Object), intent(INOUT) :: lhs !< Left hand side.
+  class(Type_Object), intent(IN)    :: rhs !< Rigth hand side.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -446,8 +437,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Free dynamic memory.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Argument), intent(INOUT):: cla !< CLA data.
+  class(Type_Command_Line_Argument), intent(INOUT) :: cla !< CLA data.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -474,8 +464,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Free dynamic memory when finalizing.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  type(Type_Command_Line_Argument), intent(INOUT):: cla !< CLA data.
+  type(Type_Command_Line_Argument), intent(INOUT) :: cla !< CLA data.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -488,10 +477,9 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Check CLA data consistency.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Argument), intent(INOUT):: cla   !< CLA data.
-  character(*), optional,            intent(IN)::    pref  !< Prefixing string.
-  character(len=:), allocatable::                    prefd !< Prefixing string.
+  class(Type_Command_Line_Argument), intent(INOUT) :: cla   !< CLA data.
+  character(*), optional,            intent(IN)    :: pref  !< Prefixing string.
+  character(len=:), allocatable                    :: prefd !< Prefixing string.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -516,30 +504,29 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check_cla
 
-  subroutine check_choices_cla(cla,val,pref)
+  subroutine check_choices_cla(cla, val, pref)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if CLA value is in allowed choices.
   !<
   !< @note This procedure can be called if and only if cla%choices has been allocated.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Argument), intent(INOUT):: cla     !< CLA data.
-  class(*),                          intent(IN)::    val     !< CLA value.
-  character(*), optional,            intent(IN)::    pref    !< Prefixing string.
-  character(len=:), allocatable::                    prefd   !< Prefixing string.
-  character(len(cla%choices)), allocatable::         toks(:) !< Tokens for parsing choices list.
-  integer(I4P)::                                     Nc      !< Number of choices.
-  logical::                                          val_in  !< Flag for checking if val is in the choosen range.
-  character(len=:), allocatable::                    val_str !< Value in string form.
-  character(len=:), allocatable::                    tmp     !< Temporary string for avoiding GNU gfrotran bug.
-  integer(I4P)::                                     c       !< Counter.
+  class(Type_Command_Line_Argument), intent(INOUT) :: cla     !< CLA data.
+  class(*),                          intent(IN)    :: val     !< CLA value.
+  character(*), optional,            intent(IN)    :: pref    !< Prefixing string.
+  character(len=:), allocatable                    :: prefd   !< Prefixing string.
+  character(len(cla%choices)), allocatable         :: toks(:) !< Tokens for parsing choices list.
+  integer(I4P)                                     :: Nc      !< Number of choices.
+  logical                                          :: val_in  !< Flag for checking if val is in the choosen range.
+  character(len=:), allocatable                    :: val_str !< Value in string form.
+  character(len=:), allocatable                    :: tmp     !< Temporary string for avoiding GNU gfrotran bug.
+  integer(I4P)                                     :: c       !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   val_in = .false.
   val_str = ''
   tmp = cla%choices
-  call tokenize(strin=tmp,delimiter=',',Nt=Nc,toks=toks)
+  call tokenize(strin=tmp, delimiter=',', toks=toks, Nt=Nc)
   select type(val)
 #ifdef r16p
   type is(real(R16P))
@@ -592,7 +579,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check_choices_cla
 
-  subroutine get_cla(cla,pref,val)
+  subroutine get_cla(cla, pref, val)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA (single) value.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -689,19 +676,18 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla
 
-  subroutine get_cla_list(cla,pref,val)
+  subroutine get_cla_list(cla, pref, val)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA (multiple) value.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Argument), intent(INOUT):: cla      !< CLA data.
-  character(*), optional,            intent(IN)::    pref     !< Prefixing string.
-  class(*),                          intent(INOUT):: val(1:)  !< CLA values.
-  integer(I4P)::                                     Nv       !< Number of values.
-  character(len=len(cla%val)), allocatable::         valsV(:) !< String array of values based on cla%val.
-  character(len=len(cla%def)), allocatable::         valsD(:) !< String array of values based on cla%def.
-  character(len=:), allocatable::                    prefd    !< Prefixing string.
-  integer(I4P)::                                     v        !< Values counter.
+  class(Type_Command_Line_Argument), intent(INOUT) :: cla      !< CLA data.
+  character(*), optional,            intent(IN)    :: pref     !< Prefixing string.
+  class(*),                          intent(INOUT) :: val(1:)  !< CLA values.
+  integer(I4P)                                     :: Nv       !< Number of values.
+  character(len=len(cla%val)), allocatable         :: valsV(:) !< String array of values based on cla%val.
+  character(len=len(cla%def)), allocatable         :: valsD(:) !< String array of values based on cla%def.
+  character(len=:), allocatable                    :: prefd    !< Prefixing string.
+  integer(I4P)                                     :: v        !< Values counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -716,7 +702,7 @@ contains
   endif
   if (cla%act==action_store) then
     if (cla%passed) then
-      call tokenize(strin=cla%val,delimiter=args_sep,Nt=Nv,toks=valsV)
+      call tokenize(strin=cla%val, delimiter=args_sep, toks=valsV, Nt=Nv)
       select type(val)
 #ifdef r16p
       type is(real(R16P))
@@ -778,7 +764,7 @@ contains
         enddo
       endselect
     else ! using default value
-      call tokenize(strin=cla%def,delimiter=' ',Nt=Nv,toks=valsD)
+      call tokenize(strin=cla%def, delimiter=' ', toks=valsD, Nt=Nv)
       select type(val)
 #ifdef r16p
       type is(real(R16P))
@@ -847,7 +833,7 @@ contains
         val = .true.
       endselect
     else
-      call tokenize(strin=cla%def,delimiter=' ',Nt=Nv,toks=valsD)
+      call tokenize(strin=cla%def, delimiter=' ', toks=valsD, Nt=Nv)
       select type(val)
       type is(logical)
         do v=1,Nv
@@ -862,7 +848,7 @@ contains
         val = .false.
       endselect
     else
-      call tokenize(strin=cla%def,delimiter=' ',Nt=Nv,toks=valsD)
+      call tokenize(strin=cla%def, delimiter=' ', toks=valsD, Nt=Nv)
       select type(val)
       type is(logical)
         do v=1,Nv
@@ -875,16 +861,15 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list
 
-  function usage_cla(cla,pref) result(usage)
+  function usage_cla(cla, pref) result(usage)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get correct CLA usage.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Argument), intent(IN):: cla   !< CLAs group data.
-  character(*), optional,            intent(IN):: pref  !< Prefixing string.
-  character(len=:), allocatable::                 usage !< Usage string.
-  character(len=:), allocatable::                 prefd !< Prefixing string.
-  integer(I4P)::                                  a     !< Counter.
+  class(Type_Command_Line_Argument), intent(IN) :: cla   !< CLAs group data.
+  character(*), optional,            intent(IN) :: pref  !< Prefixing string.
+  character(len=:), allocatable                 :: usage !< Usage string.
+  character(len=:), allocatable                 :: prefd !< Prefixing string.
+  integer(I4P)                                  :: a     !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -948,11 +933,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA signature for adding to the CLI one.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Argument), intent(IN):: cla   !< CLA data.
-  character(len=:), allocatable::                 signd !< Temporary CLI signature.
-  integer(I4P)::                                  nargs !< Number of arguments consumed by CLA.
-  integer(I4P)::                                  a     !< Counter.
+  class(Type_Command_Line_Argument), intent(IN) :: cla   !< CLA data.
+  character(len=:), allocatable                 :: signd !< Temporary CLI signature.
+  integer(I4P)                                  :: nargs !< Number of arguments consumed by CLA.
+  integer(I4P)                                  :: a     !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -997,11 +981,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction signature_cla
 
-  elemental subroutine assign_cla(lhs,rhs)
+  elemental subroutine assign_cla(lhs, rhs)
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Argument), intent(INOUT):: lhs !< Left hand side.
-  type(Type_Command_Line_Argument),  intent(IN)::    rhs !< Rigth hand side.
+  class(Type_Command_Line_Argument), intent(INOUT) :: lhs !< Left hand side.
+  type(Type_Command_Line_Argument),  intent(IN)    :: rhs !< Rigth hand side.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1029,8 +1012,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Free dynamic memory.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Arguments_Group), intent(INOUT):: clasg !< CLAs group data.
+  class(Type_Command_Line_Arguments_Group), intent(INOUT) :: clasg !< CLAs group data.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1054,8 +1036,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Free dynamic memory when finalizing.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  type(Type_Command_Line_Arguments_Group), intent(INOUT):: clasg !< CLAs group data.
+  type(Type_Command_Line_Arguments_Group), intent(INOUT) :: clasg !< CLAs group data.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1064,15 +1045,14 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine finalize_clasg
 
-  subroutine check_clasg(clasg,pref)
+  subroutine check_clasg(clasg, pref)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Check CLA data consistency.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Arguments_Group), intent(INOUT):: clasg !< CLAs group data.
-  character(*), optional,                   intent(IN)::    pref  !< Prefixing string.
-  character(len=:), allocatable::                           prefd !< Prefixing string.
-  integer(I4P)::                                            a,aa  !< Counters.
+  class(Type_Command_Line_Arguments_Group), intent(INOUT) :: clasg !< CLAs group data.
+  character(*), optional,                   intent(IN)    :: pref  !< Prefixing string.
+  character(len=:), allocatable                           :: prefd !< Prefixing string.
+  integer(I4P)                                            :: a, aa !< Counters.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1105,15 +1085,14 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check_clasg
 
-  subroutine check_required_clasg(clasg,pref)
+  subroutine check_required_clasg(clasg, pref)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if required CLAs are passed.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Arguments_Group), intent(INOUT):: clasg !< CLAs group data.
-  character(*), optional,                   intent(IN)::    pref  !< Prefixing string.
-  character(len=:), allocatable::                           prefd !< Prefixing string.
-  integer(I4P)::                                            a     !< Counter.
+  class(Type_Command_Line_Arguments_Group), intent(INOUT) :: clasg !< CLAs group data.
+  character(*), optional,                   intent(IN)    :: pref  !< Prefixing string.
+  character(len=:), allocatable                           :: prefd !< Prefixing string.
+  integer(I4P)                                            :: a     !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1134,15 +1113,14 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check_required_clasg
 
-  subroutine check_m_exclusive_clasg(clasg,pref)
+  subroutine check_m_exclusive_clasg(clasg, pref)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if two mutually exclusive CLAs have been passed.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Arguments_Group), intent(INOUT):: clasg !< CLAs group data.
-  character(*), optional,                   intent(IN)::    pref  !< Prefixing string.
-  character(len=:), allocatable::                           prefd !< Prefixing string.
-  integer(I4P)::                                            a     !< Counter.
+  class(Type_Command_Line_Arguments_Group), intent(INOUT) :: clasg !< CLAs group data.
+  character(*), optional,                   intent(IN)    :: pref  !< Prefixing string.
+  character(len=:), allocatable                           :: prefd !< Prefixing string.
+  integer(I4P)                                            :: a     !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1164,19 +1142,18 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check_m_exclusive_clasg
 
-  subroutine add_cla_clasg(clasg,pref,cla)
+  subroutine add_cla_clasg(clasg, pref, cla)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Add CLA to CLAs list.
   !<
   !< @note If not otherwise declared the action on CLA value is set to "store" a value that must be passed after the switch name
   !< or directly passed in case of positional CLA.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Arguments_Group), intent(INOUT):: clasg           !< CLAs group data.
-  character(*), optional,                   intent(IN)::    pref            !< Prefixing string.
-  type(Type_Command_Line_Argument),         intent(IN)::    cla             !< CLA data.
-  type(Type_Command_Line_Argument), allocatable::           cla_list_new(:) !< New (extended) CLA list.
-  character(len=:), allocatable::                           prefd           !< Prefixing string.
+  class(Type_Command_Line_Arguments_Group), intent(INOUT) :: clasg           !< CLAs group data.
+  character(*), optional,                   intent(IN)    :: pref            !< Prefixing string.
+  type(Type_Command_Line_Argument),         intent(IN)    :: cla             !< CLA data.
+  type(Type_Command_Line_Argument), allocatable           :: cla_list_new(:) !< New (extended) CLA list.
+  character(len=:), allocatable                           :: prefd           !< Prefixing string.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1209,16 +1186,15 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine add_cla_clasg
 
-  pure function passed_clasg(clasg,switch,position) result(passed)
+  pure function passed_clasg(clasg, switch, position) result(passed)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if a CLA has been passed.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Arguments_Group), intent(IN):: clasg    !< CLAs group data.
-  character(*), optional,                   intent(IN):: switch   !< Switch name.
-  integer(I4P), optional,                   intent(IN):: position !< Position of positional CLA.
-  logical::                                              passed   !< Check if a CLA has been passed.
-  integer(I4P)::                                         a        !< CLA counter.
+  class(Type_Command_Line_Arguments_Group), intent(IN) :: clasg    !< CLAs group data.
+  character(*), optional,                   intent(IN) :: switch   !< Switch name.
+  integer(I4P), optional,                   intent(IN) :: position !< Position of positional CLA.
+  logical                                              :: passed   !< Check if a CLA has been passed.
+  integer(I4P)                                         :: a        !< CLA counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1239,16 +1215,15 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction passed_clasg
 
-  function defined_clasg(clasg,switch,pos) result(defined)
+  function defined_clasg(clasg, switch, pos) result(defined)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if a CLA has been defined.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Arguments_Group), intent(IN)::  clasg   !< CLAs group data.
-  character(*),                             intent(IN)::  switch  !< Switch name.
-  integer(I4P), optional,                   intent(OUT):: pos     !< CLA position.
-  logical::                                               defined !< Check if a CLA has been defined.
-  integer(I4P)::                                          a       !< CLA counter.
+  class(Type_Command_Line_Arguments_Group), intent(IN)  :: clasg   !< CLAs group data.
+  character(*),                             intent(IN)  :: switch  !< Switch name.
+  integer(I4P), optional,                   intent(OUT) :: pos     !< CLA position.
+  logical                                               :: defined !< Check if a CLA has been defined.
+  integer(I4P)                                          :: a       !< CLA counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1267,21 +1242,20 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction defined_clasg
 
-  subroutine parse_clasg(clasg,pref,args)
+  subroutine parse_clasg(clasg, pref, args)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Parse CLAs group arguments.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Arguments_Group), intent(INOUT):: clasg   !< CLAs group data.
-  character(*), optional,                   intent(IN)::    pref    !< Prefixing string.
-  character(*),                             intent(IN)::    args(:) !< Command line arguments.
-  character(500)::                                          envvar  !< Environment variables buffer.
-  integer(I4P)::                                            arg     !< Argument counter.
-  integer(I4P)::                                            a       !< Counter.
-  integer(I4P)::                                            aa      !< Counter.
-  integer(I4P)::                                            nargs   !< Number of arguments consumed by a CLA.
-  character(len=:), allocatable::                           prefd   !< Prefixing string.
-  logical::                                                 found   !< Flag for checking if switch is a defined CLA.
+  class(Type_Command_Line_Arguments_Group), intent(INOUT) :: clasg   !< CLAs group data.
+  character(*), optional,                   intent(IN)    :: pref    !< Prefixing string.
+  character(*),                             intent(IN)    :: args(:) !< Command line arguments.
+  character(500)                                          :: envvar  !< Environment variables buffer.
+  integer(I4P)                                            :: arg     !< Argument counter.
+  integer(I4P)                                            :: a       !< Counter.
+  integer(I4P)                                            :: aa      !< Counter.
+  integer(I4P)                                            :: nargs   !< Number of arguments consumed by a CLA.
+  character(len=:), allocatable                           :: prefd   !< Prefixing string.
+  logical                                                 :: found   !< Flag for checking if switch is a defined CLA.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1367,17 +1341,16 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine parse_clasg
 
-  function usage_clasg(clasg,pref,no_header) result(usage)
+  function usage_clasg(clasg, pref, no_header) result(usage)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get correct CLAs group usage.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Arguments_Group), intent(IN):: clasg     !< CLAs group data.
-  character(*), optional,                   intent(IN):: pref      !< Prefixing string.
-  logical,      optional,                   intent(IN):: no_header !< Avoid insert header to usage.
-  character(len=:), allocatable::                        usage     !< Usage string.
-  integer(I4P)::                                         a         !< Counters.
-  character(len=:), allocatable::                        prefd     !< Prefixing string.
+  class(Type_Command_Line_Arguments_Group), intent(IN) :: clasg     !< CLAs group data.
+  character(*), optional,                   intent(IN) :: pref      !< Prefixing string.
+  logical,      optional,                   intent(IN) :: no_header !< Avoid insert header to usage.
+  character(len=:), allocatable                        :: usage     !< Usage string.
+  integer(I4P)                                         :: a         !< Counters.
+  character(len=:), allocatable                        :: prefd     !< Prefixing string.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1408,10 +1381,9 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLAs group signature for adding to the CLI one.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Arguments_Group), intent(IN):: clasg         !< CLAs group data.
-  character(len=:), allocatable::                        signd         !< Temporary CLI signature.
-  integer(I4P)::                                         a             !< Counters.
+  class(Type_Command_Line_Arguments_Group), intent(IN) :: clasg         !< CLAs group data.
+  character(len=:), allocatable                        :: signd         !< Temporary CLI signature.
+  integer(I4P)                                         :: a             !< Counters.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1423,11 +1395,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction signature_clasg
 
-  elemental subroutine assign_clasg(lhs,rhs)
+  elemental subroutine assign_clasg(lhs, rhs)
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Arguments_Group), intent(INOUT):: lhs !< Left hand side.
-  type(Type_Command_Line_Arguments_Group),  intent(IN)::    rhs !< Right hand side.
+  class(Type_Command_Line_Arguments_Group), intent(INOUT) :: lhs !< Left hand side.
+  type(Type_Command_Line_Arguments_Group),  intent(IN)    :: rhs !< Right hand side.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1449,11 +1420,10 @@ contains
   ! Type_Command_Line_Interface procedures
   elemental subroutine free(cli)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Procedure for freeing dynamic memory.
+  !< Free dynamic memory.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Interface), intent(INOUT):: cli !< CLI data.
-  integer(I4P)::                                      g   !< Counter.
+  class(Type_Command_Line_Interface), intent(INOUT) :: cli !< CLI data.
+  integer(I4P)                                      :: g   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1473,10 +1443,10 @@ contains
   endsubroutine free
 
   elemental subroutine finalize(cli)
-  !< Procedure for freeing dynamic memory when finalizing.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  type(Type_Command_Line_Interface), intent(INOUT):: cli !< CLI data.
+  !< Free dynamic memory when finalizing.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  type(Type_Command_Line_Interface), intent(INOUT) :: cli !< CLI data.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1485,21 +1455,20 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine finalize
 
-  pure subroutine init(cli,progname,version,help,description,license,authors,examples,epilog,disable_hv)
+  pure subroutine init(cli, progname, version, help, description, license, authors, examples, epilog, disable_hv)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Procedure for initializing CLI.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Interface), intent(INOUT):: cli          !< CLI data.
-  character(*), optional,             intent(IN)::    progname     !< Program name.
-  character(*), optional,             intent(IN)::    version      !< Program version.
-  character(*), optional,             intent(IN)::    help         !< Help message introducing the CLI usage.
-  character(*), optional,             intent(IN)::    description  !< Detailed description message introducing the program.
-  character(*), optional,             intent(IN)::    license      !< License description.
-  character(*), optional,             intent(IN)::    authors      !< Authors list.
-  character(*), optional,             intent(IN)::    examples(1:) !< Examples of correct usage.
-  character(*), optional,             intent(IN)::    epilog       !< Epilog message.
-  logical,      optional,             intent(IN)::    disable_hv   !< Disable automatic inserting of 'help' and 'version' CLAs.
+  class(Type_Command_Line_Interface), intent(INOUT) :: cli          !< CLI data.
+  character(*), optional,             intent(IN)    :: progname     !< Program name.
+  character(*), optional,             intent(IN)    :: version      !< Program version.
+  character(*), optional,             intent(IN)    :: help         !< Help message introducing the CLI usage.
+  character(*), optional,             intent(IN)    :: description  !< Detailed description message introducing the program.
+  character(*), optional,             intent(IN)    :: license      !< License description.
+  character(*), optional,             intent(IN)    :: authors      !< Authors list.
+  character(*), optional,             intent(IN)    :: examples(1:) !< Examples of correct usage.
+  character(*), optional,             intent(IN)    :: epilog       !< Epilog message.
+  logical,      optional,             intent(IN)    :: disable_hv   !< Disable automatic inserting of 'help' and 'version' CLAs.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1528,21 +1497,20 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init
 
-  subroutine add_group(cli,help,description,exclude,group)
+  subroutine add_group(cli, help, description, exclude, group)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Add CLAs group to CLI.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Interface), intent(INOUT)::    cli               !< CLI data.
-  character(*), optional,             intent(IN)::       help              !< Help message.
-  character(*), optional,             intent(IN)::       description       !< Detailed description.
-  character(*), optional,             intent(IN)::       exclude           !< Group name of the mutually exclusive group.
-  character(*),                       intent(IN)::       group             !< Name of the grouped CLAs.
-  type(Type_Command_Line_Arguments_Group), allocatable:: clasg_list_new(:) !< New (extended) CLAs group list.
-  character(len=:), allocatable::                        helpd             !< Help message.
-  character(len=:), allocatable::                        descriptiond      !< Detailed description.
-  character(len=:), allocatable::                        excluded          !< Group name of the mutually exclusive group.
-  integer(I4P)::                                         Ng                !< Number of groups.
+  class(Type_Command_Line_Interface), intent(INOUT)    :: cli               !< CLI data.
+  character(*), optional,             intent(IN)       :: help              !< Help message.
+  character(*), optional,             intent(IN)       :: description       !< Detailed description.
+  character(*), optional,             intent(IN)       :: exclude           !< Group name of the mutually exclusive group.
+  character(*),                       intent(IN)       :: group             !< Name of the grouped CLAs.
+  type(Type_Command_Line_Arguments_Group), allocatable :: clasg_list_new(:) !< New (extended) CLAs group list.
+  character(len=:), allocatable                        :: helpd             !< Help message.
+  character(len=:), allocatable                        :: descriptiond      !< Detailed description.
+  character(len=:), allocatable                        :: excluded          !< Group name of the mutually exclusive group.
+  integer(I4P)                                         :: Ng                !< Number of groups.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1567,19 +1535,18 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine add_group
 
-  subroutine set_mutually_exclusive_groups(cli,group1,group2)
+  subroutine set_mutually_exclusive_groups(cli, group1, group2)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Set two CLAs group ad mutually exclusive.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Interface), intent(INOUT):: cli    !< CLI data.
-  character(*),                       intent(IN)::    group1 !< Name of the first grouped CLAs.
-  character(*),                       intent(IN)::    group2 !< Name of the second grouped CLAs.
-  integer(I4P)::                                      g1,g2  !< Counters.
+  class(Type_Command_Line_Interface), intent(INOUT) :: cli    !< CLI data.
+  character(*),                       intent(IN)    :: group1 !< Name of the first grouped CLAs.
+  character(*),                       intent(IN)    :: group2 !< Name of the second grouped CLAs.
+  integer(I4P)                                      :: g1, g2 !< Counters.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  if (cli%defined_group(group=group1,g=g1).and.cli%defined_group(group=group2,g=g2)) then
+  if (cli%defined_group(group=group1, g=g1).and.cli%defined_group(group=group2, g=g2)) then
     cli%clasg(g1)%m_exclude = group2
     cli%clasg(g2)%m_exclude = group1
   endif
@@ -1587,8 +1554,8 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine set_mutually_exclusive_groups
 
-  subroutine add(cli,pref,group,group_index,switch,switch_ab,help,required,positional,position,act,def,nargs,choices,exclude,&
-                 envvar,error)
+  subroutine add(cli, pref, group, group_index, switch, switch_ab, help, required, positional, position, act, def, nargs,&
+                 choices, exclude, envvar, error)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Add CLA to CLI.
   !<
@@ -1599,27 +1566,26 @@ contains
   !<
   !< @note If CLA belongs to a not yet present group it is created on the fly.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Interface), intent(INOUT):: cli         !< CLI data.
-  character(*), optional,             intent(IN)::    pref        !< Prefixing string.
-  character(*), optional,             intent(IN)::    group       !< Name of the grouped CLAs.
-  integer(I4P), optional,             intent(IN)::    group_index !< Index of the grouped CLAs.
-  character(*), optional,             intent(IN)::    switch      !< Switch name.
-  character(*), optional,             intent(IN)::    switch_ab   !< Abbreviated switch name.
-  character(*), optional,             intent(IN)::    help        !< Help message describing the CLA.
-  logical,      optional,             intent(IN)::    required    !< Flag for set required argument.
-  logical,      optional,             intent(IN)::    positional  !< Flag for checking if CLA is a positional or a named CLA.
-  integer(I4P), optional,             intent(IN)::    position    !< Position of positional CLA.
-  character(*), optional,             intent(IN)::    act         !< CLA value action.
-  character(*), optional,             intent(IN)::    def         !< Default value.
-  character(*), optional,             intent(IN)::    nargs       !< Number of arguments consumed by CLA.
-  character(*), optional,             intent(IN)::    choices     !< List of allowable values for the argument.
-  character(*), optional,             intent(IN)::    exclude     !< Switch name of the mutually exclusive CLA.
-  character(*), optional,             intent(IN)::    envvar      !< Environment variable from which take value.
-  integer(I4P), optional,             intent(OUT)::   error       !< Error trapping flag.
-  type(Type_Command_Line_Argument)::                  cla         !< CLA data.
-  character(len=:), allocatable::                     prefd       !< Prefixing string.
-  integer(I4P)::                                      g           !< Counter.
+  class(Type_Command_Line_Interface), intent(INOUT) :: cli         !< CLI data.
+  character(*), optional,             intent(IN)    :: pref        !< Prefixing string.
+  character(*), optional,             intent(IN)    :: group       !< Name of the grouped CLAs.
+  integer(I4P), optional,             intent(IN)    :: group_index !< Index of the grouped CLAs.
+  character(*), optional,             intent(IN)    :: switch      !< Switch name.
+  character(*), optional,             intent(IN)    :: switch_ab   !< Abbreviated switch name.
+  character(*), optional,             intent(IN)    :: help        !< Help message describing the CLA.
+  logical,      optional,             intent(IN)    :: required    !< Flag for set required argument.
+  logical,      optional,             intent(IN)    :: positional  !< Flag for checking if CLA is a positional or a named CLA.
+  integer(I4P), optional,             intent(IN)    :: position    !< Position of positional CLA.
+  character(*), optional,             intent(IN)    :: act         !< CLA value action.
+  character(*), optional,             intent(IN)    :: def         !< Default value.
+  character(*), optional,             intent(IN)    :: nargs       !< Number of arguments consumed by CLA.
+  character(*), optional,             intent(IN)    :: choices     !< List of allowable values for the argument.
+  character(*), optional,             intent(IN)    :: exclude     !< Switch name of the mutually exclusive CLA.
+  character(*), optional,             intent(IN)    :: envvar      !< Environment variable from which take value.
+  integer(I4P), optional,             intent(OUT)   :: error       !< Error trapping flag.
+  type(Type_Command_Line_Argument)                  :: cla         !< CLA data.
+  character(len=:), allocatable                     :: prefd       !< Prefixing string.
+  integer(I4P)                                      :: g           !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1646,7 +1612,7 @@ contains
   if ((.not.present(group)).and.(.not.present(group_index))) then
     call cli%clasg(0)%add(pref=prefd,cla=cla) ; cli%error = cli%clasg(0)%error
   elseif (present(group)) then
-    if (cli%defined_group(group=group,g=g)) then
+    if (cli%defined_group(group=group, g=g)) then
       call cli%clasg(g)%add(pref=prefd,cla=cla) ; cli%error = cli%clasg(g)%error
     else
       call cli%add_group(group=group)
@@ -1662,16 +1628,15 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine add
 
-  subroutine check(cli,pref,error)
+  subroutine check(cli, pref, error)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Check CLAs data consistency.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Interface), intent(INOUT):: cli   !< CLI data.
-  character(*), optional,             intent(IN)::    pref  !< Prefixing string.
-  integer(I4P), optional,             intent(OUT)::   error !< Error trapping flag.
-  character(len=:), allocatable::                     prefd !< Prefixing string.
-  integer(I4P)::                                      g,gg  !< Counters.
+  class(Type_Command_Line_Interface), intent(INOUT) :: cli   !< CLI data.
+  character(*), optional,             intent(IN)    :: pref  !< Prefixing string.
+  integer(I4P), optional,             intent(OUT)   :: error !< Error trapping flag.
+  character(len=:), allocatable                     :: prefd !< Prefixing string.
+  integer(I4P)                                      :: g, gg !< Counters.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1685,7 +1650,7 @@ contains
     ! check mutually exclusive interaction
     if (g>0) then
       if (cli%clasg(g)%m_exclude/='') then
-        if (cli%defined_group(group=cli%clasg(g)%m_exclude,g=gg)) cli%clasg(gg)%m_exclude = cli%clasg(g)%group
+        if (cli%defined_group(group=cli%clasg(g)%m_exclude, g=gg)) cli%clasg(gg)%m_exclude = cli%clasg(g)%group
       endif
     endif
   enddo
@@ -1693,21 +1658,20 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check
 
-  subroutine check_m_exclusive(cli,pref)
+  subroutine check_m_exclusive(cli, pref)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if two mutually exclusive CLAs group have been called.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Interface), intent(INOUT):: cli   !< CLI data.
-  character(*), optional,             intent(IN)::    pref  !< Prefixing string.
-  character(len=:), allocatable::                     prefd !< Prefixing string.
-  integer(I4P)::                                      g,gg  !< Counters.
+  class(Type_Command_Line_Interface), intent(INOUT) :: cli   !< CLI data.
+  character(*), optional,             intent(IN)    :: pref  !< Prefixing string.
+  character(len=:), allocatable                     :: prefd !< Prefixing string.
+  integer(I4P)                                      :: g, gg  !< Counters.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   do g=1,size(cli%clasg,dim=1)-1
     if (cli%clasg(g)%called.and.(cli%clasg(g)%m_exclude/='')) then
-      if (cli%defined_group(group=cli%clasg(g)%m_exclude,g=gg)) then
+      if (cli%defined_group(group=cli%clasg(g)%m_exclude, g=gg)) then
         if (cli%clasg(gg)%called) then
           prefd = '' ; if (present(pref)) prefd = pref
           call cli%clasg(g)%errored(pref=prefd,error=error_clasg_m_exclude)
@@ -1721,17 +1685,16 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check_m_exclusive
 
-  function passed(cli,group,switch,position)
+  function passed(cli, group, switch, position)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if a CLA has been passed.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Interface), intent(IN):: cli      !< CLI data.
-  character(*), optional,             intent(IN):: group    !< Name of group (command) of CLA.
-  character(*), optional,             intent(IN):: switch   !< Switch name.
-  integer(I4P), optional,             intent(IN):: position !< Position of positional CLA.
-  logical::                                        passed   !< Check if a CLA has been passed.
-  integer(I4P)::                                   g        !< Counter.
+  class(Type_Command_Line_Interface), intent(IN) :: cli      !< CLI data.
+  character(*), optional,             intent(IN) :: group    !< Name of group (command) of CLA.
+  character(*), optional,             intent(IN) :: switch   !< Switch name.
+  integer(I4P), optional,             intent(IN) :: position !< Position of positional CLA.
+  logical                                        :: passed   !< Check if a CLA has been passed.
+  integer(I4P)                                   :: g        !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1743,7 +1706,7 @@ contains
       passed = cli%clasg(0)%passed(position=position)
     endif
   else
-    if (cli%defined_group(group=group,g=g)) then
+    if (cli%defined_group(group=group, g=g)) then
       if (present(switch)) then
         passed = cli%clasg(g)%passed(switch=switch)
       elseif (present(position)) then
@@ -1755,16 +1718,15 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction passed
 
-  function defined_group(cli,g,group) result(defined)
+  function defined_group(cli, group, g) result(defined)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if a CLAs group has been defined.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Interface), intent(IN)::  cli     !< CLI data.
-  integer(I4P), optional,             intent(OUT):: g       !< Index of group.
-  character(*),                       intent(IN)::  group   !< Name of group (command) of CLAs.
-  logical::                                         defined !< Check if a CLAs group has been defined.
-  integer(I4P)::                                    gg,ggg  !< Counters.
+  class(Type_Command_Line_Interface), intent(IN)  :: cli     !< CLI data.
+  character(*),                       intent(IN)  :: group   !< Name of group (command) of CLAs.
+  integer(I4P), optional,             intent(OUT) :: g       !< Index of group.
+  logical                                         :: defined !< Check if a CLAs group has been defined.
+  integer(I4P)                                    :: gg, ggg !< Counters.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1779,34 +1741,32 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction defined_group
 
-  function called_group(cli,group) result(called)
+  function called_group(cli, group) result(called)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if a CLAs group has been runned.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Interface), intent(IN)::  cli    !< CLI data.
-  character(*),                       intent(IN)::  group  !< Name of group (command) of CLAs.
-  logical::                                         called !< Check if a CLAs group has been runned.
-  integer(I4P)::                                    g      !< Counter.
+  class(Type_Command_Line_Interface), intent(IN) :: cli    !< CLI data.
+  character(*),                       intent(IN) :: group  !< Name of group (command) of CLAs.
+  logical                                        :: called !< Check if a CLAs group has been runned.
+  integer(I4P)                                   :: g      !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   called = .false.
-  if (cli%defined_group(group=group,g=g)) called = cli%clasg(g)%called
+  if (cli%defined_group(group=group, g=g)) called = cli%clasg(g)%called
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction called_group
 
-  function defined(cli,group,switch)
+  function defined(cli, switch, group)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if a CLA has been defined.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Interface), intent(IN):: cli     !< CLI data.
-  character(*), optional,             intent(IN):: group   !< Name of group (command) of CLAs.
-  character(*),                       intent(IN):: switch  !< Switch name.
-  logical::                                        defined !< Check if a CLA has been defined.
-  integer(I4P)::                                   g       !< Counter.
+  class(Type_Command_Line_Interface), intent(IN) :: cli     !< CLI data.
+  character(*),                       intent(IN) :: switch  !< Switch name.
+  character(*), optional,             intent(IN) :: group   !< Name of group (command) of CLAs.
+  logical                                        :: defined !< Check if a CLA has been defined.
+  integer(I4P)                                   :: g       !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1814,13 +1774,13 @@ contains
   if (.not.present(group)) then
     defined = cli%clasg(0)%defined(switch=switch)
   else
-    if (cli%defined_group(group=group,g=g)) defined = cli%clasg(g)%defined(switch=switch)
+    if (cli%defined_group(group=group, g=g)) defined = cli%clasg(g)%defined(switch=switch)
   endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction defined
 
-  subroutine parse(cli,pref,args,error)
+  subroutine parse(cli, pref, args, error)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Parse Command Line Interfaces by means of a previously initialized CLAs groups list.
   !<
@@ -1829,14 +1789,13 @@ contains
   !< @note If the *args* argument is passed the command line arguments are taken from it and not from the actual program CLI
   !< invocations.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Interface), intent(INOUT):: cli    !< CLI data.
-  character(*), optional,             intent(IN)::    pref   !< Prefixing string.
-  character(*), optional,             intent(IN)::    args   !< String containing command line arguments.
-  integer(I4P), optional,             intent(OUT)::   error  !< Error trapping flag.
-  character(len=:), allocatable::                     prefd  !< Prefixing string.
-  integer(I4P)::                                      g      !< Counter for CLAs group.
-  integer(I4P), allocatable::                         ai(:,:)!< Counter for CLAs grouped.
+  class(Type_Command_Line_Interface), intent(INOUT) :: cli    !< CLI data.
+  character(*), optional,             intent(IN)    :: pref   !< Prefixing string.
+  character(*), optional,             intent(IN)    :: args   !< String containing command line arguments.
+  integer(I4P), optional,             intent(OUT)   :: error  !< Error trapping flag.
+  character(len=:), allocatable                     :: prefd  !< Prefixing string.
+  integer(I4P)                                      :: g      !< Counter for CLAs group.
+  integer(I4P), allocatable                         :: ai(:,:)!< Counter for CLAs grouped.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1845,7 +1804,7 @@ contains
   ! adding help and version switches if not done by user
   if (.not.cli%disable_hv) then
     do g=0,size(cli%clasg,dim=1)-1
-      if (.not.(cli%defined(group=cli%clasg(g)%group,switch='--help').and.cli%defined(group=cli%clasg(g)%group,switch='-h'))) &
+      if (.not.(cli%defined(group=cli%clasg(g)%group, switch='--help').and.cli%defined(group=cli%clasg(g)%group, switch='-h'))) &
         call cli%add(pref        = prefd,                     &
                      group_index = g,                         &
                      switch      = '--help',                  &
@@ -1854,7 +1813,7 @@ contains
                      required    = .false.,                   &
                      def         = '',                        &
                      act         = 'print_help')
-      if (.not.(cli%defined(group=cli%clasg(g)%group,switch='--version').and.cli%defined(group=cli%clasg(g)%group,switch='-v'))) &
+      if (.not.(cli%defined(group=cli%clasg(g)%group, switch='--version').and.cli%defined(group=cli%clasg(g)%group, switch='-v'))) &
         call cli%add(pref        = prefd,           &
                      group_index = g,               &
                      switch      = '--version',     &
@@ -1919,18 +1878,17 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine parse
 
-  subroutine get_clasg_indexes(cli,ai)
+  subroutine get_clasg_indexes(cli, ai)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get the argument indexes of CLAs groups defined parsing the actual passed CLAs.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Interface), intent(INOUT):: cli    !< CLI data.
-  integer(I4P), allocatable,          intent(OUT)::   ai(:,:)!< CLAs grouped indexes.
-  integer(I4P)::                                      Na     !< Number of command line arguments passed.
-  integer(I4P)::                                      a      !< Counter for CLAs.
-  integer(I4P)::                                      aa     !< Counter for CLAs.
-  integer(I4P)::                                      g      !< Counter for CLAs group.
-  logical::                                           found  !< Flag for inquiring if a named group is found.
+  class(Type_Command_Line_Interface), intent(INOUT) :: cli    !< CLI data.
+  integer(I4P), allocatable,          intent(OUT)   :: ai(:,:)!< CLAs grouped indexes.
+  integer(I4P)                                      :: Na     !< Number of command line arguments passed.
+  integer(I4P)                                      :: a      !< Counter for CLAs.
+  integer(I4P)                                      :: aa     !< Counter for CLAs.
+  integer(I4P)                                      :: g      !< Counter for CLAs group.
+  logical                                           :: found  !< Flag for inquiring if a named group is found.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1942,7 +1900,7 @@ contains
     found = .false.
     search_named: do while(a<Na)
       a = a + 1
-      if (cli%defined_group(group=trim(cli%args(a)),g=g)) then
+      if (cli%defined_group(group=trim(cli%args(a)), g=g)) then
         found = .true.
         cli%clasg(g)%called = .true.
         ai(g,1) = a + 1
@@ -1974,23 +1932,22 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_clasg_indexes
 
-  subroutine get_args_from_string(cli,args,ai)
+  subroutine get_args_from_string(cli, args, ai)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLAs from string.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Interface), intent(INOUT):: cli    !< CLI data.
-  character(*),                       intent(IN)::    args   !< String containing command line arguments.
-  integer(I4P), allocatable,          intent(OUT)::   ai(:,:)!< CLAs grouped indexes.
-  character(len=len_trim(args))::                     argsd  !< Dummy string containing command line arguments.
-  character(len=len_trim(args)), allocatable::        toks(:)!< CLAs tokenized.
-  integer(I4P)::                                      Nt     !< Number of tokens.
-  integer(I4P)::                                      Na     !< Number of command line arguments passed.
-  integer(I4P)::                                      a      !< Counter for CLAs.
-  integer(I4P)::                                      t      !< Counter for tokens.
-  integer(I4P)::                                      c      !< Counter for characters inside tokens.
+  class(Type_Command_Line_Interface), intent(INOUT) :: cli    !< CLI data.
+  character(*),                       intent(IN)    :: args   !< String containing command line arguments.
+  integer(I4P), allocatable,          intent(OUT)   :: ai(:,:)!< CLAs grouped indexes.
+  character(len=len_trim(args))                     :: argsd  !< Dummy string containing command line arguments.
+  character(len=len_trim(args)), allocatable        :: toks(:)!< CLAs tokenized.
+  integer(I4P)                                      :: Nt     !< Number of tokens.
+  integer(I4P)                                      :: Na     !< Number of command line arguments passed.
+  integer(I4P)                                      :: a      !< Counter for CLAs.
+  integer(I4P)                                      :: t      !< Counter for tokens.
+  integer(I4P)                                      :: c      !< Counter for characters inside tokens.
 #ifndef __GFORTRAN__
-  integer(I4P)::                                      length !< Maxium lenght of arguments string.
+  integer(I4P)                                      :: length !< Maxium lenght of arguments string.
 #endif
   !---------------------------------------------------------------------------------------------------------------------------------
 
@@ -2007,7 +1964,7 @@ contains
   endif
 
   ! tokenize arguments string; the previously sanitized white spaces inside tokens are restored
-  call tokenize(strin=argsd,delimiter=' ',Nt=Nt,toks=toks)
+  call tokenize(strin=argsd, delimiter=' ', toks=toks, Nt=Nt)
   Na = 0
   find_number_of_valid_arguments: do t=1,Nt
     if (trim(adjustl(toks(t)))/='') then
@@ -2064,7 +2021,7 @@ contains
     !-------------------------------------------------------------------------------------------------------------------------------
 
     !-------------------------------------------------------------------------------------------------------------------------------
-    call tokenize(strin=trim(argsin),delimiter=delimiter,Nt=Nt,toks=tok)
+    call tokenize(strin=trim(argsin), delimiter=delimiter, toks=tok, Nt=Nt)
     do t=2,Nt,2
       do tt=1,len_trim(adjustl(tok(t)))
         if (tok(t)(tt:tt)==' ') tok(t)(tt:tt) = "'"
@@ -2080,17 +2037,16 @@ contains
     endfunction sanitize_args
   endsubroutine get_args_from_string
 
-  subroutine get_args_from_invocation(cli,ai)
+  subroutine get_args_from_invocation(cli, ai)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLAs from CLI invocation.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Interface), intent(INOUT):: cli    !< CLI data.
-  integer(I4P), allocatable,          intent(OUT)::   ai(:,:)!< CLAs grouped indexes.
-  integer(I4P)::                                      Na     !< Number of command line arguments passed.
-  character(max_val_len)::                            switch !< Switch name.
-  integer(I4P)::                                      a      !< Counter for CLAs.
-  integer(I4P)::                                      aa     !< Counter for CLAs.
+  class(Type_Command_Line_Interface), intent(INOUT) :: cli    !< CLI data.
+  integer(I4P), allocatable,          intent(OUT)   :: ai(:,:)!< CLAs grouped indexes.
+  integer(I4P)                                      :: Na     !< Number of command line arguments passed.
+  character(max_val_len)                            :: switch !< Switch name.
+  integer(I4P)                                      :: a      !< Counter for CLAs.
+  integer(I4P)                                      :: aa     !< Counter for CLAs.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -2118,30 +2074,29 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_args_from_invocation
 
-  subroutine get_cla_cli(cli,pref,group,switch,position,error,val)
+  subroutine get_cla_cli(cli, val, pref, group, switch, position, error)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA (single) value from CLAs list parsed.
   !<
   !< @note For logical type CLA the value is directly read without any robust error trapping.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Interface), intent(INOUT):: cli      !< CLI data.
-  character(*), optional,             intent(IN)::    pref     !< Prefixing string.
-  character(*), optional,             intent(IN)::    group    !< Name of group (command) of CLA.
-  character(*), optional,             intent(IN)::    switch   !< Switch name.
-  integer(I4P), optional,             intent(IN)::    position !< Position of positional CLA.
-  integer(I4P), optional,             intent(OUT)::   error    !< Error trapping flag.
-  class(*),                           intent(INOUT):: val      !< CLA value.
-  character(len=:), allocatable::                     prefd    !< Prefixing string.
-  logical::                                           found    !< Flag for checking if CLA containing switch has been found.
-  integer(I4P)::                                      g        !< Group counter.
-  integer(I4P)::                                      a        !< Argument counter.
+  class(Type_Command_Line_Interface), intent(INOUT) :: cli      !< CLI data.
+  class(*),                           intent(INOUT) :: val      !< CLA value.
+  character(*), optional,             intent(IN)    :: pref     !< Prefixing string.
+  character(*), optional,             intent(IN)    :: group    !< Name of group (command) of CLA.
+  character(*), optional,             intent(IN)    :: switch   !< Switch name.
+  integer(I4P), optional,             intent(IN)    :: position !< Position of positional CLA.
+  integer(I4P), optional,             intent(OUT)   :: error    !< Error trapping flag.
+  character(len=:), allocatable                     :: prefd    !< Prefixing string.
+  logical                                           :: found    !< Flag for checking if CLA containing switch has been found.
+  integer(I4P)                                      :: g        !< Group counter.
+  integer(I4P)                                      :: a        !< Argument counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   prefd = '' ; if (present(pref)) prefd = pref
   if (present(group)) then
-    if (.not.cli%defined_group(group=group,g=g)) then
+    if (.not.cli%defined_group(group=group, g=g)) then
       call cli%errored(pref=prefd,error=error_cli_missing_group,group=group)
     endif
   else
@@ -2175,30 +2130,29 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_cli
 
-  subroutine get_cla_list_cli(cli,pref,group,switch,position,error,val)
+  subroutine get_cla_list_cli(cli, val, pref, group, switch, position, error)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Procedure for getting CLA multiple values from CLAs list parsed.
+  !< Gett CLA multiple values from CLAs list parsed.
   !<
   !< @note For logical type CLA the value is directly read without any robust error trapping.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Interface), intent(INOUT):: cli      !< CLI data.
-  character(*), optional,             intent(IN)::    pref     !< Prefixing string.
-  character(*), optional,             intent(IN)::    group    !< Name of group (command) of CLA.
-  character(*), optional,             intent(IN)::    switch   !< Switch name.
-  integer(I4P), optional,             intent(IN)::    position !< Position of positional CLA.
-  integer(I4P), optional,             intent(OUT)::   error    !< Error trapping flag.
-  class(*),                           intent(INOUT):: val(1:)  !< CLA values.
-  character(len=:), allocatable::                     prefd    !< Prefixing string.
-  logical::                                           found    !< Flag for checking if CLA containing switch has been found.
-  integer(I4P)::                                      g        !< Group counter.
-  integer(I4P)::                                      a        !< Argument counter.
+  class(Type_Command_Line_Interface), intent(INOUT) :: cli      !< CLI data.
+  class(*),                           intent(INOUT) :: val(1:)  !< CLA values.
+  character(*), optional,             intent(IN)    :: pref     !< Prefixing string.
+  character(*), optional,             intent(IN)    :: group    !< Name of group (command) of CLA.
+  character(*), optional,             intent(IN)    :: switch   !< Switch name.
+  integer(I4P), optional,             intent(IN)    :: position !< Position of positional CLA.
+  integer(I4P), optional,             intent(OUT)   :: error    !< Error trapping flag.
+  character(len=:), allocatable                     :: prefd    !< Prefixing string.
+  logical                                           :: found    !< Flag for checking if CLA containing switch has been found.
+  integer(I4P)                                      :: g        !< Group counter.
+  integer(I4P)                                      :: a        !< Argument counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   prefd = '' ; if (present(pref)) prefd = pref
   if (present(group)) then
-    if (.not.cli%defined_group(group=group,g=g)) then
+    if (.not.cli%defined_group(group=group, g=g)) then
       call cli%errored(pref=prefd,error=error_cli_missing_group,group=group)
     endif
   else
@@ -2230,24 +2184,23 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_cli
 
-  function usage(cli,pref,no_header,no_examples,no_epilog,g) result(usaged)
+  function usage(cli, g, pref, no_header, no_examples, no_epilog) result(usaged)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Print correct usage of CLI.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Interface), intent(IN):: cli          !< CLI data.
-  character(*), optional,             intent(IN):: pref         !< Prefixing string.
-  logical,      optional,             intent(IN):: no_header    !< Avoid insert header to usage.
-  logical,      optional,             intent(IN):: no_examples  !< Avoid insert examples to usage.
-  logical,      optional,             intent(IN):: no_epilog    !< Avoid insert epilogue to usage.
-  integer(I4P),                       intent(IN):: g            !< Group index.
-  character(len=:), allocatable::                  prefd        !< Prefixing string.
-  character(len=:), allocatable::                  usaged       !< Usage string.
-  logical::                                        no_headerd   !< Avoid insert header to usage.
-  logical::                                        no_examplesd !< Avoid insert examples to usage.
-  logical::                                        no_epilogd   !< Avoid insert epilogue to usage.
-  integer(I4P)::                                   gi           !< Counter.
-  integer(I4P)::                                   e            !< Counter.
+  class(Type_Command_Line_Interface), intent(IN) :: cli          !< CLI data.
+  integer(I4P),                       intent(IN) :: g            !< Group index.
+  character(*), optional,             intent(IN) :: pref         !< Prefixing string.
+  logical,      optional,             intent(IN) :: no_header    !< Avoid insert header to usage.
+  logical,      optional,             intent(IN) :: no_examples  !< Avoid insert examples to usage.
+  logical,      optional,             intent(IN) :: no_epilog    !< Avoid insert epilogue to usage.
+  character(len=:), allocatable                  :: prefd        !< Prefixing string.
+  character(len=:), allocatable                  :: usaged       !< Usage string.
+  logical                                        :: no_headerd   !< Avoid insert header to usage.
+  logical                                        :: no_examplesd !< Avoid insert examples to usage.
+  logical                                        :: no_epilogd   !< Avoid insert epilogue to usage.
+  integer(I4P)                                   :: gi           !< Counter.
+  integer(I4P)                                   :: e            !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -2292,10 +2245,9 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLI signature.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Interface), intent(IN)::  cli   !< CLI data.
-  character(len=:), allocatable::                   signd !< Temporary CLI signature.
-  integer(I4P)::                                    g     !< Counter.
+  class(Type_Command_Line_Interface), intent(IN) :: cli   !< CLI data.
+  character(len=:), allocatable                  :: signd !< Temporary CLI signature.
+  integer(I4P)                                   :: g     !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -2311,14 +2263,13 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction signature
 
-  subroutine print_usage(cli,pref)
+  subroutine print_usage(cli, pref)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Print correct usage of CLI.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Interface), intent(IN):: cli   !< CLI data.
-  character(*), optional,             intent(IN):: pref  !< Prefixing string.
-  character(len=:), allocatable::                  prefd !< Prefixing string.
+  class(Type_Command_Line_Interface), intent(IN) :: cli   !< CLI data.
+  character(*), optional,             intent(IN) :: pref  !< Prefixing string.
+  character(len=:), allocatable                  :: prefd !< Prefixing string.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -2328,30 +2279,29 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine print_usage
 
-  subroutine save_man_page(cli,error,man_file)
+  subroutine save_man_page(cli, man_file, error)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Save man page build on the CLI.
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Interface), intent(IN)::  cli        !< CLI data.
-  integer(I4P), optional,             intent(OUT):: error      !< Error trapping flag.
-  character(*),                       intent(IN)::  man_file   !< Output file name for saving man page.
-  character(len=:), allocatable::                   man        !< Man page.
-  integer(I4P)::                                    idate(1:8) !< Integer array for handling the date.
-  integer(I4P)::                                    e          !< Counter.
-  integer(I4P)::                                    u          !< Unit file handler.
-  character(*), parameter:: month(12) = ["Jan",&
-                                         "Feb",&
-                                         "Mar",&
-                                         "Apr",&
-                                         "May",&
-                                         "Jun",&
-                                         "Jul",&
-                                         "Aug",&
-                                         "Sep",&
-                                         "Oct",&
-                                         "Nov",&
-                                         "Dec"]
+  class(Type_Command_Line_Interface), intent(IN)  :: cli        !< CLI data.
+  character(*),                       intent(IN)  :: man_file   !< Output file name for saving man page.
+  integer(I4P), optional,             intent(OUT) :: error      !< Error trapping flag.
+  character(len=:), allocatable                   :: man        !< Man page.
+  integer(I4P)                                    :: idate(1:8) !< Integer array for handling the date.
+  integer(I4P)                                    :: e          !< Counter.
+  integer(I4P)                                    :: u          !< Unit file handler.
+  character(*), parameter                         :: month(12)=["Jan",&
+                                                                "Feb",&
+                                                                "Mar",&
+                                                                "Apr",&
+                                                                "May",&
+                                                                "Jun",&
+                                                                "Jul",&
+                                                                "Aug",&
+                                                                "Sep",&
+                                                                "Oct",&
+                                                                "Nov",&
+                                                                "Dec"]
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -2391,11 +2341,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine save_man_page
 
-  elemental subroutine assign_cli(lhs,rhs)
+  elemental subroutine assign_cli(lhs, rhs)
   !---------------------------------------------------------------------------------------------------------------------------------
-  implicit none
-  class(Type_Command_Line_Interface), intent(INOUT):: lhs !< Left hand side.
-  type(Type_Command_Line_Interface),  intent(IN)::    rhs !< Right hand side.
+  class(Type_Command_Line_Interface), intent(INOUT) :: lhs !< Left hand side.
+  type(Type_Command_Line_Interface),  intent(IN)    :: rhs !< Right hand side.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
