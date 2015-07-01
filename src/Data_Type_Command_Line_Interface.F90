@@ -1933,32 +1933,47 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine finalize
 
-  pure subroutine init(cli, progname, version, help, description, license, authors, examples, epilog, disable_hv)
+  subroutine init(cli, progname, version, help, description, license, authors, examples, epilog, disable_hv)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Procedure for initializing CLI.
+  !< Initialize CLI.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(Type_Command_Line_Interface), intent(INOUT) :: cli          !< CLI data.
-  character(*), optional,             intent(IN)    :: progname     !< Program name.
-  character(*), optional,             intent(IN)    :: version      !< Program version.
-  character(*), optional,             intent(IN)    :: help         !< Help message introducing the CLI usage.
-  character(*), optional,             intent(IN)    :: description  !< Detailed description message introducing the program.
-  character(*), optional,             intent(IN)    :: license      !< License description.
-  character(*), optional,             intent(IN)    :: authors      !< Authors list.
-  character(*), optional,             intent(IN)    :: examples(1:) !< Examples of correct usage.
-  character(*), optional,             intent(IN)    :: epilog       !< Epilog message.
-  logical,      optional,             intent(IN)    :: disable_hv   !< Disable automatic inserting of 'help' and 'version' CLAs.
+  class(Type_Command_Line_Interface), intent(INOUT) :: cli               !< CLI data.
+  character(*), optional,             intent(IN)    :: progname          !< Program name.
+  character(*), optional,             intent(IN)    :: version           !< Program version.
+  character(*), optional,             intent(IN)    :: help              !< Help message introducing the CLI usage.
+  character(*), optional,             intent(IN)    :: description       !< Detailed description message introducing the program.
+  character(*), optional,             intent(IN)    :: license           !< License description.
+  character(*), optional,             intent(IN)    :: authors           !< Authors list.
+  character(*), optional,             intent(IN)    :: examples(1:)      !< Examples of correct usage.
+  character(*), optional,             intent(IN)    :: epilog            !< Epilog message.
+  logical,      optional,             intent(IN)    :: disable_hv        !< Disable automatic insert of 'help' and 'version' CLAs.
+  character(len=:), allocatable                     :: prog_invocation   !< Complete program invocation.
+  integer(I4P)                                      :: invocation_length !< Length of invocation.
+  integer(I4P)                                      :: retrieval_status  !< Retrieval status.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   call cli%free
-  cli%progname    = 'program' ; if (present(progname   )) cli%progname    = progname
+  if (present(progname)) then
+    cli%progname = progname
+  else
+    ! try to set the default progname to the 0th command line entry a-la unix $0
+    call get_command_argument(0, length=invocation_length)
+    allocate(character(len=invocation_length) :: prog_invocation)
+    call get_command_argument(0, value=prog_invocation, status=retrieval_status)
+    if (retrieval_status==0) then
+      cli%progname = prog_invocation
+    else
+      cli%progname = 'program'
+    endif
+  endif
   cli%version     = 'unknown' ; if (present(version    )) cli%version     = version
   cli%help        = 'usage: ' ; if (present(help       )) cli%help        = help
   cli%description = ''        ; if (present(description)) cli%description = description
   cli%license     = ''        ; if (present(license    )) cli%license     = license
   cli%authors     = ''        ; if (present(authors    )) cli%authors     = authors
   cli%epilog      = ''        ; if (present(epilog     )) cli%epilog      = epilog
-  if (present(disable_hv)) cli%disable_hv = .true.
+  if (present(disable_hv)) cli%disable_hv = disable_hv
   if (present(examples)) then
 #ifdef __GFORTRAN__
     allocate(cli%examples(1:size(examples)))
@@ -2307,19 +2322,6 @@ contains
                      act         = 'print_version')
     enddo
   endif
-
-  ! adding special '--' cla terminator
-  do g=0,size(cli%clasg,dim=1)-1
-    if (.not.cli%defined(group=cli%clasg(g)%group, switch='--')) &
-      call cli%add(pref        = prefd,                          &
-                   group_index = g,                              &
-                   switch      = '--',                           &
-                   help        = 'Special named-CLA terminator', &
-                   required    = .false.,                        &
-                   nargs       = '*',                            &
-                   def         = '',                             &
-                   act         = 'store')
-  enddo
 
   ! parsing passed CLAs grouping in indexes
   if (present(args)) then
