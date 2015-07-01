@@ -9,7 +9,7 @@
 
 [![Status](https://img.shields.io/badge/status-stable-brightgreen.svg)]()
 [![Build Status](https://travis-ci.org/szaghi/FLAP.svg?branch=master)](https://travis-ci.org/szaghi/FLAP)
-[![Coverage Status](https://coveralls.io/repos/szaghi/FLAP/badge.svg?branch=master)](https://coveralls.io/r/szaghi/FLAP?branch=master)
+[![Coverage Status](https://img.shields.io/codecov/c/github/szaghi/FLAP.svg)](http://codecov.io/github/szaghi/FLAP?branch=master)
 
 ### FLAP, Fortran command Line Arguments Parser for poor people
 
@@ -37,8 +37,8 @@ A KISS pure Fortran Library for building powerful, easy-to-use, elegant command 
 
 #### Compiler Support
 
-[![Compiler](https://img.shields.io/badge/GNU-pass%20(v4.9.2+)-brightgreen.svg)]()
-[![Compiler](https://img.shields.io/badge/Intel-pass%20(v12.x+)-brightgreen.svg)]()
+[![Compiler](https://img.shields.io/badge/GNU-v4.9.2+-brightgreen.svg)]()
+[![Compiler](https://img.shields.io/badge/Intel-v12.x+-brightgreen.svg)]()
 [![Compiler](https://img.shields.io/badge/IBM%20XL-not%20tested-yellow.svg)]()
 [![Compiler](https://img.shields.io/badge/g95-not%20tested-yellow.svg)]()
 [![Compiler](https://img.shields.io/badge/NAG-not%20tested-yellow.svg)]()

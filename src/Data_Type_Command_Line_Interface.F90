@@ -56,18 +56,38 @@ type, extends(Type_Object) :: Type_Command_Line_Argument
   character(len=:), allocatable :: envvar             !< Environment variable from which take value.
   contains
     ! public methods
-    procedure, public :: free          => free_cla             !< Free dynamic memory.
-    procedure, public :: check         => check_cla            !< Check CLA data consistency.
-    procedure, public :: check_choices => check_choices_cla    !< Check if CLA value is in allowed choices.
-    generic,   public :: get           => get_cla,get_cla_list !< Get CLA value(s).
-    procedure, public :: usage         => usage_cla            !< Get correct CLA usage.
-    procedure, public :: signature     => signature_cla        !< Get CLA signature for adding to the CLI one.
+    procedure, public :: free          => free_cla              !< Free dynamic memory.
+    procedure, public :: check         => check_cla             !< Check CLA data consistency.
+    procedure, public :: check_choices => check_choices_cla     !< Check if CLA value is in allowed choices.
+    generic,   public :: get           => get_cla, get_cla_list !< Get CLA value(s).
+    generic,   public :: get_varying =>                &        !< Get CLA value(s) from CLAs list parsedi, varying size list.
+#ifdef r16p
+                         get_cla_list_varying_R16P,    &
+#endif
+                         get_cla_list_varying_R8P,     &
+                         get_cla_list_varying_R4P,     &
+                         get_cla_list_varying_I8P,     &
+                         get_cla_list_varying_I4P,     &
+                         get_cla_list_varying_I2P,     &
+                         get_cla_list_varying_I1P,     &
+                         get_cla_list_varying_logical, &
+                         get_cla_list_varying_char
+    procedure, public :: usage         => usage_cla             !< Get correct CLA usage.
+    procedure, public :: signature     => signature_cla         !< Get CLA signature for adding to CLI one.
     ! private methods
-    procedure, private :: get_cla                     !< Get CLA (single) value from CLAs list parsed.
-    procedure, private :: get_cla_list                !< Get CLA multiple values from CLAs list parsed.
-    procedure, private :: assign_cla                  !< CLA assignment overloading.
-    generic,   private :: assignment(=) => assign_cla !< CLA assignment overloading.
-    final              :: finalize_cla                !< Free dynamic memory when finalizing.
+    procedure, private :: get_cla                      !< Get CLA (single) value from CLAs list parsed.
+    procedure, private :: get_cla_list                 !< Get CLA multiple values from CLAs list parsed.
+    procedure, private :: get_cla_list_varying_R8P     !< Get CLA multiple values from CLAs list parsed, varying size, R8P.
+    procedure, private :: get_cla_list_varying_R4P     !< Get CLA multiple values from CLAs list parsed, varying size, R4P.
+    procedure, private :: get_cla_list_varying_I8P     !< Get CLA multiple values from CLAs list parsed, varying size, I8P.
+    procedure, private :: get_cla_list_varying_I4P     !< Get CLA multiple values from CLAs list parsed, varying size, I4P.
+    procedure, private :: get_cla_list_varying_I2P     !< Get CLA multiple values from CLAs list parsed, varying size, I2P.
+    procedure, private :: get_cla_list_varying_I1P     !< Get CLA multiple values from CLAs list parsed, varying size, I1P.
+    procedure, private :: get_cla_list_varying_logical !< Get CLA multiple values from CLAs list parsed, varying size, bool.
+    procedure, private :: get_cla_list_varying_char    !< Get CLA multiple values from CLAs list parsed, varying size, char.
+    procedure, private :: assign_cla                   !< CLA assignment overloading.
+    generic,   private :: assignment(=) => assign_cla  !< CLA assignment overloading.
+    final              :: finalize_cla                 !< Free dynamic memory when finalizing.
 endtype Type_Command_Line_Argument
 
 type, extends(Type_Object) :: Type_Command_Line_Arguments_Group
@@ -111,21 +131,33 @@ type, extends(Type_Object), public :: Type_Command_Line_Interface
   logical                                              :: disable_hv=.false.!< Disable automatic 'help' and 'version' CLAs.
   contains
     ! public methods
-    procedure, public :: free                                !< Free dynamic memory.
-    procedure, public :: init                                !< Initialize CLI.
-    procedure, public :: add_group                           !< Add CLAs group CLI.
-    procedure, public :: add                                 !< Add CLA to CLI.
-    procedure, public :: passed                              !< Check if a CLA has been passed.
-    procedure, public :: defined                             !< Check if a CLA has been defined.
-    procedure, public :: defined_group                       !< Check if a CLAs group has been defined.
-    procedure, public :: set_mutually_exclusive_groups       !< Set two CLAs group as mutually exclusive.
-    procedure, public :: run_command => called_group         !< Check if a CLAs group has been runned.
-    procedure, public :: parse                               !< Parse Command Line Interfaces.
-    generic,   public :: get => get_cla_cli,get_cla_list_cli !< Get CLA value(s) from CLAs list parsed.
-    procedure, public :: usage                               !< Get CLI usage.
-    procedure, public :: signature                           !< Get CLI signature.
-    procedure, public :: print_usage                         !< Print correct usage of CLI.
-    procedure, public :: save_man_page                       !< Save man page build on CLI.
+    procedure, public :: free                                 !< Free dynamic memory.
+    procedure, public :: init                                 !< Initialize CLI.
+    procedure, public :: add_group                            !< Add CLAs group CLI.
+    procedure, public :: add                                  !< Add CLA to CLI.
+    procedure, public :: passed                               !< Check if a CLA has been passed.
+    procedure, public :: defined                              !< Check if a CLA has been defined.
+    procedure, public :: defined_group                        !< Check if a CLAs group has been defined.
+    procedure, public :: set_mutually_exclusive_groups        !< Set two CLAs group as mutually exclusive.
+    procedure, public :: run_command => called_group          !< Check if a CLAs group has been runned.
+    procedure, public :: parse                                !< Parse Command Line Interfaces.
+    generic,   public :: get => get_cla_cli, get_cla_list_cli !< Get CLA value(s) from CLAs list parsed.
+    generic,   public :: get_varying =>                    &  !< Get CLA value(s) from CLAs list parsedi, varying size list.
+#ifdef r16p
+                         get_cla_list_varying_R16P_cli,    &
+#endif
+                         get_cla_list_varying_R8P_cli,     &
+                         get_cla_list_varying_R4P_cli,     &
+                         get_cla_list_varying_I8P_cli,     &
+                         get_cla_list_varying_I4P_cli,     &
+                         get_cla_list_varying_I2P_cli,     &
+                         get_cla_list_varying_I1P_cli,     &
+                         get_cla_list_varying_logical_cli, &
+                         get_cla_list_varying_char_cli
+    procedure, public :: usage                                !< Get CLI usage.
+    procedure, public :: signature                            !< Get CLI signature.
+    procedure, public :: print_usage                          !< Print correct usage of CLI.
+    procedure, public :: save_man_page                        !< Save man page build on CLI.
     ! private methods
     procedure, private :: check                                !< Check CLAs data consistenc.
     procedure, private :: check_m_exclusive                    !< Check if two mutually exclusive CLAs group have been called.
@@ -136,6 +168,15 @@ type, extends(Type_Object), public :: Type_Command_Line_Interface
     procedure, private :: get_args_from_invocation             !< Get CLAs from CLI invocation.
     procedure, private :: get_cla_cli                          !< Get CLA (single) value from CLAs list parsed.
     procedure, private :: get_cla_list_cli                     !< Get CLA multiple values from CLAs list parsed.
+    procedure, private :: get_cla_list_varying_R16P_cli        !< Get CLA multiple values from CLAs list parsed, varying size, R16P.
+    procedure, private :: get_cla_list_varying_R8P_cli         !< Get CLA multiple values from CLAs list parsed, varying size, R8P.
+    procedure, private :: get_cla_list_varying_R4P_cli         !< Get CLA multiple values from CLAs list parsed, varying size, R4P.
+    procedure, private :: get_cla_list_varying_I8P_cli         !< Get CLA multiple values from CLAs list parsed, varying size, I8P.
+    procedure, private :: get_cla_list_varying_I4P_cli         !< Get CLA multiple values from CLAs list parsed, varying size, I4P.
+    procedure, private :: get_cla_list_varying_I2P_cli         !< Get CLA multiple values from CLAs list parsed, varying size, I2P.
+    procedure, private :: get_cla_list_varying_I1P_cli         !< Get CLA multiple values from CLAs list parsed, varying size, I1P.
+    procedure, private :: get_cla_list_varying_logical_cli     !< Get CLA multiple values from CLAs list parsed, varying size, bool.
+    procedure, private :: get_cla_list_varying_char_cli        !< Get CLA multiple values from CLAs list parsed, varying size, char.
     procedure, private :: assign_cli                           !< CLI assignment overloading.
     generic,   private :: assignment(=) => assign_cli          !< CLI assignment overloading.
     final              :: finalize                             !< Free dynamic memory when finalizing.
@@ -820,7 +861,7 @@ contains
         enddo
       type is(character(*))
         do v=1,Nv
-          val(v)=valsD(v)
+          val(v) = valsD(v)
           if (allocated(cla%choices).and.cla%error==0) call cla%check_choices(val=val(v),pref=prefd)
           if (cla%error/=0) exit
         enddo
@@ -861,6 +902,415 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list
 
+  subroutine get_cla_list_varying_R16P(cla, val, pref)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Get CLA (multiple) value with varying size, real(R16P).
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(Type_Command_Line_Argument), intent(INOUT) :: cla      !< CLA data.
+  real(R16P), allocatable,           intent(OUT)   :: val(:)   !< CLA values.
+  character(*), optional,            intent(IN)    :: pref     !< Prefixing string.
+  integer(I4P)                                     :: Nv       !< Number of values.
+  character(len=len(cla%val)), allocatable         :: valsV(:) !< String array of values based on cla%val.
+  character(len=len(cla%def)), allocatable         :: valsD(:) !< String array of values based on cla%def.
+  character(len=:), allocatable                    :: prefd    !< Prefixing string.
+  integer(I4P)                                     :: v        !< Values counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  prefd = '' ; if (present(pref)) prefd = pref
+  if (((.not.cla%passed).and.cla%required).or.((.not.cla%passed).and.(.not.allocated(cla%def)))) then
+    call cla%errored(pref=prefd, error=error_cla_missing_required)
+    return
+  endif
+  if (.not.allocated(cla%nargs)) then
+    call cla%errored(pref=prefd, error=error_cla_no_list)
+    return
+  endif
+  if (cla%act==action_store) then
+    if (cla%passed) then
+      call tokenize(strin=cla%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      allocate(real(R16P):: val(1:Nv))
+      do v=1, Nv
+        val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsV(v))), knd=1._R16P)
+        if (cla%error/=0) exit
+      enddo
+    else ! using default value
+      call tokenize(strin=cla%def, delimiter=' ', toks=valsD, Nt=Nv)
+      allocate(real(R16P):: val(1:Nv))
+      do v=1, Nv
+        val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsD(v))), knd=1._R16P)
+        if (cla%error/=0) exit
+      enddo
+    endif
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine get_cla_list_varying_R16P
+
+  subroutine get_cla_list_varying_R8P(cla, val, pref)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Get CLA (multiple) value with varying size, real(R8P).
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(Type_Command_Line_Argument), intent(INOUT) :: cla      !< CLA data.
+  real(R8P), allocatable,            intent(OUT)   :: val(:)   !< CLA values.
+  character(*), optional,            intent(IN)    :: pref     !< Prefixing string.
+  integer(I4P)                                     :: Nv       !< Number of values.
+  character(len=len(cla%val)), allocatable         :: valsV(:) !< String array of values based on cla%val.
+  character(len=len(cla%def)), allocatable         :: valsD(:) !< String array of values based on cla%def.
+  character(len=:), allocatable                    :: prefd    !< Prefixing string.
+  integer(I4P)                                     :: v        !< Values counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  prefd = '' ; if (present(pref)) prefd = pref
+  if (((.not.cla%passed).and.cla%required).or.((.not.cla%passed).and.(.not.allocated(cla%def)))) then
+    call cla%errored(pref=prefd, error=error_cla_missing_required)
+    return
+  endif
+  if (.not.allocated(cla%nargs)) then
+    call cla%errored(pref=prefd, error=error_cla_no_list)
+    return
+  endif
+  if (cla%act==action_store) then
+    if (cla%passed) then
+      call tokenize(strin=cla%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      allocate(real(R8P):: val(1:Nv))
+      do v=1, Nv
+        val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsV(v))), knd=1._R8P)
+        if (cla%error/=0) exit
+      enddo
+    else ! using default value
+      call tokenize(strin=cla%def, delimiter=' ', toks=valsD, Nt=Nv)
+      allocate(real(R8P):: val(1:Nv))
+      do v=1, Nv
+        val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsD(v))), knd=1._R8P)
+        if (cla%error/=0) exit
+      enddo
+    endif
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine get_cla_list_varying_R8P
+
+  subroutine get_cla_list_varying_R4P(cla, val, pref)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Get CLA (multiple) value with varying size, real(R4P).
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(Type_Command_Line_Argument), intent(INOUT) :: cla      !< CLA data.
+  real(R4P), allocatable,            intent(OUT)   :: val(:)   !< CLA values.
+  character(*), optional,            intent(IN)    :: pref     !< Prefixing string.
+  integer(I4P)                                     :: Nv       !< Number of values.
+  character(len=len(cla%val)), allocatable         :: valsV(:) !< String array of values based on cla%val.
+  character(len=len(cla%def)), allocatable         :: valsD(:) !< String array of values based on cla%def.
+  character(len=:), allocatable                    :: prefd    !< Prefixing string.
+  integer(I4P)                                     :: v        !< Values counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  prefd = '' ; if (present(pref)) prefd = pref
+  if (((.not.cla%passed).and.cla%required).or.((.not.cla%passed).and.(.not.allocated(cla%def)))) then
+    call cla%errored(pref=prefd, error=error_cla_missing_required)
+    return
+  endif
+  if (.not.allocated(cla%nargs)) then
+    call cla%errored(pref=prefd, error=error_cla_no_list)
+    return
+  endif
+  if (cla%act==action_store) then
+    if (cla%passed) then
+      call tokenize(strin=cla%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      allocate(real(R4P):: val(1:Nv))
+      do v=1, Nv
+        val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsV(v))), knd=1._R4P)
+        if (cla%error/=0) exit
+      enddo
+    else ! using default value
+      call tokenize(strin=cla%def, delimiter=' ', toks=valsD, Nt=Nv)
+      allocate(real(R4P):: val(1:Nv))
+      do v=1, Nv
+        val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsD(v))), knd=1._R4P)
+        if (cla%error/=0) exit
+      enddo
+    endif
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine get_cla_list_varying_R4P
+
+  subroutine get_cla_list_varying_I8P(cla, val, pref)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Get CLA (multiple) value with varying size, integer(I8P).
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(Type_Command_Line_Argument), intent(INOUT) :: cla      !< CLA data.
+  integer(I8P), allocatable,         intent(OUT)   :: val(:)   !< CLA values.
+  character(*), optional,            intent(IN)    :: pref     !< Prefixing string.
+  integer(I4P)                                     :: Nv       !< Number of values.
+  character(len=len(cla%val)), allocatable         :: valsV(:) !< String array of values based on cla%val.
+  character(len=len(cla%def)), allocatable         :: valsD(:) !< String array of values based on cla%def.
+  character(len=:), allocatable                    :: prefd    !< Prefixing string.
+  integer(I4P)                                     :: v        !< Values counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  prefd = '' ; if (present(pref)) prefd = pref
+  if (((.not.cla%passed).and.cla%required).or.((.not.cla%passed).and.(.not.allocated(cla%def)))) then
+    call cla%errored(pref=prefd, error=error_cla_missing_required)
+    return
+  endif
+  if (.not.allocated(cla%nargs)) then
+    call cla%errored(pref=prefd, error=error_cla_no_list)
+    return
+  endif
+  if (cla%act==action_store) then
+    if (cla%passed) then
+      call tokenize(strin=cla%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      allocate(integer(I8P):: val(1:Nv))
+      do v=1, Nv
+        val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsV(v))), knd=1_I8P)
+        if (cla%error/=0) exit
+      enddo
+    else ! using default value
+      call tokenize(strin=cla%def, delimiter=' ', toks=valsD, Nt=Nv)
+      allocate(integer(I8P):: val(1:Nv))
+      do v=1, Nv
+        val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsD(v))), knd=1_I8P)
+        if (cla%error/=0) exit
+      enddo
+    endif
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine get_cla_list_varying_I8P
+
+  subroutine get_cla_list_varying_I4P(cla, val, pref)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Get CLA (multiple) value with varying size, integer(I4P).
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(Type_Command_Line_Argument), intent(INOUT) :: cla      !< CLA data.
+  integer(I4P), allocatable,         intent(OUT)   :: val(:)   !< CLA values.
+  character(*), optional,            intent(IN)    :: pref     !< Prefixing string.
+  integer(I4P)                                     :: Nv       !< Number of values.
+  character(len=len(cla%val)), allocatable         :: valsV(:) !< String array of values based on cla%val.
+  character(len=len(cla%def)), allocatable         :: valsD(:) !< String array of values based on cla%def.
+  character(len=:), allocatable                    :: prefd    !< Prefixing string.
+  integer(I4P)                                     :: v        !< Values counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  prefd = '' ; if (present(pref)) prefd = pref
+  if (((.not.cla%passed).and.cla%required).or.((.not.cla%passed).and.(.not.allocated(cla%def)))) then
+    call cla%errored(pref=prefd, error=error_cla_missing_required)
+    return
+  endif
+  if (.not.allocated(cla%nargs)) then
+    call cla%errored(pref=prefd, error=error_cla_no_list)
+    return
+  endif
+  if (cla%act==action_store) then
+    if (cla%passed) then
+      call tokenize(strin=cla%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      allocate(integer(I4P):: val(1:Nv))
+      do v=1, Nv
+        val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsV(v))), knd=1_I4P)
+        if (cla%error/=0) exit
+      enddo
+    else ! using default value
+      call tokenize(strin=cla%def, delimiter=' ', toks=valsD, Nt=Nv)
+      allocate(integer(I4P):: val(1:Nv))
+      do v=1, Nv
+        val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsD(v))), knd=1_I4P)
+        if (cla%error/=0) exit
+      enddo
+    endif
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine get_cla_list_varying_I4P
+
+  subroutine get_cla_list_varying_I2P(cla, val, pref)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Get CLA (multiple) value with varying size, integer(I2P).
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(Type_Command_Line_Argument), intent(INOUT) :: cla      !< CLA data.
+  integer(I2P), allocatable,         intent(OUT)   :: val(:)   !< CLA values.
+  character(*), optional,            intent(IN)    :: pref     !< Prefixing string.
+  integer(I4P)                                     :: Nv       !< Number of values.
+  character(len=len(cla%val)), allocatable         :: valsV(:) !< String array of values based on cla%val.
+  character(len=len(cla%def)), allocatable         :: valsD(:) !< String array of values based on cla%def.
+  character(len=:), allocatable                    :: prefd    !< Prefixing string.
+  integer(I4P)                                     :: v        !< Values counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  prefd = '' ; if (present(pref)) prefd = pref
+  if (((.not.cla%passed).and.cla%required).or.((.not.cla%passed).and.(.not.allocated(cla%def)))) then
+    call cla%errored(pref=prefd, error=error_cla_missing_required)
+    return
+  endif
+  if (.not.allocated(cla%nargs)) then
+    call cla%errored(pref=prefd, error=error_cla_no_list)
+    return
+  endif
+  if (cla%act==action_store) then
+    if (cla%passed) then
+      call tokenize(strin=cla%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      allocate(integer(I2P):: val(1:Nv))
+      do v=1, Nv
+        val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsV(v))), knd=1_I2P)
+        if (cla%error/=0) exit
+      enddo
+    else ! using default value
+      call tokenize(strin=cla%def, delimiter=' ', toks=valsD, Nt=Nv)
+      allocate(integer(I2P):: val(1:Nv))
+      do v=1, Nv
+        val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsD(v))), knd=1_I2P)
+        if (cla%error/=0) exit
+      enddo
+    endif
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine get_cla_list_varying_I2P
+
+  subroutine get_cla_list_varying_I1P(cla, val, pref)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Get CLA (multiple) value with varying size, integer(I1P).
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(Type_Command_Line_Argument), intent(INOUT) :: cla      !< CLA data.
+  integer(I1P), allocatable,         intent(OUT)   :: val(:)   !< CLA values.
+  character(*), optional,            intent(IN)    :: pref     !< Prefixing string.
+  integer(I4P)                                     :: Nv       !< Number of values.
+  character(len=len(cla%val)), allocatable         :: valsV(:) !< String array of values based on cla%val.
+  character(len=len(cla%def)), allocatable         :: valsD(:) !< String array of values based on cla%def.
+  character(len=:), allocatable                    :: prefd    !< Prefixing string.
+  integer(I4P)                                     :: v        !< Values counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  prefd = '' ; if (present(pref)) prefd = pref
+  if (((.not.cla%passed).and.cla%required).or.((.not.cla%passed).and.(.not.allocated(cla%def)))) then
+    call cla%errored(pref=prefd, error=error_cla_missing_required)
+    return
+  endif
+  if (.not.allocated(cla%nargs)) then
+    call cla%errored(pref=prefd, error=error_cla_no_list)
+    return
+  endif
+  if (cla%act==action_store) then
+    if (cla%passed) then
+      call tokenize(strin=cla%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      allocate(integer(I1P):: val(1:Nv))
+      do v=1, Nv
+        val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsV(v))), knd=1_I1P)
+        if (cla%error/=0) exit
+      enddo
+    else ! using default value
+      call tokenize(strin=cla%def, delimiter=' ', toks=valsD, Nt=Nv)
+      allocate(integer(I1P):: val(1:Nv))
+      do v=1, Nv
+        val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsD(v))), knd=1_I1P)
+        if (cla%error/=0) exit
+      enddo
+    endif
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine get_cla_list_varying_I1P
+
+  subroutine get_cla_list_varying_logical(cla, val, pref)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Get CLA (multiple) value with varying size, logical.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(Type_Command_Line_Argument), intent(INOUT) :: cla      !< CLA data.
+  logical, allocatable,              intent(OUT)   :: val(:)   !< CLA values.
+  character(*), optional,            intent(IN)    :: pref     !< Prefixing string.
+  integer(I4P)                                     :: Nv       !< Number of values.
+  character(len=len(cla%val)), allocatable         :: valsV(:) !< String array of values based on cla%val.
+  character(len=len(cla%def)), allocatable         :: valsD(:) !< String array of values based on cla%def.
+  character(len=:), allocatable                    :: prefd    !< Prefixing string.
+  integer(I4P)                                     :: v        !< Values counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  prefd = '' ; if (present(pref)) prefd = pref
+  if (((.not.cla%passed).and.cla%required).or.((.not.cla%passed).and.(.not.allocated(cla%def)))) then
+    call cla%errored(pref=prefd, error=error_cla_missing_required)
+    return
+  endif
+  if (.not.allocated(cla%nargs)) then
+    call cla%errored(pref=prefd, error=error_cla_no_list)
+    return
+  endif
+  if (cla%act==action_store) then
+    if (cla%passed) then
+      call tokenize(strin=cla%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      allocate(logical:: val(1:Nv))
+      do v=1,Nv
+        read(valsV(v), *, iostat=cla%error)val(v)
+        if (cla%error/=0) then
+          call cla%errored(pref=prefd, error=error_cla_casting_logical, log_value=valsD(v))
+          exit
+        endif
+      enddo
+    else ! using default value
+      call tokenize(strin=cla%def, delimiter=' ', toks=valsD, Nt=Nv)
+      allocate(logical:: val(1:Nv))
+      do v=1,Nv
+        read(valsD(v), *, iostat=cla%error)val(v)
+        if (cla%error/=0) then
+          call cla%errored(pref=prefd, error=error_cla_casting_logical, log_value=valsD(v))
+          exit
+        endif
+      enddo
+    endif
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine get_cla_list_varying_logical
+
+  subroutine get_cla_list_varying_char(cla, val, pref)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Get CLA (multiple) value with varying size, character.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(Type_Command_Line_Argument), intent(INOUT) :: cla      !< CLA data.
+  character(*), allocatable,         intent(OUT)   :: val(:)   !< CLA values.
+  character(*), optional,            intent(IN)    :: pref     !< Prefixing string.
+  integer(I4P)                                     :: Nv       !< Number of values.
+  character(len=len(cla%val)), allocatable         :: valsV(:) !< String array of values based on cla%val.
+  character(len=len(cla%def)), allocatable         :: valsD(:) !< String array of values based on cla%def.
+  character(len=:), allocatable                    :: prefd    !< Prefixing string.
+  integer(I4P)                                     :: v        !< Values counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  prefd = '' ; if (present(pref)) prefd = pref
+  if (((.not.cla%passed).and.cla%required).or.((.not.cla%passed).and.(.not.allocated(cla%def)))) then
+    call cla%errored(pref=prefd, error=error_cla_missing_required)
+    return
+  endif
+  if (.not.allocated(cla%nargs)) then
+    call cla%errored(pref=prefd, error=error_cla_no_list)
+    return
+  endif
+  if (cla%act==action_store) then
+    if (cla%passed) then
+      call tokenize(strin=cla%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      allocate(val(1:Nv))
+      do v=1, Nv
+        val(v) = trim(adjustl(valsV(v)))
+      enddo
+    else ! using default value
+      call tokenize(strin=cla%def, delimiter=' ', toks=valsD, Nt=Nv)
+      allocate(val(1:Nv))
+      do v=1, Nv
+        val(v) = trim(adjustl(valsD(v)))
+      enddo
+    endif
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine get_cla_list_varying_char
+
   function usage_cla(cla, pref) result(usage)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get correct CLA usage.
@@ -879,10 +1329,12 @@ contains
       if (allocated(cla%nargs)) then
         usage = ''
         select case(cla%nargs)
-        case('+') ! not yet implemented
-        case('*') ! not yet implemented
+        case('+')
+          usage = usage//' value#1 [value#2...]'
+        case('*')
+          usage = usage//' [value#1 value#2...]'
         case default
-          do a=1,cton(str=trim(adjustl(cla%nargs)),knd=1_I4P)
+          do a=1, cton(str=trim(adjustl(cla%nargs)),knd=1_I4P)
             usage = usage//' value#'//trim(str(.true.,a))
           enddo
         endselect
@@ -946,7 +1398,7 @@ contains
         select case(cla%nargs)
         case('+')
           signd = ' value#1 [value#2 value#3...]'
-        case('*') ! not yet implemented
+        case('*')
           signd = ' [value#1 value#2 value#3...]'
         case default
           nargs = cton(str=trim(adjustl(cla%nargs)),knd=1_I4P)
@@ -1075,7 +1527,7 @@ contains
   CLA_exclude: do a=1,clasg%Na
     if (.not.clasg%cla(a)%positional) then
       if (clasg%cla(a)%m_exclude/='') then
-        if (clasg%defined(switch=clasg%cla(a)%m_exclude,pos=aa)) then
+        if (clasg%defined(switch=clasg%cla(a)%m_exclude, pos=aa)) then
           clasg%cla(aa)%m_exclude = clasg%cla(a)%switch
         endif
       endif
@@ -1154,19 +1606,26 @@ contains
   type(Type_Command_Line_Argument),         intent(IN)    :: cla             !< CLA data.
   type(Type_Command_Line_Argument), allocatable           :: cla_list_new(:) !< New (extended) CLA list.
   character(len=:), allocatable                           :: prefd           !< Prefixing string.
+  integer(I4P)                                            :: c               !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   if (clasg%Na>0_I4P) then
     if (.not.cla%positional) then
       allocate(cla_list_new(1:clasg%Na+1))
-      cla_list_new(1:clasg%Na)=clasg%cla
-      cla_list_new(clasg%Na+1)=cla
+      do c=1, clasg%Na
+        cla_list_new(c) = clasg%cla(c)
+      enddo
+      cla_list_new(clasg%Na+1) = cla
     else
       allocate(cla_list_new(1:clasg%Na+1))
-      cla_list_new(1:cla%position-1)=clasg%cla(1:cla%position-1)
-      cla_list_new(cla%position)=cla
-      cla_list_new(cla%position+1:clasg%Na+1)=clasg%cla(cla%position:clasg%Na)
+      do c=1, cla%position - 1
+        cla_list_new(c) = clasg%cla(c)
+      enddo
+      cla_list_new(cla%position) = cla
+      do c=cla%position + 1, clasg%Na + 1
+        cla_list_new(c) = clasg%cla(c-1)
+      enddo
     endif
   else
     allocate(cla_list_new(1:1))
@@ -1202,9 +1661,11 @@ contains
   if (clasg%Na>0) then
     if (present(switch)) then
       do a=1,clasg%Na
-        if ((clasg%cla(a)%switch==switch).or.(clasg%cla(a)%switch_ab==switch)) then
-          passed = clasg%cla(a)%passed
-          exit
+        if (.not.clasg%cla(a)%positional) then
+          if ((clasg%cla(a)%switch==switch).or.(clasg%cla(a)%switch_ab==switch)) then
+            passed = clasg%cla(a)%passed
+            exit
+          endif
         endif
       enddo
     elseif (present(position)) then
@@ -1230,11 +1691,13 @@ contains
   defined = .false.
   if (present(pos)) pos = 0
   if (clasg%Na>0) then
-    do a=1,clasg%Na
-      if ((clasg%cla(a)%switch==switch).or.(clasg%cla(a)%switch_ab==switch)) then
-        defined = .true.
-        if (present(pos)) pos = a
-        exit
+    do a=1, clasg%Na
+      if (.not.clasg%cla(a)%positional) then
+        if ((clasg%cla(a)%switch==switch).or.(clasg%cla(a)%switch_ab==switch)) then
+          defined = .true.
+          if (present(pos)) pos = a
+          exit
+        endif
       endif
     enddo
   endif
@@ -1253,6 +1716,7 @@ contains
   integer(I4P)                                            :: arg     !< Argument counter.
   integer(I4P)                                            :: a       !< Counter.
   integer(I4P)                                            :: aa      !< Counter.
+  integer(I4P)                                            :: aaa     !< Counter.
   integer(I4P)                                            :: nargs   !< Number of arguments consumed by a CLA.
   character(len=:), allocatable                           :: prefd   !< Prefixing string.
   logical                                                 :: found   !< Flag for checking if switch is a defined CLA.
@@ -1265,7 +1729,7 @@ contains
     do while (arg < size(args,dim=1)) ! loop over CLAs group arguments passed
       arg = arg + 1
       found = .false.
-      do a=1,clasg%Na ! loop ver CLAs group clas named options
+      do a=1, clasg%Na ! loop ver CLAs group clas named options
         if (.not.clasg%cla(a)%positional) then
           if (trim(adjustl(clasg%cla(a)%switch   ))==trim(adjustl(args(arg))).or.&
               trim(adjustl(clasg%cla(a)%switch_ab))==trim(adjustl(args(arg)))) then
@@ -1295,15 +1759,29 @@ contains
                 clasg%cla(a)%val = ''
                 select case(clasg%cla(a)%nargs)
                 case('+') ! not yet implemented
-                case('*') ! not yet implemented
+                case('*')
+                  aaa = 0
+                  do aa=arg + 1, size(args,dim=1)
+                    if (.not.clasg%defined(switch=trim(adjustl(args(aa))))) then
+                      aaa = aa
+                    else
+                      exit
+                    endif
+                  enddo
+                  if (aaa>=arg+1) then
+                    do aa=aaa, arg + 1, -1 ! decreasing loop due to gfortran bug
+                      clasg%cla(a)%val = trim(adjustl(args(aa)))//args_sep//trim(clasg%cla(a)%val)
+                    enddo
+                    arg = aaa
+                  endif
                 case default
-                  nargs = cton(str=trim(adjustl(clasg%cla(a)%nargs)),knd=1_I4P)
+                  nargs = cton(str=trim(adjustl(clasg%cla(a)%nargs)), knd=1_I4P)
                   if (arg + nargs > size(args,dim=1)) then
-                    call clasg%cla(a)%errored(pref=prefd,error = error_cla_nargs_insufficient)
+                    call clasg%cla(a)%errored(pref=prefd, error=error_cla_nargs_insufficient)
                     clasg%error = clasg%cla(a)%error
                     return
                   endif
-                  do aa=arg+nargs,arg+1,-1 ! decreasing loop due to gfortran bug
+                  do aa=arg + nargs, arg + 1, -1 ! decreasing loop due to gfortran bug
                     clasg%cla(a)%val = trim(adjustl(args(aa)))//args_sep//trim(clasg%cla(a)%val)
                   enddo
                   arg = arg + nargs
@@ -1594,6 +2072,11 @@ contains
   if (present(switch)) then
     cla%switch    = switch
     cla%switch_ab = switch
+  else
+    if (present(switch_ab)) then
+      cla%switch    = switch_ab
+      cla%switch_ab = switch_ab
+    endif
   endif
                                              if (present(switch_ab )) cla%switch_ab  = switch_ab
   cla%help       = 'Undocumented argument' ; if (present(help      )) cla%help       = help
@@ -1610,7 +2093,7 @@ contains
   call cla%check(pref=prefd) ; cli%error = cla%error
   ! adding CLA to CLI
   if ((.not.present(group)).and.(.not.present(group_index))) then
-    call cli%clasg(0)%add(pref=prefd,cla=cla) ; cli%error = cli%clasg(0)%error
+    call cli%clasg(0)%add(pref=prefd, cla=cla) ; cli%error = cli%clasg(0)%error
   elseif (present(group)) then
     if (cli%defined_group(group=group, g=g)) then
       call cli%clasg(g)%add(pref=prefd,cla=cla) ; cli%error = cli%clasg(g)%error
@@ -1824,6 +2307,19 @@ contains
                      act         = 'print_version')
     enddo
   endif
+
+  ! adding special '--' cla terminator
+  do g=0,size(cli%clasg,dim=1)-1
+    if (.not.cli%defined(group=cli%clasg(g)%group, switch='--')) &
+      call cli%add(pref        = prefd,                          &
+                   group_index = g,                              &
+                   switch      = '--',                           &
+                   help        = 'Special named-CLA terminator', &
+                   required    = .false.,                        &
+                   nargs       = '*',                            &
+                   def         = '',                             &
+                   act         = 'store')
+  enddo
 
   ! parsing passed CLAs grouping in indexes
   if (present(args)) then
@@ -2097,12 +2593,12 @@ contains
   prefd = '' ; if (present(pref)) prefd = pref
   if (present(group)) then
     if (.not.cli%defined_group(group=group, g=g)) then
-      call cli%errored(pref=prefd,error=error_cli_missing_group,group=group)
+      call cli%errored(pref=prefd, error=error_cli_missing_group, group=group)
     endif
   else
     g = 0
   endif
-  if (cli%error == 0 .and. cli%clasg(g)%called) then
+  if (cli%error==0.and.cli%clasg(g)%called) then
     if (present(switch)) then
       ! searching for the CLA corresponding to switch
       found = .false.
@@ -2115,14 +2611,14 @@ contains
         endif
       enddo
       if (.not.found) then
-        call cli%errored(pref=prefd,error=error_cli_missing_cla,switch=switch)
+        call cli%errored(pref=prefd, error=error_cli_missing_cla, switch=switch)
       else
-        call cli%clasg(g)%cla(a)%get(pref=prefd,val=val) ; cli%error = cli%clasg(g)%cla(a)%error
+        call cli%clasg(g)%cla(a)%get(pref=prefd, val=val) ; cli%error = cli%clasg(g)%cla(a)%error
       endif
     elseif (present(position)) then
-      call cli%clasg(g)%cla(position)%get(pref=prefd,val=val) ; cli%error = cli%clasg(g)%cla(position)%error
+      call cli%clasg(g)%cla(position)%get(pref=prefd, val=val) ; cli%error = cli%clasg(g)%cla(position)%error
     else
-      call cli%errored(pref=prefd,error=error_cli_missing_selection_cla)
+      call cli%errored(pref=prefd, error=error_cli_missing_selection_cla)
     endif
   endif
   if (present(error)) error = cli%error
@@ -2132,7 +2628,7 @@ contains
 
   subroutine get_cla_list_cli(cli, val, pref, group, switch, position, error)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Gett CLA multiple values from CLAs list parsed.
+  !< Get CLA multiple values from CLAs list parsed.
   !<
   !< @note For logical type CLA the value is directly read without any robust error trapping.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -2153,7 +2649,7 @@ contains
   prefd = '' ; if (present(pref)) prefd = pref
   if (present(group)) then
     if (.not.cli%defined_group(group=group, g=g)) then
-      call cli%errored(pref=prefd,error=error_cli_missing_group,group=group)
+      call cli%errored(pref=prefd, error=error_cli_missing_group, group=group)
     endif
   else
     g = 0
@@ -2161,7 +2657,7 @@ contains
   if (present(switch)) then
     ! searching for the CLA corresponding to switch
     found = .false.
-    do a=1,cli%clasg(g)%Na
+    do a=1, cli%clasg(g)%Na
       if (.not.cli%clasg(g)%cla(a)%positional) then
         if ((cli%clasg(g)%cla(a)%switch==switch).or.(cli%clasg(g)%cla(a)%switch_ab==switch)) then
           found = .true.
@@ -2170,19 +2666,523 @@ contains
       endif
     enddo
     if (.not.found) then
-      call cli%errored(pref=prefd,error=error_cli_missing_cla,switch=switch)
+      call cli%errored(pref=prefd, error=error_cli_missing_cla, switch=switch)
     else
-      call cli%clasg(g)%cla(a)%get(pref=prefd,val=val) ; cli%error = cli%clasg(g)%cla(a)%error
+      call cli%clasg(g)%cla(a)%get(pref=prefd, val=val) ; cli%error = cli%clasg(g)%cla(a)%error
     endif
   elseif (present(position)) then
-    call cli%clasg(g)%cla(position)%get(pref=prefd,val=val) ; cli%error = error
+    call cli%clasg(g)%cla(position)%get(pref=prefd, val=val) ; cli%error = error
   else
-    call cli%errored(pref=prefd,error=error_cli_missing_selection_cla)
+    call cli%errored(pref=prefd, error=error_cli_missing_selection_cla)
   endif
   if (present(error)) error = cli%error
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_cli
+
+  subroutine get_cla_list_varying_R16P_cli(cli, val, pref, group, switch, position, error)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Get CLA multiple values from CLAs list parsed with varying size list, real(R16P).
+  !<
+  !< @note The CLA list is returned deallocated if values are not correctly gotten.
+  !<
+  !< @note For logical type CLA the value is directly read without any robust error trapping.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(Type_Command_Line_Interface), intent(INOUT) :: cli      !< CLI data.
+  real(R16P), allocatable,            intent(OUT)   :: val(:)   !< CLA values.
+  character(*), optional,             intent(IN)    :: pref     !< Prefixing string.
+  character(*), optional,             intent(IN)    :: group    !< Name of group (command) of CLA.
+  character(*), optional,             intent(IN)    :: switch   !< Switch name.
+  integer(I4P), optional,             intent(IN)    :: position !< Position of positional CLA.
+  integer(I4P), optional,             intent(OUT)   :: error    !< Error trapping flag.
+  character(len=:), allocatable                     :: prefd    !< Prefixing string.
+  logical                                           :: found    !< Flag for checking if CLA containing switch has been found.
+  integer(I4P)                                      :: g        !< Group counter.
+  integer(I4P)                                      :: a        !< Argument counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  prefd = '' ; if (present(pref)) prefd = pref
+  if (present(group)) then
+    if (.not.cli%defined_group(group=group, g=g)) then
+      call cli%errored(pref=prefd, error=error_cli_missing_group, group=group)
+    endif
+  else
+    g = 0
+  endif
+  if (present(switch)) then
+    ! searching for the CLA corresponding to switch
+    found = .false.
+    do a=1, cli%clasg(g)%Na
+      if (.not.cli%clasg(g)%cla(a)%positional) then
+        if ((cli%clasg(g)%cla(a)%switch==switch).or.(cli%clasg(g)%cla(a)%switch_ab==switch)) then
+          found = .true.
+          exit
+        endif
+      endif
+    enddo
+    if (.not.found) then
+      call cli%errored(pref=prefd, error=error_cli_missing_cla, switch=switch)
+    else
+      call cli%clasg(g)%cla(a)%get_varying(pref=prefd, val=val) ; cli%error = cli%clasg(g)%cla(a)%error
+    endif
+  elseif (present(position)) then
+    call cli%clasg(g)%cla(position)%get_varying(pref=prefd, val=val) ; cli%error = error
+  else
+    call cli%errored(pref=prefd, error=error_cli_missing_selection_cla)
+  endif
+  if (present(error)) error = cli%error
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine get_cla_list_varying_R16P_cli
+
+  subroutine get_cla_list_varying_R8P_cli(cli, val, pref, group, switch, position, error)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Get CLA multiple values from CLAs list parsed with varying size list, real(R8P).
+  !<
+  !< @note The CLA list is returned deallocated if values are not correctly gotten.
+  !<
+  !< @note For logical type CLA the value is directly read without any robust error trapping.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(Type_Command_Line_Interface), intent(INOUT) :: cli      !< CLI data.
+  real(R8P), allocatable,             intent(OUT)   :: val(:)   !< CLA values.
+  character(*), optional,             intent(IN)    :: pref     !< Prefixing string.
+  character(*), optional,             intent(IN)    :: group    !< Name of group (command) of CLA.
+  character(*), optional,             intent(IN)    :: switch   !< Switch name.
+  integer(I4P), optional,             intent(IN)    :: position !< Position of positional CLA.
+  integer(I4P), optional,             intent(OUT)   :: error    !< Error trapping flag.
+  character(len=:), allocatable                     :: prefd    !< Prefixing string.
+  logical                                           :: found    !< Flag for checking if CLA containing switch has been found.
+  integer(I4P)                                      :: g        !< Group counter.
+  integer(I4P)                                      :: a        !< Argument counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  prefd = '' ; if (present(pref)) prefd = pref
+  if (present(group)) then
+    if (.not.cli%defined_group(group=group, g=g)) then
+      call cli%errored(pref=prefd, error=error_cli_missing_group, group=group)
+    endif
+  else
+    g = 0
+  endif
+  if (present(switch)) then
+    ! searching for the CLA corresponding to switch
+    found = .false.
+    do a=1, cli%clasg(g)%Na
+      if (.not.cli%clasg(g)%cla(a)%positional) then
+        if ((cli%clasg(g)%cla(a)%switch==switch).or.(cli%clasg(g)%cla(a)%switch_ab==switch)) then
+          found = .true.
+          exit
+        endif
+      endif
+    enddo
+    if (.not.found) then
+      call cli%errored(pref=prefd, error=error_cli_missing_cla, switch=switch)
+    else
+      call cli%clasg(g)%cla(a)%get_varying(pref=prefd, val=val) ; cli%error = cli%clasg(g)%cla(a)%error
+    endif
+  elseif (present(position)) then
+    call cli%clasg(g)%cla(position)%get_varying(pref=prefd, val=val) ; cli%error = error
+  else
+    call cli%errored(pref=prefd, error=error_cli_missing_selection_cla)
+  endif
+  if (present(error)) error = cli%error
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine get_cla_list_varying_R8P_cli
+
+  subroutine get_cla_list_varying_R4P_cli(cli, val, pref, group, switch, position, error)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Get CLA multiple values from CLAs list parsed with varying size list, real(R4P).
+  !<
+  !< @note The CLA list is returned deallocated if values are not correctly gotten.
+  !<
+  !< @note For logical type CLA the value is directly read without any robust error trapping.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(Type_Command_Line_Interface), intent(INOUT) :: cli      !< CLI data.
+  real(R4P), allocatable,             intent(OUT)   :: val(:)   !< CLA values.
+  character(*), optional,             intent(IN)    :: pref     !< Prefixing string.
+  character(*), optional,             intent(IN)    :: group    !< Name of group (command) of CLA.
+  character(*), optional,             intent(IN)    :: switch   !< Switch name.
+  integer(I4P), optional,             intent(IN)    :: position !< Position of positional CLA.
+  integer(I4P), optional,             intent(OUT)   :: error    !< Error trapping flag.
+  character(len=:), allocatable                     :: prefd    !< Prefixing string.
+  logical                                           :: found    !< Flag for checking if CLA containing switch has been found.
+  integer(I4P)                                      :: g        !< Group counter.
+  integer(I4P)                                      :: a        !< Argument counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  prefd = '' ; if (present(pref)) prefd = pref
+  if (present(group)) then
+    if (.not.cli%defined_group(group=group, g=g)) then
+      call cli%errored(pref=prefd, error=error_cli_missing_group, group=group)
+    endif
+  else
+    g = 0
+  endif
+  if (present(switch)) then
+    ! searching for the CLA corresponding to switch
+    found = .false.
+    do a=1, cli%clasg(g)%Na
+      if (.not.cli%clasg(g)%cla(a)%positional) then
+        if ((cli%clasg(g)%cla(a)%switch==switch).or.(cli%clasg(g)%cla(a)%switch_ab==switch)) then
+          found = .true.
+          exit
+        endif
+      endif
+    enddo
+    if (.not.found) then
+      call cli%errored(pref=prefd, error=error_cli_missing_cla, switch=switch)
+    else
+      call cli%clasg(g)%cla(a)%get_varying(pref=prefd, val=val) ; cli%error = cli%clasg(g)%cla(a)%error
+    endif
+  elseif (present(position)) then
+    call cli%clasg(g)%cla(position)%get_varying(pref=prefd, val=val) ; cli%error = error
+  else
+    call cli%errored(pref=prefd, error=error_cli_missing_selection_cla)
+  endif
+  if (present(error)) error = cli%error
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine get_cla_list_varying_R4P_cli
+
+  subroutine get_cla_list_varying_I8P_cli(cli, val, pref, group, switch, position, error)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Get CLA multiple values from CLAs list parsed with varying size list, integer(I8P).
+  !<
+  !< @note The CLA list is returned deallocated if values are not correctly gotten.
+  !<
+  !< @note For logical type CLA the value is directly read without any robust error trapping.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(Type_Command_Line_Interface), intent(INOUT) :: cli      !< CLI data.
+  integer(I8P), allocatable,          intent(OUT)   :: val(:)   !< CLA values.
+  character(*), optional,             intent(IN)    :: pref     !< Prefixing string.
+  character(*), optional,             intent(IN)    :: group    !< Name of group (command) of CLA.
+  character(*), optional,             intent(IN)    :: switch   !< Switch name.
+  integer(I4P), optional,             intent(IN)    :: position !< Position of positional CLA.
+  integer(I4P), optional,             intent(OUT)   :: error    !< Error trapping flag.
+  character(len=:), allocatable                     :: prefd    !< Prefixing string.
+  logical                                           :: found    !< Flag for checking if CLA containing switch has been found.
+  integer(I4P)                                      :: g        !< Group counter.
+  integer(I4P)                                      :: a        !< Argument counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  prefd = '' ; if (present(pref)) prefd = pref
+  if (present(group)) then
+    if (.not.cli%defined_group(group=group, g=g)) then
+      call cli%errored(pref=prefd, error=error_cli_missing_group, group=group)
+    endif
+  else
+    g = 0
+  endif
+  if (present(switch)) then
+    ! searching for the CLA corresponding to switch
+    found = .false.
+    do a=1, cli%clasg(g)%Na
+      if (.not.cli%clasg(g)%cla(a)%positional) then
+        if ((cli%clasg(g)%cla(a)%switch==switch).or.(cli%clasg(g)%cla(a)%switch_ab==switch)) then
+          found = .true.
+          exit
+        endif
+      endif
+    enddo
+    if (.not.found) then
+      call cli%errored(pref=prefd, error=error_cli_missing_cla, switch=switch)
+    else
+      call cli%clasg(g)%cla(a)%get_varying(pref=prefd, val=val) ; cli%error = cli%clasg(g)%cla(a)%error
+    endif
+  elseif (present(position)) then
+    call cli%clasg(g)%cla(position)%get_varying(pref=prefd, val=val) ; cli%error = error
+  else
+    call cli%errored(pref=prefd, error=error_cli_missing_selection_cla)
+  endif
+  if (present(error)) error = cli%error
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine get_cla_list_varying_I8P_cli
+
+  subroutine get_cla_list_varying_I4P_cli(cli, val, pref, group, switch, position, error)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Get CLA multiple values from CLAs list parsed with varying size list, integer(I4P).
+  !<
+  !< @note The CLA list is returned deallocated if values are not correctly gotten.
+  !<
+  !< @note For logical type CLA the value is directly read without any robust error trapping.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(Type_Command_Line_Interface), intent(INOUT) :: cli      !< CLI data.
+  integer(I4P), allocatable,          intent(OUT)   :: val(:)   !< CLA values.
+  character(*), optional,             intent(IN)    :: pref     !< Prefixing string.
+  character(*), optional,             intent(IN)    :: group    !< Name of group (command) of CLA.
+  character(*), optional,             intent(IN)    :: switch   !< Switch name.
+  integer(I4P), optional,             intent(IN)    :: position !< Position of positional CLA.
+  integer(I4P), optional,             intent(OUT)   :: error    !< Error trapping flag.
+  character(len=:), allocatable                     :: prefd    !< Prefixing string.
+  logical                                           :: found    !< Flag for checking if CLA containing switch has been found.
+  integer(I4P)                                      :: g        !< Group counter.
+  integer(I4P)                                      :: a        !< Argument counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  prefd = '' ; if (present(pref)) prefd = pref
+  if (present(group)) then
+    if (.not.cli%defined_group(group=group, g=g)) then
+      call cli%errored(pref=prefd, error=error_cli_missing_group, group=group)
+    endif
+  else
+    g = 0
+  endif
+  if (present(switch)) then
+    ! searching for the CLA corresponding to switch
+    found = .false.
+    do a=1, cli%clasg(g)%Na
+      if (.not.cli%clasg(g)%cla(a)%positional) then
+        if ((cli%clasg(g)%cla(a)%switch==switch).or.(cli%clasg(g)%cla(a)%switch_ab==switch)) then
+          found = .true.
+          exit
+        endif
+      endif
+    enddo
+    if (.not.found) then
+      call cli%errored(pref=prefd, error=error_cli_missing_cla, switch=switch)
+    else
+      call cli%clasg(g)%cla(a)%get_varying(pref=prefd, val=val) ; cli%error = cli%clasg(g)%cla(a)%error
+    endif
+  elseif (present(position)) then
+    call cli%clasg(g)%cla(position)%get_varying(pref=prefd, val=val) ; cli%error = error
+  else
+    call cli%errored(pref=prefd, error=error_cli_missing_selection_cla)
+  endif
+  if (present(error)) error = cli%error
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine get_cla_list_varying_I4P_cli
+
+  subroutine get_cla_list_varying_I2P_cli(cli, val, pref, group, switch, position, error)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Get CLA multiple values from CLAs list parsed with varying size list, integer(I2P).
+  !<
+  !< @note The CLA list is returned deallocated if values are not correctly gotten.
+  !<
+  !< @note For logical type CLA the value is directly read without any robust error trapping.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(Type_Command_Line_Interface), intent(INOUT) :: cli      !< CLI data.
+  integer(I2P), allocatable,          intent(OUT)   :: val(:)   !< CLA values.
+  character(*), optional,             intent(IN)    :: pref     !< Prefixing string.
+  character(*), optional,             intent(IN)    :: group    !< Name of group (command) of CLA.
+  character(*), optional,             intent(IN)    :: switch   !< Switch name.
+  integer(I4P), optional,             intent(IN)    :: position !< Position of positional CLA.
+  integer(I4P), optional,             intent(OUT)   :: error    !< Error trapping flag.
+  character(len=:), allocatable                     :: prefd    !< Prefixing string.
+  logical                                           :: found    !< Flag for checking if CLA containing switch has been found.
+  integer(I4P)                                      :: g        !< Group counter.
+  integer(I4P)                                      :: a        !< Argument counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  prefd = '' ; if (present(pref)) prefd = pref
+  if (present(group)) then
+    if (.not.cli%defined_group(group=group, g=g)) then
+      call cli%errored(pref=prefd, error=error_cli_missing_group, group=group)
+    endif
+  else
+    g = 0
+  endif
+  if (present(switch)) then
+    ! searching for the CLA corresponding to switch
+    found = .false.
+    do a=1, cli%clasg(g)%Na
+      if (.not.cli%clasg(g)%cla(a)%positional) then
+        if ((cli%clasg(g)%cla(a)%switch==switch).or.(cli%clasg(g)%cla(a)%switch_ab==switch)) then
+          found = .true.
+          exit
+        endif
+      endif
+    enddo
+    if (.not.found) then
+      call cli%errored(pref=prefd, error=error_cli_missing_cla, switch=switch)
+    else
+      call cli%clasg(g)%cla(a)%get_varying(pref=prefd, val=val) ; cli%error = cli%clasg(g)%cla(a)%error
+    endif
+  elseif (present(position)) then
+    call cli%clasg(g)%cla(position)%get_varying(pref=prefd, val=val) ; cli%error = error
+  else
+    call cli%errored(pref=prefd, error=error_cli_missing_selection_cla)
+  endif
+  if (present(error)) error = cli%error
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine get_cla_list_varying_I2P_cli
+
+  subroutine get_cla_list_varying_I1P_cli(cli, val, pref, group, switch, position, error)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Get CLA multiple values from CLAs list parsed with varying size list, integer(I1P).
+  !<
+  !< @note The CLA list is returned deallocated if values are not correctly gotten.
+  !<
+  !< @note For logical type CLA the value is directly read without any robust error trapping.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(Type_Command_Line_Interface), intent(INOUT) :: cli      !< CLI data.
+  integer(I1P), allocatable,          intent(OUT)   :: val(:)   !< CLA values.
+  character(*), optional,             intent(IN)    :: pref     !< Prefixing string.
+  character(*), optional,             intent(IN)    :: group    !< Name of group (command) of CLA.
+  character(*), optional,             intent(IN)    :: switch   !< Switch name.
+  integer(I4P), optional,             intent(IN)    :: position !< Position of positional CLA.
+  integer(I4P), optional,             intent(OUT)   :: error    !< Error trapping flag.
+  character(len=:), allocatable                     :: prefd    !< Prefixing string.
+  logical                                           :: found    !< Flag for checking if CLA containing switch has been found.
+  integer(I4P)                                      :: g        !< Group counter.
+  integer(I4P)                                      :: a        !< Argument counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  prefd = '' ; if (present(pref)) prefd = pref
+  if (present(group)) then
+    if (.not.cli%defined_group(group=group, g=g)) then
+      call cli%errored(pref=prefd, error=error_cli_missing_group, group=group)
+    endif
+  else
+    g = 0
+  endif
+  if (present(switch)) then
+    ! searching for the CLA corresponding to switch
+    found = .false.
+    do a=1, cli%clasg(g)%Na
+      if (.not.cli%clasg(g)%cla(a)%positional) then
+        if ((cli%clasg(g)%cla(a)%switch==switch).or.(cli%clasg(g)%cla(a)%switch_ab==switch)) then
+          found = .true.
+          exit
+        endif
+      endif
+    enddo
+    if (.not.found) then
+      call cli%errored(pref=prefd, error=error_cli_missing_cla, switch=switch)
+    else
+      call cli%clasg(g)%cla(a)%get_varying(pref=prefd, val=val) ; cli%error = cli%clasg(g)%cla(a)%error
+    endif
+  elseif (present(position)) then
+    call cli%clasg(g)%cla(position)%get_varying(pref=prefd, val=val) ; cli%error = error
+  else
+    call cli%errored(pref=prefd, error=error_cli_missing_selection_cla)
+  endif
+  if (present(error)) error = cli%error
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine get_cla_list_varying_I1P_cli
+
+  subroutine get_cla_list_varying_logical_cli(cli, val, pref, group, switch, position, error)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Get CLA multiple values from CLAs list parsed with varying size list, logical.
+  !<
+  !< @note The CLA list is returned deallocated if values are not correctly gotten.
+  !<
+  !< @note For logical type CLA the value is directly read without any robust error trapping.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(Type_Command_Line_Interface), intent(INOUT) :: cli      !< CLI data.
+  logical, allocatable,               intent(OUT)   :: val(:)   !< CLA values.
+  character(*), optional,             intent(IN)    :: pref     !< Prefixing string.
+  character(*), optional,             intent(IN)    :: group    !< Name of group (command) of CLA.
+  character(*), optional,             intent(IN)    :: switch   !< Switch name.
+  integer(I4P), optional,             intent(IN)    :: position !< Position of positional CLA.
+  integer(I4P), optional,             intent(OUT)   :: error    !< Error trapping flag.
+  character(len=:), allocatable                     :: prefd    !< Prefixing string.
+  logical                                           :: found    !< Flag for checking if CLA containing switch has been found.
+  integer(I4P)                                      :: g        !< Group counter.
+  integer(I4P)                                      :: a        !< Argument counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  prefd = '' ; if (present(pref)) prefd = pref
+  if (present(group)) then
+    if (.not.cli%defined_group(group=group, g=g)) then
+      call cli%errored(pref=prefd, error=error_cli_missing_group, group=group)
+    endif
+  else
+    g = 0
+  endif
+  if (present(switch)) then
+    ! searching for the CLA corresponding to switch
+    found = .false.
+    do a=1, cli%clasg(g)%Na
+      if (.not.cli%clasg(g)%cla(a)%positional) then
+        if ((cli%clasg(g)%cla(a)%switch==switch).or.(cli%clasg(g)%cla(a)%switch_ab==switch)) then
+          found = .true.
+          exit
+        endif
+      endif
+    enddo
+    if (.not.found) then
+      call cli%errored(pref=prefd, error=error_cli_missing_cla, switch=switch)
+    else
+      call cli%clasg(g)%cla(a)%get_varying(pref=prefd, val=val) ; cli%error = cli%clasg(g)%cla(a)%error
+    endif
+  elseif (present(position)) then
+    call cli%clasg(g)%cla(position)%get_varying(pref=prefd, val=val) ; cli%error = error
+  else
+    call cli%errored(pref=prefd, error=error_cli_missing_selection_cla)
+  endif
+  if (present(error)) error = cli%error
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine get_cla_list_varying_logical_cli
+
+  subroutine get_cla_list_varying_char_cli(cli, val, pref, group, switch, position, error)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Get CLA multiple values from CLAs list parsed with varying size list, character.
+  !<
+  !< @note The CLA list is returned deallocated if values are not correctly gotten.
+  !<
+  !< @note For logical type CLA the value is directly read without any robust error trapping.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(Type_Command_Line_Interface), intent(INOUT) :: cli      !< CLI data.
+  character(*), allocatable,          intent(OUT)   :: val(:)   !< CLA values.
+  character(*), optional,             intent(IN)    :: pref     !< Prefixing string.
+  character(*), optional,             intent(IN)    :: group    !< Name of group (command) of CLA.
+  character(*), optional,             intent(IN)    :: switch   !< Switch name.
+  integer(I4P), optional,             intent(IN)    :: position !< Position of positional CLA.
+  integer(I4P), optional,             intent(OUT)   :: error    !< Error trapping flag.
+  character(len=:), allocatable                     :: prefd    !< Prefixing string.
+  logical                                           :: found    !< Flag for checking if CLA containing switch has been found.
+  integer(I4P)                                      :: g        !< Group counter.
+  integer(I4P)                                      :: a        !< Argument counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  prefd = '' ; if (present(pref)) prefd = pref
+  if (present(group)) then
+    if (.not.cli%defined_group(group=group, g=g)) then
+      call cli%errored(pref=prefd, error=error_cli_missing_group, group=group)
+    endif
+  else
+    g = 0
+  endif
+  if (present(switch)) then
+    ! searching for the CLA corresponding to switch
+    found = .false.
+    do a=1, cli%clasg(g)%Na
+      if (.not.cli%clasg(g)%cla(a)%positional) then
+        if ((cli%clasg(g)%cla(a)%switch==switch).or.(cli%clasg(g)%cla(a)%switch_ab==switch)) then
+          found = .true.
+          exit
+        endif
+      endif
+    enddo
+    if (.not.found) then
+      call cli%errored(pref=prefd, error=error_cli_missing_cla, switch=switch)
+    else
+      call cli%clasg(g)%cla(a)%get_varying(pref=prefd, val=val) ; cli%error = cli%clasg(g)%cla(a)%error
+    endif
+  elseif (present(position)) then
+    call cli%clasg(g)%cla(position)%get_varying(pref=prefd, val=val) ; cli%error = error
+  else
+    call cli%errored(pref=prefd, error=error_cli_missing_selection_cla)
+  endif
+  if (present(error)) error = cli%error
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine get_cla_list_varying_char_cli
 
   function usage(cli, g, pref, no_header, no_examples, no_epilog) result(usaged)
   !---------------------------------------------------------------------------------------------------------------------------------
