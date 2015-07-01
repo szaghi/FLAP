@@ -32,6 +32,7 @@ integer(I2P), allocatable         :: vlistI2P(:)  !< Varying size integer list v
 integer(I1P), allocatable         :: vlistI1P(:)  !< Varying size integer list values.
 logical,      allocatable         :: vlistBool(:) !< Varying size boolean list values.
 character(10),allocatable         :: vlistChar(:) !< Varying size character list values.
+character(99),allocatable         :: garbage(:)   !< Varying size character list for trailing garbage values.
 integer(I4P)                      :: error        !< Error trapping flag.
 integer(I4P)                      :: l            !< Counter.
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -80,7 +81,7 @@ call cli%add(switch='--varying_listI4P',switch_ab='-vlI4P',help='Varying size in
 call cli%add(switch='--varying_listI2P',switch_ab='-vlI2P',help='Varying size integer I2P list input',required=.false.,act='store',&
              nargs='*',def='1 2',error=error)
 call cli%add(switch='--varying_listI1P',switch_ab='-vlI1P',help='Varying size integer I1P list input',required=.false.,act='store',&
-             nargs='*',def='1',error=error)
+             nargs='+',def='1',error=error)
 call cli%add(switch='--varying_listBool',switch_ab='-vlBool',help='Varying size boolean list input',required=.false.,act='store',&
              nargs='*',def='T F T T F',error=error)
 call cli%add(switch='--varying_listChar',switch_ab='-vlChar',help='Varying size character list input',required=.false.,act='store',&
@@ -106,6 +107,7 @@ call cli%get_varying(switch='-vlI2P',  val=vlistI2P,  error=error) ; if (error/=
 call cli%get_varying(switch='-vlI1P',  val=vlistI1P,  error=error) ; if (error/=0) stop
 call cli%get_varying(switch='-vlBool', val=vlistBool, error=error) ; if (error/=0) stop
 call cli%get_varying(switch='-vlChar', val=vlistChar, error=error) ; if (error/=0) stop
+call cli%get_varying(switch='--',      val=garbage,   error=error) ; if (error/=0) stop
 print '(A)'   ,'Test_Driver has been called with the following arguments values:'
 print '(A)'   ,'String              input = '//trim(adjustl(sval))
 print '(A)'   ,'Real                input = '//str(n=rval)
@@ -182,6 +184,12 @@ if (allocated(vlistChar)) then
   enddo
 else
   print '(A)'   ,'Problems occuour with varying size character list!'
+endif
+if (allocated(garbage)) then
+  print '(A)'   ,'You have used implicit "--" option for collecting list of "trailing garbage" values that are:'
+  do l=1, size(garbage)
+    print '(A)' ,'  Garbage('//trim(str(.true.,l))//') = '//garbage(l)
+  enddo
 endif
 if (cli%passed(switch='--man_file')) then
   call cli%get(switch='--man_file',val=sval,error=error) ; if (error/=0) stop

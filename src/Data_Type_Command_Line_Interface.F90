@@ -48,6 +48,7 @@ type, extends(Type_Object) :: Type_Command_Line_Argument
   logical                       :: positional=.false. !< Flag for checking if CLA is a positional or a named CLA.
   integer(I4P)                  :: position= 0_I4P    !< Position of positional CLA.
   logical                       :: passed=.false.     !< Flag for checking if CLA has been passed to CLI.
+  logical                       :: hidden=.false.     !< Flag for hiding CLA, thus it does not compare into help.
   character(len=:), allocatable :: act                !< CLA value action.
   character(len=:), allocatable :: def                !< Default value.
   character(len=:), allocatable :: nargs              !< Number of arguments consumed by CLA.
@@ -56,11 +57,12 @@ type, extends(Type_Object) :: Type_Command_Line_Argument
   character(len=:), allocatable :: envvar             !< Environment variable from which take value.
   contains
     ! public methods
-    procedure, public :: free          => free_cla              !< Free dynamic memory.
-    procedure, public :: check         => check_cla             !< Check CLA data consistency.
-    procedure, public :: check_choices => check_choices_cla     !< Check if CLA value is in allowed choices.
-    generic,   public :: get           => get_cla, get_cla_list !< Get CLA value(s).
-    generic,   public :: get_varying =>                &        !< Get CLA value(s) from CLAs list parsedi, varying size list.
+    procedure, public :: free            => free_cla              !< Free dynamic memory.
+    procedure, public :: check           => check_cla             !< Check CLA data consistency.
+    procedure, public :: check_choices   => check_choices_cla     !< Check if CLA value is in allowed choices.
+    procedure, public :: check_list_size => check_list_size_cla   !< Check CLA multiple values list size consistency.
+    generic,   public :: get             => get_cla, get_cla_list !< Get CLA value(s).
+    generic,   public :: get_varying     =>            &          !< Get CLA value(s) from CLAs list parsedi, varying size list.
 #ifdef r16p
                          get_cla_list_varying_R16P,    &
 #endif
@@ -72,8 +74,8 @@ type, extends(Type_Object) :: Type_Command_Line_Argument
                          get_cla_list_varying_I1P,     &
                          get_cla_list_varying_logical, &
                          get_cla_list_varying_char
-    procedure, public :: usage         => usage_cla             !< Get correct CLA usage.
-    procedure, public :: signature     => signature_cla         !< Get CLA signature for adding to CLI one.
+    procedure, public :: usage         => usage_cla               !< Get correct CLA usage.
+    procedure, public :: signature     => signature_cla           !< Get CLA signature for adding to CLI one.
     ! private methods
     procedure, private :: get_cla                      !< Get CLA (single) value from CLAs list parsed.
     procedure, private :: get_cla_list                 !< Get CLA multiple values from CLAs list parsed.
@@ -380,12 +382,22 @@ contains
         endif
       case(error_cla_nargs_insufficient)
         if (.not.obj%positional) then
-          write(stderr,'(A)')prefd//obj%progname//': error: named option "'//trim(adjustl(obj%switch))//'" requires '//&
-            trim(adjustl(obj%nargs))//' arguments but no enough ones remain!'
+          if (obj%nargs=='+') then
+            write(stderr,'(A)')prefd//obj%progname//': error: named option "'//trim(adjustl(obj%switch))//'" requires at least '//&
+              '1 argument but no one remains!'
+          else
+            write(stderr,'(A)')prefd//obj%progname//': error: named option "'//trim(adjustl(obj%switch))//'" requires '//&
+              trim(adjustl(obj%nargs))//' arguments but no enough ones remain!'
+          endif
         else
-          write(stderr,'(A)')prefd//obj%progname//': error: "'//trim(str(.true.,obj%position))//&
-            '-th" positional option requires '//&
-            trim(adjustl(obj%nargs))//' arguments but no enough ones remain!'
+          if (obj%nargs=='+') then
+            write(stderr,'(A)')prefd//obj%progname//': error: "'//trim(str(.true.,obj%position))//&
+              '-th" positional option requires at least 1 argument but no one remains'
+          else
+            write(stderr,'(A)')prefd//obj%progname//': error: "'//trim(str(.true.,obj%position))//&
+              '-th" positional option requires '//&
+              trim(adjustl(obj%nargs))//' arguments but no enough ones remain!'
+          endif
         endif
       case(error_cla_unknown)
         write(stderr,'(A)')prefd//obj%progname//': error: switch "'//trim(adjustl(switch))//'" is unknown!'
@@ -497,6 +509,7 @@ contains
   cla%positional = .false.
   cla%position   =  0_I4P
   cla%passed     = .false.
+  cla%hidden     = .false.
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine free_cla
@@ -902,6 +915,34 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list
 
+  function check_list_size_cla(cla, Nv, val, pref) result(is_ok)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Check CLA multiple values list size consistency.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(Type_Command_Line_Argument), intent(INOUT) :: cla     !< CLA data.
+  integer(I4P),                      intent(IN)    :: Nv      !< Number of values.
+  character(*),                      intent(IN)    :: val     !< First value.
+  character(*), optional,            intent(IN)    :: pref    !< Prefixing string.
+  logical                                          :: is_ok   !< Check result.
+  character(len=:), allocatable                    :: prefd   !< Prefixing string.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  prefd = '' ; if (present(pref)) prefd = pref
+  is_ok = .true.
+  if (Nv==1) then
+    if (trim(adjustl(val))=='') then
+      ! there is no real value, but only for nargs=+ this is a real error
+      is_ok = .false.
+      if (cla%nargs=='+') then
+        call cla%errored(pref=prefd, error=error_cla_nargs_insufficient)
+      endif
+    endif
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction check_list_size_cla
+
   subroutine get_cla_list_varying_R16P(cla, val, pref)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA (multiple) value with varying size, real(R16P).
@@ -929,6 +970,7 @@ contains
   if (cla%act==action_store) then
     if (cla%passed) then
       call tokenize(strin=cla%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      if (.not.cla%check_list_size(Nv=Nv, val=valsV(1), pref=prefd)) return
       allocate(real(R16P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsV(v))), knd=1._R16P)
@@ -936,6 +978,15 @@ contains
       enddo
     else ! using default value
       call tokenize(strin=cla%def, delimiter=' ', toks=valsD, Nt=Nv)
+      if (.not.cla%check_list_size(Nv=Nv, val=valsD(1), pref=prefd)) return
+      if (Nv==1) then
+        if (trim(adjustl(valsD(1)))=='') then
+          if (cla%nargs=='+') then
+            call cla%errored(pref=prefd, error=error_cla_nargs_insufficient)
+          endif
+          return
+        endif
+      endif
       allocate(real(R16P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsD(v))), knd=1._R16P)
@@ -974,6 +1025,7 @@ contains
   if (cla%act==action_store) then
     if (cla%passed) then
       call tokenize(strin=cla%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      if (.not.cla%check_list_size(Nv=Nv, val=valsV(1), pref=prefd)) return
       allocate(real(R8P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsV(v))), knd=1._R8P)
@@ -981,6 +1033,7 @@ contains
       enddo
     else ! using default value
       call tokenize(strin=cla%def, delimiter=' ', toks=valsD, Nt=Nv)
+      if (.not.cla%check_list_size(Nv=Nv, val=valsD(1), pref=prefd)) return
       allocate(real(R8P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsD(v))), knd=1._R8P)
@@ -1019,6 +1072,7 @@ contains
   if (cla%act==action_store) then
     if (cla%passed) then
       call tokenize(strin=cla%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      if (.not.cla%check_list_size(Nv=Nv, val=valsV(1), pref=prefd)) return
       allocate(real(R4P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsV(v))), knd=1._R4P)
@@ -1026,6 +1080,7 @@ contains
       enddo
     else ! using default value
       call tokenize(strin=cla%def, delimiter=' ', toks=valsD, Nt=Nv)
+      if (.not.cla%check_list_size(Nv=Nv, val=valsD(1), pref=prefd)) return
       allocate(real(R4P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsD(v))), knd=1._R4P)
@@ -1064,6 +1119,7 @@ contains
   if (cla%act==action_store) then
     if (cla%passed) then
       call tokenize(strin=cla%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      if (.not.cla%check_list_size(Nv=Nv, val=valsV(1), pref=prefd)) return
       allocate(integer(I8P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsV(v))), knd=1_I8P)
@@ -1071,6 +1127,7 @@ contains
       enddo
     else ! using default value
       call tokenize(strin=cla%def, delimiter=' ', toks=valsD, Nt=Nv)
+      if (.not.cla%check_list_size(Nv=Nv, val=valsD(1), pref=prefd)) return
       allocate(integer(I8P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsD(v))), knd=1_I8P)
@@ -1109,6 +1166,7 @@ contains
   if (cla%act==action_store) then
     if (cla%passed) then
       call tokenize(strin=cla%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      if (.not.cla%check_list_size(Nv=Nv, val=valsV(1), pref=prefd)) return
       allocate(integer(I4P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsV(v))), knd=1_I4P)
@@ -1116,6 +1174,7 @@ contains
       enddo
     else ! using default value
       call tokenize(strin=cla%def, delimiter=' ', toks=valsD, Nt=Nv)
+      if (.not.cla%check_list_size(Nv=Nv, val=valsD(1), pref=prefd)) return
       allocate(integer(I4P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsD(v))), knd=1_I4P)
@@ -1154,6 +1213,7 @@ contains
   if (cla%act==action_store) then
     if (cla%passed) then
       call tokenize(strin=cla%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      if (.not.cla%check_list_size(Nv=Nv, val=valsV(1), pref=prefd)) return
       allocate(integer(I2P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsV(v))), knd=1_I2P)
@@ -1161,6 +1221,7 @@ contains
       enddo
     else ! using default value
       call tokenize(strin=cla%def, delimiter=' ', toks=valsD, Nt=Nv)
+      if (.not.cla%check_list_size(Nv=Nv, val=valsD(1), pref=prefd)) return
       allocate(integer(I2P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsD(v))), knd=1_I2P)
@@ -1199,6 +1260,7 @@ contains
   if (cla%act==action_store) then
     if (cla%passed) then
       call tokenize(strin=cla%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      if (.not.cla%check_list_size(Nv=Nv, val=valsV(1), pref=prefd)) return
       allocate(integer(I1P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsV(v))), knd=1_I1P)
@@ -1206,6 +1268,7 @@ contains
       enddo
     else ! using default value
       call tokenize(strin=cla%def, delimiter=' ', toks=valsD, Nt=Nv)
+      if (.not.cla%check_list_size(Nv=Nv, val=valsD(1), pref=prefd)) return
       allocate(integer(I1P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=prefd, error=cla%error, str=trim(adjustl(valsD(v))), knd=1_I1P)
@@ -1244,6 +1307,7 @@ contains
   if (cla%act==action_store) then
     if (cla%passed) then
       call tokenize(strin=cla%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      if (.not.cla%check_list_size(Nv=Nv, val=valsV(1), pref=prefd)) return
       allocate(logical:: val(1:Nv))
       do v=1,Nv
         read(valsV(v), *, iostat=cla%error)val(v)
@@ -1254,6 +1318,7 @@ contains
       enddo
     else ! using default value
       call tokenize(strin=cla%def, delimiter=' ', toks=valsD, Nt=Nv)
+      if (.not.cla%check_list_size(Nv=Nv, val=valsD(1), pref=prefd)) return
       allocate(logical:: val(1:Nv))
       do v=1,Nv
         read(valsD(v), *, iostat=cla%error)val(v)
@@ -1295,12 +1360,14 @@ contains
   if (cla%act==action_store) then
     if (cla%passed) then
       call tokenize(strin=cla%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      if (.not.cla%check_list_size(Nv=Nv, val=valsV(1), pref=prefd)) return
       allocate(val(1:Nv))
       do v=1, Nv
         val(v) = trim(adjustl(valsV(v)))
       enddo
     else ! using default value
       call tokenize(strin=cla%def, delimiter=' ', toks=valsD, Nt=Nv)
+      if (.not.cla%check_list_size(Nv=Nv, val=valsD(1), pref=prefd)) return
       allocate(val(1:Nv))
       do v=1, Nv
         val(v) = trim(adjustl(valsD(v)))
@@ -1323,60 +1390,64 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  prefd = '' ; if (present(pref)) prefd = pref
-  if (cla%act==action_store) then
-    if (.not.cla%positional) then
-      if (allocated(cla%nargs)) then
-        usage = ''
-        select case(cla%nargs)
-        case('+')
-          usage = usage//' value#1 [value#2...]'
-        case('*')
-          usage = usage//' [value#1 value#2...]'
-        case default
-          do a=1, cton(str=trim(adjustl(cla%nargs)),knd=1_I4P)
-            usage = usage//' value#'//trim(str(.true.,a))
-          enddo
-        endselect
-        if (trim(adjustl(cla%switch))/=trim(adjustl(cla%switch_ab))) then
-          usage = '   '//trim(adjustl(cla%switch))//usage//', '//trim(adjustl(cla%switch_ab))//usage
+  if (.not.cla%hidden) then
+    prefd = '' ; if (present(pref)) prefd = pref
+    if (cla%act==action_store) then
+      if (.not.cla%positional) then
+        if (allocated(cla%nargs)) then
+          usage = ''
+          select case(cla%nargs)
+          case('+')
+            usage = usage//' value#1 [value#2...]'
+          case('*')
+            usage = usage//' [value#1 value#2...]'
+          case default
+            do a=1, cton(str=trim(adjustl(cla%nargs)),knd=1_I4P)
+              usage = usage//' value#'//trim(str(.true.,a))
+            enddo
+          endselect
+          if (trim(adjustl(cla%switch))/=trim(adjustl(cla%switch_ab))) then
+            usage = '   '//trim(adjustl(cla%switch))//usage//', '//trim(adjustl(cla%switch_ab))//usage
+          else
+            usage = '   '//trim(adjustl(cla%switch))//usage
+          endif
         else
-          usage = '   '//trim(adjustl(cla%switch))//usage
+          if (trim(adjustl(cla%switch))/=trim(adjustl(cla%switch_ab))) then
+            usage = '   '//trim(adjustl(cla%switch))//' value, '//trim(adjustl(cla%switch_ab))//' value'
+          else
+            usage = '   '//trim(adjustl(cla%switch))//' value'
+          endif
         endif
       else
-        if (trim(adjustl(cla%switch))/=trim(adjustl(cla%switch_ab))) then
-          usage = '   '//trim(adjustl(cla%switch))//' value, '//trim(adjustl(cla%switch_ab))//' value'
-        else
-          usage = '   '//trim(adjustl(cla%switch))//' value'
-        endif
+        usage = '  value'
+      endif
+      if (allocated(cla%choices)) then
+        usage = usage//', value in: ('//cla%choices//')'
       endif
     else
-      usage = '  value'
+      if (trim(adjustl(cla%switch))/=trim(adjustl(cla%switch_ab))) then
+        usage = '   '//trim(adjustl(cla%switch))//', '//trim(adjustl(cla%switch_ab))
+      else
+        usage = '   '//trim(adjustl(cla%switch))
+      endif
     endif
-    if (allocated(cla%choices)) then
-      usage = usage//', value in: ('//cla%choices//')'
+    usage = prefd//usage
+    if (cla%positional) usage = usage//new_line('a')//prefd//repeat(' ',10)//trim(str(.true.,cla%position))//'-th argument'
+    if (allocated(cla%envvar)) then
+      if (cla%envvar /= '') then
+        usage = usage//new_line('a')//prefd//repeat(' ',10)//'environment variable name "'//trim(adjustl(cla%envvar))//'"'
+      endif
     endif
+    if (.not.cla%required) then
+      if (cla%def /= '') then
+        usage = usage//new_line('a')//prefd//repeat(' ',10)//'default value '//trim(adjustl(cla%def))
+      endif
+    endif
+    if (cla%m_exclude/='') usage = usage//new_line('a')//prefd//repeat(' ',10)//'mutually exclude "'//cla%m_exclude//'"'
+    usage = usage//new_line('a')//prefd//repeat(' ',10)//trim(adjustl(cla%help))
   else
-    if (trim(adjustl(cla%switch))/=trim(adjustl(cla%switch_ab))) then
-      usage = '   '//trim(adjustl(cla%switch))//', '//trim(adjustl(cla%switch_ab))
-    else
-      usage = '   '//trim(adjustl(cla%switch))
-    endif
+    usage = ''
   endif
-  usage = prefd//usage
-  if (cla%positional) usage = usage//new_line('a')//prefd//repeat(' ',10)//trim(str(.true.,cla%position))//'-th argument'
-  if (allocated(cla%envvar)) then
-    if (cla%envvar /= '') then
-      usage = usage//new_line('a')//prefd//repeat(' ',10)//'environment variable name "'//trim(adjustl(cla%envvar))//'"'
-    endif
-  endif
-  if (.not.cla%required) then
-    if (cla%def /= '') then
-      usage = usage//new_line('a')//prefd//repeat(' ',10)//'default value '//trim(adjustl(cla%def))
-    endif
-  endif
-  if (cla%m_exclude/='') usage = usage//new_line('a')//prefd//repeat(' ',10)//'mutually exclude "'//cla%m_exclude//'"'
-  usage = usage//new_line('a')//prefd//repeat(' ',10)//trim(adjustl(cla%help))
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction usage_cla
@@ -1392,42 +1463,46 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  if (cla%act==action_store) then
-    if (.not.cla%positional) then
-      if (allocated(cla%nargs)) then
-        select case(cla%nargs)
-        case('+')
-          signd = ' value#1 [value#2 value#3...]'
-        case('*')
-          signd = ' [value#1 value#2 value#3...]'
-        case default
-          nargs = cton(str=trim(adjustl(cla%nargs)),knd=1_I4P)
-          signd = ''
-          do a=1,nargs
-            signd = signd//' value#'//trim(str(.true.,a))
-          enddo
-        endselect
+  if (.not.cla%hidden) then
+    if (cla%act==action_store) then
+      if (.not.cla%positional) then
+        if (allocated(cla%nargs)) then
+          select case(cla%nargs)
+          case('+')
+            signd = ' value#1 [value#2 value#3...]'
+          case('*')
+            signd = ' [value#1 value#2 value#3...]'
+          case default
+            nargs = cton(str=trim(adjustl(cla%nargs)),knd=1_I4P)
+            signd = ''
+            do a=1,nargs
+              signd = signd//' value#'//trim(str(.true.,a))
+            enddo
+          endselect
+        else
+          signd = ' value'
+        endif
+        if (cla%required) then
+          signd = ' '//trim(adjustl(cla%switch))//signd
+        else
+          signd = ' ['//trim(adjustl(cla%switch))//signd//']'
+        endif
       else
-        signd = ' value'
-      endif
-      if (cla%required) then
-        signd = ' '//trim(adjustl(cla%switch))//signd
-      else
-        signd = ' ['//trim(adjustl(cla%switch))//signd//']'
+        if (cla%required) then
+          signd = ' value'
+        else
+          signd = ' [value]'
+        endif
       endif
     else
       if (cla%required) then
-        signd = ' value'
+        signd = ' '//trim(adjustl(cla%switch))
       else
-        signd = ' [value]'
+        signd = ' ['//trim(adjustl(cla%switch))//']'
       endif
     endif
   else
-    if (cla%required) then
-      signd = ' '//trim(adjustl(cla%switch))
-    else
-      signd = ' ['//trim(adjustl(cla%switch))//']'
-    endif
+    signd = ''
   endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1455,6 +1530,7 @@ contains
                                 lhs%positional = rhs%positional
                                 lhs%position   = rhs%position
                                 lhs%passed     = rhs%passed
+                                lhs%hidden     = rhs%hidden
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine assign_cla
@@ -1758,7 +1834,25 @@ contains
               elseif (allocated(clasg%cla(a)%nargs)) then
                 clasg%cla(a)%val = ''
                 select case(clasg%cla(a)%nargs)
-                case('+') ! not yet implemented
+                case('+')
+                  aaa = 0
+                  do aa=arg + 1, size(args,dim=1)
+                    if (.not.clasg%defined(switch=trim(adjustl(args(aa))))) then
+                      aaa = aa
+                    else
+                      exit
+                    endif
+                  enddo
+                  if (aaa>=arg+1) then
+                    do aa=aaa, arg + 1, -1 ! decreasing loop due to gfortran bug
+                      clasg%cla(a)%val = trim(adjustl(args(aa)))//args_sep//trim(clasg%cla(a)%val)
+                    enddo
+                    arg = aaa
+                  elseif (aaa==0) then
+                    call clasg%cla(a)%errored(pref=prefd, error=error_cla_nargs_insufficient)
+                    clasg%error = clasg%cla(a)%error
+                    return
+                  endif
                 case('*')
                   aaa = 0
                   do aa=arg + 1, size(args,dim=1)
@@ -2047,7 +2141,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine set_mutually_exclusive_groups
 
-  subroutine add(cli, pref, group, group_index, switch, switch_ab, help, required, positional, position, act, def, nargs,&
+  subroutine add(cli, pref, group, group_index, switch, switch_ab, help, required, positional, position, hidden, act, def, nargs,&
                  choices, exclude, envvar, error)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Add CLA to CLI.
@@ -2069,6 +2163,7 @@ contains
   logical,      optional,             intent(IN)    :: required    !< Flag for set required argument.
   logical,      optional,             intent(IN)    :: positional  !< Flag for checking if CLA is a positional or a named CLA.
   integer(I4P), optional,             intent(IN)    :: position    !< Position of positional CLA.
+  logical,      optional,             intent(IN)    :: hidden      !< Flag for hiding CLA, thus it does not compare into help.
   character(*), optional,             intent(IN)    :: act         !< CLA value action.
   character(*), optional,             intent(IN)    :: def         !< Default value.
   character(*), optional,             intent(IN)    :: nargs       !< Number of arguments consumed by CLA.
@@ -2098,6 +2193,7 @@ contains
   cla%required   = .false.                 ; if (present(required  )) cla%required   = required
   cla%positional = .false.                 ; if (present(positional)) cla%positional = positional
   cla%position   = 0_I4P                   ; if (present(position  )) cla%position   = position
+  cla%hidden     = .false.                 ; if (present(hidden    )) cla%hidden     = hidden
   cla%act        = action_store            ; if (present(act       )) cla%act        = trim(adjustl(Upper_Case(act)))
                                              if (present(def       )) cla%def        = def
                                              if (present(nargs     )) cla%nargs      = nargs
@@ -2299,7 +2395,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   prefd = '' ; if (present(pref)) prefd = pref
 
-  ! adding help and version switches if not done by user
+  ! add help and version switches if not done by user
   if (.not.cli%disable_hv) then
     do g=0,size(cli%clasg,dim=1)-1
       if (.not.(cli%defined(group=cli%clasg(g)%group, switch='--help').and.cli%defined(group=cli%clasg(g)%group, switch='-h'))) &
@@ -2322,6 +2418,19 @@ contains
                      act         = 'print_version')
     enddo
   endif
+
+  ! add hidden CLA '--' for getting the rid of eventual trailing CLAs garbage
+  do g=0,size(cli%clasg,dim=1)-1
+    if (.not.cli%defined(group=cli%clasg(g)%group, switch='--')) &
+      call cli%add(pref        = prefd,   &
+                   group_index = g,       &
+                   switch      = '--',    &
+                   required    = .false., &
+                   hidden      = .true.,  &
+                   nargs       = '*',     &
+                   def         = '',      &
+                   act         = 'store')
+  enddo
 
   ! parsing passed CLAs grouping in indexes
   if (present(args)) then

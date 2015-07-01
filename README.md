@@ -60,7 +60,10 @@ FLAP is inspired by the python great module _argparse_, thus many features are t
   * [x] support boolean CLA;
   * [x] support positional CLA;
   * [x] support list of allowable values for defined CLA with automatic consistency check;
-  * [x] support multiple valued (list of values) CLA;
+  * [x] support multiple valued (list of values, aka list-valued) CLA:
+    * [x] prefixed size list, e.g. `nargs='3'`;
+    * [x] runtime sized list with at least 1 value, e.g. `nargs='+'`;
+    * [x] runtime sized list with any size, even empty, e.g. `nargs='*'`;
   * [x] support mutually exclusive CLAs;
   * [x] self-consistency-check of CLA definition;
   * [x] support fake CLAs input from a string;
@@ -74,7 +77,7 @@ FLAP is inspired by the python great module _argparse_, thus many features are t
 * [x] errors trapping for invalid CLI usage;
 * [x] POSIX style compliant;
 * [x] automatic generation of MAN PAGE using your CLI definition!;
-* [ ] replicate all the useful features of _argparse_;
+* [x] replicate all the useful features of _argparse_;
 * [ ] implement [docopt](https://github.com/docopt/docopt) features.
 * [ ] implement [click](http://click.pocoo.org/4/) features.
 
