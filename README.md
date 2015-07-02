@@ -61,7 +61,7 @@ FLAP is inspired by the python great module _argparse_, thus many features are t
   * [x] support positional CLA;
   * [x] support list of allowable values for defined CLA with automatic consistency check;
   * [x] support multiple valued (list of values, aka list-valued) CLA:
-    * [x] prefixed size list, e.g. `nargs='3'`;
+    * [x] compiletime sized list, e.g. `nargs='3'`;
     * [x] runtime sized list with at least 1 value, e.g. `nargs='+'`;
     * [x] runtime sized list with any size, even empty, e.g. `nargs='*'`;
   * [x] support mutually exclusive CLAs;

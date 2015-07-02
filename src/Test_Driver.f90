@@ -54,38 +54,57 @@ call cli%init(progname    = 'Test_Driver',                                      
                              "Test_Driver 33.0 -s 'Hello FLAP' -i 5                     ", &
                              "Test_Driver --string 'Hello FLAP' --boolean               "],&
               epilog      = new_line('a')//"And that's how to FLAP your life")
+if (error/=0) stop
 ! setting Command Line Argumenst
 call cli%add(switch='--string',switch_ab='-s',help='String input',required=.true.,act='store',error=error)
+if (error/=0) stop
 call cli%add(switch='--integer_ex',switch_ab='-ie',help='Exclusive integer input',required=.false.,act='store',def='-1',error=error)
+if (error/=0) stop
 call cli%add(switch='--integer',switch_ab='-i',help='Integer input with fixed range',required=.false.,act='store',&
              def='1',choices='1,3,5',exclude='-ie',error=error)
+if (error/=0) stop
 call cli%add(switch='--real',switch_ab='-r',help='Real input',required=.false.,act='store',def='1.0',error=error)
+if (error/=0) stop
 call cli%add(switch='--boolean',switch_ab='-b',help='Boolean input',required=.false.,act='store_true',def='.false.',&
              error=error)
+if (error/=0) stop
 call cli%add(switch='--boolean_val',switch_ab='-bv',help='Valued boolean input',required=.false., act='store',&
              def='.true.',error=error)
+if (error/=0) stop
 call cli%add(switch='--integer_list',switch_ab='-il',help='Integer list input',required=.false.,act='store',&
              nargs='3',def='1 8 32',error=error)
+if (error/=0) stop
 call cli%add(positional=.true.,position=1,help='Positional real input',required=.false.,def='1.0',error=error)
+if (error/=0) stop
 call cli%add(switch='--env',switch_ab='-e',help='Environment input',required=.false.,act='store',def='-1',envvar='FLAP_NUM_INT',&
              error=error)
-call cli%add(switch='--man_file',help='Save manual into man_file',required=.false.,act='store',def='Test_Driver.1',error=error)
+if (error/=0) stop
+call cli%add(switch='--man_file',help='Save manual into man_file',required=.false.,act='store*',def='Test_Driver.1',error=error)
+if (error/=0) stop
 call cli%add(switch='--varying_listR8P',switch_ab='-vlR8P',help='Varying size real R8P list input',required=.false.,act='store',&
              nargs='*',def='1.0 2.0 3.0 4.0 5.0 6.0 7.0 8.0',error=error)
+if (error/=0) stop
 call cli%add(switch='--varying_listR4P',switch_ab='-vlR4P',help='Varying size real R4P list input',required=.false.,act='store',&
              nargs='*',def='1.0 2.0 3.0 4.0',error=error)
+if (error/=0) stop
 call cli%add(switch='--varying_listI8P',switch_ab='-vlI8P',help='Varying size integer I8P list input',required=.false.,act='store',&
              nargs='*',def='1 2 3 4 5 6 7 8',error=error)
+if (error/=0) stop
 call cli%add(switch='--varying_listI4P',switch_ab='-vlI4P',help='Varying size integer I4P list input',required=.false.,act='store',&
              nargs='*',def='1 2 3 4',error=error)
+if (error/=0) stop
 call cli%add(switch='--varying_listI2P',switch_ab='-vlI2P',help='Varying size integer I2P list input',required=.false.,act='store',&
              nargs='*',def='1 2',error=error)
+if (error/=0) stop
 call cli%add(switch='--varying_listI1P',switch_ab='-vlI1P',help='Varying size integer I1P list input',required=.false.,act='store',&
              nargs='+',def='1',error=error)
+if (error/=0) stop
 call cli%add(switch='--varying_listBool',switch_ab='-vlBool',help='Varying size boolean list input',required=.false.,act='store',&
              nargs='*',def='T F T T F',error=error)
+if (error/=0) stop
 call cli%add(switch='--varying_listChar',switch_ab='-vlChar',help='Varying size character list input',required=.false.,act='store',&
              nargs='*',def='foo bar baz',error=error)
+if (error/=0) stop
 ! parsing Command Line Interface
 call cli%parse(error=error)
 if (error/=0) stop

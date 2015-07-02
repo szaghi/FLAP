@@ -185,7 +185,8 @@ type, extends(Type_Object), public :: Type_Command_Line_Interface
 endtype Type_Command_Line_Interface
 ! parameters
 integer(I4P),     parameter :: max_val_len        = 1000            !< Maximum number of characters of CLA value.
-character(len=*), parameter :: action_store       = 'STORE'         !< CLA that stores a value associated to its switch.
+character(len=*), parameter :: action_store       = 'STORE'         !< CLA that stores value (if invoked a value must be passed).
+character(len=*), parameter :: action_store_star  = 'STORE*'        !< CLA that stores value or revert on default is invoked alone.
 character(len=*), parameter :: action_store_true  = 'STORE_TRUE'    !< CLA that stores .true. without the necessity of a value.
 character(len=*), parameter :: action_store_false = 'STORE_FALSE'   !< CLA that stores .false. without the necessity of a value.
 character(len=*), parameter :: action_print_help  = 'PRINT_HELP'    !< CLA that print help message.
@@ -205,12 +206,19 @@ integer(I4P), parameter :: error_cla_casting_logical        = 10 !< Error castin
 integer(I4P), parameter :: error_cla_no_list                = 11 !< Actual CLA is not list-values.
 integer(I4P), parameter :: error_cla_nargs_insufficient     = 12 !< Multi-valued CLA with insufficient arguments.
 integer(I4P), parameter :: error_cla_unknown                = 13 !< Unknown CLA (switch name).
-integer(I4P), parameter :: error_clasg_consistency          = 14 !< CLAs group consistency error.
-integer(I4P), parameter :: error_clasg_m_exclude            = 15 !< Two mutually exclusive CLAs group have been called.
-integer(I4P), parameter :: error_cli_missing_cla            = 16 !< CLA not found in CLI.
-integer(I4P), parameter :: error_cli_missing_group          = 17 !< Group not found in CLI.
-integer(I4P), parameter :: error_cli_missing_selection_cla  = 18 !< CLA selection in CLI failing.
-integer(I4P), parameter :: error_cli_too_few_clas           = 19 !< Insufficient arguments for CLI.
+integer(I4P), parameter :: error_cla_envvar_positional      = 14 !< Envvar not allowed for positional CLA.
+integer(I4P), parameter :: error_cla_envvar_not_store       = 15 !< Envvar not allowed action different from store;
+integer(I4P), parameter :: error_cla_envvar_nargs           = 16 !< Envvar not allowed for list-values CLA.
+integer(I4P), parameter :: error_cla_store_star_positional  = 17 !< Action store* not allowed for positional CLA.
+integer(I4P), parameter :: error_cla_store_star_nargs       = 18 !< Action store* not allowed for list-values CLA.
+integer(I4P), parameter :: error_cla_store_star_envvar      = 19 !< Action store* not allowed for environment variable CLA.
+integer(I4P), parameter :: error_cla_action_unknown         = 20 !< Unknown CLA (switch name).
+integer(I4P), parameter :: error_clasg_consistency          = 21 !< CLAs group consistency error.
+integer(I4P), parameter :: error_clasg_m_exclude            = 22 !< Two mutually exclusive CLAs group have been called.
+integer(I4P), parameter :: error_cli_missing_cla            = 23 !< CLA not found in CLI.
+integer(I4P), parameter :: error_cli_missing_group          = 24 !< Group not found in CLI.
+integer(I4P), parameter :: error_cli_missing_selection_cla  = 25 !< CLA selection in CLI failing.
+integer(I4P), parameter :: error_cli_too_few_clas           = 26 !< Insufficient arguments for CLI.
 integer(I4P), parameter :: status_clasg_print_v             = -1 !< Print version status.
 integer(I4P), parameter :: status_clasg_print_h             = -2 !< Print help status.
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -401,6 +409,27 @@ contains
         endif
       case(error_cla_unknown)
         write(stderr,'(A)')prefd//obj%progname//': error: switch "'//trim(adjustl(switch))//'" is unknown!'
+      case(error_cla_envvar_positional)
+        write(stderr,'(A)')prefd//obj%progname//': error: "'//trim(str(.true.,obj%position))//'-th" positional option '//&
+                                  'has "envvar" value that is not allowed for positional option!'
+      case(error_cla_envvar_not_store)
+        write(stderr,'(A)')prefd//obj%progname//': error: named option "'//trim(adjustl(obj%switch))//&
+          '" is an envvar with action different from "'//action_store//'" that is not allowed!'
+      case(error_cla_envvar_nargs)
+        write(stderr,'(A)')prefd//obj%progname//': error: named option "'//trim(adjustl(obj%switch))//&
+          '" is an envvar that is not allowed for list valued option!'
+      case(error_cla_store_star_positional)
+        write(stderr,'(A)')prefd//obj%progname//': error: "'//trim(str(.true.,obj%position))//'-th" positional option '//&
+                                  'has "'//action_store_star//'" action that is not allowed for positional option!'
+      case(error_cla_store_star_nargs)
+        write(stderr,'(A)')prefd//obj%progname//': error: named option "'//trim(adjustl(obj%switch))//&
+          '" has "'//action_store_star//'" action that is not allowed for list valued option!'
+      case(error_cla_store_star_envvar)
+        write(stderr,'(A)')prefd//obj%progname//': error: named option "'//trim(adjustl(obj%switch))//&
+          '" has "'//action_store_star//'" action that is not allowed for environment variable option!'
+      case(error_cla_action_unknown)
+        write(stderr,'(A)')prefd//obj%progname//': error: named option "'//trim(adjustl(obj%switch))//&
+          '" has unknown "'//obj%act//'" action!'
       endselect
 
     class is(Type_Command_Line_Arguments_Group)
@@ -527,7 +556,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine finalize_cla
 
-  subroutine check_cla(cla,pref)
+  subroutine check_cla(cla, pref)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Check CLA data consistency.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -538,21 +567,70 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   prefd = '' ; if (present(pref)) prefd = pref
+  if (allocated(cla%envvar)) then
+    if (cla%positional) then
+      call cla%errored(pref=prefd, error=error_cla_envvar_positional)
+      return
+    endif
+    if (.not.allocated(cla%act)) then
+      call cla%errored(pref=prefd, error=error_cla_envvar_not_store)
+      return
+    else
+      if (cla%act/=action_store) then
+        call cla%errored(pref=prefd, error=error_cla_envvar_not_store)
+        return
+      endif
+    endif
+    if (allocated(cla%nargs)) then
+      call cla%errored(pref=prefd, error=error_cla_envvar_nargs)
+      return
+    endif
+  endif
+
+  if (allocated(cla%act)) then
+    if (cla%act==action_store_star.and.cla%positional) then
+      call cla%errored(pref=prefd, error=error_cla_store_star_positional)
+      return
+    endif
+    if (cla%act==action_store_star.and.allocated(cla%nargs)) then
+      call cla%errored(pref=prefd, error=error_cla_store_star_nargs)
+      return
+    endif
+    if (cla%act==action_store_star.and.allocated(cla%envvar)) then
+      call cla%errored(pref=prefd, error=error_cla_store_star_envvar)
+      return
+    endif
+    if (cla%act/=action_store.and.      &
+        cla%act/=action_store_star.and. &
+        cla%act/=action_store_true.and. &
+        cla%act/=action_store_false.and.&
+        cla%act/=action_print_help.and. &
+        cla%act/=action_print_vers) then
+      call cla%errored(pref=prefd, error=error_cla_action_unknown)
+      return
+    endif
+  endif
   if ((.not.cla%required).and.(.not.allocated(cla%def))) then
-    call cla%errored(pref=prefd,error=error_cla_optional_no_def)
+    call cla%errored(pref=prefd, error=error_cla_optional_no_def)
+    return
   endif
   if ((cla%required).and.(cla%m_exclude/='')) then
-    call cla%errored(pref=prefd,error=error_cla_required_m_exclude)
+    call cla%errored(pref=prefd, error=error_cla_required_m_exclude)
+    return
   endif
   if ((cla%positional).and.(cla%m_exclude/='')) then
-    call cla%errored(pref=prefd,error=error_cla_positional_m_exclude)
+    call cla%errored(pref=prefd, error=error_cla_positional_m_exclude)
+    return
   endif
   if ((.not.cla%positional).and.(.not.allocated(cla%switch))) then
-    call cla%errored(pref=prefd,error=error_cla_named_no_name)
+    call cla%errored(pref=prefd, error=error_cla_named_no_name)
+    return
   elseif ((cla%positional).and.(cla%position==0_I4P)) then
-    call cla%errored(pref=prefd,error=error_cla_positional_no_position)
+    call cla%errored(pref=prefd, error=error_cla_positional_no_position)
+    return
   elseif ((cla%positional).and.(cla%act/=action_store)) then
-    call cla%errored(pref=prefd,error=error_cla_positional_no_store)
+    call cla%errored(pref=prefd, error=error_cla_positional_no_store)
+    return
   endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -650,7 +728,7 @@ contains
     call cla%errored(pref=prefd,error=error_cla_missing_required)
     return
   endif
-  if (cla%act==action_store) then
+  if (cla%act==action_store.or.cla%act==action_store_star) then
     if (cla%passed) then
       select type(val)
 #ifdef r16p
@@ -1424,6 +1502,11 @@ contains
       if (allocated(cla%choices)) then
         usage = usage//', value in: ('//cla%choices//')'
       endif
+    elseif (cla%act==action_store_star) then
+      usage = '  [value]'
+      if (allocated(cla%choices)) then
+        usage = usage//', value in: ('//cla%choices//')'
+      endif
     else
       if (trim(adjustl(cla%switch))/=trim(adjustl(cla%switch_ab))) then
         usage = '   '//trim(adjustl(cla%switch))//', '//trim(adjustl(cla%switch_ab))
@@ -1494,6 +1577,8 @@ contains
           signd = ' [value]'
         endif
       endif
+    elseif (cla%act==action_store_star) then
+      signd = ' [value]'
     else
       if (cla%required) then
         signd = ' '//trim(adjustl(cla%switch))
@@ -1820,10 +1905,9 @@ contains
                     found = .true.
                   endif
                 endif
-                ! check if found into arguments passed
                 if (.not.found) then
                   ! not found, try to take val from environment
-                  call get_environment_variable(name=clasg%cla(a)%envvar,value=envvar,status=aa)
+                  call get_environment_variable(name=clasg%cla(a)%envvar, value=envvar, status=aa)
                   if (aa==0) then
                     clasg%cla(a)%val = trim(adjustl(envvar))
                   else
@@ -1884,6 +1968,20 @@ contains
                 arg = arg + 1
                 clasg%cla(a)%val = trim(adjustl(args(arg)))
               endif
+            elseif (clasg%cla(a)%act==action_store_star) then
+              if (arg + 1 <= size(args, dim=1)) then ! verify if the value has been passed directly to cli
+                ! there are still other arguments to check
+                if (.not.clasg%defined(switch=trim(adjustl(args(arg+1))))) then
+                  ! argument seem good...
+                  arg = arg + 1
+                  clasg%cla(a)%val = trim(adjustl(args(arg)))
+                  found = .true.
+                endif
+              endif
+              if (.not.found) then
+                ! flush default to val if environment is not set and default is set
+                if (allocated(clasg%cla(a)%def)) clasg%cla(a)%val = clasg%cla(a)%def
+              endif
             elseif (clasg%cla(a)%act==action_print_help) then
               clasg%error = status_clasg_print_h
             elseif (clasg%cla(a)%act==action_print_vers) then
@@ -1897,7 +1995,7 @@ contains
       enddo
       if (.not.found) then ! current argument (arg-th) does not correspond to a named option
         if (.not.clasg%cla(arg)%positional) then ! current argument (arg-th) is not positional... there is a problem!
-          call clasg%cla(arg)%errored(pref=prefd,error=error_cla_unknown,switch=trim(adjustl(args(arg))))
+          call clasg%cla(arg)%errored(pref=prefd, error=error_cla_unknown, switch=trim(adjustl(args(arg))))
           clasg%error = clasg%cla(arg)%error
           return
         else
@@ -2202,6 +2300,10 @@ contains
                                              if (present(envvar    )) cla%envvar     = envvar
   prefd = '' ; if (present(pref)) prefd = pref
   call cla%check(pref=prefd) ; cli%error = cla%error
+  if (cli%error/=0) then
+    if (present(error)) error = cli%error
+    return
+  endif
   ! adding CLA to CLI
   if ((.not.present(group)).and.(.not.present(group_index))) then
     call cli%clasg(0)%add(pref=prefd, cla=cla) ; cli%error = cli%clasg(0)%error
