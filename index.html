@@ -102,14 +102,14 @@
 		  
           <h1>FLAP</h1>
           <p><a name="top"></a></p>
-<h1>FLAP <a href=""><img alt="GitHub tag" src="https://img.shields.io/github/tag/szaghi/FLAP.svg"></a></h1>
+<h1>FLAP <a href=""><img alt="GitHub tag" src="https://img.shields.io/github/tag/szaghi/FLAP.svg"></a> <a href="https://gitter.im/szaghi/FLAP?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img alt="Join the chat at https://gitter.im/szaghi/FLAP" src="https://badges.gitter.im/Join%20Chat.svg"></a></h1>
 <p><a href=""><img alt="License" src="https://img.shields.io/badge/license-GNU%20GeneraL%20Public%20License%20v3,%20GPLv3-blue.svg"></a>
 <a href=""><img alt="License" src="https://img.shields.io/badge/license-BSD2-red.svg"></a>
 <a href=""><img alt="License" src="https://img.shields.io/badge/license-BSD3-red.svg"></a>
 <a href=""><img alt="License" src="https://img.shields.io/badge/license-MIT-red.svg"></a></p>
 <p><a href=""><img alt="Status" src="https://img.shields.io/badge/status-stable-brightgreen.svg"></a>
 <a href="https://travis-ci.org/szaghi/FLAP"><img alt="Build Status" src="https://travis-ci.org/szaghi/FLAP.svg?branch=master"></a>
-<a href="https://coveralls.io/r/szaghi/FLAP?branch=master"><img alt="Coverage Status" src="https://coveralls.io/repos/szaghi/FLAP/badge.svg?branch=master"></a></p>
+<a href="http://codecov.io/github/szaghi/FLAP?branch=master"><img alt="Coverage Status" src="https://img.shields.io/codecov/c/github/szaghi/FLAP.svg"></a></p>
 <h3>FLAP, Fortran command Line Arguments Parser for poor people</h3>
 <p>A KISS pure Fortran Library for building powerful, easy-to-use, elegant command line interfaces</p>
 <ul>
@@ -132,8 +132,8 @@
 <a href="https://waffle.io/szaghi/FLAP"><img alt="In Progress" src="https://badge.waffle.io/szaghi/FLAP.png?label=in%20progress&amp;title=In%20Progress"></a>
 <a href="https://waffle.io/szaghi/FLAP"><img alt="Open bugs" src="https://badge.waffle.io/szaghi/FLAP.png?label=bug&amp;title=Open%20Bugs"></a></p>
 <h4>Compiler Support</h4>
-<p><a href=""><img alt="Compiler" src="https://img.shields.io/badge/GNU-pass%20(v4.9.2+">-brightgreen.svg)</a>
-<a href=""><img alt="Compiler" src="https://img.shields.io/badge/Intel-pass%20(v12.x+">-brightgreen.svg)</a>
+<p><a href=""><img alt="Compiler" src="https://img.shields.io/badge/GNU-v4.9.2+-brightgreen.svg"></a>
+<a href=""><img alt="Compiler" src="https://img.shields.io/badge/Intel-v12.x+-brightgreen.svg"></a>
 <a href=""><img alt="Compiler" src="https://img.shields.io/badge/IBM%20XL-not%20tested-yellow.svg"></a>
 <a href=""><img alt="Compiler" src="https://img.shields.io/badge/g95-not%20tested-yellow.svg"></a>
 <a href=""><img alt="Compiler" src="https://img.shields.io/badge/NAG-not%20tested-yellow.svg"></a>
@@ -150,7 +150,12 @@
 <li><input type="checkbox" disabled checked> support boolean CLA;</li>
 <li><input type="checkbox" disabled checked> support positional CLA;</li>
 <li><input type="checkbox" disabled checked> support list of allowable values for defined CLA with automatic consistency check;</li>
-<li><input type="checkbox" disabled checked> support multiple valued (list of values) CLA;</li>
+<li><input type="checkbox" disabled checked> support multiple valued (list of values, aka list-valued) CLA:<ul class="checklist">
+<li><input type="checkbox" disabled checked> compiletime sized list, e.g. <code>nargs='3'</code>;</li>
+<li><input type="checkbox" disabled checked> runtime sized list with at least 1 value, e.g. <code>nargs='+'</code>;</li>
+<li><input type="checkbox" disabled checked> runtime sized list with any size, even empty, e.g. <code>nargs='*'</code>;</li>
+</ul>
+</li>
 <li><input type="checkbox" disabled checked> support mutually exclusive CLAs;</li>
 <li><input type="checkbox" disabled checked> self-consistency-check of CLA definition;</li>
 <li><input type="checkbox" disabled checked> support fake CLAs input from a string;</li>
@@ -164,7 +169,7 @@
 <li><input type="checkbox" disabled checked> errors trapping for invalid CLI usage;</li>
 <li><input type="checkbox" disabled checked> POSIX style compliant;</li>
 <li><input type="checkbox" disabled checked> automatic generation of MAN PAGE using your CLI definition!;</li>
-<li><input type="checkbox" disabled> replicate all the useful features of <em>argparse</em>;</li>
+<li><input type="checkbox" disabled checked> replicate all the useful features of <em>argparse</em>;</li>
 <li><input type="checkbox" disabled> implement <a href="https://github.com/docopt/docopt">docopt</a> features.</li>
 <li><input type="checkbox" disabled> implement <a href="http://click.pocoo.org/4/">click</a> features.</li>
 </ul>
@@ -355,7 +360,56 @@ Examples:
 <h3>ChangeLog</h3>
 <h1>Change Log</h1>
 <h2><a href="https://github.com/szaghi/FLAP/tree/HEAD">Unreleased</a></h2>
-<p><a href="https://github.com/szaghi/FLAP/compare/v0.4.0...HEAD">Full Changelog</a></p>
+<p><a href="https://github.com/szaghi/FLAP/compare/v0.6.1...HEAD">Full Changelog</a></p>
+<p><strong>Fixed bugs:</strong></p>
+<ul>
+<li>gfortran5 possible class\(\*\) issue <a href="https://github.com/szaghi/FLAP/issues/37">#37</a></li>
+</ul>
+<h2><a href="https://github.com/szaghi/FLAP/tree/v0.6.1">v0.6.1</a> (2015-07-02)</h2>
+<p><a href="https://github.com/szaghi/FLAP/compare/v0.6.0...v0.6.1">Full Changelog</a></p>
+<h2><a href="https://github.com/szaghi/FLAP/tree/v0.6.0">v0.6.0</a> (2015-07-01)</h2>
+<p><a href="https://github.com/szaghi/FLAP/compare/v0.5.3...v0.6.0">Full Changelog</a></p>
+<p><strong>Implemented enhancements:</strong></p>
+<ul>
+<li>CLAs vs options <a href="https://github.com/szaghi/FLAP/issues/36">#36</a></li>
+</ul>
+<p><strong>Merged pull requests:</strong></p>
+<ul>
+<li>Fix deploy.sh script <a href="https://github.com/szaghi/FLAP/pull/45">#45</a> (<a href="https://github.com/zbeekman">zbeekman</a>)</li>
+</ul>
+<h2><a href="https://github.com/szaghi/FLAP/tree/v0.5.3">v0.5.3</a> (2015-07-01)</h2>
+<p><a href="https://github.com/szaghi/FLAP/compare/v0.5.2...v0.5.3">Full Changelog</a></p>
+<p><strong>Closed issues:</strong></p>
+<ul>
+<li>
+<p>badges and links still point to coveralls <a href="https://github.com/szaghi/FLAP/issues/41">#41</a></p>
+</li>
+<li>
+<p>Why multiple README.md? <a href="https://github.com/szaghi/FLAP/issues/40">#40</a></p>
+</li>
+<li>
+<p>fobs file doesn’t actually build anything <a href="https://github.com/szaghi/FLAP/issues/34">#34</a></p>
+</li>
+</ul>
+<p><strong>Merged pull requests:</strong></p>
+<ul>
+<li>
+<p>Small docs simplification <a href="https://github.com/szaghi/FLAP/pull/42">#42</a> (<a href="https://github.com/zbeekman">zbeekman</a>)</p>
+</li>
+<li>
+<p>Progname from cl <a href="https://github.com/szaghi/FLAP/pull/38">#38</a> (<a href="https://github.com/zbeekman">zbeekman</a>)</p>
+</li>
+</ul>
+<h2><a href="https://github.com/szaghi/FLAP/tree/v0.5.2">v0.5.2</a> (2015-06-26)</h2>
+<p><a href="https://github.com/szaghi/FLAP/compare/v0.5.1...v0.5.2">Full Changelog</a></p>
+<p><strong>Merged pull requests:</strong></p>
+<ul>
+<li>use __GFORTRAN__ rather than -DGNU <a href="https://github.com/szaghi/FLAP/pull/35">#35</a> (<a href="https://github.com/zbeekman">zbeekman</a>)</li>
+</ul>
+<h2><a href="https://github.com/szaghi/FLAP/tree/v0.5.1">v0.5.1</a> (2015-06-10)</h2>
+<p><a href="https://github.com/szaghi/FLAP/compare/v0.5.0...v0.5.1">Full Changelog</a></p>
+<h2><a href="https://github.com/szaghi/FLAP/tree/v0.5.0">v0.5.0</a> (2015-06-05)</h2>
+<p><a href="https://github.com/szaghi/FLAP/compare/v0.4.0...v0.5.0">Full Changelog</a></p>
 <p><strong>Implemented enhancements:</strong></p>
 <ul>
 <li>Generate man pages <a href="https://github.com/szaghi/FLAP/issues/22">#22</a></li>
@@ -614,6 +668,44 @@ Examples:
                 
                   
                     <li><a href="./lists/procedures.html"><em>All procedures&hellip;</em></a></li>
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
                   
                 
                   

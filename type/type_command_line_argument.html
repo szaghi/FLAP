@@ -134,6 +134,8 @@
       
       <a class="list-group-item" href="../type/type_command_line_argument.html#var-passed">passed</a>
       
+      <a class="list-group-item" href="../type/type_command_line_argument.html#var-hidden">hidden</a>
+      
       <a class="list-group-item" href="../type/type_command_line_argument.html#var-act">act</a>
       
       <a class="list-group-item" href="../type/type_command_line_argument.html#var-def">def</a>
@@ -180,7 +182,11 @@
       
       <a class="list-group-item" href="../type/type_command_line_argument.html#bp-check_choices">check_choices</a>
       
+      <a class="list-group-item" href="../type/type_command_line_argument.html#bp-check_list_size">check_list_size</a>
+      
       <a class="list-group-item" href="../type/type_command_line_argument.html#bp-get">get</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#bp-get_varying">get_varying</a>
       
       <a class="list-group-item" href="../type/type_command_line_argument.html#bp-usage">usage</a>
       
@@ -189,6 +195,22 @@
       <a class="list-group-item" href="../type/type_command_line_argument.html#bp-get_cla">get_cla</a>
       
       <a class="list-group-item" href="../type/type_command_line_argument.html#bp-get_cla_list">get_cla_list</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#bp-get_cla_list_varying_R8P">get_cla_list_varying_R8P</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#bp-get_cla_list_varying_R4P">get_cla_list_varying_R4P</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#bp-get_cla_list_varying_I8P">get_cla_list_varying_I8P</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#bp-get_cla_list_varying_I4P">get_cla_list_varying_I4P</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#bp-get_cla_list_varying_I2P">get_cla_list_varying_I2P</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#bp-get_cla_list_varying_I1P">get_cla_list_varying_I1P</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#bp-get_cla_list_varying_logical">get_cla_list_varying_logical</a>
+      
+      <a class="list-group-item" href="../type/type_command_line_argument.html#bp-get_cla_list_varying_char">get_cla_list_varying_char</a>
       
       <a class="list-group-item" href="../type/type_command_line_argument.html#bp-assign_cla">assign_cla</a>
       
@@ -318,6 +340,20 @@
   <td>private</td>
   <td></td><td>::</td>
   <td><strong>passed</strong></td><td> =</td><td>.false.</td><td><p>Flag for checking if CLA has been passed to CLI.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-hidden"></a>logical,</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>hidden</strong></td><td> =</td><td>.false.</td><td><p>Flag for hiding CLA, thus it does not compare into help.</p></td>
   
 </tr>
 
@@ -739,6 +775,130 @@ private  subroutine <a href='../proc/check_choices_cla.html'>check_choices_cla</
     
 	   
 <div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-check_list_size"></a><h3>procedure, public :: <strong>check_list_size</strong>  => <a href='../proc/check_list_size_cla.html'>check_list_size_cla</a> 
+    
+  <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Check CLA multiple values list size consistency.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  function <a href='../proc/check_list_size_cla.html'>check_list_size_cla</a>(cla, Nv, val, pref)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-Nv"></a>integer(kind=I4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>Nv</strong></td><td><p>Number of values.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-val"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>val</strong></td><td><p>First value.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small><a class="anchor" name="var-is_ok"></a>logical
+  </small></h4>
+  <p>Check result.</p>
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Check CLA multiple values list size consistency.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
   <div class="panel-heading codesum"><a class="anchor" name="bp-get"></a><h3>generic, public :: <strong>get</strong>  => <a href='../proc/get_cla.html'>get_cla</a>, <a href='../proc/get_cla_list.html'>get_cla_list</a> 
     
   <h3></div>
@@ -920,6 +1080,673 @@ private  subroutine <a href='../proc/get_cla_list.html'>get_cla_list</a>(cla, pr
     
 	   
 <div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-get_varying"></a><h3>generic, public :: <strong>get_varying</strong>  => <a href='../proc/get_cla_list_varying_r8p.html'>get_cla_list_varying_R8P</a>, <a href='../proc/get_cla_list_varying_r4p.html'>get_cla_list_varying_R4P</a>, <a href='../proc/get_cla_list_varying_i8p.html'>get_cla_list_varying_I8P</a>, <a href='../proc/get_cla_list_varying_i4p.html'>get_cla_list_varying_I4P</a>, <a href='../proc/get_cla_list_varying_i2p.html'>get_cla_list_varying_I2P</a>, <a href='../proc/get_cla_list_varying_i1p.html'>get_cla_list_varying_I1P</a>, <a href='../proc/get_cla_list_varying_logical.html'>get_cla_list_varying_logical</a>, <a href='../proc/get_cla_list_varying_char.html'>get_cla_list_varying_char</a> 
+    
+  <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Get CLA value(s) from CLAs list parsedi, varying size list.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/get_cla_list_varying_r8p.html'>get_cla_list_varying_R8P</a>(cla, val, pref)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-val"></a>real(kind=R8P),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>val</strong>(:)</td><td><p>CLA values.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Get CLA (multiple) value with varying size, real(R8P).</p>
+        
+
+      </li>
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/get_cla_list_varying_r4p.html'>get_cla_list_varying_R4P</a>(cla, val, pref)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-val"></a>real(kind=R4P),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>val</strong>(:)</td><td><p>CLA values.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Get CLA (multiple) value with varying size, real(R4P).</p>
+        
+
+      </li>
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/get_cla_list_varying_i8p.html'>get_cla_list_varying_I8P</a>(cla, val, pref)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-val"></a>integer(kind=I8P),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>val</strong>(:)</td><td><p>CLA values.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Get CLA (multiple) value with varying size, integer(I8P).</p>
+        
+
+      </li>
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/get_cla_list_varying_i4p.html'>get_cla_list_varying_I4P</a>(cla, val, pref)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-val"></a>integer(kind=I4P),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>val</strong>(:)</td><td><p>CLA values.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Get CLA (multiple) value with varying size, integer(I4P).</p>
+        
+
+      </li>
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/get_cla_list_varying_i2p.html'>get_cla_list_varying_I2P</a>(cla, val, pref)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-val"></a>integer(kind=I2P),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>val</strong>(:)</td><td><p>CLA values.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Get CLA (multiple) value with varying size, integer(I2P).</p>
+        
+
+      </li>
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/get_cla_list_varying_i1p.html'>get_cla_list_varying_I1P</a>(cla, val, pref)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-val"></a>integer(kind=I1P),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>val</strong>(:)</td><td><p>CLA values.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Get CLA (multiple) value with varying size, integer(I1P).</p>
+        
+
+      </li>
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/get_cla_list_varying_logical.html'>get_cla_list_varying_logical</a>(cla, val, pref)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-val"></a>logical,</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>val</strong>(:)</td><td><p>CLA values.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Get CLA (multiple) value with varying size, logical.</p>
+        
+
+      </li>
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/get_cla_list_varying_char.html'>get_cla_list_varying_char</a>(cla, val, pref)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-val"></a>character(len=*),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>val</strong>(:)</td><td><p>CLA values.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Get CLA (multiple) value with varying size, character.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
   <div class="panel-heading codesum"><a class="anchor" name="bp-usage"></a><h3>procedure, public :: <strong>usage</strong>  => <a href='../proc/usage_cla.html'>usage_cla</a> 
     
   <h3></div>
@@ -1022,7 +1849,7 @@ private  function <a href='../proc/usage_cla.html'>usage_cla</a>(cla, pref)
     
 
 
-    <p>Get CLA signature for adding to the CLI one.</p>
+    <p>Get CLA signature for adding to CLI one.</p>
   </div>
   
   <ul class="list-group">
@@ -1283,6 +2110,806 @@ private  subroutine <a href='../proc/get_cla_list.html'>get_cla_list</a>(cla, pr
 
 
        <p>Get CLA (multiple) value.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-get_cla_list_varying_R8P"></a><h3>procedure, private :: <strong>get_cla_list_varying_R8P</strong>  
+    
+  <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Get CLA multiple values from CLAs list parsed, varying size, R8P.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/get_cla_list_varying_r8p.html'>get_cla_list_varying_R8P</a>(cla, val, pref)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-val"></a>real(kind=R8P),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>val</strong>(:)</td><td><p>CLA values.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Get CLA (multiple) value with varying size, real(R8P).</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-get_cla_list_varying_R4P"></a><h3>procedure, private :: <strong>get_cla_list_varying_R4P</strong>  
+    
+  <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Get CLA multiple values from CLAs list parsed, varying size, R4P.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/get_cla_list_varying_r4p.html'>get_cla_list_varying_R4P</a>(cla, val, pref)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-val"></a>real(kind=R4P),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>val</strong>(:)</td><td><p>CLA values.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Get CLA (multiple) value with varying size, real(R4P).</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-get_cla_list_varying_I8P"></a><h3>procedure, private :: <strong>get_cla_list_varying_I8P</strong>  
+    
+  <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Get CLA multiple values from CLAs list parsed, varying size, I8P.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/get_cla_list_varying_i8p.html'>get_cla_list_varying_I8P</a>(cla, val, pref)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-val"></a>integer(kind=I8P),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>val</strong>(:)</td><td><p>CLA values.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Get CLA (multiple) value with varying size, integer(I8P).</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-get_cla_list_varying_I4P"></a><h3>procedure, private :: <strong>get_cla_list_varying_I4P</strong>  
+    
+  <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Get CLA multiple values from CLAs list parsed, varying size, I4P.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/get_cla_list_varying_i4p.html'>get_cla_list_varying_I4P</a>(cla, val, pref)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-val"></a>integer(kind=I4P),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>val</strong>(:)</td><td><p>CLA values.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Get CLA (multiple) value with varying size, integer(I4P).</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-get_cla_list_varying_I2P"></a><h3>procedure, private :: <strong>get_cla_list_varying_I2P</strong>  
+    
+  <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Get CLA multiple values from CLAs list parsed, varying size, I2P.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/get_cla_list_varying_i2p.html'>get_cla_list_varying_I2P</a>(cla, val, pref)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-val"></a>integer(kind=I2P),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>val</strong>(:)</td><td><p>CLA values.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Get CLA (multiple) value with varying size, integer(I2P).</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-get_cla_list_varying_I1P"></a><h3>procedure, private :: <strong>get_cla_list_varying_I1P</strong>  
+    
+  <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Get CLA multiple values from CLAs list parsed, varying size, I1P.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/get_cla_list_varying_i1p.html'>get_cla_list_varying_I1P</a>(cla, val, pref)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-val"></a>integer(kind=I1P),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>val</strong>(:)</td><td><p>CLA values.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Get CLA (multiple) value with varying size, integer(I1P).</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-get_cla_list_varying_logical"></a><h3>procedure, private :: <strong>get_cla_list_varying_logical</strong>  
+    
+  <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Get CLA multiple values from CLAs list parsed, varying size, bool.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/get_cla_list_varying_logical.html'>get_cla_list_varying_logical</a>(cla, val, pref)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-val"></a>logical,</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>val</strong>(:)</td><td><p>CLA values.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Get CLA (multiple) value with varying size, logical.</p>
+        
+
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><a class="anchor" name="bp-get_cla_list_varying_char"></a><h3>procedure, private :: <strong>get_cla_list_varying_char</strong>  
+    
+  <h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Get CLA multiple values from CLAs list parsed, varying size, char.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+    
+    <h3>
+private  subroutine <a href='../proc/get_cla_list_varying_char.html'>get_cla_list_varying_char</a>(cla, val, pref)
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-cla"></a>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cla</strong></td><td><p>CLA data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-val"></a>character(len=*),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>val</strong>(:)</td><td><p>CLA values.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+
+
+       <p>Get CLA (multiple) value with varying size, character.</p>
         
 
       </li>

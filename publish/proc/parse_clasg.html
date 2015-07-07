@@ -130,11 +130,15 @@
       
       <a class="list-group-item" href="../proc/parse_clasg.html#var-aa">aa</a>
       
+      <a class="list-group-item" href="../proc/parse_clasg.html#var-aaa">aaa</a>
+      
       <a class="list-group-item" href="../proc/parse_clasg.html#var-nargs">nargs</a>
       
       <a class="list-group-item" href="../proc/parse_clasg.html#var-prefd">prefd</a>
       
       <a class="list-group-item" href="../proc/parse_clasg.html#var-found">found</a>
+      
+      <a class="list-group-item" href="../proc/parse_clasg.html#var-found_val">found_val</a>
       
     </div>
   </div>
@@ -241,6 +245,8 @@
       
       <a class="list-group-item" href="../proc/check_endian.html">check_endian</a>
       
+      <a class="list-group-item" href="../proc/check_list_size_cla.html">check_list_size_cla</a>
+      
       <a class="list-group-item" href="../proc/check_m_exclusive.html">check_m_exclusive</a>
       
       <a class="list-group-item" href="../proc/check_m_exclusive_clasg.html">check_m_exclusive_clasg</a>
@@ -306,6 +312,42 @@
       <a class="list-group-item" href="../proc/get_cla_list.html">get_cla_list</a>
       
       <a class="list-group-item" href="../proc/get_cla_list_cli.html">get_cla_list_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_char.html">get_cla_list_varying_char</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_char_cli.html">get_cla_list_varying_char_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_i1p.html">get_cla_list_varying_I1P</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_i1p_cli.html">get_cla_list_varying_I1P_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_i2p.html">get_cla_list_varying_I2P</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_i2p_cli.html">get_cla_list_varying_I2P_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_i4p.html">get_cla_list_varying_I4P</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_i4p_cli.html">get_cla_list_varying_I4P_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_i8p.html">get_cla_list_varying_I8P</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_i8p_cli.html">get_cla_list_varying_I8P_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_logical.html">get_cla_list_varying_logical</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_logical_cli.html">get_cla_list_varying_logical_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_r16p.html">get_cla_list_varying_R16P</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_r16p_cli.html">get_cla_list_varying_R16P_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_r4p.html">get_cla_list_varying_R4P</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_r4p_cli.html">get_cla_list_varying_R4P_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_r8p.html">get_cla_list_varying_R8P</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_r8p_cli.html">get_cla_list_varying_R8P_cli</a>
       
       <a class="list-group-item" href="../proc/get_clasg_indexes.html">get_clasg_indexes</a>
       
@@ -562,6 +604,20 @@ private  subroutine parse_clasg(clasg, pref, args)
   
 <tr>
   
+  <td><a class="anchor" name="var-aaa"></a>integer(kind=I4P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>aaa</strong></td><td></td><td></td><td><p>Counter.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
   <td><a class="anchor" name="var-nargs"></a>integer(kind=I4P),</td>
   
   <td>public</td>
@@ -595,6 +651,20 @@ private  subroutine parse_clasg(clasg, pref, args)
   <td>public</td>
   <td></td><td>::</td>
   <td><strong>found</strong></td><td></td><td></td><td><p>Flag for checking if switch is a defined CLA.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-found_val"></a>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>found_val</strong></td><td></td><td></td><td><p>Flag for checking if switch value is found.</p></td>
   
 </tr>
 

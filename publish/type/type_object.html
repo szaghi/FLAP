@@ -437,7 +437,7 @@ private elemental subroutine <a href='../proc/free_object.html'>free_object</a>(
       
     
     <h3>
-private  subroutine <a href='../proc/errored.html'>errored</a>(obj, pref, group, switch, val_str, log_value, a1, a2, error)
+private  subroutine <a href='../proc/errored.html'>errored</a>(obj, error, pref, group, switch, val_str, log_value, a1, a2)
 </h3>
     
     <h4>Arguments</h4>
@@ -465,6 +465,21 @@ private  subroutine <a href='../proc/errored.html'>errored</a>(obj, pref, group,
   
   <td></td><td>::</td>
   <td><strong>obj</strong></td><td><p>Object data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>error</strong></td><td><p>Error occurred.</p></td>
   
 </tr>
 
@@ -570,21 +585,6 @@ private  subroutine <a href='../proc/errored.html'>errored</a>(obj, pref, group,
   
   <td></td><td>::</td>
   <td><strong>a2</strong></td><td><p>CLAs group inconsistent indexes.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>error</strong></td><td><p>Error occurred.</p></td>
   
 </tr>
 

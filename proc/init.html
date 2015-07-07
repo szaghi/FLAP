@@ -118,6 +118,18 @@
   
   
   
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../proc/init.html#var-prog_invocation">prog_invocation</a>
+      
+      <a class="list-group-item" href="../proc/init.html#var-invocation_length">invocation_length</a>
+      
+      <a class="list-group-item" href="../proc/init.html#var-retrieval_status">retrieval_status</a>
+      
+    </div>
+  </div>
   
   
   
@@ -130,6 +142,8 @@
   
   
   
+  
+  <hr>
   
   <div class="panel panel-default">
     <div class="panel-heading text-left"><h3 class="panel-title">All Procedures</h3></div>
@@ -219,6 +233,8 @@
       
       <a class="list-group-item" href="../proc/check_endian.html">check_endian</a>
       
+      <a class="list-group-item" href="../proc/check_list_size_cla.html">check_list_size_cla</a>
+      
       <a class="list-group-item" href="../proc/check_m_exclusive.html">check_m_exclusive</a>
       
       <a class="list-group-item" href="../proc/check_m_exclusive_clasg.html">check_m_exclusive_clasg</a>
@@ -284,6 +300,42 @@
       <a class="list-group-item" href="../proc/get_cla_list.html">get_cla_list</a>
       
       <a class="list-group-item" href="../proc/get_cla_list_cli.html">get_cla_list_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_char.html">get_cla_list_varying_char</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_char_cli.html">get_cla_list_varying_char_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_i1p.html">get_cla_list_varying_I1P</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_i1p_cli.html">get_cla_list_varying_I1P_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_i2p.html">get_cla_list_varying_I2P</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_i2p_cli.html">get_cla_list_varying_I2P_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_i4p.html">get_cla_list_varying_I4P</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_i4p_cli.html">get_cla_list_varying_I4P_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_i8p.html">get_cla_list_varying_I8P</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_i8p_cli.html">get_cla_list_varying_I8P_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_logical.html">get_cla_list_varying_logical</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_logical_cli.html">get_cla_list_varying_logical_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_r16p.html">get_cla_list_varying_R16P</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_r16p_cli.html">get_cla_list_varying_R16P_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_r4p.html">get_cla_list_varying_R4P</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_r4p_cli.html">get_cla_list_varying_R4P_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_r8p.html">get_cla_list_varying_R8P</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_r8p_cli.html">get_cla_list_varying_R8P_cli</a>
       
       <a class="list-group-item" href="../proc/get_clasg_indexes.html">get_clasg_indexes</a>
       
@@ -391,7 +443,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-private pure subroutine init(cli, progname, version, help, description, license, authors, examples, epilog, disable_hv)
+private  subroutine init(cli, progname, version, help, description, license, authors, examples, epilog, disable_hv)
 </h2>
     
   
@@ -556,7 +608,7 @@ private pure subroutine init(cli, progname, version, help, description, license,
   <td>optional</td>
   
   <td></td><td>::</td>
-  <td><strong>disable_hv</strong></td><td><p>Disable automatic inserting of 'help' and 'version' CLAs.</p></td>
+  <td><strong>disable_hv</strong></td><td><p>Disable automatic insert of 'help' and 'version' CLAs.</p></td>
   
 </tr>
 
@@ -567,8 +619,68 @@ private pure subroutine init(cli, progname, version, help, description, license,
     
     
     <h3>Description</h3>
-    <p>Procedure for initializing CLI.</p>
+    <p>Initialize CLI.</p>
     
+    <br>
+    
+    <section>
+    <h2>Variables</h2>
+    
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Visibility</th>
+
+<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-prog_invocation"></a>character(len=:),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>prog_invocation</strong></td><td></td><td></td><td><p>Complete program invocation.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-invocation_length"></a>integer(kind=I4P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>invocation_length</strong></td><td></td><td></td><td><p>Length of invocation.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><a class="anchor" name="var-retrieval_status"></a>integer(kind=I4P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>retrieval_status</strong></td><td></td><td></td><td><p>Retrieval status.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    </section>
     <br>
     
     

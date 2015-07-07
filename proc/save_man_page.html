@@ -237,6 +237,8 @@
       
       <a class="list-group-item" href="../proc/check_endian.html">check_endian</a>
       
+      <a class="list-group-item" href="../proc/check_list_size_cla.html">check_list_size_cla</a>
+      
       <a class="list-group-item" href="../proc/check_m_exclusive.html">check_m_exclusive</a>
       
       <a class="list-group-item" href="../proc/check_m_exclusive_clasg.html">check_m_exclusive_clasg</a>
@@ -302,6 +304,42 @@
       <a class="list-group-item" href="../proc/get_cla_list.html">get_cla_list</a>
       
       <a class="list-group-item" href="../proc/get_cla_list_cli.html">get_cla_list_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_char.html">get_cla_list_varying_char</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_char_cli.html">get_cla_list_varying_char_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_i1p.html">get_cla_list_varying_I1P</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_i1p_cli.html">get_cla_list_varying_I1P_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_i2p.html">get_cla_list_varying_I2P</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_i2p_cli.html">get_cla_list_varying_I2P_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_i4p.html">get_cla_list_varying_I4P</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_i4p_cli.html">get_cla_list_varying_I4P_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_i8p.html">get_cla_list_varying_I8P</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_i8p_cli.html">get_cla_list_varying_I8P_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_logical.html">get_cla_list_varying_logical</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_logical_cli.html">get_cla_list_varying_logical_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_r16p.html">get_cla_list_varying_R16P</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_r16p_cli.html">get_cla_list_varying_R16P_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_r4p.html">get_cla_list_varying_R4P</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_r4p_cli.html">get_cla_list_varying_R4P_cli</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_r8p.html">get_cla_list_varying_R8P</a>
+      
+      <a class="list-group-item" href="../proc/get_cla_list_varying_r8p_cli.html">get_cla_list_varying_R8P_cli</a>
       
       <a class="list-group-item" href="../proc/get_clasg_indexes.html">get_clasg_indexes</a>
       
@@ -409,7 +447,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-private  subroutine save_man_page(cli, error, man_file)
+private  subroutine save_man_page(cli, man_file, error)
 </h2>
     
   
@@ -449,12 +487,12 @@ private  subroutine save_man_page(cli, error, man_file)
   
 <tr>
   
-  <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
-  <td>intent(out),</td>
-  <td>optional</td>
+  <td><a class="anchor" name="var-man_file"></a>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
   
   <td></td><td>::</td>
-  <td><strong>error</strong></td><td><p>Error trapping flag.</p></td>
+  <td><strong>man_file</strong></td><td><p>Output file name for saving man page.</p></td>
   
 </tr>
 
@@ -464,12 +502,12 @@ private  subroutine save_man_page(cli, error, man_file)
   
 <tr>
   
-  <td><a class="anchor" name="var-man_file"></a>character(len=*),</td>
-  <td>intent(in)</td>
-  <td></td>
+  <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
+  <td>intent(out),</td>
+  <td>optional</td>
   
   <td></td><td>::</td>
-  <td><strong>man_file</strong></td><td><p>Output file name for saving man page.</p></td>
+  <td><strong>error</strong></td><td><p>Error trapping flag.</p></td>
   
 </tr>
 
