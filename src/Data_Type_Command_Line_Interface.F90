@@ -205,20 +205,21 @@ integer(I4P), parameter :: error_cla_m_exclude              = 9  !< Two mutually
 integer(I4P), parameter :: error_cla_casting_logical        = 10 !< Error casting CLA value to logical type.
 integer(I4P), parameter :: error_cla_no_list                = 11 !< Actual CLA is not list-values.
 integer(I4P), parameter :: error_cla_nargs_insufficient     = 12 !< Multi-valued CLA with insufficient arguments.
-integer(I4P), parameter :: error_cla_unknown                = 13 !< Unknown CLA (switch name).
-integer(I4P), parameter :: error_cla_envvar_positional      = 14 !< Envvar not allowed for positional CLA.
-integer(I4P), parameter :: error_cla_envvar_not_store       = 15 !< Envvar not allowed action different from store;
-integer(I4P), parameter :: error_cla_envvar_nargs           = 16 !< Envvar not allowed for list-values CLA.
-integer(I4P), parameter :: error_cla_store_star_positional  = 17 !< Action store* not allowed for positional CLA.
-integer(I4P), parameter :: error_cla_store_star_nargs       = 18 !< Action store* not allowed for list-values CLA.
-integer(I4P), parameter :: error_cla_store_star_envvar      = 19 !< Action store* not allowed for environment variable CLA.
-integer(I4P), parameter :: error_cla_action_unknown         = 20 !< Unknown CLA (switch name).
-integer(I4P), parameter :: error_clasg_consistency          = 21 !< CLAs group consistency error.
-integer(I4P), parameter :: error_clasg_m_exclude            = 22 !< Two mutually exclusive CLAs group have been called.
-integer(I4P), parameter :: error_cli_missing_cla            = 23 !< CLA not found in CLI.
-integer(I4P), parameter :: error_cli_missing_group          = 24 !< Group not found in CLI.
-integer(I4P), parameter :: error_cli_missing_selection_cla  = 25 !< CLA selection in CLI failing.
-integer(I4P), parameter :: error_cli_too_few_clas           = 26 !< Insufficient arguments for CLI.
+integer(I4P), parameter :: error_cla_value_missing          = 13 !< Missing value of CLA.
+integer(I4P), parameter :: error_cla_unknown                = 14 !< Unknown CLA (switch name).
+integer(I4P), parameter :: error_cla_envvar_positional      = 15 !< Envvar not allowed for positional CLA.
+integer(I4P), parameter :: error_cla_envvar_not_store       = 16 !< Envvar not allowed action different from store;
+integer(I4P), parameter :: error_cla_envvar_nargs           = 17 !< Envvar not allowed for list-values CLA.
+integer(I4P), parameter :: error_cla_store_star_positional  = 18 !< Action store* not allowed for positional CLA.
+integer(I4P), parameter :: error_cla_store_star_nargs       = 19 !< Action store* not allowed for list-values CLA.
+integer(I4P), parameter :: error_cla_store_star_envvar      = 20 !< Action store* not allowed for environment variable CLA.
+integer(I4P), parameter :: error_cla_action_unknown         = 21 !< Unknown CLA (switch name).
+integer(I4P), parameter :: error_clasg_consistency          = 22 !< CLAs group consistency error.
+integer(I4P), parameter :: error_clasg_m_exclude            = 23 !< Two mutually exclusive CLAs group have been called.
+integer(I4P), parameter :: error_cli_missing_cla            = 24 !< CLA not found in CLI.
+integer(I4P), parameter :: error_cli_missing_group          = 25 !< Group not found in CLI.
+integer(I4P), parameter :: error_cli_missing_selection_cla  = 26 !< CLA selection in CLI failing.
+integer(I4P), parameter :: error_cli_too_few_clas           = 27 !< Insufficient arguments for CLI.
 integer(I4P), parameter :: status_clasg_print_v             = -1 !< Print version status.
 integer(I4P), parameter :: status_clasg_print_h             = -2 !< Print help status.
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -407,6 +408,9 @@ contains
               trim(adjustl(obj%nargs))//' arguments but no enough ones remain!'
           endif
         endif
+      case(error_cla_value_missing)
+        write(stderr,'(A)')prefd//obj%progname//': error: named option "'//trim(adjustl(obj%switch))//&
+          '" needs a value that is not passed!'
       case(error_cla_unknown)
         write(stderr,'(A)')prefd//obj%progname//': error: switch "'//trim(adjustl(switch))//'" is unknown!'
       case(error_cla_envvar_positional)
@@ -725,70 +729,71 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   prefd = '' ; if (present(pref)) prefd = pref
   if (((.not.cla%passed).and.cla%required).or.((.not.cla%passed).and.(.not.allocated(cla%def)))) then
-    call cla%errored(pref=prefd,error=error_cla_missing_required)
+    call cla%errored(pref=prefd, error=error_cla_missing_required)
     return
   endif
   if (cla%act==action_store.or.cla%act==action_store_star) then
-    if (cla%passed) then
+    if (cla%passed.and.allocated(cla%val)) then
       select type(val)
 #ifdef r16p
       type is(real(R16P))
-        val = cton(pref=prefd,error=cla%error,str=trim(adjustl(cla%val)),knd=1._R16P)
+        val = cton(pref=prefd, error=cla%error, str=trim(adjustl(cla%val)), knd=1._R16P)
 #endif
       type is(real(R8P))
-        val = cton(pref=prefd,error=cla%error,str=trim(adjustl(cla%val)),knd=1._R8P)
+        val = cton(pref=prefd, error=cla%error, str=trim(adjustl(cla%val)), knd=1._R8P)
       type is(real(R4P))
-        val = cton(pref=prefd,error=cla%error,str=trim(adjustl(cla%val)),knd=1._R4P)
+        val = cton(pref=prefd, error=cla%error, str=trim(adjustl(cla%val)), knd=1._R4P)
       type is(integer(I8P))
-        val = cton(pref=prefd,error=cla%error,str=trim(adjustl(cla%val)),knd=1_I8P)
+        val = cton(pref=prefd, error=cla%error, str=trim(adjustl(cla%val)), knd=1_I8P)
       type is(integer(I4P))
-        val = cton(pref=prefd,error=cla%error,str=trim(adjustl(cla%val)),knd=1_I4P)
+        val = cton(pref=prefd, error=cla%error, str=trim(adjustl(cla%val)), knd=1_I4P)
       type is(integer(I2P))
-        val = cton(pref=prefd,error=cla%error,str=trim(adjustl(cla%val)),knd=1_I2P)
+        val = cton(pref=prefd, error=cla%error, str=trim(adjustl(cla%val)), knd=1_I2P)
       type is(integer(I1P))
-        val = cton(pref=prefd,error=cla%error,str=trim(adjustl(cla%val)),knd=1_I1P)
+        val = cton(pref=prefd, error=cla%error, str=trim(adjustl(cla%val)), knd=1_I1P)
       type is(logical)
-        read(cla%val,*,iostat=cla%error)val
-        if (cla%error/=0) call cla%errored(pref=prefd,error=error_cla_casting_logical,log_value=cla%val)
+        read(cla%val, *, iostat=cla%error)val
+        if (cla%error/=0) call cla%errored(pref=prefd, error=error_cla_casting_logical, log_value=cla%val)
       type is(character(*))
         val = cla%val
       endselect
-    else ! using default value
+    elseif (allocated(cla%def)) then ! using default value
       select type(val)
 #ifdef r16p
       type is(real(R16P))
-        val = cton(pref=prefd,error=cla%error,str=trim(adjustl(cla%def)),knd=1._R16P)
+        val = cton(pref=prefd, error=cla%error, str=trim(adjustl(cla%def)), knd=1._R16P)
 #endif
       type is(real(R8P))
-        val = cton(pref=prefd,error=cla%error,str=trim(adjustl(cla%def)),knd=1._R8P)
+        val = cton(pref=prefd, error=cla%error, str=trim(adjustl(cla%def)), knd=1._R8P)
       type is(real(R4P))
-        val = cton(pref=prefd,error=cla%error,str=trim(adjustl(cla%def)),knd=1._R4P)
+        val = cton(pref=prefd, error=cla%error, str=trim(adjustl(cla%def)), knd=1._R4P)
       type is(integer(I8P))
-        val = cton(pref=prefd,error=cla%error,str=trim(adjustl(cla%def)),knd=1_I8P)
+        val = cton(pref=prefd, error=cla%error, str=trim(adjustl(cla%def)), knd=1_I8P)
       type is(integer(I4P))
-        val = cton(pref=prefd,error=cla%error,str=trim(adjustl(cla%def)),knd=1_I4P)
+        val = cton(pref=prefd, error=cla%error, str=trim(adjustl(cla%def)), knd=1_I4P)
       type is(integer(I2P))
-        val = cton(pref=prefd,error=cla%error,str=trim(adjustl(cla%def)),knd=1_I2P)
+        val = cton(pref=prefd, error=cla%error, str=trim(adjustl(cla%def)), knd=1_I2P)
       type is(integer(I1P))
-        val = cton(pref=prefd,error=cla%error,str=trim(adjustl(cla%def)),knd=1_I1P)
+        val = cton(pref=prefd, error=cla%error, str=trim(adjustl(cla%def)), knd=1_I1P)
       type is(logical)
-        read(cla%def,*,iostat=cla%error)val
-        if (cla%error/=0) call cla%errored(pref=prefd,error=error_cla_casting_logical,log_value=cla%def)
+        read(cla%def, *, iostat=cla%error)val
+        if (cla%error/=0) call cla%errored(pref=prefd, error=error_cla_casting_logical, log_value=cla%def)
       type is(character(*))
         val = cla%def
       endselect
     endif
-    if (allocated(cla%choices).and.cla%error==0) call cla%check_choices(val=val,pref=prefd)
+    if (allocated(cla%choices).and.cla%error==0) call cla%check_choices(val=val, pref=prefd)
   elseif (cla%act==action_store_true) then
     if (cla%passed) then
       select type(val)
       type is(logical)
         val = .true.
       endselect
-    else
+    elseif (allocated(cla%def)) then
       select type(val)
       type is(logical)
-        read(cla%def,*)val
+        read(cla%def, *, iostat=cla%error)val
+        if (cla%error/=0) call cla%errored(pref=prefd, error=error_cla_casting_logical, log_value=cla%def)
       endselect
     endif
   elseif (cla%act==action_store_false) then
@@ -797,10 +802,11 @@ contains
       type is(logical)
         val = .false.
       endselect
-    else
+    elseif (allocated(cla%def)) then
       select type(val)
       type is(logical)
-        read(cla%def,*)val
+        read(cla%def, *, iostat=cla%error)val
+        if (cla%error/=0) call cla%errored(pref=prefd, error=error_cla_casting_logical, log_value=cla%def)
       endselect
     endif
   endif
@@ -1870,17 +1876,18 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Parse CLAs group arguments.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(Type_Command_Line_Arguments_Group), intent(INOUT) :: clasg   !< CLAs group data.
-  character(*), optional,                   intent(IN)    :: pref    !< Prefixing string.
-  character(*),                             intent(IN)    :: args(:) !< Command line arguments.
-  character(500)                                          :: envvar  !< Environment variables buffer.
-  integer(I4P)                                            :: arg     !< Argument counter.
-  integer(I4P)                                            :: a       !< Counter.
-  integer(I4P)                                            :: aa      !< Counter.
-  integer(I4P)                                            :: aaa     !< Counter.
-  integer(I4P)                                            :: nargs   !< Number of arguments consumed by a CLA.
-  character(len=:), allocatable                           :: prefd   !< Prefixing string.
-  logical                                                 :: found   !< Flag for checking if switch is a defined CLA.
+  class(Type_Command_Line_Arguments_Group), intent(INOUT) :: clasg     !< CLAs group data.
+  character(*), optional,                   intent(IN)    :: pref      !< Prefixing string.
+  character(*),                             intent(IN)    :: args(:)   !< Command line arguments.
+  character(500)                                          :: envvar    !< Environment variables buffer.
+  integer(I4P)                                            :: arg       !< Argument counter.
+  integer(I4P)                                            :: a         !< Counter.
+  integer(I4P)                                            :: aa        !< Counter.
+  integer(I4P)                                            :: aaa       !< Counter.
+  integer(I4P)                                            :: nargs     !< Number of arguments consumed by a CLA.
+  character(len=:), allocatable                           :: prefd     !< Prefixing string.
+  logical                                                 :: found     !< Flag for checking if switch is a defined CLA.
+  logical                                                 :: found_val !< Flag for checking if switch value is found.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1895,6 +1902,7 @@ contains
           if (trim(adjustl(clasg%cla(a)%switch   ))==trim(adjustl(args(arg))).or.&
               trim(adjustl(clasg%cla(a)%switch_ab))==trim(adjustl(args(arg)))) then
             if (clasg%cla(a)%act==action_store) then
+              found_val = .false.
               if (allocated(clasg%cla(a)%envvar)) then
                 if (arg + 1 <= size(args,dim=1)) then ! verify if the value has been passed directly to cli
                   ! there are still other arguments to check
@@ -1903,6 +1911,7 @@ contains
                     arg = arg + 1
                     clasg%cla(a)%val = trim(adjustl(args(arg)))
                     found = .true.
+                    found_val = .true.
                   endif
                 endif
                 if (.not.found) then
@@ -1910,9 +1919,13 @@ contains
                   call get_environment_variable(name=clasg%cla(a)%envvar, value=envvar, status=aa)
                   if (aa==0) then
                     clasg%cla(a)%val = trim(adjustl(envvar))
+                    found_val = .true.
                   else
                     ! flush default to val if environment is not set and default is set
-                    if (allocated(clasg%cla(a)%def)) clasg%cla(a)%val = clasg%cla(a)%def
+                    if (allocated(clasg%cla(a)%def)) then
+                      clasg%cla(a)%val = clasg%cla(a)%def
+                      found_val = .true.
+                    endif
                   endif
                 endif
               elseif (allocated(clasg%cla(a)%nargs)) then
@@ -1930,6 +1943,7 @@ contains
                   if (aaa>=arg+1) then
                     do aa=aaa, arg + 1, -1 ! decreasing loop due to gfortran bug
                       clasg%cla(a)%val = trim(adjustl(args(aa)))//args_sep//trim(clasg%cla(a)%val)
+                      found_val = .true.
                     enddo
                     arg = aaa
                   elseif (aaa==0) then
@@ -1949,6 +1963,7 @@ contains
                   if (aaa>=arg+1) then
                     do aa=aaa, arg + 1, -1 ! decreasing loop due to gfortran bug
                       clasg%cla(a)%val = trim(adjustl(args(aa)))//args_sep//trim(clasg%cla(a)%val)
+                      found_val = .true.
                     enddo
                     arg = aaa
                   endif
@@ -1965,8 +1980,14 @@ contains
                   arg = arg + nargs
                 endselect
               else
+                if (arg+1>size(args)) then
+                  call clasg%cla(a)%errored(pref=prefd, error=error_cla_value_missing)
+                  clasg%error = clasg%cla(a)%error
+                  return
+                endif
                 arg = arg + 1
                 clasg%cla(a)%val = trim(adjustl(args(arg)))
+                found_val = .true.
               endif
             elseif (clasg%cla(a)%act==action_store_star) then
               if (arg + 1 <= size(args, dim=1)) then ! verify if the value has been passed directly to cli

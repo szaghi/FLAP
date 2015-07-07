@@ -2,11 +2,45 @@
 
 ## [Unreleased](https://github.com/szaghi/FLAP/tree/HEAD)
 
-[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.5.2...HEAD)
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.6.1...HEAD)
+
+**Fixed bugs:**
+
+- gfortran5 possible class\(\*\) issue [\#37](https://github.com/szaghi/FLAP/issues/37)
+
+## [v0.6.1](https://github.com/szaghi/FLAP/tree/v0.6.1) (2015-07-02)
+
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.6.0...v0.6.1)
+
+## [v0.6.0](https://github.com/szaghi/FLAP/tree/v0.6.0) (2015-07-01)
+
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.5.3...v0.6.0)
+
+**Implemented enhancements:**
+
+- CLAs vs options [\#36](https://github.com/szaghi/FLAP/issues/36)
+
+**Merged pull requests:**
+
+- Fix deploy.sh script [\#45](https://github.com/szaghi/FLAP/pull/45) ([zbeekman](https://github.com/zbeekman))
+
+## [v0.5.3](https://github.com/szaghi/FLAP/tree/v0.5.3) (2015-07-01)
+
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v0.5.2...v0.5.3)
 
 **Closed issues:**
 
+- badges and links still point to coveralls [\#41](https://github.com/szaghi/FLAP/issues/41)
+
+- Why multiple README.md? [\#40](https://github.com/szaghi/FLAP/issues/40)
+
 - fobs file doesn’t actually build anything [\#34](https://github.com/szaghi/FLAP/issues/34)
+
+**Merged pull requests:**
+
+- Small docs simplification [\#42](https://github.com/szaghi/FLAP/pull/42) ([zbeekman](https://github.com/zbeekman))
+
+- Progname from cl [\#38](https://github.com/szaghi/FLAP/pull/38) ([zbeekman](https://github.com/zbeekman))
 
 ## [v0.5.2](https://github.com/szaghi/FLAP/tree/v0.5.2) (2015-06-26)
 

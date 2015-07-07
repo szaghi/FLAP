@@ -79,7 +79,7 @@ if (error/=0) stop
 call cli%add(switch='--env',switch_ab='-e',help='Environment input',required=.false.,act='store',def='-1',envvar='FLAP_NUM_INT',&
              error=error)
 if (error/=0) stop
-call cli%add(switch='--man_file',help='Save manual into man_file',required=.false.,act='store*',def='Test_Driver.1',error=error)
+call cli%add(switch='--man_file',help='Save manual into man_file',required=.false.,act='store',def='Test_Driver.1',error=error)
 if (error/=0) stop
 call cli%add(switch='--varying_listR8P',switch_ab='-vlR8P',help='Varying size real R8P list input',required=.false.,act='store',&
              nargs='*',def='1.0 2.0 3.0 4.0 5.0 6.0 7.0 8.0',error=error)
