@@ -9,7 +9,7 @@ LIBS    =
 FC      = gfortran
 OPTSC   =  -cpp -c -frealloc-lhs -O2  -J Test_Driver/mod/
 OPTSL   =  -J Test_Driver/mod/
-VPATH   = $(DSRC) $(DOBJ) $(DMOD)
+VPATH   = $(DSRC) $(DOBJ) $(DMOD) src/IR_Precision/src/
 MKDIRS  = $(DOBJ) $(DMOD) $(DEXE)
 LCEXES  = $(shell echo $(EXES) | tr '[:upper:]' '[:lower:]')
 EXESPO  = $(addsuffix .o,$(LCEXES))
@@ -32,7 +32,7 @@ $(DOBJ)data_type_command_line_interface.o: src/Data_Type_Command_Line_Interface.
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
-$(DOBJ)ir_precision.o: src/IR_Precision.F90
+$(DOBJ)ir_precision.o: src/IR_Precision/src/IR_Precision.f90
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
