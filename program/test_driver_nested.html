@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	 
-	 <meta name="description" content="<p>Fortran command Line Arguments Parser for poor people</p>">
+	 <meta name="description" content="Fortran command Line Arguments Parser for poor people">
     
     <meta name="author" content="Chris MacMackin" >
     <link rel="icon" href="../favicon.png">
@@ -25,10 +25,13 @@
     <![endif]-->
     
     <script src="../js/jquery-2.1.3.min.js"></script>
+
+    
     <script src="../tipuesearch/tipuesearch_content.js"></script>
     <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
     <script src="../tipuesearch/tipuesearch_set.js"></script>
     <script src="../tipuesearch/tipuesearch.js"></script>
+    
 
   </head>
 
@@ -65,6 +68,7 @@
             <li><a href="../lists/programs.html">Programs</a></li>
 				
           </ul>
+        
         <form action="../search.html" class="navbar-form navbar-right" role="search">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
@@ -73,6 +77,7 @@
         <button type="submit" class="btn btn-default">Submit</button>
 -->
         </form>
+        
         </div><!--/.nav-collapse -->
       </div>
     </nav>
@@ -143,11 +148,21 @@
   
   
   
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+    <div class="list-group">
+      <a class="list-group-item" href="../program/test_driver_nested.html#src">Test_Driver_Nested</a>
+    </div>
+  </div>
+  
   <hr>
   
   <div class="panel panel-default">
     <div class="panel-heading text-left"><h3 class="panel-title">All Programs</h3></div>
     <div class="list-group">
+      
+      <a class="list-group-item" href="../program/test_driver.html">Test_Driver</a>
       
       <a class="list-group-item" href="../program/test_driver.html">Test_Driver</a>
       
@@ -175,9 +190,9 @@
   
 
     <p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p>
-<h3>Compile</h3>
+<h3 id="compile"><a class="toclink" href="#compile">Compile</a></h3>
 <p>See <a href="https://github.com/szaghi/FLAP/wiki/Download-compile">compile instructions</a>.</p>
-<h3>Usage Compile</h3>
+<h3 id="usage-compile"><a class="toclink" href="#usage-compile">Usage Compile</a></h3>
 <p>See <a href="https://github.com/szaghi/FLAP/wiki/Testing-Programs">usage instructions</a>.</p>
     <br>
 
@@ -268,6 +283,81 @@
 
     
     
+    
+    <section>
+    <h2><a class="anchor" name="src"></a>Source Code</h2>
+    <div class="highlight"><pre><span class="k">program </span><span class="n">Test_Driver_Nested</span>
+<span class="c">!&lt; A testing program for FLAP, Fortran command Line Arguments Parser for poor people</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt;### Compile</span>
+<span class="c">!&lt; See [compile instructions](https://github.com/szaghi/FLAP/wiki/Download-compile).</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt;###Usage Compile</span>
+<span class="c">!&lt; See [usage instructions](https://github.com/szaghi/FLAP/wiki/Testing-Programs).</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="k">USE </span><span class="n">IR_Precision</span>                                                        <span class="c">! Integers and reals precision definition.</span>
+<span class="k">USE </span><span class="n">Data_Type_Command_Line_Interface</span><span class="p">,</span> <span class="n">only</span><span class="p">:</span> <span class="n">Type_Command_Line_Interface</span> <span class="c">! Definition of Type_Command_Line_Interface.</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="k">implicit none</span>
+<span class="k">type</span><span class="p">(</span><span class="n">Type_Command_Line_Interface</span><span class="p">)</span><span class="kd">::</span> <span class="n">cli</span>           <span class="c">!&lt; Command Line Interface (CLI).</span>
+<span class="kt">logical</span><span class="kd">::</span>                           <span class="n">authors_print</span> <span class="c">!&lt; Boolean value.</span>
+<span class="kt">character</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span><span class="kd">::</span>                    <span class="n">message</span>       <span class="c">!&lt; Message value.</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                      <span class="n">error</span>         <span class="c">!&lt; Error trapping flag.</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="n">authors_print</span> <span class="o">=</span> <span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<span class="c">! initializing Command Line Interface</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span>    <span class="o">=</span> <span class="s1">&#39;Test_Driver_Nested&#39;</span><span class="p">,</span>                                    <span class="p">&amp;</span>
+              <span class="n">version</span>     <span class="o">=</span> <span class="s1">&#39;v2.1.5&#39;</span><span class="p">,</span>                                                <span class="p">&amp;</span>
+              <span class="n">authors</span>     <span class="o">=</span> <span class="s1">&#39;Stefano Zaghi&#39;</span><span class="p">,</span>                                         <span class="p">&amp;</span>
+              <span class="n">license</span>     <span class="o">=</span> <span class="s1">&#39;MIT&#39;</span><span class="p">,</span>                                                   <span class="p">&amp;</span>
+              <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Toy program for testing FLAP with nested commands&#39;</span><span class="p">,</span>     <span class="p">&amp;</span>
+              <span class="n">examples</span>    <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Test_Driver_Nested                      &#39;</span><span class="p">,&amp;</span>
+                             <span class="s1">&#39;Test_Driver_Nested -h                   &#39;</span><span class="p">,&amp;</span>
+                             <span class="s1">&#39;Test_Driver_Nested init                 &#39;</span><span class="p">,&amp;</span>
+                             <span class="s1">&#39;Test_Driver_Nested commit -m &quot;fix bug-1&quot;&#39;</span><span class="p">,&amp;</span>
+                             <span class="s1">&#39;Test_Driver_Nested tag -a &quot;v2.1.5&quot;      &#39;</span><span class="p">])</span>
+<span class="c">! set a Command Line Argument without a group to trigger authors names printing</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--authors&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-a&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Print authors names&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">)</span>
+<span class="c">! set Command Line Arguments Groups, i.e. commands</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add_group</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;init&#39;</span><span class="p">,</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;fake init versioning&#39;</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add_group</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;commit&#39;</span><span class="p">,</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;fake commit changes to current branch&#39;</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add_group</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;tag&#39;</span><span class="p">,</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;fake tag current commit&#39;</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">set_mutually_exclusive_groups</span><span class="p">(</span><span class="n">group1</span><span class="o">=</span><span class="s1">&#39;init&#39;</span><span class="p">,</span><span class="n">group2</span><span class="o">=</span><span class="s1">&#39;commit&#39;</span><span class="p">)</span>
+<span class="c">! set Command Line Arguments of commit command</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;commit&#39;</span><span class="p">,</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--message&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-m&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Commit message&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">! set Command Line Arguments of commit command</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;tag&#39;</span><span class="p">,</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--annotate&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-a&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Tag annotation&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">! parsing Command Line Interface</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">parse</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">  print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span> <span class="s1">&#39;Error code: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">error</span><span class="p">))</span>
+  <span class="k">stop</span>
+<span class="n">endif</span>
+<span class="c">! using Command Line Interface data to trigger program behaviour</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-a&#39;</span><span class="p">,</span><span class="n">val</span><span class="o">=</span><span class="n">authors_print</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">authors_print</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">  print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="s1">&#39;Authors: &#39;</span><span class="o">//</span><span class="n">cli</span><span class="p">%</span><span class="n">authors</span>
+<span class="n">elseif</span> <span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">run_command</span><span class="p">(</span><span class="s1">&#39;init&#39;</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">  print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="s1">&#39;init (fake) versioning&#39;</span>
+<span class="n">elseif</span> <span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">run_command</span><span class="p">(</span><span class="s1">&#39;commit&#39;</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">  call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;commit&#39;</span><span class="p">,</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-m&#39;</span><span class="p">,</span><span class="n">val</span><span class="o">=</span><span class="n">message</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">  print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="s1">&#39;commit changes to current branch with message &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;&quot;&#39;</span>
+<span class="n">elseif</span> <span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">run_command</span><span class="p">(</span><span class="s1">&#39;tag&#39;</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">  call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;tag&#39;</span><span class="p">,</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-a&#39;</span><span class="p">,</span><span class="n">val</span><span class="o">=</span><span class="n">message</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">  print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="s1">&#39;tag current branch with message &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;&quot;&#39;</span>
+<span class="k">else</span>
+<span class="k">  print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="s1">&#39;cowardly you are doing nothing... try at least &quot;-h&quot; option!&#39;</span>
+<span class="n">endif</span>
+<span class="k">stop</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="n">endprogram</span> <span class="n">Test_Driver_Nested</span>
+</pre></div>
+
+    </section>
     
     
     </div>

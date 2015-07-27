@@ -3,10 +3,6 @@ module IR_Precision
 !-----------------------------------------------------------------------------------------------------------------------------------
 !< Pure Fortran (2003+) library for ensuring codes portability
 !<{!README-IR_Precision.md!}
-!<
-!<### ChangeLog
-!<
-!<{!ChangeLog-IR_Precision.md!}
 !-----------------------------------------------------------------------------------------------------------------------------------
 USE, intrinsic:: ISO_FORTRAN_ENV, only: stdout => OUTPUT_UNIT, stderr => ERROR_UNIT ! Standard output/error logical units.
 !-----------------------------------------------------------------------------------------------------------------------------------

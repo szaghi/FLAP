@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	 
-	 <meta name="description" content="<p>Fortran command Line Arguments Parser for poor people</p>">
+	 <meta name="description" content="Fortran command Line Arguments Parser for poor people">
     
     <meta name="author" content="Chris MacMackin" >
     <link rel="icon" href="../favicon.png">
@@ -25,10 +25,13 @@
     <![endif]-->
     
     <script src="../js/jquery-2.1.3.min.js"></script>
+
+    
     <script src="../tipuesearch/tipuesearch_content.js"></script>
     <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
     <script src="../tipuesearch/tipuesearch_set.js"></script>
     <script src="../tipuesearch/tipuesearch.js"></script>
+    
 
   </head>
 
@@ -65,6 +68,7 @@
             <li><a href="../lists/programs.html">Programs</a></li>
 				
           </ul>
+        
         <form action="../search.html" class="navbar-form navbar-right" role="search">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
@@ -73,6 +77,7 @@
         <button type="submit" class="btn btn-default">Submit</button>
 -->
         </form>
+        
         </div><!--/.nav-collapse -->
       </div>
     </nav>
@@ -233,6 +238,14 @@
   
   
   
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+    <div class="list-group">
+      <a class="list-group-item" href="../type/type_command_line_interface.html#src">Type_Command_Line_Interface</a>
+    </div>
+  </div>
+  
   <hr>
   
   <div class="panel panel-default">
@@ -386,8 +399,6 @@ private elemental subroutine <a href='../proc/finalize.html'>finalize</a>(cli)
     
     <h4>Description</h4>
        
-
-
        <p>Free dynamic memory when finalizing.</p>
         
 
@@ -462,8 +473,6 @@ private elemental subroutine <a href='../proc/free.html'>free</a>(cli)
     
     <h4>Description</h4>
        
-
-
        <p>Free dynamic memory.</p>
         
 
@@ -667,8 +676,6 @@ private  subroutine <a href='../proc/init.html'>init</a>(cli, progname, version,
     
     <h4>Description</h4>
        
-
-
        <p>Initialize CLI.</p>
         
 
@@ -797,8 +804,6 @@ private  subroutine <a href='../proc/add_group.html'>add_group</a>(cli, help, de
     
     <h4>Description</h4>
        
-
-
        <p>Add CLAs group to CLI.</p>
         
 
@@ -1122,8 +1127,6 @@ private  subroutine <a href='../proc/add.html'>add</a>(cli, pref, group, group_i
     
     <h4>Description</h4>
        
-
-
        <p>Add CLA to CLI.</p>
         
 
@@ -1246,8 +1249,6 @@ private  function <a href='../proc/passed.html'>passed</a>(cli, group, switch, p
     
     <h4>Description</h4>
        
-
-
        <p>Check if a CLA has been passed.</p>
         
 
@@ -1355,8 +1356,6 @@ private  function <a href='../proc/defined.html'>defined</a>(cli, switch, group)
     
     <h4>Description</h4>
        
-
-
        <p>Check if a CLA has been defined.</p>
         
 
@@ -1464,8 +1463,6 @@ private  function <a href='../proc/defined_group.html'>defined_group</a>(cli, gr
     
     <h4>Description</h4>
        
-
-
        <p>Check if a CLAs group has been defined.</p>
         
 
@@ -1564,8 +1561,6 @@ private  subroutine <a href='../proc/set_mutually_exclusive_groups.html'>set_mut
     
     <h4>Description</h4>
        
-
-
        <p>Set two CLAs group ad mutually exclusive.</p>
         
 
@@ -1658,8 +1653,6 @@ private  function <a href='../proc/called_group.html'>called_group</a>(cli, grou
     
     <h4>Description</h4>
        
-
-
        <p>Check if a CLAs group has been runned.</p>
         
 
@@ -1773,8 +1766,6 @@ private  subroutine <a href='../proc/parse.html'>parse</a>(cli, pref, args, erro
     
     <h4>Description</h4>
        
-
-
        <p>Parse Command Line Interfaces by means of a previously initialized CLAs groups list.</p>
         
 
@@ -1933,8 +1924,6 @@ private  subroutine <a href='../proc/get_cla_cli.html'>get_cla_cli</a>(cli, val,
     
     <h4>Description</h4>
        
-
-
        <p>Get CLA (single) value from CLAs list parsed.</p>
         
 
@@ -2074,8 +2063,6 @@ private  subroutine <a href='../proc/get_cla_list_cli.html'>get_cla_list_cli</a>
     
     <h4>Description</h4>
        
-
-
        <p>Get CLA multiple values from CLAs list parsed.</p>
         
 
@@ -2234,8 +2221,6 @@ private  subroutine <a href='../proc/get_cla_list_varying_r8p_cli.html'>get_cla_
     
     <h4>Description</h4>
        
-
-
        <p>Get CLA multiple values from CLAs list parsed with varying size list, real(R8P).</p>
         
 
@@ -2375,8 +2360,6 @@ private  subroutine <a href='../proc/get_cla_list_varying_r4p_cli.html'>get_cla_
     
     <h4>Description</h4>
        
-
-
        <p>Get CLA multiple values from CLAs list parsed with varying size list, real(R4P).</p>
         
 
@@ -2516,8 +2499,6 @@ private  subroutine <a href='../proc/get_cla_list_varying_i8p_cli.html'>get_cla_
     
     <h4>Description</h4>
        
-
-
        <p>Get CLA multiple values from CLAs list parsed with varying size list, integer(I8P).</p>
         
 
@@ -2657,8 +2638,6 @@ private  subroutine <a href='../proc/get_cla_list_varying_i4p_cli.html'>get_cla_
     
     <h4>Description</h4>
        
-
-
        <p>Get CLA multiple values from CLAs list parsed with varying size list, integer(I4P).</p>
         
 
@@ -2798,8 +2777,6 @@ private  subroutine <a href='../proc/get_cla_list_varying_i2p_cli.html'>get_cla_
     
     <h4>Description</h4>
        
-
-
        <p>Get CLA multiple values from CLAs list parsed with varying size list, integer(I2P).</p>
         
 
@@ -2939,8 +2916,6 @@ private  subroutine <a href='../proc/get_cla_list_varying_i1p_cli.html'>get_cla_
     
     <h4>Description</h4>
        
-
-
        <p>Get CLA multiple values from CLAs list parsed with varying size list, integer(I1P).</p>
         
 
@@ -3080,8 +3055,6 @@ private  subroutine <a href='../proc/get_cla_list_varying_logical_cli.html'>get_
     
     <h4>Description</h4>
        
-
-
        <p>Get CLA multiple values from CLAs list parsed with varying size list, logical.</p>
         
 
@@ -3221,8 +3194,6 @@ private  subroutine <a href='../proc/get_cla_list_varying_char_cli.html'>get_cla
     
     <h4>Description</h4>
        
-
-
        <p>Get CLA multiple values from CLAs list parsed with varying size list, character.</p>
         
 
@@ -3375,8 +3346,6 @@ private  function <a href='../proc/usage.html'>usage</a>(cli, g, pref, no_header
     
     <h4>Description</h4>
        
-
-
        <p>Print correct usage of CLI.</p>
         
 
@@ -3454,8 +3423,6 @@ private  function <a href='../proc/signature.html'>signature</a>(cli)
     
     <h4>Description</h4>
        
-
-
        <p>Get CLI signature.</p>
         
 
@@ -3539,8 +3506,6 @@ private  subroutine <a href='../proc/print_usage.html'>print_usage</a>(cli, pref
     
     <h4>Description</h4>
        
-
-
        <p>Print correct usage of CLI.</p>
         
 
@@ -3639,8 +3604,6 @@ private  subroutine <a href='../proc/save_man_page.html'>save_man_page</a>(cli, 
     
     <h4>Description</h4>
        
-
-
        <p>Save man page build on the CLI.</p>
         
 
@@ -3739,8 +3702,6 @@ private  subroutine <a href='../proc/check.html'>check</a>(cli, pref, error)
     
     <h4>Description</h4>
        
-
-
        <p>Check CLAs data consistency.</p>
         
 
@@ -3824,8 +3785,6 @@ private  subroutine <a href='../proc/check_m_exclusive.html'>check_m_exclusive</
     
     <h4>Description</h4>
        
-
-
        <p>Check if two mutually exclusive CLAs group have been called.</p>
         
 
@@ -3909,8 +3868,6 @@ private  subroutine <a href='../proc/get_clasg_indexes.html'>get_clasg_indexes</
     
     <h4>Description</h4>
        
-
-
        <p>Get the argument indexes of CLAs groups defined parsing the actual passed CLAs.</p>
         
 
@@ -4010,8 +3967,6 @@ private  subroutine <a href='../proc/get_args_from_string.html'>get_args_from_st
     
     <h4>Description</h4>
        
-
-
        <p>Get CLAs from string.</p>
         
 
@@ -4076,8 +4031,6 @@ private  subroutine <a href='../proc/get_args_from_invocation.html'>get_args_fro
     
     <h4>Description</h4>
        
-
-
        <p>Get CLAs from CLI invocation.</p>
         
 
@@ -4176,8 +4129,6 @@ private  subroutine <a href='../proc/get_args_from_string.html'>get_args_from_st
     
     <h4>Description</h4>
        
-
-
        <p>Get CLAs from string.</p>
         
 
@@ -4261,8 +4212,6 @@ private  subroutine <a href='../proc/get_args_from_invocation.html'>get_args_fro
     
     <h4>Description</h4>
        
-
-
        <p>Get CLAs from CLI invocation.</p>
         
 
@@ -4421,8 +4370,6 @@ private  subroutine <a href='../proc/get_cla_cli.html'>get_cla_cli</a>(cli, val,
     
     <h4>Description</h4>
        
-
-
        <p>Get CLA (single) value from CLAs list parsed.</p>
         
 
@@ -4581,8 +4528,6 @@ private  subroutine <a href='../proc/get_cla_list_cli.html'>get_cla_list_cli</a>
     
     <h4>Description</h4>
        
-
-
        <p>Get CLA multiple values from CLAs list parsed.</p>
         
 
@@ -4741,8 +4686,6 @@ private  subroutine <a href='../proc/get_cla_list_varying_r16p_cli.html'>get_cla
     
     <h4>Description</h4>
        
-
-
        <p>Get CLA multiple values from CLAs list parsed with varying size list, real(R16P).</p>
         
 
@@ -4901,8 +4844,6 @@ private  subroutine <a href='../proc/get_cla_list_varying_r8p_cli.html'>get_cla_
     
     <h4>Description</h4>
        
-
-
        <p>Get CLA multiple values from CLAs list parsed with varying size list, real(R8P).</p>
         
 
@@ -5061,8 +5002,6 @@ private  subroutine <a href='../proc/get_cla_list_varying_r4p_cli.html'>get_cla_
     
     <h4>Description</h4>
        
-
-
        <p>Get CLA multiple values from CLAs list parsed with varying size list, real(R4P).</p>
         
 
@@ -5221,8 +5160,6 @@ private  subroutine <a href='../proc/get_cla_list_varying_i8p_cli.html'>get_cla_
     
     <h4>Description</h4>
        
-
-
        <p>Get CLA multiple values from CLAs list parsed with varying size list, integer(I8P).</p>
         
 
@@ -5381,8 +5318,6 @@ private  subroutine <a href='../proc/get_cla_list_varying_i4p_cli.html'>get_cla_
     
     <h4>Description</h4>
        
-
-
        <p>Get CLA multiple values from CLAs list parsed with varying size list, integer(I4P).</p>
         
 
@@ -5541,8 +5476,6 @@ private  subroutine <a href='../proc/get_cla_list_varying_i2p_cli.html'>get_cla_
     
     <h4>Description</h4>
        
-
-
        <p>Get CLA multiple values from CLAs list parsed with varying size list, integer(I2P).</p>
         
 
@@ -5701,8 +5634,6 @@ private  subroutine <a href='../proc/get_cla_list_varying_i1p_cli.html'>get_cla_
     
     <h4>Description</h4>
        
-
-
        <p>Get CLA multiple values from CLAs list parsed with varying size list, integer(I1P).</p>
         
 
@@ -5861,8 +5792,6 @@ private  subroutine <a href='../proc/get_cla_list_varying_logical_cli.html'>get_
     
     <h4>Description</h4>
        
-
-
        <p>Get CLA multiple values from CLAs list parsed with varying size list, logical.</p>
         
 
@@ -6021,8 +5950,6 @@ private  subroutine <a href='../proc/get_cla_list_varying_char_cli.html'>get_cla
     
     <h4>Description</h4>
        
-
-
        <p>Get CLA multiple values from CLAs list parsed with varying size list, character.</p>
         
 
@@ -6103,12 +6030,6 @@ private elemental subroutine <a href='../proc/assign_cli.html'>assign_cli</a>(lh
       
     
     
-    
-    <h4>Description</h4>
-       
-
-
-       
         
 
       </li>
@@ -6188,12 +6109,6 @@ private elemental subroutine <a href='../proc/assign_cli.html'>assign_cli</a>(lh
       
     
     
-    
-    <h4>Description</h4>
-       
-
-
-       
         
 
       </li>
@@ -6205,6 +6120,76 @@ private elemental subroutine <a href='../proc/assign_cli.html'>assign_cli</a>(lh
     </section>
     
     
+    
+    <section>
+    <h2><a class="anchor" name="src"></a>Source Code</h2>
+    <div class="highlight"><pre><span class="k">type</span><span class="p">,</span> <span class="k">extends</span><span class="p">(</span><span class="n">Type_Object</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">Type_Command_Line_Interface</span>
+  <span class="c">!&lt; Command Line Interface (CLI).</span>
+  <span class="k">private</span>
+<span class="k">  type</span><span class="p">(</span><span class="n">Type_Command_Line_Arguments_Group</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">clasg</span><span class="p">(:)</span>          <span class="c">!&lt; CLA list [1:Na].</span>
+<span class="cp">#ifdef __GFORTRAN__</span>
+  <span class="kt">character</span><span class="p">(</span><span class="mi">100</span>  <span class="p">),</span> <span class="k">allocatable</span>                        <span class="kd">::</span> <span class="n">args</span><span class="p">(:)</span>           <span class="c">!&lt; Actually passed command line arguments.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="mi">100</span>  <span class="p">),</span> <span class="k">allocatable</span>                        <span class="kd">::</span> <span class="n">examples</span><span class="p">(:)</span>       <span class="c">!&lt; Examples of correct usage.</span>
+<span class="cp">#else</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>                        <span class="kd">::</span> <span class="n">args</span><span class="p">(:)</span>           <span class="c">!&lt; Actually passed command line arguments.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>                        <span class="kd">::</span> <span class="n">examples</span><span class="p">(:)</span>       <span class="c">!&lt; Examples of correct usage (not work with gfortran).</span>
+<span class="cp">#endif</span>
+  <span class="kt">logical</span>                                              <span class="kd">::</span> <span class="n">disable_hv</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="c">!&lt; Disable automatic &#39;help&#39; and &#39;version&#39; CLAs.</span>
+  <span class="k">contains</span>
+    <span class="c">! public methods</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">free</span>                                 <span class="c">!&lt; Free dynamic memory.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">init</span>                                 <span class="c">!&lt; Initialize CLI.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">add_group</span>                            <span class="c">!&lt; Add CLAs group CLI.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">add</span>                                  <span class="c">!&lt; Add CLA to CLI.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">passed</span>                               <span class="c">!&lt; Check if a CLA has been passed.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">defined</span>                              <span class="c">!&lt; Check if a CLA has been defined.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">defined_group</span>                        <span class="c">!&lt; Check if a CLAs group has been defined.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">set_mutually_exclusive_groups</span>        <span class="c">!&lt; Set two CLAs group as mutually exclusive.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">run_command</span> <span class="o">=&gt;</span> <span class="n">called_group</span>          <span class="c">!&lt; Check if a CLAs group has been runned.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">parse</span>                                <span class="c">!&lt; Parse Command Line Interfaces.</span>
+    <span class="k">generic</span><span class="p">,</span>   <span class="k">public</span> <span class="kd">::</span> <span class="n">get</span> <span class="o">=&gt;</span> <span class="n">get_cla_cli</span><span class="p">,</span> <span class="n">get_cla_list_cli</span> <span class="c">!&lt; Get CLA value(s) from CLAs list parsed.</span>
+    <span class="k">generic</span><span class="p">,</span>   <span class="k">public</span> <span class="kd">::</span> <span class="n">get_varying</span> <span class="o">=&gt;</span>                    <span class="p">&amp;</span>  <span class="c">!&lt; Get CLA value(s) from CLAs list parsedi, varying size list.</span>
+<span class="cp">#ifdef r16p</span>
+                         <span class="n">get_cla_list_varying_R16P_cli</span><span class="p">,</span>    <span class="p">&amp;</span>
+<span class="cp">#endif</span>
+                         <span class="n">get_cla_list_varying_R8P_cli</span><span class="p">,</span>     <span class="p">&amp;</span>
+                         <span class="n">get_cla_list_varying_R4P_cli</span><span class="p">,</span>     <span class="p">&amp;</span>
+                         <span class="n">get_cla_list_varying_I8P_cli</span><span class="p">,</span>     <span class="p">&amp;</span>
+                         <span class="n">get_cla_list_varying_I4P_cli</span><span class="p">,</span>     <span class="p">&amp;</span>
+                         <span class="n">get_cla_list_varying_I2P_cli</span><span class="p">,</span>     <span class="p">&amp;</span>
+                         <span class="n">get_cla_list_varying_I1P_cli</span><span class="p">,</span>     <span class="p">&amp;</span>
+                         <span class="n">get_cla_list_varying_logical_cli</span><span class="p">,</span> <span class="p">&amp;</span>
+                         <span class="n">get_cla_list_varying_char_cli</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">usage</span>                                <span class="c">!&lt; Get CLI usage.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">signature</span>                            <span class="c">!&lt; Get CLI signature.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">print_usage</span>                          <span class="c">!&lt; Print correct usage of CLI.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">save_man_page</span>                        <span class="c">!&lt; Save man page build on CLI.</span>
+    <span class="c">! private methods</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">check</span>                                <span class="c">!&lt; Check CLAs data consistenc.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">check_m_exclusive</span>                    <span class="c">!&lt; Check if two mutually exclusive CLAs group have been called.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">get_clasg_indexes</span>                    <span class="c">!&lt; Get CLAs groups indexes.</span>
+    <span class="k">generic</span><span class="p">,</span>   <span class="k">private</span> <span class="kd">::</span> <span class="n">get_args</span> <span class="o">=&gt;</span> <span class="n">get_args_from_string</span><span class="p">,&amp;</span>   <span class="c">!&lt; Get CLAs from string.</span>
+                                      <span class="n">get_args_from_invocation</span> <span class="c">!&lt; Get CLAs from CLI invocation.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">get_args_from_string</span>                 <span class="c">!&lt; Get CLAs from string.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">get_args_from_invocation</span>             <span class="c">!&lt; Get CLAs from CLI invocation.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">get_cla_cli</span>                          <span class="c">!&lt; Get CLA (single) value from CLAs list parsed.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">get_cla_list_cli</span>                     <span class="c">!&lt; Get CLA multiple values from CLAs list parsed.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">get_cla_list_varying_R16P_cli</span>        <span class="c">!&lt; Get CLA multiple values from CLAs list parsed, varying size, R16P.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">get_cla_list_varying_R8P_cli</span>         <span class="c">!&lt; Get CLA multiple values from CLAs list parsed, varying size, R8P.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">get_cla_list_varying_R4P_cli</span>         <span class="c">!&lt; Get CLA multiple values from CLAs list parsed, varying size, R4P.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">get_cla_list_varying_I8P_cli</span>         <span class="c">!&lt; Get CLA multiple values from CLAs list parsed, varying size, I8P.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">get_cla_list_varying_I4P_cli</span>         <span class="c">!&lt; Get CLA multiple values from CLAs list parsed, varying size, I4P.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">get_cla_list_varying_I2P_cli</span>         <span class="c">!&lt; Get CLA multiple values from CLAs list parsed, varying size, I2P.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">get_cla_list_varying_I1P_cli</span>         <span class="c">!&lt; Get CLA multiple values from CLAs list parsed, varying size, I1P.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">get_cla_list_varying_logical_cli</span>     <span class="c">!&lt; Get CLA multiple values from CLAs list parsed, varying size, bool.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">get_cla_list_varying_char_cli</span>        <span class="c">!&lt; Get CLA multiple values from CLAs list parsed, varying size, char.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">assign_cli</span>                           <span class="c">!&lt; CLI assignment overloading.</span>
+    <span class="k">generic</span><span class="p">,</span>   <span class="k">private</span> <span class="kd">::</span> <span class="n">assignment</span><span class="p">(</span><span class="o">=</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">assign_cli</span>          <span class="c">!&lt; CLI assignment overloading.</span>
+    <span class="k">final</span>              <span class="kd">::</span> <span class="n">finalize</span>                             <span class="c">!&lt; Free dynamic memory when finalizing.</span>
+<span class="n">endtype</span> <span class="n">Type_Command_Line_Interface</span>
+</pre></div>
+
+    </section>
     
     
     </div>

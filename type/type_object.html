@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	 
-	 <meta name="description" content="<p>Fortran command Line Arguments Parser for poor people</p>">
+	 <meta name="description" content="Fortran command Line Arguments Parser for poor people">
     
     <meta name="author" content="Chris MacMackin" >
     <link rel="icon" href="../favicon.png">
@@ -25,10 +25,13 @@
     <![endif]-->
     
     <script src="../js/jquery-2.1.3.min.js"></script>
+
+    
     <script src="../tipuesearch/tipuesearch_content.js"></script>
     <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
     <script src="../tipuesearch/tipuesearch_set.js"></script>
     <script src="../tipuesearch/tipuesearch.js"></script>
+    
 
   </head>
 
@@ -65,6 +68,7 @@
             <li><a href="../lists/programs.html">Programs</a></li>
 				
           </ul>
+        
         <form action="../search.html" class="navbar-form navbar-right" role="search">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
@@ -73,6 +77,7 @@
         <button type="submit" class="btn btn-default">Submit</button>
 -->
         </form>
+        
         </div><!--/.nav-collapse -->
       </div>
     </nav>
@@ -170,6 +175,14 @@
   </div>
   
   
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+    <div class="list-group">
+      <a class="list-group-item" href="../type/type_object.html#src">Type_Object</a>
+    </div>
+  </div>
   
   <hr>
   
@@ -407,8 +420,6 @@ private elemental subroutine <a href='../proc/free_object.html'>free_object</a>(
     
     <h4>Description</h4>
        
-
-
        <p>Free dynamic memory.</p>
         
 
@@ -597,8 +608,6 @@ private  subroutine <a href='../proc/errored.html'>errored</a>(obj, error, pref,
     
     <h4>Description</h4>
        
-
-
        <p>Trig error occurence and print meaningful message.</p>
         
 
@@ -682,8 +691,6 @@ private  subroutine <a href='../proc/print_version.html'>print_version</a>(obj, 
     
     <h4>Description</h4>
        
-
-
        <p>Print version.</p>
         
 
@@ -764,12 +771,6 @@ private elemental subroutine <a href='../proc/assign_object.html'>assign_object<
       
     
     
-    
-    <h4>Description</h4>
-       
-
-
-       
         
 
       </li>
@@ -781,6 +782,29 @@ private elemental subroutine <a href='../proc/assign_object.html'>assign_object<
     </section>
     
     
+    
+    <section>
+    <h2><a class="anchor" name="src"></a>Source Code</h2>
+    <div class="highlight"><pre><span class="k">type</span><span class="p">,</span> <span class="k">abstract</span> <span class="kd">::</span> <span class="n">Type_Object</span>
+  <span class="k">private</span>
+<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">progname</span>    <span class="c">!&lt; Program name.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">version</span>     <span class="c">!&lt; Program version.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span>         <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">help</span>        <span class="c">!&lt; Help message.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">description</span> <span class="c">!&lt; Detailed description.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">license</span>     <span class="c">!&lt; License description.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">authors</span>     <span class="c">!&lt; Authors list.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">epilog</span>      <span class="c">!&lt; Epilog message.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">m_exclude</span>   <span class="c">!&lt; Mutually exclude other CLA(s group).</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span>     <span class="k">public</span>              <span class="kd">::</span> <span class="n">error</span><span class="o">=</span><span class="mi">0_I4P</span> <span class="c">!&lt; Error traping flag.</span>
+  <span class="k">contains</span>
+<span class="k">    procedure</span> <span class="kd">::</span> <span class="n">free_object</span>   <span class="c">!&lt; Free dynamic memory.</span>
+    <span class="k">procedure</span> <span class="kd">::</span> <span class="n">errored</span>       <span class="c">!&lt; Trig error occurence and print meaningful message.</span>
+    <span class="k">procedure</span> <span class="kd">::</span> <span class="n">print_version</span> <span class="c">!&lt; Print version.</span>
+    <span class="k">procedure</span> <span class="kd">::</span> <span class="n">assign_object</span> <span class="c">!&lt; Assignment overloading.</span>
+<span class="n">endtype</span> <span class="n">Type_Object</span>
+</pre></div>
+
+    </section>
     
     
     </div>

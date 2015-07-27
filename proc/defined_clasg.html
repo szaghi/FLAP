@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	 
-	 <meta name="description" content="<p>Fortran command Line Arguments Parser for poor people</p>">
+	 <meta name="description" content="Fortran command Line Arguments Parser for poor people">
     
     <meta name="author" content="Chris MacMackin" >
     <link rel="icon" href="../favicon.png">
@@ -25,10 +25,13 @@
     <![endif]-->
     
     <script src="../js/jquery-2.1.3.min.js"></script>
+
+    
     <script src="../tipuesearch/tipuesearch_content.js"></script>
     <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
     <script src="../tipuesearch/tipuesearch_set.js"></script>
     <script src="../tipuesearch/tipuesearch.js"></script>
+    
 
   </head>
 
@@ -65,6 +68,7 @@
             <li><a href="../lists/programs.html">Programs</a></li>
 				
           </ul>
+        
         <form action="../search.html" class="navbar-form navbar-right" role="search">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
@@ -73,6 +77,7 @@
         <button type="submit" class="btn btn-default">Submit</button>
 -->
         </form>
+        
         </div><!--/.nav-collapse -->
       </div>
     </nav>
@@ -138,6 +143,14 @@
   
   
   
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+    <div class="list-group">
+      <a class="list-group-item" href="../proc/defined_clasg.html#src">defined_clasg</a>
+    </div>
+  </div>
   
   <hr>
   
@@ -567,6 +580,40 @@ private  function defined_clasg(clasg, switch, pos)
 
     
     
+    
+    <section>
+    <h2><a class="anchor" name="src"></a>Source Code</h2>
+    <div class="highlight"><pre>  <span class="k">function </span><span class="n">defined_clasg</span><span class="p">(</span><span class="n">clasg</span><span class="p">,</span> <span class="n">switch</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">defined</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Check if a CLA has been defined.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">Type_Command_Line_Arguments_Group</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">clasg</span>   <span class="c">!&lt; CLAs group data.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span>                             <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">switch</span>  <span class="c">!&lt; Switch name.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>                   <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">pos</span>     <span class="c">!&lt; CLA position.</span>
+  <span class="kt">logical</span>                                               <span class="kd">::</span> <span class="n">defined</span> <span class="c">!&lt; Check if a CLA has been defined.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                          <span class="kd">::</span> <span class="n">a</span>       <span class="c">!&lt; CLA counter.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">defined</span> <span class="o">=</span> <span class="p">.</span><span class="n">false</span><span class="p">.</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">pos</span><span class="p">))</span> <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">clasg</span><span class="p">%</span><span class="n">Na</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">    do </span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">clasg</span><span class="p">%</span><span class="n">Na</span>
+      <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">clasg</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">positional</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">        if</span> <span class="p">((</span><span class="n">clasg</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">switch</span><span class="o">==</span><span class="n">switch</span><span class="p">).</span><span class="nb">or</span><span class="p">.(</span><span class="n">clasg</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">switch_ab</span><span class="o">==</span><span class="n">switch</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">          </span><span class="n">defined</span> <span class="o">=</span> <span class="p">.</span><span class="n">true</span><span class="p">.</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">pos</span><span class="p">))</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">a</span>
+          <span class="k">exit</span>
+<span class="k">        </span><span class="n">endif</span>
+      <span class="n">endif</span>
+    <span class="n">enddo</span>
+  <span class="n">endif</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endfunction</span> <span class="n">defined_clasg</span>
+</pre></div>
+
+    </section>
     
     
     </div>

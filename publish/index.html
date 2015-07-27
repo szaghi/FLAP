@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	 
-	 <meta name="description" content="<p>Fortran command Line Arguments Parser for poor people</p>">
+	 <meta name="description" content="Fortran command Line Arguments Parser for poor people">
     
     <meta name="author" content="Chris MacMackin" >
     <link rel="icon" href="./favicon.png">
@@ -25,10 +25,13 @@
     <![endif]-->
     
     <script src="./js/jquery-2.1.3.min.js"></script>
+
+    
     <script src="./tipuesearch/tipuesearch_content.js"></script>
     <link  href="./tipuesearch/tipuesearch.css" rel="stylesheet">
     <script src="./tipuesearch/tipuesearch_set.js"></script>
     <script src="./tipuesearch/tipuesearch.js"></script>
+    
 
   </head>
 
@@ -65,6 +68,7 @@
             <li><a href="./lists/programs.html">Programs</a></li>
 				
           </ul>
+        
         <form action="./search.html" class="navbar-form navbar-right" role="search">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
@@ -73,6 +77,7 @@
         <button type="submit" class="btn btn-default">Submit</button>
 -->
         </form>
+        
         </div><!--/.nav-collapse -->
       </div>
     </nav>
@@ -102,7 +107,7 @@
 		  
           <h1>FLAP</h1>
           <p><a name="top"></a></p>
-<h1>FLAP <a href=""><img alt="GitHub tag" src="https://img.shields.io/github/tag/szaghi/FLAP.svg"></a> <a href="https://gitter.im/szaghi/FLAP?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img alt="Join the chat at https://gitter.im/szaghi/FLAP" src="https://badges.gitter.im/Join%20Chat.svg"></a></h1>
+<h1 id="flap"><a href="https://gitter.im/szaghi/FLAP?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img alt="Join the chat at https://gitter.im/szaghi/FLAP" src="https://badges.gitter.im/Join%20Chat.svg"></a><a class="toclink" href="#flap">FLAP <a href=""><img alt="GitHub tag" src="https://img.shields.io/github/tag/szaghi/FLAP.svg"></a> </a></h1>
 <p><a href=""><img alt="License" src="https://img.shields.io/badge/license-GNU%20GeneraL%20Public%20License%20v3,%20GPLv3-blue.svg"></a>
 <a href=""><img alt="License" src="https://img.shields.io/badge/license-BSD2-red.svg"></a>
 <a href=""><img alt="License" src="https://img.shields.io/badge/license-BSD3-red.svg"></a>
@@ -110,7 +115,7 @@
 <p><a href=""><img alt="Status" src="https://img.shields.io/badge/status-stable-brightgreen.svg"></a>
 <a href="https://travis-ci.org/szaghi/FLAP"><img alt="Build Status" src="https://travis-ci.org/szaghi/FLAP.svg?branch=master"></a>
 <a href="http://codecov.io/github/szaghi/FLAP?branch=master"><img alt="Coverage Status" src="https://img.shields.io/codecov/c/github/szaghi/FLAP.svg"></a></p>
-<h3>FLAP, Fortran command Line Arguments Parser for poor people</h3>
+<h3 id="flap-fortran-command-line-arguments-parser-for-poor-people"><a class="toclink" href="#flap-fortran-command-line-arguments-parser-for-poor-people">FLAP, Fortran command Line Arguments Parser for poor people</a></h3>
 <p>A KISS pure Fortran Library for building powerful, easy-to-use, elegant command line interfaces</p>
 <ul>
 <li>FLAP is a pure Fortran (KISS) library for building easily nice Command Line Interfaces (CLI) for modern Fortran projects;</li>
@@ -118,7 +123,7 @@
 <li>FLAP is OOP designed;</li>
 <li>FLAP is a Free, Open Source Project.</li>
 </ul>
-<h4>Table of Contents</h4>
+<h4 id="table-of-contents"><a class="toclink" href="#table-of-contents">Table of Contents</a></h4>
 <ul>
 <li><a href="#what-is-flap">What is FLAP?</a></li>
 <li><a href="#main-features">Main features</a></li>
@@ -126,22 +131,22 @@
 <li><a href="#documentation">Documentation</a></li>
 <li><a href="#a-taste-of-flap">A Taste of FLAP</a></li>
 </ul>
-<h4>Issues</h4>
+<h4 id="issues"><a class="toclink" href="#issues">Issues</a></h4>
 <p><a href=""><img alt="GitHub issues" src="https://img.shields.io/github/issues/szaghi/FLAP.svg"></a>
 <a href="https://waffle.io/szaghi/FLAP"><img alt="Ready in backlog" src="https://badge.waffle.io/szaghi/FLAP.png?label=ready&amp;title=Ready"></a>
 <a href="https://waffle.io/szaghi/FLAP"><img alt="In Progress" src="https://badge.waffle.io/szaghi/FLAP.png?label=in%20progress&amp;title=In%20Progress"></a>
 <a href="https://waffle.io/szaghi/FLAP"><img alt="Open bugs" src="https://badge.waffle.io/szaghi/FLAP.png?label=bug&amp;title=Open%20Bugs"></a></p>
-<h4>Compiler Support</h4>
+<h4 id="compiler-support"><a class="toclink" href="#compiler-support">Compiler Support</a></h4>
 <p><a href=""><img alt="Compiler" src="https://img.shields.io/badge/GNU-v4.9.2+-brightgreen.svg"></a>
 <a href=""><img alt="Compiler" src="https://img.shields.io/badge/Intel-v12.x+-brightgreen.svg"></a>
 <a href=""><img alt="Compiler" src="https://img.shields.io/badge/IBM%20XL-not%20tested-yellow.svg"></a>
 <a href=""><img alt="Compiler" src="https://img.shields.io/badge/g95-not%20tested-yellow.svg"></a>
 <a href=""><img alt="Compiler" src="https://img.shields.io/badge/NAG-not%20tested-yellow.svg"></a>
 <a href=""><img alt="Compiler" src="https://img.shields.io/badge/PGI-not%20tested-yellow.svg"></a></p>
-<h2>What is FLAP?</h2>
+<h2 id="what-is-flap"><a class="toclink" href="#what-is-flap">What is FLAP?</a></h2>
 <p>Modern Fortran standards (2003+) have introduced support for Command Line Arguments (CLA), thus it is possible to construct nice and effective Command Line Interfaces (CLI). FLAP is a small library designed to simplify the (repetitive) construction of complicated CLI in pure Fortran (standard 2003+). FLAP has been inspired by the python module <em>argparse</em> trying to mimic it. Once you have defined the arguments that are required by means of a user-friendly method of the CLI, FLAP will parse the CLAs for you. It is worthy of note that FLAP, as <em>argparse</em>, also automatically generates help and usage messages and issues errors when users give the program invalid arguments.</p>
 <p>Go to <a href="#top">Top</a></p>
-<h2>Main features</h2>
+<h2 id="main-features"><a class="toclink" href="#main-features">Main features</a></h2>
 <p>FLAP is inspired by the python great module <em>argparse</em>, thus many features are taken from it. Here the main features are listed.</p>
 <ul class="checklist">
 <li><input type="checkbox" disabled checked> User-friendly methods for building flexible and effective Command Line Interfaces (CLI);</li>
@@ -175,7 +180,7 @@
 </ul>
 <p>Any feature request is welcome.</p>
 <p>Go to <a href="#top">Top</a></p>
-<h2>Copyrights</h2>
+<h2 id="copyrights"><a class="toclink" href="#copyrights">Copyrights</a></h2>
 <p>FLAP is an open source project, it is distributed under a multi-licensing system:</p>
 <ul>
 <li>for FOSS projects:</li>
@@ -188,9 +193,9 @@
 <p>Anyone is interest to use, to develop or to contribute to FLAP is welcome, feel free to select the license that best matches your soul!</p>
 <p>More details can be found on <a href="https://github.com/szaghi/FLAP/wiki/Copyrights">wiki</a>.</p>
 <p>Go to <a href="#top">Top</a></p>
-<h2>Documentation</h2>
+<h2 id="documentation"><a class="toclink" href="#documentation">Documentation</a></h2>
 <p>Besides this README file the FLAP documentation is contained into its own <a href="https://github.com/szaghi/FLAP/wiki">wiki</a>. Detailed documentation of the API is contained into the <a href="http://szaghi.github.io/FLAP/index.html">GitHub Pages</a> that can also be created locally by means of <a href="https://github.com/cmacmackin/ford">ford tool</a>.</p>
-<h3>A Taste of FLAP</h3>
+<h3 id="a-taste-of-flap"><a class="toclink" href="#a-taste-of-flap">A Taste of FLAP</a></h3>
 <p>Running the provided test program, <code>Test_Driver -h</code>, a taste of FLAP is served:</p>
 <div class="codehilite"><pre>usage:  Test_Driver [value] --string value [--integer value] [--real value] [--boolean] [--boolean_val value] [--integer_list value#1 value#2 value#3] [--help] [--version]
 
@@ -267,7 +272,7 @@ Examples:
 
 <p>For more details, see the provided <a href="https://github.com/szaghi/FLAP/blob/master/src/Test_Driver.f90">example</a>.</p>
 <p>For a practical example of FLAP usage see <a href="https://github.com/szaghi/OFF/blob/testing/src/POG.f90">POG</a> source file at line <code>85</code>.</p>
-<h4>Nested (sub)commands</h4>
+<h4 id="nested-subcommands"><a class="toclink" href="#nested-subcommands">Nested (sub)commands</a></h4>
 <p>FLAP fully supports nested (sub)commands or groups of command line arguments. For example a fake <code>git</code> toy remake can be coded as</p>
 <div class="codehilite"><pre><span class="c">! initializing Command Line Interface</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span>    <span class="o">=</span> <span class="s1">&#39;Test_Driver_Nested&#39;</span><span class="p">,</span>                                    <span class="p">&amp;</span>
@@ -357,194 +362,6 @@ Examples:
 
 <p>For more details, see the provided <a href="https://github.com/szaghi/FLAP/blob/master/src/Test_Driver_Nested.f90">example</a>.</p>
 <p>Go to <a href="#top">Top</a></p>
-<h3>ChangeLog</h3>
-<h1>Change Log</h1>
-<h2><a href="https://github.com/szaghi/FLAP/tree/HEAD">Unreleased</a></h2>
-<p><a href="https://github.com/szaghi/FLAP/compare/v0.6.1...HEAD">Full Changelog</a></p>
-<p><strong>Fixed bugs:</strong></p>
-<ul>
-<li>gfortran5 possible class\(\*\) issue <a href="https://github.com/szaghi/FLAP/issues/37">#37</a></li>
-</ul>
-<h2><a href="https://github.com/szaghi/FLAP/tree/v0.6.1">v0.6.1</a> (2015-07-02)</h2>
-<p><a href="https://github.com/szaghi/FLAP/compare/v0.6.0...v0.6.1">Full Changelog</a></p>
-<h2><a href="https://github.com/szaghi/FLAP/tree/v0.6.0">v0.6.0</a> (2015-07-01)</h2>
-<p><a href="https://github.com/szaghi/FLAP/compare/v0.5.3...v0.6.0">Full Changelog</a></p>
-<p><strong>Implemented enhancements:</strong></p>
-<ul>
-<li>CLAs vs options <a href="https://github.com/szaghi/FLAP/issues/36">#36</a></li>
-</ul>
-<p><strong>Merged pull requests:</strong></p>
-<ul>
-<li>Fix deploy.sh script <a href="https://github.com/szaghi/FLAP/pull/45">#45</a> (<a href="https://github.com/zbeekman">zbeekman</a>)</li>
-</ul>
-<h2><a href="https://github.com/szaghi/FLAP/tree/v0.5.3">v0.5.3</a> (2015-07-01)</h2>
-<p><a href="https://github.com/szaghi/FLAP/compare/v0.5.2...v0.5.3">Full Changelog</a></p>
-<p><strong>Closed issues:</strong></p>
-<ul>
-<li>
-<p>badges and links still point to coveralls <a href="https://github.com/szaghi/FLAP/issues/41">#41</a></p>
-</li>
-<li>
-<p>Why multiple README.md? <a href="https://github.com/szaghi/FLAP/issues/40">#40</a></p>
-</li>
-<li>
-<p>fobs file doesn’t actually build anything <a href="https://github.com/szaghi/FLAP/issues/34">#34</a></p>
-</li>
-</ul>
-<p><strong>Merged pull requests:</strong></p>
-<ul>
-<li>
-<p>Small docs simplification <a href="https://github.com/szaghi/FLAP/pull/42">#42</a> (<a href="https://github.com/zbeekman">zbeekman</a>)</p>
-</li>
-<li>
-<p>Progname from cl <a href="https://github.com/szaghi/FLAP/pull/38">#38</a> (<a href="https://github.com/zbeekman">zbeekman</a>)</p>
-</li>
-</ul>
-<h2><a href="https://github.com/szaghi/FLAP/tree/v0.5.2">v0.5.2</a> (2015-06-26)</h2>
-<p><a href="https://github.com/szaghi/FLAP/compare/v0.5.1...v0.5.2">Full Changelog</a></p>
-<p><strong>Merged pull requests:</strong></p>
-<ul>
-<li>use __GFORTRAN__ rather than -DGNU <a href="https://github.com/szaghi/FLAP/pull/35">#35</a> (<a href="https://github.com/zbeekman">zbeekman</a>)</li>
-</ul>
-<h2><a href="https://github.com/szaghi/FLAP/tree/v0.5.1">v0.5.1</a> (2015-06-10)</h2>
-<p><a href="https://github.com/szaghi/FLAP/compare/v0.5.0...v0.5.1">Full Changelog</a></p>
-<h2><a href="https://github.com/szaghi/FLAP/tree/v0.5.0">v0.5.0</a> (2015-06-05)</h2>
-<p><a href="https://github.com/szaghi/FLAP/compare/v0.4.0...v0.5.0">Full Changelog</a></p>
-<p><strong>Implemented enhancements:</strong></p>
-<ul>
-<li>Generate man pages <a href="https://github.com/szaghi/FLAP/issues/22">#22</a></li>
-</ul>
-<p><strong>Closed issues:</strong></p>
-<ul>
-<li>
-<p>Correct WIKI: Requirement page wrong number of modules shipped <a href="https://github.com/szaghi/FLAP/issues/32">#32</a></p>
-</li>
-<li>
-<p>Update WIKI: Requirements <a href="https://github.com/szaghi/FLAP/issues/31">#31</a></p>
-</li>
-</ul>
-<h2><a href="https://github.com/szaghi/FLAP/tree/v0.4.0">v0.4.0</a> (2015-06-01)</h2>
-<p><a href="https://github.com/szaghi/FLAP/compare/v0.3.0...v0.4.0">Full Changelog</a></p>
-<p><strong>Implemented enhancements:</strong></p>
-<ul>
-<li>
-<p>Implement fake arguments parsed from string input <a href="https://github.com/szaghi/FLAP/issues/28">#28</a></p>
-</li>
-<li>
-<p>Support environment variables <a href="https://github.com/szaghi/FLAP/issues/12">#12</a></p>
-</li>
-</ul>
-<p><strong>Fixed bugs:</strong></p>
-<ul>
-<li>Bug for list-value CLA <a href="https://github.com/szaghi/FLAP/issues/30">#30</a></li>
-</ul>
-<h2><a href="https://github.com/szaghi/FLAP/tree/v0.3.0">v0.3.0</a> (2015-05-29)</h2>
-<p><a href="https://github.com/szaghi/FLAP/compare/v0.2.0...v0.3.0">Full Changelog</a></p>
-<p><strong>Implemented enhancements:</strong></p>
-<ul>
-<li>Implement argparse epilog <a href="https://github.com/szaghi/FLAP/issues/27">#27</a></li>
-</ul>
-<h2><a href="https://github.com/szaghi/FLAP/tree/v0.2.0">v0.2.0</a> (2015-05-26)</h2>
-<p><a href="https://github.com/szaghi/FLAP/compare/v0.1.0...v0.2.0">Full Changelog</a></p>
-<p><strong>Implemented enhancements:</strong></p>
-<ul>
-<li>
-<p>Add mutually exsclusive option for groups of CLAs <a href="https://github.com/szaghi/FLAP/issues/29">#29</a></p>
-</li>
-<li>
-<p>Support nested subcommands or groups of commands or <a href="https://github.com/szaghi/FLAP/issues/10">#10</a></p>
-</li>
-</ul>
-<p><strong>Closed issues:</strong></p>
-<ul>
-<li>
-<p>Travis issue  <a href="https://github.com/szaghi/FLAP/issues/26">#26</a></p>
-</li>
-<li>
-<p>Bug when parsing? <a href="https://github.com/szaghi/FLAP/issues/24">#24</a></p>
-</li>
-<li>
-<p>Reduce the number cycles when parsing <a href="https://github.com/szaghi/FLAP/issues/23">#23</a></p>
-</li>
-<li>
-<p>Correct the taste wiki page <a href="https://github.com/szaghi/FLAP/issues/20">#20</a></p>
-</li>
-<li>
-<p>Correct requirements wiki page <a href="https://github.com/szaghi/FLAP/issues/19">#19</a></p>
-</li>
-<li>
-<p>Change licensing system <a href="https://github.com/szaghi/FLAP/issues/15">#15</a></p>
-</li>
-</ul>
-<h2><a href="https://github.com/szaghi/FLAP/tree/v0.1.0">v0.1.0</a> (2015-05-22)</h2>
-<p><a href="https://github.com/szaghi/FLAP/compare/v0.0.7...v0.1.0">Full Changelog</a></p>
-<p><strong>Closed issues:</strong></p>
-<ul>
-<li>Make a more uniform errors trapping mechanism <a href="https://github.com/szaghi/FLAP/issues/21">#21</a></li>
-</ul>
-<h2><a href="https://github.com/szaghi/FLAP/tree/v0.0.7">v0.0.7</a> (2015-04-22)</h2>
-<p><a href="https://github.com/szaghi/FLAP/compare/v0.0.6...v0.0.7">Full Changelog</a></p>
-<p><strong>Implemented enhancements:</strong></p>
-<ul>
-<li>Make FLAP CLI Posix compliant <a href="https://github.com/szaghi/FLAP/issues/13">#13</a></li>
-</ul>
-<p><strong>Closed issues:</strong></p>
-<ul>
-<li>
-<p>Rename files extension for the ones requiring preprocessing <a href="https://github.com/szaghi/FLAP/issues/17">#17</a></p>
-</li>
-<li>
-<p>Add makefile <a href="https://github.com/szaghi/FLAP/issues/16">#16</a></p>
-</li>
-<li>
-<p>Correct politically incorrect references to "Fortran poor men"... <a href="https://github.com/szaghi/FLAP/issues/14">#14</a></p>
-</li>
-</ul>
-<h2><a href="https://github.com/szaghi/FLAP/tree/v0.0.6">v0.0.6</a> (2015-04-17)</h2>
-<p><a href="https://github.com/szaghi/FLAP/compare/v0.0.5...v0.0.6">Full Changelog</a></p>
-<p><strong>Closed issues:</strong></p>
-<ul>
-<li>Put auxiliary procedures directly into FLAP <a href="https://github.com/szaghi/FLAP/issues/18">#18</a></li>
-</ul>
-<h2><a href="https://github.com/szaghi/FLAP/tree/v0.0.5">v0.0.5</a> (2015-04-15)</h2>
-<p><a href="https://github.com/szaghi/FLAP/compare/v0.0.4...v0.0.5">Full Changelog</a></p>
-<p><strong>Closed issues:</strong></p>
-<ul>
-<li>gfortran support <a href="https://github.com/szaghi/FLAP/issues/5">#5</a></li>
-</ul>
-<h2><a href="https://github.com/szaghi/FLAP/tree/v0.0.4">v0.0.4</a> (2015-04-15)</h2>
-<p><a href="https://github.com/szaghi/FLAP/compare/v0.0.3...v0.0.4">Full Changelog</a></p>
-<p><strong>Closed issues:</strong></p>
-<ul>
-<li>No error control parsing boolean values <a href="https://github.com/szaghi/FLAP/issues/9">#9</a></li>
-</ul>
-<h2><a href="https://github.com/szaghi/FLAP/tree/v0.0.3">v0.0.3</a> (2015-04-07)</h2>
-<p><a href="https://github.com/szaghi/FLAP/compare/v0.0.2...v0.0.3">Full Changelog</a></p>
-<p><strong>Closed issues:</strong></p>
-<ul>
-<li>
-<p>FLAP compilation system <a href="https://github.com/szaghi/FLAP/issues/7">#7</a></p>
-</li>
-<li>
-<p>elemental function result must not be allocatable <a href="https://github.com/szaghi/FLAP/issues/6">#6</a></p>
-</li>
-</ul>
-<h2><a href="https://github.com/szaghi/FLAP/tree/v0.0.2">v0.0.2</a> (2015-02-17)</h2>
-<p><a href="https://github.com/szaghi/FLAP/compare/v0.0.1...v0.0.2">Full Changelog</a></p>
-<p><strong>Closed issues:</strong></p>
-<ul>
-<li>
-<p>Check-boxes in documentation <a href="https://github.com/szaghi/FLAP/issues/4">#4</a></p>
-</li>
-<li>
-<p>Doc refactoring: WIKI! <a href="https://github.com/szaghi/FLAP/issues/3">#3</a></p>
-</li>
-<li>
-<p>Make the module a library <a href="https://github.com/szaghi/FLAP/issues/2">#2</a></p>
-</li>
-</ul>
-<h2><a href="https://github.com/szaghi/FLAP/tree/v0.0.1">v0.0.1</a> (2014-10-24)</h2>
-<p>* *This Change Log was automatically generated by <a href="https://github.com/skywinder/Github-Changelog-Generator">github_changelog_generator</a></p>
         </div>
 		  
         <div class="col-lg-4">
@@ -588,7 +405,11 @@ Examples:
                   
                 
                   
-                    <li><a href='./sourcefile/ir_precision.f90.html'>IR_Precision.F90</a></li>
+                    <li><a href='./sourcefile/ir_precision.f90.html'>IR_Precision.f90</a></li>
+                  
+                
+                  
+                    <li><a href='./sourcefile/test_driver.f90.html'>Test_Driver.f90</a></li>
                   
                 
                   

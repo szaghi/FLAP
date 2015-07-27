@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	 
-	 <meta name="description" content="<p>Fortran command Line Arguments Parser for poor people</p>">
+	 <meta name="description" content="Fortran command Line Arguments Parser for poor people">
     
     <meta name="author" content="Chris MacMackin" >
     <link rel="icon" href="../favicon.png">
@@ -25,10 +25,13 @@
     <![endif]-->
     
     <script src="../js/jquery-2.1.3.min.js"></script>
+
+    
     <script src="../tipuesearch/tipuesearch_content.js"></script>
     <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
     <script src="../tipuesearch/tipuesearch_set.js"></script>
     <script src="../tipuesearch/tipuesearch.js"></script>
+    
 
   </head>
 
@@ -65,6 +68,7 @@
             <li><a href="../lists/programs.html">Programs</a></li>
 				
           </ul>
+        
         <form action="../search.html" class="navbar-form navbar-right" role="search">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
@@ -73,6 +77,7 @@
         <button type="submit" class="btn btn-default">Submit</button>
 -->
         </form>
+        
         </div><!--/.nav-collapse -->
       </div>
     </nav>
@@ -96,12 +101,12 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/IR_Precision.F90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/IR_Precision.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/ir_precision.f90.html'>IR_Precision.F90</a></li>
+     <li><a href='../sourcefile/ir_precision.f90.html'>IR_Precision.f90</a></li>
   
      <li><a href='../module/ir_precision.html'>IR_Precision</a></li>
   
@@ -138,6 +143,14 @@
   
   
   
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+    <div class="list-group">
+      <a class="list-group-item" href="../proc/is_little_endian.html#src">is_little_endian</a>
+    </div>
+  </div>
   
   <hr>
   
@@ -510,6 +523,27 @@ private pure function is_little_endian()
 
     
     
+    
+    <section>
+    <h2><a class="anchor" name="src"></a>Source Code</h2>
+    <div class="highlight"><pre>  <span class="k">pure function </span><span class="n">is_little_endian</span><span class="p">()</span> <span class="k">result</span><span class="p">(</span><span class="n">is_little</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Procedure for checking if the type of the bit ordering of the running architecture is little endian.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">implicit none</span>
+<span class="k">  </span><span class="kt">logical</span><span class="kd">::</span>      <span class="n">is_little</span> <span class="c">!&lt; Logical output: true is the running architecture uses little endian ordering, false otherwise.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I1P</span><span class="p">)</span><span class="kd">::</span> <span class="n">int1</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">)</span> <span class="c">!&lt; One byte integer array for casting 4 bytes integer.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">int1</span> <span class="o">=</span> <span class="nb">transfer</span><span class="p">(</span><span class="mi">1_I4P</span><span class="p">,</span><span class="n">int1</span><span class="p">)</span>
+  <span class="n">is_little</span> <span class="o">=</span> <span class="p">(</span><span class="n">int1</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">==</span><span class="mi">1_I1P</span><span class="p">)</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endfunction</span> <span class="n">is_little_endian</span>
+</pre></div>
+
+    </section>
     
     
     </div>

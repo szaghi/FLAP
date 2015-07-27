@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	 
-	 <meta name="description" content="<p>Fortran command Line Arguments Parser for poor people</p>">
+	 <meta name="description" content="Fortran command Line Arguments Parser for poor people">
     
     <meta name="author" content="Chris MacMackin" >
     <link rel="icon" href="../favicon.png">
@@ -25,10 +25,13 @@
     <![endif]-->
     
     <script src="../js/jquery-2.1.3.min.js"></script>
+
+    
     <script src="../tipuesearch/tipuesearch_content.js"></script>
     <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
     <script src="../tipuesearch/tipuesearch_set.js"></script>
     <script src="../tipuesearch/tipuesearch.js"></script>
+    
 
   </head>
 
@@ -65,6 +68,7 @@
             <li><a href="../lists/programs.html">Programs</a></li>
 				
           </ul>
+        
         <form action="../search.html" class="navbar-form navbar-right" role="search">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
@@ -73,6 +77,7 @@
         <button type="submit" class="btn btn-default">Submit</button>
 -->
         </form>
+        
         </div><!--/.nav-collapse -->
       </div>
     </nav>
@@ -190,6 +195,14 @@
   </div>
   
   
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+    <div class="list-group">
+      <a class="list-group-item" href="../type/type_command_line_arguments_group.html#src">Type_Command_Line_Arguments_Group</a>
+    </div>
+  </div>
   
   <hr>
   
@@ -372,8 +385,6 @@ private elemental subroutine <a href='../proc/finalize_clasg.html'>finalize_clas
     
     <h4>Description</h4>
        
-
-
        <p>Free dynamic memory when finalizing.</p>
         
 
@@ -448,8 +459,6 @@ private elemental subroutine <a href='../proc/free_clasg.html'>free_clasg</a>(cl
     
     <h4>Description</h4>
        
-
-
        <p>Free dynamic memory.</p>
         
 
@@ -533,8 +542,6 @@ private  subroutine <a href='../proc/check_clasg.html'>check_clasg</a>(clasg, pr
     
     <h4>Description</h4>
        
-
-
        <p>Check CLA data consistency.</p>
         
 
@@ -618,8 +625,6 @@ private  subroutine <a href='../proc/check_required_clasg.html'>check_required_c
     
     <h4>Description</h4>
        
-
-
        <p>Check if required CLAs are passed.</p>
         
 
@@ -703,8 +708,6 @@ private  subroutine <a href='../proc/check_m_exclusive_clasg.html'>check_m_exclu
     
     <h4>Description</h4>
        
-
-
        <p>Check if two mutually exclusive CLAs have been passed.</p>
         
 
@@ -803,8 +806,6 @@ private  subroutine <a href='../proc/add_cla_clasg.html'>add_cla_clasg</a>(clasg
     
     <h4>Description</h4>
        
-
-
        <p>Add CLA to CLAs list.</p>
         
 
@@ -912,8 +913,6 @@ private pure function <a href='../proc/passed_clasg.html'>passed_clasg</a>(clasg
     
     <h4>Description</h4>
        
-
-
        <p>Check if a CLA has been passed.</p>
         
 
@@ -1021,8 +1020,6 @@ private  function <a href='../proc/defined_clasg.html'>defined_clasg</a>(clasg, 
     
     <h4>Description</h4>
        
-
-
        <p>Check if a CLA has been defined.</p>
         
 
@@ -1121,8 +1118,6 @@ private  subroutine <a href='../proc/parse_clasg.html'>parse_clasg</a>(clasg, pr
     
     <h4>Description</h4>
        
-
-
        <p>Parse CLAs group arguments.</p>
         
 
@@ -1230,8 +1225,6 @@ private  function <a href='../proc/usage_clasg.html'>usage_clasg</a>(clasg, pref
     
     <h4>Description</h4>
        
-
-
        <p>Get correct CLAs group usage.</p>
         
 
@@ -1309,8 +1302,6 @@ private  function <a href='../proc/signature_clasg.html'>signature_clasg</a>(cla
     
     <h4>Description</h4>
        
-
-
        <p>Get CLAs group signature for adding to the CLI one.</p>
         
 
@@ -1391,12 +1382,6 @@ private elemental subroutine <a href='../proc/assign_clasg.html'>assign_clasg</a
       
     
     
-    
-    <h4>Description</h4>
-       
-
-
-       
         
 
       </li>
@@ -1476,12 +1461,6 @@ private elemental subroutine <a href='../proc/assign_clasg.html'>assign_clasg</a
       
     
     
-    
-    <h4>Description</h4>
-       
-
-
-       
         
 
       </li>
@@ -1493,6 +1472,38 @@ private elemental subroutine <a href='../proc/assign_clasg.html'>assign_clasg</a
     </section>
     
     
+    
+    <section>
+    <h2><a class="anchor" name="src"></a>Source Code</h2>
+    <div class="highlight"><pre><span class="k">type</span><span class="p">,</span> <span class="k">extends</span><span class="p">(</span><span class="n">Type_Object</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Type_Command_Line_Arguments_Group</span>
+  <span class="c">!&lt; Group of CLAs for building nested commands.</span>
+  <span class="k">private</span>
+<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>                 <span class="kd">::</span> <span class="n">group</span>             <span class="c">!&lt; Group name (command).</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                  <span class="kd">::</span> <span class="n">Na</span><span class="o">=</span><span class="mi">0_I4P</span>          <span class="c">!&lt; Number of CLA.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                  <span class="kd">::</span> <span class="n">Na_required</span><span class="o">=</span><span class="mi">0_I4P</span> <span class="c">!&lt; Number of command line arguments that CLI requires.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                  <span class="kd">::</span> <span class="n">Na_optional</span><span class="o">=</span><span class="mi">0_I4P</span> <span class="c">!&lt; Number of command line arguments that are optional for CLI.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">Type_Command_Line_Argument</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">cla</span><span class="p">(:)</span>            <span class="c">!&lt; CLA list [1:Na].</span>
+  <span class="kt">logical</span>                                       <span class="kd">::</span> <span class="n">called</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span>    <span class="c">!&lt; Flag for checking if CLAs group has been passed to CLI.</span>
+  <span class="k">contains</span>
+    <span class="c">! public methods</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">free</span>              <span class="o">=&gt;</span> <span class="n">free_clasg</span>              <span class="c">!&lt; Free dynamic memory.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">check</span>             <span class="o">=&gt;</span> <span class="n">check_clasg</span>             <span class="c">!&lt; Check CLAs data consistency.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">check_required</span>    <span class="o">=&gt;</span> <span class="n">check_required_clasg</span>    <span class="c">!&lt; Check if required CLAs are passed.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">check_m_exclusive</span> <span class="o">=&gt;</span> <span class="n">check_m_exclusive_clasg</span> <span class="c">!&lt; Check if two mutually exclusive CLAs have been passed.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">add</span>               <span class="o">=&gt;</span> <span class="n">add_cla_clasg</span>           <span class="c">!&lt; Add CLA to CLAs group.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">passed</span>            <span class="o">=&gt;</span> <span class="n">passed_clasg</span>            <span class="c">!&lt; Check if a CLA has been passed.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">defined</span>           <span class="o">=&gt;</span> <span class="n">defined_clasg</span>           <span class="c">!&lt; Check if a CLA has been defined.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">parse</span>             <span class="o">=&gt;</span> <span class="n">parse_clasg</span>             <span class="c">!&lt; Parse CLAs group arguments.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">usage</span>             <span class="o">=&gt;</span> <span class="n">usage_clasg</span>             <span class="c">!&lt; Get correct CLAs group usage.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">signature</span>         <span class="o">=&gt;</span> <span class="n">signature_clasg</span>         <span class="c">!&lt; Get CLAs group signature for adding to the CLI one.</span>
+    <span class="c">! private methods</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">assign_clasg</span>                  <span class="c">!&lt; CLAs group assignment overloading.</span>
+    <span class="k">generic</span><span class="p">,</span>   <span class="k">private</span> <span class="kd">::</span> <span class="n">assignment</span><span class="p">(</span><span class="o">=</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">assign_clasg</span> <span class="c">!&lt; CLAs group assignment overloading.</span>
+    <span class="k">final</span>              <span class="kd">::</span> <span class="n">finalize_clasg</span>                <span class="c">!&lt; Free dynamic memory when finalizing.</span>
+<span class="n">endtype</span> <span class="n">Type_Command_Line_Arguments_Group</span>
+</pre></div>
+
+    </section>
     
     
     </div>
