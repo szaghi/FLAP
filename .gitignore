@@ -1,3 +1,5 @@
 doc/html/
+Test_Driver/
+*.log
 get_automatic_changelog.sh
 wiki

@@ -54,7 +54,6 @@ call cli%init(progname    = 'Test_Driver',                                      
                              "Test_Driver 33.0 -s 'Hello FLAP' -i 5                     ", &
                              "Test_Driver --string 'Hello FLAP' --boolean               "],&
               epilog      = new_line('a')//"And that's how to FLAP your life")
-if (error/=0) stop
 ! setting Command Line Argumenst
 call cli%add(switch='--string',switch_ab='-s',help='String input',required=.true.,act='store',error=error)
 if (error/=0) stop
