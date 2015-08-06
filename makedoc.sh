@@ -11,7 +11,7 @@ if [[ "${TRAVIS}" = "true" && "${TRAVIS_PULL_REQUEST}" != "false" ]]; then
 fi
 # either we are not on TRAVIS and maybe you want to manually dpeloy documentation
 # or we are on TRAVIS but not testing a PR so it is safe to deploy documentation
-git clone --branch=gh-pages https://${GH_TOKEN}@github.com/szaghi/$GITREPO doc/html
+git clone --branch=gh-pages https://${GH_TOKEN}@github.com/$GITREPO doc/html
 FoBiS.py rule -ex makedoc
 cd doc/html
 git add -f --all './*'

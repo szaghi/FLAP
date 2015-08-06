@@ -28,4 +28,4 @@ script:
 after_success:
   - cd $TRAVIS_BUILD_DIR
   - bash <(curl -s https://codecov.io/bash)
-  - ./makedoc.sh FLAP
+  - ./makedoc.sh szaghi/FLAP
