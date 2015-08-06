@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ev # echo what we're doing and fail on errors
+set -ev # echo what we are doing and fail on errors
 GITREPO=$1
 git config --global user.name "Stefano Zaghi"
 git config --global user.email "stefano.zaghi@gmail.com"
