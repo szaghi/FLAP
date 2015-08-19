@@ -62,7 +62,8 @@
     
     .anchor {
       position: absolute;
-      margin: -4.5em
+      margin: -4.5em;
+      visibility:hidden;
     }
 
     .alert {
@@ -103,4 +104,9 @@
       padding: 0px 0px;
       margin-bottom: 0px;
       float:right;
+    }
+    
+    table tr.submod>td {
+      border-top: none;
+      font-size: 13.5px;
     }

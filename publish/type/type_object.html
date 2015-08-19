@@ -38,7 +38,7 @@
   <body>
 
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -112,7 +112,8 @@
   
      <li class="active">Type_Object</li>
   </ol>
-  </div>
+</div>
+</div>
 </div>
     
   </div>
@@ -127,26 +128,30 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../type/type_object.html#var-progname">progname</a>
+      <a class="list-group-item" href="../type/type_object.html#variable-progname">progname</a>
       
-      <a class="list-group-item" href="../type/type_object.html#var-version">version</a>
+      <a class="list-group-item" href="../type/type_object.html#variable-version">version</a>
       
-      <a class="list-group-item" href="../type/type_object.html#var-help">help</a>
+      <a class="list-group-item" href="../type/type_object.html#variable-help">help</a>
       
-      <a class="list-group-item" href="../type/type_object.html#var-description">description</a>
+      <a class="list-group-item" href="../type/type_object.html#variable-description">description</a>
       
-      <a class="list-group-item" href="../type/type_object.html#var-license">license</a>
+      <a class="list-group-item" href="../type/type_object.html#variable-license">license</a>
       
-      <a class="list-group-item" href="../type/type_object.html#var-authors">authors</a>
+      <a class="list-group-item" href="../type/type_object.html#variable-authors">authors</a>
       
-      <a class="list-group-item" href="../type/type_object.html#var-epilog">epilog</a>
+      <a class="list-group-item" href="../type/type_object.html#variable-epilog">epilog</a>
       
-      <a class="list-group-item" href="../type/type_object.html#var-m_exclude">m_exclude</a>
+      <a class="list-group-item" href="../type/type_object.html#variable-m_exclude">m_exclude</a>
       
-      <a class="list-group-item" href="../type/type_object.html#var-error">error</a>
+      <a class="list-group-item" href="../type/type_object.html#variable-error">error</a>
       
     </div>
   </div>
+  
+  
+  
+  
   
   
   
@@ -163,13 +168,13 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Type-Bound Procedures</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../type/type_object.html#bp-free_object">free_object</a>
+      <a class="list-group-item" href="../type/type_object.html#boundprocedure-free_object">free_object</a>
       
-      <a class="list-group-item" href="../type/type_object.html#bp-errored">errored</a>
+      <a class="list-group-item" href="../type/type_object.html#boundprocedure-errored">errored</a>
       
-      <a class="list-group-item" href="../type/type_object.html#bp-print_version">print_version</a>
+      <a class="list-group-item" href="../type/type_object.html#boundprocedure-print_version">print_version</a>
       
-      <a class="list-group-item" href="../type/type_object.html#bp-assign_object">assign_object</a>
+      <a class="list-group-item" href="../type/type_object.html#boundprocedure-assign_object">assign_object</a>
       
     </div>
   </div>
@@ -205,6 +210,7 @@
     </div>
     
     <div class="col-lg-9" id='text'>
+    <h2>type, private, abstract :: Type_Object</h2>
     
     
     
@@ -226,7 +232,7 @@
   
 <tr>
   
-  <td><a class="anchor" name="var-progname"></a>character(len=:),</td>
+  <td><span class="anchor" id="variable-progname"></span>character(len=:),</td>
   
   <td>public,</td>
   <td>allocatable</td><td>::</td>
@@ -240,7 +246,7 @@
   
 <tr>
   
-  <td><a class="anchor" name="var-version"></a>character(len=:),</td>
+  <td><span class="anchor" id="variable-version"></span>character(len=:),</td>
   
   <td>public,</td>
   <td>allocatable</td><td>::</td>
@@ -254,7 +260,7 @@
   
 <tr>
   
-  <td><a class="anchor" name="var-help"></a>character(len=:),</td>
+  <td><span class="anchor" id="variable-help"></span>character(len=:),</td>
   
   <td>private,</td>
   <td>allocatable</td><td>::</td>
@@ -268,7 +274,7 @@
   
 <tr>
   
-  <td><a class="anchor" name="var-description"></a>character(len=:),</td>
+  <td><span class="anchor" id="variable-description"></span>character(len=:),</td>
   
   <td>public,</td>
   <td>allocatable</td><td>::</td>
@@ -282,7 +288,7 @@
   
 <tr>
   
-  <td><a class="anchor" name="var-license"></a>character(len=:),</td>
+  <td><span class="anchor" id="variable-license"></span>character(len=:),</td>
   
   <td>public,</td>
   <td>allocatable</td><td>::</td>
@@ -296,7 +302,7 @@
   
 <tr>
   
-  <td><a class="anchor" name="var-authors"></a>character(len=:),</td>
+  <td><span class="anchor" id="variable-authors"></span>character(len=:),</td>
   
   <td>public,</td>
   <td>allocatable</td><td>::</td>
@@ -310,7 +316,7 @@
   
 <tr>
   
-  <td><a class="anchor" name="var-epilog"></a>character(len=:),</td>
+  <td><span class="anchor" id="variable-epilog"></span>character(len=:),</td>
   
   <td>public,</td>
   <td>allocatable</td><td>::</td>
@@ -324,7 +330,7 @@
   
 <tr>
   
-  <td><a class="anchor" name="var-m_exclude"></a>character(len=:),</td>
+  <td><span class="anchor" id="variable-m_exclude"></span>character(len=:),</td>
   
   <td>public,</td>
   <td>allocatable</td><td>::</td>
@@ -338,7 +344,7 @@
   
 <tr>
   
-  <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
+  <td><span class="anchor" id="variable-error"></span>integer(kind=I4P),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -363,9 +369,9 @@
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="bp-free_object"></a><h3>procedure, public :: <strong>free_object</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-free_object"></span><h3>procedure, public :: <strong>free_object</strong>  
     
-  <h3></div>
+  </h3></div>
   
   <div class="panel-body">
     
@@ -378,9 +384,13 @@
     
       <li class="list-group-item">
       
+        
     
     <h3>
-private elemental subroutine <a href='../proc/free_object.html'>free_object</a>(obj)
+private elementalsubroutine <a href='../proc/free_object.html'>free_object</a>(obj)
+    
+    
+    
 </h3>
     
     <h4>Arguments</h4>
@@ -402,7 +412,7 @@ private elemental subroutine <a href='../proc/free_object.html'>free_object</a>(
   
 <tr>
   
-  <td><a class="anchor" name="var-obj"></a>class(<a href='../type/type_object.html'>Type_Object</a>),</td>
+  <td><span class="anchor" ></span>class(<a href='../type/type_object.html'>Type_Object</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -423,6 +433,7 @@ private elemental subroutine <a href='../proc/free_object.html'>free_object</a>(
        <p>Free dynamic memory.</p>
         
 
+      
       </li>
     
   </ul>
@@ -431,9 +442,9 @@ private elemental subroutine <a href='../proc/free_object.html'>free_object</a>(
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="bp-errored"></a><h3>procedure, public :: <strong>errored</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-errored"></span><h3>procedure, public :: <strong>errored</strong>  
     
-  <h3></div>
+  </h3></div>
   
   <div class="panel-body">
     
@@ -446,9 +457,13 @@ private elemental subroutine <a href='../proc/free_object.html'>free_object</a>(
     
       <li class="list-group-item">
       
+        
     
     <h3>
-private  subroutine <a href='../proc/errored.html'>errored</a>(obj, error, pref, group, switch, val_str, log_value, a1, a2)
+private subroutine <a href='../proc/errored.html'>errored</a>(obj, error, pref, group, switch, val_str, log_value, a1, a2)
+    
+    
+    
 </h3>
     
     <h4>Arguments</h4>
@@ -470,7 +485,7 @@ private  subroutine <a href='../proc/errored.html'>errored</a>(obj, error, pref,
   
 <tr>
   
-  <td><a class="anchor" name="var-obj"></a>class(<a href='../type/type_object.html'>Type_Object</a>),</td>
+  <td><span class="anchor" ></span>class(<a href='../type/type_object.html'>Type_Object</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -485,7 +500,7 @@ private  subroutine <a href='../proc/errored.html'>errored</a>(obj, error, pref,
   
 <tr>
   
-  <td><a class="anchor" name="var-error"></a>integer(kind=I4P),</td>
+  <td><span class="anchor" ></span>integer(kind=I4P),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -500,7 +515,7 @@ private  subroutine <a href='../proc/errored.html'>errored</a>(obj, error, pref,
   
 <tr>
   
-  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td><span class="anchor" ></span>character(len=*),</td>
   <td>intent(in),</td>
   <td>optional</td>
   
@@ -515,7 +530,7 @@ private  subroutine <a href='../proc/errored.html'>errored</a>(obj, error, pref,
   
 <tr>
   
-  <td><a class="anchor" name="var-group"></a>character(len=*),</td>
+  <td><span class="anchor" ></span>character(len=*),</td>
   <td>intent(in),</td>
   <td>optional</td>
   
@@ -530,7 +545,7 @@ private  subroutine <a href='../proc/errored.html'>errored</a>(obj, error, pref,
   
 <tr>
   
-  <td><a class="anchor" name="var-switch"></a>character(len=*),</td>
+  <td><span class="anchor" ></span>character(len=*),</td>
   <td>intent(in),</td>
   <td>optional</td>
   
@@ -545,7 +560,7 @@ private  subroutine <a href='../proc/errored.html'>errored</a>(obj, error, pref,
   
 <tr>
   
-  <td><a class="anchor" name="var-val_str"></a>character(len=*),</td>
+  <td><span class="anchor" ></span>character(len=*),</td>
   <td>intent(in),</td>
   <td>optional</td>
   
@@ -560,7 +575,7 @@ private  subroutine <a href='../proc/errored.html'>errored</a>(obj, error, pref,
   
 <tr>
   
-  <td><a class="anchor" name="var-log_value"></a>character(len=*),</td>
+  <td><span class="anchor" ></span>character(len=*),</td>
   <td>intent(in),</td>
   <td>optional</td>
   
@@ -575,7 +590,7 @@ private  subroutine <a href='../proc/errored.html'>errored</a>(obj, error, pref,
   
 <tr>
   
-  <td><a class="anchor" name="var-a1"></a>integer(kind=I4P),</td>
+  <td><span class="anchor" ></span>integer(kind=I4P),</td>
   <td>intent(in),</td>
   <td>optional</td>
   
@@ -590,7 +605,7 @@ private  subroutine <a href='../proc/errored.html'>errored</a>(obj, error, pref,
   
 <tr>
   
-  <td><a class="anchor" name="var-a2"></a>integer(kind=I4P),</td>
+  <td><span class="anchor" ></span>integer(kind=I4P),</td>
   <td>intent(in),</td>
   <td>optional</td>
   
@@ -611,6 +626,7 @@ private  subroutine <a href='../proc/errored.html'>errored</a>(obj, error, pref,
        <p>Trig error occurence and print meaningful message.</p>
         
 
+      
       </li>
     
   </ul>
@@ -619,9 +635,9 @@ private  subroutine <a href='../proc/errored.html'>errored</a>(obj, error, pref,
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="bp-print_version"></a><h3>procedure, public :: <strong>print_version</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-print_version"></span><h3>procedure, public :: <strong>print_version</strong>  
     
-  <h3></div>
+  </h3></div>
   
   <div class="panel-body">
     
@@ -634,9 +650,13 @@ private  subroutine <a href='../proc/errored.html'>errored</a>(obj, error, pref,
     
       <li class="list-group-item">
       
+        
     
     <h3>
-private  subroutine <a href='../proc/print_version.html'>print_version</a>(obj, pref)
+private subroutine <a href='../proc/print_version.html'>print_version</a>(obj, pref)
+    
+    
+    
 </h3>
     
     <h4>Arguments</h4>
@@ -658,7 +678,7 @@ private  subroutine <a href='../proc/print_version.html'>print_version</a>(obj, 
   
 <tr>
   
-  <td><a class="anchor" name="var-obj"></a>class(<a href='../type/type_object.html'>Type_Object</a>),</td>
+  <td><span class="anchor" ></span>class(<a href='../type/type_object.html'>Type_Object</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -673,7 +693,7 @@ private  subroutine <a href='../proc/print_version.html'>print_version</a>(obj, 
   
 <tr>
   
-  <td><a class="anchor" name="var-pref"></a>character(len=*),</td>
+  <td><span class="anchor" ></span>character(len=*),</td>
   <td>intent(in),</td>
   <td>optional</td>
   
@@ -694,6 +714,7 @@ private  subroutine <a href='../proc/print_version.html'>print_version</a>(obj, 
        <p>Print version.</p>
         
 
+      
       </li>
     
   </ul>
@@ -702,9 +723,9 @@ private  subroutine <a href='../proc/print_version.html'>print_version</a>(obj, 
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="bp-assign_object"></a><h3>procedure, public :: <strong>assign_object</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-assign_object"></span><h3>procedure, public :: <strong>assign_object</strong>  
     
-  <h3></div>
+  </h3></div>
   
   <div class="panel-body">
     
@@ -717,9 +738,13 @@ private  subroutine <a href='../proc/print_version.html'>print_version</a>(obj, 
     
       <li class="list-group-item">
       
+        
     
     <h3>
-private elemental subroutine <a href='../proc/assign_object.html'>assign_object</a>(lhs, rhs)
+private elementalsubroutine <a href='../proc/assign_object.html'>assign_object</a>(lhs, rhs)
+    
+    
+    
 </h3>
     
     <h4>Arguments</h4>
@@ -741,7 +766,7 @@ private elemental subroutine <a href='../proc/assign_object.html'>assign_object<
   
 <tr>
   
-  <td><a class="anchor" name="var-lhs"></a>class(<a href='../type/type_object.html'>Type_Object</a>),</td>
+  <td><span class="anchor" ></span>class(<a href='../type/type_object.html'>Type_Object</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -756,7 +781,7 @@ private elemental subroutine <a href='../proc/assign_object.html'>assign_object<
   
 <tr>
   
-  <td><a class="anchor" name="var-rhs"></a>class(<a href='../type/type_object.html'>Type_Object</a>),</td>
+  <td><span class="anchor" ></span>class(<a href='../type/type_object.html'>Type_Object</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -773,6 +798,7 @@ private elemental subroutine <a href='../proc/assign_object.html'>assign_object<
     
         
 
+      
       </li>
     
   </ul>
@@ -784,7 +810,7 @@ private elemental subroutine <a href='../proc/assign_object.html'>assign_object<
     
     
     <section>
-    <h2><a class="anchor" name="src"></a>Source Code</h2>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
     <div class="highlight"><pre><span class="k">type</span><span class="p">,</span> <span class="k">abstract</span> <span class="kd">::</span> <span class="n">Type_Object</span>
   <span class="k">private</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">progname</span>    <span class="c">!&lt; Program name.</span>
