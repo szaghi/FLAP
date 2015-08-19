@@ -2315,6 +2315,7 @@ contains
   cla%hidden     = .false.                 ; if (present(hidden    )) cla%hidden     = hidden
   cla%act        = action_store            ; if (present(act       )) cla%act        = trim(adjustl(Upper_Case(act)))
                                              if (present(def       )) cla%def        = def
+                                             if (present(def       )) cla%val        = def
                                              if (present(nargs     )) cla%nargs      = nargs
                                              if (present(choices   )) cla%choices    = choices
   cla%m_exclude  = ''                      ; if (present(exclude   )) cla%m_exclude  = exclude
