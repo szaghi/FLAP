@@ -2219,6 +2219,7 @@ contains
   character(len=:), allocatable                        :: descriptiond      !< Detailed description.
   character(len=:), allocatable                        :: excluded          !< Group name of the mutually exclusive group.
   integer(I4P)                                         :: Ng                !< Number of groups.
+  integer(I4P)                                         :: gi                !< Group index
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -2228,7 +2229,10 @@ contains
     excluded     = ''        ; if (present(exclude    )) excluded     = exclude
     Ng = size(cli%clasg,dim=1)
     allocate(clasg_list_new(0:Ng))
-    clasg_list_new(0:Ng-1) = cli%clasg(0:Ng-1)
+!    clasg_list_new(0:Ng-1) = cli%clasg(0:Ng-1) ! Not working on Intel Fortran 15.0.2
+    do gi = 0, Ng-1     
+      clasg_list_new(gi) = cli%clasg(gi)
+    enddo
     call clasg_list_new(Ng)%assign_object(cli)
     clasg_list_new(Ng)%help        = helpd
     clasg_list_new(Ng)%description = descriptiond
