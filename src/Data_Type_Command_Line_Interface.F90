@@ -225,7 +225,9 @@ integer(I4P), parameter :: status_clasg_print_h             = -2 !< Print help s
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
   ! auxiliary procedures
-  elemental function Upper_Case(string)
+  function Upper_Case(string)
+  ! elemental function Upper_Case(string)
+  ! 1513-209 (S) The result of an elemental function must be a nonpointer, nonallocatable scalar, and its type parameters must be constant expressions.
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Convert the lower case characters of a string to upper case one.
   !---------------------------------------------------------------------------------------------------------------------------------
