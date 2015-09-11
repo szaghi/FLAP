@@ -1,5 +1,5 @@
 !< A testing program for FLAP, Fortran command Line Arguments Parser for poor people
-program Test_Driver_Nested
+program test_nested
 !< A testing program for FLAP, Fortran command Line Arguments Parser for poor people
 !<
 !<### Compile
@@ -67,4 +67,4 @@ else
 endif
 stop
 !-----------------------------------------------------------------------------------------------------------------------------------
-endprogram Test_Driver_Nested
+endprogram test_nested

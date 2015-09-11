@@ -1,5 +1,5 @@
 !< A testing program for FLAP, Fortran command Line Arguments Parser for poor people
-program Test_Driver
+program test_string
 !< A testing program for FLAP, Fortran command Line Arguments Parser for poor people
 !<
 !<### Compile
@@ -81,4 +81,4 @@ do l=1,3
 enddo
 stop
 !-----------------------------------------------------------------------------------------------------------------------------------
-endprogram Test_Driver
+endprogram test_string

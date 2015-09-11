@@ -203,23 +203,24 @@ integer(I4P), parameter :: error_cla_not_in_choices         = 7  !< CLA value ou
 integer(I4P), parameter :: error_cla_missing_required       = 8  !< Missing required CLA.
 integer(I4P), parameter :: error_cla_m_exclude              = 9  !< Two mutually exclusive CLAs have been passed.
 integer(I4P), parameter :: error_cla_casting_logical        = 10 !< Error casting CLA value to logical type.
-integer(I4P), parameter :: error_cla_no_list                = 11 !< Actual CLA is not list-values.
-integer(I4P), parameter :: error_cla_nargs_insufficient     = 12 !< Multi-valued CLA with insufficient arguments.
-integer(I4P), parameter :: error_cla_value_missing          = 13 !< Missing value of CLA.
-integer(I4P), parameter :: error_cla_unknown                = 14 !< Unknown CLA (switch name).
-integer(I4P), parameter :: error_cla_envvar_positional      = 15 !< Envvar not allowed for positional CLA.
-integer(I4P), parameter :: error_cla_envvar_not_store       = 16 !< Envvar not allowed action different from store;
-integer(I4P), parameter :: error_cla_envvar_nargs           = 17 !< Envvar not allowed for list-values CLA.
-integer(I4P), parameter :: error_cla_store_star_positional  = 18 !< Action store* not allowed for positional CLA.
-integer(I4P), parameter :: error_cla_store_star_nargs       = 19 !< Action store* not allowed for list-values CLA.
-integer(I4P), parameter :: error_cla_store_star_envvar      = 20 !< Action store* not allowed for environment variable CLA.
-integer(I4P), parameter :: error_cla_action_unknown         = 21 !< Unknown CLA (switch name).
-integer(I4P), parameter :: error_clasg_consistency          = 22 !< CLAs group consistency error.
-integer(I4P), parameter :: error_clasg_m_exclude            = 23 !< Two mutually exclusive CLAs group have been called.
-integer(I4P), parameter :: error_cli_missing_cla            = 24 !< CLA not found in CLI.
-integer(I4P), parameter :: error_cli_missing_group          = 25 !< Group not found in CLI.
-integer(I4P), parameter :: error_cli_missing_selection_cla  = 26 !< CLA selection in CLI failing.
-integer(I4P), parameter :: error_cli_too_few_clas           = 27 !< Insufficient arguments for CLI.
+integer(I4P), parameter :: error_cla_choices_logical        = 11 !< Error adding choices check for CLA value of logical type.
+integer(I4P), parameter :: error_cla_no_list                = 12 !< Actual CLA is not list-values.
+integer(I4P), parameter :: error_cla_nargs_insufficient     = 13 !< Multi-valued CLA with insufficient arguments.
+integer(I4P), parameter :: error_cla_value_missing          = 14 !< Missing value of CLA.
+integer(I4P), parameter :: error_cla_unknown                = 15 !< Unknown CLA (switch name).
+integer(I4P), parameter :: error_cla_envvar_positional      = 16 !< Envvar not allowed for positional CLA.
+integer(I4P), parameter :: error_cla_envvar_not_store       = 17 !< Envvar not allowed action different from store;
+integer(I4P), parameter :: error_cla_envvar_nargs           = 18 !< Envvar not allowed for list-values CLA.
+integer(I4P), parameter :: error_cla_store_star_positional  = 19 !< Action store* not allowed for positional CLA.
+integer(I4P), parameter :: error_cla_store_star_nargs       = 20 !< Action store* not allowed for list-values CLA.
+integer(I4P), parameter :: error_cla_store_star_envvar      = 21 !< Action store* not allowed for environment variable CLA.
+integer(I4P), parameter :: error_cla_action_unknown         = 22 !< Unknown CLA (switch name).
+integer(I4P), parameter :: error_clasg_consistency          = 23 !< CLAs group consistency error.
+integer(I4P), parameter :: error_clasg_m_exclude            = 24 !< Two mutually exclusive CLAs group have been called.
+integer(I4P), parameter :: error_cli_missing_cla            = 25 !< CLA not found in CLI.
+integer(I4P), parameter :: error_cli_missing_group          = 26 !< Group not found in CLI.
+integer(I4P), parameter :: error_cli_missing_selection_cla  = 27 !< CLA selection in CLI failing.
+integer(I4P), parameter :: error_cli_too_few_clas           = 28 !< Insufficient arguments for CLI.
 integer(I4P), parameter :: status_clasg_print_v             = -1 !< Print version status.
 integer(I4P), parameter :: status_clasg_print_h             = -2 !< Print help status.
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -381,6 +382,9 @@ contains
       case(error_cla_casting_logical)
         write(stderr,'(A)')prefd//obj%progname//': error: cannot convert "'//log_value//'" of option "'//obj%switch//&
                            '" to logical type!'
+      case(error_cla_choices_logical)
+        write(stderr,'(A)')prefd//obj%progname//': error: cannot use "choices" value check for option "'//obj%switch//&
+                           '" it being of logical type! The choices is, by definition of logical, limited to ".true." or ".false."'
       case(error_cla_no_list)
         if (.not.obj%positional) then
           write(stderr,'(A)')prefd//obj%progname//': error: named option "'//trim(adjustl(obj%switch))//'" has not "nargs" value'//&
@@ -706,8 +710,11 @@ contains
     do c=1,Nc
       if (val==toks(c)) val_in = .true.
     enddo
+  type is(logical)
+    prefd = '' ; if (present(pref)) prefd = pref
+    call cla%errored(pref=prefd, error=error_cla_choices_logical)
   endselect
-  if (.not.val_in) then
+  if (.not.val_in.and.(cla%error==0)) then
     prefd = '' ; if (present(pref)) prefd = pref
     call cla%errored(pref=prefd,error=error_cla_not_in_choices,val_str=val_str)
   endif
