@@ -226,7 +226,9 @@ integer(I4P), parameter :: status_clasg_print_h             = -2 !< Print help s
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
   ! auxiliary procedures
-  elemental function Upper_Case(string)
+  function Upper_Case(string)
+  ! elemental function Upper_Case(string)
+  ! 1513-209 (S) The result of an elemental function must be a nonpointer, nonallocatable scalar, and its type parameters must be constant expressions.
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Convert the lower case characters of a string to upper case one.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -2224,6 +2226,7 @@ contains
   character(len=:), allocatable                        :: descriptiond      !< Detailed description.
   character(len=:), allocatable                        :: excluded          !< Group name of the mutually exclusive group.
   integer(I4P)                                         :: Ng                !< Number of groups.
+  integer(I4P)                                         :: gi                !< Group index
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -2233,7 +2236,10 @@ contains
     excluded     = ''        ; if (present(exclude    )) excluded     = exclude
     Ng = size(cli%clasg,dim=1)
     allocate(clasg_list_new(0:Ng))
-    clasg_list_new(0:Ng-1) = cli%clasg(0:Ng-1)
+!    clasg_list_new(0:Ng-1) = cli%clasg(0:Ng-1) ! Not working on Intel Fortran 15.0.2
+    do gi = 0, Ng-1     
+      clasg_list_new(gi) = cli%clasg(gi)
+    enddo
     call clasg_list_new(Ng)%assign_object(cli)
     clasg_list_new(Ng)%help        = helpd
     clasg_list_new(Ng)%description = descriptiond
@@ -2322,6 +2328,7 @@ contains
   cla%hidden     = .false.                 ; if (present(hidden    )) cla%hidden     = hidden
   cla%act        = action_store            ; if (present(act       )) cla%act        = trim(adjustl(Upper_Case(act)))
                                              if (present(def       )) cla%def        = def
+                                             if (present(def       )) cla%val        = def
                                              if (present(nargs     )) cla%nargs      = nargs
                                              if (present(choices   )) cla%choices    = choices
   cla%m_exclude  = ''                      ; if (present(exclude   )) cla%m_exclude  = exclude
