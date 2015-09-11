@@ -1,26 +1,49 @@
 language: python
 
-sudo: required
-
 python:
   - 2.7
 
+sudo: false
+
+cache:
+  apt: true
+  pip: true
+  directories:
+    - $HOME/.cache/pip
+    - $HOME/.local
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gfortran-4.9
+      - binutils
+      - python-pip
+      - graphviz      
+
 env:
   global:
-    - APT_DEPENDS="gfortran-4.9 binutils"
-    - PIP_DEPENDS="FoBiS.py markdown-checklist ford"
     - SCRIPT="FoBiS.py rule -ex makecoverage"
 
 before_install:
-  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-  - sudo apt-get update -qq
+  - git submodule update --init --recursive
 
 install:
-  - sudo apt-get install -y $APT_DEPENDS
-  - sudo pip install $PIP_DEPENDS
-  - ln -fs /usr/bin/gfortran-4.9 gfortran
-  - ln -fs /usr/bin/gcov-4.9 gcov
-  - export PATH=".:$PATH"
+  - |
+    if [[ ! -d "$HOME/.local/bin" ]]; then
+      mkdir "$HOME/.local/bin"
+    fi
+  - export PATH="$HOME/.local/bin:$PATH"
+  - export FC=/usr/bin/gfortran-4.9
+  - ln -fs /usr/bin/gfortran-4.9 "$HOME/.local/bin/gfortran" && gfortran --version
+  - ls -l /usr/bin/gfortran-4.9
+  - ln -fs /usr/bin/gcov-4.9 "$HOME/.local/bin/gcov" && gcov --version
+  - pip install --upgrade pygooglechart
+  - pip install --upgrade graphviz
+  - pip install --upgrade FoBiS.py
+  - pip install --upgrade markdown-checklist 
+  - pip install --upgrade ford
 
 script:
   - $SCRIPT

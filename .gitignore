@@ -1,5 +1,34 @@
-doc/html/
-Test_Driver/
+# compiled object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# compiled dynamic libraries
+*.so
+
+# fortran module files
+*.mod
+
+# compiled static libraries
+*.la
+*.a
+*.lib
+
+# executables
+*.exe
+*.out
+*.a
+*.app
+
+# log files
 *.log
+
+# special directories
+doc/html/
+external/lib/
+tests/
+wiki/
+
+# special files
 get_automatic_changelog.sh
-wiki
