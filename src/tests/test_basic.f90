@@ -1,5 +1,5 @@
 !< A testing program for FLAP, Fortran command Line Arguments Parser for poor people
-program Test_Driver
+program test_basic
 !< A testing program for FLAP, Fortran command Line Arguments Parser for poor people
 !<
 !<### Compile
@@ -216,4 +216,4 @@ if (cli%passed(switch='--man_file')) then
 endif
 stop
 !-----------------------------------------------------------------------------------------------------------------------------------
-endprogram Test_Driver
+endprogram test_basic

@@ -1,12 +1,8 @@
 [modes]
 modes = shared-gnu static-gnu shared-gnu-debug static-gnu-debug
-        test-driver-gnu test-driver-nested-gnu test-driver-string-gnu
-        test-driver-gnu-debug test-driver-nested-gnu-debug test-driver-string-gnu-debug
         shared-intel static-intel shared-intel-debug static-intel-debug
-        test-driver-intel
-        test-driver-intel-debug
-        test-driver-nested-gnu-coverage
-        test-driver-string-gnu-coverage
+        tests-gnu tests-gnu-debug
+        tests-intel tests-intel-debug
 
 [common-variables]
 $CSHARED_GNU = -cpp -c -fPIC -frealloc-lhs
@@ -22,123 +18,76 @@ $OPTIMIZE    = -O2
 # GNU
 [shared-gnu]
 template  = template-shared-gnu
-target    = src/Data_Type_Command_Line_Interface.F90
+target    = Data_Type_Command_Line_Interface.F90
 build_dir = ./shared/
-output    = FLAP.so
+output    = libflap.so
 mklib     = shared
 
 [static-gnu]
 template  = template-static-gnu
-target    = src/Data_Type_Command_Line_Interface.F90
+target    = Data_Type_Command_Line_Interface.F90
 build_dir = ./static/
-output    = FLAP.a
+output    = libflap.a
 mklib     = static
 
 [shared-gnu-debug]
 template  = template-shared-gnu-debug
-target    = src/Data_Type_Command_Line_Interface.F90
+target    = Data_Type_Command_Line_Interface.F90
 build_dir = ./shared/
-output    = FLAP.so
+output    = libflap.so
 mklib     = shared
 
 [static-gnu-debug]
 template  = template-static-gnu-debug
-target    = src/Data_Type_Command_Line_Interface.F90
+target    = Data_Type_Command_Line_Interface.F90
 build_dir = ./static/
-output    = FLAP.a
+output    = libflap.a
 mklib     = static
 
-[test-driver-gnu]
+[tests-gnu]
 template  = template-static-gnu
-target    = src/Test_Driver.f90
-build_dir = ./Test_Driver/
-output    = Test_Driver
+build_dir = ./tests/
 
-[test-driver-nested-gnu]
-template  = template-static-gnu
-target    = src/Test_Driver_Nested.f90
-build_dir = ./Test_Driver_Nested/
-output    = Test_Driver_Nested
-
-[test-driver-string-gnu]
-template  = template-static-gnu
-target    = src/Test_Driver_Args_From_String.f90
-build_dir = ./Test_Driver_String/
-output    = Test_Driver_String
-
-[test-driver-gnu-debug]
+[tests-gnu-debug]
 template  = template-static-gnu-debug
-target    = src/Test_Driver.f90
-build_dir = ./Test_Driver/
-output    = Test_Driver
-
-[test-driver-nested-gnu-debug]
-template  = template-static-gnu-debug
-target    = src/Test_Driver_Nested.f90
-build_dir = ./Test_Driver_Nested/
-output    = Test_Driver_Nested
-
-[test-driver-string-gnu-debug]
-template  = template-static-gnu-debug
-target    = src/Test_Driver_Args_From_String.f90
-build_dir = ./Test_Driver_String/
-output    = Test_Driver_String
+build_dir = ./tests/
 
 # Intel
 [shared-intel]
 template  = template-shared-intel
-target    = src/Data_Type_Command_Line_Interface.F90
+target    = Data_Type_Command_Line_Interface.F90
 build_dir = ./shared/
-output    = FLAP.so
+output    = libflap.so
 mklib     = shared
 
 [static-intel]
 template  = template-static-intel
-target    = src/Data_Type_Command_Line_Interface.F90
+target    = Data_Type_Command_Line_Interface.F90
 build_dir = ./static/
-output    = FLAP.a
+output    = libflap.a
 mklib     = static
 
 [shared-intel-debug]
 template  = template-shared-intel-debug
-target    = src/Data_Type_Command_Line_Interface.F90
+target    = Data_Type_Command_Line_Interface.F90
 build_dir = ./shared/
-output    = FLAP.so
+output    = libflap.so
 mklib     = shared
 
 [static-intel-debug]
 template  = template-static-intel-debug
-target    = src/Data_Type_Command_Line_Interface.F90
+target    = Data_Type_Command_Line_Interface.F90
 build_dir = ./static/
-output    = FLAP.a
+output    = libflap.a
 mklib     = static
 
-[test-driver-intel]
+[tests-intel]
 template = template-static-intel
-target   = src/Test_Driver.f90
-build_dir = ./Test_Driver/
-output   = Test_Driver
+build_dir = ./tests/
 
-[test-driver-intel-debug]
+[tests-intel-debug]
 template  = template-static-intel-debug
-target    = src/Test_Driver.f90
-build_dir = ./Test_Driver/
-output    = Test_Driver
-
-# coverage
-[test-driver-nested-gnu-coverage]
-template  = template-static-gnu
-target    = src/Test_Driver_Nested.f90
-build_dir = ./Test_Driver/
-output    = Test_Driver_Nested
-coverage  = True
-
-[test-driver-string-gnu-coverage]
-template  = template-static-gnu
-target    = src/Test_Driver_Args_From_String.f90
-build_dir = ./Test_Driver/
-output    = Test_Driver_String
-coverage  = True
+build_dir = ./tests/
 
 #templates
 [template-shared-gnu]
@@ -252,52 +201,50 @@ rule = tar -czf FLAP.tar.gz *
 
 [rule-makecoverage]
 help    = Rule for performing coverage analysis
-rule_1  = FoBiS.py clean -mode test-driver-gnu
-rule_2  = FoBiS.py build -mode test-driver-gnu -coverage
-rule_3  = FoBiS.py build -mode test-driver-nested-gnu-coverage
-rule_4  = FoBiS.py build -mode test-driver-string-gnu-coverage
-rule_5  = ./Test_Driver/Test_Driver
-rule_6  = ./Test_Driver/Test_Driver -v
-rule_7  = ./Test_Driver/Test_Driver -h
-rule_8  = ./Test_Driver/Test_Driver -s 'Hello FLAP' -i 2
-rule_9  = ./Test_Driver/Test_Driver -s 'Hello FLAP' -i 3 -ie 11
-rule_10 = ./Test_Driver/Test_Driver 33.0 -s 'Hello FLAP' --integer_list 10 -3 87 -i 3 -r 64.123d0  --boolean --boolean_val .false.
-rule_11 = ./Test_Driver/Test_Driver -s 'Hello FLAP' --man_file FLAP.1
-rule_12 = ./Test_Driver/Test_Driver -s 'Hello FLAP' -vlI1P 2 1 3 -vlI2P 12 -2 -vlI4P 1 -vlI8P 1 -vlR8P 121.31 -vlR4P 3423121.31 -vlChar foo bar -vlBool T F T F
-rule_13 = ./Test_Driver/Test_Driver -s 'Hello FLAP' -- foo.bar bar/baz.f90
-rule_14 = ./Test_Driver/Test_Driver_Nested
-rule_15 = ./Test_Driver/Test_Driver_Nested -h
-rule_16 = ./Test_Driver/Test_Driver_Nested -a
-rule_17 = ./Test_Driver/Test_Driver_Nested init
-rule_18 = ./Test_Driver/Test_Driver_Nested init commit -m 'hello'
-rule_19 = ./Test_Driver/Test_Driver_Nested commit -m 'hello'
-rule_20 = ./Test_Driver/Test_Driver_Nested tag -a 'hello'
-rule_21 = ./Test_Driver/Test_Driver_String
-rule_22 = gcov -o Test_Driver/obj/ src/Data_Type_Command_Line_Interface.F90
+rule_1  = FoBiS.py clean -mode tests-gnu
+rule_2  = FoBiS.py build -mode tests-gnu -coverage
+rule_3  = ./tests/test_basic
+rule_4  = ./tests/test_basic -v
+rule_5  = ./tests/test_basic -h
+rule_6  = ./tests/test_basic -s 'Hello FLAP' -i 2
+rule_7  = ./tests/test_basic -s 'Hello FLAP' -i 3 -ie 11
+rule_8  = ./tests/test_basic 33.0 -s 'Hello FLAP' --integer_list 10 -3 87 -i 3 -r 64.123d0  --boolean --boolean_val .false.
+rule_9  = ./tests/test_basic -s 'Hello FLAP' --man_file FLAP.1
+rule_10 = ./tests/test_basic -s 'Hello FLAP' -vlI1P 2 1 3 -vlI2P 12 -2 -vlI4P 1 -vlI8P 1 -vlR8P 121.31 -vlR4P 3423121.31 -vlChar foo bar -vlBool T F T F
+rule_11 = ./tests/test_basic -s 'Hello FLAP' -- foo.bar bar/baz.f90
+rule_12 = ./tests/test_nested
+rule_13 = ./tests/test_nested -h
+rule_14 = ./tests/test_nested -a
+rule_15 = ./tests/test_nested init
+rule_16 = ./tests/test_nested init commit -m 'hello'
+rule_17 = ./tests/test_nested commit -m 'hello'
+rule_18 = ./tests/test_nested tag -a 'hello'
+rule_19 = ./tests/test_string
+rule_20 = ./tests/test_choices_logical
+rule_21 = gcov -o tests/obj/ src/lib/Data_Type_Command_Line_Interface.F90
 
 [rule-coverage-analysis]
 help    = Rule for performing coverage analysis and saving reports in markdown
-rule_1  = FoBiS.py clean -mode test-driver-gnu
-rule_2  = FoBiS.py build -mode test-driver-gnu -coverage
-rule_3  = FoBiS.py build -mode test-driver-nested-gnu-coverage
-rule_4  = FoBiS.py build -mode test-driver-string-gnu-coverage
-rule_5  = ./Test_Driver/Test_Driver
-rule_6  = ./Test_Driver/Test_Driver -v
-rule_7  = ./Test_Driver/Test_Driver -h
-rule_8  = ./Test_Driver/Test_Driver -s 'Hello FLAP' -i 2
-rule_9  = ./Test_Driver/Test_Driver -s 'Hello FLAP' -i 3 -ie 11
-rule_10 = ./Test_Driver/Test_Driver 33.0 -s 'Hello FLAP' --integer_list 10 -3 87 -i 3 -r 64.123d0  --boolean --boolean_val .false.
-rule_11 = ./Test_Driver/Test_Driver -s 'Hello FLAP' --man_file FLAP.1
-rule_12 = ./Test_Driver/Test_Driver -s 'Hello FLAP' -vlI1P 2 1 3 -vlI2P 12 -2 -vlI4P 1 -vlI8P 1 -vlR8P 121.31 -vlR4P 3423121.31 -vlChar foo bar -vlBool T F T F
-rule_13 = ./Test_Driver/Test_Driver -s 'Hello FLAP' -- foo.bar bar/baz.f90
-rule_14 = ./Test_Driver/Test_Driver_Nested
-rule_15 = ./Test_Driver/Test_Driver_Nested -h
-rule_16 = ./Test_Driver/Test_Driver_Nested -a
-rule_17 = ./Test_Driver/Test_Driver_Nested init
-rule_18 = ./Test_Driver/Test_Driver_Nested init commit -m 'hello'
-rule_19 = ./Test_Driver/Test_Driver_Nested commit -m 'hello'
-rule_20 = ./Test_Driver/Test_Driver_Nested tag -a 'hello'
-rule_21 = ./Test_Driver/Test_Driver_String
-rule_22 = gcov -o Test_Driver/obj/ src/*
-rule_23 = FoBiS.py rule -gcov_analyzer wiki/ Coverage-Analysis
-rule_24 = rm -f *.gcov FLAP.1
+rule_1  = FoBiS.py clean -mode tests-gnu
+rule_2  = FoBiS.py build -mode tests-gnu -coverage
+rule_3  = ./tests/test_basic
+rule_4  = ./tests/test_basic -v
+rule_5  = ./tests/test_basic -h
+rule_6  = ./tests/test_basic -s 'Hello FLAP' -i 2
+rule_7  = ./tests/test_basic -s 'Hello FLAP' -i 3 -ie 11
+rule_8  = ./tests/test_basic 33.0 -s 'Hello FLAP' --integer_list 10 -3 87 -i 3 -r 64.123d0  --boolean --boolean_val .false.
+rule_9  = ./tests/test_basic -s 'Hello FLAP' --man_file FLAP.1
+rule_10 = ./tests/test_basic -s 'Hello FLAP' -vlI1P 2 1 3 -vlI2P 12 -2 -vlI4P 1 -vlI8P 1 -vlR8P 121.31 -vlR4P 3423121.31 -vlChar foo bar -vlBool T F T F
+rule_11 = ./tests/test_basic -s 'Hello FLAP' -- foo.bar bar/baz.f90
+rule_12 = ./tests/test_nested
+rule_13 = ./tests/test_nested -h
+rule_14 = ./tests/test_nested -a
+rule_15 = ./tests/test_nested init
+rule_16 = ./tests/test_nested init commit -m 'hello'
+rule_17 = ./tests/test_nested commit -m 'hello'
+rule_18 = ./tests/test_nested tag -a 'hello'
+rule_19 = ./tests/test_string
+rule_20 = ./tests/test_choices_logical
+rule_21 = gcov -o tests/obj/ src/lib/Data_Type_Command_Line_Interface.F90 src/tests/*
+rule_22 = FoBiS.py rule -gcov_analyzer wiki/ Coverage-Analysis
+rule_23 = rm -f *.gcov FLAP.1
