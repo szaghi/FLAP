@@ -337,7 +337,7 @@ private subroutine errored(obj, error, pref, group, switch, val_str, log_value, 
   
 <tr>
   
-  <td><span class="anchor" id="variable-obj%7E2"></span>class(<a href='../type/type_object.html'>Type_Object</a>),</td>
+  <td><span class="anchor" id="variable-obj%7E2"></span>class(Type_Object),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -475,6 +475,8 @@ private subroutine errored(obj, error, pref, group, switch, val_str, log_value, 
     <h3>Description</h3>
     <p>Trig error occurence and print meaningful message.</p>
     
+    
+     
     <br>
     
     <section>
@@ -587,6 +589,9 @@ private subroutine errored(obj, error, pref, group, switch, val_str, log_value, 
       <span class="k">case</span><span class="p">(</span><span class="n">error_cla_casting_logical</span><span class="p">)</span>
         <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="n">prefd</span><span class="o">//</span><span class="n">obj</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="s1">&#39;: error: cannot convert &quot;&#39;</span><span class="o">//</span><span class="n">log_value</span><span class="o">//</span><span class="s1">&#39;&quot; of option &quot;&#39;</span><span class="o">//</span><span class="n">obj</span><span class="p">%</span><span class="n">switch</span><span class="o">//</span><span class="p">&amp;</span>
                            <span class="s1">&#39;&quot; to logical type!&#39;</span>
+      <span class="k">case</span><span class="p">(</span><span class="n">error_cla_choices_logical</span><span class="p">)</span>
+        <span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="n">prefd</span><span class="o">//</span><span class="n">obj</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="s1">&#39;: error: cannot use &quot;choices&quot; value check for option &quot;&#39;</span><span class="o">//</span><span class="n">obj</span><span class="p">%</span><span class="n">switch</span><span class="o">//</span><span class="p">&amp;</span>
+                           <span class="s1">&#39;&quot; it being of logical type! The choices is, by definition of logical, limited to &quot;.true.&quot; or &quot;.false.&quot;&#39;</span>
       <span class="k">case</span><span class="p">(</span><span class="n">error_cla_no_list</span><span class="p">)</span>
         <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">obj</span><span class="p">%</span><span class="n">positional</span><span class="p">)</span> <span class="k">then</span>
 <span class="k">          write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="n">prefd</span><span class="o">//</span><span class="n">obj</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="s1">&#39;: error: named option &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">obj</span><span class="p">%</span><span class="n">switch</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&quot; has not &quot;nargs&quot; value&#39;</span><span class="o">//</span><span class="p">&amp;</span>

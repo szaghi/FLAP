@@ -230,10 +230,12 @@
     </div>
     
     <div class="col-lg-9" id='text'>
-    <h2>type, private, extends(<a href='../type/type_object.html'>Type_Object</a>) :: Type_Command_Line_Arguments_Group</h2>
+    <h2>type, private, extends(Type_Object) :: Type_Command_Line_Arguments_Group</h2>
+    
     <p>Group of CLAs for building nested commands.
  Free dynamic memory when finalizing.</p>
     <br>
+    
     
     <section>
     <h2>Components</h2>
@@ -309,7 +311,7 @@
   
 <tr>
   
-  <td><span class="anchor" id="variable-cla"></span>type(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td><span class="anchor" id="variable-cla"></span>type(Type_Command_Line_Argument),</td>
   
   <td>private,</td>
   <td>allocatable</td><td>::</td>
@@ -376,7 +378,7 @@ private elementalsubroutine <a href='../proc/finalize_clasg.html'>finalize_clasg
   
 <tr>
   
-  <td><span class="anchor" ></span>type(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" ></span>type(Type_Command_Line_Arguments_Group),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -393,6 +395,10 @@ private elementalsubroutine <a href='../proc/finalize_clasg.html'>finalize_clasg
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Free dynamic memory when finalizing.</p>
         
@@ -426,7 +432,7 @@ private elementalsubroutine <a href='../proc/finalize_clasg.html'>finalize_clasg
     
       <li class="list-group-item">
       
-        
+         
     
     <h3>
 private elementalsubroutine <a href='../proc/free_clasg.html'>free_clasg</a>(clasg)
@@ -454,7 +460,7 @@ private elementalsubroutine <a href='../proc/free_clasg.html'>free_clasg</a>(cla
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Arguments_Group),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -471,6 +477,10 @@ private elementalsubroutine <a href='../proc/free_clasg.html'>free_clasg</a>(cla
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Free dynamic memory.</p>
         
@@ -499,7 +509,7 @@ private elementalsubroutine <a href='../proc/free_clasg.html'>free_clasg</a>(cla
     
       <li class="list-group-item">
       
-        
+         
     
     <h3>
 private subroutine <a href='../proc/check_clasg.html'>check_clasg</a>(clasg, pref)
@@ -527,7 +537,7 @@ private subroutine <a href='../proc/check_clasg.html'>check_clasg</a>(clasg, pre
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Arguments_Group),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -559,6 +569,10 @@ private subroutine <a href='../proc/check_clasg.html'>check_clasg</a>(clasg, pre
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Check CLA data consistency.</p>
         
@@ -587,7 +601,7 @@ private subroutine <a href='../proc/check_clasg.html'>check_clasg</a>(clasg, pre
     
       <li class="list-group-item">
       
-        
+         
     
     <h3>
 private subroutine <a href='../proc/check_required_clasg.html'>check_required_clasg</a>(clasg, pref)
@@ -615,7 +629,7 @@ private subroutine <a href='../proc/check_required_clasg.html'>check_required_cl
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Arguments_Group),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -647,6 +661,10 @@ private subroutine <a href='../proc/check_required_clasg.html'>check_required_cl
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Check if required CLAs are passed.</p>
         
@@ -675,7 +693,7 @@ private subroutine <a href='../proc/check_required_clasg.html'>check_required_cl
     
       <li class="list-group-item">
       
-        
+         
     
     <h3>
 private subroutine <a href='../proc/check_m_exclusive_clasg.html'>check_m_exclusive_clasg</a>(clasg, pref)
@@ -703,7 +721,7 @@ private subroutine <a href='../proc/check_m_exclusive_clasg.html'>check_m_exclus
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Arguments_Group),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -735,6 +753,10 @@ private subroutine <a href='../proc/check_m_exclusive_clasg.html'>check_m_exclus
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Check if two mutually exclusive CLAs have been passed.</p>
         
@@ -763,7 +785,7 @@ private subroutine <a href='../proc/check_m_exclusive_clasg.html'>check_m_exclus
     
       <li class="list-group-item">
       
-        
+         
     
     <h3>
 private subroutine <a href='../proc/add_cla_clasg.html'>add_cla_clasg</a>(clasg, pref, cla)
@@ -791,7 +813,7 @@ private subroutine <a href='../proc/add_cla_clasg.html'>add_cla_clasg</a>(clasg,
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Arguments_Group),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -821,7 +843,7 @@ private subroutine <a href='../proc/add_cla_clasg.html'>add_cla_clasg</a>(clasg,
   
 <tr>
   
-  <td><span class="anchor" ></span>type(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td><span class="anchor" ></span>type(Type_Command_Line_Argument),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -838,6 +860,10 @@ private subroutine <a href='../proc/add_cla_clasg.html'>add_cla_clasg</a>(clasg,
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Add CLA to CLAs list.</p>
         
@@ -866,10 +892,10 @@ private subroutine <a href='../proc/add_cla_clasg.html'>add_cla_clasg</a>(clasg,
     
       <li class="list-group-item">
       
-        
+         
     
     <h3>
-private purefunction <a href='../proc/passed_clasg.html'>passed_clasg</a>(clasg, switch, position)
+private purefunction <a href='../proc/passed_clasg.html'>passed_clasg</a>(clasg, switch, position) result(passed)
     
     
     
@@ -894,7 +920,7 @@ private purefunction <a href='../proc/passed_clasg.html'>passed_clasg</a>(clasg,
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Arguments_Group),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -951,6 +977,10 @@ private purefunction <a href='../proc/passed_clasg.html'>passed_clasg</a>(clasg,
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Check if a CLA has been passed.</p>
         
 
@@ -978,10 +1008,10 @@ private purefunction <a href='../proc/passed_clasg.html'>passed_clasg</a>(clasg,
     
       <li class="list-group-item">
       
-        
+         
     
     <h3>
-private function <a href='../proc/defined_clasg.html'>defined_clasg</a>(clasg, switch, pos)
+private function <a href='../proc/defined_clasg.html'>defined_clasg</a>(clasg, switch, pos) result(defined)
     
     
     
@@ -1006,7 +1036,7 @@ private function <a href='../proc/defined_clasg.html'>defined_clasg</a>(clasg, s
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Arguments_Group),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -1063,6 +1093,10 @@ private function <a href='../proc/defined_clasg.html'>defined_clasg</a>(clasg, s
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Check if a CLA has been defined.</p>
         
 
@@ -1090,7 +1124,7 @@ private function <a href='../proc/defined_clasg.html'>defined_clasg</a>(clasg, s
     
       <li class="list-group-item">
       
-        
+         
     
     <h3>
 private subroutine <a href='../proc/parse_clasg.html'>parse_clasg</a>(clasg, pref, args)
@@ -1118,7 +1152,7 @@ private subroutine <a href='../proc/parse_clasg.html'>parse_clasg</a>(clasg, pre
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Arguments_Group),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -1166,6 +1200,10 @@ private subroutine <a href='../proc/parse_clasg.html'>parse_clasg</a>(clasg, pre
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Parse CLAs group arguments.</p>
         
 
@@ -1193,10 +1231,10 @@ private subroutine <a href='../proc/parse_clasg.html'>parse_clasg</a>(clasg, pre
     
       <li class="list-group-item">
       
-        
+         
     
     <h3>
-private function <a href='../proc/usage_clasg.html'>usage_clasg</a>(clasg, pref, no_header)
+private function <a href='../proc/usage_clasg.html'>usage_clasg</a>(clasg, pref, no_header) result(usage)
     
     
     
@@ -1221,7 +1259,7 @@ private function <a href='../proc/usage_clasg.html'>usage_clasg</a>(clasg, pref,
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Arguments_Group),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -1278,6 +1316,10 @@ private function <a href='../proc/usage_clasg.html'>usage_clasg</a>(clasg, pref,
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get correct CLAs group usage.</p>
         
 
@@ -1305,10 +1347,10 @@ private function <a href='../proc/usage_clasg.html'>usage_clasg</a>(clasg, pref,
     
       <li class="list-group-item">
       
-        
+         
     
     <h3>
-private function <a href='../proc/signature_clasg.html'>signature_clasg</a>(clasg)
+private function <a href='../proc/signature_clasg.html'>signature_clasg</a>(clasg) result(signd)
     
     
     
@@ -1333,7 +1375,7 @@ private function <a href='../proc/signature_clasg.html'>signature_clasg</a>(clas
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Arguments_Group),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -1359,6 +1401,10 @@ private function <a href='../proc/signature_clasg.html'>signature_clasg</a>(clas
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Get CLAs group signature for adding to the CLI one.</p>
         
@@ -1387,7 +1433,7 @@ private function <a href='../proc/signature_clasg.html'>signature_clasg</a>(clas
     
       <li class="list-group-item">
       
-        
+         
     
     <h3>
 private elementalsubroutine <a href='../proc/assign_clasg.html'>assign_clasg</a>(lhs, rhs)
@@ -1415,7 +1461,7 @@ private elementalsubroutine <a href='../proc/assign_clasg.html'>assign_clasg</a>
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Arguments_Group),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -1430,7 +1476,7 @@ private elementalsubroutine <a href='../proc/assign_clasg.html'>assign_clasg</a>
   
 <tr>
   
-  <td><span class="anchor" ></span>type(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" ></span>type(Type_Command_Line_Arguments_Group),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -1456,7 +1502,7 @@ private elementalsubroutine <a href='../proc/assign_clasg.html'>assign_clasg</a>
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-assignment%28%3D%29%7E2"></span><h3>generic, private :: <strong>assignment(=)</strong>  => <a href='../proc/assign_clasg.html'>assign_clasg</a> 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-assignment%28%3D%29%7E2"></span><h3>generic, private :: <strong>assignment(=)</strong>  => <a href='../type/type_command_line_arguments_group.html#boundprocedure-assign_clasg'>assign_clasg</a> 
     
   </h3></div>
   
@@ -1471,10 +1517,10 @@ private elementalsubroutine <a href='../proc/assign_clasg.html'>assign_clasg</a>
     
       <li class="list-group-item">
       
-        
+         
     
     <h3>
-private elementalsubroutine <a href='../proc/assign_clasg.html'>assign_clasg</a>(lhs, rhs)
+ <a href='../type/type_command_line_arguments_group.html#boundprocedure-assign_clasg'>assign_clasg</a>()
     
     
     
@@ -1482,53 +1528,17 @@ private elementalsubroutine <a href='../proc/assign_clasg.html'>assign_clasg</a>
     
     <h4>Arguments</h4>
     
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
-  <td>intent(inout)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>type(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
+      <em>None</em>
     
     
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>CLAs group assignment overloading.</p>
         
 
       

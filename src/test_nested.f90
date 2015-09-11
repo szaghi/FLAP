@@ -1,5 +1,5 @@
 !< A testing program for FLAP, Fortran command Line Arguments Parser for poor people
-program Test_Driver_Nested
+program test_nested
 !< A testing program for FLAP, Fortran command Line Arguments Parser for poor people
 !<
 !<### Compile
@@ -23,16 +23,16 @@ integer(I4P)::                      error         !< Error trapping flag.
 !-----------------------------------------------------------------------------------------------------------------------------------
 authors_print = .false.
 ! initializing Command Line Interface
-call cli%init(progname    = 'Test_Driver_Nested',                                    &
-              version     = 'v2.1.5',                                                &
-              authors     = 'Stefano Zaghi',                                         &
-              license     = 'MIT',                                                   &
-              description = 'Toy program for testing FLAP with nested commands',     &
-              examples    = ['Test_Driver_Nested                      ',&
-                             'Test_Driver_Nested -h                   ',&
-                             'Test_Driver_Nested init                 ',&
-                             'Test_Driver_Nested commit -m "fix bug-1"',&
-                             'Test_Driver_Nested tag -a "v2.1.5"      '])
+call cli%init(progname    = 'test_nested',                                       &
+              version     = 'v2.1.5',                                            &
+              authors     = 'Stefano Zaghi',                                     &
+              license     = 'MIT',                                               &
+              description = 'Toy program for testing FLAP with nested commands', &
+              examples    = ['test_nested                      ',                &
+                             'test_nested -h                   ',                &
+                             'test_nested init                 ',                &
+                             'test_nested commit -m "fix bug-1"',                &
+                             'test_nested tag -a "v2.1.5"      '])
 ! set a Command Line Argument without a group to trigger authors names printing
 call cli%add(switch='--authors',switch_ab='-a',help='Print authors names',required=.false.,act='store_true',def='.false.')
 ! set Command Line Arguments Groups, i.e. commands
@@ -67,4 +67,4 @@ else
 endif
 stop
 !-----------------------------------------------------------------------------------------------------------------------------------
-endprogram Test_Driver_Nested
+endprogram test_nested

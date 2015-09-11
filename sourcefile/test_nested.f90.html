@@ -10,7 +10,7 @@
     <meta name="author" content="Chris MacMackin" >
     <link rel="icon" href="../favicon.png">
 
-    <title>Test_Driver_Nested.f90 &ndash; FLAP</title>
+    <title>test_nested.f90 &ndash; FLAP</title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -86,7 +86,7 @@
     
   
   <div class="row">
-    <h1>Test_Driver_Nested.f90
+    <h1>test_nested.f90
     <small>Source File</small>
     
     </h1>
@@ -101,12 +101,12 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/Test_Driver_Nested.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/test_nested.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li class="active">Test_Driver_Nested.f90</li>
+     <li class="active">test_nested.f90</li>
   </ol>
 </div>
 </div>
@@ -125,7 +125,7 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Programs</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../program/test_driver_nested.html">Test_Driver_Nested</a>
+      <a class="list-group-item" href="../program/test_nested.html">test_nested</a>
       
     </div>
   </div>
@@ -148,7 +148,7 @@
   <div class="panel panel-primary">
     <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
     <div class="list-group">
-      <a class="list-group-item" href="../sourcefile/test_driver_nested.f90.html#src">Test_Driver_Nested.f90</a>
+      <a class="list-group-item" href="../sourcefile/test_nested.f90.html#src">test_nested.f90</a>
     </div>
   </div>
   
@@ -160,11 +160,13 @@
       
       <a class="list-group-item" href="../sourcefile/data_type_command_line_interface.f90.html">Data_Type_Command_Line_Interface.F90</a>
       
-      <a class="list-group-item" href="../sourcefile/test_driver.f90.html">Test_Driver.f90</a>
+      <a class="list-group-item" href="../sourcefile/test_basic.f90.html">test_basic.f90</a>
       
-      <a class="list-group-item" href="../sourcefile/test_driver_args_from_string.f90.html">Test_Driver_Args_From_String.f90</a>
+      <a class="list-group-item" href="../sourcefile/test_choices_logical.f90.html">test_choices_logical.f90</a>
       
-      <a class="list-group-item" href="../sourcefile/test_driver_nested.f90.html">Test_Driver_Nested.f90</a>
+      <a class="list-group-item" href="../sourcefile/test_nested.f90.html">test_nested.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/test_string.f90.html">test_string.f90</a>
       
     </div>
   </div>
@@ -177,7 +179,7 @@
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
     <div class="highlight"><pre><span class="c">!&lt; A testing program for FLAP, Fortran command Line Arguments Parser for poor people</span>
-<span class="k">program </span><span class="n">Test_Driver_Nested</span>
+<span class="k">program </span><span class="n">test_nested</span>
 <span class="c">!&lt; A testing program for FLAP, Fortran command Line Arguments Parser for poor people</span>
 <span class="c">!&lt;</span>
 <span class="c">!&lt;### Compile</span>
@@ -201,16 +203,16 @@
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="n">authors_print</span> <span class="o">=</span> <span class="p">.</span><span class="n">false</span><span class="p">.</span>
 <span class="c">! initializing Command Line Interface</span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span>    <span class="o">=</span> <span class="s1">&#39;Test_Driver_Nested&#39;</span><span class="p">,</span>                                    <span class="p">&amp;</span>
-              <span class="n">version</span>     <span class="o">=</span> <span class="s1">&#39;v2.1.5&#39;</span><span class="p">,</span>                                                <span class="p">&amp;</span>
-              <span class="n">authors</span>     <span class="o">=</span> <span class="s1">&#39;Stefano Zaghi&#39;</span><span class="p">,</span>                                         <span class="p">&amp;</span>
-              <span class="n">license</span>     <span class="o">=</span> <span class="s1">&#39;MIT&#39;</span><span class="p">,</span>                                                   <span class="p">&amp;</span>
-              <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Toy program for testing FLAP with nested commands&#39;</span><span class="p">,</span>     <span class="p">&amp;</span>
-              <span class="n">examples</span>    <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Test_Driver_Nested                      &#39;</span><span class="p">,&amp;</span>
-                             <span class="s1">&#39;Test_Driver_Nested -h                   &#39;</span><span class="p">,&amp;</span>
-                             <span class="s1">&#39;Test_Driver_Nested init                 &#39;</span><span class="p">,&amp;</span>
-                             <span class="s1">&#39;Test_Driver_Nested commit -m &quot;fix bug-1&quot;&#39;</span><span class="p">,&amp;</span>
-                             <span class="s1">&#39;Test_Driver_Nested tag -a &quot;v2.1.5&quot;      &#39;</span><span class="p">])</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span>    <span class="o">=</span> <span class="s1">&#39;test_nested&#39;</span><span class="p">,</span>                                       <span class="p">&amp;</span>
+              <span class="n">version</span>     <span class="o">=</span> <span class="s1">&#39;v2.1.5&#39;</span><span class="p">,</span>                                            <span class="p">&amp;</span>
+              <span class="n">authors</span>     <span class="o">=</span> <span class="s1">&#39;Stefano Zaghi&#39;</span><span class="p">,</span>                                     <span class="p">&amp;</span>
+              <span class="n">license</span>     <span class="o">=</span> <span class="s1">&#39;MIT&#39;</span><span class="p">,</span>                                               <span class="p">&amp;</span>
+              <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Toy program for testing FLAP with nested commands&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+              <span class="n">examples</span>    <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;test_nested                      &#39;</span><span class="p">,</span>                <span class="p">&amp;</span>
+                             <span class="s1">&#39;test_nested -h                   &#39;</span><span class="p">,</span>                <span class="p">&amp;</span>
+                             <span class="s1">&#39;test_nested init                 &#39;</span><span class="p">,</span>                <span class="p">&amp;</span>
+                             <span class="s1">&#39;test_nested commit -m &quot;fix bug-1&quot;&#39;</span><span class="p">,</span>                <span class="p">&amp;</span>
+                             <span class="s1">&#39;test_nested tag -a &quot;v2.1.5&quot;      &#39;</span><span class="p">])</span>
 <span class="c">! set a Command Line Argument without a group to trigger authors names printing</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--authors&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-a&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Print authors names&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">)</span>
 <span class="c">! set Command Line Arguments Groups, i.e. commands</span>
@@ -245,7 +247,7 @@
 <span class="n">endif</span>
 <span class="k">stop</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="n">endprogram</span> <span class="n">Test_Driver_Nested</span>
+<span class="n">endprogram</span> <span class="n">test_nested</span>
 </pre></div>
 
     </section>

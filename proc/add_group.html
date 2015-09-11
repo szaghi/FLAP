@@ -138,6 +138,8 @@
       
       <a class="list-group-item" href="../proc/add_group.html#variable-ng">Ng</a>
       
+      <a class="list-group-item" href="../proc/add_group.html#variable-gi%7E2">gi</a>
+      
     </div>
   </div>
   
@@ -345,7 +347,7 @@ private subroutine add_group(cli, help, description, exclude, group)
   
 <tr>
   
-  <td><span class="anchor" id="variable-cli%7E10"></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" id="variable-cli%7E10"></span>class(Type_Command_Line_Interface),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -423,6 +425,8 @@ private subroutine add_group(cli, help, description, exclude, group)
     <h3>Description</h3>
     <p>Add CLAs group to CLI.</p>
     
+    
+     
     <br>
     
     <section>
@@ -443,7 +447,7 @@ private subroutine add_group(cli, help, description, exclude, group)
   
 <tr>
   
-  <td><span class="anchor" id="variable-clasg_list_new"></span>type(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" id="variable-clasg_list_new"></span>type(Type_Command_Line_Arguments_Group),</td>
   
   <td>public,</td>
   <td>allocatable</td><td>::</td>
@@ -507,6 +511,20 @@ private subroutine add_group(cli, help, description, exclude, group)
   
 </tr>
 
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-gi%7E2"></span>integer(kind=I4P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>gi</strong></td><td></td><td></td><td><p>Group index</p></td>
+  
+</tr>
+
 </tbody>
 </table>
 
@@ -542,6 +560,7 @@ private subroutine add_group(cli, help, description, exclude, group)
   <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>                        <span class="kd">::</span> <span class="n">descriptiond</span>      <span class="c">!&lt; Detailed description.</span>
   <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>                        <span class="kd">::</span> <span class="n">excluded</span>          <span class="c">!&lt; Group name of the mutually exclusive group.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                         <span class="kd">::</span> <span class="n">Ng</span>                <span class="c">!&lt; Number of groups.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                         <span class="kd">::</span> <span class="n">gi</span>                <span class="c">!&lt; Group index</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -551,7 +570,10 @@ private subroutine add_group(cli, help, description, exclude, group)
     <span class="n">excluded</span>     <span class="o">=</span> <span class="s1">&#39;&#39;</span>        <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">exclude</span>    <span class="p">))</span> <span class="n">excluded</span>     <span class="o">=</span> <span class="n">exclude</span>
     <span class="n">Ng</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">clasg</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">allocate</span><span class="p">(</span><span class="n">clasg_list_new</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="n">Ng</span><span class="p">))</span>
-    <span class="n">clasg_list_new</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="n">Ng</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">cli</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="n">Ng</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="c">!    clasg_list_new(0:Ng-1) = cli%clasg(0:Ng-1) ! Not working on Intel Fortran 15.0.2</span>
+    <span class="k">do </span><span class="n">gi</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Ng</span><span class="o">-</span><span class="mi">1</span>
+      <span class="n">clasg_list_new</span><span class="p">(</span><span class="n">gi</span><span class="p">)</span> <span class="o">=</span> <span class="n">cli</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">gi</span><span class="p">)</span>
+    <span class="n">enddo</span>
     <span class="k">call </span><span class="n">clasg_list_new</span><span class="p">(</span><span class="n">Ng</span><span class="p">)%</span><span class="n">assign_object</span><span class="p">(</span><span class="n">cli</span><span class="p">)</span>
     <span class="n">clasg_list_new</span><span class="p">(</span><span class="n">Ng</span><span class="p">)%</span><span class="n">help</span>        <span class="o">=</span> <span class="n">helpd</span>
     <span class="n">clasg_list_new</span><span class="p">(</span><span class="n">Ng</span><span class="p">)%</span><span class="n">description</span> <span class="o">=</span> <span class="n">descriptiond</span>

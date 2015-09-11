@@ -349,7 +349,7 @@ private subroutine check_choices_cla(cla, val, pref)
   
 <tr>
   
-  <td><span class="anchor" id="variable-cla%7E8"></span>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td><span class="anchor" id="variable-cla%7E8"></span>class(Type_Command_Line_Argument),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -398,6 +398,8 @@ private subroutine check_choices_cla(cla, val, pref)
     <p>Check if CLA value is in allowed choices.</p>
 <p></p><div class="alert alert-info" role="alert"><h4>Note</h4>This procedure can be called if and only if cla%choices has been allocated.</div>
     
+    
+     
     <br>
     
     <section>
@@ -597,8 +599,11 @@ private subroutine check_choices_cla(cla, val, pref)
     <span class="k">do </span><span class="n">c</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">Nc</span>
       <span class="k">if</span> <span class="p">(</span><span class="n">val</span><span class="o">==</span><span class="n">toks</span><span class="p">(</span><span class="n">c</span><span class="p">))</span> <span class="n">val_in</span> <span class="o">=</span> <span class="p">.</span><span class="n">true</span><span class="p">.</span>
     <span class="n">enddo</span>
+  <span class="k">type is</span><span class="p">(</span><span class="kt">logical</span><span class="p">)</span>
+    <span class="n">prefd</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">pref</span><span class="p">))</span> <span class="n">prefd</span> <span class="o">=</span> <span class="n">pref</span>
+    <span class="k">call </span><span class="n">cla</span><span class="p">%</span><span class="n">errored</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">prefd</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error_cla_choices_logical</span><span class="p">)</span>
   <span class="n">endselect</span>
-  <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">val_in</span><span class="p">)</span> <span class="k">then</span>
+  <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">val_in</span><span class="p">.</span><span class="nb">and</span><span class="p">.(</span><span class="n">cla</span><span class="p">%</span><span class="n">error</span><span class="o">==</span><span class="mi">0</span><span class="p">))</span> <span class="k">then</span>
 <span class="k">    </span><span class="n">prefd</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">pref</span><span class="p">))</span> <span class="n">prefd</span> <span class="o">=</span> <span class="n">pref</span>
     <span class="k">call </span><span class="n">cla</span><span class="p">%</span><span class="n">errored</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">prefd</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error_cla_not_in_choices</span><span class="p">,</span><span class="n">val_str</span><span class="o">=</span><span class="n">val_str</span><span class="p">)</span>
   <span class="n">endif</span>

@@ -162,6 +162,8 @@
       
       <a class="list-group-item" href="../module/data_type_command_line_interface.html#variable-error_cla_casting_logical">error_cla_casting_logical</a>
       
+      <a class="list-group-item" href="../module/data_type_command_line_interface.html#variable-error_cla_choices_logical">error_cla_choices_logical</a>
+      
       <a class="list-group-item" href="../module/data_type_command_line_interface.html#variable-error_cla_no_list">error_cla_no_list</a>
       
       <a class="list-group-item" href="../module/data_type_command_line_interface.html#variable-error_cla_nargs_insufficient">error_cla_nargs_insufficient</a>
@@ -406,7 +408,6 @@
     <div class="col-lg-9" id='text'>
     
     
-    
   
     <ul class="list-inline">
       <li><h4>Uses:</h4></li>
@@ -418,6 +419,8 @@
     </ul>
   
 
+    
+    
     <p>FLAP, Fortran command Line Arguments Parser for poor people
 <a name="top"></a></p>
 <h1 id="flap"><a href="https://gitter.im/szaghi/FLAP?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img alt="Join the chat at https://gitter.im/szaghi/FLAP" src="https://badges.gitter.im/Join%20Chat.svg"></a><a class="toclink" href="#flap">FLAP <a href=""><img alt="GitHub tag" src="https://img.shields.io/github/tag/szaghi/FLAP.svg"></a> </a></h1>
@@ -509,8 +512,8 @@
 <h2 id="documentation"><a class="toclink" href="#documentation">Documentation</a></h2>
 <p>Besides this README file the FLAP documentation is contained into its own <a href="https://github.com/szaghi/FLAP/wiki">wiki</a>. Detailed documentation of the API is contained into the <a href="http://szaghi.github.io/FLAP/index.html">GitHub Pages</a> that can also be created locally by means of <a href="https://github.com/cmacmackin/ford">ford tool</a>.</p>
 <h3 id="a-taste-of-flap"><a class="toclink" href="#a-taste-of-flap">A Taste of FLAP</a></h3>
-<p>Running the provided test program, <code>Test_Driver -h</code>, a taste of FLAP is served:</p>
-<div class="codehilite"><pre>usage:  Test_Driver [value] --string value [--integer value] [--real value] [--boolean] [--boolean_val value] [--integer_list value#1 value#2 value#3] [--help] [--version]
+<p>Running the provided test program, <code>test_basic -h</code>, a taste of FLAP is served:</p>
+<div class="codehilite"><pre>usage:  test_basic [value] --string value [--integer value] [--real value] [--boolean] [--boolean_val value] [--integer_list value#1 value#2 value#3] [--help] [--version]
 
 Toy program for testing FLAP
 
@@ -544,28 +547,28 @@ Optional switches:
           Print version
 
 Examples:
-   Test_Driver -s &#39;Hello FLAP&#39;
-   Test_Driver -s &#39;Hello FLAP&#39; -i -2 # printing error...
-   Test_Driver -s &#39;Hello FLAP&#39; -i 3 -r 33.d0
-   Test_Driver -s &#39;Hello FLAP&#39; --integer_list 10 -3 87
-   Test_Driver 33.0 -s &#39;Hello FLAP&#39; -i 5
-   Test_Driver --string &#39;Hello FLAP&#39; --boolean
+   test_basic -s &#39;Hello FLAP&#39;
+   test_basic -s &#39;Hello FLAP&#39; -i -2 # printing error...
+   test_basic -s &#39;Hello FLAP&#39; -i 3 -r 33.d0
+   test_basic -s &#39;Hello FLAP&#39; --integer_list 10 -3 87
+   test_basic 33.0 -s &#39;Hello FLAP&#39; -i 5
+   test_basic --string &#39;Hello FLAP&#39; --boolean
 </pre></div>
 
 
 <p>Not so bad for just a very few statements as the following:</p>
 <div class="codehilite"><pre><span class="c">! initializing Command Line Interface</span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span>    <span class="o">=</span> <span class="s1">&#39;Test_Driver&#39;</span><span class="p">,</span>                                           <span class="p">&amp;</span>
-              <span class="n">version</span>     <span class="o">=</span> <span class="s1">&#39;v2.1.5&#39;</span><span class="p">,</span>                                                <span class="p">&amp;</span>
-              <span class="n">authors</span>     <span class="o">=</span> <span class="s1">&#39;Stefano Zaghi&#39;</span><span class="p">,</span>                                         <span class="p">&amp;</span>
-              <span class="n">license</span>     <span class="o">=</span> <span class="s1">&#39;MIT&#39;</span><span class="p">,</span>                                                   <span class="p">&amp;</span>
-              <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Toy program for testing FLAP&#39;</span><span class="p">,</span>                          <span class="p">&amp;</span>
-              <span class="n">examples</span>    <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Test_Driver -s &#39;Hello FLAP&#39;                          &quot;</span><span class="p">,&amp;</span>
-                             <span class="s2">&quot;Test_Driver -s &#39;Hello FLAP&#39; -i -2 # printing error...&quot;</span><span class="p">,&amp;</span>
-                             <span class="s2">&quot;Test_Driver -s &#39;Hello FLAP&#39; -i 3 -r 33.d0            &quot;</span><span class="p">,&amp;</span>
-                             <span class="s2">&quot;Test_Driver -s &#39;Hello FLAP&#39; --integer_list 10 -3 87  &quot;</span><span class="p">,&amp;</span>
-                             <span class="s2">&quot;Test_Driver 33.0 -s &#39;Hello FLAP&#39; -i 5                &quot;</span><span class="p">,&amp;</span>
-                             <span class="s2">&quot;Test_Driver --string &#39;Hello FLAP&#39; --boolean          &quot;</span><span class="p">])</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span>    <span class="o">=</span> <span class="s1">&#39;test_basic&#39;</span><span class="p">,</span>                                           <span class="p">&amp;</span>
+              <span class="n">version</span>     <span class="o">=</span> <span class="s1">&#39;v2.1.5&#39;</span><span class="p">,</span>                                               <span class="p">&amp;</span>
+              <span class="n">authors</span>     <span class="o">=</span> <span class="s1">&#39;Stefano Zaghi&#39;</span><span class="p">,</span>                                        <span class="p">&amp;</span>
+              <span class="n">license</span>     <span class="o">=</span> <span class="s1">&#39;MIT&#39;</span><span class="p">,</span>                                                  <span class="p">&amp;</span>
+              <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Toy program for testing FLAP&#39;</span><span class="p">,</span>                         <span class="p">&amp;</span>
+              <span class="n">examples</span>    <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;test_basic -s &#39;Hello FLAP&#39;                          &quot;</span><span class="p">,&amp;</span>
+                             <span class="s2">&quot;test_basic -s &#39;Hello FLAP&#39; -i -2 # printing error...&quot;</span><span class="p">,&amp;</span>
+                             <span class="s2">&quot;test_basic -s &#39;Hello FLAP&#39; -i 3 -r 33.d0            &quot;</span><span class="p">,&amp;</span>
+                             <span class="s2">&quot;test_basic -s &#39;Hello FLAP&#39; --integer_list 10 -3 87  &quot;</span><span class="p">,&amp;</span>
+                             <span class="s2">&quot;test_basic 33.0 -s &#39;Hello FLAP&#39; -i 5                &quot;</span><span class="p">,&amp;</span>
+                             <span class="s2">&quot;test_basic --string &#39;Hello FLAP&#39; --boolean          &quot;</span><span class="p">])</span>
 <span class="c">! setting Command Line Argumenst</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--string&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;String input&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--integer&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-i&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Integer input with fixed range&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,&amp;</span>
@@ -583,21 +586,21 @@ Examples:
 </pre></div>
 
 
-<p>For more details, see the provided <a href="https://github.com/szaghi/FLAP/blob/master/src/Test_Driver.f90">example</a>.</p>
+<p>For more details, see the provided <a href="https://github.com/szaghi/FLAP/blob/master/src/tests/test_basic.f90">example</a>.</p>
 <p>For a practical example of FLAP usage see <a href="https://github.com/szaghi/OFF/blob/testing/src/POG.f90">POG</a> source file at line <code>85</code>.</p>
 <h4 id="nested-subcommands"><a class="toclink" href="#nested-subcommands">Nested (sub)commands</a></h4>
 <p>FLAP fully supports nested (sub)commands or groups of command line arguments. For example a fake <code>git</code> toy remake can be coded as</p>
 <div class="codehilite"><pre><span class="c">! initializing Command Line Interface</span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span>    <span class="o">=</span> <span class="s1">&#39;Test_Driver_Nested&#39;</span><span class="p">,</span>                                    <span class="p">&amp;</span>
-              <span class="n">version</span>     <span class="o">=</span> <span class="s1">&#39;v2.1.5&#39;</span><span class="p">,</span>                                                <span class="p">&amp;</span>
-              <span class="n">authors</span>     <span class="o">=</span> <span class="s1">&#39;Stefano Zaghi&#39;</span><span class="p">,</span>                                         <span class="p">&amp;</span>
-              <span class="n">license</span>     <span class="o">=</span> <span class="s1">&#39;MIT&#39;</span><span class="p">,</span>                                                   <span class="p">&amp;</span>
-              <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Toy program for testing FLAP with nested commands&#39;</span><span class="p">,</span>     <span class="p">&amp;</span>
-              <span class="n">examples</span>    <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Test_Driver_Nested                      &#39;</span><span class="p">,&amp;</span>
-                             <span class="s1">&#39;Test_Driver_Nested -h                   &#39;</span><span class="p">,&amp;</span>
-                             <span class="s1">&#39;Test_Driver_Nested init                 &#39;</span><span class="p">,&amp;</span>
-                             <span class="s1">&#39;Test_Driver_Nested commit -m &quot;fix bug-1&quot;&#39;</span><span class="p">,&amp;</span>
-                             <span class="s1">&#39;Test_Driver_Nested tag -a &quot;v2.1.5&quot;      &#39;</span><span class="p">])</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span>    <span class="o">=</span> <span class="s1">&#39;test_nested&#39;</span><span class="p">,</span>                                      <span class="p">&amp;</span>
+              <span class="n">version</span>     <span class="o">=</span> <span class="s1">&#39;v2.1.5&#39;</span><span class="p">,</span>                                           <span class="p">&amp;</span>
+              <span class="n">authors</span>     <span class="o">=</span> <span class="s1">&#39;Stefano Zaghi&#39;</span><span class="p">,</span>                                    <span class="p">&amp;</span>
+              <span class="n">license</span>     <span class="o">=</span> <span class="s1">&#39;MIT&#39;</span><span class="p">,</span>                                              <span class="p">&amp;</span>
+              <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Toy program for testing FLAP with nested commands&#39;</span><span class="p">,&amp;</span>
+              <span class="n">examples</span>    <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;test_nested                      &#39;</span><span class="p">,&amp;</span>
+                             <span class="s1">&#39;test_nested -h                   &#39;</span><span class="p">,&amp;</span>
+                             <span class="s1">&#39;test_nested init                 &#39;</span><span class="p">,&amp;</span>
+                             <span class="s1">&#39;test_nested commit -m &quot;fix bug-1&quot;&#39;</span><span class="p">,&amp;</span>
+                             <span class="s1">&#39;test_nested tag -a &quot;v2.1.5&quot;      &#39;</span><span class="p">])</span>
 <span class="c">! set a Command Line Argument without a group to trigger authors names printing</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--authors&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-a&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Print authors names&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">)</span>
 <span class="c">! set Command Line Arguments Groups, i.e. commands</span>
@@ -638,7 +641,7 @@ Examples:
 
 
 <p>and invoked with <code>-h</code> option gives:</p>
-<div class="codehilite"><pre>usage: Test_Driver_Nested  <span class="o">[</span>--authors<span class="o">]</span> <span class="o">[</span>--help<span class="o">]</span> <span class="o">[</span>--version<span class="o">]</span> <span class="o">{</span>init,commit,tag<span class="o">}</span> ...
+<div class="codehilite"><pre>usage: test_nested  <span class="o">[</span>--authors<span class="o">]</span> <span class="o">[</span>--help<span class="o">]</span> <span class="o">[</span>--version<span class="o">]</span> <span class="o">{</span>init,commit,tag<span class="o">}</span> ...
 
 Toy program <span class="k">for</span> testing FLAP with nested commands
 
@@ -660,23 +663,24 @@ Commands:
           fake tag current commit
 
 For more detailed commands <span class="nb">help </span>try:
-  Test_Driver_Nested init -h,--help
-  Test_Driver_Nested commit -h,--help
-  Test_Driver_Nested tag -h,--help
+  test_nested init -h,--help
+  test_nested commit -h,--help
+  test_nested tag -h,--help
 
 Examples:
-   Test_Driver_Nested
-   Test_Driver_Nested -h
-   Test_Driver_Nested init
-   Test_Driver_Nested commit -m <span class="s2">&quot;fix bug-1&quot;</span>
-   Test_Driver_Nested tag -a <span class="s2">&quot;v2.1.5&quot;</span>
+   test_nested
+   test_nested -h
+   test_nested init
+   test_nested commit -m <span class="s2">&quot;fix bug-1&quot;</span>
+   test_nested tag -a <span class="s2">&quot;v2.1.5&quot;</span>
 </pre></div>
 
 
-<p>For more details, see the provided <a href="https://github.com/szaghi/FLAP/blob/master/src/Test_Driver_Nested.f90">example</a>.</p>
+<p>For more details, see the provided <a href="https://github.com/szaghi/FLAP/blob/master/src/tests/test_nested.f90">example</a>.</p>
 <p>Go to <a href="#top">Top</a></p>
 <h3 id="changelog"><a class="toclink" href="#changelog">ChangeLog</a></h3>
     <br>
+    
 
     
     <section>
@@ -949,11 +953,25 @@ Examples:
   
 <tr>
   
+  <td><span class="anchor" id="variable-error_cla_choices_logical"></span>integer(kind=I4P),</td>
+  
+  <td>private,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>error_cla_choices_logical</strong></td><td> =</td><td>11</td><td><p>Error adding choices check for CLA value of logical type.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
   <td><span class="anchor" id="variable-error_cla_no_list"></span>integer(kind=I4P),</td>
   
   <td>private,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>error_cla_no_list</strong></td><td> =</td><td>11</td><td><p>Actual CLA is not list-values.</p></td>
+  <td><strong>error_cla_no_list</strong></td><td> =</td><td>12</td><td><p>Actual CLA is not list-values.</p></td>
   
 </tr>
 
@@ -967,7 +985,7 @@ Examples:
   
   <td>private,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>error_cla_nargs_insufficient</strong></td><td> =</td><td>12</td><td><p>Multi-valued CLA with insufficient arguments.</p></td>
+  <td><strong>error_cla_nargs_insufficient</strong></td><td> =</td><td>13</td><td><p>Multi-valued CLA with insufficient arguments.</p></td>
   
 </tr>
 
@@ -981,7 +999,7 @@ Examples:
   
   <td>private,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>error_cla_value_missing</strong></td><td> =</td><td>13</td><td><p>Missing value of CLA.</p></td>
+  <td><strong>error_cla_value_missing</strong></td><td> =</td><td>14</td><td><p>Missing value of CLA.</p></td>
   
 </tr>
 
@@ -995,7 +1013,7 @@ Examples:
   
   <td>private,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>error_cla_unknown</strong></td><td> =</td><td>14</td><td><p>Unknown CLA (switch name).</p></td>
+  <td><strong>error_cla_unknown</strong></td><td> =</td><td>15</td><td><p>Unknown CLA (switch name).</p></td>
   
 </tr>
 
@@ -1009,7 +1027,7 @@ Examples:
   
   <td>private,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>error_cla_envvar_positional</strong></td><td> =</td><td>15</td><td><p>Envvar not allowed for positional CLA.</p></td>
+  <td><strong>error_cla_envvar_positional</strong></td><td> =</td><td>16</td><td><p>Envvar not allowed for positional CLA.</p></td>
   
 </tr>
 
@@ -1023,7 +1041,7 @@ Examples:
   
   <td>private,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>error_cla_envvar_not_store</strong></td><td> =</td><td>16</td><td><p>Envvar not allowed action different from store;</p></td>
+  <td><strong>error_cla_envvar_not_store</strong></td><td> =</td><td>17</td><td><p>Envvar not allowed action different from store;</p></td>
   
 </tr>
 
@@ -1037,7 +1055,7 @@ Examples:
   
   <td>private,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>error_cla_envvar_nargs</strong></td><td> =</td><td>17</td><td><p>Envvar not allowed for list-values CLA.</p></td>
+  <td><strong>error_cla_envvar_nargs</strong></td><td> =</td><td>18</td><td><p>Envvar not allowed for list-values CLA.</p></td>
   
 </tr>
 
@@ -1051,7 +1069,7 @@ Examples:
   
   <td>private,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>error_cla_store_star_positional</strong></td><td> =</td><td>18</td><td><p>Action store* not allowed for positional CLA.</p></td>
+  <td><strong>error_cla_store_star_positional</strong></td><td> =</td><td>19</td><td><p>Action store* not allowed for positional CLA.</p></td>
   
 </tr>
 
@@ -1065,7 +1083,7 @@ Examples:
   
   <td>private,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>error_cla_store_star_nargs</strong></td><td> =</td><td>19</td><td><p>Action store* not allowed for list-values CLA.</p></td>
+  <td><strong>error_cla_store_star_nargs</strong></td><td> =</td><td>20</td><td><p>Action store* not allowed for list-values CLA.</p></td>
   
 </tr>
 
@@ -1079,7 +1097,7 @@ Examples:
   
   <td>private,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>error_cla_store_star_envvar</strong></td><td> =</td><td>20</td><td><p>Action store* not allowed for environment variable CLA.</p></td>
+  <td><strong>error_cla_store_star_envvar</strong></td><td> =</td><td>21</td><td><p>Action store* not allowed for environment variable CLA.</p></td>
   
 </tr>
 
@@ -1093,7 +1111,7 @@ Examples:
   
   <td>private,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>error_cla_action_unknown</strong></td><td> =</td><td>21</td><td><p>Unknown CLA (switch name).</p></td>
+  <td><strong>error_cla_action_unknown</strong></td><td> =</td><td>22</td><td><p>Unknown CLA (switch name).</p></td>
   
 </tr>
 
@@ -1107,7 +1125,7 @@ Examples:
   
   <td>private,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>error_clasg_consistency</strong></td><td> =</td><td>22</td><td><p>CLAs group consistency error.</p></td>
+  <td><strong>error_clasg_consistency</strong></td><td> =</td><td>23</td><td><p>CLAs group consistency error.</p></td>
   
 </tr>
 
@@ -1121,7 +1139,7 @@ Examples:
   
   <td>private,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>error_clasg_m_exclude</strong></td><td> =</td><td>23</td><td><p>Two mutually exclusive CLAs group have been called.</p></td>
+  <td><strong>error_clasg_m_exclude</strong></td><td> =</td><td>24</td><td><p>Two mutually exclusive CLAs group have been called.</p></td>
   
 </tr>
 
@@ -1135,7 +1153,7 @@ Examples:
   
   <td>private,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>error_cli_missing_cla</strong></td><td> =</td><td>24</td><td><p>CLA not found in CLI.</p></td>
+  <td><strong>error_cli_missing_cla</strong></td><td> =</td><td>25</td><td><p>CLA not found in CLI.</p></td>
   
 </tr>
 
@@ -1149,7 +1167,7 @@ Examples:
   
   <td>private,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>error_cli_missing_group</strong></td><td> =</td><td>25</td><td><p>Group not found in CLI.</p></td>
+  <td><strong>error_cli_missing_group</strong></td><td> =</td><td>26</td><td><p>Group not found in CLI.</p></td>
   
 </tr>
 
@@ -1163,7 +1181,7 @@ Examples:
   
   <td>private,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>error_cli_missing_selection_cla</strong></td><td> =</td><td>26</td><td><p>CLA selection in CLI failing.</p></td>
+  <td><strong>error_cli_missing_selection_cla</strong></td><td> =</td><td>27</td><td><p>CLA selection in CLI failing.</p></td>
   
 </tr>
 
@@ -1177,7 +1195,7 @@ Examples:
   
   <td>private,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>error_cli_too_few_clas</strong></td><td> =</td><td>27</td><td><p>Insufficient arguments for CLI.</p></td>
+  <td><strong>error_cli_too_few_clas</strong></td><td> =</td><td>28</td><td><p>Insufficient arguments for CLI.</p></td>
   
 </tr>
 
@@ -1401,7 +1419,7 @@ Examples:
      
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="type-type_command_line_argument"></span><h3>type, private, extends(<a href='../type/type_object.html'>Type_Object</a>) :: <a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>
+  <div class="panel-heading codesum"><span class="anchor" id="type-type_command_line_argument"></span><h3>type, private, extends(Type_Object) :: <a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>
     
   </h3></div>
   <div class="panel-body">
@@ -1693,7 +1711,7 @@ Examples:
      
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="type-type_command_line_arguments_group"></span><h3>type, private, extends(<a href='../type/type_object.html'>Type_Object</a>) :: <a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>
+  <div class="panel-heading codesum"><span class="anchor" id="type-type_command_line_arguments_group"></span><h3>type, private, extends(Type_Object) :: <a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>
     
   </h3></div>
   <div class="panel-body">
@@ -1771,7 +1789,7 @@ Examples:
   
 <tr>
   
-  <td><span class="anchor" id="variable-cla"></span>type(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td><span class="anchor" id="variable-cla"></span>type(Type_Command_Line_Argument),</td>
   
   <td>private,</td>
   <td>allocatable</td><td>::</td>
@@ -1864,7 +1882,7 @@ Examples:
      
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="type-type_command_line_interface"></span><h3>type, public, extends(<a href='../type/type_object.html'>Type_Object</a>) :: <a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>
+  <div class="panel-heading codesum"><span class="anchor" id="type-type_command_line_interface"></span><h3>type, public, extends(Type_Object) :: <a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>
     
   </h3></div>
   <div class="panel-body">
@@ -1886,7 +1904,7 @@ Examples:
   
 <tr>
   
-  <td><span class="anchor" id="variable-clasg"></span>type(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" id="variable-clasg"></span>type(Type_Command_Line_Arguments_Group),</td>
   
   <td>private,</td>
   <td>allocatable</td><td>::</td>
@@ -2086,7 +2104,7 @@ Examples:
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-upper_case"></span><h3>
-private elementalfunction <a href='../proc/upper_case.html'>Upper_Case</a>(string)
+private purefunction <a href='../proc/upper_case.html'>Upper_Case</a>(string)
     
     
     
@@ -2140,6 +2158,10 @@ private elementalfunction <a href='../proc/upper_case.html'>Upper_Case</a>(strin
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Convert the lower case characters of a string to upper case one.</p>
         
 
@@ -2150,7 +2172,7 @@ private elementalfunction <a href='../proc/upper_case.html'>Upper_Case</a>(strin
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-check_list_size_cla"></span><h3>
-private function <a href='../proc/check_list_size_cla.html'>check_list_size_cla</a>(cla, Nv, val, pref)
+private function <a href='../proc/check_list_size_cla.html'>check_list_size_cla</a>(cla, Nv, val, pref) result(is_ok)
     
     
     
@@ -2177,7 +2199,7 @@ private function <a href='../proc/check_list_size_cla.html'>check_list_size_cla<
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Argument),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -2249,6 +2271,10 @@ private function <a href='../proc/check_list_size_cla.html'>check_list_size_cla<
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Check CLA multiple values list size consistency.</p>
         
 
@@ -2259,7 +2285,7 @@ private function <a href='../proc/check_list_size_cla.html'>check_list_size_cla<
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-usage_cla"></span><h3>
-private function <a href='../proc/usage_cla.html'>usage_cla</a>(cla, pref)
+private function <a href='../proc/usage_cla.html'>usage_cla</a>(cla, pref) result(usage)
     
     
     
@@ -2286,7 +2312,7 @@ private function <a href='../proc/usage_cla.html'>usage_cla</a>(cla, pref)
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Argument),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -2328,6 +2354,10 @@ private function <a href='../proc/usage_cla.html'>usage_cla</a>(cla, pref)
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get correct CLA usage.</p>
         
 
@@ -2338,7 +2368,7 @@ private function <a href='../proc/usage_cla.html'>usage_cla</a>(cla, pref)
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-signature_cla"></span><h3>
-private function <a href='../proc/signature_cla.html'>signature_cla</a>(cla)
+private function <a href='../proc/signature_cla.html'>signature_cla</a>(cla) result(signd)
     
     
     
@@ -2365,7 +2395,7 @@ private function <a href='../proc/signature_cla.html'>signature_cla</a>(cla)
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Argument),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -2392,6 +2422,10 @@ private function <a href='../proc/signature_cla.html'>signature_cla</a>(cla)
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get CLA signature for adding to the CLI one.</p>
         
 
@@ -2402,7 +2436,7 @@ private function <a href='../proc/signature_cla.html'>signature_cla</a>(cla)
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-passed_clasg"></span><h3>
-private purefunction <a href='../proc/passed_clasg.html'>passed_clasg</a>(clasg, switch, position)
+private purefunction <a href='../proc/passed_clasg.html'>passed_clasg</a>(clasg, switch, position) result(passed)
     
     
     
@@ -2429,7 +2463,7 @@ private purefunction <a href='../proc/passed_clasg.html'>passed_clasg</a>(clasg,
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Arguments_Group),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -2486,6 +2520,10 @@ private purefunction <a href='../proc/passed_clasg.html'>passed_clasg</a>(clasg,
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Check if a CLA has been passed.</p>
         
 
@@ -2496,7 +2534,7 @@ private purefunction <a href='../proc/passed_clasg.html'>passed_clasg</a>(clasg,
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-defined_clasg"></span><h3>
-private function <a href='../proc/defined_clasg.html'>defined_clasg</a>(clasg, switch, pos)
+private function <a href='../proc/defined_clasg.html'>defined_clasg</a>(clasg, switch, pos) result(defined)
     
     
     
@@ -2523,7 +2561,7 @@ private function <a href='../proc/defined_clasg.html'>defined_clasg</a>(clasg, s
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Arguments_Group),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -2580,6 +2618,10 @@ private function <a href='../proc/defined_clasg.html'>defined_clasg</a>(clasg, s
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Check if a CLA has been defined.</p>
         
 
@@ -2590,7 +2632,7 @@ private function <a href='../proc/defined_clasg.html'>defined_clasg</a>(clasg, s
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-usage_clasg"></span><h3>
-private function <a href='../proc/usage_clasg.html'>usage_clasg</a>(clasg, pref, no_header)
+private function <a href='../proc/usage_clasg.html'>usage_clasg</a>(clasg, pref, no_header) result(usage)
     
     
     
@@ -2617,7 +2659,7 @@ private function <a href='../proc/usage_clasg.html'>usage_clasg</a>(clasg, pref,
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Arguments_Group),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -2674,6 +2716,10 @@ private function <a href='../proc/usage_clasg.html'>usage_clasg</a>(clasg, pref,
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get correct CLAs group usage.</p>
         
 
@@ -2684,7 +2730,7 @@ private function <a href='../proc/usage_clasg.html'>usage_clasg</a>(clasg, pref,
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-signature_clasg"></span><h3>
-private function <a href='../proc/signature_clasg.html'>signature_clasg</a>(clasg)
+private function <a href='../proc/signature_clasg.html'>signature_clasg</a>(clasg) result(signd)
     
     
     
@@ -2711,7 +2757,7 @@ private function <a href='../proc/signature_clasg.html'>signature_clasg</a>(clas
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Arguments_Group),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -2737,6 +2783,10 @@ private function <a href='../proc/signature_clasg.html'>signature_clasg</a>(clas
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Get CLAs group signature for adding to the CLI one.</p>
         
@@ -2775,7 +2825,7 @@ private function <a href='../proc/passed.html'>passed</a>(cli, group, switch, po
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -2847,6 +2897,10 @@ private function <a href='../proc/passed.html'>passed</a>(cli, group, switch, po
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Check if a CLA has been passed.</p>
         
 
@@ -2857,7 +2911,7 @@ private function <a href='../proc/passed.html'>passed</a>(cli, group, switch, po
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-defined_group"></span><h3>
-private function <a href='../proc/defined_group.html'>defined_group</a>(cli, group, g)
+private function <a href='../proc/defined_group.html'>defined_group</a>(cli, group, g) result(defined)
     
     
     
@@ -2884,7 +2938,7 @@ private function <a href='../proc/defined_group.html'>defined_group</a>(cli, gro
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -2941,6 +2995,10 @@ private function <a href='../proc/defined_group.html'>defined_group</a>(cli, gro
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Check if a CLAs group has been defined.</p>
         
 
@@ -2951,7 +3009,7 @@ private function <a href='../proc/defined_group.html'>defined_group</a>(cli, gro
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-called_group"></span><h3>
-private function <a href='../proc/called_group.html'>called_group</a>(cli, group)
+private function <a href='../proc/called_group.html'>called_group</a>(cli, group) result(called)
     
     
     
@@ -2978,7 +3036,7 @@ private function <a href='../proc/called_group.html'>called_group</a>(cli, group
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -3020,6 +3078,10 @@ private function <a href='../proc/called_group.html'>called_group</a>(cli, group
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Check if a CLAs group has been runned.</p>
         
 
@@ -3057,7 +3119,7 @@ private function <a href='../proc/defined.html'>defined</a>(cli, switch, group)
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -3114,6 +3176,10 @@ private function <a href='../proc/defined.html'>defined</a>(cli, switch, group)
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Check if a CLA has been defined.</p>
         
 
@@ -3124,7 +3190,7 @@ private function <a href='../proc/defined.html'>defined</a>(cli, switch, group)
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-usage"></span><h3>
-private function <a href='../proc/usage.html'>usage</a>(cli, g, pref, no_header, no_examples, no_epilog)
+private function <a href='../proc/usage.html'>usage</a>(cli, g, pref, no_header, no_examples, no_epilog) result(usaged)
     
     
     
@@ -3151,7 +3217,7 @@ private function <a href='../proc/usage.html'>usage</a>(cli, g, pref, no_header,
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -3253,6 +3319,10 @@ private function <a href='../proc/usage.html'>usage</a>(cli, g, pref, no_header,
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Print correct usage of CLI.</p>
         
 
@@ -3263,7 +3333,7 @@ private function <a href='../proc/usage.html'>usage</a>(cli, g, pref, no_header,
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-signature"></span><h3>
-private function <a href='../proc/signature.html'>signature</a>(cli)
+private function <a href='../proc/signature.html'>signature</a>(cli) result(signd)
     
     
     
@@ -3290,7 +3360,7 @@ private function <a href='../proc/signature.html'>signature</a>(cli)
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -3316,6 +3386,10 @@ private function <a href='../proc/signature.html'>signature</a>(cli)
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Get CLI signature.</p>
         
@@ -3425,6 +3499,10 @@ private puresubroutine <a href='../proc/tokenize.html'>tokenize</a>(strin, delim
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Tokenize a string in order to parse it.</p>
         
 
@@ -3462,7 +3540,7 @@ private elementalsubroutine <a href='../proc/free_object.html'>free_object</a>(o
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_object.html'>Type_Object</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Object),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -3479,6 +3557,10 @@ private elementalsubroutine <a href='../proc/free_object.html'>free_object</a>(o
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Free dynamic memory.</p>
         
@@ -3517,7 +3599,7 @@ private subroutine <a href='../proc/errored.html'>errored</a>(obj, error, pref, 
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_object.html'>Type_Object</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Object),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -3655,6 +3737,10 @@ private subroutine <a href='../proc/errored.html'>errored</a>(obj, error, pref, 
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Trig error occurence and print meaningful message.</p>
         
 
@@ -3692,7 +3778,7 @@ private subroutine <a href='../proc/print_version.html'>print_version</a>(obj, p
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_object.html'>Type_Object</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Object),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -3724,6 +3810,10 @@ private subroutine <a href='../proc/print_version.html'>print_version</a>(obj, p
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Print version.</p>
         
@@ -3762,7 +3852,7 @@ private elementalsubroutine <a href='../proc/assign_object.html'>assign_object</
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_object.html'>Type_Object</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Object),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -3777,7 +3867,7 @@ private elementalsubroutine <a href='../proc/assign_object.html'>assign_object</
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_object.html'>Type_Object</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Object),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -3828,7 +3918,7 @@ private elementalsubroutine <a href='../proc/free_cla.html'>free_cla</a>(cla)
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Argument),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -3845,6 +3935,10 @@ private elementalsubroutine <a href='../proc/free_cla.html'>free_cla</a>(cla)
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Free dynamic memory.</p>
         
@@ -3883,7 +3977,7 @@ private elementalsubroutine <a href='../proc/finalize_cla.html'>finalize_cla</a>
   
 <tr>
   
-  <td><span class="anchor" ></span>type(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td><span class="anchor" ></span>type(Type_Command_Line_Argument),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -3900,6 +3994,10 @@ private elementalsubroutine <a href='../proc/finalize_cla.html'>finalize_cla</a>
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Free dynamic memory when finalizing.</p>
         
@@ -3938,7 +4036,7 @@ private subroutine <a href='../proc/check_cla.html'>check_cla</a>(cla, pref)
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Argument),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -3970,6 +4068,10 @@ private subroutine <a href='../proc/check_cla.html'>check_cla</a>(cla, pref)
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Check CLA data consistency.</p>
         
@@ -4008,7 +4110,7 @@ private subroutine <a href='../proc/check_choices_cla.html'>check_choices_cla</a
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Argument),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -4056,6 +4158,10 @@ private subroutine <a href='../proc/check_choices_cla.html'>check_choices_cla</a
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Check if CLA value is in allowed choices.</p>
         
 
@@ -4093,7 +4199,7 @@ private subroutine <a href='../proc/get_cla.html'>get_cla</a>(cla, pref, val)
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Argument),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -4141,6 +4247,10 @@ private subroutine <a href='../proc/get_cla.html'>get_cla</a>(cla, pref, val)
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get CLA (single) value.</p>
         
 
@@ -4178,7 +4288,7 @@ private subroutine <a href='../proc/get_cla_list.html'>get_cla_list</a>(cla, pre
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Argument),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -4226,6 +4336,10 @@ private subroutine <a href='../proc/get_cla_list.html'>get_cla_list</a>(cla, pre
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get CLA (multiple) value.</p>
         
 
@@ -4263,7 +4377,7 @@ private subroutine <a href='../proc/get_cla_list_varying_r16p.html'>get_cla_list
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Argument),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -4311,6 +4425,10 @@ private subroutine <a href='../proc/get_cla_list_varying_r16p.html'>get_cla_list
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get CLA (multiple) value with varying size, real(R16P).</p>
         
 
@@ -4348,7 +4466,7 @@ private subroutine <a href='../proc/get_cla_list_varying_r8p.html'>get_cla_list_
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Argument),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -4396,6 +4514,10 @@ private subroutine <a href='../proc/get_cla_list_varying_r8p.html'>get_cla_list_
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get CLA (multiple) value with varying size, real(R8P).</p>
         
 
@@ -4433,7 +4555,7 @@ private subroutine <a href='../proc/get_cla_list_varying_r4p.html'>get_cla_list_
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Argument),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -4481,6 +4603,10 @@ private subroutine <a href='../proc/get_cla_list_varying_r4p.html'>get_cla_list_
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get CLA (multiple) value with varying size, real(R4P).</p>
         
 
@@ -4518,7 +4644,7 @@ private subroutine <a href='../proc/get_cla_list_varying_i8p.html'>get_cla_list_
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Argument),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -4566,6 +4692,10 @@ private subroutine <a href='../proc/get_cla_list_varying_i8p.html'>get_cla_list_
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get CLA (multiple) value with varying size, integer(I8P).</p>
         
 
@@ -4603,7 +4733,7 @@ private subroutine <a href='../proc/get_cla_list_varying_i4p.html'>get_cla_list_
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Argument),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -4651,6 +4781,10 @@ private subroutine <a href='../proc/get_cla_list_varying_i4p.html'>get_cla_list_
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get CLA (multiple) value with varying size, integer(I4P).</p>
         
 
@@ -4688,7 +4822,7 @@ private subroutine <a href='../proc/get_cla_list_varying_i2p.html'>get_cla_list_
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Argument),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -4736,6 +4870,10 @@ private subroutine <a href='../proc/get_cla_list_varying_i2p.html'>get_cla_list_
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get CLA (multiple) value with varying size, integer(I2P).</p>
         
 
@@ -4773,7 +4911,7 @@ private subroutine <a href='../proc/get_cla_list_varying_i1p.html'>get_cla_list_
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Argument),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -4821,6 +4959,10 @@ private subroutine <a href='../proc/get_cla_list_varying_i1p.html'>get_cla_list_
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get CLA (multiple) value with varying size, integer(I1P).</p>
         
 
@@ -4858,7 +5000,7 @@ private subroutine <a href='../proc/get_cla_list_varying_logical.html'>get_cla_l
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Argument),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -4906,6 +5048,10 @@ private subroutine <a href='../proc/get_cla_list_varying_logical.html'>get_cla_l
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get CLA (multiple) value with varying size, logical.</p>
         
 
@@ -4943,7 +5089,7 @@ private subroutine <a href='../proc/get_cla_list_varying_char.html'>get_cla_list
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Argument),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -4991,6 +5137,10 @@ private subroutine <a href='../proc/get_cla_list_varying_char.html'>get_cla_list
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get CLA (multiple) value with varying size, character.</p>
         
 
@@ -5028,7 +5178,7 @@ private elementalsubroutine <a href='../proc/assign_cla.html'>assign_cla</a>(lhs
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Argument),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -5043,7 +5193,7 @@ private elementalsubroutine <a href='../proc/assign_cla.html'>assign_cla</a>(lhs
   
 <tr>
   
-  <td><span class="anchor" ></span>type(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td><span class="anchor" ></span>type(Type_Command_Line_Argument),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -5094,7 +5244,7 @@ private elementalsubroutine <a href='../proc/free_clasg.html'>free_clasg</a>(cla
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Arguments_Group),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -5111,6 +5261,10 @@ private elementalsubroutine <a href='../proc/free_clasg.html'>free_clasg</a>(cla
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Free dynamic memory.</p>
         
@@ -5149,7 +5303,7 @@ private elementalsubroutine <a href='../proc/finalize_clasg.html'>finalize_clasg
   
 <tr>
   
-  <td><span class="anchor" ></span>type(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" ></span>type(Type_Command_Line_Arguments_Group),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -5166,6 +5320,10 @@ private elementalsubroutine <a href='../proc/finalize_clasg.html'>finalize_clasg
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Free dynamic memory when finalizing.</p>
         
@@ -5204,7 +5362,7 @@ private subroutine <a href='../proc/check_clasg.html'>check_clasg</a>(clasg, pre
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Arguments_Group),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -5236,6 +5394,10 @@ private subroutine <a href='../proc/check_clasg.html'>check_clasg</a>(clasg, pre
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Check CLA data consistency.</p>
         
@@ -5274,7 +5436,7 @@ private subroutine <a href='../proc/check_required_clasg.html'>check_required_cl
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Arguments_Group),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -5306,6 +5468,10 @@ private subroutine <a href='../proc/check_required_clasg.html'>check_required_cl
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Check if required CLAs are passed.</p>
         
@@ -5344,7 +5510,7 @@ private subroutine <a href='../proc/check_m_exclusive_clasg.html'>check_m_exclus
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Arguments_Group),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -5376,6 +5542,10 @@ private subroutine <a href='../proc/check_m_exclusive_clasg.html'>check_m_exclus
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Check if two mutually exclusive CLAs have been passed.</p>
         
@@ -5414,7 +5584,7 @@ private subroutine <a href='../proc/add_cla_clasg.html'>add_cla_clasg</a>(clasg,
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Arguments_Group),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -5444,7 +5614,7 @@ private subroutine <a href='../proc/add_cla_clasg.html'>add_cla_clasg</a>(clasg,
   
 <tr>
   
-  <td><span class="anchor" ></span>type(<a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a>),</td>
+  <td><span class="anchor" ></span>type(Type_Command_Line_Argument),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -5461,6 +5631,10 @@ private subroutine <a href='../proc/add_cla_clasg.html'>add_cla_clasg</a>(clasg,
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Add CLA to CLAs list.</p>
         
@@ -5499,7 +5673,7 @@ private subroutine <a href='../proc/parse_clasg.html'>parse_clasg</a>(clasg, pre
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Arguments_Group),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -5547,6 +5721,10 @@ private subroutine <a href='../proc/parse_clasg.html'>parse_clasg</a>(clasg, pre
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Parse CLAs group arguments.</p>
         
 
@@ -5584,7 +5762,7 @@ private elementalsubroutine <a href='../proc/assign_clasg.html'>assign_clasg</a>
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Arguments_Group),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -5599,7 +5777,7 @@ private elementalsubroutine <a href='../proc/assign_clasg.html'>assign_clasg</a>
   
 <tr>
   
-  <td><span class="anchor" ></span>type(<a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a>),</td>
+  <td><span class="anchor" ></span>type(Type_Command_Line_Arguments_Group),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -5650,7 +5828,7 @@ private elementalsubroutine <a href='../proc/free.html'>free</a>(cli)
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -5667,6 +5845,10 @@ private elementalsubroutine <a href='../proc/free.html'>free</a>(cli)
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Free dynamic memory.</p>
         
@@ -5705,7 +5887,7 @@ private elementalsubroutine <a href='../proc/finalize.html'>finalize</a>(cli)
   
 <tr>
   
-  <td><span class="anchor" ></span>type(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>type(Type_Command_Line_Interface),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -5722,6 +5904,10 @@ private elementalsubroutine <a href='../proc/finalize.html'>finalize</a>(cli)
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Free dynamic memory when finalizing.</p>
         
@@ -5760,7 +5946,7 @@ private subroutine <a href='../proc/init.html'>init</a>(cli, progname, version, 
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -5913,6 +6099,10 @@ private subroutine <a href='../proc/init.html'>init</a>(cli, progname, version, 
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Initialize CLI.</p>
         
 
@@ -5950,7 +6140,7 @@ private subroutine <a href='../proc/add_group.html'>add_group</a>(cli, help, des
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -6028,6 +6218,10 @@ private subroutine <a href='../proc/add_group.html'>add_group</a>(cli, help, des
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Add CLAs group to CLI.</p>
         
 
@@ -6065,7 +6259,7 @@ private subroutine <a href='../proc/set_mutually_exclusive_groups.html'>set_mutu
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -6113,6 +6307,10 @@ private subroutine <a href='../proc/set_mutually_exclusive_groups.html'>set_mutu
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Set two CLAs group ad mutually exclusive.</p>
         
 
@@ -6150,7 +6348,7 @@ private subroutine <a href='../proc/add.html'>add</a>(cli, pref, group, group_in
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -6423,6 +6621,10 @@ private subroutine <a href='../proc/add.html'>add</a>(cli, pref, group, group_in
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Add CLA to CLI.</p>
         
 
@@ -6460,7 +6662,7 @@ private subroutine <a href='../proc/check.html'>check</a>(cli, pref, error)
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -6508,6 +6710,10 @@ private subroutine <a href='../proc/check.html'>check</a>(cli, pref, error)
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Check CLAs data consistency.</p>
         
 
@@ -6545,7 +6751,7 @@ private subroutine <a href='../proc/check_m_exclusive.html'>check_m_exclusive</a
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -6577,6 +6783,10 @@ private subroutine <a href='../proc/check_m_exclusive.html'>check_m_exclusive</a
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Check if two mutually exclusive CLAs group have been called.</p>
         
@@ -6615,7 +6825,7 @@ private subroutine <a href='../proc/parse.html'>parse</a>(cli, pref, args, error
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -6678,6 +6888,10 @@ private subroutine <a href='../proc/parse.html'>parse</a>(cli, pref, args, error
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Parse Command Line Interfaces by means of a previously initialized CLAs groups list.</p>
         
 
@@ -6715,7 +6929,7 @@ private subroutine <a href='../proc/get_clasg_indexes.html'>get_clasg_indexes</a
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -6747,6 +6961,10 @@ private subroutine <a href='../proc/get_clasg_indexes.html'>get_clasg_indexes</a
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Get the argument indexes of CLAs groups defined parsing the actual passed CLAs.</p>
         
@@ -6785,7 +7003,7 @@ private subroutine <a href='../proc/get_args_from_string.html'>get_args_from_str
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -6833,6 +7051,10 @@ private subroutine <a href='../proc/get_args_from_string.html'>get_args_from_str
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get CLAs from string.</p>
         
 
@@ -6870,7 +7092,7 @@ private subroutine <a href='../proc/get_args_from_invocation.html'>get_args_from
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -6902,6 +7124,10 @@ private subroutine <a href='../proc/get_args_from_invocation.html'>get_args_from
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Get CLAs from CLI invocation.</p>
         
@@ -6940,7 +7166,7 @@ private subroutine <a href='../proc/get_cla_cli.html'>get_cla_cli</a>(cli, val, 
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -7048,6 +7274,10 @@ private subroutine <a href='../proc/get_cla_cli.html'>get_cla_cli</a>(cli, val, 
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get CLA (single) value from CLAs list parsed.</p>
         
 
@@ -7085,7 +7315,7 @@ private subroutine <a href='../proc/get_cla_list_cli.html'>get_cla_list_cli</a>(
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -7193,6 +7423,10 @@ private subroutine <a href='../proc/get_cla_list_cli.html'>get_cla_list_cli</a>(
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get CLA multiple values from CLAs list parsed.</p>
         
 
@@ -7230,7 +7464,7 @@ private subroutine <a href='../proc/get_cla_list_varying_r16p_cli.html'>get_cla_
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -7338,6 +7572,10 @@ private subroutine <a href='../proc/get_cla_list_varying_r16p_cli.html'>get_cla_
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get CLA multiple values from CLAs list parsed with varying size list, real(R16P).</p>
         
 
@@ -7375,7 +7613,7 @@ private subroutine <a href='../proc/get_cla_list_varying_r8p_cli.html'>get_cla_l
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -7483,6 +7721,10 @@ private subroutine <a href='../proc/get_cla_list_varying_r8p_cli.html'>get_cla_l
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get CLA multiple values from CLAs list parsed with varying size list, real(R8P).</p>
         
 
@@ -7520,7 +7762,7 @@ private subroutine <a href='../proc/get_cla_list_varying_r4p_cli.html'>get_cla_l
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -7628,6 +7870,10 @@ private subroutine <a href='../proc/get_cla_list_varying_r4p_cli.html'>get_cla_l
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get CLA multiple values from CLAs list parsed with varying size list, real(R4P).</p>
         
 
@@ -7665,7 +7911,7 @@ private subroutine <a href='../proc/get_cla_list_varying_i8p_cli.html'>get_cla_l
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -7773,6 +8019,10 @@ private subroutine <a href='../proc/get_cla_list_varying_i8p_cli.html'>get_cla_l
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get CLA multiple values from CLAs list parsed with varying size list, integer(I8P).</p>
         
 
@@ -7810,7 +8060,7 @@ private subroutine <a href='../proc/get_cla_list_varying_i4p_cli.html'>get_cla_l
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -7918,6 +8168,10 @@ private subroutine <a href='../proc/get_cla_list_varying_i4p_cli.html'>get_cla_l
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get CLA multiple values from CLAs list parsed with varying size list, integer(I4P).</p>
         
 
@@ -7955,7 +8209,7 @@ private subroutine <a href='../proc/get_cla_list_varying_i2p_cli.html'>get_cla_l
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -8063,6 +8317,10 @@ private subroutine <a href='../proc/get_cla_list_varying_i2p_cli.html'>get_cla_l
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get CLA multiple values from CLAs list parsed with varying size list, integer(I2P).</p>
         
 
@@ -8100,7 +8358,7 @@ private subroutine <a href='../proc/get_cla_list_varying_i1p_cli.html'>get_cla_l
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -8208,6 +8466,10 @@ private subroutine <a href='../proc/get_cla_list_varying_i1p_cli.html'>get_cla_l
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get CLA multiple values from CLAs list parsed with varying size list, integer(I1P).</p>
         
 
@@ -8245,7 +8507,7 @@ private subroutine <a href='../proc/get_cla_list_varying_logical_cli.html'>get_c
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -8353,6 +8615,10 @@ private subroutine <a href='../proc/get_cla_list_varying_logical_cli.html'>get_c
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get CLA multiple values from CLAs list parsed with varying size list, logical.</p>
         
 
@@ -8390,7 +8656,7 @@ private subroutine <a href='../proc/get_cla_list_varying_char_cli.html'>get_cla_
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -8498,6 +8764,10 @@ private subroutine <a href='../proc/get_cla_list_varying_char_cli.html'>get_cla_
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Get CLA multiple values from CLAs list parsed with varying size list, character.</p>
         
 
@@ -8535,7 +8805,7 @@ private subroutine <a href='../proc/print_usage.html'>print_usage</a>(cli, pref)
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -8567,6 +8837,10 @@ private subroutine <a href='../proc/print_usage.html'>print_usage</a>(cli, pref)
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Print correct usage of CLI.</p>
         
@@ -8605,7 +8879,7 @@ private subroutine <a href='../proc/save_man_page.html'>save_man_page</a>(cli, m
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -8653,6 +8927,10 @@ private subroutine <a href='../proc/save_man_page.html'>save_man_page</a>(cli, m
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Save man page build on the CLI.</p>
         
 
@@ -8690,7 +8968,7 @@ private elementalsubroutine <a href='../proc/assign_cli.html'>assign_cli</a>(lhs
   
 <tr>
   
-  <td><span class="anchor" ></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>class(Type_Command_Line_Interface),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -8705,7 +8983,7 @@ private elementalsubroutine <a href='../proc/assign_cli.html'>assign_cli</a>(lhs
   
 <tr>
   
-  <td><span class="anchor" ></span>type(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
+  <td><span class="anchor" ></span>type(Type_Command_Line_Interface),</td>
   <td>intent(in)</td>
   <td></td>
   

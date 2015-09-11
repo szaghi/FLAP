@@ -196,8 +196,8 @@
 <h2 id="documentation"><a class="toclink" href="#documentation">Documentation</a></h2>
 <p>Besides this README file the FLAP documentation is contained into its own <a href="https://github.com/szaghi/FLAP/wiki">wiki</a>. Detailed documentation of the API is contained into the <a href="http://szaghi.github.io/FLAP/index.html">GitHub Pages</a> that can also be created locally by means of <a href="https://github.com/cmacmackin/ford">ford tool</a>.</p>
 <h3 id="a-taste-of-flap"><a class="toclink" href="#a-taste-of-flap">A Taste of FLAP</a></h3>
-<p>Running the provided test program, <code>Test_Driver -h</code>, a taste of FLAP is served:</p>
-<div class="codehilite"><pre>usage:  Test_Driver [value] --string value [--integer value] [--real value] [--boolean] [--boolean_val value] [--integer_list value#1 value#2 value#3] [--help] [--version]
+<p>Running the provided test program, <code>test_basic -h</code>, a taste of FLAP is served:</p>
+<div class="codehilite"><pre>usage:  test_basic [value] --string value [--integer value] [--real value] [--boolean] [--boolean_val value] [--integer_list value#1 value#2 value#3] [--help] [--version]
 
 Toy program for testing FLAP
 
@@ -231,28 +231,28 @@ Optional switches:
           Print version
 
 Examples:
-   Test_Driver -s &#39;Hello FLAP&#39;
-   Test_Driver -s &#39;Hello FLAP&#39; -i -2 # printing error...
-   Test_Driver -s &#39;Hello FLAP&#39; -i 3 -r 33.d0
-   Test_Driver -s &#39;Hello FLAP&#39; --integer_list 10 -3 87
-   Test_Driver 33.0 -s &#39;Hello FLAP&#39; -i 5
-   Test_Driver --string &#39;Hello FLAP&#39; --boolean
+   test_basic -s &#39;Hello FLAP&#39;
+   test_basic -s &#39;Hello FLAP&#39; -i -2 # printing error...
+   test_basic -s &#39;Hello FLAP&#39; -i 3 -r 33.d0
+   test_basic -s &#39;Hello FLAP&#39; --integer_list 10 -3 87
+   test_basic 33.0 -s &#39;Hello FLAP&#39; -i 5
+   test_basic --string &#39;Hello FLAP&#39; --boolean
 </pre></div>
 
 
 <p>Not so bad for just a very few statements as the following:</p>
 <div class="codehilite"><pre><span class="c">! initializing Command Line Interface</span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span>    <span class="o">=</span> <span class="s1">&#39;Test_Driver&#39;</span><span class="p">,</span>                                           <span class="p">&amp;</span>
-              <span class="n">version</span>     <span class="o">=</span> <span class="s1">&#39;v2.1.5&#39;</span><span class="p">,</span>                                                <span class="p">&amp;</span>
-              <span class="n">authors</span>     <span class="o">=</span> <span class="s1">&#39;Stefano Zaghi&#39;</span><span class="p">,</span>                                         <span class="p">&amp;</span>
-              <span class="n">license</span>     <span class="o">=</span> <span class="s1">&#39;MIT&#39;</span><span class="p">,</span>                                                   <span class="p">&amp;</span>
-              <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Toy program for testing FLAP&#39;</span><span class="p">,</span>                          <span class="p">&amp;</span>
-              <span class="n">examples</span>    <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Test_Driver -s &#39;Hello FLAP&#39;                          &quot;</span><span class="p">,&amp;</span>
-                             <span class="s2">&quot;Test_Driver -s &#39;Hello FLAP&#39; -i -2 # printing error...&quot;</span><span class="p">,&amp;</span>
-                             <span class="s2">&quot;Test_Driver -s &#39;Hello FLAP&#39; -i 3 -r 33.d0            &quot;</span><span class="p">,&amp;</span>
-                             <span class="s2">&quot;Test_Driver -s &#39;Hello FLAP&#39; --integer_list 10 -3 87  &quot;</span><span class="p">,&amp;</span>
-                             <span class="s2">&quot;Test_Driver 33.0 -s &#39;Hello FLAP&#39; -i 5                &quot;</span><span class="p">,&amp;</span>
-                             <span class="s2">&quot;Test_Driver --string &#39;Hello FLAP&#39; --boolean          &quot;</span><span class="p">])</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span>    <span class="o">=</span> <span class="s1">&#39;test_basic&#39;</span><span class="p">,</span>                                           <span class="p">&amp;</span>
+              <span class="n">version</span>     <span class="o">=</span> <span class="s1">&#39;v2.1.5&#39;</span><span class="p">,</span>                                               <span class="p">&amp;</span>
+              <span class="n">authors</span>     <span class="o">=</span> <span class="s1">&#39;Stefano Zaghi&#39;</span><span class="p">,</span>                                        <span class="p">&amp;</span>
+              <span class="n">license</span>     <span class="o">=</span> <span class="s1">&#39;MIT&#39;</span><span class="p">,</span>                                                  <span class="p">&amp;</span>
+              <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Toy program for testing FLAP&#39;</span><span class="p">,</span>                         <span class="p">&amp;</span>
+              <span class="n">examples</span>    <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;test_basic -s &#39;Hello FLAP&#39;                          &quot;</span><span class="p">,&amp;</span>
+                             <span class="s2">&quot;test_basic -s &#39;Hello FLAP&#39; -i -2 # printing error...&quot;</span><span class="p">,&amp;</span>
+                             <span class="s2">&quot;test_basic -s &#39;Hello FLAP&#39; -i 3 -r 33.d0            &quot;</span><span class="p">,&amp;</span>
+                             <span class="s2">&quot;test_basic -s &#39;Hello FLAP&#39; --integer_list 10 -3 87  &quot;</span><span class="p">,&amp;</span>
+                             <span class="s2">&quot;test_basic 33.0 -s &#39;Hello FLAP&#39; -i 5                &quot;</span><span class="p">,&amp;</span>
+                             <span class="s2">&quot;test_basic --string &#39;Hello FLAP&#39; --boolean          &quot;</span><span class="p">])</span>
 <span class="c">! setting Command Line Argumenst</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--string&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;String input&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--integer&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-i&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Integer input with fixed range&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,&amp;</span>
@@ -270,21 +270,21 @@ Examples:
 </pre></div>
 
 
-<p>For more details, see the provided <a href="https://github.com/szaghi/FLAP/blob/master/src/Test_Driver.f90">example</a>.</p>
+<p>For more details, see the provided <a href="https://github.com/szaghi/FLAP/blob/master/src/tests/test_basic.f90">example</a>.</p>
 <p>For a practical example of FLAP usage see <a href="https://github.com/szaghi/OFF/blob/testing/src/POG.f90">POG</a> source file at line <code>85</code>.</p>
 <h4 id="nested-subcommands"><a class="toclink" href="#nested-subcommands">Nested (sub)commands</a></h4>
 <p>FLAP fully supports nested (sub)commands or groups of command line arguments. For example a fake <code>git</code> toy remake can be coded as</p>
 <div class="codehilite"><pre><span class="c">! initializing Command Line Interface</span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span>    <span class="o">=</span> <span class="s1">&#39;Test_Driver_Nested&#39;</span><span class="p">,</span>                                    <span class="p">&amp;</span>
-              <span class="n">version</span>     <span class="o">=</span> <span class="s1">&#39;v2.1.5&#39;</span><span class="p">,</span>                                                <span class="p">&amp;</span>
-              <span class="n">authors</span>     <span class="o">=</span> <span class="s1">&#39;Stefano Zaghi&#39;</span><span class="p">,</span>                                         <span class="p">&amp;</span>
-              <span class="n">license</span>     <span class="o">=</span> <span class="s1">&#39;MIT&#39;</span><span class="p">,</span>                                                   <span class="p">&amp;</span>
-              <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Toy program for testing FLAP with nested commands&#39;</span><span class="p">,</span>     <span class="p">&amp;</span>
-              <span class="n">examples</span>    <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Test_Driver_Nested                      &#39;</span><span class="p">,&amp;</span>
-                             <span class="s1">&#39;Test_Driver_Nested -h                   &#39;</span><span class="p">,&amp;</span>
-                             <span class="s1">&#39;Test_Driver_Nested init                 &#39;</span><span class="p">,&amp;</span>
-                             <span class="s1">&#39;Test_Driver_Nested commit -m &quot;fix bug-1&quot;&#39;</span><span class="p">,&amp;</span>
-                             <span class="s1">&#39;Test_Driver_Nested tag -a &quot;v2.1.5&quot;      &#39;</span><span class="p">])</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span>    <span class="o">=</span> <span class="s1">&#39;test_nested&#39;</span><span class="p">,</span>                                      <span class="p">&amp;</span>
+              <span class="n">version</span>     <span class="o">=</span> <span class="s1">&#39;v2.1.5&#39;</span><span class="p">,</span>                                           <span class="p">&amp;</span>
+              <span class="n">authors</span>     <span class="o">=</span> <span class="s1">&#39;Stefano Zaghi&#39;</span><span class="p">,</span>                                    <span class="p">&amp;</span>
+              <span class="n">license</span>     <span class="o">=</span> <span class="s1">&#39;MIT&#39;</span><span class="p">,</span>                                              <span class="p">&amp;</span>
+              <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Toy program for testing FLAP with nested commands&#39;</span><span class="p">,&amp;</span>
+              <span class="n">examples</span>    <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;test_nested                      &#39;</span><span class="p">,&amp;</span>
+                             <span class="s1">&#39;test_nested -h                   &#39;</span><span class="p">,&amp;</span>
+                             <span class="s1">&#39;test_nested init                 &#39;</span><span class="p">,&amp;</span>
+                             <span class="s1">&#39;test_nested commit -m &quot;fix bug-1&quot;&#39;</span><span class="p">,&amp;</span>
+                             <span class="s1">&#39;test_nested tag -a &quot;v2.1.5&quot;      &#39;</span><span class="p">])</span>
 <span class="c">! set a Command Line Argument without a group to trigger authors names printing</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--authors&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-a&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Print authors names&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">)</span>
 <span class="c">! set Command Line Arguments Groups, i.e. commands</span>
@@ -325,7 +325,7 @@ Examples:
 
 
 <p>and invoked with <code>-h</code> option gives:</p>
-<div class="codehilite"><pre>usage: Test_Driver_Nested  <span class="o">[</span>--authors<span class="o">]</span> <span class="o">[</span>--help<span class="o">]</span> <span class="o">[</span>--version<span class="o">]</span> <span class="o">{</span>init,commit,tag<span class="o">}</span> ...
+<div class="codehilite"><pre>usage: test_nested  <span class="o">[</span>--authors<span class="o">]</span> <span class="o">[</span>--help<span class="o">]</span> <span class="o">[</span>--version<span class="o">]</span> <span class="o">{</span>init,commit,tag<span class="o">}</span> ...
 
 Toy program <span class="k">for</span> testing FLAP with nested commands
 
@@ -347,20 +347,20 @@ Commands:
           fake tag current commit
 
 For more detailed commands <span class="nb">help </span>try:
-  Test_Driver_Nested init -h,--help
-  Test_Driver_Nested commit -h,--help
-  Test_Driver_Nested tag -h,--help
+  test_nested init -h,--help
+  test_nested commit -h,--help
+  test_nested tag -h,--help
 
 Examples:
-   Test_Driver_Nested
-   Test_Driver_Nested -h
-   Test_Driver_Nested init
-   Test_Driver_Nested commit -m <span class="s2">&quot;fix bug-1&quot;</span>
-   Test_Driver_Nested tag -a <span class="s2">&quot;v2.1.5&quot;</span>
+   test_nested
+   test_nested -h
+   test_nested init
+   test_nested commit -m <span class="s2">&quot;fix bug-1&quot;</span>
+   test_nested tag -a <span class="s2">&quot;v2.1.5&quot;</span>
 </pre></div>
 
 
-<p>For more details, see the provided <a href="https://github.com/szaghi/FLAP/blob/master/src/Test_Driver_Nested.f90">example</a>.</p>
+<p>For more details, see the provided <a href="https://github.com/szaghi/FLAP/blob/master/src/tests/test_nested.f90">example</a>.</p>
 <p>Go to <a href="#top">Top</a></p>
         </div>
 		  
@@ -405,15 +405,19 @@ Examples:
                   
                 
                   
-                    <li><a href='./sourcefile/test_driver.f90.html'>Test_Driver.f90</a></li>
+                    <li><a href='./sourcefile/test_basic.f90.html'>test_basic.f90</a></li>
                   
                 
                   
-                    <li><a href='./sourcefile/test_driver_args_from_string.f90.html'>Test_Driver_Args_From_String.f90</a></li>
+                    <li><a href='./sourcefile/test_choices_logical.f90.html'>test_choices_logical.f90</a></li>
                   
                 
                   
-                    <li><a href='./sourcefile/test_driver_nested.f90.html'>Test_Driver_Nested.f90</a></li>
+                    <li><a href='./sourcefile/test_nested.f90.html'>test_nested.f90</a></li>
+                  
+                
+                  
+                    <li><a href='./sourcefile/test_string.f90.html'>test_string.f90</a></li>
                   
                 
               </ul>

@@ -315,7 +315,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-private elementalfunction Upper_Case(string)
+private purefunction Upper_Case(string)
     
     
     
@@ -370,6 +370,8 @@ private elementalfunction Upper_Case(string)
     <h3>Description</h3>
     <p>Convert the lower case characters of a string to upper case one.</p>
     
+    
+     
     <br>
     
     <section>
@@ -461,7 +463,9 @@ private elementalfunction Upper_Case(string)
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">elemental function </span><span class="n">Upper_Case</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">pure function </span><span class="n">Upper_Case</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+  <span class="c">! elemental function Upper_Case(string)</span>
+  <span class="c">! 1513-209 (S) The result of an elemental function must be a nonpointer, nonallocatable scalar, and its type parameters must be constant expressions.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Convert the lower case characters of a string to upper case one.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
