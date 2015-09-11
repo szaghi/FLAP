@@ -108,10 +108,10 @@ Besides this README file the FLAP documentation is contained into its own [wiki]
 
 ### A Taste of FLAP
 
-Running the provided test program, `Test_Driver -h`, a taste of FLAP is served:
+Running the provided test program, `test_basic -h`, a taste of FLAP is served:
 
 ```man
-usage:  Test_Driver [value] --string value [--integer value] [--real value] [--boolean] [--boolean_val value] [--integer_list value#1 value#2 value#3] [--help] [--version]
+usage:  test_basic [value] --string value [--integer value] [--real value] [--boolean] [--boolean_val value] [--integer_list value#1 value#2 value#3] [--help] [--version]
 
 Toy program for testing FLAP
 
@@ -145,29 +145,29 @@ Optional switches:
           Print version
 
 Examples:
-   Test_Driver -s 'Hello FLAP'
-   Test_Driver -s 'Hello FLAP' -i -2 # printing error...
-   Test_Driver -s 'Hello FLAP' -i 3 -r 33.d0
-   Test_Driver -s 'Hello FLAP' --integer_list 10 -3 87
-   Test_Driver 33.0 -s 'Hello FLAP' -i 5
-   Test_Driver --string 'Hello FLAP' --boolean
+   test_basic -s 'Hello FLAP'
+   test_basic -s 'Hello FLAP' -i -2 # printing error...
+   test_basic -s 'Hello FLAP' -i 3 -r 33.d0
+   test_basic -s 'Hello FLAP' --integer_list 10 -3 87
+   test_basic 33.0 -s 'Hello FLAP' -i 5
+   test_basic --string 'Hello FLAP' --boolean
 ```
 
 Not so bad for just a very few statements as the following:
 
 ```fortran
 ! initializing Command Line Interface
-call cli%init(progname    = 'Test_Driver',                                           &
-              version     = 'v2.1.5',                                                &
-              authors     = 'Stefano Zaghi',                                         &
-              license     = 'MIT',                                                   &
-              description = 'Toy program for testing FLAP',                          &
-              examples    = ["Test_Driver -s 'Hello FLAP'                          ",&
-                             "Test_Driver -s 'Hello FLAP' -i -2 # printing error...",&
-                             "Test_Driver -s 'Hello FLAP' -i 3 -r 33.d0            ",&
-                             "Test_Driver -s 'Hello FLAP' --integer_list 10 -3 87  ",&
-                             "Test_Driver 33.0 -s 'Hello FLAP' -i 5                ",&
-                             "Test_Driver --string 'Hello FLAP' --boolean          "])
+call cli%init(progname    = 'test_basic',                                           &
+              version     = 'v2.1.5',                                               &
+              authors     = 'Stefano Zaghi',                                        &
+              license     = 'MIT',                                                  &
+              description = 'Toy program for testing FLAP',                         &
+              examples    = ["test_basic -s 'Hello FLAP'                          ",&
+                             "test_basic -s 'Hello FLAP' -i -2 # printing error...",&
+                             "test_basic -s 'Hello FLAP' -i 3 -r 33.d0            ",&
+                             "test_basic -s 'Hello FLAP' --integer_list 10 -3 87  ",&
+                             "test_basic 33.0 -s 'Hello FLAP' -i 5                ",&
+                             "test_basic --string 'Hello FLAP' --boolean          "])
 ! setting Command Line Argumenst
 call cli%add(switch='--string',switch_ab='-s',help='String input',required=.true.,act='store',error=error)
 call cli%add(switch='--integer',switch_ab='-i',help='Integer input with fixed range',required=.false.,act='store',&
@@ -184,7 +184,7 @@ call cli%add(positional=.true.,position=1,help='Positional real input',required=
 call cli%parse(error=error)
 ```
 
-For more details, see the provided [example](https://github.com/szaghi/FLAP/blob/master/src/Test_Driver.f90).
+For more details, see the provided [example](https://github.com/szaghi/FLAP/blob/master/src/tests/test_basic.f90).
 
 For a practical example of FLAP usage see [POG](https://github.com/szaghi/OFF/blob/testing/src/POG.f90) source file at line `85`.
 
@@ -194,16 +194,16 @@ FLAP fully supports nested (sub)commands or groups of command line arguments. Fo
 
 ```fortran
 ! initializing Command Line Interface
-call cli%init(progname    = 'Test_Driver_Nested',                                    &
-              version     = 'v2.1.5',                                                &
-              authors     = 'Stefano Zaghi',                                         &
-              license     = 'MIT',                                                   &
-              description = 'Toy program for testing FLAP with nested commands',     &
-              examples    = ['Test_Driver_Nested                      ',&
-                             'Test_Driver_Nested -h                   ',&
-                             'Test_Driver_Nested init                 ',&
-                             'Test_Driver_Nested commit -m "fix bug-1"',&
-                             'Test_Driver_Nested tag -a "v2.1.5"      '])
+call cli%init(progname    = 'test_nested',                                      &
+              version     = 'v2.1.5',                                           &
+              authors     = 'Stefano Zaghi',                                    &
+              license     = 'MIT',                                              &
+              description = 'Toy program for testing FLAP with nested commands',&
+              examples    = ['test_nested                      ',&
+                             'test_nested -h                   ',&
+                             'test_nested init                 ',&
+                             'test_nested commit -m "fix bug-1"',&
+                             'test_nested tag -a "v2.1.5"      '])
 ! set a Command Line Argument without a group to trigger authors names printing
 call cli%add(switch='--authors',switch_ab='-a',help='Print authors names',required=.false.,act='store_true',def='.false.')
 ! set Command Line Arguments Groups, i.e. commands
@@ -245,7 +245,7 @@ cowardly you are doing nothing... try at least "-h" option!
 and invoked with `-h` option gives:
 
 ```shell
-usage: Test_Driver_Nested  [--authors] [--help] [--version] {init,commit,tag} ...
+usage: test_nested  [--authors] [--help] [--version] {init,commit,tag} ...
 
 Toy program for testing FLAP with nested commands
 
@@ -267,18 +267,18 @@ Commands:
           fake tag current commit
 
 For more detailed commands help try:
-  Test_Driver_Nested init -h,--help
-  Test_Driver_Nested commit -h,--help
-  Test_Driver_Nested tag -h,--help
+  test_nested init -h,--help
+  test_nested commit -h,--help
+  test_nested tag -h,--help
 
 Examples:
-   Test_Driver_Nested
-   Test_Driver_Nested -h
-   Test_Driver_Nested init
-   Test_Driver_Nested commit -m "fix bug-1"
-   Test_Driver_Nested tag -a "v2.1.5"
+   test_nested
+   test_nested -h
+   test_nested init
+   test_nested commit -m "fix bug-1"
+   test_nested tag -a "v2.1.5"
 ```
 
-For more details, see the provided [example](https://github.com/szaghi/FLAP/blob/master/src/Test_Driver_Nested.f90).
+For more details, see the provided [example](https://github.com/szaghi/FLAP/blob/master/src/tests/test_nested.f90).
 
 Go to [Top](#top)

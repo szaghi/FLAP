@@ -39,20 +39,20 @@ integer(I4P)                      :: l            !< Counter.
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! initializing Command Line Interface
-call cli%init(progname    = 'Test_Driver',                                                 &
-              version     = 'v2.1.5',                                                      &
-              authors     = 'Stefano Zaghi',                                               &
-              license     = 'MIT',                                                         &
-              help        = 'Usage: ',                                                     &
-              description = 'Toy program for testing FLAP',                                &
-              examples    = ["Test_Driver -s 'Hello FLAP'                               ", &
-                             "Test_Driver -s 'Hello FLAP' -i -2 # printing error...     ", &
-                             "Test_Driver -s 'Hello FLAP' -i 3 -ie 1 # printing error...", &
-                             "Test_Driver -s 'Hello FLAP' -i 3 -r 33.d0                 ", &
-                             "Test_Driver -s 'Hello FLAP' --integer_list 10 -3 87       ", &
-                             "Test_Driver -s 'Hello FLAP' --man_file FLAP.1             ", &
-                             "Test_Driver 33.0 -s 'Hello FLAP' -i 5                     ", &
-                             "Test_Driver --string 'Hello FLAP' --boolean               "],&
+call cli%init(progname    = 'test_basic',                                                 &
+              version     = 'v2.1.5',                                                     &
+              authors     = 'Stefano Zaghi',                                              &
+              license     = 'MIT',                                                        &
+              help        = 'Usage: ',                                                    &
+              description = 'Toy program for testing FLAP',                               &
+              examples    = ["test_basic -s 'Hello FLAP'                               ", &
+                             "test_basic -s 'Hello FLAP' -i -2 # printing error...     ", &
+                             "test_basic -s 'Hello FLAP' -i 3 -ie 1 # printing error...", &
+                             "test_basic -s 'Hello FLAP' -i 3 -r 33.d0                 ", &
+                             "test_basic -s 'Hello FLAP' --integer_list 10 -3 87       ", &
+                             "test_basic -s 'Hello FLAP' --man_file FLAP.1             ", &
+                             "test_basic 33.0 -s 'Hello FLAP' -i 5                     ", &
+                             "test_basic --string 'Hello FLAP' --boolean               "],&
               epilog      = new_line('a')//"And that's how to FLAP your life")
 ! setting Command Line Argumenst
 call cli%add(switch='--string',switch_ab='-s',help='String input',required=.true.,act='store',error=error)
@@ -78,7 +78,7 @@ if (error/=0) stop
 call cli%add(switch='--env',switch_ab='-e',help='Environment input',required=.false.,act='store',def='-1',envvar='FLAP_NUM_INT',&
              error=error)
 if (error/=0) stop
-call cli%add(switch='--man_file',help='Save manual into man_file',required=.false.,act='store',def='Test_Driver.1',error=error)
+call cli%add(switch='--man_file',help='Save manual into man_file',required=.false.,act='store',def='test_basic.1',error=error)
 if (error/=0) stop
 call cli%add(switch='--varying_listR8P',switch_ab='-vlR8P',help='Varying size real R8P list input',required=.false.,act='store',&
              nargs='*',def='1.0 2.0 3.0 4.0 5.0 6.0 7.0 8.0',error=error)
@@ -107,7 +107,7 @@ if (error/=0) stop
 ! parsing Command Line Interface
 call cli%parse(error=error)
 if (error/=0) stop
-! using Command Line Interface data to set Test_Driver behaviour
+! using Command Line Interface data to set test_basic behaviour
 call cli%get(        switch='-s',      val=sval,      error=error) ; if (error/=0) stop
 call cli%get(        switch='-r',      val=rval,      error=error) ; if (error/=0) stop
 call cli%get(        switch='-i',      val=ival,      error=error) ; if (error/=0) stop
@@ -126,7 +126,7 @@ call cli%get_varying(switch='-vlI1P',  val=vlistI1P,  error=error) ; if (error/=
 call cli%get_varying(switch='-vlBool', val=vlistBool, error=error) ; if (error/=0) stop
 call cli%get_varying(switch='-vlChar', val=vlistChar, error=error) ; if (error/=0) stop
 call cli%get_varying(switch='--',      val=garbage,   error=error) ; if (error/=0) stop
-print '(A)'   ,'Test_Driver has been called with the following arguments values:'
+print '(A)'   ,'test_basic has been called with the following arguments values:'
 print '(A)'   ,'String              input = '//trim(adjustl(sval))
 print '(A)'   ,'Real                input = '//str(n=rval)
 print '(A)'   ,'Integer             input = '//str(n=ival)
