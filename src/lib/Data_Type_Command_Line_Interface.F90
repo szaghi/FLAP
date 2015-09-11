@@ -226,7 +226,7 @@ integer(I4P), parameter :: status_clasg_print_h             = -2 !< Print help s
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
   ! auxiliary procedures
-  function Upper_Case(string)
+  pure function Upper_Case(string)
   ! elemental function Upper_Case(string)
   ! 1513-209 (S) The result of an elemental function must be a nonpointer, nonallocatable scalar, and its type parameters must be constant expressions.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -2237,7 +2237,7 @@ contains
     Ng = size(cli%clasg,dim=1)
     allocate(clasg_list_new(0:Ng))
 !    clasg_list_new(0:Ng-1) = cli%clasg(0:Ng-1) ! Not working on Intel Fortran 15.0.2
-    do gi = 0, Ng-1     
+    do gi = 0, Ng-1
       clasg_list_new(gi) = cli%clasg(gi)
     enddo
     call clasg_list_new(Ng)%assign_object(cli)
