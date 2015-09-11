@@ -1,0 +1,13 @@
+digraph "program~~test_nested~~CallsGraph" {
+	graph [concentrate=true rankdir=LR size="8.90625,1000.0"]
+	node [fontname=Helvetica fontsize=10.5 height=0.0 margin=0.08 shape=box]
+	edge [fontname=Helvetica fontsize=9.5]
+		"program~test_nested" [label=test_nested]
+		graph [concentrate=false]
+		str [label=str color="#777777" fontcolor=white style=filled]
+		graph [concentrate=false]
+		graph [concentrate=false]
+		graph [concentrate=false]
+			"program~test_nested" -> str
+		graph [concentrate=false]
+}

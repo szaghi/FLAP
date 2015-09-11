@@ -1,0 +1,14 @@
+digraph "proc~~add~~CallsGraph" {
+	graph [concentrate=true rankdir=LR size="8.90625,1000.0"]
+	node [fontname=Helvetica fontsize=10.5 height=0.0 margin=0.08 shape=box]
+	edge [fontname=Helvetica fontsize=9.5]
+		"proc~add" [label=add]
+		graph [concentrate=false]
+		"proc~upper_case" [label=Upper_Case URL="../proc/upper_case.html" color="#d94e8f" fontcolor=white style=filled]
+		graph [concentrate=false]
+		graph [concentrate=false]
+			"proc~upper_case" -> "proc~upper_case"
+		graph [concentrate=false]
+			"proc~add" -> "proc~upper_case"
+		graph [concentrate=false]
+}

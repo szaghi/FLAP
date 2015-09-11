@@ -1,0 +1,18 @@
+digraph "type~~graph~~TypeGraph" {
+	graph [concentrate=true rankdir=LR size="8.90625,1000.0"]
+	node [fontname=Helvetica fontsize=10.5 height=0.0 margin=0.08 shape=box]
+	edge [fontname=Helvetica fontsize=9.5]
+		"type~type_command_line_argument" [label=Type_Command_Line_Argument URL="../type/type_command_line_argument.html" color="#5cb85c" fontcolor=white style=filled]
+		"type~type_command_line_interface" [label=Type_Command_Line_Interface URL="../type/type_command_line_interface.html" color="#5cb85c" fontcolor=white style=filled]
+		"type~type_object" [label=Type_Object URL="../type/type_object.html" color="#5cb85c" fontcolor=white style=filled]
+		"type~type_command_line_arguments_group" [label=Type_Command_Line_Arguments_Group URL="../type/type_command_line_arguments_group.html" color="#5cb85c" fontcolor=white style=filled]
+		graph [size="11.875,1000.0"]
+		Type_Object [label=Type_Object color="#5cb85c" fontcolor=white style=filled]
+			Type_Object -> "type~type_command_line_argument"
+		Type_Command_Line_Arguments_Group [label=Type_Command_Line_Arguments_Group color="#5cb85c" fontcolor=white style=filled]
+			Type_Command_Line_Arguments_Group -> "type~type_command_line_interface" [label=clasg style=dashed]
+			Type_Object -> "type~type_command_line_interface"
+		Type_Command_Line_Argument [label=Type_Command_Line_Argument color="#5cb85c" fontcolor=white style=filled]
+			Type_Command_Line_Argument -> "type~type_command_line_arguments_group" [label=cla style=dashed]
+			Type_Object -> "type~type_command_line_arguments_group"
+}

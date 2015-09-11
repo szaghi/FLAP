@@ -1,0 +1,17 @@
+digraph "proc~~usage_cla~~CallsGraph" {
+	graph [concentrate=true rankdir=LR size="8.90625,1000.0"]
+	node [fontname=Helvetica fontsize=10.5 height=0.0 margin=0.08 shape=box]
+	edge [fontname=Helvetica fontsize=9.5]
+		"proc~usage_cla" [label=usage_cla]
+		graph [concentrate=false]
+		str [label=str color="#777777" fontcolor=white style=filled]
+		cton [label=cton color="#777777" fontcolor=white style=filled]
+		graph [concentrate=false]
+		graph [concentrate=false]
+		graph [concentrate=false]
+		graph [concentrate=false]
+		graph [concentrate=false]
+			"proc~usage_cla" -> str
+			"proc~usage_cla" -> cton
+		graph [concentrate=false]
+}

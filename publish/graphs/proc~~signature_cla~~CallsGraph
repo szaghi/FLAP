@@ -1,0 +1,17 @@
+digraph "proc~~signature_cla~~CallsGraph" {
+	graph [concentrate=true rankdir=LR size="8.90625,1000.0"]
+	node [fontname=Helvetica fontsize=10.5 height=0.0 margin=0.08 shape=box]
+	edge [fontname=Helvetica fontsize=9.5]
+		"proc~signature_cla" [label=signature_cla]
+		graph [concentrate=false]
+		str [label=str color="#777777" fontcolor=white style=filled]
+		cton [label=cton color="#777777" fontcolor=white style=filled]
+		graph [concentrate=false]
+		graph [concentrate=false]
+		graph [concentrate=false]
+		graph [concentrate=false]
+		graph [concentrate=false]
+			"proc~signature_cla" -> str
+			"proc~signature_cla" -> cton
+		graph [concentrate=false]
+}

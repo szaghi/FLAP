@@ -1,0 +1,18 @@
+digraph "proc~~get_args_from_string~~CallsGraph" {
+	graph [concentrate=true rankdir=LR size="8.90625,1000.0"]
+	node [fontname=Helvetica fontsize=10.5 height=0.0 margin=0.08 shape=box]
+	edge [fontname=Helvetica fontsize=9.5]
+		"proc~get_args_from_string" [label=get_args_from_string]
+		graph [concentrate=false]
+		"none~sanitize_args" [label=sanitize_args color="#d94e8f" fontcolor=white style=filled]
+		"proc~tokenize" [label=tokenize URL="../proc/tokenize.html" color="#d9534f" fontcolor=white style=filled]
+		graph [concentrate=false]
+		graph [concentrate=false]
+			"none~sanitize_args" -> "proc~tokenize"
+		graph [concentrate=false]
+		graph [concentrate=false]
+		graph [concentrate=false]
+			"proc~get_args_from_string" -> "none~sanitize_args"
+			"proc~get_args_from_string" -> "proc~tokenize"
+		graph [concentrate=false]
+}
