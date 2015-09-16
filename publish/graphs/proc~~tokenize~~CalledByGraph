@@ -5,20 +5,18 @@ digraph "proc~~tokenize~~CalledByGraph" {
 		"proc~tokenize" [label=tokenize]
 		graph [concentrate=false]
 		"proc~check_choices_cla" [label=check_choices_cla URL="../proc/check_choices_cla.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~get_args_from_string" [label=get_args_from_string URL="../proc/get_args_from_string.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~get_cla_list_varying_r16p" [label=get_cla_list_varying_R16P URL="../proc/get_cla_list_varying_r16p.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~get_cla_list_varying_i1p" [label=get_cla_list_varying_I1P URL="../proc/get_cla_list_varying_i1p.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~get_cla_list_varying_char" [label=get_cla_list_varying_char URL="../proc/get_cla_list_varying_char.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~get_cla_list_varying_r8p" [label=get_cla_list_varying_R8P URL="../proc/get_cla_list_varying_r8p.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~get_cla_list_varying_i1p" [label=get_cla_list_varying_I1P URL="../proc/get_cla_list_varying_i1p.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~get_cla_list_varying_i2p" [label=get_cla_list_varying_I2P URL="../proc/get_cla_list_varying_i2p.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~get_cla_list" [label=get_cla_list URL="../proc/get_cla_list.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~get_cla_list_varying_r4p" [label=get_cla_list_varying_R4P URL="../proc/get_cla_list_varying_r4p.html" color="#d9534f" fontcolor=white style=filled]
 		"none~sanitize_args" [label=sanitize_args color="#d94e8f" fontcolor=white style=filled]
 		"proc~get_cla_list_varying_logical" [label=get_cla_list_varying_logical URL="../proc/get_cla_list_varying_logical.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~get_args_from_string" [label=get_args_from_string URL="../proc/get_args_from_string.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~get_cla_list_varying_i8p" [label=get_cla_list_varying_I8P URL="../proc/get_cla_list_varying_i8p.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~get_cla_list_varying_i4p" [label=get_cla_list_varying_I4P URL="../proc/get_cla_list_varying_i4p.html" color="#d9534f" fontcolor=white style=filled]
-		graph [concentrate=false]
-		graph [concentrate=false]
 		graph [concentrate=false]
 		graph [concentrate=false]
 		graph [concentrate=false]
@@ -45,17 +43,19 @@ digraph "proc~~tokenize~~CalledByGraph" {
 		graph [concentrate=false]
 		graph [concentrate=false]
 		graph [concentrate=false]
+		graph [concentrate=false]
+		graph [concentrate=false]
 			"proc~check_choices_cla" -> "proc~tokenize"
-			"proc~get_args_from_string" -> "proc~tokenize"
 			"proc~get_cla_list_varying_r16p" -> "proc~tokenize"
+			"proc~get_cla_list_varying_i1p" -> "proc~tokenize"
 			"proc~get_cla_list_varying_char" -> "proc~tokenize"
 			"proc~get_cla_list_varying_r8p" -> "proc~tokenize"
-			"proc~get_cla_list_varying_i1p" -> "proc~tokenize"
 			"proc~get_cla_list_varying_i2p" -> "proc~tokenize"
 			"proc~get_cla_list" -> "proc~tokenize"
 			"proc~get_cla_list_varying_r4p" -> "proc~tokenize"
 			"none~sanitize_args" -> "proc~tokenize"
 			"proc~get_cla_list_varying_logical" -> "proc~tokenize"
+			"proc~get_args_from_string" -> "proc~tokenize"
 			"proc~get_cla_list_varying_i8p" -> "proc~tokenize"
 			"proc~get_cla_list_varying_i4p" -> "proc~tokenize"
 		graph [concentrate=false]
