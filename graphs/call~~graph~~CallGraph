@@ -2,71 +2,71 @@ digraph "call~~graph~~CallGraph" {
 	graph [concentrate=true rankdir=LR size="8.90625,1000.0"]
 	node [fontname=Helvetica fontsize=10.5 height=0.0 margin=0.08 shape=box]
 	edge [fontname=Helvetica fontsize=9.5]
+		"proc~get_cla_list_varying_r8p_cli" [label=get_cla_list_varying_R8P_cli URL="../proc/get_cla_list_varying_r8p_cli.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~get_cla_list_varying_r16p_cli" [label=get_cla_list_varying_R16P_cli URL="../proc/get_cla_list_varying_r16p_cli.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~get_cla_list_varying_i1p_cli" [label=get_cla_list_varying_I1P_cli URL="../proc/get_cla_list_varying_i1p_cli.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~set_mutually_exclusive_groups" [label=set_mutually_exclusive_groups URL="../proc/set_mutually_exclusive_groups.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~get_cla_list_varying_i1p" [label=get_cla_list_varying_I1P URL="../proc/get_cla_list_varying_i1p.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~check_m_exclusive" [label=check_m_exclusive URL="../proc/check_m_exclusive.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~get_clasg_indexes" [label=get_clasg_indexes URL="../proc/get_clasg_indexes.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~get_cla" [label=get_cla URL="../proc/get_cla.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~parse" [label=parse URL="../proc/parse.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~signature_cla" [label=signature_cla URL="../proc/signature_cla.html" color="#d94e8f" fontcolor=white style=filled]
+		"proc~assign_clasg" [label=assign_clasg URL="../proc/assign_clasg.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~get_cla_list_varying_r4p_cli" [label=get_cla_list_varying_R4P_cli URL="../proc/get_cla_list_varying_r4p_cli.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~get_cla_list_varying_i2p" [label=get_cla_list_varying_I2P URL="../proc/get_cla_list_varying_i2p.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~finalize_cla" [label=finalize_cla URL="../proc/finalize_cla.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~free_cla" [label=free_cla URL="../proc/free_cla.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~add_group" [label=add_group URL="../proc/add_group.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~get_cla_list_varying_char" [label=get_cla_list_varying_char URL="../proc/get_cla_list_varying_char.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~get_cla_list_cli" [label=get_cla_list_cli URL="../proc/get_cla_list_cli.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~assign_object" [label=assign_object URL="../proc/assign_object.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~usage_clasg" [label=usage_clasg URL="../proc/usage_clasg.html" color="#d94e8f" fontcolor=white style=filled]
-		"proc~defined_clasg" [label=defined_clasg URL="../proc/defined_clasg.html" color="#d94e8f" fontcolor=white style=filled]
-		"proc~print_usage" [label=print_usage URL="../proc/print_usage.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~defined_group" [label=defined_group URL="../proc/defined_group.html" color="#d94e8f" fontcolor=white style=filled]
-		"proc~save_man_page" [label=save_man_page URL="../proc/save_man_page.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~get_args_from_string" [label=get_args_from_string URL="../proc/get_args_from_string.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~get_cla_list_varying_i2p_cli" [label=get_cla_list_varying_I2P_cli URL="../proc/get_cla_list_varying_i2p_cli.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~init" [label=init URL="../proc/init.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~print_version" [label=print_version URL="../proc/print_version.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~get_cla_list_varying_i4p_cli" [label=get_cla_list_varying_I4P_cli URL="../proc/get_cla_list_varying_i4p_cli.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~init" [label=init URL="../proc/init.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~upper_case" [label=Upper_Case URL="../proc/upper_case.html" color="#d94e8f" fontcolor=white style=filled]
+		"proc~parse" [label=parse URL="../proc/parse.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~get_cla_list" [label=get_cla_list URL="../proc/get_cla_list.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~finalize_cla" [label=finalize_cla URL="../proc/finalize_cla.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~get_cla_list_varying_r8p_cli" [label=get_cla_list_varying_R8P_cli URL="../proc/get_cla_list_varying_r8p_cli.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~get_cla" [label=get_cla URL="../proc/get_cla.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~signature_cla" [label=signature_cla URL="../proc/signature_cla.html" color="#d94e8f" fontcolor=white style=filled]
 		"proc~check_m_exclusive_clasg" [label=check_m_exclusive_clasg URL="../proc/check_m_exclusive_clasg.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~print_usage" [label=print_usage URL="../proc/print_usage.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~get_cla_list_varying_logical" [label=get_cla_list_varying_logical URL="../proc/get_cla_list_varying_logical.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~get_cla_list_varying_i1p_cli" [label=get_cla_list_varying_I1P_cli URL="../proc/get_cla_list_varying_i1p_cli.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~get_cla_cli" [label=get_cla_cli URL="../proc/get_cla_cli.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~check_cla" [label=check_cla URL="../proc/check_cla.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~get_args_from_invocation" [label=get_args_from_invocation URL="../proc/get_args_from_invocation.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~assign_cli" [label=assign_cli URL="../proc/assign_cli.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~defined_clasg" [label=defined_clasg URL="../proc/defined_clasg.html" color="#d94e8f" fontcolor=white style=filled]
+		"proc~check_required_clasg" [label=check_required_clasg URL="../proc/check_required_clasg.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~add" [label=add URL="../proc/add.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~get_cla_list_varying_logical_cli" [label=get_cla_list_varying_logical_cli URL="../proc/get_cla_list_varying_logical_cli.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~add_cla_clasg" [label=add_cla_clasg URL="../proc/add_cla_clasg.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~get_cla_list_varying_r4p_cli" [label=get_cla_list_varying_R4P_cli URL="../proc/get_cla_list_varying_r4p_cli.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~get_cla_cli" [label=get_cla_cli URL="../proc/get_cla_cli.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~upper_case" [label=Upper_Case URL="../proc/upper_case.html" color="#d94e8f" fontcolor=white style=filled]
-		"proc~get_cla_list_varying_i4p" [label=get_cla_list_varying_I4P URL="../proc/get_cla_list_varying_i4p.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~get_args_from_string" [label=get_args_from_string URL="../proc/get_args_from_string.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~get_cla_list_varying_i2p_cli" [label=get_cla_list_varying_I2P_cli URL="../proc/get_cla_list_varying_i2p_cli.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~save_man_page" [label=save_man_page URL="../proc/save_man_page.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~free_object" [label=free_object URL="../proc/free_object.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~finalize" [label=finalize URL="../proc/finalize.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~called_group" [label=called_group URL="../proc/called_group.html" color="#d94e8f" fontcolor=white style=filled]
-		"proc~get_cla_list_varying_char_cli" [label=get_cla_list_varying_char_cli URL="../proc/get_cla_list_varying_char_cli.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~parse_clasg" [label=parse_clasg URL="../proc/parse_clasg.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~get_cla_list_varying_r16p_cli" [label=get_cla_list_varying_R16P_cli URL="../proc/get_cla_list_varying_r16p_cli.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~usage" [label=usage URL="../proc/usage.html" color="#d94e8f" fontcolor=white style=filled]
+		"proc~get_cla_list_varying_i4p" [label=get_cla_list_varying_I4P URL="../proc/get_cla_list_varying_i4p.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~check_choices_cla" [label=check_choices_cla URL="../proc/check_choices_cla.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~get_cla_list_varying_i4p_cli" [label=get_cla_list_varying_I4P_cli URL="../proc/get_cla_list_varying_i4p_cli.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~get_cla_list_varying_r4p" [label=get_cla_list_varying_R4P URL="../proc/get_cla_list_varying_r4p.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~errored" [label=errored URL="../proc/errored.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~check" [label=check URL="../proc/check.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~signature" [label=signature URL="../proc/signature.html" color="#d94e8f" fontcolor=white style=filled]
+		"proc~check_m_exclusive" [label=check_m_exclusive URL="../proc/check_m_exclusive.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~check_list_size_cla" [label=check_list_size_cla URL="../proc/check_list_size_cla.html" color="#d94e8f" fontcolor=white style=filled]
+		"proc~get_clasg_indexes" [label=get_clasg_indexes URL="../proc/get_clasg_indexes.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~finalize_clasg" [label=finalize_clasg URL="../proc/finalize_clasg.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~get_cla_list_varying_logical_cli" [label=get_cla_list_varying_logical_cli URL="../proc/get_cla_list_varying_logical_cli.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~tokenize" [label=tokenize URL="../proc/tokenize.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~defined" [label=defined URL="../proc/defined.html" color="#d94e8f" fontcolor=white style=filled]
-		"proc~check" [label=check URL="../proc/check.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~set_mutually_exclusive_groups" [label=set_mutually_exclusive_groups URL="../proc/set_mutually_exclusive_groups.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~add_group" [label=add_group URL="../proc/add_group.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~passed_clasg" [label=passed_clasg URL="../proc/passed_clasg.html" color="#d94e8f" fontcolor=white style=filled]
-		"proc~assign_clasg" [label=assign_clasg URL="../proc/assign_clasg.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~get_cla_list_varying_r8p" [label=get_cla_list_varying_R8P URL="../proc/get_cla_list_varying_r8p.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~finalize" [label=finalize URL="../proc/finalize.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~check_clasg" [label=check_clasg URL="../proc/check_clasg.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~check_required_clasg" [label=check_required_clasg URL="../proc/check_required_clasg.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~parse_clasg" [label=parse_clasg URL="../proc/parse_clasg.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~signature_clasg" [label=signature_clasg URL="../proc/signature_clasg.html" color="#d94e8f" fontcolor=white style=filled]
-		"proc~get_cla_list_varying_i2p" [label=get_cla_list_varying_I2P URL="../proc/get_cla_list_varying_i2p.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~free" [label=free URL="../proc/free.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~get_cla_list_varying_char_cli" [label=get_cla_list_varying_char_cli URL="../proc/get_cla_list_varying_char_cli.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~usage_cla" [label=usage_cla URL="../proc/usage_cla.html" color="#d94e8f" fontcolor=white style=filled]
-		"proc~get_cla_list_varying_char" [label=get_cla_list_varying_char URL="../proc/get_cla_list_varying_char.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~get_cla_list_varying_r16p" [label=get_cla_list_varying_R16P URL="../proc/get_cla_list_varying_r16p.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~get_cla_list_varying_i8p_cli" [label=get_cla_list_varying_I8P_cli URL="../proc/get_cla_list_varying_i8p_cli.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~get_cla_list_varying_r16p" [label=get_cla_list_varying_R16P URL="../proc/get_cla_list_varying_r16p.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~assign_cla" [label=assign_cla URL="../proc/assign_cla.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~passed" [label=passed URL="../proc/passed.html" color="#d94e8f" fontcolor=white style=filled]
 		"proc~get_cla_list_varying_i8p" [label=get_cla_list_varying_I8P URL="../proc/get_cla_list_varying_i8p.html" color="#d9534f" fontcolor=white style=filled]
@@ -84,29 +84,35 @@ digraph "call~~graph~~CallGraph" {
 			"proc~get_cla_list_varying_i1p" -> "proc~tokenize"
 		valsv [label=valsv color="#777777" fontcolor=white style=filled]
 			"proc~get_cla_list_varying_i1p" -> valsv
-			"proc~get_cla" -> cton
-		str [label=str color="#777777" fontcolor=white style=filled]
-			"proc~signature_cla" -> str
-			"proc~signature_cla" -> cton
-		strz [label=strz color="#777777" fontcolor=white style=filled]
-			"proc~save_man_page" -> strz
-		"none~sanitize_args" [label=sanitize_args color="#d94e8f" fontcolor=white style=filled]
-			"proc~get_args_from_string" -> "none~sanitize_args"
-			"proc~get_args_from_string" -> "proc~tokenize"
+			"proc~get_cla_list_varying_i2p" -> valsd
+			"proc~get_cla_list_varying_i2p" -> cton
+			"proc~get_cla_list_varying_i2p" -> "proc~tokenize"
+			"proc~get_cla_list_varying_i2p" -> valsv
+			"proc~get_cla_list_varying_char" -> valsd
+			"proc~get_cla_list_varying_char" -> "proc~tokenize"
+			"proc~get_cla_list_varying_char" -> valsv
+			"proc~upper_case" -> "proc~upper_case"
 			"proc~get_cla_list" -> valsd
 			"proc~get_cla_list" -> valsv
 			"proc~get_cla_list" -> "proc~tokenize"
 			"proc~get_cla_list" -> cton
+			"proc~get_cla" -> cton
+		str [label=str color="#777777" fontcolor=white style=filled]
+			"proc~signature_cla" -> str
+			"proc~signature_cla" -> cton
 			"proc~get_cla_list_varying_logical" -> valsd
 			"proc~get_cla_list_varying_logical" -> "proc~tokenize"
 			"proc~get_cla_list_varying_logical" -> valsv
 			"proc~add" -> "proc~upper_case"
-			"proc~upper_case" -> "proc~upper_case"
+		"none~sanitize_args" [label=sanitize_args color="#d94e8f" fontcolor=white style=filled]
+			"proc~get_args_from_string" -> "none~sanitize_args"
+			"proc~get_args_from_string" -> "proc~tokenize"
+		strz [label=strz color="#777777" fontcolor=white style=filled]
+			"proc~save_man_page" -> strz
 			"proc~get_cla_list_varying_i4p" -> valsd
 			"proc~get_cla_list_varying_i4p" -> cton
 			"proc~get_cla_list_varying_i4p" -> "proc~tokenize"
 			"proc~get_cla_list_varying_i4p" -> valsv
-			"proc~parse_clasg" -> cton
 			"proc~check_choices_cla" -> str
 			"proc~check_choices_cla" -> "proc~tokenize"
 			"proc~check_choices_cla" -> cton
@@ -119,15 +125,9 @@ digraph "call~~graph~~CallGraph" {
 			"proc~get_cla_list_varying_r8p" -> cton
 			"proc~get_cla_list_varying_r8p" -> "proc~tokenize"
 			"proc~get_cla_list_varying_r8p" -> valsv
-			"proc~get_cla_list_varying_i2p" -> valsd
-			"proc~get_cla_list_varying_i2p" -> cton
-			"proc~get_cla_list_varying_i2p" -> "proc~tokenize"
-			"proc~get_cla_list_varying_i2p" -> valsv
+			"proc~parse_clasg" -> cton
 			"proc~usage_cla" -> str
 			"proc~usage_cla" -> cton
-			"proc~get_cla_list_varying_char" -> valsd
-			"proc~get_cla_list_varying_char" -> "proc~tokenize"
-			"proc~get_cla_list_varying_char" -> valsv
 			"proc~get_cla_list_varying_r16p" -> valsd
 			"proc~get_cla_list_varying_r16p" -> cton
 			"proc~get_cla_list_varying_r16p" -> "proc~tokenize"
