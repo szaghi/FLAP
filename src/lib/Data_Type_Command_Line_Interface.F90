@@ -2131,7 +2131,7 @@ contains
   call cli%free_object
   ! Type_Command_Line_Interface members
   if (allocated(cli%clasg)) then
-    do g=1,size(cli%clasg,dim=1)
+    do g=0,size(cli%clasg,dim=1)-1
       call cli%clasg(g)%free
     enddo
     deallocate(cli%clasg)
