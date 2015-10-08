@@ -124,8 +124,8 @@ type, extends(Type_Object), public :: Type_Command_Line_Interface
   private
   type(Type_Command_Line_Arguments_Group), allocatable :: clasg(:)          !< CLA list [1:Na].
 #ifdef __GFORTRAN__
-  character(100  ), allocatable                        :: args(:)           !< Actually passed command line arguments.
-  character(100  ), allocatable                        :: examples(:)       !< Examples of correct usage.
+  character(512  ), allocatable                        :: args(:)           !< Actually passed command line arguments.
+  character(512  ), allocatable                        :: examples(:)       !< Examples of correct usage.
 #else
   character(len=:), allocatable                        :: args(:)           !< Actually passed command line arguments.
   character(len=:), allocatable                        :: examples(:)       !< Examples of correct usage (not work with gfortran).
