@@ -25,6 +25,7 @@
     <![endif]-->
     
     <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
 
     
     <script src="../tipuesearch/tipuesearch_content.js"></script>
@@ -132,6 +133,7 @@
       
     </div>
   </div>
+  
   
   
   
@@ -337,7 +339,7 @@ private elementalsubroutine free(cli)
   
 <tr>
   
-  <td><span class="anchor" id="variable-cli%7E7"></span>class(Type_Command_Line_Interface),</td>
+  <td><span class="anchor" id="variable-cli%7E7"></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -393,6 +395,8 @@ private elementalsubroutine free(cli)
     
     
     
+    
+    
 
     
     
@@ -419,7 +423,7 @@ private elementalsubroutine free(cli)
   <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">free_object</span>
   <span class="c">! Type_Command_Line_Interface members</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">clasg</span><span class="p">))</span> <span class="k">then</span>
-<span class="k">    do </span><span class="n">g</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">clasg</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">    do </span><span class="n">g</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">clasg</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
       <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">free</span>
     <span class="n">enddo</span>
     <span class="k">deallocate</span><span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">clasg</span><span class="p">)</span>

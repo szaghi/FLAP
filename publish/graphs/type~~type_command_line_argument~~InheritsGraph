@@ -1,8 +1,0 @@
-digraph "type~~type_command_line_argument~~InheritsGraph" {
-	graph [concentrate=true rankdir=LR size="8.90625,1000.0"]
-	node [fontname=Helvetica fontsize=10.5 height=0.0 margin=0.08 shape=box]
-	edge [fontname=Helvetica fontsize=9.5]
-		"type~type_command_line_argument" [label=Type_Command_Line_Argument]
-		Type_Object [label=Type_Object color="#5cb85c" fontcolor=white style=filled]
-			Type_Object -> "type~type_command_line_argument"
-}

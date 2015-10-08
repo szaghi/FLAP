@@ -124,8 +124,8 @@ type, extends(Type_Object), public :: Type_Command_Line_Interface
   private
   type(Type_Command_Line_Arguments_Group), allocatable :: clasg(:)          !< CLA list [1:Na].
 #ifdef __GFORTRAN__
-  character(512  ), allocatable                        :: args(:)           !< Actually passed command line arguments.
-  character(512  ), allocatable                        :: examples(:)       !< Examples of correct usage.
+  character(100  ), allocatable                        :: args(:)           !< Actually passed command line arguments.
+  character(100  ), allocatable                        :: examples(:)       !< Examples of correct usage.
 #else
   character(len=:), allocatable                        :: args(:)           !< Actually passed command line arguments.
   character(len=:), allocatable                        :: examples(:)       !< Examples of correct usage (not work with gfortran).
@@ -2131,7 +2131,7 @@ contains
   call cli%free_object
   ! Type_Command_Line_Interface members
   if (allocated(cli%clasg)) then
-    do g=1,size(cli%clasg,dim=1)
+    do g=0,size(cli%clasg,dim=1)-1
       call cli%clasg(g)%free
     enddo
     deallocate(cli%clasg)
