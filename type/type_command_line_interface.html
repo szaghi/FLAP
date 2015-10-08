@@ -481,7 +481,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-args"></span>character(len=100),</td>
+  <td><span class="anchor" id="variable-args"></span>character(len=512),</td>
   
   <td>private,</td>
   <td>allocatable</td><td>::</td>
@@ -495,7 +495,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-examples"></span>character(len=100),</td>
+  <td><span class="anchor" id="variable-examples"></span>character(len=512),</td>
   
   <td>private,</td>
   <td>allocatable</td><td>::</td>
@@ -5372,8 +5372,8 @@ private elementalsubroutine <a href='../proc/assign_cli.html'>assign_cli</a>(lhs
   <span class="k">private</span>
 <span class="k">  type</span><span class="p">(</span><span class="n">Type_Command_Line_Arguments_Group</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">clasg</span><span class="p">(:)</span>          <span class="c">!&lt; CLA list [1:Na].</span>
 <span class="cp">#ifdef __GFORTRAN__</span>
-  <span class="kt">character</span><span class="p">(</span><span class="mi">100</span>  <span class="p">),</span> <span class="k">allocatable</span>                        <span class="kd">::</span> <span class="n">args</span><span class="p">(:)</span>           <span class="c">!&lt; Actually passed command line arguments.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="mi">100</span>  <span class="p">),</span> <span class="k">allocatable</span>                        <span class="kd">::</span> <span class="n">examples</span><span class="p">(:)</span>       <span class="c">!&lt; Examples of correct usage.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="mi">512</span>  <span class="p">),</span> <span class="k">allocatable</span>                        <span class="kd">::</span> <span class="n">args</span><span class="p">(:)</span>           <span class="c">!&lt; Actually passed command line arguments.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="mi">512</span>  <span class="p">),</span> <span class="k">allocatable</span>                        <span class="kd">::</span> <span class="n">examples</span><span class="p">(:)</span>       <span class="c">!&lt; Examples of correct usage.</span>
 <span class="cp">#else</span>
   <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>                        <span class="kd">::</span> <span class="n">args</span><span class="p">(:)</span>           <span class="c">!&lt; Actually passed command line arguments.</span>
   <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>                        <span class="kd">::</span> <span class="n">examples</span><span class="p">(:)</span>       <span class="c">!&lt; Examples of correct usage (not work with gfortran).</span>
