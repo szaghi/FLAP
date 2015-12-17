@@ -122,31 +122,34 @@
   <div class="row">
     <div class="col-lg-3">
     
+<div id="sidebar">
   
   
   
   <div class="panel panel-primary">
-    <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
-    <div class="list-group">
-      
-      <a class="list-group-item" href="../type/type_object.html#variable-progname">progname</a>
-      
-      <a class="list-group-item" href="../type/type_object.html#variable-version">version</a>
-      
-      <a class="list-group-item" href="../type/type_object.html#variable-help">help</a>
-      
-      <a class="list-group-item" href="../type/type_object.html#variable-description">description</a>
-      
-      <a class="list-group-item" href="../type/type_object.html#variable-license">license</a>
-      
-      <a class="list-group-item" href="../type/type_object.html#variable-authors">authors</a>
-      
-      <a class="list-group-item" href="../type/type_object.html#variable-epilog">epilog</a>
-      
-      <a class="list-group-item" href="../type/type_object.html#variable-m_exclude">m_exclude</a>
-      
-      <a class="list-group-item" href="../type/type_object.html#variable-error">error</a>
-      
+    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#vars">Variables</a></h3></div>
+    <div id="vars" class="panel-collapse collapse">
+      <div class="list-group">
+        
+        <a class="list-group-item" href="../type/type_object.html#variable-progname">progname</a>
+        
+        <a class="list-group-item" href="../type/type_object.html#variable-version">version</a>
+        
+        <a class="list-group-item" href="../type/type_object.html#variable-help">help</a>
+        
+        <a class="list-group-item" href="../type/type_object.html#variable-description">description</a>
+        
+        <a class="list-group-item" href="../type/type_object.html#variable-license">license</a>
+        
+        <a class="list-group-item" href="../type/type_object.html#variable-authors">authors</a>
+        
+        <a class="list-group-item" href="../type/type_object.html#variable-epilog">epilog</a>
+        
+        <a class="list-group-item" href="../type/type_object.html#variable-m_exclude">m_exclude</a>
+        
+        <a class="list-group-item" href="../type/type_object.html#variable-error">error</a>
+        
+      </div>
     </div>
   </div>
   
@@ -167,17 +170,19 @@
   
   
   <div class="panel panel-primary">
-    <div class="panel-heading text-left"><h3 class="panel-title">Type-Bound Procedures</h3></div>
-    <div class="list-group">
-      
-      <a class="list-group-item" href="../type/type_object.html#boundprocedure-free_object">free_object</a>
-      
-      <a class="list-group-item" href="../type/type_object.html#boundprocedure-errored">errored</a>
-      
-      <a class="list-group-item" href="../type/type_object.html#boundprocedure-print_version">print_version</a>
-      
-      <a class="list-group-item" href="../type/type_object.html#boundprocedure-assign_object">assign_object</a>
-      
+    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#boundprocs">Type-Bound Procedures</a></h3></div>
+    <div id="boundprocs" class="panel-collapse collapse">
+        <div class="list-group">
+          
+          <a class="list-group-item" href="../type/type_object.html#boundprocedure-free_object">free_object</a>
+          
+          <a class="list-group-item" href="../type/type_object.html#boundprocedure-errored">errored</a>
+          
+          <a class="list-group-item" href="../type/type_object.html#boundprocedure-print_version">print_version</a>
+          
+          <a class="list-group-item" href="../type/type_object.html#boundprocedure-assign_object">assign_object</a>
+          
+        </div>
     </div>
   </div>
   
@@ -194,27 +199,30 @@
   <hr>
   
   <div class="panel panel-default">
-    <div class="panel-heading text-left"><h3 class="panel-title">All Derived Types</h3></div>
-    <div class="list-group">
-      
-      <a class="list-group-item" href="../type/type_command_line_argument.html">Type_Command_Line_Argument</a>
-      
-      <a class="list-group-item" href="../type/type_command_line_arguments_group.html">Type_Command_Line_Arguments_Group</a>
-      
-      <a class="list-group-item" href="../type/type_command_line_interface.html">Type_Command_Line_Interface</a>
-      
-      <a class="list-group-item" href="../type/type_object.html">Type_Object</a>
-      
+    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#alltypes">All Derived Types</a></h3></div>
+    <div id="alltypes" class="panel-collapse collapse">
+        <div class="list-group">
+          
+          <a class="list-group-item" href="../type/type_command_line_argument.html">Type_Command_Line_Argument</a>
+          
+          <a class="list-group-item" href="../type/type_command_line_arguments_group.html">Type_Command_Line_Arguments_Group</a>
+          
+          <a class="list-group-item" href="../type/type_command_line_interface.html">Type_Command_Line_Interface</a>
+          
+          <a class="list-group-item" href="../type/type_object.html">Type_Object</a>
+          
+        </div>
     </div>
   </div>
   
-  
+</div>
+
     </div>
     
     <div class="col-lg-9" id='text'>
     <h2>type, private, abstract :: Type_Object</h2>
     
-    
+    <p>Abstract object defining data and methods that are common to CLA, CLAG and CLI.</p>
     
     
     <h3>Inherited By</h3>
@@ -225,64 +233,64 @@
 <!-- Generated by graphviz version 2.26.3 (20100126.1600)
  -->
 <!-- Title: type~~type_object~~InheritedByGraph Pages: 1 -->
-<svg id="typetype_objectInheritedByGraph" width="641pt" height="96pt"
- viewBox="0.00 0.00 641.00 95.55" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="type~~type_object~~InheritedByGraph" class="graph" transform="scale(0.823907 0.823907) rotate(0) translate(4 111.97)">
+<svg id="typetype_objectInheritedByGraph" width="641pt" height="88pt"
+ viewBox="0.00 0.00 641.00 88.27" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="type~~type_object~~InheritedByGraph" class="graph" transform="scale(0.823907 0.823907) rotate(0) translate(4 103.136)">
 <title>type~~type_object~~InheritedByGraph</title>
-<polygon fill="white" stroke="white" points="-4,5 -4,-111.97 775,-111.97 775,5 -4,5"/>
+<polygon fill="white" stroke="white" points="-4,5 -4,-103.136 775,-103.136 775,5 -4,5"/>
 <!-- type~type_object -->
 <g id="node1" class="node"><title>type~type_object</title>
-<polygon fill="none" stroke="black" points="73,-82.8869 1,-82.8869 1,-56.8869 73,-56.8869 73,-82.8869"/>
-<text text-anchor="middle" x="37" y="-67.4369" font-family="Helvetica,sans-Serif" font-size="10.50">Type_Object</text>
-</g>
-<!-- type~type_command_line_argument -->
-<g id="node2" class="node"><title>type~type_command_line_argument</title>
-<a xlink:href="../type/type_command_line_argument.html" xlink:title="Type_Command_Line_Argument">
-<polygon fill="#5cb85c" stroke="#5cb85c" points="283,-82.8869 113,-82.8869 113,-56.8869 283,-56.8869 283,-82.8869"/>
-<text text-anchor="middle" x="198" y="-67.4369" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type_Command_Line_Argument</text>
-</a>
-</g>
-<!-- type~type_object&#45;&gt;type~type_command_line_argument -->
-<g id="edge6" class="edge"><title>type~type_object&#45;&gt;type~type_command_line_argument</title>
-<path fill="none" stroke="black" d="M93,-69.8869C96.0463,-69.8869 99.1422,-69.8869 102.268,-69.8869"/>
-<polygon fill="black" stroke="black" points="102.332,-73.387 112.332,-69.8869 102.331,-66.387 102.332,-73.387"/>
+<polygon fill="none" stroke="black" points="73,-51.0829 1,-51.0829 1,-25.0829 73,-25.0829 73,-51.0829"/>
+<text text-anchor="middle" x="37" y="-35.6329" font-family="Helvetica,sans-Serif" font-size="10.50">Type_Object</text>
 </g>
 <!-- type~type_command_line_interface -->
-<g id="node3" class="node"><title>type~type_command_line_interface</title>
+<g id="node2" class="node"><title>type~type_command_line_interface</title>
 <a xlink:href="../type/type_command_line_interface.html" xlink:title="Type_Command_Line_Interface">
-<polygon fill="#5cb85c" stroke="#5cb85c" points="770,-59.8869 604,-59.8869 604,-33.8869 770,-33.8869 770,-59.8869"/>
-<text text-anchor="middle" x="687" y="-44.4369" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type_Command_Line_Interface</text>
+<polygon fill="#5cb85c" stroke="#5cb85c" points="770,-75.0829 604,-75.0829 604,-49.0829 770,-49.0829 770,-75.0829"/>
+<text text-anchor="middle" x="687" y="-59.6329" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type_Command_Line_Interface</text>
 </a>
 </g>
 <!-- type~type_object&#45;&gt;type~type_command_line_interface -->
-<g id="edge8" class="edge"><title>type~type_object&#45;&gt;type~type_command_line_interface</title>
-<path fill="none" stroke="black" d="M73.7519,-70.0868C80.1684,-70.0646 86.7789,-70.0054 93,-69.8869"/>
-<path fill="none" stroke="black" d="M93,-69.8869C105.917,-69.641 100.257,-53.2738 112,-47.8869 285.117,31.5268 519.576,-6.8762 627.784,-31.5919"/>
-<polygon fill="black" stroke="black" points="627.01,-35.0053 637.543,-33.8626 628.596,-28.1874 627.01,-35.0053"/>
+<g id="edge6" class="edge"><title>type~type_object&#45;&gt;type~type_command_line_interface</title>
+<path fill="none" stroke="black" d="M93,-38.0829C105.918,-38.3084 100.282,-54.6414 112,-60.0829 294.212,-144.699 363.102,-63.9718 564,-65.0829 573.778,-65.137 576.223,-65.2281 586,-65.0829 588.532,-65.0453 591.1,-65.0024 593.692,-64.9549"/>
+<polygon fill="black" stroke="black" points="593.852,-68.4525 603.779,-64.7505 593.71,-61.4539 593.852,-68.4525"/>
+</g>
+<!-- type~type_command_line_argument -->
+<g id="node3" class="node"><title>type~type_command_line_argument</title>
+<a xlink:href="../type/type_command_line_argument.html" xlink:title="Type_Command_Line_Argument">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="283,-51.0829 113,-51.0829 113,-25.0829 283,-25.0829 283,-51.0829"/>
+<text text-anchor="middle" x="198" y="-35.6329" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type_Command_Line_Argument</text>
+</a>
+</g>
+<!-- type~type_object&#45;&gt;type~type_command_line_argument -->
+<g id="edge8" class="edge"><title>type~type_object&#45;&gt;type~type_command_line_argument</title>
+<path fill="none" stroke="black" d="M93,-38.0829C96.0463,-38.0829 99.1422,-38.0829 102.268,-38.0829"/>
+<polygon fill="black" stroke="black" points="102.332,-41.583 112.332,-38.0829 102.331,-34.583 102.332,-41.583"/>
 </g>
 <!-- type~type_command_line_arguments_group -->
 <g id="node4" class="node"><title>type~type_command_line_arguments_group</title>
 <a xlink:href="../type/type_command_line_arguments_group.html" xlink:title="Type_Command_Line_Arguments_Group">
-<polygon fill="#5cb85c" stroke="#5cb85c" points="546,-82.8869 334,-82.8869 334,-56.8869 546,-56.8869 546,-82.8869"/>
-<text text-anchor="middle" x="440" y="-67.4369" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type_Command_Line_Arguments_Group</text>
+<polygon fill="#5cb85c" stroke="#5cb85c" points="546,-51.0829 334,-51.0829 334,-25.0829 546,-25.0829 546,-51.0829"/>
+<text text-anchor="middle" x="440" y="-35.6329" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type_Command_Line_Arguments_Group</text>
 </a>
 </g>
 <!-- type~type_object&#45;&gt;type~type_command_line_arguments_group -->
 <g id="edge10" class="edge"><title>type~type_object&#45;&gt;type~type_command_line_arguments_group</title>
-<path fill="none" stroke="black" d="M93,-69.8869C105.92,-69.8869 100.252,-86.5104 112,-91.8869 181.51,-123.7 207.743,-97.2376 284,-91.8869 306.478,-90.3098 330.644,-87.4694 353.084,-84.3421"/>
-<polygon fill="black" stroke="black" points="353.856,-87.7675 363.26,-82.8886 352.866,-80.8378 353.856,-87.7675"/>
+<path fill="none" stroke="black" d="M73.75,-38.0829C80.1667,-38.0829 86.7778,-38.0829 93,-38.0829"/>
+<path fill="none" stroke="black" d="M93,-38.0829C105.92,-38.0829 100.252,-21.4595 112,-16.0829 181.51,15.7303 207.743,-10.7323 284,-16.0829 306.478,-17.66 330.644,-20.5004 353.084,-23.6277"/>
+<polygon fill="black" stroke="black" points="352.866,-27.132 363.26,-25.0812 353.856,-20.2024 352.866,-27.132"/>
 </g>
 <!-- type~type_command_line_argument&#45;&gt;type~type_command_line_arguments_group -->
 <g id="edge2" class="edge"><title>type~type_command_line_argument&#45;&gt;type~type_command_line_arguments_group</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M283.661,-69.8869C296.554,-69.8869 310.035,-69.8869 323.442,-69.8869"/>
-<polygon fill="black" stroke="black" points="323.67,-73.387 333.67,-69.8869 323.67,-66.387 323.67,-73.387"/>
-<text text-anchor="middle" x="309" y="-74.3369" font-family="Helvetica,sans-Serif" font-size="9.50">cla</text>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M283.661,-38.0829C296.554,-38.0829 310.035,-38.0829 323.442,-38.0829"/>
+<polygon fill="black" stroke="black" points="323.67,-41.583 333.67,-38.0829 323.67,-34.583 323.67,-41.583"/>
+<text text-anchor="middle" x="309" y="-42.5329" font-family="Helvetica,sans-Serif" font-size="9.50">cla</text>
 </g>
 <!-- type~type_command_line_arguments_group&#45;&gt;type~type_command_line_interface -->
 <g id="edge4" class="edge"><title>type~type_command_line_arguments_group&#45;&gt;type~type_command_line_interface</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M546.184,-59.9994C561.951,-58.5312 578.102,-57.0273 593.581,-55.5858"/>
-<polygon fill="black" stroke="black" points="594.014,-59.0608 603.646,-54.6486 593.365,-52.091 594.014,-59.0608"/>
-<text text-anchor="middle" x="575" y="-61.3369" font-family="Helvetica,sans-Serif" font-size="9.50">clasg</text>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M546.061,-48.2143C559.505,-49.51 573.075,-50.8233 586,-52.0829 588.532,-52.3296 591.1,-52.5803 593.691,-52.8338"/>
+<polygon fill="black" stroke="black" points="593.483,-56.3301 603.777,-53.8224 594.166,-49.3635 593.483,-56.3301"/>
+<text text-anchor="middle" x="575" y="-56.5329" font-family="Helvetica,sans-Serif" font-size="9.50">clasg</text>
 </g>
 </g>
 </svg>
@@ -770,7 +778,7 @@ private subroutine <a href='../proc/errored.html'>errored</a>(obj, error, pref, 
   <td>optional</td>
   
   <td></td><td>::</td>
-  <td><strong>a1</strong></td><td></td>
+  <td><strong>a1</strong></td><td><p>First index CLAs group inconsistent.</p></td>
   
 </tr>
 
@@ -785,7 +793,7 @@ private subroutine <a href='../proc/errored.html'>errored</a>(obj, error, pref, 
   <td>optional</td>
   
   <td></td><td>::</td>
-  <td><strong>a2</strong></td><td><p>CLAs group inconsistent indexes.</p></td>
+  <td><strong>a2</strong></td><td><p>Second index CLAs group inconsistent.</p></td>
   
 </tr>
 
@@ -979,6 +987,14 @@ private elementalsubroutine <a href='../proc/assign_object.html'>assign_object</
       
     
     
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Assign two abstract objects.</p>
         
 
       
@@ -995,6 +1011,7 @@ private elementalsubroutine <a href='../proc/assign_object.html'>assign_object</
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
     <div class="highlight"><pre><span class="k">type</span><span class="p">,</span> <span class="k">abstract</span> <span class="kd">::</span> <span class="n">Type_Object</span>
+  <span class="c">!&lt; Abstract object defining data and methods that are common to CLA, CLAG and CLI.</span>
   <span class="k">private</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">progname</span>    <span class="c">!&lt; Program name.</span>
   <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">version</span>     <span class="c">!&lt; Program version.</span>

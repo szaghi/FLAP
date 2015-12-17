@@ -117,6 +117,7 @@
   <div class="row">
     <div class="col-lg-3">
     
+<div id="sidebar">
   
   
   
@@ -125,11 +126,13 @@
   
   
   <div class="panel panel-primary">
-    <div class="panel-heading text-left"><h3 class="panel-title">Modules</h3></div>
-    <div class="list-group">
-      
-      <a class="list-group-item" href="../module/data_type_command_line_interface.html">Data_Type_Command_Line_Interface</a>
-      
+    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods">Modules</a></h3></div>
+    <div id="mods" class="panel-collapse collapse">
+        <div class="list-group">
+          
+          <a class="list-group-item" href="../module/data_type_command_line_interface.html">Data_Type_Command_Line_Interface</a>
+          
+        </div>
     </div>
   </div>
   
@@ -157,23 +160,26 @@
   <hr>
   
   <div class="panel panel-default">
-    <div class="panel-heading text-left"><h3 class="panel-title">All Source Files</h3></div>
-    <div class="list-group">
-      
-      <a class="list-group-item" href="../sourcefile/data_type_command_line_interface.f90.html">Data_Type_Command_Line_Interface.F90</a>
-      
-      <a class="list-group-item" href="../sourcefile/test_basic.f90.html">test_basic.f90</a>
-      
-      <a class="list-group-item" href="../sourcefile/test_choices_logical.f90.html">test_choices_logical.f90</a>
-      
-      <a class="list-group-item" href="../sourcefile/test_nested.f90.html">test_nested.f90</a>
-      
-      <a class="list-group-item" href="../sourcefile/test_string.f90.html">test_string.f90</a>
-      
+    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#allfiles">All Source Files</a></h3></div>
+    <div id="allfiles" class="panel-collapse collapse">
+        <div class="list-group">
+          
+          <a class="list-group-item" href="../sourcefile/data_type_command_line_interface.f90.html">Data_Type_Command_Line_Interface.F90</a>
+          
+          <a class="list-group-item" href="../sourcefile/test_basic.f90.html">test_basic.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/test_choices_logical.f90.html">test_choices_logical.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/test_nested.f90.html">test_nested.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/test_string.f90.html">test_string.f90</a>
+          
+        </div>
     </div>
   </div>
   
-  
+</div>
+
     </div>
     <div class="col-lg-9" id='text'>
     <p>FLAP, Fortran command Line Arguments Parser for poor people</p>
@@ -185,10 +191,6 @@
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="c">!&lt; FLAP, Fortran command Line Arguments Parser for poor people</span>
 <span class="c">!&lt;{!README-FLAP.md!}</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt;### ChangeLog</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt;{!ChangeLog-FLAP.md!}</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="k">USE </span><span class="n">IR_Precision</span>                                                                <span class="c">! Integers and reals precision definition.</span>
 <span class="k">USE</span><span class="p">,</span> <span class="k">intrinsic</span><span class="kd">::</span> <span class="n">ISO_FORTRAN_ENV</span><span class="p">,</span> <span class="n">only</span><span class="p">:</span> <span class="n">stdout</span><span class="o">=&gt;</span><span class="n">OUTPUT_UNIT</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=&gt;</span><span class="n">ERROR_UNIT</span> <span class="c">! Standard output/error logical units.</span>
@@ -202,6 +204,7 @@
 
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="k">type</span><span class="p">,</span> <span class="k">abstract</span> <span class="kd">::</span> <span class="n">Type_Object</span>
+  <span class="c">!&lt; Abstract object defining data and methods that are common to CLA, CLAG and CLI.</span>
   <span class="k">private</span>
 <span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">progname</span>    <span class="c">!&lt; Program name.</span>
   <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">version</span>     <span class="c">!&lt; Program version.</span>
@@ -514,7 +517,8 @@
   <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">switch</span>    <span class="c">!&lt; CLA switch name.</span>
   <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">val_str</span>   <span class="c">!&lt; Value string.</span>
   <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">log_value</span> <span class="c">!&lt; Logical value to be casted.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">a1</span><span class="p">,</span><span class="n">a2</span>     <span class="c">!&lt; CLAs group inconsistent indexes.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">a1</span>        <span class="c">!&lt; First index CLAs group inconsistent.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">a2</span>        <span class="c">!&lt; Second index CLAs group inconsistent.</span>
   <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>         <span class="kd">::</span> <span class="n">prefd</span>     <span class="c">!&lt; Prefixing string.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
@@ -686,6 +690,8 @@
   <span class="n">endsubroutine</span> <span class="n">print_version</span>
 
   <span class="k">elemental subroutine </span><span class="n">assign_object</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Assign two abstract objects.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">class</span><span class="p">(</span><span class="n">Type_Object</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">Type_Object</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Rigth hand side.</span>
@@ -1792,6 +1798,8 @@
 
   <span class="k">elemental subroutine </span><span class="n">assign_cla</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Assign two CLA.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">class</span><span class="p">(</span><span class="n">Type_Command_Line_Argument</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
   <span class="k">type</span><span class="p">(</span><span class="n">Type_Command_Line_Argument</span><span class="p">),</span>  <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Rigth hand side.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -1862,7 +1870,8 @@
   <span class="k">class</span><span class="p">(</span><span class="n">Type_Command_Line_Arguments_Group</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">clasg</span> <span class="c">!&lt; CLAs group data.</span>
   <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>                   <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">pref</span>  <span class="c">!&lt; Prefixing string.</span>
   <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>                           <span class="kd">::</span> <span class="n">prefd</span> <span class="c">!&lt; Prefixing string.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                            <span class="kd">::</span> <span class="n">a</span><span class="p">,</span> <span class="n">aa</span> <span class="c">!&lt; Counters.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                            <span class="kd">::</span> <span class="n">a</span>     <span class="c">!&lt; Counter.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                            <span class="kd">::</span> <span class="n">aa</span>    <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -2279,6 +2288,8 @@
 
   <span class="k">elemental subroutine </span><span class="n">assign_clasg</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Assign two CLASg.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">class</span><span class="p">(</span><span class="n">Type_Command_Line_Arguments_Group</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
   <span class="k">type</span><span class="p">(</span><span class="n">Type_Command_Line_Arguments_Group</span><span class="p">),</span>  <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -2443,7 +2454,8 @@
   <span class="k">class</span><span class="p">(</span><span class="n">Type_Command_Line_Interface</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">cli</span>    <span class="c">!&lt; CLI data.</span>
   <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span>                       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">group1</span> <span class="c">!&lt; Name of the first grouped CLAs.</span>
   <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span>                       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">group2</span> <span class="c">!&lt; Name of the second grouped CLAs.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                      <span class="kd">::</span> <span class="n">g1</span><span class="p">,</span> <span class="n">g2</span> <span class="c">!&lt; Counters.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                      <span class="kd">::</span> <span class="n">g1</span>     <span class="c">!&lt; Counter.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                      <span class="kd">::</span> <span class="n">g2</span>     <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -2549,7 +2561,8 @@
   <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>             <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">pref</span>  <span class="c">!&lt; Prefixing string.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>             <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span>   <span class="kd">::</span> <span class="n">error</span> <span class="c">!&lt; Error trapping flag.</span>
   <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>                     <span class="kd">::</span> <span class="n">prefd</span> <span class="c">!&lt; Prefixing string.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                      <span class="kd">::</span> <span class="n">g</span><span class="p">,</span> <span class="n">gg</span> <span class="c">!&lt; Counters.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                      <span class="kd">::</span> <span class="n">g</span>     <span class="c">!&lt; Counter.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                      <span class="kd">::</span> <span class="n">gg</span>    <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -2578,7 +2591,8 @@
   <span class="k">class</span><span class="p">(</span><span class="n">Type_Command_Line_Interface</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">cli</span>   <span class="c">!&lt; CLI data.</span>
   <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>             <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">pref</span>  <span class="c">!&lt; Prefixing string.</span>
   <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>                     <span class="kd">::</span> <span class="n">prefd</span> <span class="c">!&lt; Prefixing string.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                      <span class="kd">::</span> <span class="n">g</span><span class="p">,</span> <span class="n">gg</span>  <span class="c">!&lt; Counters.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                      <span class="kd">::</span> <span class="n">g</span>     <span class="c">!&lt; Counter.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                      <span class="kd">::</span> <span class="n">gg</span>    <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -2639,7 +2653,8 @@
   <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span>                       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">group</span>   <span class="c">!&lt; Name of group (command) of CLAs.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>             <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">g</span>       <span class="c">!&lt; Index of group.</span>
   <span class="kt">logical</span>                                         <span class="kd">::</span> <span class="n">defined</span> <span class="c">!&lt; Check if a CLAs group has been defined.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                    <span class="kd">::</span> <span class="n">gg</span><span class="p">,</span> <span class="n">ggg</span> <span class="c">!&lt; Counters.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                    <span class="kd">::</span> <span class="n">gg</span>      <span class="c">!&lt; Counter.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                    <span class="kd">::</span> <span class="n">ggg</span>     <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -2943,7 +2958,8 @@
     <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="nb">len_trim</span><span class="p">(</span><span class="n">argsin</span><span class="p">))</span><span class="kd">::</span>              <span class="n">sanitized</span> <span class="c">!&lt; Arguments string sanitized.</span>
     <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="nb">len_trim</span><span class="p">(</span><span class="n">argsin</span><span class="p">)),</span> <span class="k">allocatable</span><span class="kd">::</span> <span class="n">tok</span><span class="p">(:)</span>    <span class="c">!&lt; Arguments string tokens.</span>
     <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                                 <span class="n">Nt</span>        <span class="c">!&lt; Number of command line arguments passed.</span>
-    <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                                 <span class="n">t</span><span class="p">,</span><span class="n">tt</span>      <span class="c">!&lt; Counters.</span>
+    <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                                 <span class="n">t</span>         <span class="c">!&lt; Counter.</span>
+    <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                                 <span class="n">tt</span>        <span class="c">!&lt; Counter.</span>
     <span class="c">!-------------------------------------------------------------------------------------------------------------------------------</span>
 
     <span class="c">!-------------------------------------------------------------------------------------------------------------------------------</span>
@@ -3713,13 +3729,13 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Save man page build on the CLI.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">Type_Command_Line_Interface</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">cli</span>        <span class="c">!&lt; CLI data.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span>                       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">man_file</span>   <span class="c">!&lt; Output file name for saving man page.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>             <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">error</span>      <span class="c">!&lt; Error trapping flag.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>                   <span class="kd">::</span> <span class="n">man</span>        <span class="c">!&lt; Man page.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                    <span class="kd">::</span> <span class="nb">idate</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">)</span> <span class="c">!&lt; Integer array for handling the date.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                    <span class="kd">::</span> <span class="n">e</span>          <span class="c">!&lt; Counter.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                    <span class="kd">::</span> <span class="n">u</span>          <span class="c">!&lt; Unit file handler.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">Type_Command_Line_Interface</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">cli</span>                <span class="c">!&lt; CLI data.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span>                       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">man_file</span>           <span class="c">!&lt; Output file name for saving man page.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>             <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">error</span>              <span class="c">!&lt; Error trapping flag.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>                   <span class="kd">::</span> <span class="n">man</span>                <span class="c">!&lt; Man page.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                    <span class="kd">::</span> <span class="nb">idate</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">)</span>         <span class="c">!&lt; Integer array for handling the date.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                    <span class="kd">::</span> <span class="n">e</span>                  <span class="c">!&lt; Counter.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                    <span class="kd">::</span> <span class="n">u</span>                  <span class="c">!&lt; Unit file handler.</span>
   <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">parameter</span>                         <span class="kd">::</span> <span class="n">month</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Jan&quot;</span><span class="p">,&amp;</span>
                                                                 <span class="s2">&quot;Feb&quot;</span><span class="p">,&amp;</span>
                                                                 <span class="s2">&quot;Mar&quot;</span><span class="p">,&amp;</span>
@@ -3731,7 +3747,7 @@
                                                                 <span class="s2">&quot;Sep&quot;</span><span class="p">,&amp;</span>
                                                                 <span class="s2">&quot;Oct&quot;</span><span class="p">,&amp;</span>
                                                                 <span class="s2">&quot;Nov&quot;</span><span class="p">,&amp;</span>
-                                                                <span class="s2">&quot;Dec&quot;</span><span class="p">]</span>
+                                                                <span class="s2">&quot;Dec&quot;</span><span class="p">]</span>  <span class="c">!&lt; Months list.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -3772,6 +3788,8 @@
   <span class="n">endsubroutine</span> <span class="n">save_man_page</span>
 
   <span class="k">elemental subroutine </span><span class="n">assign_cli</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Assign two CLI.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">class</span><span class="p">(</span><span class="n">Type_Command_Line_Interface</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
   <span class="k">type</span><span class="p">(</span><span class="n">Type_Command_Line_Interface</span><span class="p">),</span>  <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>

@@ -3,10 +3,6 @@ module Data_Type_Command_Line_Interface
 !-----------------------------------------------------------------------------------------------------------------------------------
 !< FLAP, Fortran command Line Arguments Parser for poor people
 !<{!README-FLAP.md!}
-!<
-!<### ChangeLog
-!<
-!<{!ChangeLog-FLAP.md!}
 !-----------------------------------------------------------------------------------------------------------------------------------
 USE IR_Precision                                                                ! Integers and reals precision definition.
 USE, intrinsic:: ISO_FORTRAN_ENV, only: stdout=>OUTPUT_UNIT, stderr=>ERROR_UNIT ! Standard output/error logical units.
@@ -20,6 +16,7 @@ save
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 type, abstract :: Type_Object
+  !< Abstract object defining data and methods that are common to CLA, CLAG and CLI.
   private
   character(len=:), public, allocatable :: progname    !< Program name.
   character(len=:), public, allocatable :: version     !< Program version.
@@ -332,7 +329,8 @@ contains
   character(*), optional, intent(IN)    :: switch    !< CLA switch name.
   character(*), optional, intent(IN)    :: val_str   !< Value string.
   character(*), optional, intent(IN)    :: log_value !< Logical value to be casted.
-  integer(I4P), optional, intent(IN)    :: a1,a2     !< CLAs group inconsistent indexes.
+  integer(I4P), optional, intent(IN)    :: a1        !< First index CLAs group inconsistent.
+  integer(I4P), optional, intent(IN)    :: a2        !< Second index CLAs group inconsistent.
   character(len=:), allocatable         :: prefd     !< Prefixing string.
   !---------------------------------------------------------------------------------------------------------------------------------
 
@@ -504,6 +502,8 @@ contains
   endsubroutine print_version
 
   elemental subroutine assign_object(lhs, rhs)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Assign two abstract objects.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(Type_Object), intent(INOUT) :: lhs !< Left hand side.
   class(Type_Object), intent(IN)    :: rhs !< Rigth hand side.
@@ -1610,6 +1610,8 @@ contains
 
   elemental subroutine assign_cla(lhs, rhs)
   !---------------------------------------------------------------------------------------------------------------------------------
+  !< Assign two CLA.
+  !---------------------------------------------------------------------------------------------------------------------------------
   class(Type_Command_Line_Argument), intent(INOUT) :: lhs !< Left hand side.
   type(Type_Command_Line_Argument),  intent(IN)    :: rhs !< Rigth hand side.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1680,7 +1682,8 @@ contains
   class(Type_Command_Line_Arguments_Group), intent(INOUT) :: clasg !< CLAs group data.
   character(*), optional,                   intent(IN)    :: pref  !< Prefixing string.
   character(len=:), allocatable                           :: prefd !< Prefixing string.
-  integer(I4P)                                            :: a, aa !< Counters.
+  integer(I4P)                                            :: a     !< Counter.
+  integer(I4P)                                            :: aa    !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -2097,6 +2100,8 @@ contains
 
   elemental subroutine assign_clasg(lhs, rhs)
   !---------------------------------------------------------------------------------------------------------------------------------
+  !< Assign two CLASg.
+  !---------------------------------------------------------------------------------------------------------------------------------
   class(Type_Command_Line_Arguments_Group), intent(INOUT) :: lhs !< Left hand side.
   type(Type_Command_Line_Arguments_Group),  intent(IN)    :: rhs !< Right hand side.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -2261,7 +2266,8 @@ contains
   class(Type_Command_Line_Interface), intent(INOUT) :: cli    !< CLI data.
   character(*),                       intent(IN)    :: group1 !< Name of the first grouped CLAs.
   character(*),                       intent(IN)    :: group2 !< Name of the second grouped CLAs.
-  integer(I4P)                                      :: g1, g2 !< Counters.
+  integer(I4P)                                      :: g1     !< Counter.
+  integer(I4P)                                      :: g2     !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -2367,7 +2373,8 @@ contains
   character(*), optional,             intent(IN)    :: pref  !< Prefixing string.
   integer(I4P), optional,             intent(OUT)   :: error !< Error trapping flag.
   character(len=:), allocatable                     :: prefd !< Prefixing string.
-  integer(I4P)                                      :: g, gg !< Counters.
+  integer(I4P)                                      :: g     !< Counter.
+  integer(I4P)                                      :: gg    !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -2396,7 +2403,8 @@ contains
   class(Type_Command_Line_Interface), intent(INOUT) :: cli   !< CLI data.
   character(*), optional,             intent(IN)    :: pref  !< Prefixing string.
   character(len=:), allocatable                     :: prefd !< Prefixing string.
-  integer(I4P)                                      :: g, gg  !< Counters.
+  integer(I4P)                                      :: g     !< Counter.
+  integer(I4P)                                      :: gg    !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -2457,7 +2465,8 @@ contains
   character(*),                       intent(IN)  :: group   !< Name of group (command) of CLAs.
   integer(I4P), optional,             intent(OUT) :: g       !< Index of group.
   logical                                         :: defined !< Check if a CLAs group has been defined.
-  integer(I4P)                                    :: gg, ggg !< Counters.
+  integer(I4P)                                    :: gg      !< Counter.
+  integer(I4P)                                    :: ggg     !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -2761,7 +2770,8 @@ contains
     character(len=len_trim(argsin))::              sanitized !< Arguments string sanitized.
     character(len=len_trim(argsin)), allocatable:: tok(:)    !< Arguments string tokens.
     integer(I4P)::                                 Nt        !< Number of command line arguments passed.
-    integer(I4P)::                                 t,tt      !< Counters.
+    integer(I4P)::                                 t         !< Counter.
+    integer(I4P)::                                 tt        !< Counter.
     !-------------------------------------------------------------------------------------------------------------------------------
 
     !-------------------------------------------------------------------------------------------------------------------------------
@@ -3531,13 +3541,13 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Save man page build on the CLI.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(Type_Command_Line_Interface), intent(IN)  :: cli        !< CLI data.
-  character(*),                       intent(IN)  :: man_file   !< Output file name for saving man page.
-  integer(I4P), optional,             intent(OUT) :: error      !< Error trapping flag.
-  character(len=:), allocatable                   :: man        !< Man page.
-  integer(I4P)                                    :: idate(1:8) !< Integer array for handling the date.
-  integer(I4P)                                    :: e          !< Counter.
-  integer(I4P)                                    :: u          !< Unit file handler.
+  class(Type_Command_Line_Interface), intent(IN)  :: cli                !< CLI data.
+  character(*),                       intent(IN)  :: man_file           !< Output file name for saving man page.
+  integer(I4P), optional,             intent(OUT) :: error              !< Error trapping flag.
+  character(len=:), allocatable                   :: man                !< Man page.
+  integer(I4P)                                    :: idate(1:8)         !< Integer array for handling the date.
+  integer(I4P)                                    :: e                  !< Counter.
+  integer(I4P)                                    :: u                  !< Unit file handler.
   character(*), parameter                         :: month(12)=["Jan",&
                                                                 "Feb",&
                                                                 "Mar",&
@@ -3549,7 +3559,7 @@ contains
                                                                 "Sep",&
                                                                 "Oct",&
                                                                 "Nov",&
-                                                                "Dec"]
+                                                                "Dec"]  !< Months list.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -3590,6 +3600,8 @@ contains
   endsubroutine save_man_page
 
   elemental subroutine assign_cli(lhs, rhs)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Assign two CLI.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(Type_Command_Line_Interface), intent(INOUT) :: lhs !< Left hand side.
   type(Type_Command_Line_Interface),  intent(IN)    :: rhs !< Right hand side.
