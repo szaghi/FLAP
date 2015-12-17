@@ -3,10 +3,6 @@ module Data_Type_Command_Line_Interface
 !-----------------------------------------------------------------------------------------------------------------------------------
 !< FLAP, Fortran command Line Arguments Parser for poor people
 !<{!README-FLAP.md!}
-!<
-!<### ChangeLog
-!<
-!<{!ChangeLog-FLAP.md!}
 !-----------------------------------------------------------------------------------------------------------------------------------
 USE IR_Precision                                                                ! Integers and reals precision definition.
 USE, intrinsic:: ISO_FORTRAN_ENV, only: stdout=>OUTPUT_UNIT, stderr=>ERROR_UNIT ! Standard output/error logical units.
