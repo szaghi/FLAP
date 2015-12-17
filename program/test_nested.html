@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	 
+	 <meta name="description" content="Fortran command Line Arguments Parser for poor people">
+    
+    <meta name="author" content="Chris MacMackin" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>test_nested &ndash; FLAP</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">FLAP </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+				
+                
+            <li><a href="../lists/files.html">Source Files</a></li>
+				
+				
+            <li><a href="../lists/modules.html">Modules</a></li>
+				
+				
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+				
+								
+            <li><a href="../lists/types.html">Derived Types</a></li>
+				
+				
+            <li><a href="../lists/programs.html">Programs</a></li>
+				
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>test_nested 
+    <small>Program</small>
+    
+    </h1>
+	 
+<div class="row">
+<div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+    <li><i class="fa fa-code"></i><a href="../src/test_nested.f90"> Source File</a></li>
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+     <li><a href='../sourcefile/test_nested.f90.html'>test_nested.f90</a></li>
+  
+     <li class="active">test_nested</li>
+  </ol>
+</div>
+</div>
+</div>
+    
+  </div>
+  
+  <div class="row">
+    <div class="col-lg-3">
+    
+<div id="sidebar">
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#vars">Variables</a></h3></div>
+    <div id="vars" class="panel-collapse collapse">
+      <div class="list-group">
+        
+        <a class="list-group-item" href="../program/test_nested.html#variable-cli%7E32">cli</a>
+        
+        <a class="list-group-item" href="../program/test_nested.html#variable-authors_print">authors_print</a>
+        
+        <a class="list-group-item" href="../program/test_nested.html#variable-message">message</a>
+        
+        <a class="list-group-item" href="../program/test_nested.html#variable-error%7E18">error</a>
+        
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+    <div class="list-group">
+      <a class="list-group-item" href="../program/test_nested.html#src">test_nested</a>
+    </div>
+  </div>
+  
+  <hr>
+  
+  <div class="panel panel-default">
+    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#allprogs">All Programs</a></h3></div>
+    <div id="allprogs" class="panel-collapse collapse">
+        <div class="list-group">
+          
+          <a class="list-group-item" href="../program/test_basic.html">test_basic</a>
+          
+          <a class="list-group-item" href="../program/test_choices_logical.html">test_choices_logical</a>
+          
+          <a class="list-group-item" href="../program/test_nested.html">test_nested</a>
+          
+          <a class="list-group-item" href="../program/test_string.html">test_string</a>
+          
+        </div>
+    </div>
+  </div>
+  
+</div>
+
+    </div>
+    
+    <div class="col-lg-9" id='text'>
+    
+  
+    <ul class="list-inline">
+      <li><h4>Uses:</h4></li>
+      
+      <li>IR_Precision</li>
+      
+      <li><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></li>
+      
+    </ul>
+  
+
+    
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.38.0 (20140413.2041)
+ -->
+<!-- Title: program~~test_nested~~UsesGraph Pages: 1 -->
+<svg id="programtest_nestedUsesGraph" width="430pt" height="74pt"
+ viewBox="0.00 0.00 430.00 74.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="program~~test_nested~~UsesGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 70)">
+<title>program~~test_nested~~UsesGraph</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-70 426,-70 426,4 -4,4"/>
+<!-- program~test_nested -->
+<g id="program~~test_nested~~UsesGraph_node1" class="node"><title>program~test_nested</title>
+<polygon fill="none" stroke="black" points="422,-46 354,-46 354,-22 422,-22 422,-46"/>
+<text text-anchor="middle" x="388" y="-31.6" font-family="Helvetica,sans-Serif" font-size="10.50">test_nested</text>
+</g>
+<!-- IR_Precision -->
+<g id="program~~test_nested~~UsesGraph_node2" class="node"><title>IR_Precision</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="80,-66 7,-66 7,-42 80,-42 80,-66"/>
+<text text-anchor="middle" x="43.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">IR_Precision</text>
+</g>
+<!-- IR_Precision&#45;&gt;program~test_nested -->
+<g id="program~~test_nested~~UsesGraph_edge3" class="edge"><title>IR_Precision&#45;&gt;program~test_nested</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M80.1842,-51.9162C143.579,-48.2144 275.581,-40.5062 343.922,-36.5155"/>
+<polygon fill="black" stroke="black" points="344.147,-40.0084 353.926,-35.9313 343.739,-33.0203 344.147,-40.0084"/>
+</g>
+<!-- module~data_type_command_line_interface -->
+<g id="program~~test_nested~~UsesGraph_node3" class="node"><title>module~data_type_command_line_interface</title>
+<g id="a_program~~test_nested~~UsesGraph_node3"><a xlink:href="../module/data_type_command_line_interface.html" xlink:title="Data_Type_Command_Line_Interface">
+<polygon fill="#337ab7" stroke="#337ab7" points="318,-26 123,-26 123,-2 318,-2 318,-26"/>
+<text text-anchor="middle" x="220.5" y="-11.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Data_Type_Command_Line_Interface</text>
+</a>
+</g>
+</g>
+<!-- IR_Precision&#45;&gt;module~data_type_command_line_interface -->
+<g id="program~~test_nested~~UsesGraph_edge1" class="edge"><title>IR_Precision&#45;&gt;module~data_type_command_line_interface</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M80.3362,-45.8089C102.318,-40.7846 131.076,-34.2112 156.741,-28.345"/>
+<polygon fill="black" stroke="black" points="157.806,-31.6919 166.775,-26.0515 156.246,-24.8679 157.806,-31.6919"/>
+</g>
+<!-- module~data_type_command_line_interface&#45;&gt;program~test_nested -->
+<g id="program~~test_nested~~UsesGraph_edge4" class="edge"><title>module~data_type_command_line_interface&#45;&gt;program~test_nested</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M318.251,-25.692C327.104,-26.7618 335.737,-27.8051 343.728,-28.7708"/>
+<polygon fill="black" stroke="black" points="343.481,-32.2663 353.829,-29.9914 344.321,-25.3169 343.481,-32.2663"/>
+</g>
+<!-- iso_fortran_env -->
+<g id="program~~test_nested~~UsesGraph_node4" class="node"><title>iso_fortran_env</title>
+<g id="a_program~~test_nested~~UsesGraph_node4"><a xlink:href="https://gcc.gnu.org/onlinedocs/gfortran/ISO_005fFORTRAN_005fENV.html" xlink:title="iso_fortran_env">
+<polygon fill="#337ab7" stroke="#337ab7" points="87,-24 0,-24 0,-0 87,-0 87,-24"/>
+<text text-anchor="middle" x="43.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">iso_fortran_env</text>
+</a>
+</g>
+</g>
+<!-- iso_fortran_env&#45;&gt;module~data_type_command_line_interface -->
+<g id="program~~test_nested~~UsesGraph_edge2" class="edge"><title>iso_fortran_env&#45;&gt;module~data_type_command_line_interface</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M87.3098,-12.4893C95.25,-12.58 103.861,-12.6784 112.751,-12.78"/>
+<polygon fill="black" stroke="black" points="112.847,-16.2812 122.886,-12.8958 112.927,-9.2817 112.847,-16.2812"/>
+</g>
+</g>
+</svg>
+</div>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+Nodes of different colours represent the following:
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.38.0 (20140413.2041)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="26pt"
+ viewBox="0.00 0.00 641.00 25.98" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(0.811906 0.811906) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-28 785.5,-28 785.5,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node"><title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,-0 54,-0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node"><title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="139.5,-24 72.5,-24 72.5,-0 139.5,-0 139.5,-24"/>
+<text text-anchor="middle" x="106" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Type -->
+<g id="node3" class="node"><title>Type</title>
+<polygon fill="#5cb85c" stroke="#5cb85c" points="212,-24 158,-24 158,-0 212,-0 212,-24"/>
+<text text-anchor="middle" x="185" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type</text>
+</g>
+<!-- Subroutine -->
+<g id="node4" class="node"><title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="294,-24 230,-24 230,-0 294,-0 294,-24"/>
+<text text-anchor="middle" x="262" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node5" class="node"><title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="366,-24 312,-24 312,-0 366,-0 366,-24"/>
+<text text-anchor="middle" x="339" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node6" class="node"><title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="439.5,-24 384.5,-24 384.5,-0 439.5,-0 439.5,-24"/>
+<text text-anchor="middle" x="412" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node7" class="node"><title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="594,-24 458,-24 458,-0 594,-0 594,-24"/>
+<text text-anchor="middle" x="526" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node8" class="node"><title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="666,-24 612,-24 612,-0 666,-0 666,-24"/>
+<text text-anchor="middle" x="639" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node9" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="781.5,-24 684.5,-24 684.5,-0 781.5,-0 781.5,-24"/>
+<text text-anchor="middle" x="733" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<h5>Module Graph</h5>
+<p>Solid arrows point from a parent (sub)module to the submodule which is
+descended from it. Dashed arrows point from a module being used to the
+module using it.</p>
+<h5>Type Graph</h5>
+<p>Solid arrows point from one derived type to another which extends
+(inherits from) it. Dashed arrows point from a derived type to another
+type containing it as a components, with a label listing the name(s) of
+said component(s).</p>
+<h5>Call Graph</h5>
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.</p>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+    <br><br>
+    <p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p>
+<h3 id="compile"><a class="toclink" href="#compile">Compile</a></h3>
+<p>See <a href="https://github.com/szaghi/FLAP/wiki/Download-compile">compile instructions</a>.</p>
+<h3 id="usage-compile"><a class="toclink" href="#usage-compile">Usage Compile</a></h3>
+<p>See <a href="https://github.com/szaghi/FLAP/wiki/Testing-Programs">usage instructions</a>.</p>
+    
+     <h3>Calls</h3>
+     
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.38.0 (20140413.2041)
+ -->
+<!-- Title: program~~test_nested~~CallsGraph Pages: 1 -->
+<svg id="programtest_nestedCallsGraph" width="166pt" height="32pt"
+ viewBox="0.00 0.00 166.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="program~~test_nested~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>program~~test_nested~~CallsGraph</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-28 162,-28 162,4 -4,4"/>
+<!-- program~test_nested -->
+<g id="program~~test_nested~~CallsGraph_node1" class="node"><title>program~test_nested</title>
+<polygon fill="none" stroke="black" points="68,-24 0,-24 0,-0 68,-0 68,-24"/>
+<text text-anchor="middle" x="34" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">test_nested</text>
+</g>
+<!-- str -->
+<g id="program~~test_nested~~CallsGraph_node2" class="node"><title>str</title>
+<polygon fill="#777777" stroke="#777777" points="158,-24 104,-24 104,-0 158,-0 158,-24"/>
+<text text-anchor="middle" x="131" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">str</text>
+</g>
+<!-- program~test_nested&#45;&gt;str -->
+<g id="program~~test_nested~~CallsGraph_edge1" class="edge"><title>program~test_nested&#45;&gt;str</title>
+<path fill="none" stroke="black" d="M68.2264,-12C76.4279,-12 85.2553,-12 93.5988,-12"/>
+<polygon fill="black" stroke="black" points="93.8248,-15.5001 103.825,-12 93.8247,-8.5001 93.8248,-15.5001"/>
+</g>
+</g>
+</svg>
+</div>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+Nodes of different colours represent the following:
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.38.0 (20140413.2041)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="26pt"
+ viewBox="0.00 0.00 641.00 25.98" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(0.811906 0.811906) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-28 785.5,-28 785.5,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node"><title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,-0 54,-0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node"><title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="139.5,-24 72.5,-24 72.5,-0 139.5,-0 139.5,-24"/>
+<text text-anchor="middle" x="106" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Type -->
+<g id="node3" class="node"><title>Type</title>
+<polygon fill="#5cb85c" stroke="#5cb85c" points="212,-24 158,-24 158,-0 212,-0 212,-24"/>
+<text text-anchor="middle" x="185" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type</text>
+</g>
+<!-- Subroutine -->
+<g id="node4" class="node"><title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="294,-24 230,-24 230,-0 294,-0 294,-24"/>
+<text text-anchor="middle" x="262" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node5" class="node"><title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="366,-24 312,-24 312,-0 366,-0 366,-24"/>
+<text text-anchor="middle" x="339" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node6" class="node"><title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="439.5,-24 384.5,-24 384.5,-0 439.5,-0 439.5,-24"/>
+<text text-anchor="middle" x="412" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node7" class="node"><title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="594,-24 458,-24 458,-0 594,-0 594,-24"/>
+<text text-anchor="middle" x="526" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node8" class="node"><title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="666,-24 612,-24 612,-0 666,-0 666,-24"/>
+<text text-anchor="middle" x="639" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node9" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="781.5,-24 684.5,-24 684.5,-0 781.5,-0 781.5,-24"/>
+<text text-anchor="middle" x="733" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<h5>Module Graph</h5>
+<p>Solid arrows point from a parent (sub)module to the submodule which is
+descended from it. Dashed arrows point from a module being used to the
+module using it.</p>
+<h5>Type Graph</h5>
+<p>Solid arrows point from one derived type to another which extends
+(inherits from) it. Dashed arrows point from a derived type to another
+type containing it as a components, with a label listing the name(s) of
+said component(s).</p>
+<h5>Call Graph</h5>
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.</p>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+     
+    <br>
+
+    
+    <section>
+    <h2>Variables</h2>
+    
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+
+<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-cli%7E32"></span>type(Type_Command_Line_Interface)</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>cli</strong></td><td></td><td></td><td><p>Command Line Interface (CLI).</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-authors_print"></span>logical</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>authors_print</strong></td><td></td><td></td><td><p>Boolean value.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-message"></span>character(len=500)</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>message</strong></td><td></td><td></td><td><p>Message value.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-error%7E18"></span>integer(kind=I4P)</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>error</strong></td><td></td><td></td><td><p>Error trapping flag.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    </section>
+    <br>
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+    
+    
+    
+    <section>
+    <h2 id="src">Source Code</h2>
+    <div class="highlight"><pre><span class="k">program </span><span class="n">test_nested</span>
+<span class="c">!&lt; A testing program for FLAP, Fortran command Line Arguments Parser for poor people</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt;### Compile</span>
+<span class="c">!&lt; See [compile instructions](https://github.com/szaghi/FLAP/wiki/Download-compile).</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt;###Usage Compile</span>
+<span class="c">!&lt; See [usage instructions](https://github.com/szaghi/FLAP/wiki/Testing-Programs).</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="k">USE </span><span class="n">IR_Precision</span>                                                        <span class="c">! Integers and reals precision definition.</span>
+<span class="k">USE </span><span class="n">Data_Type_Command_Line_Interface</span><span class="p">,</span> <span class="n">only</span><span class="p">:</span> <span class="n">Type_Command_Line_Interface</span> <span class="c">! Definition of Type_Command_Line_Interface.</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="k">implicit none</span>
+<span class="k">type</span><span class="p">(</span><span class="n">Type_Command_Line_Interface</span><span class="p">)</span><span class="kd">::</span> <span class="n">cli</span>           <span class="c">!&lt; Command Line Interface (CLI).</span>
+<span class="kt">logical</span><span class="kd">::</span>                           <span class="n">authors_print</span> <span class="c">!&lt; Boolean value.</span>
+<span class="kt">character</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span><span class="kd">::</span>                    <span class="n">message</span>       <span class="c">!&lt; Message value.</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>                      <span class="n">error</span>         <span class="c">!&lt; Error trapping flag.</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="n">authors_print</span> <span class="o">=</span> <span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<span class="c">! initializing Command Line Interface</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span>    <span class="o">=</span> <span class="s1">&#39;test_nested&#39;</span><span class="p">,</span>                                       <span class="p">&amp;</span>
+              <span class="n">version</span>     <span class="o">=</span> <span class="s1">&#39;v2.1.5&#39;</span><span class="p">,</span>                                            <span class="p">&amp;</span>
+              <span class="n">authors</span>     <span class="o">=</span> <span class="s1">&#39;Stefano Zaghi&#39;</span><span class="p">,</span>                                     <span class="p">&amp;</span>
+              <span class="n">license</span>     <span class="o">=</span> <span class="s1">&#39;MIT&#39;</span><span class="p">,</span>                                               <span class="p">&amp;</span>
+              <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Toy program for testing FLAP with nested commands&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+              <span class="n">examples</span>    <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;test_nested                      &#39;</span><span class="p">,</span>                <span class="p">&amp;</span>
+                             <span class="s1">&#39;test_nested -h                   &#39;</span><span class="p">,</span>                <span class="p">&amp;</span>
+                             <span class="s1">&#39;test_nested init                 &#39;</span><span class="p">,</span>                <span class="p">&amp;</span>
+                             <span class="s1">&#39;test_nested commit -m &quot;fix bug-1&quot;&#39;</span><span class="p">,</span>                <span class="p">&amp;</span>
+                             <span class="s1">&#39;test_nested tag -a &quot;v2.1.5&quot;      &#39;</span><span class="p">])</span>
+<span class="c">! set a Command Line Argument without a group to trigger authors names printing</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--authors&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-a&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Print authors names&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">)</span>
+<span class="c">! set Command Line Arguments Groups, i.e. commands</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add_group</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;init&#39;</span><span class="p">,</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;fake init versioning&#39;</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add_group</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;commit&#39;</span><span class="p">,</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;fake commit changes to current branch&#39;</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add_group</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;tag&#39;</span><span class="p">,</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;fake tag current commit&#39;</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">set_mutually_exclusive_groups</span><span class="p">(</span><span class="n">group1</span><span class="o">=</span><span class="s1">&#39;init&#39;</span><span class="p">,</span><span class="n">group2</span><span class="o">=</span><span class="s1">&#39;commit&#39;</span><span class="p">)</span>
+<span class="c">! set Command Line Arguments of commit command</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;commit&#39;</span><span class="p">,</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--message&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-m&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Commit message&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">! set Command Line Arguments of commit command</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;tag&#39;</span><span class="p">,</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--annotate&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-a&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Tag annotation&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">! parsing Command Line Interface</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">parse</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">  print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span> <span class="s1">&#39;Error code: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">error</span><span class="p">))</span>
+  <span class="k">stop</span>
+<span class="n">endif</span>
+<span class="c">! using Command Line Interface data to trigger program behaviour</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-a&#39;</span><span class="p">,</span><span class="n">val</span><span class="o">=</span><span class="n">authors_print</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">authors_print</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">  print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="s1">&#39;Authors: &#39;</span><span class="o">//</span><span class="n">cli</span><span class="p">%</span><span class="n">authors</span>
+<span class="n">elseif</span> <span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">run_command</span><span class="p">(</span><span class="s1">&#39;init&#39;</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">  print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="s1">&#39;init (fake) versioning&#39;</span>
+<span class="n">elseif</span> <span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">run_command</span><span class="p">(</span><span class="s1">&#39;commit&#39;</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">  call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;commit&#39;</span><span class="p">,</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-m&#39;</span><span class="p">,</span><span class="n">val</span><span class="o">=</span><span class="n">message</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">  print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="s1">&#39;commit changes to current branch with message &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;&quot;&#39;</span>
+<span class="n">elseif</span> <span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">run_command</span><span class="p">(</span><span class="s1">&#39;tag&#39;</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">  call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;tag&#39;</span><span class="p">,</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-a&#39;</span><span class="p">,</span><span class="n">val</span><span class="o">=</span><span class="n">message</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">  print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="s1">&#39;tag current branch with message &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;&quot;&#39;</span>
+<span class="k">else</span>
+<span class="k">  print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="s1">&#39;cowardly you are doing nothing... try at least &quot;-h&quot; option!&#39;</span>
+<span class="n">endif</span>
+<span class="k">stop</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="n">endprogram</span> <span class="n">test_nested</span>
+</pre></div>
+
+    </section>
+    
+    
+    </div>
+  </div>
+
+    <hr>
+    <footer>
+        <div class="row">
+        <div class="col-md-6">&copy; 2015 FLAP was written by Stefano Zaghi. </div>
+        <div class="col-md-6"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a>.</span></div>
+        </div>
+        <br>
+    </footer>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'],
+        'HTML-CSS': { 
+           styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: '#000000 ! important'} }
+        }
+      });
+    </script>
+    <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  </body>
+</html>

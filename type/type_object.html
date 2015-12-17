@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	 
+	 <meta name="description" content="Fortran command Line Arguments Parser for poor people">
+    
+    <meta name="author" content="Chris MacMackin" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>Type_Object &ndash; FLAP </title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">FLAP </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+				
+                
+            <li><a href="../lists/files.html">Source Files</a></li>
+				
+				
+            <li><a href="../lists/modules.html">Modules</a></li>
+				
+				
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+				
+								
+            <li><a href="../lists/types.html">Derived Types</a></li>
+				
+				
+            <li><a href="../lists/programs.html">Programs</a></li>
+				
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>Type_Object
+    <small>Derived Type</small>
+    
+    </h1>
+	 
+<div class="row">
+<div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+    <li><i class="fa fa-code"></i><a href="../src/Data_Type_Command_Line_Interface.F90"> Source File</a></li>
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+     <li><a href='../sourcefile/data_type_command_line_interface.f90.html'>Data_Type_Command_Line_Interface.F90</a></li>
+  
+     <li><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></li>
+  
+     <li class="active">Type_Object</li>
+  </ol>
+</div>
+</div>
+</div>
+    
+  </div>
+  
+  <div class="row">
+    <div class="col-lg-3">
+    
+<div id="sidebar">
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#vars">Variables</a></h3></div>
+    <div id="vars" class="panel-collapse collapse">
+      <div class="list-group">
+        
+        <a class="list-group-item" href="../type/type_object.html#variable-progname">progname</a>
+        
+        <a class="list-group-item" href="../type/type_object.html#variable-version">version</a>
+        
+        <a class="list-group-item" href="../type/type_object.html#variable-help">help</a>
+        
+        <a class="list-group-item" href="../type/type_object.html#variable-description">description</a>
+        
+        <a class="list-group-item" href="../type/type_object.html#variable-license">license</a>
+        
+        <a class="list-group-item" href="../type/type_object.html#variable-authors">authors</a>
+        
+        <a class="list-group-item" href="../type/type_object.html#variable-epilog">epilog</a>
+        
+        <a class="list-group-item" href="../type/type_object.html#variable-m_exclude">m_exclude</a>
+        
+        <a class="list-group-item" href="../type/type_object.html#variable-error">error</a>
+        
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#boundprocs">Type-Bound Procedures</a></h3></div>
+    <div id="boundprocs" class="panel-collapse collapse">
+        <div class="list-group">
+          
+          <a class="list-group-item" href="../type/type_object.html#boundprocedure-free_object">free_object</a>
+          
+          <a class="list-group-item" href="../type/type_object.html#boundprocedure-errored">errored</a>
+          
+          <a class="list-group-item" href="../type/type_object.html#boundprocedure-print_version">print_version</a>
+          
+          <a class="list-group-item" href="../type/type_object.html#boundprocedure-assign_object">assign_object</a>
+          
+        </div>
+    </div>
+  </div>
+  
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+    <div class="list-group">
+      <a class="list-group-item" href="../type/type_object.html#src">Type_Object</a>
+    </div>
+  </div>
+  
+  <hr>
+  
+  <div class="panel panel-default">
+    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#alltypes">All Derived Types</a></h3></div>
+    <div id="alltypes" class="panel-collapse collapse">
+        <div class="list-group">
+          
+          <a class="list-group-item" href="../type/type_command_line_argument.html">Type_Command_Line_Argument</a>
+          
+          <a class="list-group-item" href="../type/type_command_line_arguments_group.html">Type_Command_Line_Arguments_Group</a>
+          
+          <a class="list-group-item" href="../type/type_command_line_interface.html">Type_Command_Line_Interface</a>
+          
+          <a class="list-group-item" href="../type/type_object.html">Type_Object</a>
+          
+        </div>
+    </div>
+  </div>
+  
+</div>
+
+    </div>
+    
+    <div class="col-lg-9" id='text'>
+    <h2>type, private, abstract :: Type_Object</h2>
+    
+    <p>Abstract object defining data and methods that are common to CLA, CLAG and CLI.</p>
+    
+    
+    <h3>Inherited By</h3>
+    
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.38.0 (20140413.2041)
+ -->
+<!-- Title: type~~type_object~~InheritedByGraph Pages: 1 -->
+<svg id="typetype_objectInheritedByGraph" width="641pt" height="87pt"
+ viewBox="0.00 0.00 641.00 87.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="type~~type_object~~InheritedByGraph" class="graph" transform="scale(0.828165 0.828165) rotate(0) translate(4 101.051)">
+<title>type~~type_object~~InheritedByGraph</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-101.051 770,-101.051 770,4 -4,4"/>
+<!-- type~type_object -->
+<g id="type~~type_object~~InheritedByGraph_node1" class="node"><title>type~type_object</title>
+<polygon fill="none" stroke="black" points="73,-49.0119 0,-49.0119 0,-25.0119 73,-25.0119 73,-49.0119"/>
+<text text-anchor="middle" x="36.5" y="-34.6119" font-family="Helvetica,sans-Serif" font-size="10.50">Type_Object</text>
+</g>
+<!-- type~type_command_line_interface -->
+<g id="type~~type_object~~InheritedByGraph_node2" class="node"><title>type~type_command_line_interface</title>
+<g id="a_type~~type_object~~InheritedByGraph_node2"><a xlink:href="../type/type_command_line_interface.html" xlink:title="Type_Command_Line_Interface">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="766,-73.0119 600,-73.0119 600,-49.0119 766,-49.0119 766,-73.0119"/>
+<text text-anchor="middle" x="683" y="-58.6119" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type_Command_Line_Interface</text>
+</a>
+</g>
+</g>
+<!-- type~type_object&#45;&gt;type~type_command_line_interface -->
+<g id="type~~type_object~~InheritedByGraph_edge3" class="edge"><title>type~type_object&#45;&gt;type~type_command_line_interface</title>
+<path fill="none" stroke="black" d="M92,-37.0119C104.291,-37.2285 98.8606,-52.8133 110,-58.0119 291.247,-142.597 359.991,-61.9007 560,-63.0119 569.778,-63.0662 572.223,-63.1096 582,-63.0119 584.545,-62.9864 587.126,-62.9573 589.731,-62.9251"/>
+<polygon fill="black" stroke="black" points="589.92,-66.4229 599.871,-62.7863 589.824,-59.4236 589.92,-66.4229"/>
+</g>
+<!-- type~type_command_line_argument -->
+<g id="type~~type_object~~InheritedByGraph_node3" class="node"><title>type~type_command_line_argument</title>
+<g id="a_type~~type_object~~InheritedByGraph_node3"><a xlink:href="../type/type_command_line_argument.html" xlink:title="Type_Command_Line_Argument">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="281,-49.0119 110,-49.0119 110,-25.0119 281,-25.0119 281,-49.0119"/>
+<text text-anchor="middle" x="195.5" y="-34.6119" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type_Command_Line_Argument</text>
+</a>
+</g>
+</g>
+<!-- type~type_object&#45;&gt;type~type_command_line_argument -->
+<g id="type~~type_object~~InheritedByGraph_edge4" class="edge"><title>type~type_object&#45;&gt;type~type_command_line_argument</title>
+<path fill="none" stroke="black" d="M92,-37.0119C94.5302,-37.0119 97.0956,-37.0119 99.6844,-37.0119"/>
+<polygon fill="black" stroke="black" points="99.7611,-40.512 109.761,-37.0119 99.7611,-33.512 99.7611,-40.512"/>
+</g>
+<!-- type~type_command_line_arguments_group -->
+<g id="type~~type_object~~InheritedByGraph_node4" class="node"><title>type~type_command_line_arguments_group</title>
+<g id="a_type~~type_object~~InheritedByGraph_node4"><a xlink:href="../type/type_command_line_arguments_group.html" xlink:title="Type_Command_Line_Arguments_Group">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="542,-49.0119 330,-49.0119 330,-25.0119 542,-25.0119 542,-49.0119"/>
+<text text-anchor="middle" x="436" y="-34.6119" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type_Command_Line_Arguments_Group</text>
+</a>
+</g>
+</g>
+<!-- type~type_object&#45;&gt;type~type_command_line_arguments_group -->
+<g id="type~~type_object~~InheritedByGraph_edge5" class="edge"><title>type~type_object&#45;&gt;type~type_command_line_arguments_group</title>
+<path fill="none" stroke="black" d="M73.1846,-37.0119C79.134,-37.0119 85.2413,-37.0119 91,-37.0119"/>
+<path fill="none" stroke="black" d="M92,-37.0119C104.293,-37.0119 98.8319,-21.1485 110,-16.0119 179.047,15.7453 205.174,-10.8657 281,-16.0119 304.099,-17.5796 329.014,-20.4555 351.933,-23.5865"/>
+<polygon fill="black" stroke="black" points="351.576,-27.0705 361.964,-24.9899 352.546,-20.138 351.576,-27.0705"/>
+</g>
+<!-- type~type_command_line_argument&#45;&gt;type~type_command_line_arguments_group -->
+<g id="type~~type_object~~InheritedByGraph_edge1" class="edge"><title>type~type_command_line_argument&#45;&gt;type~type_command_line_arguments_group</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M281.258,-37.0119C293.618,-37.0119 306.52,-37.0119 319.366,-37.0119"/>
+<polygon fill="black" stroke="black" points="319.645,-40.512 329.645,-37.0119 319.645,-33.512 319.645,-40.512"/>
+<text text-anchor="middle" x="305.5" y="-39.4119" font-family="Helvetica,sans-Serif" font-size="9.50">cla</text>
+</g>
+<!-- type~type_command_line_arguments_group&#45;&gt;type~type_command_line_interface -->
+<g id="type~~type_object~~InheritedByGraph_edge2" class="edge"><title>type~type_command_line_arguments_group&#45;&gt;type~type_command_line_interface</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M542.324,-47.3293C558.07,-48.8717 574.201,-50.452 589.651,-51.9654"/>
+<polygon fill="black" stroke="black" points="589.401,-55.4576 599.694,-52.9493 590.083,-48.4909 589.401,-55.4576"/>
+<text text-anchor="middle" x="571" y="-53.4119" font-family="Helvetica,sans-Serif" font-size="9.50">clasg</text>
+</g>
+</g>
+</svg>
+</div>
+                <script>var pantypetype_objectInheritedByGraph = svgPanZoom('#typetype_objectInheritedByGraph', {
+                    zoomEnabled: true,
+                    controlIconsEnabled: true,
+                    fit: true,
+                    center: true,});
+                    </script>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+Nodes of different colours represent the following:
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.38.0 (20140413.2041)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="26pt"
+ viewBox="0.00 0.00 641.00 25.98" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(0.811906 0.811906) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-28 785.5,-28 785.5,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node"><title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,-0 54,-0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node"><title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="139.5,-24 72.5,-24 72.5,-0 139.5,-0 139.5,-24"/>
+<text text-anchor="middle" x="106" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Type -->
+<g id="node3" class="node"><title>Type</title>
+<polygon fill="#5cb85c" stroke="#5cb85c" points="212,-24 158,-24 158,-0 212,-0 212,-24"/>
+<text text-anchor="middle" x="185" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type</text>
+</g>
+<!-- Subroutine -->
+<g id="node4" class="node"><title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="294,-24 230,-24 230,-0 294,-0 294,-24"/>
+<text text-anchor="middle" x="262" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node5" class="node"><title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="366,-24 312,-24 312,-0 366,-0 366,-24"/>
+<text text-anchor="middle" x="339" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node6" class="node"><title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="439.5,-24 384.5,-24 384.5,-0 439.5,-0 439.5,-24"/>
+<text text-anchor="middle" x="412" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node7" class="node"><title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="594,-24 458,-24 458,-0 594,-0 594,-24"/>
+<text text-anchor="middle" x="526" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node8" class="node"><title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="666,-24 612,-24 612,-0 666,-0 666,-24"/>
+<text text-anchor="middle" x="639" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node9" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="781.5,-24 684.5,-24 684.5,-0 781.5,-0 781.5,-24"/>
+<text text-anchor="middle" x="733" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<h5>Module Graph</h5>
+<p>Solid arrows point from a parent (sub)module to the submodule which is
+descended from it. Dashed arrows point from a module being used to the
+module using it.</p>
+<h5>Type Graph</h5>
+<p>Solid arrows point from one derived type to another which extends
+(inherits from) it. Dashed arrows point from a derived type to another
+type containing it as a components, with a label listing the name(s) of
+said component(s).</p>
+<h5>Call Graph</h5>
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.</p>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+    
+    
+    <section>
+    <h2>Components</h2>
+    
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Visibility</th>
+
+<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-progname"></span>character(len=:),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>progname</strong></td><td></td><td></td><td><p>Program name.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-version"></span>character(len=:),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>version</strong></td><td></td><td></td><td><p>Program version.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-help"></span>character(len=:),</td>
+  
+  <td>private,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>help</strong></td><td></td><td></td><td><p>Help message.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-description"></span>character(len=:),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>description</strong></td><td></td><td></td><td><p>Detailed description.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-license"></span>character(len=:),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>license</strong></td><td></td><td></td><td><p>License description.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-authors"></span>character(len=:),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>authors</strong></td><td></td><td></td><td><p>Authors list.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-epilog"></span>character(len=:),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>epilog</strong></td><td></td><td></td><td><p>Epilog message.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-m_exclude"></span>character(len=:),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>m_exclude</strong></td><td></td><td></td><td><p>Mutually exclude other CLA(s group).</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-error"></span>integer(kind=I4P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>error</strong></td><td> =</td><td>0_I4P</td><td><p>Error traping flag.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    </section>
+    <br>
+    
+    
+    
+    
+    
+    
+     
+    <section>
+    <h2>Type-Bound Procedures</h2>
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-free_object"></span><h3>procedure, public :: <strong>free_object</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Free dynamic memory.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private elementalsubroutine <a href='../proc/free_object.html'>free_object</a>(obj)
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/type_object.html'>Type_Object</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>obj</strong></td><td><p>Object data.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Free dynamic memory.</p>
+        
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-errored"></span><h3>procedure, public :: <strong>errored</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Trig error occurence and print meaningful message.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private subroutine <a href='../proc/errored.html'>errored</a>(obj, error, pref, group, switch, val_str, log_value, a1, a2)
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/type_object.html'>Type_Object</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>obj</strong></td><td><p>Object data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>error</strong></td><td><p>Error occurred.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>group</strong></td><td><p>Group name.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>switch</strong></td><td><p>CLA switch name.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>val_str</strong></td><td><p>Value string.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>log_value</strong></td><td><p>Logical value to be casted.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I4P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong></td><td><p>First index CLAs group inconsistent.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I4P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong></td><td><p>Second index CLAs group inconsistent.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Trig error occurence and print meaningful message.</p>
+        
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-print_version"></span><h3>procedure, public :: <strong>print_version</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Print version.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private subroutine <a href='../proc/print_version.html'>print_version</a>(obj, pref)
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/type_object.html'>Type_Object</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>obj</strong></td><td><p>Object data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Print version.</p>
+        
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-assign_object"></span><h3>procedure, public :: <strong>assign_object</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Assignment overloading.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private elementalsubroutine <a href='../proc/assign_object.html'>assign_object</a>(lhs, rhs)
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/type_object.html'>Type_Object</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/type_object.html'>Type_Object</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Rigth hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Assign two abstract objects.</p>
+        
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+    </section>
+    
+    
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span class="k">type</span><span class="p">,</span> <span class="k">abstract</span> <span class="kd">::</span> <span class="n">Type_Object</span>
+  <span class="c">!&lt; Abstract object defining data and methods that are common to CLA, CLAG and CLI.</span>
+  <span class="k">private</span>
+<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">progname</span>    <span class="c">!&lt; Program name.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">version</span>     <span class="c">!&lt; Program version.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span>         <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">help</span>        <span class="c">!&lt; Help message.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">description</span> <span class="c">!&lt; Detailed description.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">license</span>     <span class="c">!&lt; License description.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">authors</span>     <span class="c">!&lt; Authors list.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">epilog</span>      <span class="c">!&lt; Epilog message.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">m_exclude</span>   <span class="c">!&lt; Mutually exclude other CLA(s group).</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span>     <span class="k">public</span>              <span class="kd">::</span> <span class="n">error</span><span class="o">=</span><span class="mi">0_I4P</span> <span class="c">!&lt; Error traping flag.</span>
+  <span class="k">contains</span>
+<span class="k">    procedure</span> <span class="kd">::</span> <span class="n">free_object</span>   <span class="c">!&lt; Free dynamic memory.</span>
+    <span class="k">procedure</span> <span class="kd">::</span> <span class="n">errored</span>       <span class="c">!&lt; Trig error occurence and print meaningful message.</span>
+    <span class="k">procedure</span> <span class="kd">::</span> <span class="n">print_version</span> <span class="c">!&lt; Print version.</span>
+    <span class="k">procedure</span> <span class="kd">::</span> <span class="n">assign_object</span> <span class="c">!&lt; Assignment overloading.</span>
+<span class="n">endtype</span> <span class="n">Type_Object</span>
+</pre></div>
+
+    </section>
+    
+    
+    </div>
+  </div>
+
+    <hr>
+    <footer>
+        <div class="row">
+        <div class="col-md-6">&copy; 2015 FLAP was written by Stefano Zaghi. </div>
+        <div class="col-md-6"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a>.</span></div>
+        </div>
+        <br>
+    </footer>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'],
+        'HTML-CSS': { 
+           styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: '#000000 ! important'} }
+        }
+      });
+    </script>
+    <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  </body>
+</html>
