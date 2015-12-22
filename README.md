@@ -11,6 +11,8 @@
 [![Build Status](https://travis-ci.org/szaghi/FLAP.svg?branch=master)](https://travis-ci.org/szaghi/FLAP)
 [![Coverage Status](https://img.shields.io/codecov/c/github/szaghi/FLAP.svg)](http://codecov.io/github/szaghi/FLAP?branch=master)
 
+[![analytics](http://www.google-analytics.com/collect?v=1&t=pageview&_s=1&dl=https%3A%2F%2Fgithub.com%2Fproject-imas%2Fapp-password&_u=MAC~&cid=1757014354.1393964045&tid=UA-71658271-1)]()
+
 ### FLAP, Fortran command Line Arguments Parser for poor people
 
 A KISS pure Fortran Library for building powerful, easy-to-use, elegant command line interfaces
