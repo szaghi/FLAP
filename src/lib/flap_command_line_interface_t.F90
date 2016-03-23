@@ -1546,17 +1546,18 @@ contains
     prefd = '' ; if (present(pref)) prefd = pref
     select case(self%error)
     case(ERROR_MISSING_CLA)
-      write(stderr,'(A)')prefd//self%progname//': error: there is no option "'//trim(adjustl(switch))//'"!'
+      self%error_message = prefd//self%progname//': error: there is no option "'//trim(adjustl(switch))//'"!'
     case(ERROR_MISSING_SELECTION_CLA)
-      write(stderr,'(A)')prefd//self%progname//&
+      self%error_message = prefd//self%progname//&
         ': error: to get an option value one of switch "name" or "position" must be provided!'
     case(ERROR_MISSING_GROUP)
-      write(stderr,'(A)')prefd//self%progname//': error: ther is no group (command) named "'//trim(adjustl(group))//'"!'
+      self%error_message = prefd//self%progname//': error: ther is no group (command) named "'//trim(adjustl(group))//'"!'
     case(ERROR_TOO_FEW_CLAS)
-      ! write(stderr,'(A)')prefd//self%progname//': error: too few arguments ('//trim(str(.true.,Na))//')'//&
+      ! self%error_message = prefd//self%progname//': error: too few arguments ('//trim(str(.true.,Na))//')'//&
                          ! ' respect the required ('//trim(str(.true.,self%Na_required))//')'
     endselect
     write(stderr,'(A)')
+    call self%print_error_message
   endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
