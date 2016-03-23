@@ -188,7 +188,7 @@ jobs     = 2
 [rule-makedoc]
 help   = Rule for building documentation from source files
 rule_1 = rm -rf doc/html/*
-rule_2 = ford doc/main_page.md
+rule_2 = ford doc/main_page.md --debug
 rule_3 = cp -r doc/html/publish/* doc/html/
 
 [rule-deldoc]
