@@ -434,10 +434,10 @@ contains
         self%error_message = prefd//self%progname//': error: value of "'//trim(str(n=self%position))//&
           '-th" positional option must be chosen in:'
       else
-        self%error_message = prefd//self%progname//': error: value of named option "'//self%switch//'" must be chosen in:'
+        self%error_message = prefd//self%progname//': error: value of named option "'//self%switch//'" must be chosen in: '
       endif
-      self%error_message = prefd//'('//self%choices//')'
-      self%error_message = prefd//'"'//trim(val_str)//'" has been passed!'
+      self%error_message = self%error_message//'('//self%choices//')'
+      self%error_message = self%error_message//' but "'//trim(val_str)//'" has been passed!'
     case(ERROR_MISSING_REQUIRED)
       if (.not.self%is_positional) then
         self%error_message = prefd//self%progname//': error: named option "'//trim(adjustl(self%switch))//'" is required!'
