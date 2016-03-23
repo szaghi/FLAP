@@ -508,11 +508,11 @@ contains
       else
         self%error_message = prefd//self%progname//': error: consistency error:'
       endif
-      self%error_message = prefd//' "'//trim(str(.true.,a1))//'-th" option has the same switch or abbreviated switch of "'&
-                         //trim(str(.true.,a2))//'-th" option:'
-      self%error_message = prefd//' CLA('//trim(str(.true.,a1)) //') switches = '//self%cla(a1)%switch //' '//&
-                         self%cla(a1)%switch_ab
-      self%error_message = prefd//' CLA('//trim(str(.true.,a2))//') switches = '//self%cla(a2)%switch//' '//&
+      self%error_message = self%error_message//' "'//trim(str(.true.,a1))//&
+        '-th" option has the same switch or abbreviated switch of "'//trim(str(.true.,a2))//'-th" option:'//new_line('a')
+      self%error_message = self%error_message//prefd//' CLA('//trim(str(.true.,a1)) //') switches = '//self%cla(a1)%switch //' '//&
+        self%cla(a1)%switch_ab//new_line('a')
+      self%error_message = self%error_message//prefd//' CLA('//trim(str(.true.,a2))//') switches = '//self%cla(a2)%switch//' '//&
                          self%cla(a2)%switch_ab
     case(ERROR_M_EXCLUDE)
       self%error_message = prefd//self%progname//': error: the group "'//self%group//'" and "'//self%m_exclude//'" are mutually'//&
