@@ -18,28 +18,28 @@ $OPTIMIZE    = -O2
 # GNU
 [shared-gnu]
 template  = template-shared-gnu
-target    = Data_Type_Command_Line_Interface.F90
+target    = flap.f90
 build_dir = ./shared/
 output    = libflap.so
 mklib     = shared
 
 [static-gnu]
 template  = template-static-gnu
-target    = Data_Type_Command_Line_Interface.F90
+target    = flap.f90
 build_dir = ./static/
 output    = libflap.a
 mklib     = static
 
 [shared-gnu-debug]
 template  = template-shared-gnu-debug
-target    = Data_Type_Command_Line_Interface.F90
+target    = flap.f90
 build_dir = ./shared/
 output    = libflap.so
 mklib     = shared
 
 [static-gnu-debug]
 template  = template-static-gnu-debug
-target    = Data_Type_Command_Line_Interface.F90
+target    = flap.f90
 build_dir = ./static/
 output    = libflap.a
 mklib     = static
@@ -55,28 +55,28 @@ build_dir = ./tests/
 # Intel
 [shared-intel]
 template  = template-shared-intel
-target    = Data_Type_Command_Line_Interface.F90
+target    = flap.f90
 build_dir = ./shared/
 output    = libflap.so
 mklib     = shared
 
 [static-intel]
 template  = template-static-intel
-target    = Data_Type_Command_Line_Interface.F90
+target    = flap.f90
 build_dir = ./static/
 output    = libflap.a
 mklib     = static
 
 [shared-intel-debug]
 template  = template-shared-intel-debug
-target    = Data_Type_Command_Line_Interface.F90
+target    = flap.f90
 build_dir = ./shared/
 output    = libflap.so
 mklib     = shared
 
 [static-intel-debug]
 template  = template-static-intel-debug
-target    = Data_Type_Command_Line_Interface.F90
+target    = flap.f90
 build_dir = ./static/
 output    = libflap.a
 mklib     = static
@@ -221,7 +221,7 @@ rule_17 = ./tests/test_nested commit -m 'hello'
 rule_18 = ./tests/test_nested tag -a 'hello'
 rule_19 = ./tests/test_string
 rule_20 = ./tests/test_choices_logical
-rule_21 = gcov -o tests/obj/ src/lib/Data_Type_Command_Line_Interface.F90
+rule_21 = gcov -o tests/obj/ src/lib/flap.f90
 
 [rule-coverage-analysis]
 help    = Rule for performing coverage analysis and saving reports in markdown
@@ -245,6 +245,6 @@ rule_17 = ./tests/test_nested commit -m 'hello'
 rule_18 = ./tests/test_nested tag -a 'hello'
 rule_19 = ./tests/test_string
 rule_20 = ./tests/test_choices_logical
-rule_21 = gcov -o tests/obj/ src/lib/Data_Type_Command_Line_Interface.F90 src/tests/*
+rule_21 = gcov -o tests/obj/ src/lib/flap.f90 src/tests/*
 rule_22 = FoBiS.py rule -gcov_analyzer wiki/ Coverage-Analysis
 rule_23 = rm -f *.gcov FLAP.1

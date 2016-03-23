@@ -26,7 +26,6 @@
 
 # special directories
 doc/html/
-external/lib/
 tests/
 wiki/
 
