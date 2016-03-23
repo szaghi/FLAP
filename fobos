@@ -245,6 +245,6 @@ rule_17 = ./tests/test_nested commit -m 'hello'
 rule_18 = ./tests/test_nested tag -a 'hello'
 rule_19 = ./tests/test_string
 rule_20 = ./tests/test_choices_logical
-rule_21 = gcov -o tests/obj/ src/lib/flap.f90 src/tests/*
+rule_21 = gcov -o tests/obj/ src/lib/*.[fF]90 src/tests/*
 rule_22 = FoBiS.py rule -gcov_analyzer wiki/ Coverage-Analysis
 rule_23 = rm -f *.gcov FLAP.1
