@@ -3,15 +3,15 @@ program test_choices_logical
 !-----------------------------------------------------------------------------------------------------------------------------------
 !< Test FLAP for bad usage of choices option with logical
 !-----------------------------------------------------------------------------------------------------------------------------------
-USE IR_Precision
-USE Data_Type_Command_Line_Interface, only: Type_Command_Line_Interface
+use IR_Precision
+use flap, only : command_line_interface
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
-type(Type_Command_Line_Interface) :: cli   !< Command Line Interface (CLI).
-logical                           :: vbval !< Valued-boolean value.
-integer(I4P)                      :: error !< Error trapping flag.
+type(command_line_interface) :: cli   !< Command Line Interface (CLI).
+logical                      :: vbval !< Valued-boolean value.
+integer(I4P)                 :: error !< Error trapping flag.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
