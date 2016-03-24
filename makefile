@@ -113,12 +113,7 @@ $(DOBJ)flap.o: src/lib/flap.f90 \
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
-$(DOBJ)ir_precision.o: src/third_party/IR_Precision/src/IR_Precision.f90
-	@echo $(COTEXT)
-	@$(FC) $(OPTSC)  $< -o $@
-
-$(DOBJ)test_driver.o: src/third_party/IR_Precision/src/Test_Driver.f90 \
-	$(DOBJ)ir_precision.o
+$(DOBJ)ir_precision.o: src/third_party/IR_Precision/src/lib/IR_Precision.F90
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
