@@ -21,15 +21,16 @@ save
 type, extends(object), public :: command_line_interface
   !< Command Line Interface (CLI) class.
   private
-  type(command_line_arguments_group), allocatable :: clasg(:)          !< CLA list [1:Na].
+  type(command_line_arguments_group), allocatable :: clasg(:)           !< CLA list [1:Na].
 #ifdef __GFORTRAN__
-  character(512  ), allocatable                   :: args(:)           !< Actually passed command line arguments.
-  character(512  ), allocatable                   :: examples(:)       !< Examples of correct usage.
+  character(512  ), allocatable                   :: args(:)            !< Actually passed command line arguments.
+  character(512  ), allocatable                   :: examples(:)        !< Examples of correct usage.
 #else
-  character(len=:), allocatable                   :: args(:)           !< Actually passed command line arguments.
-  character(len=:), allocatable                   :: examples(:)       !< Examples of correct usage (not work with gfortran).
+  character(len=:), allocatable                   :: args(:)            !< Actually passed command line arguments.
+  character(len=:), allocatable                   :: examples(:)        !< Examples of correct usage (not work with gfortran).
 #endif
-  logical                                         :: disable_hv=.false.!< Disable automatic 'help' and 'version' CLAs.
+  logical                                         :: disable_hv=.false. !< Disable automatic 'help' and 'version' CLAs.
+  logical                                         :: is_parsed_=.false. !< Parse status.
   contains
     ! public methods
     procedure, public :: free                            !< Free dynamic memory.
@@ -39,6 +40,7 @@ type, extends(object), public :: command_line_interface
     procedure, public :: is_passed                       !< Check if a CLA has been passed.
     procedure, public :: is_defined_group                !< Check if a CLAs group has been defined.
     procedure, public :: is_defined                      !< Check if a CLA has been defined.
+    procedure, public :: is_parsed                       !< Check if CLI has been parsed.
     procedure, public :: set_mutually_exclusive_groups   !< Set two CLAs group as mutually exclusive.
     procedure, public :: run_command => is_called_group  !< Check if a CLAs group has been run.
     procedure, public :: parse                           !< Parse Command Line Interfaces.
@@ -473,6 +475,20 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction is_defined
 
+  elemental function is_parsed(self)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Check if CLI has been parsed.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(command_line_interface), intent(in) :: self      !< CLI data.
+  logical                                   :: is_parsed !< Parsed status.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  is_parsed = self%is_parsed_
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction is_parsed
+
   subroutine parse(self, pref, args, error)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Parse Command Line Interfaces by means of a previously initialized CLAs groups list.
@@ -491,6 +507,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  if (self%is_parsed_) return
 
   ! add help and version switches if not done by user
   if (.not.self%disable_hv) then
@@ -533,7 +550,7 @@ contains
 
   ! parse passed CLAs grouping in indexes
   if (present(args)) then
-    call self%get_args(args=args,ai=ai)
+    call self%get_args(args=args, ai=ai)
   else
     call self%get_args(ai=ai)
   endif
@@ -578,6 +595,8 @@ contains
 
   ! check mutually exclusive interaction
   call self%check_m_exclusive(pref=pref)
+
+  self%is_parsed_ = .true.
 
   if (present(error)) error = self%error
   return
@@ -780,7 +799,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_args_from_invocation
 
-  subroutine get_cla(self, val, pref, group, switch, position, error)
+  subroutine get_cla(self, val, pref, args, group, switch, position, error)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA (single) value from CLAs list parsed.
   !<
@@ -789,6 +808,7 @@ contains
   class(command_line_interface), intent(inout) :: self     !< CLI data.
   class(*),                      intent(inout) :: val      !< CLA value.
   character(*), optional,        intent(in)    :: pref     !< Prefixing string.
+  character(*), optional,        intent(in)    :: args     !< String containing command line arguments.
   character(*), optional,        intent(in)    :: group    !< Name of group (command) of CLA.
   character(*), optional,        intent(in)    :: switch   !< Switch name.
   integer(I4P), optional,        intent(in)    :: position !< Position of positional CLA.
@@ -799,6 +819,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  if (.not.self%is_parsed_) then
+    call self%parse(pref=pref, args=args, error=error)
+    if (self%error/=0) return
+  endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -834,7 +858,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla
 
-  subroutine get_cla_list(self, val, pref, group, switch, position, error)
+  subroutine get_cla_list(self, val, pref, args, group, switch, position, error)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA multiple values from CLAs list parsed.
   !<
@@ -843,6 +867,7 @@ contains
   class(command_line_interface), intent(inout) :: self     !< CLI data.
   class(*),                      intent(inout) :: val(1:)  !< CLA values.
   character(*), optional,        intent(in)    :: pref     !< Prefixing string.
+  character(*), optional,        intent(in)    :: args     !< String containing command line arguments.
   character(*), optional,        intent(in)    :: group    !< Name of group (command) of CLA.
   character(*), optional,        intent(in)    :: switch   !< Switch name.
   integer(I4P), optional,        intent(in)    :: position !< Position of positional CLA.
@@ -853,6 +878,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  if (.not.self%is_parsed_) then
+    call self%parse(pref=pref, args=args, error=error)
+    if (self%error/=0) return
+  endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -886,7 +915,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list
 
-  subroutine get_cla_list_varying_R16P(self, val, pref, group, switch, position, error)
+  subroutine get_cla_list_varying_R16P(self, val, pref, args, group, switch, position, error)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA multiple values from CLAs list parsed with varying size list, real(R16P).
   !<
@@ -897,6 +926,7 @@ contains
   class(command_line_interface), intent(inout) :: self     !< CLI data.
   real(R16P), allocatable,       intent(out)   :: val(:)   !< CLA values.
   character(*), optional,        intent(in)    :: pref     !< Prefixing string.
+  character(*), optional,        intent(in)    :: args     !< String containing command line arguments.
   character(*), optional,        intent(in)    :: group    !< Name of group (command) of CLA.
   character(*), optional,        intent(in)    :: switch   !< Switch name.
   integer(I4P), optional,        intent(in)    :: position !< Position of positional CLA.
@@ -907,6 +937,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  if (.not.self%is_parsed_) then
+    call self%parse(pref=pref, args=args, error=error)
+    if (self%error/=0) return
+  endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -940,7 +974,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_varying_R16P
 
-  subroutine get_cla_list_varying_R8P(self, val, pref, group, switch, position, error)
+  subroutine get_cla_list_varying_R8P(self, val, pref, args, group, switch, position, error)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA multiple values from CLAs list parsed with varying size list, real(R8P).
   !<
@@ -951,6 +985,7 @@ contains
   class(command_line_interface), intent(inout) :: self     !< CLI data.
   real(R8P), allocatable,        intent(out)   :: val(:)   !< CLA values.
   character(*), optional,        intent(in)    :: pref     !< Prefixing string.
+  character(*), optional,        intent(in)    :: args     !< String containing command line arguments.
   character(*), optional,        intent(in)    :: group    !< Name of group (command) of CLA.
   character(*), optional,        intent(in)    :: switch   !< Switch name.
   integer(I4P), optional,        intent(in)    :: position !< Position of positional CLA.
@@ -961,6 +996,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  if (.not.self%is_parsed_) then
+    call self%parse(pref=pref, args=args, error=error)
+    if (self%error/=0) return
+  endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -994,7 +1033,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_varying_R8P
 
-  subroutine get_cla_list_varying_R4P(self, val, pref, group, switch, position, error)
+  subroutine get_cla_list_varying_R4P(self, val, pref, args, group, switch, position, error)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA multiple values from CLAs list parsed with varying size list, real(R4P).
   !<
@@ -1005,6 +1044,7 @@ contains
   class(command_line_interface), intent(inout) :: self     !< CLI data.
   real(R4P), allocatable,        intent(out)   :: val(:)   !< CLA values.
   character(*), optional,        intent(in)    :: pref     !< Prefixing string.
+  character(*), optional,        intent(in)    :: args     !< String containing command line arguments.
   character(*), optional,        intent(in)    :: group    !< Name of group (command) of CLA.
   character(*), optional,        intent(in)    :: switch   !< Switch name.
   integer(I4P), optional,        intent(in)    :: position !< Position of positional CLA.
@@ -1015,6 +1055,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  if (.not.self%is_parsed_) then
+    call self%parse(pref=pref, args=args, error=error)
+    if (self%error/=0) return
+  endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -1048,7 +1092,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_varying_R4P
 
-  subroutine get_cla_list_varying_I8P(self, val, pref, group, switch, position, error)
+  subroutine get_cla_list_varying_I8P(self, val, pref, args, group, switch, position, error)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA multiple values from CLAs list parsed with varying size list, integer(I8P).
   !<
@@ -1059,6 +1103,7 @@ contains
   class(command_line_interface), intent(inout) :: self     !< CLI data.
   integer(I8P), allocatable,     intent(out)   :: val(:)   !< CLA values.
   character(*), optional,        intent(in)    :: pref     !< Prefixing string.
+  character(*), optional,        intent(in)    :: args     !< String containing command line arguments.
   character(*), optional,        intent(in)    :: group    !< Name of group (command) of CLA.
   character(*), optional,        intent(in)    :: switch   !< Switch name.
   integer(I4P), optional,        intent(in)    :: position !< Position of positional CLA.
@@ -1069,6 +1114,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  if (.not.self%is_parsed_) then
+    call self%parse(pref=pref, args=args, error=error)
+    if (self%error/=0) return
+  endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -1102,7 +1151,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_varying_I8P
 
-  subroutine get_cla_list_varying_I4P(self, val, pref, group, switch, position, error)
+  subroutine get_cla_list_varying_I4P(self, val, pref, args, group, switch, position, error)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA multiple values from CLAs list parsed with varying size list, integer(I4P).
   !<
@@ -1113,6 +1162,7 @@ contains
   class(command_line_interface), intent(inout) :: self     !< CLI data.
   integer(I4P), allocatable,     intent(out)   :: val(:)   !< CLA values.
   character(*), optional,        intent(in)    :: pref     !< Prefixing string.
+  character(*), optional,        intent(in)    :: args     !< String containing command line arguments.
   character(*), optional,        intent(in)    :: group    !< Name of group (command) of CLA.
   character(*), optional,        intent(in)    :: switch   !< Switch name.
   integer(I4P), optional,        intent(in)    :: position !< Position of positional CLA.
@@ -1123,6 +1173,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  if (.not.self%is_parsed_) then
+    call self%parse(pref=pref, args=args, error=error)
+    if (self%error/=0) return
+  endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -1156,7 +1210,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_varying_I4P
 
-  subroutine get_cla_list_varying_I2P(self, val, pref, group, switch, position, error)
+  subroutine get_cla_list_varying_I2P(self, val, pref, args, group, switch, position, error)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA multiple values from CLAs list parsed with varying size list, integer(I2P).
   !<
@@ -1167,6 +1221,7 @@ contains
   class(command_line_interface), intent(inout) :: self     !< CLI data.
   integer(I2P), allocatable,     intent(out)   :: val(:)   !< CLA values.
   character(*), optional,        intent(in)    :: pref     !< Prefixing string.
+  character(*), optional,        intent(in)    :: args     !< String containing command line arguments.
   character(*), optional,        intent(in)    :: group    !< Name of group (command) of CLA.
   character(*), optional,        intent(in)    :: switch   !< Switch name.
   integer(I4P), optional,        intent(in)    :: position !< Position of positional CLA.
@@ -1177,6 +1232,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  if (.not.self%is_parsed_) then
+    call self%parse(pref=pref, args=args, error=error)
+    if (self%error/=0) return
+  endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -1210,7 +1269,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_varying_I2P
 
-  subroutine get_cla_list_varying_I1P(self, val, pref, group, switch, position, error)
+  subroutine get_cla_list_varying_I1P(self, val, pref, args, group, switch, position, error)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA multiple values from CLAs list parsed with varying size list, integer(I1P).
   !<
@@ -1221,6 +1280,7 @@ contains
   class(command_line_interface), intent(inout) :: self     !< CLI data.
   integer(I1P), allocatable,     intent(out)   :: val(:)   !< CLA values.
   character(*), optional,        intent(in)    :: pref     !< Prefixing string.
+  character(*), optional,        intent(in)    :: args     !< String containing command line arguments.
   character(*), optional,        intent(in)    :: group    !< Name of group (command) of CLA.
   character(*), optional,        intent(in)    :: switch   !< Switch name.
   integer(I4P), optional,        intent(in)    :: position !< Position of positional CLA.
@@ -1231,6 +1291,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  if (.not.self%is_parsed_) then
+    call self%parse(pref=pref, args=args, error=error)
+    if (self%error/=0) return
+  endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -1264,7 +1328,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_varying_I1P
 
-  subroutine get_cla_list_varying_logical(self, val, pref, group, switch, position, error)
+  subroutine get_cla_list_varying_logical(self, val, pref, args, group, switch, position, error)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA multiple values from CLAs list parsed with varying size list, logical.
   !<
@@ -1275,6 +1339,7 @@ contains
   class(command_line_interface), intent(inout) :: self     !< CLI data.
   logical, allocatable,          intent(out)   :: val(:)   !< CLA values.
   character(*), optional,        intent(in)    :: pref     !< Prefixing string.
+  character(*), optional,        intent(in)    :: args     !< String containing command line arguments.
   character(*), optional,        intent(in)    :: group    !< Name of group (command) of CLA.
   character(*), optional,        intent(in)    :: switch   !< Switch name.
   integer(I4P), optional,        intent(in)    :: position !< Position of positional CLA.
@@ -1285,6 +1350,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  if (.not.self%is_parsed_) then
+    call self%parse(pref=pref, args=args, error=error)
+    if (self%error/=0) return
+  endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -1318,7 +1387,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_varying_logical
 
-  subroutine get_cla_list_varying_char(self, val, pref, group, switch, position, error)
+  subroutine get_cla_list_varying_char(self, val, pref, args, group, switch, position, error)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA multiple values from CLAs list parsed with varying size list, character.
   !<
@@ -1329,6 +1398,7 @@ contains
   class(command_line_interface), intent(inout) :: self     !< CLI data.
   character(*), allocatable,     intent(out)   :: val(:)   !< CLA values.
   character(*), optional,        intent(in)    :: pref     !< Prefixing string.
+  character(*), optional,        intent(in)    :: args     !< String containing command line arguments.
   character(*), optional,        intent(in)    :: group    !< Name of group (command) of CLA.
   character(*), optional,        intent(in)    :: switch   !< Switch name.
   integer(I4P), optional,        intent(in)    :: position !< Position of positional CLA.
@@ -1339,6 +1409,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  if (.not.self%is_parsed_) then
+    call self%parse(pref=pref, args=args, error=error)
+    if (self%error/=0) return
+  endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)

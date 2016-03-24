@@ -107,6 +107,7 @@ call cli%add(switch='--varying_listChar',switch_ab='-vlChar',help='Varying size 
 if (error/=0) stop
 
 ! parse Command Line Interface
+! this is optional: if skipped the first call to cli%get will automatically call cli%parse
 call cli%parse(error=error)
 if (error/=0) stop
 

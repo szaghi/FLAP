@@ -48,8 +48,9 @@ type, extends(object) :: command_line_arguments_group
     procedure, public :: usage                 !< Get correct CLAsG usage.
     procedure, public :: signature             !< Get CLAsG signature.
     ! private methods
-    procedure, private :: errored                             !< Trig error occurence and print meaningful message.
+    procedure, private :: errored                             !< Trig error occurrence and print meaningful message.
     procedure, private :: check_m_exclusive                   !< Check if two mutually exclusive CLAs have been passed.
+    procedure, private :: sanitize_defaults                   !< Sanitize default values.
     procedure, private :: clasg_assign_clasg                  !< Assignment operator.
     generic,   private :: assignment(=) => clasg_assign_clasg !< Assignment operator overloading.
     final              :: finalize                            !< Free dynamic memory when finalizing.
@@ -295,12 +296,12 @@ contains
     do while (arg < size(args,dim=1)) ! loop over CLAs group arguments passed
       arg = arg + 1
       found = .false.
-      do a=1, self%Na ! loop ver CLAs group clas named options
+      do a=1, self%Na ! loop over CLAs group clas named options
         if (.not.self%cla(a)%is_positional) then
           if (trim(adjustl(self%cla(a)%switch   ))==trim(adjustl(args(arg))).or.&
               trim(adjustl(self%cla(a)%switch_ab))==trim(adjustl(args(arg)))) then
+            found_val = .false.
             if (self%cla(a)%act==action_store) then
-              found_val = .false.
               if (allocated(self%cla(a)%envvar)) then
                 if (arg + 1 <= size(args,dim=1)) then ! verify if the value has been passed directly to cli
                   ! there are still other arguments to check
@@ -375,6 +376,7 @@ contains
                   do aa=arg + nargs, arg + 1, -1 ! decreasing loop due to gfortran bug
                     self%cla(a)%val = trim(adjustl(args(aa)))//args_sep//trim(self%cla(a)%val)
                   enddo
+                  found_val = .true.
                   arg = arg + nargs
                 endselect
               else
@@ -395,10 +397,11 @@ contains
                   arg = arg + 1
                   self%cla(a)%val = trim(adjustl(args(arg)))
                   found = .true.
+                  found_val = .true.
                 endif
               endif
               if (.not.found) then
-                ! flush default to val if environment is not set and default is set
+                ! flush default to val if default is set
                 if (allocated(self%cla(a)%def)) self%cla(a)%val = self%cla(a)%def
               endif
             elseif (self%cla(a)%act==action_print_help) then
@@ -425,6 +428,7 @@ contains
       endif
     enddo
     call self%check_m_exclusive(pref=pref)
+    call self%sanitize_defaults
   endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -453,13 +457,13 @@ contains
   if (self%Na_required>0) then
     usage = usage//new_line('a')//new_line('a')//prefd//'Required switches:'
     do a=1, self%Na
-      if (self%cla(a)%is_required) usage = usage//new_line('a')//self%cla(a)%usage(pref=prefd)
+      if (self%cla(a)%is_required.and.(.not.self%cla(a)%is_hidden)) usage = usage//new_line('a')//self%cla(a)%usage(pref=prefd)
     enddo
   endif
   if (self%Na_optional>0) then
     usage = usage//new_line('a')//new_line('a')//prefd//'Optional switches:'
     do a=1, self%Na
-      if (.not.self%cla(a)%is_required) usage = usage//new_line('a')//self%cla(a)%usage(pref=prefd)
+      if (.not.self%cla(a)%is_required.and.(.not.self%cla(a)%is_hidden)) usage = usage//new_line('a')//self%cla(a)%usage(pref=prefd)
     enddo
   endif
   return
@@ -528,9 +532,9 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if two mutually exclusive CLAs have been passed.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(command_line_arguments_group), intent(inout) :: self  !< CLAsG data.
-  character(*), optional,              intent(in)    :: pref  !< Prefixing string.
-  integer(I4P)                                       :: a     !< Counter.
+  class(command_line_arguments_group), intent(inout) :: self !< CLAsG data.
+  character(*), optional,              intent(in)    :: pref !< Prefixing string.
+  integer(I4P)                                       :: a    !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -550,6 +554,26 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check_m_exclusive
+
+  subroutine sanitize_defaults(self)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Sanitize defaults values.
+  !<
+  !< It is necessary to *sanitize* the default values of non-passed, optional CLAs.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(command_line_arguments_group), intent(inout) :: self !< CLAsG data.
+  integer(I4P)                                       :: a    !< Counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  if (self%is_called) then
+    do a=1, self%Na
+      call self%cla(a)%sanitize_defaults
+    enddo
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine sanitize_defaults
 
   elemental subroutine clasg_assign_clasg(lhs, rhs)
   !---------------------------------------------------------------------------------------------------------------------------------

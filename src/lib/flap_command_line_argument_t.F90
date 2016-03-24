@@ -66,6 +66,7 @@ type, extends(object) :: command_line_argument
                          get_cla_list_varying_I1P,     &
                          get_cla_list_varying_logical, &
                          get_cla_list_varying_char       !< Get CLA value(s) from varying size list.
+    procedure, public :: sanitize_defaults               !< Sanitize default values.
     procedure, public :: usage                           !< Get correct usage.
     procedure, public :: signature                       !< Get signature.
     ! private methods
@@ -250,6 +251,31 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine raise_error_switch_unknown
+
+  subroutine sanitize_defaults(self)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Sanitize defaults values.
+  !<
+  !< It is necessary to *sanitize* the default values of non-passed, optional CLA.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(command_line_argument), intent(inout) :: self !< CLAsG data.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  if (.not.self%is_passed) then
+    if (allocated(self%def)) then
+      ! strip leading and trailing white spaces
+      self%def = wstrip(self%def)
+      if (allocated(self%nargs)) then
+        ! replace white space separator with FLAP ARGS_SEP
+        self%def = unique(string=self%def, substring=' ')
+        self%def = replace_all(string=self%def, substring=' ', restring=ARGS_SEP)
+      endif
+    endif
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine sanitize_defaults
 
   function usage(self, pref)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -998,7 +1024,7 @@ contains
   endif
   if (self%act==action_store) then
     if (self%is_passed) then
-      call tokenize(strin=self%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      call tokenize(strin=self%val, delimiter=ARGS_SEP, toks=valsV, Nt=Nv)
       if (.not.self%check_list_size(Nv=Nv, val=valsV(1), pref=pref)) return
       allocate(real(R16P):: val(1:Nv))
       do v=1, Nv
@@ -1006,7 +1032,7 @@ contains
         if (self%error/=0) exit
       enddo
     else ! using default value
-      call tokenize(strin=self%def, delimiter=' ', toks=valsD, Nt=Nv)
+      call tokenize(strin=self%def, delimiter=ARGS_SEP, toks=valsD, Nt=Nv)
       if (.not.self%check_list_size(Nv=Nv, val=valsD(1), pref=pref)) return
       if (Nv==1) then
         if (trim(adjustl(valsD(1)))=='') then
@@ -1048,7 +1074,7 @@ contains
   endif
   if (self%act==action_store) then
     if (self%is_passed) then
-      call tokenize(strin=self%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      call tokenize(strin=self%val, delimiter=ARGS_SEP, toks=valsV, Nt=Nv)
       if (.not.self%check_list_size(Nv=Nv, val=valsV(1), pref=pref)) return
       allocate(real(R8P):: val(1:Nv))
       do v=1, Nv
@@ -1056,7 +1082,7 @@ contains
         if (self%error/=0) exit
       enddo
     else ! using default value
-      call tokenize(strin=self%def, delimiter=' ', toks=valsD, Nt=Nv)
+      call tokenize(strin=self%def, delimiter=ARGS_SEP, toks=valsD, Nt=Nv)
       if (.not.self%check_list_size(Nv=Nv, val=valsD(1), pref=pref)) return
       allocate(real(R8P):: val(1:Nv))
       do v=1, Nv
@@ -1090,7 +1116,7 @@ contains
   endif
   if (self%act==action_store) then
     if (self%is_passed) then
-      call tokenize(strin=self%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      call tokenize(strin=self%val, delimiter=ARGS_SEP, toks=valsV, Nt=Nv)
       if (.not.self%check_list_size(Nv=Nv, val=valsV(1), pref=pref)) return
       allocate(real(R4P):: val(1:Nv))
       do v=1, Nv
@@ -1098,7 +1124,7 @@ contains
         if (self%error/=0) exit
       enddo
     else ! using default value
-      call tokenize(strin=self%def, delimiter=' ', toks=valsD, Nt=Nv)
+      call tokenize(strin=self%def, delimiter=ARGS_SEP, toks=valsD, Nt=Nv)
       if (.not.self%check_list_size(Nv=Nv, val=valsD(1), pref=pref)) return
       allocate(real(R4P):: val(1:Nv))
       do v=1, Nv
@@ -1132,7 +1158,7 @@ contains
   endif
   if (self%act==action_store) then
     if (self%is_passed) then
-      call tokenize(strin=self%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      call tokenize(strin=self%val, delimiter=ARGS_SEP, toks=valsV, Nt=Nv)
       if (.not.self%check_list_size(Nv=Nv, val=valsV(1), pref=pref)) return
       allocate(integer(I8P):: val(1:Nv))
       do v=1, Nv
@@ -1140,7 +1166,7 @@ contains
         if (self%error/=0) exit
       enddo
     else ! using default value
-      call tokenize(strin=self%def, delimiter=' ', toks=valsD, Nt=Nv)
+      call tokenize(strin=self%def, delimiter=ARGS_SEP, toks=valsD, Nt=Nv)
       if (.not.self%check_list_size(Nv=Nv, val=valsD(1), pref=pref)) return
       allocate(integer(I8P):: val(1:Nv))
       do v=1, Nv
@@ -1174,7 +1200,7 @@ contains
   endif
   if (self%act==action_store) then
     if (self%is_passed) then
-      call tokenize(strin=self%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      call tokenize(strin=self%val, delimiter=ARGS_SEP, toks=valsV, Nt=Nv)
       if (.not.self%check_list_size(Nv=Nv, val=valsV(1), pref=pref)) return
       allocate(integer(I4P):: val(1:Nv))
       do v=1, Nv
@@ -1182,7 +1208,7 @@ contains
         if (self%error/=0) exit
       enddo
     else ! using default value
-      call tokenize(strin=self%def, delimiter=' ', toks=valsD, Nt=Nv)
+      call tokenize(strin=self%def, delimiter=ARGS_SEP, toks=valsD, Nt=Nv)
       if (.not.self%check_list_size(Nv=Nv, val=valsD(1), pref=pref)) return
       allocate(integer(I4P):: val(1:Nv))
       do v=1, Nv
@@ -1216,7 +1242,7 @@ contains
   endif
   if (self%act==action_store) then
     if (self%is_passed) then
-      call tokenize(strin=self%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      call tokenize(strin=self%val, delimiter=ARGS_SEP, toks=valsV, Nt=Nv)
       if (.not.self%check_list_size(Nv=Nv, val=valsV(1), pref=pref)) return
       allocate(integer(I2P):: val(1:Nv))
       do v=1, Nv
@@ -1224,7 +1250,7 @@ contains
         if (self%error/=0) exit
       enddo
     else ! using default value
-      call tokenize(strin=self%def, delimiter=' ', toks=valsD, Nt=Nv)
+      call tokenize(strin=self%def, delimiter=ARGS_SEP, toks=valsD, Nt=Nv)
       if (.not.self%check_list_size(Nv=Nv, val=valsD(1), pref=pref)) return
       allocate(integer(I2P):: val(1:Nv))
       do v=1, Nv
@@ -1258,7 +1284,7 @@ contains
   endif
   if (self%act==action_store) then
     if (self%is_passed) then
-      call tokenize(strin=self%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      call tokenize(strin=self%val, delimiter=ARGS_SEP, toks=valsV, Nt=Nv)
       if (.not.self%check_list_size(Nv=Nv, val=valsV(1), pref=pref)) return
       allocate(integer(I1P):: val(1:Nv))
       do v=1, Nv
@@ -1266,7 +1292,7 @@ contains
         if (self%error/=0) exit
       enddo
     else ! using default value
-      call tokenize(strin=self%def, delimiter=' ', toks=valsD, Nt=Nv)
+      call tokenize(strin=self%def, delimiter=ARGS_SEP, toks=valsD, Nt=Nv)
       if (.not.self%check_list_size(Nv=Nv, val=valsD(1), pref=pref)) return
       allocate(integer(I1P):: val(1:Nv))
       do v=1, Nv
@@ -1300,7 +1326,7 @@ contains
   endif
   if (self%act==action_store) then
     if (self%is_passed) then
-      call tokenize(strin=self%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      call tokenize(strin=self%val, delimiter=ARGS_SEP, toks=valsV, Nt=Nv)
       if (.not.self%check_list_size(Nv=Nv, val=valsV(1), pref=pref)) return
       allocate(logical:: val(1:Nv))
       do v=1,Nv
@@ -1311,7 +1337,7 @@ contains
         endif
       enddo
     else ! using default value
-      call tokenize(strin=self%def, delimiter=' ', toks=valsD, Nt=Nv)
+      call tokenize(strin=self%def, delimiter=ARGS_SEP, toks=valsD, Nt=Nv)
       if (.not.self%check_list_size(Nv=Nv, val=valsD(1), pref=pref)) return
       allocate(logical:: val(1:Nv))
       do v=1,Nv
@@ -1348,14 +1374,14 @@ contains
   endif
   if (self%act==action_store) then
     if (self%is_passed) then
-      call tokenize(strin=self%val, delimiter=args_sep, toks=valsV, Nt=Nv)
+      call tokenize(strin=self%val, delimiter=ARGS_SEP, toks=valsV, Nt=Nv)
       if (.not.self%check_list_size(Nv=Nv, val=valsV(1), pref=pref)) return
       allocate(val(1:Nv))
       do v=1, Nv
         val(v) = trim(adjustl(valsV(v)))
       enddo
     else ! using default value
-      call tokenize(strin=self%def, delimiter=' ', toks=valsD, Nt=Nv)
+      call tokenize(strin=self%def, delimiter=ARGS_SEP, toks=valsD, Nt=Nv)
       if (.not.self%check_list_size(Nv=Nv, val=valsD(1), pref=pref)) return
       allocate(val(1:Nv))
       do v=1, Nv
