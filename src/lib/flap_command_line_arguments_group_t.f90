@@ -293,7 +293,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   if (self%is_called) then
     arg = 0
-    do while (arg < size(args,dim=1)) ! loop over CLAs group arguments passed
+    do while (arg < size(args, dim=1)) ! loop over CLAs group arguments passed
       arg = arg + 1
       found = .false.
       do a=1, self%Na ! loop over CLAs group clas named options
