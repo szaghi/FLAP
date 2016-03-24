@@ -10,17 +10,19 @@ ifeq "$(STATIC)" "yes"
   DMOD    = static/mod/
   DEXE    = static/
   MAKELIB = ar -rcs $(DEXE)libflap.a $(DOBJ)*.o ; ranlib $(DEXE)libflap.a
+  RULE    = FLAP
 else
   DOBJ = tests/obj/
   DMOD = tests/mod/
   DEXE = tests/
+  RULE = $(DEXE)test_basic $(DEXE)test_choices_logical $(DEXE)test_nested $(DEXE)test_string
 endif
 DSRC = src/
 LIBS =
 ifeq "$(COMPILER)" "gnu"
   FC    = gfortran
-  OPTSC = -cpp -c -frealloc-lhs -O2  -J $(DMOD) -static
-  OPTSL = -J $(DMOD) -static
+  OPTSC = -cpp -c -frealloc-lhs -O2  -J $(DMOD)
+  OPTSL = -J $(DMOD)
 endif
 ifeq "$(COMPILER)" "ibm"
   FC    = bgxlf2008_r
@@ -34,10 +36,11 @@ EXESPO  = $(addsuffix .o,$(LCEXES))
 EXESOBJ = $(addprefix $(DOBJ),$(EXESPO))
 
 #auxiliary variables
-COTEXT = "Compiling $(<F)"
-LITEXT = "Assembling $@"
+COTEXT = "Compile $(<F)"
+LITEXT = "Assemble $@"
+RUTEXT = "Executed rule $@"
 
-all: $(DEXE)test_basic $(DEXE)test_choices_logical $(DEXE)test_nested $(DEXE)test_string
+firsrule: $(RULE)
 
 #building rules
 $(DEXE)test_basic: $(MKDIRS) $(DOBJ)test_basic.o
@@ -143,7 +146,6 @@ $(DOBJ)test_basic.o: src/tests/test_basic.f90 \
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
-default: $(EXES)
 #phony auxiliary rules
 .PHONY : $(MKDIRS)
 $(MKDIRS):
