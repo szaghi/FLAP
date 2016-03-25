@@ -8,8 +8,8 @@ program test_basic
 !<###Usage Compile
 !< See [usage instructions](https://github.com/szaghi/FLAP/wiki/Testing-Programs).
 !-----------------------------------------------------------------------------------------------------------------------------------
-use IR_Precision
 use flap, only : command_line_interface
+use penf
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -141,12 +141,12 @@ print '(A,L1)','Valued boolean      input = ',vbval
 print '(A)'   ,'Positional real     input = '//str(n=prval)
 print '(A)'   ,'Integer list inputs:'
 do l=1, 3
-  print '(A)' ,'  Input('//trim(str(.true.,l))//') = '//trim(str(n=ilist(l)))
+  print '(A)' ,'  Input('//trim(str(l, .true.))//') = '//trim(str(n=ilist(l)))
 enddo
 if (allocated(vlistR8P)) then
   print '(A)'   ,'Varying size real R8P list inputs:'
   do l=1, size(vlistR8P)
-    print '(A)' ,'  Input('//trim(str(.true.,l))//') = '//trim(str(n=vlistR8P(l)))
+    print '(A)' ,'  Input('//trim(str(l, .true.))//') = '//trim(str(n=vlistR8P(l)))
   enddo
 else
   print '(A)'   ,'Problems occuour with varying size real R8P list!'
@@ -154,7 +154,7 @@ endif
 if (allocated(vlistR4P)) then
   print '(A)'   ,'Varying size real R4P list inputs:'
   do l=1, size(vlistR4P)
-    print '(A)' ,'  Input('//trim(str(.true.,l))//') = '//trim(str(n=vlistR4P(l)))
+    print '(A)' ,'  Input('//trim(str(l, .true.))//') = '//trim(str(n=vlistR4P(l)))
   enddo
 else
   print '(A)'   ,'Problems occuour with varying size real R4P list!'
@@ -162,7 +162,7 @@ endif
 if (allocated(vlistI8P)) then
   print '(A)'   ,'Varying size integer I8P list inputs:'
   do l=1, size(vlistI8P)
-    print '(A)' ,'  Input('//trim(str(.true.,l))//') = '//trim(str(n=vlistI8P(l)))
+    print '(A)' ,'  Input('//trim(str(l, .true.))//') = '//trim(str(n=vlistI8P(l)))
   enddo
 else
   print '(A)'   ,'Problems occuour with varying size integer I8P list!'
@@ -170,7 +170,7 @@ endif
 if (allocated(vlistI4P)) then
   print '(A)'   ,'Varying size integer I4P list inputs:'
   do l=1, size(vlistI4P)
-    print '(A)' ,'  Input('//trim(str(.true.,l))//') = '//trim(str(n=vlistI4P(l)))
+    print '(A)' ,'  Input('//trim(str(l, .true.))//') = '//trim(str(n=vlistI4P(l)))
   enddo
 else
   print '(A)'   ,'Problems occuour with varying size integer I4P list!'
@@ -178,7 +178,7 @@ endif
 if (allocated(vlistI2P)) then
   print '(A)'   ,'Varying size integer I2P list inputs:'
   do l=1, size(vlistI2P)
-    print '(A)' ,'  Input('//trim(str(.true.,l))//') = '//trim(str(n=vlistI2P(l)))
+    print '(A)' ,'  Input('//trim(str(l, .true.))//') = '//trim(str(n=vlistI2P(l)))
   enddo
 else
   print '(A)'   ,'Problems occuour with varying size integer I2P list!'
@@ -186,7 +186,7 @@ endif
 if (allocated(vlistI1P)) then
   print '(A)'   ,'Varying size integer I1P list inputs:'
   do l=1, size(vlistI1P)
-    print '(A)' ,'  Input('//trim(str(.true.,l))//') = '//trim(str(n=vlistI1P(l)))
+    print '(A)' ,'  Input('//trim(str(l, .true.))//') = '//trim(str(n=vlistI1P(l)))
   enddo
 else
   print '(A)'   ,'Problems occuour with varying size integer I1P list!'
@@ -194,7 +194,7 @@ endif
 if (allocated(vlistBool)) then
   print '(A)'   ,'Varying size boolean list inputs:'
   do l=1, size(vlistBool)
-    print '(A,L1)' ,'  Input('//trim(str(.true.,l))//') = ',vlistBool(l)
+    print '(A,L1)' ,'  Input('//trim(str(l, .true.))//') = ',vlistBool(l)
   enddo
 else
   print '(A)'   ,'Problems occuour with varying size boolean list!'
@@ -202,7 +202,7 @@ endif
 if (allocated(vlistChar)) then
   print '(A)'   ,'Varying size character list inputs:'
   do l=1, size(vlistChar)
-    print '(A)' ,'  Input('//trim(str(.true.,l))//') = '//vlistChar(l)
+    print '(A)' ,'  Input('//trim(str(l, .true.))//') = '//vlistChar(l)
   enddo
 else
   print '(A)'   ,'Problems occuour with varying size character list!'
@@ -210,7 +210,7 @@ endif
 if (allocated(garbage)) then
   print '(A)'   ,'You have used implicit "--" option for collecting list of "trailing garbage" values that are:'
   do l=1, size(garbage)
-    print '(A)' ,'  Garbage('//trim(str(.true.,l))//') = '//garbage(l)
+    print '(A)' ,'  Garbage('//trim(str(l, .true.))//') = '//garbage(l)
   enddo
 endif
 if (cli%is_passed(switch='--man_file')) then
