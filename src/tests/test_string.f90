@@ -8,8 +8,8 @@ program test_string
 !<###Usage Compile
 !< See [usage instructions](https://github.com/szaghi/FLAP/wiki/Testing-Programs).
 !-----------------------------------------------------------------------------------------------------------------------------------
-use IR_Precision
 use flap, only : command_line_interface
+use penf
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -80,7 +80,7 @@ print '(A,L1)','Valued boolean    input = ',vbval
 print '(A)'   ,'Positional real   input = '//str(n=prval)
 print '(A)'   ,'Integer list inputs:'
 do l=1,3
-  print '(A)' ,'Input('//trim(str(.true.,l))//') = '//trim(str(n=ilist(l)))
+  print '(A)' ,'Input('//trim(str(l, .true.))//') = '//trim(str(n=ilist(l)))
 enddo
 stop
 !-----------------------------------------------------------------------------------------------------------------------------------

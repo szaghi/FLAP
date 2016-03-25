@@ -10,17 +10,19 @@ ifeq "$(STATIC)" "yes"
   DMOD    = static/mod/
   DEXE    = static/
   MAKELIB = ar -rcs $(DEXE)libflap.a $(DOBJ)*.o ; ranlib $(DEXE)libflap.a
+  RULE    = FLAP
 else
   DOBJ = tests/obj/
   DMOD = tests/mod/
   DEXE = tests/
+  RULE = $(DEXE)test_basic $(DEXE)test_choices_logical $(DEXE)test_nested $(DEXE)test_string
 endif
 DSRC = src/
 LIBS =
 ifeq "$(COMPILER)" "gnu"
   FC    = gfortran
-  OPTSC = -cpp -c -frealloc-lhs -O2  -J $(DMOD) -static
-  OPTSL = -J $(DMOD) -static
+  OPTSC = -cpp -c -frealloc-lhs -O2  -J $(DMOD)
+  OPTSL = -J $(DMOD)
 endif
 ifeq "$(COMPILER)" "ibm"
   FC    = bgxlf2008_r
@@ -34,10 +36,11 @@ EXESPO  = $(addsuffix .o,$(LCEXES))
 EXESOBJ = $(addprefix $(DOBJ),$(EXESPO))
 
 #auxiliary variables
-COTEXT = "Compiling $(<F)"
-LITEXT = "Assembling $@"
+COTEXT = "Compile $(<F)"
+LITEXT = "Assemble $@"
+RUTEXT = "Executed rule $@"
 
-all: $(DEXE)test_basic $(DEXE)test_choices_logical $(DEXE)test_nested $(DEXE)test_string
+firsrule: $(RULE)
 
 #building rules
 $(DEXE)test_basic: $(MKDIRS) $(DOBJ)test_basic.o
@@ -74,31 +77,31 @@ $(DOBJ)flap_command_line_interface_t.o: src/lib/flap_command_line_interface_t.F9
 	$(DOBJ)flap_command_line_arguments_group_t.o \
 	$(DOBJ)flap_object_t.o \
 	$(DOBJ)flap_utils_m.o \
-	$(DOBJ)ir_precision.o
+	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
 $(DOBJ)flap_command_line_arguments_group_t.o: src/lib/flap_command_line_arguments_group_t.f90 \
 	$(DOBJ)flap_command_line_argument_t.o \
 	$(DOBJ)flap_object_t.o \
-	$(DOBJ)ir_precision.o
+	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
 $(DOBJ)flap_utils_m.o: src/lib/flap_utils_m.f90 \
-	$(DOBJ)ir_precision.o
+	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
 $(DOBJ)flap_command_line_argument_t.o: src/lib/flap_command_line_argument_t.F90 \
 	$(DOBJ)flap_object_t.o \
 	$(DOBJ)flap_utils_m.o \
-	$(DOBJ)ir_precision.o
+	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
 $(DOBJ)flap_object_t.o: src/lib/flap_object_t.f90 \
-	$(DOBJ)ir_precision.o
+	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
@@ -106,44 +109,38 @@ $(DOBJ)flap.o: src/lib/flap.f90 \
 	$(DOBJ)flap_command_line_argument_t.o \
 	$(DOBJ)flap_command_line_arguments_group_t.o \
 	$(DOBJ)flap_command_line_interface_t.o \
-	$(DOBJ)ir_precision.o
+	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
-$(DOBJ)ir_precision.o: src/third_party/IR_Precision/src/IR_Precision.f90
-	@echo $(COTEXT)
-	@$(FC) $(OPTSC)  $< -o $@
-
-$(DOBJ)test_driver.o: src/third_party/IR_Precision/src/Test_Driver.f90 \
-	$(DOBJ)ir_precision.o
+$(DOBJ)penf.o: src/third_party/PENF/src/lib/penf.F90
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
 $(DOBJ)test_nested.o: src/tests/test_nested.f90 \
-	$(DOBJ)ir_precision.o \
+	$(DOBJ)penf.o \
 	$(DOBJ)flap.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
 $(DOBJ)test_choices_logical.o: src/tests/test_choices_logical.f90 \
-	$(DOBJ)ir_precision.o \
+	$(DOBJ)penf.o \
 	$(DOBJ)flap.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
 $(DOBJ)test_string.o: src/tests/test_string.f90 \
-	$(DOBJ)ir_precision.o \
+	$(DOBJ)penf.o \
 	$(DOBJ)flap.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
 $(DOBJ)test_basic.o: src/tests/test_basic.f90 \
-	$(DOBJ)ir_precision.o \
+	$(DOBJ)penf.o \
 	$(DOBJ)flap.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
-default: $(EXES)
 #phony auxiliary rules
 .PHONY : $(MKDIRS)
 $(MKDIRS):

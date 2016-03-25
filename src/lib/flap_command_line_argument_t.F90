@@ -6,7 +6,7 @@ module flap_command_line_argument_t
 use, intrinsic:: ISO_FORTRAN_ENV, only : stderr=>ERROR_UNIT
 use flap_object_t, only : object
 use flap_utils_m
-use IR_Precision
+use penf
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -301,7 +301,7 @@ contains
             usage = usage//' [value#1 value#2...]'
           case default
             do a=1, cton(str=trim(adjustl(self%nargs)),knd=1_I4P)
-              usage = usage//' value#'//trim(str(.true.,a))
+              usage = usage//' value#'//trim(str(a, .true.))
             enddo
           endselect
           if (trim(adjustl(self%switch))/=trim(adjustl(self%switch_ab))) then
@@ -336,7 +336,7 @@ contains
     endif
     prefd = '' ; if (present(pref)) prefd = pref
     usage = prefd//usage
-    if (self%is_positional) usage = usage//new_line('a')//prefd//repeat(' ',10)//trim(str(.true.,self%position))//'-th argument'
+    if (self%is_positional) usage = usage//new_line('a')//prefd//repeat(' ',10)//trim(str(self%position, .true.))//'-th argument'
     if (allocated(self%envvar)) then
       if (self%envvar /= '') then
         usage = usage//new_line('a')//prefd//repeat(' ',10)//'environment variable name "'//trim(adjustl(self%envvar))//'"'
@@ -380,7 +380,7 @@ contains
             nargs = cton(str=trim(adjustl(self%nargs)),knd=1_I4P)
             signature = ''
             do a=1, nargs
-              signature = signature//' value#'//trim(str(.true.,a))
+              signature = signature//' value#'//trim(str(a, .true.))
             enddo
           endselect
         else
@@ -468,7 +468,7 @@ contains
       if (.not.self%is_positional) then
         self%error_message = prefd//self%progname//': error: named option "'//trim(adjustl(self%switch))//'" is required!'
       else
-        self%error_message = prefd//self%progname//': error: "'//trim(str(.true.,self%position))//&
+        self%error_message = prefd//self%progname//': error: "'//trim(str(self%position, .true.))//&
           '-th" positional option is required!'
       endif
     case(ERROR_CASTING_LOGICAL)
@@ -482,7 +482,7 @@ contains
         self%error_message = prefd//self%progname//': error: named option "'//trim(adjustl(self%switch))//&
           '" has not "nargs" value but an array has been passed to "get" method!'
       else
-        self%error_message = prefd//self%progname//': error: "'//trim(str(.true.,self%position))//'-th" positional option '//&
+        self%error_message = prefd//self%progname//': error: "'//trim(str(self%position, .true.))//'-th" positional option '//&
           'has not "nargs" value but an array has been passed to "get" method!'
       endif
     case(ERROR_NARGS_INSUFFICIENT)
@@ -496,10 +496,10 @@ contains
         endif
       else
         if (self%nargs=='+') then
-          self%error_message = prefd//self%progname//': error: "'//trim(str(.true.,self%position))//&
+          self%error_message = prefd//self%progname//': error: "'//trim(str(self%position, .true.))//&
             '-th" positional option requires at least 1 argument but no one remains'
         else
-          self%error_message = prefd//self%progname//': error: "'//trim(str(.true.,self%position))//&
+          self%error_message = prefd//self%progname//': error: "'//trim(str(self%position, .true.))//&
             '-th" positional option requires '//&
             trim(adjustl(self%nargs))//' arguments but no enough ones remain!'
         endif
@@ -510,7 +510,7 @@ contains
     case(ERROR_UNKNOWN)
       self%error_message = prefd//self%progname//': error: switch "'//trim(adjustl(switch))//'" is unknown!'
     case(ERROR_ENVVAR_POSITIONAL)
-      self%error_message = prefd//self%progname//': error: "'//trim(str(.true.,self%position))//'-th" positional option '//&
+      self%error_message = prefd//self%progname//': error: "'//trim(str(self%position, .true.))//'-th" positional option '//&
         'has "envvar" value that is not allowed for positional option!'
     case(ERROR_ENVVAR_NOT_STORE)
       self%error_message = prefd//self%progname//': error: named option "'//trim(adjustl(self%switch))//&
@@ -519,7 +519,7 @@ contains
       self%error_message = prefd//self%progname//': error: named option "'//trim(adjustl(self%switch))//&
         '" is an envvar that is not allowed for list valued option!'
     case(ERROR_STORE_STAR_POSITIONAL)
-      self%error_message = prefd//self%progname//': error: "'//trim(str(.true.,self%position))//'-th" positional option '//&
+      self%error_message = prefd//self%progname//': error: "'//trim(str(self%position, .true.))//'-th" positional option '//&
         'has "'//action_store_star//'" action that is not allowed for positional option!'
     case(ERROR_STORE_STAR_NARGS)
       self%error_message = prefd//self%progname//': error: named option "'//trim(adjustl(self%switch))//&

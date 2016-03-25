@@ -8,7 +8,7 @@ use flap_command_line_argument_t, only : command_line_argument, action_store
 use flap_command_line_arguments_group_t, only : command_line_arguments_group, STATUS_PRINT_H, STATUS_PRINT_V
 use flap_object_t, only : object
 use flap_utils_m
-use IR_Precision
+use penf
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
