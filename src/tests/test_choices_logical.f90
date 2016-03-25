@@ -3,8 +3,8 @@ program test_choices_logical
 !-----------------------------------------------------------------------------------------------------------------------------------
 !< Test FLAP for bad usage of choices option with logical
 !-----------------------------------------------------------------------------------------------------------------------------------
-use IR_Precision
 use flap, only : command_line_interface
+use penf
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -20,7 +20,7 @@ call cli%add(switch='--boolean-value', switch_ab='-bv', help='A help message', &
              required=.false., def='.false.', choices='.True.,.False.', act='store', error=error)
 call cli%parse(error=error)
 call cli%get(switch='-bv', val=vbval, error=error)
-print "(A)", "Error code: "//trim(str(.true., error))
+print "(A)", "Error code: "//trim(str(error, .true.))
 stop
 !-----------------------------------------------------------------------------------------------------------------------------------
 endprogram test_choices_logical

@@ -8,8 +8,8 @@ program test_hidden
 !<###Usage Compile
 !< See [usage instructions](https://github.com/szaghi/FLAP/wiki/Testing-Programs).
 !-----------------------------------------------------------------------------------------------------------------------------------
-use IR_Precision
 use flap, only : command_line_interface
+use penf
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ call cli%get(switch='-i', val=a_integer, error=error) ; if (error/=0) stop
 print '(A)', cli%progname//' has been called with the following argument:'
 print '(A)', 'String       = '//trim(adjustl(a_string))
 print '(A)', 'Ghost string = '//trim(adjustl(g_string))
-print '(A)', 'Integer      = '//trim(adjustl(str(.true., a_integer)))
+print '(A)', 'Integer      = '//trim(adjustl(str(a_integer, .true.)))
 stop
 !-----------------------------------------------------------------------------------------------------------------------------------
 endprogram test_hidden
