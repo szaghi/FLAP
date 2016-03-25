@@ -77,31 +77,31 @@ $(DOBJ)flap_command_line_interface_t.o: src/lib/flap_command_line_interface_t.F9
 	$(DOBJ)flap_command_line_arguments_group_t.o \
 	$(DOBJ)flap_object_t.o \
 	$(DOBJ)flap_utils_m.o \
-	$(DOBJ)ir_precision.o
+	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
 $(DOBJ)flap_command_line_arguments_group_t.o: src/lib/flap_command_line_arguments_group_t.f90 \
 	$(DOBJ)flap_command_line_argument_t.o \
 	$(DOBJ)flap_object_t.o \
-	$(DOBJ)ir_precision.o
+	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
 $(DOBJ)flap_utils_m.o: src/lib/flap_utils_m.f90 \
-	$(DOBJ)ir_precision.o
+	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
 $(DOBJ)flap_command_line_argument_t.o: src/lib/flap_command_line_argument_t.F90 \
 	$(DOBJ)flap_object_t.o \
 	$(DOBJ)flap_utils_m.o \
-	$(DOBJ)ir_precision.o
+	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
 $(DOBJ)flap_object_t.o: src/lib/flap_object_t.f90 \
-	$(DOBJ)ir_precision.o
+	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
@@ -109,34 +109,34 @@ $(DOBJ)flap.o: src/lib/flap.f90 \
 	$(DOBJ)flap_command_line_argument_t.o \
 	$(DOBJ)flap_command_line_arguments_group_t.o \
 	$(DOBJ)flap_command_line_interface_t.o \
-	$(DOBJ)ir_precision.o
+	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
-$(DOBJ)ir_precision.o: src/third_party/IR_Precision/src/lib/IR_Precision.F90
+$(DOBJ)penf.o: src/third_party/PENF/src/lib/penf.F90
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
 $(DOBJ)test_nested.o: src/tests/test_nested.f90 \
-	$(DOBJ)ir_precision.o \
+	$(DOBJ)penf.o \
 	$(DOBJ)flap.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
 $(DOBJ)test_choices_logical.o: src/tests/test_choices_logical.f90 \
-	$(DOBJ)ir_precision.o \
+	$(DOBJ)penf.o \
 	$(DOBJ)flap.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
 $(DOBJ)test_string.o: src/tests/test_string.f90 \
-	$(DOBJ)ir_precision.o \
+	$(DOBJ)penf.o \
 	$(DOBJ)flap.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
 $(DOBJ)test_basic.o: src/tests/test_basic.f90 \
-	$(DOBJ)ir_precision.o \
+	$(DOBJ)penf.o \
 	$(DOBJ)flap.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
