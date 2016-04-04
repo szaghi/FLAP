@@ -147,7 +147,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine tokenize
 
-  pure function unique(string, substring) result(uniq)
+  elemental function unique(string, substring) result(uniq)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Reduce to one (unique) multiple (sequential) occurrences of a characters substring into a string.
   !<
@@ -188,7 +188,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction unique
 
-  pure function upper_case(string)
+  elemental function upper_case(string)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Convert the lower case characters of a string to upper case one.
   !---------------------------------------------------------------------------------------------------------------------------------
