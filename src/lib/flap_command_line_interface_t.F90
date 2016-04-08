@@ -3,7 +3,6 @@ module flap_command_line_interface_t
 !-----------------------------------------------------------------------------------------------------------------------------------
 !< Command Line Interface (CLI) class.
 !-----------------------------------------------------------------------------------------------------------------------------------
-use, intrinsic:: ISO_FORTRAN_ENV, only: stdout=>OUTPUT_UNIT, stderr=>ERROR_UNIT
 use flap_command_line_argument_t, only : command_line_argument, action_store
 use flap_command_line_arguments_group_t, only : command_line_arguments_group, STATUS_PRINT_H, STATUS_PRINT_V
 use flap_object_t, only : object
@@ -121,7 +120,8 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine free
 
-  subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv)
+  subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, &
+       usage_lun, error_lun, version_lun)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Initialize CLI.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -135,6 +135,9 @@ contains
   character(*), optional,        intent(in)    :: examples(1:)      !< Examples of correct usage.
   character(*), optional,        intent(in)    :: epilog            !< Epilog message.
   logical,      optional,        intent(in)    :: disable_hv        !< Disable automatic insert of 'help' and 'version' CLAs.
+  integer(I4P), optional,        intent(in)    :: usage_lun         !< Unit number to print usage/help
+  integer(I4P), optional,        intent(in)    :: version_lun       !< Unit number to print version/license info
+  integer(I4P), optional,        intent(in)    :: error_lun         !< Unit number to print error info
   character(len=:), allocatable                :: prog_invocation   !< Complete program invocation.
   integer(I4P)                                 :: invocation_length !< Length of invocation.
   integer(I4P)                                 :: retrieval_status  !< Retrieval status.
@@ -142,6 +145,9 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   call self%free
+  if (present(usage_lun))   self%usage_lun   = usage_lun
+  if (present(version_lun)) self%version_lun = version_lun
+  if (present(error_lun))   self%error_lun   = error_lun
   if (present(progname)) then
     self%progname = progname
   else
@@ -578,7 +584,7 @@ contains
     call self%print_version(pref=pref)
     stop
   elseif (self%error == STATUS_PRINT_H) then
-    write(stdout,'(A)') self%usage(pref=pref, g=g)
+    write(self%usage_lun,'(A)') self%usage(pref=pref, g=g)
     stop
   endif
 
@@ -1534,7 +1540,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  write(stdout, '(A)') self%usage(pref=pref, g=0)
+  write(self%usage_lun, '(A)') self%usage(pref=pref, g=0)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine print_usage
@@ -1630,7 +1636,7 @@ contains
       ! self%error_message = prefd//self%progname//': error: too few arguments ('//trim(str(.true.,Na))//')'//&
                          ! ' respect the required ('//trim(str(.true.,self%Na_required))//')'
     endselect
-    write(stderr,'(A)')
+    write(self%error_lun,'(A)')
     call self%print_error_message
   endif
   return
