@@ -17,16 +17,19 @@ save
 type, abstract, public :: object
   !< Base (abstract) class upon which FLAP's concrete classes are built.
   private
-  character(len=:), public, allocatable :: progname      !< Program name.
-  character(len=:), public, allocatable :: version       !< Program version.
-  character(len=:), public, allocatable :: help          !< Help message.
-  character(len=:), public, allocatable :: description   !< Detailed description.
-  character(len=:), public, allocatable :: license       !< License description.
-  character(len=:), public, allocatable :: authors       !< Authors list.
-  character(len=:), public, allocatable :: epilog        !< Epilogue message.
-  character(len=:), public, allocatable :: m_exclude     !< Mutually exclude other CLA(s group).
-  character(len=:), public, allocatable :: error_message !< Meaningful error message to standard-error.
-  integer(I4P),     public              :: error=0_I4P   !< Error trapping flag.
+  character(len=:), public, allocatable :: progname           !< Program name.
+  character(len=:), public, allocatable :: version            !< Program version.
+  character(len=:), public, allocatable :: help               !< Help message.
+  character(len=:), public, allocatable :: description        !< Detailed description.
+  character(len=:), public, allocatable :: license            !< License description.
+  character(len=:), public, allocatable :: authors            !< Authors list.
+  character(len=:), public, allocatable :: epilog             !< Epilogue message.
+  character(len=:), public, allocatable :: m_exclude          !< Mutually exclude other CLA(s group).
+  character(len=:), public, allocatable :: error_message      !< Meaningful error message to standard-error.
+  integer(I4P),     public              :: error=0_I4P        !< Error trapping flag.
+  integer(I4P),     public              :: usage_lun=stderr   !< Output unit to print help/usage messages
+  integer(I4P),     public              :: version_lun=stdout !< Output unit to print version message
+  integer(I4P),     public              :: error_lun=stderr   !< Error unit to print error messages
   contains
     procedure :: free_object         !< Free dynamic memory.
     procedure :: print_version       !< Print version.
@@ -68,12 +71,12 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   prefd = '' ; if (present(pref)) prefd = pref
-  write(stdout,'(A)')prefd//self%progname//' version '//self%version
+  write(self%version_lun,'(A)')prefd//self%progname//' version '//self%version
   if (self%license /= '') then
-    write(stdout,'(A)')prefd//self%license
+    write(self%version_lun,'(A)')prefd//self%license
   endif
   if (self%authors /= '') then
-    write(stdout,'(A)')prefd//self%authors
+    write(self%version_lun,'(A)')prefd//self%authors
   endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -87,8 +90,8 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  write(stderr, '(A)') self%error_message
-  write(stderr, '(A)')
+  write(self%error_lun, '(A)') self%error_message
+  write(self%error_lun, '(A)')
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine print_error_message
