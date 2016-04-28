@@ -3,7 +3,6 @@ module flap_command_line_argument_t
 !-----------------------------------------------------------------------------------------------------------------------------------
 !< Command Line Argument (CLA) class.
 !-----------------------------------------------------------------------------------------------------------------------------------
-use, intrinsic:: ISO_FORTRAN_ENV, only : stderr=>ERROR_UNIT
 use flap_object_t, only : object
 use flap_utils_m
 use penf

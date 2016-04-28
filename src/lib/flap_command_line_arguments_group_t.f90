@@ -3,7 +3,6 @@ module flap_command_line_arguments_group_t
 !-----------------------------------------------------------------------------------------------------------------------------------
 !< Command Line Arguments Group (CLAsG) class.
 !-----------------------------------------------------------------------------------------------------------------------------------
-use, intrinsic:: ISO_FORTRAN_ENV, only: stdout=>OUTPUT_UNIT, stderr=>ERROR_UNIT
 use flap_command_line_argument_t, only : command_line_argument, &
                                          ACTION_PRINT_HELP,     &
                                          ACTION_PRINT_VERS,     &
@@ -141,7 +140,7 @@ contains
     do a=1, self%Na
       if (.not.self%cla(a)%is_required_passed(pref=pref)) then
         self%error = self%cla(a)%error
-        write(stdout, '(A)') self%usage(pref=pref)
+        write(self%usage_lun, '(A)') self%usage(pref=pref)
         return
       endif
     enddo
