@@ -375,9 +375,9 @@ contains
       if (self%def /= '') then
         if ( markdownd ) then
           ! two spaces make a line break in markdown.
-          usage = usage//'  '//new_line('a')//prefd//repeat(' ',4)//'default value '//trim(adjustl(self%def))
+          usage = usage//'  '//new_line('a')//prefd//repeat(' ',4)//'default value '//trim(replace_all(self%def,ARGS_SEP,' '))
         else
-          usage = usage//new_line('a')//prefd//repeat(' ',indent)//'default value '//trim(adjustl(self%def))
+          usage = usage//new_line('a')//prefd//repeat(' ',indent)//'default value '//trim(replace_all(self%def,ARGS_SEP,' '))
         endif
       endif
     endif

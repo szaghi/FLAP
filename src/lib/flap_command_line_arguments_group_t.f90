@@ -46,10 +46,10 @@ type, extends(object) :: command_line_arguments_group
     procedure, public :: parse                 !< Parse CLAsG arguments.
     procedure, public :: usage                 !< Get correct CLAsG usage.
     procedure, public :: signature             !< Get CLAsG signature.
+    procedure, public :: sanitize_defaults     !< Sanitize default values.
     ! private methods
     procedure, private :: errored                             !< Trig error occurrence and print meaningful message.
     procedure, private :: check_m_exclusive                   !< Check if two mutually exclusive CLAs have been passed.
-    procedure, private :: sanitize_defaults                   !< Sanitize default values.
     procedure, private :: clasg_assign_clasg                  !< Assignment operator.
     generic,   private :: assignment(=) => clasg_assign_clasg !< Assignment operator overloading.
     final              :: finalize                            !< Free dynamic memory when finalizing.

@@ -573,7 +573,11 @@ contains
 
   ! parse CLI
   do g=0,size(ai,dim=1)-1
-    if (ai(g,1)>0) call self%clasg(g)%parse(args=self%args(ai(g,1):ai(g,2)), pref=pref)
+    if (ai(g,1)>0) then
+        call self%clasg(g)%parse(args=self%args(ai(g,1):ai(g,2)), pref=pref)
+    else
+        call self%clasg(g)%sanitize_defaults
+    endif
     self%error = self%clasg(g)%error
     if (self%error /= 0) exit
   enddo
