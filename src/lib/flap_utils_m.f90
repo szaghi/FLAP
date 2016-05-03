@@ -105,7 +105,7 @@ contains
   !<
   !< @note The dummy array containing tokens must allocatable and its character elements must have the same length of the input
   !< string. If the length of the delimiter is higher than the input string one then the output tokens array is allocated with
-  !< only one element set to char(0).
+  !< only one element set to input string.
   !---------------------------------------------------------------------------------------------------------------------------------
   character(len=*),          intent(in)               :: strin     !< String to be tokenized.
   character(len=*),          intent(in)               :: delimiter !< Delimiter of tokens.
@@ -124,7 +124,7 @@ contains
   strsub = strin
   dlen = len(delimiter)
   if (dlen>len(strin)) then
-    allocate(toks(1:1)) ; toks(1) = char(0) ; if (present(Nt)) Nt = 1 ; return
+    allocate(toks(1:1)) ; toks(1) = strin ; if (present(Nt)) Nt = 1 ; return
   endif
   ! compute the number of tokens
   n = 1
