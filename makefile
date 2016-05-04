@@ -21,7 +21,7 @@ DSRC = src/
 LIBS =
 ifeq "$(COMPILER)" "gnu"
   FC    = gfortran
-  OPTSC = -cpp -c -frealloc-lhs -O2  -J $(DMOD)
+  OPTSC = -cpp -c -frealloc-lhs -O2  -J $(DMOD) -ffree-line-length-none
   OPTSL = -J $(DMOD)
 endif
 ifeq "$(COMPILER)" "ibm"
