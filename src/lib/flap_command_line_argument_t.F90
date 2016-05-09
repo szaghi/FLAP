@@ -276,18 +276,23 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine sanitize_defaults
 
-  function usage(self, pref)
+  function usage(self, pref, markdown)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get correct usage.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(command_line_argument), intent(in) :: self  !< CLAs group data.
-  character(*), optional,       intent(in) :: pref  !< Prefixing string.
-  character(len=:), allocatable            :: usage !< Usage string.
-  character(len=:), allocatable            :: prefd !< Prefixing string.
-  integer(I4P)                             :: a     !< Counter.
+  class(command_line_argument), intent(in) :: self      !< CLAs group data.
+  character(*), optional,       intent(in) :: pref      !< Prefixing string.
+  logical,      optional,       intent(in) :: markdown  !< Format for markdown
+  character(len=:), allocatable            :: usage     !< Usage string.
+  character(len=:), allocatable            :: prefd     !< Prefixing string.
+  integer(I4P)                             :: a         !< Counter.
+  logical                                  :: markdownd !< Format for markdown
+  integer                                  :: indent    !< how many spaces to indent
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  markdownd = .false. ; if (present(markdown)) markdownd = markdown
+  indent = 4
   if (.not.self%is_hidden) then
     if (self%act==action_store) then
       if (.not.self%is_positional) then
@@ -304,22 +309,38 @@ contains
             enddo
           endselect
           if (trim(adjustl(self%switch))/=trim(adjustl(self%switch_ab))) then
-            usage = '   '//trim(adjustl(self%switch))//usage//', '//trim(adjustl(self%switch_ab))//usage
+            if (markdownd) then
+              usage = new_line('a')//'* `'//trim(adjustl(self%switch))//usage//'`, `'//trim(adjustl(self%switch_ab))//usage//'`'
+            else
+              usage = '   '//trim(adjustl(self%switch))//usage//', '//trim(adjustl(self%switch_ab))//usage
+            endif
           else
-            usage = '   '//trim(adjustl(self%switch))//usage
+            if (markdownd) then
+              usage = new_line('a')//'* `'//trim(adjustl(self%switch))//usage//'`'
+            else
+              usage = '   '//trim(adjustl(self%switch))//usage
+            endif
           endif
         else
           if (trim(adjustl(self%switch))/=trim(adjustl(self%switch_ab))) then
-            usage = '   '//trim(adjustl(self%switch))//' value, '//trim(adjustl(self%switch_ab))//' value'
+            if (markdownd) then
+              usage = new_line('a')//'* `'//trim(adjustl(self%switch))//' value`, `'//trim(adjustl(self%switch_ab))//' value'//'`'
+            else
+              usage = '   '//trim(adjustl(self%switch))//' value, '//trim(adjustl(self%switch_ab))//' value'
+            endif
           else
-            usage = '   '//trim(adjustl(self%switch))//' value'
+            if (markdownd) then
+              usage = new_line('a')//'* `'//trim(adjustl(self%switch))//' value`'
+            else
+              usage = '   '//trim(adjustl(self%switch))//' value'
+            endif
           endif
         endif
       else
         usage = '  value'
       endif
       if (allocated(self%choices)) then
-        usage = usage//', value in: ('//self%choices//')'
+        usage = usage//', value in: `'//self%choices//'`'
       endif
     elseif (self%act==action_store_star) then
       usage = '  [value]'
@@ -328,14 +349,23 @@ contains
       endif
     else
       if (trim(adjustl(self%switch))/=trim(adjustl(self%switch_ab))) then
-        usage = '   '//trim(adjustl(self%switch))//', '//trim(adjustl(self%switch_ab))
+        if (markdownd) then
+          usage = new_line('a')//'* `'//trim(adjustl(self%switch))//'`, `'//trim(adjustl(self%switch_ab))//'`'
+        else
+          usage = '   '//trim(adjustl(self%switch))//', '//trim(adjustl(self%switch_ab))
+        endif
       else
-        usage = '   '//trim(adjustl(self%switch))
+        if (markdownd) then
+          usage = new_line('a')//'* `'//trim(adjustl(self%switch))//'`'
+        else
+          usage = '   '//trim(adjustl(self%switch))
+        endif
       endif
     endif
     prefd = '' ; if (present(pref)) prefd = pref
     usage = prefd//usage
-    if (self%is_positional) usage = usage//new_line('a')//prefd//repeat(' ',10)//trim(str(self%position, .true.))//'-th argument'
+    if (self%is_positional) usage = usage//new_line('a')//prefd//repeat(' ',indent)//trim(str(self%position, .true.))//&
+      '-th argument'
     if (allocated(self%envvar)) then
       if (self%envvar /= '') then
         usage = usage//new_line('a')//prefd//repeat(' ',10)//'environment variable name "'//trim(adjustl(self%envvar))//'"'
@@ -343,11 +373,23 @@ contains
     endif
     if (.not.self%is_required) then
       if (self%def /= '') then
-        usage = usage//new_line('a')//prefd//repeat(' ',10)//'default value '//trim(adjustl(self%def))
+        if (markdownd) then
+          ! two spaces make a line break in markdown.
+          usage = usage//'  '//new_line('a')//prefd//repeat(' ', 4)//'default value '//trim(replace_all(self%def,ARGS_SEP,' '))
+        else
+          usage = usage//new_line('a')//prefd//repeat(' ', indent)//'default value '//trim(replace_all(self%def,ARGS_SEP,' '))
+        endif
       endif
     endif
-    if (self%m_exclude/='') usage = usage//new_line('a')//prefd//repeat(' ',10)//'mutually exclude "'//self%m_exclude//'"'
-    usage = usage//new_line('a')//prefd//repeat(' ',10)//trim(adjustl(self%help))
+    if (self%m_exclude/='') usage = usage//new_line('a')//prefd//repeat(' ', indent)//'mutually exclude "'//self%m_exclude//'"'
+    if (markdownd) then
+      usage = usage//'  '//new_line('a')//prefd//repeat(' ',4)//trim(adjustl(self%help))
+      if (self%help_markdown/='') then
+        usage = usage//trim(adjustl(self%help_markdown))
+      endif
+    else
+      usage = usage//new_line('a')//prefd//repeat(' ', indent)//trim(adjustl(self%help))
+    endif
   else
     usage = ''
   endif
