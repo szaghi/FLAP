@@ -20,6 +20,7 @@ type, abstract, public :: object
   character(len=:), public, allocatable :: progname           !< Program name.
   character(len=:), public, allocatable :: version            !< Program version.
   character(len=:), public, allocatable :: help               !< Help message.
+  character(len=:), public, allocatable :: help_markdown      !< Longer help message, markdown formatted.
   character(len=:), public, allocatable :: description        !< Detailed description.
   character(len=:), public, allocatable :: license            !< License description.
   character(len=:), public, allocatable :: authors            !< Authors list.
