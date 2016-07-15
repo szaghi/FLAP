@@ -53,6 +53,10 @@ IF(NOT CMAKE_BUILD_TYPE)
   SET_PROPERTY(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS NONE DEBUG RELEASE)
 ENDIF(NOT CMAKE_BUILD_TYPE)
 
+IF(NOT ${PROJECT_NAME}_ENABLE_TESTS)
+    OPTION(${PROJECT_NAME}_ENABLE_TESTS "Enable/disable tests compilation" OFF)
+ENDIF(NOT ${PROJECT_NAME}_ENABLE_TESTS)
+
 #################################################################
 # STATIC LIBRARIES
 #################################################################
@@ -119,8 +123,10 @@ message (STATUS "CMAKE_Fortran_FLAGS_DEBUG: " ${CMAKE_Fortran_FLAGS_DEBUG})
 #################################################################
 
 SET(BUILDNAME ${CMAKE_Fortran_COMPILER_ID}_${CMAKE_BUILD_TYPE}_MKL=${${PROJECT_NAME}_ENABLE_MKL} CACHE STRING "" )
-ENABLE_TESTING()
-INCLUDE(CTest)
+IF(${PROJECT_NAME}_ENABLE_TESTS)
+    ENABLE_TESTING()
+    INCLUDE(CTest)
+ENDIF()
 
 #################################################################
 # Add external projects
@@ -154,5 +160,7 @@ INCLUDE_DIRECTORIES(${THIRDPARTY_OUTPUT_PATH}/${PENF_LIB}/modules)
 #################################################################
 
 ADD_SUBDIRECTORY(${LIB_PATH})
-ADD_SUBDIRECTORY(${TESTS_PATH})
+IF(${PROJECT_NAME}_ENABLE_TESTS)
+    ADD_SUBDIRECTORY(${TESTS_PATH})
+ENDIF()
 
