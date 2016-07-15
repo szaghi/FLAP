@@ -13,33 +13,34 @@ $CSTATIC_INT = -cpp -c -assume realloc_lhs
 $DEBUG_GNU   = -O0 -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -fcheck=all -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan -std=f2008 -fall-intrinsics
 $DEBUG_INT   = -O0 -debug all -check all -warn all -extend-source 132 -traceback -gen-interfaces#-fpe-all=0 -fp-stack-check -fstack-protector-all -ftrapuv -no-ftz -std08
 $OPTIMIZE    = -O2
+$EXDIRS      = ./src/third_party/PENF/
 
 # main modes
 # GNU
 [shared-gnu]
 template  = template-shared-gnu
-target    = Data_Type_Command_Line_Interface.F90
+target    = flap.f90
 build_dir = ./shared/
 output    = libflap.so
 mklib     = shared
 
 [static-gnu]
 template  = template-static-gnu
-target    = Data_Type_Command_Line_Interface.F90
+target    = flap.f90
 build_dir = ./static/
 output    = libflap.a
 mklib     = static
 
 [shared-gnu-debug]
 template  = template-shared-gnu-debug
-target    = Data_Type_Command_Line_Interface.F90
+target    = flap.f90
 build_dir = ./shared/
 output    = libflap.so
 mklib     = shared
 
 [static-gnu-debug]
 template  = template-static-gnu-debug
-target    = Data_Type_Command_Line_Interface.F90
+target    = flap.f90
 build_dir = ./static/
 output    = libflap.a
 mklib     = static
@@ -55,28 +56,28 @@ build_dir = ./tests/
 # Intel
 [shared-intel]
 template  = template-shared-intel
-target    = Data_Type_Command_Line_Interface.F90
+target    = flap.f90
 build_dir = ./shared/
 output    = libflap.so
 mklib     = shared
 
 [static-intel]
 template  = template-static-intel
-target    = Data_Type_Command_Line_Interface.F90
+target    = flap.f90
 build_dir = ./static/
 output    = libflap.a
 mklib     = static
 
 [shared-intel-debug]
 template  = template-shared-intel-debug
-target    = Data_Type_Command_Line_Interface.F90
+target    = flap.f90
 build_dir = ./shared/
 output    = libflap.so
 mklib     = shared
 
 [static-intel-debug]
 template  = template-static-intel-debug
-target    = Data_Type_Command_Line_Interface.F90
+target    = flap.f90
 build_dir = ./static/
 output    = libflap.a
 mklib     = static
@@ -91,104 +92,113 @@ build_dir = ./tests/
 
 #templates
 [template-shared-gnu]
-compiler = gnu
-cflags   = $CSHARED_GNU $OPTIMIZE
-lflags   = $LSHARED $OPTIMIZE
-mod_dir  = ./mod/
-obj_dir  = ./obj/
-src      = ./src/
-colors   = True
-quiet    = False
-log      = True
-jobs     = 2
+compiler     = gnu
+cflags       = $CSHARED_GNU $OPTIMIZE
+lflags       = $LSHARED $OPTIMIZE
+exclude_dirs = $EXDIRS
+mod_dir      = ./mod/
+obj_dir      = ./obj/
+src          = ./src/
+colors       = True
+quiet        = False
+log          = True
+jobs         = 2
 
 [template-static-gnu]
-compiler = gnu
-cflags   = $CSTATIC_GNU $OPTIMIZE
-mod_dir  = ./mod/
-obj_dir  = ./obj/
-src      = ./src/
-colors   = True
-quiet    = False
-log      = True
-jobs     = 2
+compiler     = gnu
+cflags       = $CSTATIC_GNU $OPTIMIZE
+exclude_dirs = $EXDIRS
+mod_dir      = ./mod/
+obj_dir      = ./obj/
+src          = ./src/
+colors       = True
+quiet        = False
+log          = True
+jobs         = 2
 
 [template-shared-gnu-debug]
-compiler = gnu
-cflags   = $CSHARED_GNU $DEBUG_GNU
-lflags   = $LSHARED $DEBUG_GNU
-mod_dir  = ./mod/
-obj_dir  = ./obj/
-src      = ./src/
-colors   = True
-quiet    = False
-log      = True
-jobs     = 2
+compiler     = gnu
+cflags       = $CSHARED_GNU $DEBUG_GNU
+lflags       = $LSHARED $DEBUG_GNU
+exclude_dirs = $EXDIRS
+mod_dir      = ./mod/
+obj_dir      = ./obj/
+src          = ./src/
+colors       = True
+quiet        = False
+log          = True
+jobs         = 2
 
 [template-static-gnu-debug]
-compiler = gnu
-cflags   = $CSTATIC_GNU $DEBUG_GNU
-lflags   = $DEBUG_GNU
-mod_dir  = ./mod/
-obj_dir  = ./obj/
-src      = ./src/
-colors   = True
-quiet    = False
-log      = True
-jobs     = 2
+compiler     = gnu
+cflags       = $CSTATIC_GNU $DEBUG_GNU
+lflags       = $DEBUG_GNU
+exclude_dirs = $EXDIRS
+mod_dir      = ./mod/
+obj_dir      = ./obj/
+src          = ./src/
+colors       = True
+quiet        = False
+log          = True
+jobs         = 2
 
 [template-shared-intel]
-compiler = intel
-cflags   = $CSHARED_INT $OPTIMIZE
-lflags   = $LSHARED $OPTIMIZE
-mod_dir  = ./mod/
-obj_dir  = ./obj/
-src      = ./src/
-colors   = True
-quiet    = False
-log      = True
-jobs     = 2
+compiler     = intel
+cflags       = $CSHARED_INT $OPTIMIZE
+lflags       = $LSHARED $OPTIMIZE
+exclude_dirs = $EXDIRS
+mod_dir      = ./mod/
+obj_dir      = ./obj/
+src          = ./src/
+colors       = True
+quiet        = False
+log          = True
+jobs         = 2
 
 [template-static-intel]
-compiler = intel
-cflags   = $CSTATIC_INT $OPTIMIZE
-lflags   = $OPTIMIZE
-mod_dir  = ./mod/
-obj_dir  = ./obj/
-src      = ./src/
-colors   = True
-quiet    = False
-log      = True
-jobs     = 2
+compiler     = intel
+cflags       = $CSTATIC_INT $OPTIMIZE
+lflags       = $OPTIMIZE
+exclude_dirs = $EXDIRS
+mod_dir      = ./mod/
+obj_dir      = ./obj/
+src          = ./src/
+colors       = True
+quiet        = False
+log          = True
+jobs         = 2
 
 [template-shared-intel-debug]
-compiler = intel
-cflags   = $CSHARED_INT $DEBUG_INT
-lflags   = $LSHARED $DEBUG_INT
-mod_dir  = ./mod/
-obj_dir  = ./obj/
-src      = ./src/
-colors   = True
-quiet    = False
-log      = True
-jobs     = 2
+compiler     = intel
+cflags       = $CSHARED_INT $DEBUG_INT
+lflags       = $LSHARED $DEBUG_INT
+exclude_dirs = $EXDIRS
+mod_dir      = ./mod/
+obj_dir      = ./obj/
+src          = ./src/
+colors       = True
+quiet        = False
+log          = True
+jobs         = 2
 
 [template-static-intel-debug]
-compiler = intel
-cflags   = $CSTATIC_INT $DEBUG_INT
-lflags   = $DEBUG_INT
-mod_dir  = ./mod/
-obj_dir  = ./obj/
-src      = ./src/
-colors   = True
-quiet    = False
-log      = True
-jobs     = 2
+compiler     = intel
+cflags       = $CSTATIC_INT $DEBUG_INT
+lflags       = $DEBUG_INT
+exclude_dirs = $EXDIRS
+mod_dir      = ./mod/
+obj_dir      = ./obj/
+src          = ./src/
+colors       = True
+quiet        = False
+log          = True
+jobs         = 2
 
+# rules
 [rule-makedoc]
 help   = Rule for building documentation from source files
 rule_1 = rm -rf doc/html/*
-rule_2 = ford doc/main_page.md
+rule_2 = ford doc/main_page.md --debug
 rule_3 = cp -r doc/html/publish/* doc/html/
 
 [rule-deldoc]
@@ -203,48 +213,52 @@ rule = tar -czf FLAP.tar.gz *
 help    = Rule for performing coverage analysis
 rule_1  = FoBiS.py clean -mode tests-gnu
 rule_2  = FoBiS.py build -mode tests-gnu -coverage
-rule_3  = ./tests/test_basic
-rule_4  = ./tests/test_basic -v
-rule_5  = ./tests/test_basic -h
-rule_6  = ./tests/test_basic -s 'Hello FLAP' -i 2
-rule_7  = ./tests/test_basic -s 'Hello FLAP' -i 3 -ie 11
-rule_8  = ./tests/test_basic 33.0 -s 'Hello FLAP' --integer_list 10 -3 87 -i 3 -r 64.123d0  --boolean --boolean_val .false.
-rule_9  = ./tests/test_basic -s 'Hello FLAP' --man_file FLAP.1
-rule_10 = ./tests/test_basic -s 'Hello FLAP' -vlI1P 2 1 3 -vlI2P 12 -2 -vlI4P 1 -vlI8P 1 -vlR8P 121.31 -vlR4P 3423121.31 -vlChar foo bar -vlBool T F T F
-rule_11 = ./tests/test_basic -s 'Hello FLAP' -- foo.bar bar/baz.f90
-rule_12 = ./tests/test_nested
-rule_13 = ./tests/test_nested -h
-rule_14 = ./tests/test_nested -a
-rule_15 = ./tests/test_nested init
-rule_16 = ./tests/test_nested init commit -m 'hello'
-rule_17 = ./tests/test_nested commit -m 'hello'
-rule_18 = ./tests/test_nested tag -a 'hello'
-rule_19 = ./tests/test_string
-rule_20 = ./tests/test_choices_logical
-rule_21 = gcov -o tests/obj/ src/lib/Data_Type_Command_Line_Interface.F90
+rule_3  = ./tests/test_minimal -s 'hello'
+rule_4  = ./tests/test_hidden -s 'hello' -i 2
+rule_5  = ./tests/test_basic
+rule_6  = ./tests/test_basic -v
+rule_7  = ./tests/test_basic -h
+rule_8  = ./tests/test_basic -s 'Hello FLAP' -i 2
+rule_9  = ./tests/test_basic -s 'Hello FLAP' -i 3 -ie 11
+rule_10 = ./tests/test_basic 33.0 -s 'Hello FLAP' --integer_list 10 -3 87 -i 3 -r 64.123d0  --boolean --boolean_val .false.
+rule_11 = ./tests/test_basic -s 'Hello FLAP' --man_file FLAP.1
+rule_12 = ./tests/test_basic -s 'Hello FLAP' -vlI1P 2 1 3 -vlI2P 12 -2 -vlI4P 1 -vlI8P 1 -vlR8P 121.31 -vlR4P 3423121.31 -vlChar foo bar -vlBool T F T F
+rule_13 = ./tests/test_basic -s 'Hello FLAP' -- foo.bar bar/baz.f90
+rule_14 = ./tests/test_nested
+rule_15 = ./tests/test_nested -h
+rule_16 = ./tests/test_nested -a
+rule_17 = ./tests/test_nested init
+rule_18 = ./tests/test_nested init commit -m 'hello'
+rule_19 = ./tests/test_nested commit -m 'hello'
+rule_20 = ./tests/test_nested tag -a 'hello'
+rule_21 = ./tests/test_string
+rule_22 = ./tests/test_choices_logical
+rule_23 = gcov -o tests/obj/ src/lib/flap.f90
 
 [rule-coverage-analysis]
 help    = Rule for performing coverage analysis and saving reports in markdown
 rule_1  = FoBiS.py clean -mode tests-gnu
 rule_2  = FoBiS.py build -mode tests-gnu -coverage
-rule_3  = ./tests/test_basic
-rule_4  = ./tests/test_basic -v
-rule_5  = ./tests/test_basic -h
-rule_6  = ./tests/test_basic -s 'Hello FLAP' -i 2
-rule_7  = ./tests/test_basic -s 'Hello FLAP' -i 3 -ie 11
-rule_8  = ./tests/test_basic 33.0 -s 'Hello FLAP' --integer_list 10 -3 87 -i 3 -r 64.123d0  --boolean --boolean_val .false.
-rule_9  = ./tests/test_basic -s 'Hello FLAP' --man_file FLAP.1
-rule_10 = ./tests/test_basic -s 'Hello FLAP' -vlI1P 2 1 3 -vlI2P 12 -2 -vlI4P 1 -vlI8P 1 -vlR8P 121.31 -vlR4P 3423121.31 -vlChar foo bar -vlBool T F T F
-rule_11 = ./tests/test_basic -s 'Hello FLAP' -- foo.bar bar/baz.f90
-rule_12 = ./tests/test_nested
-rule_13 = ./tests/test_nested -h
-rule_14 = ./tests/test_nested -a
-rule_15 = ./tests/test_nested init
-rule_16 = ./tests/test_nested init commit -m 'hello'
-rule_17 = ./tests/test_nested commit -m 'hello'
-rule_18 = ./tests/test_nested tag -a 'hello'
-rule_19 = ./tests/test_string
-rule_20 = ./tests/test_choices_logical
-rule_21 = gcov -o tests/obj/ src/lib/Data_Type_Command_Line_Interface.F90 src/tests/*
-rule_22 = FoBiS.py rule -gcov_analyzer wiki/ Coverage-Analysis
-rule_23 = rm -f *.gcov FLAP.1
+rule_3  = ./tests/test_minimal -s 'hello'
+rule_4  = ./tests/test_hidden -s 'hello' -i 2
+rule_5  = ./tests/test_basic
+rule_6  = ./tests/test_basic -v
+rule_7  = ./tests/test_basic -h
+rule_8  = ./tests/test_basic -s 'Hello FLAP' -i 2
+rule_9  = ./tests/test_basic -s 'Hello FLAP' -i 3 -ie 11
+rule_10 = ./tests/test_basic 33.0 -s 'Hello FLAP' --integer_list 10 -3 87 -i 3 -r 64.123d0  --boolean --boolean_val .false.
+rule_11 = ./tests/test_basic -s 'Hello FLAP' --man_file FLAP.1
+rule_12 = ./tests/test_basic -s 'Hello FLAP' -vlI1P 2 1 3 -vlI2P 12 -2 -vlI4P 1 -vlI8P 1 -vlR8P 121.31 -vlR4P 3423121.31 -vlChar foo bar -vlBool T F T F
+rule_13 = ./tests/test_basic -s 'Hello FLAP' -- foo.bar bar/baz.f90
+rule_14 = ./tests/test_nested
+rule_15 = ./tests/test_nested -h
+rule_16 = ./tests/test_nested -a
+rule_17 = ./tests/test_nested init
+rule_18 = ./tests/test_nested init commit -m 'hello'
+rule_19 = ./tests/test_nested commit -m 'hello'
+rule_20 = ./tests/test_nested tag -a 'hello'
+rule_21 = ./tests/test_string
+rule_22 = ./tests/test_choices_logical
+rule_23 = gcov -o tests/obj/ src/lib/*.[fF]90 src/tests/*
+rule_24 = FoBiS.py rule -gcov_analyzer wiki/ Coverage-Analysis
+rule_25 = rm -f *.gcov FLAP.1

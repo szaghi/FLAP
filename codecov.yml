@@ -1,0 +1,3 @@
+coverage:
+  ignore:
+    - src/lib/penf.F90

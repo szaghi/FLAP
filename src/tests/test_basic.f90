@@ -8,37 +8,37 @@ program test_basic
 !<###Usage Compile
 !< See [usage instructions](https://github.com/szaghi/FLAP/wiki/Testing-Programs).
 !-----------------------------------------------------------------------------------------------------------------------------------
-USE IR_Precision                                                        ! Integers and reals precision definition.
-USE Data_Type_Command_Line_Interface, only: Type_Command_Line_Interface ! Definition of Type_Command_Line_Interface.
+use flap, only : command_line_interface
+use penf
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
-type(Type_Command_Line_Interface) :: cli          !< Command Line Interface (CLI).
-character(99)                     :: sval         !< String value.
-real(R8P)                         :: rval         !< Real value.
-real(R8P)                         :: prval        !< Positional real value.
-integer(I4P)                      :: ival         !< Integer value.
-integer(I4P)                      :: ieval        !< Exclusive integer value.
-integer(I4P)                      :: envi         !< Environment set integer value.
-logical                           :: bval         !< Boolean value.
-logical                           :: vbval        !< Valued-boolean value.
-integer(I8P)                      :: ilist(1:3)   !< Integer list values.
-real(R8P),    allocatable         :: vlistR8P(:)  !< Varying size real list values.
-real(R4P),    allocatable         :: vlistR4P(:)  !< Varying size real list values.
-integer(I8P), allocatable         :: vlistI8P(:)  !< Varying size integer list values.
-integer(I4P), allocatable         :: vlistI4P(:)  !< Varying size integer list values.
-integer(I2P), allocatable         :: vlistI2P(:)  !< Varying size integer list values.
-integer(I1P), allocatable         :: vlistI1P(:)  !< Varying size integer list values.
-logical,      allocatable         :: vlistBool(:) !< Varying size boolean list values.
-character(10),allocatable         :: vlistChar(:) !< Varying size character list values.
-character(99),allocatable         :: garbage(:)   !< Varying size character list for trailing garbage values.
-integer(I4P)                      :: error        !< Error trapping flag.
-integer(I4P)                      :: l            !< Counter.
+type(command_line_interface) :: cli          !< Command Line Interface (CLI).
+character(99)                :: sval         !< String value.
+real(R8P)                    :: rval         !< Real value.
+real(R8P)                    :: prval        !< Positional real value.
+integer(I4P)                 :: ival         !< Integer value.
+integer(I4P)                 :: ieval        !< Exclusive integer value.
+integer(I4P)                 :: envi         !< Environment set integer value.
+logical                      :: bval         !< Boolean value.
+logical                      :: vbval        !< Valued-boolean value.
+integer(I8P)                 :: ilist(1:3)   !< Integer list values.
+real(R8P),     allocatable   :: vlistR8P(:)  !< Varying size real list values.
+real(R4P),     allocatable   :: vlistR4P(:)  !< Varying size real list values.
+integer(I8P),  allocatable   :: vlistI8P(:)  !< Varying size integer list values.
+integer(I4P),  allocatable   :: vlistI4P(:)  !< Varying size integer list values.
+integer(I2P),  allocatable   :: vlistI2P(:)  !< Varying size integer list values.
+integer(I1P),  allocatable   :: vlistI1P(:)  !< Varying size integer list values.
+logical,       allocatable   :: vlistBool(:) !< Varying size boolean list values.
+character(10), allocatable   :: vlistChar(:) !< Varying size character list values.
+character(99), allocatable   :: garbage(:)   !< Varying size character list for trailing garbage values.
+integer(I4P)                 :: error        !< Error trapping flag.
+integer(I4P)                 :: l            !< Counter.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-! initializing Command Line Interface
+! initialize Command Line Interface
 call cli%init(progname    = 'test_basic',                                                 &
               version     = 'v2.1.5',                                                     &
               authors     = 'Stefano Zaghi',                                              &
@@ -54,7 +54,8 @@ call cli%init(progname    = 'test_basic',                                       
                              "test_basic 33.0 -s 'Hello FLAP' -i 5                     ", &
                              "test_basic --string 'Hello FLAP' --boolean               "],&
               epilog      = new_line('a')//"And that's how to FLAP your life")
-! setting Command Line Argumenst
+
+! set Command Line Argumenst
 call cli%add(switch='--string',switch_ab='-s',help='String input',required=.true.,act='store',error=error)
 if (error/=0) stop
 call cli%add(switch='--integer_ex',switch_ab='-ie',help='Exclusive integer input',required=.false.,act='store',def='-1',error=error)
@@ -106,10 +107,13 @@ if (error/=0) stop
 call cli%add(switch='--varying_listChar',switch_ab='-vlChar',help='Varying size character list input',required=.false.,act='store',&
              nargs='*',def='foo bar baz',error=error)
 if (error/=0) stop
-! parsing Command Line Interface
+
+! parse Command Line Interface
+! this is optional: if skipped the first call to cli%get will automatically call cli%parse
 call cli%parse(error=error)
 if (error/=0) stop
-! using Command Line Interface data to set test_basic behaviour
+
+! use Command Line Interface data to set test_basic behaviour
 call cli%get(        switch='-s',      val=sval,      error=error) ; if (error/=0) stop
 call cli%get(        switch='-r',      val=rval,      error=error) ; if (error/=0) stop
 call cli%get(        switch='-i',      val=ival,      error=error) ; if (error/=0) stop
@@ -139,12 +143,12 @@ print '(A,L1)','Valued boolean      input = ',vbval
 print '(A)'   ,'Positional real     input = '//str(n=prval)
 print '(A)'   ,'Integer list inputs:'
 do l=1, 3
-  print '(A)' ,'  Input('//trim(str(.true.,l))//') = '//trim(str(n=ilist(l)))
+  print '(A)' ,'  Input('//trim(str(l, .true.))//') = '//trim(str(n=ilist(l)))
 enddo
 if (allocated(vlistR8P)) then
   print '(A)'   ,'Varying size real R8P list inputs:'
   do l=1, size(vlistR8P)
-    print '(A)' ,'  Input('//trim(str(.true.,l))//') = '//trim(str(n=vlistR8P(l)))
+    print '(A)' ,'  Input('//trim(str(l, .true.))//') = '//trim(str(n=vlistR8P(l)))
   enddo
 else
   print '(A)'   ,'Problems occuour with varying size real R8P list!'
@@ -152,7 +156,7 @@ endif
 if (allocated(vlistR4P)) then
   print '(A)'   ,'Varying size real R4P list inputs:'
   do l=1, size(vlistR4P)
-    print '(A)' ,'  Input('//trim(str(.true.,l))//') = '//trim(str(n=vlistR4P(l)))
+    print '(A)' ,'  Input('//trim(str(l, .true.))//') = '//trim(str(n=vlistR4P(l)))
   enddo
 else
   print '(A)'   ,'Problems occuour with varying size real R4P list!'
@@ -160,7 +164,7 @@ endif
 if (allocated(vlistI8P)) then
   print '(A)'   ,'Varying size integer I8P list inputs:'
   do l=1, size(vlistI8P)
-    print '(A)' ,'  Input('//trim(str(.true.,l))//') = '//trim(str(n=vlistI8P(l)))
+    print '(A)' ,'  Input('//trim(str(l, .true.))//') = '//trim(str(n=vlistI8P(l)))
   enddo
 else
   print '(A)'   ,'Problems occuour with varying size integer I8P list!'
@@ -168,7 +172,7 @@ endif
 if (allocated(vlistI4P)) then
   print '(A)'   ,'Varying size integer I4P list inputs:'
   do l=1, size(vlistI4P)
-    print '(A)' ,'  Input('//trim(str(.true.,l))//') = '//trim(str(n=vlistI4P(l)))
+    print '(A)' ,'  Input('//trim(str(l, .true.))//') = '//trim(str(n=vlistI4P(l)))
   enddo
 else
   print '(A)'   ,'Problems occuour with varying size integer I4P list!'
@@ -176,7 +180,7 @@ endif
 if (allocated(vlistI2P)) then
   print '(A)'   ,'Varying size integer I2P list inputs:'
   do l=1, size(vlistI2P)
-    print '(A)' ,'  Input('//trim(str(.true.,l))//') = '//trim(str(n=vlistI2P(l)))
+    print '(A)' ,'  Input('//trim(str(l, .true.))//') = '//trim(str(n=vlistI2P(l)))
   enddo
 else
   print '(A)'   ,'Problems occuour with varying size integer I2P list!'
@@ -184,7 +188,7 @@ endif
 if (allocated(vlistI1P)) then
   print '(A)'   ,'Varying size integer I1P list inputs:'
   do l=1, size(vlistI1P)
-    print '(A)' ,'  Input('//trim(str(.true.,l))//') = '//trim(str(n=vlistI1P(l)))
+    print '(A)' ,'  Input('//trim(str(l, .true.))//') = '//trim(str(n=vlistI1P(l)))
   enddo
 else
   print '(A)'   ,'Problems occuour with varying size integer I1P list!'
@@ -192,7 +196,7 @@ endif
 if (allocated(vlistBool)) then
   print '(A)'   ,'Varying size boolean list inputs:'
   do l=1, size(vlistBool)
-    print '(A,L1)' ,'  Input('//trim(str(.true.,l))//') = ',vlistBool(l)
+    print '(A,L1)' ,'  Input('//trim(str(l, .true.))//') = ',vlistBool(l)
   enddo
 else
   print '(A)'   ,'Problems occuour with varying size boolean list!'
@@ -200,7 +204,7 @@ endif
 if (allocated(vlistChar)) then
   print '(A)'   ,'Varying size character list inputs:'
   do l=1, size(vlistChar)
-    print '(A)' ,'  Input('//trim(str(.true.,l))//') = '//vlistChar(l)
+    print '(A)' ,'  Input('//trim(str(l, .true.))//') = '//vlistChar(l)
   enddo
 else
   print '(A)'   ,'Problems occuour with varying size character list!'
@@ -208,10 +212,10 @@ endif
 if (allocated(garbage)) then
   print '(A)'   ,'You have used implicit "--" option for collecting list of "trailing garbage" values that are:'
   do l=1, size(garbage)
-    print '(A)' ,'  Garbage('//trim(str(.true.,l))//') = '//garbage(l)
+    print '(A)' ,'  Garbage('//trim(str(l, .true.))//') = '//garbage(l)
   enddo
 endif
-if (cli%passed(switch='--man_file')) then
+if (cli%is_passed(switch='--man_file')) then
   call cli%get(switch='--man_file',val=sval,error=error) ; if (error/=0) stop
   print '(A)','Saving man page'
   call cli%save_man_page(error=error,man_file=trim(adjustl(sval)))
