@@ -1,0 +1,59 @@
+#################################################################
+# @PROJECT_NAME@ Config file
+#################################################################
+
+SET(TARGET_NAME @PROJECT_NAME@)
+
+#################################################################
+# PATHS
+#################################################################
+
+SET(${TARGET_NAME}_DIR          @PROJECT_BINARY_DIR@)
+SET(${TARGET_NAME}_BINARY_DIRS  @EXECUTABLE_OUTPUT_PATH@)
+SET(${TARGET_NAME}_LIBRARY_DIRS @LIBRARY_OUTPUT_PATH@)
+SET(${TARGET_NAME}_INCLUDE_DIRS @MODULE_OUTPUT_PATH@)
+
+#################################################################
+# TARGETS
+#################################################################
+
+SET(${TARGET_NAME}_INC_SUFFIXES "include" "cmake" "${TARGET_NAME}" "include/${TARGET_NAME}" "cmake/${TARGET_NAME}")
+
+SET(${LIB_PREFIX}_FOUND FALSE)
+
+FIND_FILE(${TARGET_NAME}_TARGET
+    NAMES ${TARGET_NAME}Targets.cmake
+    PATHS ${${TARGET_NAME}_DIR}  ENV PATH LD_LIBRARY_PATH
+    PATH_SUFFIXES ${${TARGET_NAME}_INC_SUFFIXES}
+    DOC "The path to ${TARGET_NAME} library"
+)
+
+IF(${TARGET_NAME}_TARGET)
+    INCLUDE(${${TARGET_NAME}_TARGET})
+
+    SET(${TARGET_NAME}_FOUND TRUE)
+
+    GET_PROPERTY(${TARGET_NAME}_BUILD_TYPE 
+                 TARGET ${TARGET_NAME} 
+                 PROPERTY IMPORTED_CONFIGURATIONS)
+
+    GET_PROPERTY(${TARGET_NAME}_LINK_LIBS 
+                 TARGET ${TARGET_NAME} 
+                 PROPERTY IMPORTED_LINK_INTERFACE_LIBRARIES_${${TARGET_NAME}_BUILD_TYPE})
+
+    GET_PROPERTY(${TARGET_NAME}_LIB 
+                 TARGET ${TARGET_NAME} 
+                 PROPERTY IMPORTED_LOCATION_${${TARGET_NAME}_BUILD_TYPE})
+
+    SET(${TARGET_NAME}_LIBS 
+                 ${${TARGET_NAME}_LINK_LIBS} ${${TARGET_NAME}_LIB} 
+                 CACHE STRING "${TARGET_NAME} libraries to link")
+
+    SET(${TARGET_NAME}_INCLUDES 
+                 ${${TARGET_NAME}_INCLUDE_DIRS} 
+                 CACHE STRING "Directories containing ${TARGET_NAME} modules")
+ELSE()
+    MESSAGE(FATAL_ERROR "Cannot find ${TARGET_NAME} TARGET description. ${TARGET_NAME}_DIR must contain a path where to find ${TARGET_NAME} already builded!")
+ENDIF()
+
+UNSET(${TARGET_NAME}_TARGET CACHE)
