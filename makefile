@@ -12,10 +12,10 @@ ifeq "$(STATIC)" "yes"
   MAKELIB = ar -rcs $(DEXE)libflap.a $(DOBJ)*.o ; ranlib $(DEXE)libflap.a
   RULE    = FLAP
 else
-  DOBJ = tests/obj/
-  DMOD = tests/mod/
-  DEXE = tests/
-  RULE = $(DEXE)test_basic $(DEXE)test_choices_logical $(DEXE)test_nested $(DEXE)test_string
+  DOBJ = exe/obj/
+  DMOD = exe/mod/
+  DEXE = exe/
+  RULE = $(DEXE)test_basic $(DEXE)test_choices_logical $(DEXE)test_nested $(DEXE)test_string $(DEXE)test_hidden $(DEXE)test_minimal
 endif
 DSRC = src/
 LIBS =
@@ -67,6 +67,18 @@ $(DEXE)test_string: $(MKDIRS) $(DOBJ)test_string.o
 	@$(FC) $(OPTSL) $(DOBJ)*.o $(LIBS) -o $@
 EXES := $(EXES) test_string
 
+$(DEXE)test_hidden: $(MKDIRS) $(DOBJ)test_hidden.o
+	@rm -f $(filter-out $(DOBJ)test_hidden.o,$(EXESOBJ))
+	@echo $(LITEXT)
+	@$(FC) $(OPTSL) $(DOBJ)*.o $(LIBS) -o $@
+EXES := $(EXES) test_hidden
+
+$(DEXE)test_minimal: $(MKDIRS) $(DOBJ)test_minimal.o
+	@rm -f $(filter-out $(DOBJ)test_minimal.o,$(EXESOBJ))
+	@echo $(LITEXT)
+	@$(FC) $(OPTSL) $(DOBJ)*.o $(LIBS) -o $@
+EXES := $(EXES) test_minimal
+
 FLAP: $(MKDIRS) $(DOBJ)flap.o
 	@echo $(LITEXT)
 	@$(MAKELIB)
@@ -108,36 +120,65 @@ $(DOBJ)flap_object_t.o: src/lib/flap_object_t.f90 \
 $(DOBJ)flap.o: src/lib/flap.f90 \
 	$(DOBJ)flap_command_line_argument_t.o \
 	$(DOBJ)flap_command_line_arguments_group_t.o \
-	$(DOBJ)flap_command_line_interface_t.o \
-	$(DOBJ)penf.o
+	$(DOBJ)flap_command_line_interface_t.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
-$(DOBJ)penf.o: src/third_party/PENF/src/lib/penf.F90
+$(DOBJ)penf_b_size.o: src/third_party/PENF/src/lib/penf_b_size.F90 \
+	$(DOBJ)penf_global_parameters_variables.o
+	@echo $(COTEXT)
+	@$(FC) $(OPTSC)  $< -o $@
+
+$(DOBJ)penf.o: src/third_party/PENF/src/lib/penf.F90 \
+	$(DOBJ)penf_global_parameters_variables.o \
+	$(DOBJ)penf_b_size.o \
+	$(DOBJ)penf_stringify.o
+	@echo $(COTEXT)
+	@$(FC) $(OPTSC)  $< -o $@
+
+$(DOBJ)penf_stringify.o: src/third_party/PENF/src/lib/penf_stringify.F90 \
+	$(DOBJ)penf_b_size.o \
+	$(DOBJ)penf_global_parameters_variables.o
+	@echo $(COTEXT)
+	@$(FC) $(OPTSC)  $< -o $@
+
+$(DOBJ)penf_global_parameters_variables.o: src/third_party/PENF/src/lib/penf_global_parameters_variables.F90
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
 $(DOBJ)test_nested.o: src/tests/test_nested.f90 \
-	$(DOBJ)penf.o \
-	$(DOBJ)flap.o
+	$(DOBJ)flap.o \
+	$(DOBJ)penf.o
+	@echo $(COTEXT)
+	@$(FC) $(OPTSC)  $< -o $@
+
+$(DOBJ)test_hidden.o: src/tests/test_hidden.f90 \
+	$(DOBJ)flap.o \
+	$(DOBJ)penf.o
+	@echo $(COTEXT)
+	@$(FC) $(OPTSC)  $< -o $@
+
+$(DOBJ)test_minimal.o: src/tests/test_minimal.f90 \
+	$(DOBJ)flap.o \
+	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
 $(DOBJ)test_choices_logical.o: src/tests/test_choices_logical.f90 \
-	$(DOBJ)penf.o \
-	$(DOBJ)flap.o
+	$(DOBJ)flap.o \
+	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
 $(DOBJ)test_string.o: src/tests/test_string.f90 \
-	$(DOBJ)penf.o \
-	$(DOBJ)flap.o
+	$(DOBJ)flap.o \
+	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
 $(DOBJ)test_basic.o: src/tests/test_basic.f90 \
-	$(DOBJ)penf.o \
-	$(DOBJ)flap.o
+	$(DOBJ)flap.o \
+	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
