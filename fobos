@@ -13,7 +13,7 @@ $CSTATIC_INT = -cpp -c -assume realloc_lhs
 $DEBUG_GNU   = -O0 -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -fcheck=all -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan -std=f2008 -fall-intrinsics
 $DEBUG_INT   = -O0 -debug all -check all -warn all -extend-source 132 -traceback -gen-interfaces#-fpe-all=0 -fp-stack-check -fstack-protector-all -ftrapuv -no-ftz -std08
 $OPTIMIZE    = -O2
-$EXDIRS      = ./src/third_party/PENF/
+$EXDIRS      = ./src/third_party/PENF/src/tests/
 
 # main modes
 # GNU
@@ -47,11 +47,11 @@ mklib     = static
 
 [tests-gnu]
 template  = template-static-gnu
-build_dir = ./tests/
+build_dir = ./exe/
 
 [tests-gnu-debug]
 template  = template-static-gnu-debug
-build_dir = ./tests/
+build_dir = ./exe/
 
 # Intel
 [shared-intel]
@@ -84,11 +84,11 @@ mklib     = static
 
 [tests-intel]
 template = template-static-intel
-build_dir = ./tests/
+build_dir = ./exe/
 
 [tests-intel-debug]
 template  = template-static-intel-debug
-build_dir = ./tests/
+build_dir = ./exe/
 
 #templates
 [template-shared-gnu]
@@ -210,55 +210,19 @@ help = Rule for making tar archive of the project
 rule = tar -czf FLAP.tar.gz *
 
 [rule-makecoverage]
-help    = Rule for performing coverage analysis
-rule_1  = FoBiS.py clean -mode tests-gnu
-rule_2  = FoBiS.py build -mode tests-gnu -coverage
-rule_3  = ./tests/test_minimal -s 'hello'
-rule_4  = ./tests/test_hidden -s 'hello' -i 2
-rule_5  = ./tests/test_basic
-rule_6  = ./tests/test_basic -v
-rule_7  = ./tests/test_basic -h
-rule_8  = ./tests/test_basic -s 'Hello FLAP' -i 2
-rule_9  = ./tests/test_basic -s 'Hello FLAP' -i 3 -ie 11
-rule_10 = ./tests/test_basic 33.0 -s 'Hello FLAP' --integer_list 10 -3 87 -i 3 -r 64.123d0  --boolean --boolean_val .false.
-rule_11 = ./tests/test_basic -s 'Hello FLAP' --man_file FLAP.1
-rule_12 = ./tests/test_basic -s 'Hello FLAP' -vlI1P 2 1 3 -vlI2P 12 -2 -vlI4P 1 -vlI8P 1 -vlR8P 121.31 -vlR4P 3423121.31 -vlChar foo bar -vlBool T F T F
-rule_13 = ./tests/test_basic -s 'Hello FLAP' -- foo.bar bar/baz.f90
-rule_14 = ./tests/test_nested
-rule_15 = ./tests/test_nested -h
-rule_16 = ./tests/test_nested -a
-rule_17 = ./tests/test_nested init
-rule_18 = ./tests/test_nested init commit -m 'hello'
-rule_19 = ./tests/test_nested commit -m 'hello'
-rule_20 = ./tests/test_nested tag -a 'hello'
-rule_21 = ./tests/test_string
-rule_22 = ./tests/test_choices_logical
-rule_23 = gcov -o tests/obj/ src/lib/flap.f90
+help   = Rule for performing coverage analysis
+rule_1 = FoBiS.py clean -mode tests-gnu
+rule_2 = FoBiS.py build -mode tests-gnu -coverage
+rule_3 = ./run_tests.sh
+rule_4 = rm -f exe/obj/penf* FLAP.1
+rule_5 = gcov -o exe/obj/ src/lib/flap*
+rule_6 = rm -f *.gcov
 
 [rule-coverage-analysis]
-help    = Rule for performing coverage analysis and saving reports in markdown
-rule_1  = FoBiS.py clean -mode tests-gnu
-rule_2  = FoBiS.py build -mode tests-gnu -coverage
-rule_3  = ./tests/test_minimal -s 'hello'
-rule_4  = ./tests/test_hidden -s 'hello' -i 2
-rule_5  = ./tests/test_basic
-rule_6  = ./tests/test_basic -v
-rule_7  = ./tests/test_basic -h
-rule_8  = ./tests/test_basic -s 'Hello FLAP' -i 2
-rule_9  = ./tests/test_basic -s 'Hello FLAP' -i 3 -ie 11
-rule_10 = ./tests/test_basic 33.0 -s 'Hello FLAP' --integer_list 10 -3 87 -i 3 -r 64.123d0  --boolean --boolean_val .false.
-rule_11 = ./tests/test_basic -s 'Hello FLAP' --man_file FLAP.1
-rule_12 = ./tests/test_basic -s 'Hello FLAP' -vlI1P 2 1 3 -vlI2P 12 -2 -vlI4P 1 -vlI8P 1 -vlR8P 121.31 -vlR4P 3423121.31 -vlChar foo bar -vlBool T F T F
-rule_13 = ./tests/test_basic -s 'Hello FLAP' -- foo.bar bar/baz.f90
-rule_14 = ./tests/test_nested
-rule_15 = ./tests/test_nested -h
-rule_16 = ./tests/test_nested -a
-rule_17 = ./tests/test_nested init
-rule_18 = ./tests/test_nested init commit -m 'hello'
-rule_19 = ./tests/test_nested commit -m 'hello'
-rule_20 = ./tests/test_nested tag -a 'hello'
-rule_21 = ./tests/test_string
-rule_22 = ./tests/test_choices_logical
-rule_23 = gcov -o tests/obj/ src/lib/*.[fF]90 src/tests/*
-rule_24 = FoBiS.py rule -gcov_analyzer wiki/ Coverage-Analysis
-rule_25 = rm -f *.gcov FLAP.1
+help   = Rule for performing coverage analysis and saving reports in markdown
+rule_1 = FoBiS.py clean -mode tests-gnu
+rule_2 = FoBiS.py build -mode tests-gnu -coverage
+rule_3 = ./run_tests.sh
+rule_4 = rm -f exe/obj/penf* FLAP.1
+rule_5 = FoBiS.py rule -gcov_analyzer wiki/ Coverage-Analysis
+rule_6 = rm -f *.gcov
