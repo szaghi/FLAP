@@ -20,14 +20,6 @@ A KISS pure Fortran Library for building powerful, easy-to-use, elegant command 
 - FLAP is OOP designed;
 - FLAP is a Free, Open Source Project.
 
-#### Table of Contents
-
-- [What is FLAP?](#what-is-flap)
-- [Main features](#main-features)
-- [Copyrights](#copyrights)
-- [Documentation](#documentation)
-  - [A Taste of FLAP](#a-taste-of-flap)
-
 #### Issues
 
 [![GitHub issues](https://img.shields.io/github/issues/szaghi/FLAP.svg)]()
@@ -43,6 +35,12 @@ A KISS pure Fortran Library for building powerful, easy-to-use, elegant command 
 [![Compiler](https://img.shields.io/badge/g95-not%20tested-yellow.svg)]()
 [![Compiler](https://img.shields.io/badge/NAG-not%20tested-yellow.svg)]()
 [![Compiler](https://img.shields.io/badge/PGI-not%20tested-yellow.svg)]()
+
+---
+
+| [What is FLAP?](#what-is-flap) | [Main features](#main-features) | [Copyrights](#copyrights) | [Documentation](#documentation) | [Download & Compile](#download-and-compile) |
+
+---
 
 ## What is FLAP?
 
@@ -108,85 +106,59 @@ Besides this README file the FLAP documentation is contained into its own [wiki]
 
 ### A Taste of FLAP
 
-Running the provided test program, `test_basic -h`, a taste of FLAP is served:
+A minimal *plate*:
 
-```man
-usage:  test_basic [value] --string value [--integer value] [--real value] [--boolean] [--boolean_val value] [--integer_list value#1 value#2 value#3] [--help] [--version]
+```fortran
+program minimal
+type(command_line_interface) :: cli    ! Command Line Interface (CLI).
+character(99)                :: string ! String value.
+integer                      :: error  ! Error trapping flag.
 
-Toy program for testing FLAP
+call cli%init(description = 'minimal FLAP example')
+call cli%add(switch='--string', &
+             switch_ab='-s',    &
+             help='a string',   &
+             required=.true.,   &
+             act='store',       &
+             error=error)
+if (error/=0) stop
+call cli%get(switch='-s', val=string, error=error)
+if (error/=0) stop
+print '(A)', cli%progname//' has been called with the following argument:'
+print '(A)', 'String = '//trim(adjustl(string))
+endprogram minimal
+```
+
+That *built and run* provides:
+
+```shell
+→ ./minimal
+./minimal: error: named option "--string" is required!
+
+usage:  ./exe/test_minimal --string value [--help] [--version]
+
+minimal FLAP example
 
 Required switches:
    --string value, -s value
-          String input
+    a string
 
 Optional switches:
-   value
-          1-th argument
-          default value 1.0
-          Positional real input
-   --integer value, -i value, value in: (1,3,5)
-          default value 1
-          Integer input with fixed range
-   --real value, -r value
-          default value 1.0
-          Real input
-   --boolean, -b
-          default value .false.
-          Boolean input
-   --boolean_val value, -bv value
-          default value .true.
-          Valued boolean input
-   --integer_list value#1 value#2 value#3, -il value#1 value#2 value#3
-          default value 1 8 32
-          Integer list input
    --help, -h
-          Print this help message
+    Print this help message
    --version, -v
-          Print version
-
-Examples:
-   test_basic -s 'Hello FLAP'
-   test_basic -s 'Hello FLAP' -i -2 # printing error...
-   test_basic -s 'Hello FLAP' -i 3 -r 33.d0
-   test_basic -s 'Hello FLAP' --integer_list 10 -3 87
-   test_basic 33.0 -s 'Hello FLAP' -i 5
-   test_basic --string 'Hello FLAP' --boolean
+    Print version
 ```
 
-Not so bad for just a very few statements as the following:
+A nice automatic help-message, right? Executed correctly gives.
 
-```fortran
-! initializing Command Line Interface
-call cli%init(progname    = 'test_basic',                                           &
-              version     = 'v2.1.5',                                               &
-              authors     = 'Stefano Zaghi',                                        &
-              license     = 'MIT',                                                  &
-              description = 'Toy program for testing FLAP',                         &
-              examples    = ["test_basic -s 'Hello FLAP'                          ",&
-                             "test_basic -s 'Hello FLAP' -i -2 # printing error...",&
-                             "test_basic -s 'Hello FLAP' -i 3 -r 33.d0            ",&
-                             "test_basic -s 'Hello FLAP' --integer_list 10 -3 87  ",&
-                             "test_basic 33.0 -s 'Hello FLAP' -i 5                ",&
-                             "test_basic --string 'Hello FLAP' --boolean          "])
-! setting Command Line Argumenst
-call cli%add(switch='--string',switch_ab='-s',help='String input',required=.true.,act='store',error=error)
-call cli%add(switch='--integer',switch_ab='-i',help='Integer input with fixed range',required=.false.,act='store',&
-             def='1',choices='1,3,5',error=error)
-call cli%add(switch='--real',switch_ab='-r',help='Real input',required=.false.,act='store',def='1.0',error=error)
-call cli%add(switch='--boolean',switch_ab='-b',help='Boolean input',required=.false.,act='store_true',def='.false.',&
-             error=error)
-call cli%add(switch='--boolean_val',switch_ab='-bv',help='Valued boolean input',required=.false., act='store',&
-             def='.true.',error=error)
-call cli%add(switch='--integer_list',switch_ab='-il',help='Integer list input',required=.false.,act='store',&
-             nargs='3',def='1 8 32',error=error)
-call cli%add(positional=.true.,position=1,help='Positional real input',required=.false.,def='1.0',error=error)
-! parsing Command Line Interface
-call cli%parse(error=error)
+```shell
+→ ./minimal --string 'hello world'
+./exe/minimal has been called with the following argument:
+String = hello world
 ```
 
-For more details, see the provided [example](https://github.com/szaghi/FLAP/blob/master/src/tests/test_basic.f90).
-
-For a practical example of FLAP usage see [POG](https://github.com/szaghi/OFF/blob/testing/src/POG.f90) source file at line `85`.
+For more details, see the provided [tests](https://github.com/szaghi/FLAP/blob/master/src/tests).
 
 #### Nested (sub)commands
 
@@ -280,5 +252,208 @@ Examples:
 ```
 
 For more details, see the provided [example](https://github.com/szaghi/FLAP/blob/master/src/tests/test_nested.f90).
+
+Go to [Top](#top)
+
+---
+
+## Download and Compile
+
+FLAP is a Fortran library composed by several modules.
+
+Before download and compile the library you must check the [requirements](https://github.com/szaghi/FLAP/wiki/Requirements).
+
+### Download
+
+The tree structure of the FLAP project is the following:
+```bash
+.
+├── CONTRIBUTING.md
+├── fobos
+├── LICENSE.bsd-2.md
+├── LICENSE.bsd-3.md
+├── LICENSE.gpl3.md
+├── LICENSE.mit.md
+├── makedoc.sh
+├── makefile
+├── README.md
+└── src
+    ├── lib
+    │   ├── flap_command_line_arguments_group_t.f90
+    │   ├── flap_command_line_argument_t.F90
+    │   ├── flap_command_line_interface_t.F90
+    │   ├── flap.f90
+    │   ├── flap_object_t.f90
+    │   └── flap_utils_m.f90
+    ├── tests
+    │   ├── test_basic.f90
+    │   ├── test_choices_logical.f90
+    │   ├── test_nested.f90
+    │   └── test_string.f90
+    └── third_party
+        └── PENF
+```
+
+To download all the available releases and utilities (fobos, license, readme, etc...), it can be convenient to _clone_ whole the project:
+
+```shell
+git clone --recursive https://github.com/szaghi/FLAP
+```
+
+Alternatively, you can directly download a release from GitHub server, see the [ChangeLog](https://github.com/szaghi/FLAP/wiki/ChangeLog).
+
+### Compile
+
+The most easy way to compile FLAP is to use [FoBiS.py](https://github.com/szaghi/FoBiS) within the provided fobos file.
+
+Consequently, it is strongly encouraged to install [FoBiS.py](https://github.com/szaghi/FoBiS#install).
+
+| [Build by means of FoBiS](#build-by-means-of-fobis) | [Build by means of GNU Make](#build-by-means-of-gnu-make) | [Build by means of CMake](#build-by-means-of-cmake) |
+
+---
+
+### Build by means of FoBiS
+
+FoBiS.py is a KISS tool for automatic building of modern Fortran projects. Providing very few options, FoBiS.py is able to build almost automatically complex Fortran projects with cumbersome inter-modules dependency. This removes the necessity to write complex makefile. Moreover, providing a very simple options file (in the FoBiS.py nomenclature indicated as `fobos` file) FoBiS.py can substitute the (ab)use of makefile for other project stuffs (build documentations, make project archive, etc...). FLAP is shipped with a fobos file that can build the library in both _static_ and _shared_ forms and also build the `Test_Driver` program. The provided fobos file has several building modes.
+
+#### Listing fobos building modes
+Typing:
+```bash
+FoBiS.py build -lmodes
+```
+the following message should be printed:
+```bash
+The fobos file defines the following modes:
+ - "shared-gnu"
+  - "static-gnu"
+  - "test-driver-gnu"
+  - "shared-gnu-debug"
+  - "static-gnu-debug"
+  - "test-driver-gnu-debug"
+  - "shared-intel"
+  - "static-intel"
+  - "test-driver-intel"
+  - "shared-intel-debug"
+  - "static-intel-debug"
+  - "test-driver-intel-debug"
+```
+The modes should be self-explicative: `shared`, `static` and `test-driver` are the modes for building (in release, optimized form) the shared and static versions of the library and the Test Driver program, respectively. The other 3 modes are the same, but in debug form instead of release one. `-gnu` use the `GNU gfortran` compiler while `-intel` the Intel one.
+
+#### Building the library
+The `shared` or `static` directories are created accordingly to the form of the library built. The compiled objects and mod files are placed inside this directory, as well as the linked library.
+##### Release shared library
+```bash
+FoBiS.py build -mode shared-gnu
+```
+##### Release static library
+```bash
+FoBiS.py build -mode static-gnu
+```
+##### Debug shared library
+```bash
+FoBiS.py build -mode shared-gnu-debug
+```
+##### Debug static library
+```bash
+FoBiS.py build -mode static-gnu-debug
+```
+
+#### Building the Test Driver program
+The `Test_Driver` directory is created. The compiled objects and mod files are placed inside this directory, as well as the linked program.
+##### Release test driver program
+```bash
+FoBiS.py build -mode test-driver-gnu
+```
+##### Debug test driver program
+```bash
+FoBiS.py build -mode test-driver-gnu-debug
+```
+
+#### Listing fobos rules
+Typing:
+```bash
+FoBiS.py rule -ls
+```
+the following message should be printed:
+```bash
+The fobos file defines the following rules:
+  - "makedoc" Rule for building documentation from source files
+       Command => rm -rf doc/html/*
+       Command => ford doc/main_page.md
+       Command => cp -r doc/html/publish/* doc/html/
+  - "deldoc" Rule for deleting documentation
+       Command => rm -rf doc/html/*
+  - "maketar" Rule for making tar archive of the project
+       Command => tar -czf FLAP.tar.gz *
+  - "makecoverage" Rule for performing coverage analysis
+       Command => FoBiS.py clean -mode test-driver-gnu
+       Command => FoBiS.py build -mode test-driver-gnu -coverage
+       Command => ./Test_Driver/Test_Driver
+       Command => ./Test_Driver/Test_Driver -v
+       Command => ./Test_Driver/Test_Driver -s 'Hello FLAP' -i 2
+       Command => ./Test_Driver/Test_Driver 33.0 -s 'Hello FLAP' --integer_list 10 -3 87 -i 3 -r 64.123d0  --boolean --boolean_val .false.
+  - "coverage-analysis" Rule for performing coverage analysis and saving reports in markdown
+       Command => FoBiS.py clean -mode test-driver-gnu
+       Command => FoBiS.py build -mode test-driver-gnu -coverage
+       Command => ./Test_Driver/Test_Driver
+       Command => ./Test_Driver/Test_Driver -v
+       Command => ./Test_Driver/Test_Driver -s 'Hello FLAP' -i 2
+       Command => ./Test_Driver/Test_Driver 33.0 -s 'Hello FLAP' --integer_list 10 -3 87 -i 3 -r 64.123d0  --boolean --boolean_val .false.
+       Command => gcov -o Test_Driver/obj/ src/*
+       Command => FoBiS.py rule -gcov_analyzer wiki/ Coverage-Analysis
+       Command => rm -f *.gcov
+```
+The rules should be self-explicative.
+
+---
+
+### Build by means of GNU Make
+
+Bad choice :-)
+
+However, a makefile (generated by FoBiS.py...) to be used with a compatible GNU Make tool is [provided](https://github.com/szaghi/FLAP/blob/master/makefile).
+
+It is convenient to clone the whole FLAP repository and run a *standard* make:
+
+```shell
+git clone --recursive https://github.com/szaghi/FLAP
+cd FLAP
+make
+```
+
+This commands build all tests (executables are in `exe/` directory). To build only the library (statically linked) type:
+
+```shell
+git clone --recursive https://github.com/szaghi/FLAP
+cd FLAP
+make STATIC=yes
+```
+
+### Build by means of CMake
+
+Bad choice :-)
+
+However, a CMake setup (kindly developed by [victorsndvg](https://github.com/victorsndvg)) is provided.
+
+It is convenient to clone the whole FLAP repository and run a *standard* CMake configure/build commands:
+
+```shell
+git clone --recursive https://github.com/szaghi/FLAP $YOUR_FLAP_PATH
+mkdir build
+cd build
+cmake $YOUR_FLAP_PATH
+make
+```
+
+If you want to run the tests suite type:
+
+```shell
+git clone --recursive https://github.com/szaghi/FLAP $YOUR_FLAP_PATH
+mkdir build
+cd build
+cmake -DFLAP_ENABLE_TESTS=ON $YOUR_FLAP_PATH
+make
+ctest
+```
 
 Go to [Top](#top)
