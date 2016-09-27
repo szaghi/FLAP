@@ -1,7 +1,4 @@
-language: python
-
-python:
-  - 2.7
+language: generic
 
 sudo: false
 
@@ -17,14 +14,15 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - gfortran-4.9
+      - gfortran-6
       - binutils
       - python-pip
       - graphviz      
 
 env:
   global:
-    - SCRIPT="FoBiS.py rule -ex makecoverage"
+    - MAKECOVERAGE="FoBiS.py rule -ex makecoverage"
+    - MAKEDOC="./makedoc.sh szaghi/FLAP"
 
 before_install:
   - git submodule update --init --recursive
@@ -35,20 +33,20 @@ install:
       mkdir "$HOME/.local/bin"
     fi
   - export PATH="$HOME/.local/bin:$PATH"
-  - export FC=/usr/bin/gfortran-4.9
-  - ln -fs /usr/bin/gfortran-4.9 "$HOME/.local/bin/gfortran" && gfortran --version
-  - ls -l /usr/bin/gfortran-4.9
-  - ln -fs /usr/bin/gcov-4.9 "$HOME/.local/bin/gcov" && gcov --version
-  - pip install --upgrade pygooglechart
-  - pip install --upgrade graphviz
-  - pip install --upgrade FoBiS.py
-  - pip install --upgrade markdown-checklist 
-  - pip install --upgrade ford
+  - export FC=/usr/bin/gfortran-6
+  - ln -fs /usr/bin/gfortran-6 "$HOME/.local/bin/gfortran" && gfortran --version
+  - ls -l /usr/bin/gfortran-6
+  - ln -fs /usr/bin/gcov-6 "$HOME/.local/bin/gcov" && gcov --version
+  - pip install --user --upgrade pygooglechart
+  - pip install --user --upgrade graphviz
+  - pip install --user --upgrade FoBiS.py
+  - pip install --user --upgrade markdown-checklist 
+  - pip install --user --upgrade ford
 
 script:
-  - $SCRIPT
+  - $MAKECOVERAGE
 
 after_success:
-  - cd $TRAVIS_BUILD_DIR
+  - find . -name '*.gcno' -print
   - bash <(curl -s https://codecov.io/bash)
-  - ./makedoc.sh szaghi/FLAP
+  - $MAKEDOC
