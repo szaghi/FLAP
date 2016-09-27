@@ -60,8 +60,6 @@ call cli%add(switch='--string',switch_ab='-s',help='String input',required=.true
 if (error/=0) stop
 call cli%add(switch='--integer_ex',switch_ab='-ie',help='Exclusive integer input',required=.false.,act='store',def='-1',error=error)
 if (error/=0) stop
-call cli%add(switch='--integer_ex',switch_ab='-ie',help='Exclusive integer input',required=.false.,act='store',def='-1',error=error)
-if (error/=0) stop
 call cli%add(switch='--integer',switch_ab='-i',help='Integer input with fixed range',required=.false.,act='store',&
              def='1',choices='1,3,5',exclude='-ie',error=error)
 if (error/=0) stop
