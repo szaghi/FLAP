@@ -1,6 +1,8 @@
 project: FLAP
-project_dir: ./src
-output_dir: ./doc/html/publish/
+src_dir: ../src
+exclude_dir: ../src/third_party/PENF/src/lib
+             ../src/third_party/PENF/src/tests
+output_dir: html/publish/
 project_github: https://github.com/szaghi/FLAP
 summary: Fortran command Line Arguments Parser for poor people
 author: Stefano Zaghi
