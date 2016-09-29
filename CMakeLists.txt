@@ -40,7 +40,7 @@ INCLUDE_DIRECTORIES(${CMAKE_Fortran_MODULE_DIRECTORY})
 # ADD INCLUDE DIRS
 #################################################################
 
-INCLUDE_DIRECTORIES(${INCLUDE_PATH})
+SET(${PROJECT_NAME}_INCLUDE_DIRS ${MODULE_OUTPUT_PATH})
 
 #################################################################
 # CONFIGURATION TYPES & BUILD MODE
@@ -156,6 +156,7 @@ EXTERNALPROJECT_Add(${PENF_LIB}
 SET(PENF_LIBS ${${PENF_LIB}_BINARY_PATH}/lib/lib${PENF_LIB}.a)
 LINK_DIRECTORIES(${THIRDPARTY_OUTPUT_PATH}/${PENF_LIB}/lib)
 INCLUDE_DIRECTORIES(${THIRDPARTY_OUTPUT_PATH}/${PENF_LIB}/modules)
+SET(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_INCLUDE_DIRS} ${THIRDPARTY_OUTPUT_PATH}/${PENF_LIB}/modules)
 
 #################################################################
 # ADD SOURCE SUBDIRS
