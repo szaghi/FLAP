@@ -88,7 +88,7 @@ type, extends(object), public :: command_line_interface
     generic,   private :: assignment(=) => cli_assign_cli !< CLI assignment overloading.
     final              :: finalize                        !< Free dynamic memory when finalizing.
 endtype command_line_interface
-integer(I4P),     parameter, public :: MAX_VAL_LEN        = 1000            !< Maximum number of characters of CLA value.
+integer(I4P), parameter, public :: MAX_VAL_LEN = 1000 !< Maximum number of characters of CLA value.
 ! errors codes
 integer(I4P), parameter, public :: ERROR_MISSING_CLA           = 25 !< CLA not found in CLI.
 integer(I4P), parameter, public :: ERROR_MISSING_GROUP         = 26 !< Group not found in CLI.
@@ -117,6 +117,7 @@ contains
   endif
   if (allocated(self%examples))  deallocate(self%examples)
   self%disable_hv = .false.
+  self%is_parsed_ = .false.
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine free
@@ -516,6 +517,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  if (present(error)) error = 0
   if (self%is_parsed_) return
 
   ! add help and version switches if not done by user
