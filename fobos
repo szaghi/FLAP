@@ -196,22 +196,32 @@ jobs         = 2
 
 # rules
 [rule-makedoc]
-help   = Rule for building documentation from source files
+help   = Build documentation from source files
 rule_1 = rm -rf doc/html/*
 rule_2 = ford doc/main_page.md --debug
 rule_3 = cp -r doc/html/publish/* doc/html/
 rule_4 = rm -rf doc/html/publish
 
 [rule-deldoc]
-help = Rule for deleting documentation
+help = Delete documentation
 rule = rm -rf doc/html/*
 
+[rule-delexe]
+help = Delete exes
+rule = rm -rf exe/
+
+[rule-clean]
+help = Clean the project tree
+rule_1 = FoBiS.py rule -ex deldoc
+rule_2 = FoBiS.py rule -ex delexe
+rule_3 = tar -czf FLAP.tar.gz *
+
 [rule-maketar]
-help = Rule for making tar archive of the project
+help = Make tar archive of the project
 rule = tar -czf FLAP.tar.gz *
 
 [rule-makecoverage]
-help   = Rule for performing coverage analysis
+help   = Perform coverage analysis
 rule_1 = FoBiS.py clean -mode tests-gnu
 rule_2 = FoBiS.py build -mode tests-gnu -coverage
 rule_3 = ./run_tests.sh
@@ -219,8 +229,8 @@ rule_4 = rm -f exe/obj/penf* FLAP.1
 rule_5 = gcov -o exe/obj/ src/lib/flap*
 rule_6 = rm -f *.gcov
 
-[rule-coverage-analysis]
-help   = Rule for performing coverage analysis and saving reports in markdown
+[rule-makecoverage-analysis]
+help   = Perform coverage analysis and saving reports in markdown
 rule_1 = FoBiS.py clean -mode tests-gnu
 rule_2 = FoBiS.py build -mode tests-gnu -coverage
 rule_3 = ./run_tests.sh

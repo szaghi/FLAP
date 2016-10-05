@@ -23,6 +23,8 @@ env:
   global:
     - MAKECOVERAGE="FoBiS.py rule -ex makecoverage"
     - MAKEDOC="./makedoc.sh szaghi/FLAP"
+    - CLEAN="FoBiS.py rule -ex clean"
+    - MAKETAR="FoBiS.py rule -ex maketar"
 
 before_install:
   - git submodule update --init --recursive
@@ -50,3 +52,17 @@ after_success:
   - find . -name '*.gcno' -print
   - bash <(curl -s https://codecov.io/bash)
   - $MAKEDOC
+
+before_deploy:
+  - $CLEAN
+  - $MAKETAR
+
+deploy:
+  provider: releases
+  api_key:
+    secure: MqRf9dWvZak0yEzTUcrf/tlfWztVLJe1OImUZBHfJLWE3GjtM8VLv50otNOyb+JNUYfV8e86F5Tzouxxp5xD54RhDhSKnG3f2RSpVJ3BwTewIXsJEYlV14Ec1xlKCLkg6EEZg1Fn/eZDLonjicm1whTP9GJb3GCWL9X1y6mPCt0=
+  file: FLAP.tar.gz
+  skip_cleanup: true
+  overwrite: true
+  on:
+    tags: true
