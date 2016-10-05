@@ -38,7 +38,7 @@ A KISS pure Fortran Library for building powerful, easy-to-use, elegant command 
 
 ---
 
-| [What is FLAP?](#what-is-flap) | [Main features](#main-features) | [Copyrights](#copyrights) | [Documentation](#documentation) | [Download & Compile](#download-and-build) |
+| [What is FLAP?](#what-is-flap) | [Main features](#main-features) | [Copyrights](#copyrights) | [Documentation](#documentation) | [Download & Build](#download-and-build) |
 
 ---
 
