@@ -214,11 +214,11 @@ rule = rm -rf exe/
 help = Clean the project tree
 rule_1 = FoBiS.py rule -ex deldoc
 rule_2 = FoBiS.py rule -ex delexe
-rule_3 = tar -czf FLAP.tar.gz *
+rule_3 = rm -f *.gcov
 
 [rule-maketar]
 help = Make tar archive of the project
-rule = tar -czf FLAP.tar.gz *
+rule = tar --xform="s%^%FLAP/%" -czf FLAP.tar.gz *
 
 [rule-makecoverage]
 help   = Perform coverage analysis
