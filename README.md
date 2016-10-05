@@ -38,7 +38,7 @@ A KISS pure Fortran Library for building powerful, easy-to-use, elegant command 
 
 ---
 
-| [What is FLAP?](#what-is-flap) | [Main features](#main-features) | [Copyrights](#copyrights) | [Documentation](#documentation) | [Download & Compile](#download-and-compile) |
+| [What is FLAP?](#what-is-flap) | [Main features](#main-features) | [Copyrights](#copyrights) | [Documentation](#documentation) | [Download & Compile](#download-and-build) |
 
 ---
 
@@ -257,42 +257,17 @@ Go to [Top](#top)
 
 ---
 
-## Download and Compile
+## Download and Build
 
 FLAP is a Fortran library composed by several modules.
 
-Before download and compile the library you must check the [requirements](https://github.com/szaghi/FLAP/wiki/Requirements).
+> Before download and compile the library you must check the [requirements](https://github.com/szaghi/FLAP/wiki/Requirements).
+
++ [Download](#download)
++ [Build](#build)
++ [Install script](#install-script)
 
 ### Download
-
-The tree structure of the FLAP project is the following:
-```bash
-.
-├── CONTRIBUTING.md
-├── fobos
-├── LICENSE.bsd-2.md
-├── LICENSE.bsd-3.md
-├── LICENSE.gpl3.md
-├── LICENSE.mit.md
-├── makedoc.sh
-├── makefile
-├── README.md
-└── src
-    ├── lib
-    │   ├── flap_command_line_arguments_group_t.f90
-    │   ├── flap_command_line_argument_t.F90
-    │   ├── flap_command_line_interface_t.F90
-    │   ├── flap.f90
-    │   ├── flap_object_t.f90
-    │   └── flap_utils_m.f90
-    ├── tests
-    │   ├── test_basic.f90
-    │   ├── test_choices_logical.f90
-    │   ├── test_nested.f90
-    │   └── test_string.f90
-    └── third_party
-        └── PENF
-```
 
 To download all the available releases and utilities (fobos, license, readme, etc...), it can be convenient to _clone_ whole the project:
 
@@ -302,7 +277,7 @@ git clone --recursive https://github.com/szaghi/FLAP
 
 Alternatively, you can directly download a release from GitHub server, see the [ChangeLog](https://github.com/szaghi/FLAP/wiki/ChangeLog).
 
-### Compile
+### Build
 
 The most easy way to compile FLAP is to use [FoBiS.py](https://github.com/szaghi/FoBiS) within the provided fobos file.
 
@@ -418,7 +393,7 @@ It is convenient to clone the whole FLAP repository and run a *standard* make:
 ```shell
 git clone --recursive https://github.com/szaghi/FLAP
 cd FLAP
-make
+make -j 1
 ```
 
 This commands build all tests (executables are in `exe/` directory). To build only the library (statically linked) type:
@@ -426,7 +401,7 @@ This commands build all tests (executables are in `exe/` directory). To build on
 ```shell
 git clone --recursive https://github.com/szaghi/FLAP
 cd FLAP
-make STATIC=yes
+make -j 1 STATIC=yes
 ```
 
 ### Build by means of CMake
@@ -455,5 +430,48 @@ cmake -DFLAP_ENABLE_TESTS=ON $YOUR_FLAP_PATH
 make
 ctest
 ```
+
+### Install script
+
+FLAP ships a bash script that is able to automatize the download and build steps. The script, `install.sh` has the following usage:
+
+```shell
+→ ./install.sh
+Install script of FLAP
+Usage:
+
+install.sh --help|-?
+    Print this usage output and exit
+
+install.sh --download|-d <arg> [--verbose|-v]
+    Download the project
+
+    --download|-d [arg]  Download the project, arg=git|wget to download with git or wget respectively
+    --verbose|-v         Output verbose mode activation
+
+install.sh --build|-b <arg> [--verbose|-v]
+    Build the project
+
+    --build|-b [arg]  Build the project, arg=fobis|make|cmake to build with FoBiS.py, GNU Make or CMake respectively
+    --verbose|-v      Output verbose mode activation
+
+Examples:
+
+install.sh --download git
+install.sh --build make
+install.sh --download wget --build cmake
+```
+
+> The script does not cover all possibilities.
+
+The script is able to:
+
++ download a new fresh-clone of the latest master-release by means of:
+  + git
+  + wget
++ build a fresh-clone project as static-linked library by means of:
+  + FoBiS.py
+  + GNU Make
+  + CMake
 
 Go to [Top](#top)
