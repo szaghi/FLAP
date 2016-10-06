@@ -265,7 +265,7 @@ FLAP is a Fortran library composed by several modules.
 
 To download and build the project two main ways are available:
 
-+ exploit the [install script](#install-script) that can be downloaded [here](https://github.com/szaghi/FLAP/releases/latest/install.sh)
++ exploit the [install script](#install-script) that can be downloaded [here](https://github.com/szaghi/FLAP/releases/latest)
 + [manually download and build](#manually-download-and-build):
   + [download](#download)
   + [build](#build)
@@ -274,7 +274,7 @@ To download and build the project two main ways are available:
 
 ### install script
 
-FLAP ships a bash script (downloadable from [here](https://github.com/szaghi/FLAP/releases/latest/install.sh)) that is able to automatize the download and build steps. The script `install.sh` has the following usage:
+FLAP ships a bash script (downloadable from [here](https://github.com/szaghi/FLAP/releases/latest)) that is able to automatize the download and build steps. The script `install.sh` has the following usage:
 
 ```shell
 → ./install.sh
