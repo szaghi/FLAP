@@ -17,7 +17,7 @@ addons:
       - gfortran-6
       - binutils
       - python-pip
-      - graphviz      
+      - graphviz
 
 env:
   global:
