@@ -38,7 +38,7 @@ A KISS pure Fortran Library for building powerful, easy-to-use, elegant command 
 
 ---
 
-| [What is FLAP?](#what-is-flap) | [Main features](#main-features) | [Copyrights](#copyrights) | [Documentation](#documentation) | [Download & Build](#download-and-build) |
+| [What is FLAP?](#what-is-flap) | [Main features](#main-features) | [Copyrights](#copyrights) | [Documentation](#documentation) | [Install](#install) |
 
 ---
 
@@ -257,27 +257,94 @@ Go to [Top](#top)
 
 ---
 
-## Download and Build
+## Install
 
 FLAP is a Fortran library composed by several modules.
 
 > Before download and compile the library you must check the [requirements](https://github.com/szaghi/FLAP/wiki/Requirements).
 
-+ [Download](#download)
-+ [Build](#build)
-+ [Install script](#install-script)
+To download and build the project two main ways are available:
 
-### Download
++ exploit the [install script](#install-script) that can be downloaded [here](https://github.com/szaghi/FLAP/releases/latest/install.sh)
++ [manually download and build](#manually-download-and-build):
+  + [download](#download)
+  + [build](#build)
+
+---
+
+### install script
+
+FLAP ships a bash script (downloadable from [here](https://github.com/szaghi/FLAP/releases/latest/install.sh)) that is able to automatize the download and build steps. The script `install.sh` has the following usage:
+
+```shell
+→ ./install.sh
+Install script of FLAP
+Usage:
+
+install.sh --help|-?
+    Print this usage output and exit
+
+install.sh --download|-d <arg> [--verbose|-v]
+    Download the project
+
+    --download|-d [arg]  Download the project, arg=git|wget to download with git or wget respectively
+    --verbose|-v         Output verbose mode activation
+
+install.sh --build|-b <arg> [--verbose|-v]
+    Build the project
+
+    --build|-b [arg]  Build the project, arg=fobis|make|cmake to build with FoBiS.py, GNU Make or CMake respectively
+    --verbose|-v      Output verbose mode activation
+
+Examples:
+
+install.sh --download git
+install.sh --build make
+install.sh --download wget --build cmake
+```
+
+> The script does not cover all possibilities.
+
+The script operation modes are 2 (*collapsible* into one-single-mode):
+
++ download a new fresh-clone of the latest master-release by means of:
+  + [git](https://git-scm.com/);
+  + [wget](https://www.gnu.org/software/wget/) (also [curl](https://curl.haxx.se/) is necessary);
++ build a fresh-clone project as static-linked library by means of:
+  + [FoBiS.py](https://github.com/szaghi/FoBiS);
+  + [GNU Make](https://www.gnu.org/software/make/);
+  + [CMake](https://cmake.org/);
+
+> you can mix any of the above combinations accordingly to the tools available.
+
+Typical usages are:
+
+```shell
+# download and prepare the project by means of git and build with GNU Make
+install.sh --dowload git --build make
+# download and prepare the project by means of wget (curl) and build with CMake
+install.sh --dowload wget --build cmake
+# download and prepare the project by means of git and build with FoBiS.py
+install.sh --dowload git --build fobis
+```
+
+---
+
+### manually download and build
+
+#### download
 
 To download all the available releases and utilities (fobos, license, readme, etc...), it can be convenient to _clone_ whole the project:
 
 ```shell
 git clone --recursive https://github.com/szaghi/FLAP
+cd FLAP
+git submodule update --init --recursive
 ```
 
 Alternatively, you can directly download a release from GitHub server, see the [ChangeLog](https://github.com/szaghi/FLAP/wiki/ChangeLog).
 
-### Build
+#### build
 
 The most easy way to compile FLAP is to use [FoBiS.py](https://github.com/szaghi/FoBiS) within the provided fobos file.
 
@@ -287,11 +354,11 @@ Consequently, it is strongly encouraged to install [FoBiS.py](https://github.com
 
 ---
 
-### Build by means of FoBiS
+#### build by means of FoBiS
 
 FoBiS.py is a KISS tool for automatic building of modern Fortran projects. Providing very few options, FoBiS.py is able to build almost automatically complex Fortran projects with cumbersome inter-modules dependency. This removes the necessity to write complex makefile. Moreover, providing a very simple options file (in the FoBiS.py nomenclature indicated as `fobos` file) FoBiS.py can substitute the (ab)use of makefile for other project stuffs (build documentations, make project archive, etc...). FLAP is shipped with a fobos file that can build the library in both _static_ and _shared_ forms and also build the `Test_Driver` program. The provided fobos file has several building modes.
 
-#### Listing fobos building modes
+##### listing fobos building modes
 Typing:
 ```bash
 FoBiS.py build -lmodes
@@ -314,37 +381,37 @@ The fobos file defines the following modes:
 ```
 The modes should be self-explicative: `shared`, `static` and `test-driver` are the modes for building (in release, optimized form) the shared and static versions of the library and the Test Driver program, respectively. The other 3 modes are the same, but in debug form instead of release one. `-gnu` use the `GNU gfortran` compiler while `-intel` the Intel one.
 
-#### Building the library
+##### building the library
 The `shared` or `static` directories are created accordingly to the form of the library built. The compiled objects and mod files are placed inside this directory, as well as the linked library.
-##### Release shared library
+###### release shared library
 ```bash
 FoBiS.py build -mode shared-gnu
 ```
-##### Release static library
+###### release static library
 ```bash
 FoBiS.py build -mode static-gnu
 ```
-##### Debug shared library
+###### debug shared library
 ```bash
 FoBiS.py build -mode shared-gnu-debug
 ```
-##### Debug static library
+###### debug static library
 ```bash
 FoBiS.py build -mode static-gnu-debug
 ```
 
-#### Building the Test Driver program
+##### building the Test Driver program
 The `Test_Driver` directory is created. The compiled objects and mod files are placed inside this directory, as well as the linked program.
-##### Release test driver program
+###### release test driver program
 ```bash
 FoBiS.py build -mode test-driver-gnu
 ```
-##### Debug test driver program
+###### debug test driver program
 ```bash
 FoBiS.py build -mode test-driver-gnu-debug
 ```
 
-#### Listing fobos rules
+##### listing fobos rules
 Typing:
 ```bash
 FoBiS.py rule -ls
@@ -382,7 +449,7 @@ The rules should be self-explicative.
 
 ---
 
-### Build by means of GNU Make
+#### build by means of GNU Make
 
 Bad choice :-)
 
@@ -404,7 +471,7 @@ cd FLAP
 make -j 1 STATIC=yes
 ```
 
-### Build by means of CMake
+#### Build by means of CMake
 
 Bad choice :-)
 
@@ -417,7 +484,7 @@ git clone --recursive https://github.com/szaghi/FLAP $YOUR_FLAP_PATH
 mkdir build
 cd build
 cmake $YOUR_FLAP_PATH
-make
+cmake --build .
 ```
 
 If you want to run the tests suite type:
@@ -427,51 +494,8 @@ git clone --recursive https://github.com/szaghi/FLAP $YOUR_FLAP_PATH
 mkdir build
 cd build
 cmake -DFLAP_ENABLE_TESTS=ON $YOUR_FLAP_PATH
-make
+cmake --build .
 ctest
 ```
-
-### Install script
-
-FLAP ships a bash script that is able to automatize the download and build steps. The script, `install.sh` has the following usage:
-
-```shell
-→ ./install.sh
-Install script of FLAP
-Usage:
-
-install.sh --help|-?
-    Print this usage output and exit
-
-install.sh --download|-d <arg> [--verbose|-v]
-    Download the project
-
-    --download|-d [arg]  Download the project, arg=git|wget to download with git or wget respectively
-    --verbose|-v         Output verbose mode activation
-
-install.sh --build|-b <arg> [--verbose|-v]
-    Build the project
-
-    --build|-b [arg]  Build the project, arg=fobis|make|cmake to build with FoBiS.py, GNU Make or CMake respectively
-    --verbose|-v      Output verbose mode activation
-
-Examples:
-
-install.sh --download git
-install.sh --build make
-install.sh --download wget --build cmake
-```
-
-> The script does not cover all possibilities.
-
-The script is able to:
-
-+ download a new fresh-clone of the latest master-release by means of:
-  + git
-  + wget
-+ build a fresh-clone project as static-linked library by means of:
-  + FoBiS.py
-  + GNU Make
-  + CMake
 
 Go to [Top](#top)
