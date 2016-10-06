@@ -87,7 +87,7 @@ function projectbuild () {
     mkdir -p static
     cd static
     cmake ../
-    make
+    cmake --build .
     cd ../
   fi
 }
