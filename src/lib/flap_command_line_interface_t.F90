@@ -845,7 +845,7 @@ contains
   else
     g = 0
   endif
-  if (self%error==0.and.self%clasg(g)%is_called) then
+  if (self%error==0) then
     if (present(switch)) then
       ! search for the CLA corresponding to switch
       found = .false.
@@ -867,6 +867,9 @@ contains
     else
       call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
     endif
+  endif
+  if (self%error==0.and.(.not.self%clasg(g)%is_called)) then
+    ! TODO warn (if liked) for non invoked group querying
   endif
   if (present(error)) error = self%error
   return
