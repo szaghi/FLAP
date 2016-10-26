@@ -87,7 +87,7 @@ message(STATUS "COMPILER INFO: ${CMAKE_Fortran_COMPILER_ID} - ${Fortran_COMPILER
 
 IF (${CMAKE_Fortran_COMPILER_ID} STREQUAL "GNU" OR Fortran_COMPILER_NAME MATCHES "gfortran*")
   # gfortran 
-  set(FORTRAN_FLAGS "-fdefault-real-8 -ffree-line-length-0 -cpp -Wimplicit-interface ${EXTRA_FLAGS} ")
+  set(FORTRAN_FLAGS "-ffree-line-length-0 -cpp -Wimplicit-interface ${EXTRA_FLAGS} ")
   set (CMAKE_Fortran_FLAGS "${FORTRAN_FLAGS} ${MACROS} ${INCLUDES} " CACHE STRING "" FORCE)
   set (CMAKE_Fortran_FLAGS_RELEASE "-O3 ${EXTRA_FLAGS} " CACHE STRING "" FORCE)
   set (CMAKE_Fortran_FLAGS_DEBUG   "-g -fbacktrace -fbounds-check -fprofile-arcs -ftest-coverage -Wimplicit-interface ${EXTRA_FLAGS} " CACHE STRING "" FORCE)
@@ -138,7 +138,7 @@ include(ExternalProject)
 SET(PENF_LIB PENF)
 
 SET(${PENF_LIB}_SRC_PATH ${THIRDPARTY_PATH}/PENF)
-MESSAGE("${PENF_LIB}_SRC_PATH: ${${PENF_LIB}_SRC_PATH}") 
+MESSAGE(STATUS "${PENF_LIB}_SRC_PATH: ${${PENF_LIB}_SRC_PATH}")
 SET(${PENF_LIB}_BINARY_PATH ${THIRDPARTY_OUTPUT_PATH}/${PENF_LIB})
 EXTERNALPROJECT_Add(${PENF_LIB}
     DOWNLOAD_COMMAND ""
@@ -164,6 +164,7 @@ SET(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_INCLUDE_DIRS} ${THIRDPARTY_OU
 
 ADD_SUBDIRECTORY(${LIB_PATH})
 IF(${PROJECT_NAME}_ENABLE_TESTS)
+    ADD_SUBDIRECTORY(${THIRDPARTY_PATH}/fortran_tester)
     ADD_SUBDIRECTORY(${TESTS_PATH})
 ENDIF()
 
