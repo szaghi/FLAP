@@ -82,6 +82,7 @@ type, extends(object) :: command_line_argument
     procedure, private :: get_cla_from_buffer             !< Get CLA (single) value from a buffer.
     procedure, private :: get_cla_list                    !< Get CLA multiple values.
     procedure, private :: get_cla_list_from_buffer        !< Get CLA (single) value from a buffer.
+    procedure, private :: get_cla_list_varying_R16P       !< Get CLA multiple values, varying size, R16P.
     procedure, private :: get_cla_list_varying_R8P        !< Get CLA multiple values, varying size, R8P.
     procedure, private :: get_cla_list_varying_R4P        !< Get CLA multiple values, varying size, R4P.
     procedure, private :: get_cla_list_varying_I8P        !< Get CLA multiple values, varying size, I8P.
