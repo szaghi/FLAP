@@ -1,5 +1,5 @@
 !< A testing program for FLAP, Fortran command Line Arguments Parser for poor people
-program test_group
+program flap_test_group
 !< A testing program for FLAP, Fortran command Line Arguments Parser for poor people
 !<
 !<### Compile
@@ -7,21 +7,17 @@ program test_group
 !<
 !<###Usage Compile
 !< See [usage instructions](https://github.com/szaghi/FLAP/wiki/Testing-Programs).
-!-----------------------------------------------------------------------------------------------------------------------------------
+
 use flap, only : command_line_interface
 use penf
 use tester
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 type(tester_t)               :: crash_test_dummy      !< Tests handler.
 logical                      :: switch_value_domain   !< Switch sentinel.
 logical                      :: switch_value_grid     !< Switch sentinel.
 logical                      :: switch_value_spectrum !< Switch sentinel.
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 call crash_test_dummy%init
 
 call fake_call(args='', spectrum=switch_value_spectrum, domain=switch_value_domain, grid=switch_value_grid)
@@ -61,7 +57,6 @@ call crash_test_dummy%assert_equal(switch_value_domain, .false.)
 call crash_test_dummy%assert_equal(switch_value_grid , .true.)
 
 call crash_test_dummy%print
-!-----------------------------------------------------------------------------------------------------------------------------------
 contains
   subroutine fake_call(args, spectrum, domain, grid)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -100,4 +95,4 @@ contains
   if (error/=0) stop
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine fake_call
-endprogram test_group
+endprogram flap_test_group

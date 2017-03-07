@@ -1,5 +1,5 @@
 !< A testing program for FLAP, Fortran command Line Arguments Parser for poor people
-program test_string
+program flap_test_string
 !< A testing program for FLAP, Fortran command Line Arguments Parser for poor people
 !<
 !<### Compile
@@ -7,12 +7,10 @@ program test_string
 !<
 !<###Usage Compile
 !< See [usage instructions](https://github.com/szaghi/FLAP/wiki/Testing-Programs).
-!-----------------------------------------------------------------------------------------------------------------------------------
+
 use flap, only : command_line_interface
 use penf
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 type(command_line_interface) :: cli        !< Command Line Interface (CLI).
 character(99)                :: sval       !< String value.
@@ -25,9 +23,7 @@ logical                      :: vbval      !< Valued-boolean value.
 integer(I8P)                 :: ilist(1:3) !< Integer list values.
 integer(I4P)                 :: error      !< Error trapping flag.
 integer(I4P)                 :: l          !< Counter.
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 ! initialize Command Line Interface
 call cli%init(progname    = 'test_sting',                                                 &
               version     = 'v2.1.5',                                                     &
@@ -82,6 +78,4 @@ print '(A)'   ,'Integer list inputs:'
 do l=1,3
   print '(A)' ,'Input('//trim(str(l, .true.))//') = '//trim(str(n=ilist(l)))
 enddo
-stop
-!-----------------------------------------------------------------------------------------------------------------------------------
-endprogram test_string
+endprogram flap_test_string

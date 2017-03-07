@@ -34,23 +34,25 @@
 #   echo "Some tests failed"
 #   exit 1
 # fi
-./exe/test_minimal -s 'hello'
-./exe/test_hidden -s 'hello' -i 2
-./exe/test_basic
-./exe/test_basic -v
-./exe/test_basic -h
-./exe/test_basic -s 'Hello FLAP' -i 2
-./exe/test_basic -s 'Hello FLAP' -i 3 -ie 11
-./exe/test_basic 33.0 -s 'Hello FLAP' --integer_list 10 -3 87 -i 3 -r 64.123d0  --boolean --boolean_val .false.
-./exe/test_basic -s 'Hello FLAP' --man_file FLAP.1
-./exe/test_basic -s 'Hello FLAP' -vlI1P 2 1 3 -vlI2P 12 -2 -vlI4P 1 -vlI8P 1 -vlR8P 121.31 -vlR4P 3423121.31 -vlChar foo bar -vlBool T F T F
-./exe/test_basic -s 'Hello FLAP' -- foo.bar bar/baz.f90
-./exe/test_nested
-./exe/test_nested -h
-./exe/test_nested -a
-./exe/test_nested init
-./exe/test_nested init commit -m 'hello'
-./exe/test_nested commit -m 'hello'
-./exe/test_nested tag -a 'hello'
-./exe/test_string
-./exe/test_choices_logical
+./exe/flap_test_ansi_color_style
+./exe/flap_test_basic
+./exe/flap_test_basic -v
+./exe/flap_test_basic -h
+./exe/flap_test_basic -s 'Hello FLAP' -i 2
+./exe/flap_test_basic -s 'Hello FLAP' -i 3 -ie 11
+./exe/flap_test_basic 33.0 -s 'Hello FLAP' --integer_list 10 -3 87 -i 3 -r 64.123d0  --boolean --boolean_val .false.
+./exe/flap_test_basic -s 'Hello FLAP' --man_file FLAP.1
+./exe/flap_test_basic -s 'Hello FLAP' -vlI1P 2 1 3 -vlI2P 12 -2 -vlI4P 1 -vlI8P 1 -vlR8P 121.31 -vlR4P 3423121.31 -vlChar foo bar -vlBool T F T F
+./exe/flap_test_basic -s 'Hello FLAP' -- foo.bar bar/baz.f90
+./exe/flap_test_choices_logical
+./exe/flap_test_group
+./exe/flap_test_hidden -s 'hello' -i 2
+./exe/flap_test_minimal -s 'hello'
+./exe/flap_test_nested
+./exe/flap_test_nested -h
+./exe/flap_test_nested -a
+./exe/flap_test_nested init
+./exe/flap_test_nested init commit -m 'hello'
+./exe/flap_test_nested commit -m 'hello'
+./exe/flap_test_nested tag -a 'hello'
+./exe/flap_test_string
