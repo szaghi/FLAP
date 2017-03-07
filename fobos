@@ -13,7 +13,7 @@ $CSTATIC_INT = -cpp -c -assume realloc_lhs
 $DEBUG_GNU   = -O0 -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -fcheck=all -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan -std=f2008 -fall-intrinsics
 $DEBUG_INT   = -O0 -debug all -check all -warn all -extend-source 132 -traceback -gen-interfaces#-fpe-all=0 -fp-stack-check -fstack-protector-all -ftrapuv -no-ftz -std08
 $OPTIMIZE    = -O2
-$EXDIRS      = ./src/third_party/fortran_tester/test/ ./src/third_party/PENF/src/tests/
+$EXDIRS      = FACE/src/tests/ fortran_tester/test/ PENF/src/tests/
 
 # main modes
 # GNU
@@ -225,7 +225,7 @@ help   = Perform coverage analysis
 rule_1 = FoBiS.py clean -mode tests-gnu
 rule_2 = FoBiS.py build -mode tests-gnu -coverage
 rule_3 = ./scripts/run_tests.sh
-rule_4 = rm -f exe/obj/penf* FLAP.1
+rule_4 = rm -f exe/obj/face* exe/obj/penf* exe/obj/tester* FLAP.1
 rule_5 = gcov -o exe/obj/ src/lib/flap*
 rule_6 = rm -f *.gcov
 
@@ -234,7 +234,7 @@ help   = Perform coverage analysis and saving reports in markdown
 rule_1 = FoBiS.py clean -mode tests-gnu
 rule_2 = FoBiS.py build -mode tests-gnu -coverage
 rule_3 = ./scripts/run_tests.sh
-rule_4 = rm -f exe/obj/penf* FLAP.1
+rule_4 = rm -f exe/obj/face* exe/obj/penf* exe/obj/tester* FLAP.1
 rule_5 = gcov -o exe/obj/ src/lib/flap*
 rule_6 = FoBiS.py rule -gcov_analyzer wiki/ Coverage-Analysis
 rule_7 = rm -f *.gcov

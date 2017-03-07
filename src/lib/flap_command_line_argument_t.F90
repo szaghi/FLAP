@@ -1,14 +1,12 @@
 !< Command Line Argument (CLA) class.
 module flap_command_line_argument_t
-!-----------------------------------------------------------------------------------------------------------------------------------
 !< Command Line Argument (CLA) class.
-!-----------------------------------------------------------------------------------------------------------------------------------
+
+use face, only : colorize
 use flap_object_t, only : object
 use flap_utils_m
 use penf
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 private
 save
@@ -20,9 +18,7 @@ public :: ACTION_STORE_FALSE
 public :: ACTION_PRINT_HELP
 public :: ACTION_PRINT_VERS
 public :: ARGS_SEP
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 type, extends(object) :: command_line_argument
   !< Command Line Argument (CLA) class.
   !<
@@ -95,6 +91,7 @@ type, extends(object) :: command_line_argument
     generic,   private :: assignment(=) => cla_assign_cla !< Assignment operator overloading.
     final              :: finalize                        !< Free dynamic memory when finalizing.
 endtype command_line_argument
+
 ! parameters
 character(len=*), parameter :: ACTION_STORE       = 'STORE'         !< Store value (if invoked a value must be passed).
 character(len=*), parameter :: ACTION_STORE_STAR  = 'STORE*'        !< Store value or revert on default is invoked alone.
@@ -103,6 +100,7 @@ character(len=*), parameter :: ACTION_STORE_FALSE = 'STORE_FALSE'   !< Store .fa
 character(len=*), parameter :: ACTION_PRINT_HELP  = 'PRINT_HELP'    !< Print help message.
 character(len=*), parameter :: ACTION_PRINT_VERS  = 'PRINT_VERSION' !< Print version.
 character(len=*), parameter :: ARGS_SEP           = '||!||'         !< Arguments separator for multiple valued (list) CLA.
+
 ! errors codes
 integer(I4P), parameter :: ERROR_OPTIONAL_NO_DEF        = 1  !< Optional CLA without default value.
 integer(I4P), parameter :: ERROR_REQUIRED_M_EXCLUDE     = 2  !< Required CLA cannot exclude others.
@@ -126,7 +124,7 @@ integer(I4P), parameter :: ERROR_STORE_STAR_POSITIONAL  = 19 !< Action store* no
 integer(I4P), parameter :: ERROR_STORE_STAR_NARGS       = 20 !< Action store* not allowed for list-values CLA.
 integer(I4P), parameter :: ERROR_STORE_STAR_ENVVAR      = 21 !< Action store* not allowed for environment variable CLA.
 integer(I4P), parameter :: ERROR_ACTION_UNKNOWN         = 22 !< Unknown CLA (switch name).
-!-----------------------------------------------------------------------------------------------------------------------------------
+
 contains
   ! public methods
   elemental subroutine free(self)
@@ -238,18 +236,12 @@ contains
   endsubroutine raise_error_value_missing
 
   subroutine raise_error_switch_unknown(self, switch, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Raise error switch_unknown.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: self   !< CLA data.
   character(*), optional,       intent(in)    :: switch !< CLA switch name.
   character(*), optional,       intent(in)    :: pref   !< Prefixing string.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   call self%errored(pref=pref, error=ERROR_UNKNOWN, switch=switch)
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine raise_error_switch_unknown
 
   subroutine sanitize_defaults(self)
@@ -278,22 +270,22 @@ contains
   endsubroutine sanitize_defaults
 
   function usage(self, pref, markdown)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get correct usage.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  class(command_line_argument), intent(in) :: self      !< CLAs group data.
-  character(*), optional,       intent(in) :: pref      !< Prefixing string.
-  logical,      optional,       intent(in) :: markdown  !< Format for markdown
-  character(len=:), allocatable            :: usage     !< Usage string.
-  character(len=:), allocatable            :: prefd     !< Prefixing string.
-  integer(I4P)                             :: a         !< Counter.
-  logical                                  :: markdownd !< Format for markdown
-  integer                                  :: indent    !< how many spaces to indent
-  !---------------------------------------------------------------------------------------------------------------------------------
+  class(command_line_argument), intent(in) :: self       !< CLAs group data.
+  character(*), optional,       intent(in) :: pref       !< Prefixing string.
+  logical,      optional,       intent(in) :: markdown   !< Format for markdown
+  character(len=:), allocatable            :: usage      !< Usage string.
+  character(len=:), allocatable            :: prefd      !< Prefixing string.
+  character(len=:), allocatable            :: switch_    !< Switch name, local variable.
+  character(len=:), allocatable            :: switch_ab_ !< Abbreviated switch name, local variable.
+  integer(I4P)                             :: a          !< Counter.
+  logical                                  :: markdownd  !< Format for markdown
+  integer                                  :: indent     !< how many spaces to indent
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   markdownd = .false. ; if (present(markdown)) markdownd = markdown
   indent = 4
+  switch_ = colorize(trim(adjustl(self%switch)), color_fg=self%help_color, style=self%help_style)
+  switch_ab_ = colorize(trim(adjustl(self%switch_ab)), color_fg=self%help_color, style=self%help_style)
   if (.not.self%is_hidden) then
     if (self%act==action_store) then
       if (.not.self%is_positional) then
@@ -313,13 +305,13 @@ contains
             if (markdownd) then
               usage = new_line('a')//'* `'//trim(adjustl(self%switch))//usage//'`, `'//trim(adjustl(self%switch_ab))//usage//'`'
             else
-              usage = '   '//trim(adjustl(self%switch))//usage//', '//trim(adjustl(self%switch_ab))//usage
+              usage = '   '//switch_//usage//', '//switch_ab_//usage
             endif
           else
             if (markdownd) then
               usage = new_line('a')//'* `'//trim(adjustl(self%switch))//usage//'`'
             else
-              usage = '   '//trim(adjustl(self%switch))//usage
+              usage = '   '//switch_//usage
             endif
           endif
         else
@@ -327,13 +319,13 @@ contains
             if (markdownd) then
               usage = new_line('a')//'* `'//trim(adjustl(self%switch))//' value`, `'//trim(adjustl(self%switch_ab))//' value'//'`'
             else
-              usage = '   '//trim(adjustl(self%switch))//' value, '//trim(adjustl(self%switch_ab))//' value'
+              usage = '   '//switch_//' value, '//switch_ab_//' value'
             endif
           else
             if (markdownd) then
               usage = new_line('a')//'* `'//trim(adjustl(self%switch))//' value`'
             else
-              usage = '   '//trim(adjustl(self%switch))//' value'
+              usage = '   '//switch_//' value'
             endif
           endif
         endif
@@ -353,13 +345,13 @@ contains
         if (markdownd) then
           usage = new_line('a')//'* `'//trim(adjustl(self%switch))//'`, `'//trim(adjustl(self%switch_ab))//'`'
         else
-          usage = '   '//trim(adjustl(self%switch))//', '//trim(adjustl(self%switch_ab))
+          usage = '   '//switch_//', '//switch_ab_
         endif
       else
         if (markdownd) then
           usage = new_line('a')//'* `'//trim(adjustl(self%switch))//'`'
         else
-          usage = '   '//trim(adjustl(self%switch))
+          usage = '   '//switch_
         endif
       endif
     endif
@@ -394,8 +386,6 @@ contains
   else
     usage = ''
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction usage
 
   function signature(self)
@@ -458,9 +448,7 @@ contains
 
   ! private methods
   subroutine errored(self, error, pref, switch, val_str, log_value)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Trig error occurence and print meaningful message.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: self      !< CLA data.
   integer(I4P),                 intent(in)    :: error     !< Error occurred.
   character(*), optional,       intent(in)    :: pref      !< Prefixing string.
@@ -468,115 +456,106 @@ contains
   character(*), optional,       intent(in)    :: val_str   !< Value string.
   character(*), optional,       intent(in)    :: log_value !< Logical value to be casted.
   character(len=:), allocatable               :: prefd     !< Prefixing string.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   self%error = error
   if (self%error/=0) then
     prefd = '' ; if (present(pref)) prefd = pref
+    prefd = prefd//self%progname//': '//colorize('error', color_fg=self%error_color, style=self%error_style)
     select case(self%error)
     case(ERROR_OPTIONAL_NO_DEF)
       if (self%is_positional) then
-        self%error_message = prefd//self%progname//': error: "'//trim(str(n=self%position))//&
-                           '-th" positional option has not a default value!'
+        self%error_message = prefd//': "'//trim(str(n=self%position))//'-th" positional option has not a default value!'
       else
-        self%error_message = prefd//self%progname//': error: named option "'//self%switch//'" has not a default value!'
+        self%error_message = prefd//': named option "'//self%switch//'" has not a default value!'
       endif
     case(ERROR_REQUIRED_M_EXCLUDE)
-      self%error_message = prefd//self%progname//': error: named option "'//self%switch//'" cannot exclude others'//&
-        ', it being requiredi, only optional ones can!'
+      self%error_message = prefd//': named option "'//self%switch//'" cannot exclude others'//&
+                           ', it being required, only optional ones can!'
     case(ERROR_POSITIONAL_M_EXCLUDE)
-      self%error_message = prefd//self%progname//': error: "'//trim(str(n=self%position))//&
-        '-th" positional option cannot exclude others, only optional named options can!'
+      self%error_message = prefd//': "'//trim(str(n=self%position))//&
+                           '-th" positional option cannot exclude others, only optional named options can!'
     case(ERROR_NAMED_NO_NAME)
-      self%error_message = prefd//self%progname//': error: a non positional optiona must have a switch name!'
+      self%error_message = prefd//': a non positional optiona must have a switch name!'
     case(ERROR_POSITIONAL_NO_POSITION)
-      self%error_message = prefd//self%progname//': error: a positional option must have a position number different from 0!'
+      self%error_message = prefd//': a positional option must have a position number different from 0!'
     case(ERROR_POSITIONAL_NO_STORE)
-      self%error_message = prefd//self%progname//': error: a positional option must have action set to "'//action_store//'"!'
+      self%error_message = prefd//': a positional option must have action set to "'//action_store//'"!'
     case(ERROR_M_EXCLUDE)
-      self%error_message = prefd//self%progname//': error: the options "'//self%switch//'" and "'//self%m_exclude//&
-        '" are mutually exclusive, but both have been passed!'
+      self%error_message = prefd//': the options "'//self%switch//'" and "'//self%m_exclude//&
+                           '" are mutually exclusive, but both have been passed!'
     case(ERROR_NOT_IN_CHOICES)
       if (self%is_positional) then
-        self%error_message = prefd//self%progname//': error: value of "'//trim(str(n=self%position))//&
-          '-th" positional option must be chosen in:'
+        self%error_message = prefd//': value of "'//trim(str(n=self%position))//&
+                             '-th" positional option must be chosen in:'
       else
-        self%error_message = prefd//self%progname//': error: value of named option "'//self%switch//'" must be chosen in: '
+        self%error_message = prefd//': value of named option "'//self%switch//'" must be chosen in: '
       endif
       self%error_message = self%error_message//'('//self%choices//')'
       self%error_message = self%error_message//' but "'//trim(val_str)//'" has been passed!'
     case(ERROR_MISSING_REQUIRED)
       if (.not.self%is_positional) then
-        self%error_message = prefd//self%progname//': error: named option "'//trim(adjustl(self%switch))//'" is required!'
+        self%error_message = prefd//': named option "'//trim(adjustl(self%switch))//'" is required!'
       else
-        self%error_message = prefd//self%progname//': error: "'//trim(str(self%position, .true.))//&
-          '-th" positional option is required!'
+        self%error_message = prefd//': "'//trim(str(self%position, .true.))//'-th" positional option is required!'
       endif
     case(ERROR_CASTING_LOGICAL)
-      self%error_message = prefd//self%progname//': error: cannot convert "'//log_value//'" of option "'//self%switch//&
-        '" to logical type!'
+      self%error_message = prefd//': cannot convert "'//log_value//'" of option "'//self%switch//'" to logical type!'
     case(ERROR_CHOICES_LOGICAL)
-      self%error_message = prefd//self%progname//': error: cannot use "choices" value check for option "'//self%switch//&
-        '" it being of logical type! The choices is, by definition of logical, limited to ".true." or ".false."'
+      self%error_message = prefd//': cannot use "choices" value check for option "'//self%switch//&
+                           '" it being of logical type! The choices are limited to ".true." or ".false." by definition!'
     case(ERROR_NO_LIST)
       if (.not.self%is_positional) then
-        self%error_message = prefd//self%progname//': error: named option "'//trim(adjustl(self%switch))//&
-          '" has not "nargs" value but an array has been passed to "get" method!'
+        self%error_message = prefd//': named option "'//trim(adjustl(self%switch))//&
+                             '" has not "nargs" value but an array has been passed to "get" method!'
       else
-        self%error_message = prefd//self%progname//': error: "'//trim(str(self%position, .true.))//'-th" positional option '//&
-          'has not "nargs" value but an array has been passed to "get" method!'
+        self%error_message = prefd//': "'//trim(str(self%position, .true.))//'-th" positional option '//&
+                             'has not "nargs" value but an array has been passed to "get" method!'
       endif
     case(ERROR_NARGS_INSUFFICIENT)
       if (.not.self%is_positional) then
         if (self%nargs=='+') then
-          self%error_message = prefd//self%progname//': error: named option "'//trim(adjustl(self%switch))//&
-            '" requires at least 1 argument but no one remains!'
+          self%error_message = prefd//': named option "'//trim(adjustl(self%switch))//&
+                               '" requires at least 1 argument but no one remains!'
         else
-          self%error_message = prefd//self%progname//': error: named option "'//trim(adjustl(self%switch))//'" requires '//&
-            trim(adjustl(self%nargs))//' arguments but no enough ones remain!'
+          self%error_message = prefd//': named option "'//trim(adjustl(self%switch))//'" requires '//&
+                               trim(adjustl(self%nargs))//' arguments but no enough ones remain!'
         endif
       else
         if (self%nargs=='+') then
-          self%error_message = prefd//self%progname//': error: "'//trim(str(self%position, .true.))//&
-            '-th" positional option requires at least 1 argument but no one remains'
+          self%error_message = prefd//': "'//trim(str(self%position, .true.))//&
+                               '-th" positional option requires at least 1 argument but no one remains'
         else
-          self%error_message = prefd//self%progname//': error: "'//trim(str(self%position, .true.))//&
-            '-th" positional option requires '//&
-            trim(adjustl(self%nargs))//' arguments but no enough ones remain!'
+          self%error_message = prefd//': "'//trim(str(self%position, .true.))//'-th" positional option requires '//&
+                               trim(adjustl(self%nargs))//' arguments but no enough ones remain!'
         endif
       endif
     case(ERROR_VALUE_MISSING)
-      self%error_message = prefd//self%progname//': error: named option "'//trim(adjustl(self%switch))//&
-        '" needs a value that is not passed!'
+      self%error_message = prefd//': named option "'//trim(adjustl(self%switch))//'" needs a value that is not passed!'
     case(ERROR_UNKNOWN)
-      self%error_message = prefd//self%progname//': error: switch "'//trim(adjustl(switch))//'" is unknown!'
+      self%error_message = prefd//': switch "'//trim(adjustl(switch))//'" is unknown!'
     case(ERROR_ENVVAR_POSITIONAL)
-      self%error_message = prefd//self%progname//': error: "'//trim(str(self%position, .true.))//'-th" positional option '//&
-        'has "envvar" value that is not allowed for positional option!'
+      self%error_message = prefd//': "'//trim(str(self%position, .true.))//'-th" positional option '//&
+                           'has "envvar" value that is not allowed for positional option!'
     case(ERROR_ENVVAR_NOT_STORE)
-      self%error_message = prefd//self%progname//': error: named option "'//trim(adjustl(self%switch))//&
-        '" is an envvar with action different from "'//action_store//'" that is not allowed!'
+      self%error_message = prefd//': named option "'//trim(adjustl(self%switch))//&
+                           '" is an envvar with action different from "'//action_store//'" that is not allowed!'
     case(ERROR_ENVVAR_NARGS)
-      self%error_message = prefd//self%progname//': error: named option "'//trim(adjustl(self%switch))//&
-        '" is an envvar that is not allowed for list valued option!'
+      self%error_message = prefd//': named option "'//trim(adjustl(self%switch))//&
+                           '" is an envvar that is not allowed for list valued option!'
     case(ERROR_STORE_STAR_POSITIONAL)
-      self%error_message = prefd//self%progname//': error: "'//trim(str(self%position, .true.))//'-th" positional option '//&
-        'has "'//action_store_star//'" action that is not allowed for positional option!'
+      self%error_message = prefd//': "'//trim(str(self%position, .true.))//'-th" positional option '//&
+                           'has "'//action_store_star//'" action that is not allowed for positional option!'
     case(ERROR_STORE_STAR_NARGS)
-      self%error_message = prefd//self%progname//': error: named option "'//trim(adjustl(self%switch))//&
-        '" has "'//action_store_star//'" action that is not allowed for list valued option!'
+      self%error_message = prefd//': named option "'//trim(adjustl(self%switch))//&
+                           '" has "'//action_store_star//'" action that is not allowed for list valued option!'
     case(ERROR_STORE_STAR_ENVVAR)
-      self%error_message = prefd//self%progname//': error: named option "'//trim(adjustl(self%switch))//&
-        '" has "'//action_store_star//'" action that is not allowed for environment variable option!'
+      self%error_message = prefd//': named option "'//trim(adjustl(self%switch))//&
+                           '" has "'//action_store_star//'" action that is not allowed for environment variable option!'
     case(ERROR_ACTION_UNKNOWN)
-      self%error_message = prefd//self%progname//': error: named option "'//trim(adjustl(self%switch))//&
-        '" has unknown "'//self%act//'" action!'
+      self%error_message = prefd//': named option "'//trim(adjustl(self%switch))//'" has unknown "'//self%act//'" action!'
     endselect
     call self%print_error_message
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine errored
 
   subroutine check_envvar_consistency(self, pref)

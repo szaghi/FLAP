@@ -1,22 +1,18 @@
 !< Command Line Interface (CLI) class.
 module flap_command_line_interface_t
-!-----------------------------------------------------------------------------------------------------------------------------------
 !< Command Line Interface (CLI) class.
-!-----------------------------------------------------------------------------------------------------------------------------------
+
+use face, only : colorize
 use flap_command_line_argument_t, only : command_line_argument, action_store
 use flap_command_line_arguments_group_t, only : command_line_arguments_group, STATUS_PRINT_H, STATUS_PRINT_V
 use flap_object_t, only : object
 use flap_utils_m
 use penf
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 private
 save
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 type, extends(object), public :: command_line_interface
   !< Command Line Interface (CLI) class.
   private
@@ -88,24 +84,21 @@ type, extends(object), public :: command_line_interface
     generic,   private :: assignment(=) => cli_assign_cli !< CLI assignment overloading.
     final              :: finalize                        !< Free dynamic memory when finalizing.
 endtype command_line_interface
+
 integer(I4P), parameter, public :: MAX_VAL_LEN = 1000 !< Maximum number of characters of CLA value.
 ! errors codes
 integer(I4P), parameter, public :: ERROR_MISSING_CLA           = 25 !< CLA not found in CLI.
 integer(I4P), parameter, public :: ERROR_MISSING_GROUP         = 26 !< Group not found in CLI.
 integer(I4P), parameter, public :: ERROR_MISSING_SELECTION_CLA = 27 !< CLA selection in CLI failing.
 integer(I4P), parameter, public :: ERROR_TOO_FEW_CLAS          = 28 !< Insufficient arguments for CLI.
-!-----------------------------------------------------------------------------------------------------------------------------------
+
 contains
   ! public methods
   elemental subroutine free(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Free dynamic memory.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(inout) :: self !< CLI data.
   integer(I4P)                                 :: g    !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   ! object members
   call self%free_object
   ! command_line_interface members
@@ -115,18 +108,15 @@ contains
     enddo
     deallocate(self%clasg)
   endif
-  if (allocated(self%examples))  deallocate(self%examples)
+  if (allocated(self%args)) deallocate(self%args)
+  if (allocated(self%examples)) deallocate(self%examples)
   self%disable_hv = .false.
   self%is_parsed_ = .false.
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine free
 
   subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, &
-       usage_lun, error_lun, version_lun)
-  !---------------------------------------------------------------------------------------------------------------------------------
+                  usage_lun, error_lun, version_lun, error_color, error_style)
   !< Initialize CLI.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(inout) :: self              !< CLI data.
   character(*), optional,        intent(in)    :: progname          !< Program name.
   character(*), optional,        intent(in)    :: version           !< Program version.
@@ -137,19 +127,16 @@ contains
   character(*), optional,        intent(in)    :: examples(1:)      !< Examples of correct usage.
   character(*), optional,        intent(in)    :: epilog            !< Epilog message.
   logical,      optional,        intent(in)    :: disable_hv        !< Disable automatic insert of 'help' and 'version' CLAs.
-  integer(I4P), optional,        intent(in)    :: usage_lun         !< Unit number to print usage/help
-  integer(I4P), optional,        intent(in)    :: version_lun       !< Unit number to print version/license info
-  integer(I4P), optional,        intent(in)    :: error_lun         !< Unit number to print error info
+  integer(I4P), optional,        intent(in)    :: usage_lun         !< Unit number to print usage/help.
+  integer(I4P), optional,        intent(in)    :: version_lun       !< Unit number to print version/license info.
+  integer(I4P), optional,        intent(in)    :: error_lun         !< Unit number to print error info.
+  character(*), optional,        intent(in)    :: error_color       !< ANSI color of error messages.
+  character(*), optional,        intent(in)    :: error_style       !< ANSI style of error messages.
   character(len=:), allocatable                :: prog_invocation   !< Complete program invocation.
   integer(I4P)                                 :: invocation_length !< Length of invocation.
   integer(I4P)                                 :: retrieval_status  !< Retrieval status.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   call self%free
-  if (present(usage_lun))   self%usage_lun   = usage_lun
-  if (present(version_lun)) self%version_lun = version_lun
-  if (present(error_lun))   self%error_lun   = error_lun
   if (present(progname)) then
     self%progname = progname
   else
@@ -168,8 +155,6 @@ contains
   self%description = ''        ; if (present(description)) self%description = description
   self%license     = ''        ; if (present(license    )) self%license     = license
   self%authors     = ''        ; if (present(authors    )) self%authors     = authors
-  self%epilog      = ''        ; if (present(epilog     )) self%epilog      = epilog
-  if (present(disable_hv)) self%disable_hv = disable_hv
   if (present(examples)) then
 #ifdef __GFORTRAN__
     allocate(self%examples(1:size(examples)))
@@ -178,18 +163,21 @@ contains
 #endif
     self%examples = examples
   endif
+  self%epilog      = '' ; if (present(epilog     )) self%epilog      = epilog
+                          if (present(disable_hv )) self%disable_hv  = disable_hv  ! default set by self%free
+                          if (present(usage_lun  )) self%usage_lun   = usage_lun   ! default set by self%free
+                          if (present(version_lun)) self%version_lun = version_lun ! default set by self%free
+                          if (present(error_lun  )) self%error_lun   = error_lun   ! default set by self%free
+  self%error_color = '' ; if (present(error_color)) self%error_color = error_color
+  self%error_style = '' ; if (present(error_style)) self%error_style = error_style
   ! initialize only the first default group
   allocate(self%clasg(0:0))
   call self%clasg(0)%assign_object(self)
   self%clasg(0)%group = ''
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init
 
   subroutine add_group(self, help, description, exclude, group)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Add CLAs group to CLI.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(inout)    :: self              !< CLI data.
   character(*), optional,        intent(in)       :: help              !< Help message.
   character(*), optional,        intent(in)       :: description       !< Detailed description.
@@ -201,9 +189,7 @@ contains
   character(len=:), allocatable                   :: excluded          !< Group name of the mutually exclusive group.
   integer(I4P)                                    :: Ng                !< Number of groups.
   integer(I4P)                                    :: gi                !< Group index
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (.not.self%is_defined_group(group=group)) then
     helpd        = 'usage: ' ; if (present(help       )) helpd        = help
     descriptiond = ''        ; if (present(description)) descriptiond = description
@@ -224,33 +210,24 @@ contains
     self%clasg = clasg_list_new
     deallocate(clasg_list_new)
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine add_group
 
   subroutine set_mutually_exclusive_groups(self, group1, group2)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Set two CLAs group ad mutually exclusive.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(inout) :: self   !< CLI data.
   character(*),                  intent(in)    :: group1 !< Name of the first grouped CLAs.
   character(*),                  intent(in)    :: group2 !< Name of the second grouped CLAs.
   integer(I4P)                                 :: g1     !< Counter.
   integer(I4P)                                 :: g2     !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (self%is_defined_group(group=group1, g=g1).and.self%is_defined_group(group=group2, g=g2)) then
     self%clasg(g1)%m_exclude = group2
     self%clasg(g2)%m_exclude = group1
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine set_mutually_exclusive_groups
 
-  subroutine add(self, pref, group, group_index, switch, switch_ab, help, help_markdown, required, &
-                 positional, position, hidden, act, def, nargs, choices, exclude, envvar, error)
-  !---------------------------------------------------------------------------------------------------------------------------------
+  subroutine add(self, pref, group, group_index, switch, switch_ab, help, help_markdown, help_color, help_style, &
+                 required, positional, position, hidden, act, def, nargs, choices, exclude, envvar, error)
   !< Add CLA to CLI.
   !<
   !< @note If not otherwise declared the action on CLA value is set to "store" a value that must be passed after the switch name
@@ -259,7 +236,6 @@ contains
   !< @note If not otherwise speficied the CLA belongs to the default group "zero" that is the group of non-grouped CLAs.
   !<
   !< @note If CLA belongs to a not yet present group it is created on the fly.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(inout) :: self          !< CLI data.
   character(*), optional,        intent(in)    :: pref          !< Prefixing string.
   character(*), optional,        intent(in)    :: group         !< Name of the grouped CLAs.
@@ -267,6 +243,8 @@ contains
   character(*), optional,        intent(in)    :: switch        !< Switch name.
   character(*), optional,        intent(in)    :: switch_ab     !< Abbreviated switch name.
   character(*), optional,        intent(in)    :: help          !< Help message describing the CLA.
+  character(*), optional,        intent(in)    :: help_color    !< ANSI color of help messages.
+  character(*), optional,        intent(in)    :: help_style    !< ANSI style of help messages.
   character(*), optional,        intent(in)    :: help_markdown !< Longer help message, markdown formatted.
   logical,      optional,        intent(in)    :: required      !< Flag for set required argument.
   logical,      optional,        intent(in)    :: positional    !< Flag for checking if CLA is a positional or a named CLA.
@@ -281,9 +259,7 @@ contains
   integer(I4P), optional,        intent(out)   :: error         !< Error trapping flag.
   type(command_line_argument)                  :: cla           !< CLA data.
   integer(I4P)                                 :: g             !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   ! initialize CLA
   call cla%assign_object(self)
   if (present(switch)) then
@@ -295,20 +271,22 @@ contains
       cla%switch_ab = switch_ab
     endif
   endif
-                                                if (present(switch_ab ))    cla%switch_ab     = switch_ab
-  cla%help          = 'Undocumented argument' ; if (present(help      ))    cla%help          = help
+                                                if (present(switch_ab    )) cla%switch_ab     = switch_ab
+  cla%help          = 'Undocumented argument' ; if (present(help         )) cla%help          = help
+  cla%help_color    = ''                      ; if (present(help_color   )) cla%help_color    = help_color
+  cla%help_style    = ''                      ; if (present(help_style   )) cla%help_style    = help_style
   cla%help_markdown = ''                      ; if (present(help_markdown)) cla%help_markdown = help_markdown
-  cla%is_required   = .false.                 ; if (present(required  ))    cla%is_required   = required
-  cla%is_positional = .false.                 ; if (present(positional))    cla%is_positional = positional
-  cla%position      = 0_I4P                   ; if (present(position  ))    cla%position      = position
-  cla%is_hidden     = .false.                 ; if (present(hidden    ))    cla%is_hidden     = hidden
-  cla%act           = action_store            ; if (present(act       ))    cla%act           = trim(adjustl(Upper_Case(act)))
-                                                if (present(def       ))    cla%def           = def
-                                                if (present(def       ))    cla%val           = def
-                                                if (present(nargs     ))    cla%nargs         = nargs
-                                                if (present(choices   ))    cla%choices       = choices
-  cla%m_exclude     = ''                      ; if (present(exclude   ))    cla%m_exclude     = exclude
-                                                if (present(envvar    ))    cla%envvar        = envvar
+  cla%is_required   = .false.                 ; if (present(required     )) cla%is_required   = required
+  cla%is_positional = .false.                 ; if (present(positional   )) cla%is_positional = positional
+  cla%position      = 0_I4P                   ; if (present(position     )) cla%position      = position
+  cla%is_hidden     = .false.                 ; if (present(hidden       )) cla%is_hidden     = hidden
+  cla%act           = action_store            ; if (present(act          )) cla%act           = trim(adjustl(Upper_Case(act)))
+                                                if (present(def          )) cla%def           = def
+                                                if (present(def          )) cla%val           = def
+                                                if (present(nargs        )) cla%nargs         = nargs
+                                                if (present(choices      )) cla%choices       = choices
+  cla%m_exclude     = ''                      ; if (present(exclude      )) cla%m_exclude     = exclude
+                                                if (present(envvar       )) cla%envvar        = envvar
   call cla%check(pref=pref) ; self%error = cla%error
   if (self%error/=0) then
     if (present(error)) error = self%error
@@ -330,22 +308,16 @@ contains
     endif
   endif
   if (present(error)) error = self%error
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine add
 
   subroutine check(self, pref, error)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Check data consistency.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(INOUT) :: self  !< CLI data.
   character(*), optional,        intent(IN)    :: pref  !< Prefixing string.
   integer(I4P), optional,        intent(OUT)   :: error !< Error trapping flag.
   integer(I4P)                                 :: g     !< Counter.
   integer(I4P)                                 :: gg    !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   do g=0,size(self%clasg,dim=1)-1
     ! check group consistency
     call self%clasg(g)%check(pref=pref)
@@ -359,21 +331,15 @@ contains
       endif
     endif
   enddo
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check
 
   subroutine check_m_exclusive(self, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if two mutually exclusive CLAs group have been called.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(inout) :: self  !< CLI data.
   character(*), optional,        intent(in)    :: pref  !< Prefixing string.
   integer(I4P)                                 :: g     !< Counter.
   integer(I4P)                                 :: gg    !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   do g=1,size(self%clasg,dim=1)-1
     if (self%clasg(g)%is_called.and.(self%clasg(g)%m_exclude/='')) then
       if (self%is_defined_group(group=self%clasg(g)%m_exclude, g=gg)) then
@@ -385,23 +351,17 @@ contains
       endif
     endif
   enddo
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check_m_exclusive
 
   function is_passed(self, group, switch, position)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if a CLA has been passed.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(in) :: self      !< CLI data.
   character(*), optional,        intent(in) :: group     !< Name of group (command) of CLA.
   character(*), optional,        intent(in) :: switch    !< Switch name.
   integer(I4P), optional,        intent(in) :: position  !< Position of positional CLA.
   logical                                   :: is_passed !< Check if a CLA has been passed.
   integer(I4P)                              :: g         !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   is_passed = .false.
   if (.not.present(group)) then
     if (present(switch)) then
@@ -418,23 +378,17 @@ contains
       endif
     endif
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction is_passed
 
   function is_defined_group(self, group, g) result(defined)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if a CLAs group has been defined.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(in)  :: self    !< CLI data.
   character(*),                  intent(in)  :: group   !< Name of group (command) of CLAs.
   integer(I4P), optional,        intent(out) :: g       !< Index of group.
   logical                                    :: defined !< Check if a CLAs group has been defined.
   integer(I4P)                               :: gg      !< Counter.
   integer(I4P)                               :: ggg     !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   defined = .false.
   do gg=0, size(self%clasg,dim=1)-1
     ggg = gg
@@ -442,81 +396,57 @@ contains
     if (defined) exit
   enddo
   if (present(g)) g = ggg
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction is_defined_group
 
   function is_called_group(self, group) result(called)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if a CLAs group has been run.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(in) :: self   !< CLI data.
   character(*),                  intent(in) :: group  !< Name of group (command) of CLAs.
   logical                                   :: called !< Check if a CLAs group has been runned.
   integer(I4P)                              :: g      !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   called = .false.
   if (self%is_defined_group(group=group, g=g)) called = self%clasg(g)%is_called
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction is_called_group
 
   function is_defined(self, switch, group)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if a CLA has been defined.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(in) :: self       !< CLI data.
   character(*),                  intent(in) :: switch     !< Switch name.
   character(*), optional,        intent(in) :: group      !< Name of group (command) of CLAs.
   logical                                   :: is_defined !< Check if a CLA has been defined.
   integer(I4P)                              :: g          !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   is_defined = .false.
   if (.not.present(group)) then
     is_defined = self%clasg(0)%is_defined(switch=switch)
   else
     if (self%is_defined_group(group=group, g=g)) is_defined = self%clasg(g)%is_defined(switch=switch)
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction is_defined
 
   elemental function is_parsed(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if CLI has been parsed.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(in) :: self      !< CLI data.
   logical                                   :: is_parsed !< Parsed status.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   is_parsed = self%is_parsed_
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction is_parsed
 
   subroutine parse(self, pref, args, error)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Parse Command Line Interfaces by means of a previously initialized CLAs groups list.
   !<
   !< @note The leading and trailing white spaces are removed from CLA values.
   !<
   !< @note If the *args* argument is passed the command line arguments are taken from it and not from the actual program CLI
   !< invocations.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(inout) :: self    !< CLI data.
   character(*), optional,        intent(in)    :: pref    !< Prefixing string.
   character(*), optional,        intent(in)    :: args    !< String containing command line arguments.
   integer(I4P), optional,        intent(out)   :: error   !< Error trapping flag.
   integer(I4P)                                 :: g       !< Counter for CLAs group.
   integer(I4P), allocatable                    :: ai(:,:) !< Counter for CLAs grouped.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (present(error)) error = 0
   if (self%is_parsed_) return
 
@@ -614,14 +544,10 @@ contains
   self%is_parsed_ = .true.
 
   if (present(error)) error = self%error
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine parse
 
   subroutine get_clasg_indexes(self, ai)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get the argument indexes of CLAs groups defined parsing the actual passed CLAs.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(inout) :: self   !< CLI data.
   integer(I4P), allocatable,     intent(out)   :: ai(:,:)!< CLAs grouped indexes.
   integer(I4P)                                 :: Na     !< Number of command line arguments passed.
@@ -629,9 +555,7 @@ contains
   integer(I4P)                                 :: aa     !< Counter for CLAs.
   integer(I4P)                                 :: g      !< Counter for CLAs group.
   logical                                      :: found  !< Flag for inquiring if a named group is found.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   allocate(ai(0:size(self%clasg,dim=1)-1,1:2))
   ai = 0
   if (allocated(self%args)) then
@@ -668,14 +592,10 @@ contains
   else
     self%clasg(0)%is_called = .true.
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_clasg_indexes
 
   subroutine get_args_from_string(self, args, ai)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLAs from string.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(inout) :: self   !< CLI data.
   character(*),                  intent(in)    :: args   !< String containing command line arguments.
   integer(I4P), allocatable,     intent(out)   :: ai(:,:)!< CLAs grouped indexes.
@@ -689,9 +609,7 @@ contains
 #ifndef __GFORTRAN__
   integer(I4P)                                 :: length !< Maxium lenght of arguments string.
 #endif
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   ! prepare CLI arguments list
   if (allocated(self%args)) deallocate(self%args)
 
@@ -738,11 +656,8 @@ contains
   endif
 
   call self%get_clasg_indexes(ai=ai)
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   contains
     function sanitize_args(argsin, delimiter) result(sanitized)
-    !-------------------------------------------------------------------------------------------------------------------------------
     !< Sanitize arguments string.
     !<
     !< Substitute white spaces enclosed into string-arguments, i.e. 'string argument with spaces...' or
@@ -750,7 +665,6 @@ contains
     !< string is string'argument'with'spaces...
     !<
     !< @note The white spaces are reintroduce later.
-    !-------------------------------------------------------------------------------------------------------------------------------
     character(*), intent(in)                     :: argsin    !< Arguments string.
     character(*), intent(in)                     :: delimiter !< Delimiter enclosing string argument.
     character(len=len_trim(argsin))              :: sanitized !< Arguments string sanitized.
@@ -758,9 +672,7 @@ contains
     integer(I4P)                                 :: Nt        !< Number of command line arguments passed.
     integer(I4P)                                 :: t         !< Counter.
     integer(I4P)                                 :: tt        !< Counter.
-    !-------------------------------------------------------------------------------------------------------------------------------
 
-    !-------------------------------------------------------------------------------------------------------------------------------
     call tokenize(strin=trim(argsin), delimiter=delimiter, toks=tok, Nt=Nt)
     do t=2, Nt, 2
       do tt=1,len_trim(adjustl(tok(t)))
@@ -772,24 +684,18 @@ contains
       sanitized = trim(sanitized)//" "//trim(adjustl(tok(t)))
     enddo
     sanitized = trim(adjustl(sanitized))
-    return
-    !-------------------------------------------------------------------------------------------------------------------------------
     endfunction sanitize_args
   endsubroutine get_args_from_string
 
   subroutine get_args_from_invocation(self, ai)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLAs from CLI invocation.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(inout) :: self    !< CLI data.
   integer(I4P), allocatable,     intent(out)   :: ai(:,:) !< CLAs grouped indexes.
   integer(I4P)                                 :: Na      !< Number of command line arguments passed.
   character(max_val_len)                       :: switch  !< Switch name.
   integer(I4P)                                 :: a       !< Counter for CLAs.
   integer(I4P)                                 :: aa      !< Counter for CLAs.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (allocated(self%args)) deallocate(self%args)
   Na = command_argument_count()
   if (Na > 0) then
@@ -810,16 +716,12 @@ contains
   endif
 
   call self%get_clasg_indexes(ai=ai)
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_args_from_invocation
 
   subroutine get_cla(self, val, pref, args, group, switch, position, error)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA (single) value from CLAs list parsed.
   !<
   !< @note For logical type CLA the value is directly read without any robust error trapping.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(inout) :: self     !< CLI data.
   class(*),                      intent(inout) :: val      !< CLA value.
   character(*), optional,        intent(in)    :: pref     !< Prefixing string.
@@ -831,9 +733,7 @@ contains
   logical                                      :: found    !< Flag for checking if CLA containing switch has been found.
   integer(I4P)                                 :: g        !< Group counter.
   integer(I4P)                                 :: a        !< Argument counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
     if (self%error/=0) return
@@ -872,16 +772,12 @@ contains
     ! TODO warn (if liked) for non invoked group querying
   endif
   if (present(error)) error = self%error
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla
 
   subroutine get_cla_list(self, val, pref, args, group, switch, position, error)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA multiple values from CLAs list parsed.
   !<
   !< @note For logical type CLA the value is directly read without any robust error trapping.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(inout) :: self     !< CLI data.
   class(*),                      intent(inout) :: val(1:)  !< CLA values.
   character(*), optional,        intent(in)    :: pref     !< Prefixing string.
@@ -893,9 +789,7 @@ contains
   logical                                      :: found    !< Flag for checking if CLA containing switch has been found.
   integer(I4P)                                 :: g        !< Group counter.
   integer(I4P)                                 :: a        !< Argument counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
     if (self%error/=0) return
@@ -929,18 +823,14 @@ contains
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
   if (present(error)) error = self%error
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list
 
   subroutine get_cla_list_varying_R16P(self, val, pref, args, group, switch, position, error)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA multiple values from CLAs list parsed with varying size list, real(R16P).
   !<
   !< @note The CLA list is returned deallocated if values are not correctly gotten.
   !<
   !< @note For logical type CLA the value is directly read without any robust error trapping.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(inout) :: self     !< CLI data.
   real(R16P), allocatable,       intent(out)   :: val(:)   !< CLA values.
   character(*), optional,        intent(in)    :: pref     !< Prefixing string.
@@ -952,9 +842,7 @@ contains
   logical                                      :: found    !< Flag for checking if CLA containing switch has been found.
   integer(I4P)                                 :: g        !< Group counter.
   integer(I4P)                                 :: a        !< Argument counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
     if (self%error/=0) return
@@ -988,18 +876,14 @@ contains
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
   if (present(error)) error = self%error
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_varying_R16P
 
   subroutine get_cla_list_varying_R8P(self, val, pref, args, group, switch, position, error)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA multiple values from CLAs list parsed with varying size list, real(R8P).
   !<
   !< @note The CLA list is returned deallocated if values are not correctly gotten.
   !<
   !< @note For logical type CLA the value is directly read without any robust error trapping.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(inout) :: self     !< CLI data.
   real(R8P), allocatable,        intent(out)   :: val(:)   !< CLA values.
   character(*), optional,        intent(in)    :: pref     !< Prefixing string.
@@ -1011,9 +895,7 @@ contains
   logical                                      :: found    !< Flag for checking if CLA containing switch has been found.
   integer(I4P)                                 :: g        !< Group counter.
   integer(I4P)                                 :: a        !< Argument counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
     if (self%error/=0) return
@@ -1047,18 +929,14 @@ contains
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
   if (present(error)) error = self%error
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_varying_R8P
 
   subroutine get_cla_list_varying_R4P(self, val, pref, args, group, switch, position, error)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA multiple values from CLAs list parsed with varying size list, real(R4P).
   !<
   !< @note The CLA list is returned deallocated if values are not correctly gotten.
   !<
   !< @note For logical type CLA the value is directly read without any robust error trapping.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(inout) :: self     !< CLI data.
   real(R4P), allocatable,        intent(out)   :: val(:)   !< CLA values.
   character(*), optional,        intent(in)    :: pref     !< Prefixing string.
@@ -1070,9 +948,7 @@ contains
   logical                                      :: found    !< Flag for checking if CLA containing switch has been found.
   integer(I4P)                                 :: g        !< Group counter.
   integer(I4P)                                 :: a        !< Argument counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
     if (self%error/=0) return
@@ -1106,18 +982,14 @@ contains
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
   if (present(error)) error = self%error
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_varying_R4P
 
   subroutine get_cla_list_varying_I8P(self, val, pref, args, group, switch, position, error)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA multiple values from CLAs list parsed with varying size list, integer(I8P).
   !<
   !< @note The CLA list is returned deallocated if values are not correctly gotten.
   !<
   !< @note For logical type CLA the value is directly read without any robust error trapping.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(inout) :: self     !< CLI data.
   integer(I8P), allocatable,     intent(out)   :: val(:)   !< CLA values.
   character(*), optional,        intent(in)    :: pref     !< Prefixing string.
@@ -1129,9 +1001,7 @@ contains
   logical                                      :: found    !< Flag for checking if CLA containing switch has been found.
   integer(I4P)                                 :: g        !< Group counter.
   integer(I4P)                                 :: a        !< Argument counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
     if (self%error/=0) return
@@ -1165,18 +1035,14 @@ contains
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
   if (present(error)) error = self%error
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_varying_I8P
 
   subroutine get_cla_list_varying_I4P(self, val, pref, args, group, switch, position, error)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA multiple values from CLAs list parsed with varying size list, integer(I4P).
   !<
   !< @note The CLA list is returned deallocated if values are not correctly gotten.
   !<
   !< @note For logical type CLA the value is directly read without any robust error trapping.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(inout) :: self     !< CLI data.
   integer(I4P), allocatable,     intent(out)   :: val(:)   !< CLA values.
   character(*), optional,        intent(in)    :: pref     !< Prefixing string.
@@ -1188,9 +1054,7 @@ contains
   logical                                      :: found    !< Flag for checking if CLA containing switch has been found.
   integer(I4P)                                 :: g        !< Group counter.
   integer(I4P)                                 :: a        !< Argument counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
     if (self%error/=0) return
@@ -1224,18 +1088,14 @@ contains
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
   if (present(error)) error = self%error
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_varying_I4P
 
   subroutine get_cla_list_varying_I2P(self, val, pref, args, group, switch, position, error)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA multiple values from CLAs list parsed with varying size list, integer(I2P).
   !<
   !< @note The CLA list is returned deallocated if values are not correctly gotten.
   !<
   !< @note For logical type CLA the value is directly read without any robust error trapping.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(inout) :: self     !< CLI data.
   integer(I2P), allocatable,     intent(out)   :: val(:)   !< CLA values.
   character(*), optional,        intent(in)    :: pref     !< Prefixing string.
@@ -1247,9 +1107,7 @@ contains
   logical                                      :: found    !< Flag for checking if CLA containing switch has been found.
   integer(I4P)                                 :: g        !< Group counter.
   integer(I4P)                                 :: a        !< Argument counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
     if (self%error/=0) return
@@ -1283,18 +1141,14 @@ contains
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
   if (present(error)) error = self%error
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_varying_I2P
 
   subroutine get_cla_list_varying_I1P(self, val, pref, args, group, switch, position, error)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA multiple values from CLAs list parsed with varying size list, integer(I1P).
   !<
   !< @note The CLA list is returned deallocated if values are not correctly gotten.
   !<
   !< @note For logical type CLA the value is directly read without any robust error trapping.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(inout) :: self     !< CLI data.
   integer(I1P), allocatable,     intent(out)   :: val(:)   !< CLA values.
   character(*), optional,        intent(in)    :: pref     !< Prefixing string.
@@ -1306,9 +1160,7 @@ contains
   logical                                      :: found    !< Flag for checking if CLA containing switch has been found.
   integer(I4P)                                 :: g        !< Group counter.
   integer(I4P)                                 :: a        !< Argument counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
     if (self%error/=0) return
@@ -1342,18 +1194,14 @@ contains
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
   if (present(error)) error = self%error
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_varying_I1P
 
   subroutine get_cla_list_varying_logical(self, val, pref, args, group, switch, position, error)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA multiple values from CLAs list parsed with varying size list, logical.
   !<
   !< @note The CLA list is returned deallocated if values are not correctly gotten.
   !<
   !< @note For logical type CLA the value is directly read without any robust error trapping.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(inout) :: self     !< CLI data.
   logical, allocatable,          intent(out)   :: val(:)   !< CLA values.
   character(*), optional,        intent(in)    :: pref     !< Prefixing string.
@@ -1365,9 +1213,7 @@ contains
   logical                                      :: found    !< Flag for checking if CLA containing switch has been found.
   integer(I4P)                                 :: g        !< Group counter.
   integer(I4P)                                 :: a        !< Argument counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
     if (self%error/=0) return
@@ -1401,18 +1247,14 @@ contains
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
   if (present(error)) error = self%error
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_varying_logical
 
   subroutine get_cla_list_varying_char(self, val, pref, args, group, switch, position, error)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA multiple values from CLAs list parsed with varying size list, character.
   !<
   !< @note The CLA list is returned deallocated if values are not correctly gotten.
   !<
   !< @note For logical type CLA the value is directly read without any robust error trapping.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(inout) :: self     !< CLI data.
   character(*), allocatable,     intent(out)   :: val(:)   !< CLA values.
   character(*), optional,        intent(in)    :: pref     !< Prefixing string.
@@ -1424,9 +1266,7 @@ contains
   logical                                      :: found    !< Flag for checking if CLA containing switch has been found.
   integer(I4P)                                 :: g        !< Group counter.
   integer(I4P)                                 :: a        !< Argument counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
     if (self%error/=0) return
@@ -1460,14 +1300,10 @@ contains
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
   if (present(error)) error = self%error
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_varying_char
 
   function usage(self, g, pref, no_header, no_examples, no_epilog, markdown) result(usaged)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Print correct usage of CLI.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(in) :: self         !< CLI data.
   integer(I4P),                  intent(in) :: g            !< Group index.
   character(*), optional,        intent(in) :: pref         !< Prefixing string.
@@ -1483,9 +1319,7 @@ contains
   logical                                   :: markdownd    !< Format for markdown.
   integer(I4P)                              :: gi           !< Counter.
   integer(I4P)                              :: e            !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   no_headerd = .false. ; if (present(no_header)) no_headerd = no_header
   no_examplesd = .false. ; if (present(no_examples)) no_examplesd = no_examples
   no_epilogd = .false. ; if (present(no_epilog)) no_epilogd = no_epilog
@@ -1520,20 +1354,14 @@ contains
     enddo
   endif
   if (self%epilog/=''.and.(.not.no_epilogd)) usaged = usaged//new_line('a')//prefd//self%epilog
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction usage
 
   function signature(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get signature.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(in) :: self      !< CLI data.
   character(len=:), allocatable             :: signature !< Signature.
   integer(I4P)                              :: g         !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   signature = self%clasg(0)%signature()
   if (size(self%clasg,dim=1)>1) then
     signature = signature//' {'//self%clasg(1)%group
@@ -1542,28 +1370,18 @@ contains
     enddo
     signature = signature//'} ...'
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction signature
 
   subroutine print_usage(self, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Print correct usage.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(in) :: self  !< CLI data.
   character(*), optional,        intent(in) :: pref  !< Prefixing string.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   write(self%usage_lun, '(A)') self%usage(pref=pref, g=0)
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine print_usage
 
   subroutine save_man_page(self, man_file, error)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Save man page build on the CLI.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(in)  :: self               !< CLI data.
   character(*),                  intent(in)  :: man_file           !< Output file name for saving man page.
   integer(I4P), optional,        intent(out) :: error              !< Error trapping flag.
@@ -1583,9 +1401,7 @@ contains
                                                            "Oct",&
                                                            "Nov",&
                                                            "Dec"]  !< Months list.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   call date_and_time(values=idate)
   man = '.TH '//self%progname//' "1" "'//month(idate(2))//' '//trim(adjustl(strz(4,idate(1))))//'" "version '//self%version//&
     '" "'//self%progname//' Manual"'
@@ -1619,14 +1435,10 @@ contains
     write(u, "(A)")man
   endif
   close(u)
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine save_man_page
 
   subroutine save_usage_to_markdown(self, markdown_file, error)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Save the CLI as a markdown page, for inclusion into the documentation.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(in)  :: self               !< CLI data.
   character(*),                  intent(in)  :: markdown_file      !< Output file name for saving man page.
   integer(I4P), optional,        intent(out) :: error              !< Error trapping flag.
@@ -1646,9 +1458,7 @@ contains
                                                            "Oct",&
                                                            "Nov",&
                                                            "Dec"]  !< Months list.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   ! add the other tags here.
   man = ''
   ! add the short description
@@ -1671,75 +1481,55 @@ contains
     write(u, "(A)")man
   endif
   close(u)
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine save_usage_to_markdown
 
   ! private methods
   subroutine errored(self, error, pref, group, switch)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Trig error occurrence and print meaningful message.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(inout) :: self   !< Object data.
   integer(I4P),                  intent(in)    :: error  !< Error occurred.
   character(*), optional,        intent(in)    :: pref   !< Prefixing string.
   character(*), optional,        intent(in)    :: group  !< Group name.
   character(*), optional,        intent(in)    :: switch !< CLA switch name.
   character(len=:), allocatable                :: prefd  !< Prefixing string.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   self%error = error
   if (self%error/=0) then
     prefd = '' ; if (present(pref)) prefd = pref
+    prefd = prefd//self%progname//': '//colorize('error', color_fg=self%error_color, style=self%error_style)
     select case(self%error)
     case(ERROR_MISSING_CLA)
-      self%error_message = prefd//self%progname//': error: there is no option "'//trim(adjustl(switch))//'"!'
+      self%error_message = prefd//': there is no option "'//trim(adjustl(switch))//'"!'
     case(ERROR_MISSING_SELECTION_CLA)
-      self%error_message = prefd//self%progname//&
-        ': error: to get an option value one of switch "name" or "position" must be provided!'
+      self%error_message = prefd//': to get an option value one of switch "name" or "position" must be provided!'
     case(ERROR_MISSING_GROUP)
-      self%error_message = prefd//self%progname//': error: ther is no group (command) named "'//trim(adjustl(group))//'"!'
+      self%error_message = prefd//': ther is no group (command) named "'//trim(adjustl(group))//'"!'
     case(ERROR_TOO_FEW_CLAS)
-      ! self%error_message = prefd//self%progname//': error: too few arguments ('//trim(str(.true.,Na))//')'//&
+      ! self%error_message = prefd//': too few arguments ('//trim(str(.true.,Na))//')'//&
                          ! ' respect the required ('//trim(str(.true.,self%Na_required))//')'
     endselect
     write(self%error_lun,'(A)')
     call self%print_error_message
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine errored
 
   elemental subroutine cli_assign_cli(lhs, rhs)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Assignment operator.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_interface), intent(inout) :: lhs !< Left hand side.
   type(command_line_interface),  intent(in)    :: rhs !< Right hand side.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   ! object members
   call lhs%assign_object(rhs)
   ! command_line_interface members
   if (allocated(rhs%clasg   )) lhs%clasg      = rhs%clasg
   if (allocated(rhs%examples)) lhs%examples   = rhs%examples
                                lhs%disable_hv = rhs%disable_hv
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine cli_assign_cli
 
   elemental subroutine finalize(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Free dynamic memory when finalizing.
-  !---------------------------------------------------------------------------------------------------------------------------------
   type(command_line_interface), intent(inout) :: self !< CLI data.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   call self%free
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine finalize
 endmodule flap_command_line_interface_t

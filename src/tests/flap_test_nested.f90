@@ -1,5 +1,5 @@
 !< A testing program for FLAP, Fortran command Line Arguments Parser for poor people
-program test_nested
+program flap_test_nested
 !< A testing program for FLAP, Fortran command Line Arguments Parser for poor people
 !<
 !<### Compile
@@ -7,20 +7,16 @@ program test_nested
 !<
 !<###Usage Compile
 !< See [usage instructions](https://github.com/szaghi/FLAP/wiki/Testing-Programs).
-!-----------------------------------------------------------------------------------------------------------------------------------
+
 use flap, only : command_line_interface
 use penf
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 type(command_line_interface) :: cli           !< Command Line Interface (CLI).
 logical                      :: authors_print !< Boolean value.
 character(500)               :: message       !< Message value.
 integer(I4P)                 :: error         !< Error trapping flag.
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 authors_print = .false.
 
 ! initialize Command Line Interface
@@ -72,6 +68,4 @@ elseif (cli%run_command('tag')) then
 else
   print '(A)','cowardly you are doing nothing... try at least "-h" option!'
 endif
-stop
-!-----------------------------------------------------------------------------------------------------------------------------------
-endprogram test_nested
+endprogram flap_test_nested

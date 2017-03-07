@@ -6,3 +6,7 @@
   path = src/third_party/fortran_tester
   url = https://github.com/pdebuyl/fortran_tester
   branch = master
+[submodule "src/third_party/FACE"]
+  path = src/third_party/FACE
+  url = git@github.com:szaghi/FACE.git
+  branch = master
