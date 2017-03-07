@@ -8,5 +8,5 @@
   branch = master
 [submodule "src/third_party/FACE"]
   path = src/third_party/FACE
-  url = git@github.com:szaghi/FACE.git
+  url = https://github.com/szaghi/FACE
   branch = master
