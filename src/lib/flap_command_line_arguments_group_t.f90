@@ -1,8 +1,8 @@
 !< Command Line Arguments Group (CLAsG) class.
 module flap_command_line_arguments_group_t
-!-----------------------------------------------------------------------------------------------------------------------------------
 !< Command Line Arguments Group (CLAsG) class.
-!-----------------------------------------------------------------------------------------------------------------------------------
+
+use face, only : colorize
 use flap_command_line_argument_t, only : command_line_argument, &
                                          ACTION_PRINT_HELP,     &
                                          ACTION_PRINT_VERS,     &
@@ -11,18 +11,14 @@ use flap_command_line_argument_t, only : command_line_argument, &
                                          ARGS_SEP
 use flap_object_t, only : object
 use penf
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 private
 save
 public :: command_line_arguments_group
 public :: STATUS_PRINT_V
 public :: STATUS_PRINT_H
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 type, extends(object) :: command_line_arguments_group
   !< Command Line Arguments Group (CLAsG) class.
   !<
@@ -54,13 +50,15 @@ type, extends(object) :: command_line_arguments_group
     generic,   private :: assignment(=) => clasg_assign_clasg !< Assignment operator overloading.
     final              :: finalize                            !< Free dynamic memory when finalizing.
 endtype command_line_arguments_group
+
 ! status codes
 integer(I4P), parameter :: STATUS_PRINT_V = -1 !< Print version status.
 integer(I4P), parameter :: STATUS_PRINT_H = -2 !< Print help status.
+
 ! errors codes
 integer(I4P), parameter :: ERROR_CONSISTENCY = 23 !< CLAs group consistency error.
 integer(I4P), parameter :: ERROR_M_EXCLUDE   = 24 !< Two mutually exclusive CLAs group have been called.
-!-----------------------------------------------------------------------------------------------------------------------------------
+
 contains
   ! public methods
   elemental subroutine free(self)
@@ -494,42 +492,38 @@ contains
 
   ! private methods
   subroutine errored(self, error, pref, a1, a2)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Trig error occurrence and print meaningful message.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_arguments_group), intent(inout) :: self  !< CLAsG data.
   integer(I4P),                        intent(in)    :: error !< Error occurred.
   character(*), optional,              intent(in)    :: pref  !< Prefixing string.
   integer(I4P), optional,              intent(in)    :: a1    !< First index CLAs group inconsistent.
   integer(I4P), optional,              intent(in)    :: a2    !< Second index CLAs group inconsistent.
   character(len=:), allocatable                      :: prefd !< Prefixing string.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   self%error = error
   if (self%error/=0) then
     prefd = '' ; if (present(pref)) prefd = pref
+    prefd = prefd//self%progname//': '//colorize('error', color_fg=self%error_color, style=self%error_style)
     select case(self%error)
     case(ERROR_CONSISTENCY)
       if (self%group /= '') then
-        self%error_message = prefd//self%progname//': error: group (command) name: "'//self%group//'" consistency error:'
+        self%error_message = prefd//': group (command) name: "'//self%group//'" consistency error:'
       else
-        self%error_message = prefd//self%progname//': error: consistency error:'
+        self%error_message = prefd//': consistency error:'
       endif
-      self%error_message = self%error_message//' "'//trim(str(a1, .true.))//&
-        '-th" option has the same switch or abbreviated switch of "'//trim(str(a2, .true.))//'-th" option:'//new_line('a')
+      self%error_message = self%error_message//' "'//trim(str(a1, .true.))//             &
+                           '-th" option has the same switch or abbreviated switch of "'//&
+                           trim(str(a2, .true.))//'-th" option:'//new_line('a')
       self%error_message = self%error_message//prefd//' CLA('//trim(str(a1, .true.)) //') switches = '//self%cla(a1)%switch //' '//&
-        self%cla(a1)%switch_ab//new_line('a')
+                           self%cla(a1)%switch_ab//new_line('a')
       self%error_message = self%error_message//prefd//' CLA('//trim(str(a2, .true.))//') switches = '//self%cla(a2)%switch//' '//&
-                         self%cla(a2)%switch_ab
+                           self%cla(a2)%switch_ab
     case(ERROR_M_EXCLUDE)
-      self%error_message = prefd//self%progname//': error: the group "'//self%group//'" and "'//self%m_exclude//'" are mutually'//&
-       ' exclusive, but both have been called!'
+      self%error_message = prefd//': the group "'//self%group//'" and "'//self%m_exclude//'" are mutually'//&
+                           ' exclusive, but both have been called!'
     endselect
     call self%print_error_message
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine errored
 
   subroutine check_m_exclusive(self, pref)

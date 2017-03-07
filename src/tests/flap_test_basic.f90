@@ -1,5 +1,5 @@
 !< A testing program for FLAP, Fortran command Line Arguments Parser for poor people
-program test_basic
+program flap_test_basic
 !< A testing program for FLAP, Fortran command Line Arguments Parser for poor people
 !<
 !<### Compile
@@ -7,12 +7,10 @@ program test_basic
 !<
 !<###Usage Compile
 !< See [usage instructions](https://github.com/szaghi/FLAP/wiki/Testing-Programs).
-!-----------------------------------------------------------------------------------------------------------------------------------
+
 use flap, only : command_line_interface
 use penf
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 type(command_line_interface) :: cli          !< Command Line Interface (CLI).
 character(99)                :: sval         !< String value.
@@ -35,9 +33,7 @@ character(10), allocatable   :: vlistChar(:) !< Varying size character list valu
 character(99), allocatable   :: garbage(:)   !< Varying size character list for trailing garbage values.
 integer(I4P)                 :: error        !< Error trapping flag.
 integer(I4P)                 :: l            !< Counter.
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 ! initialize Command Line Interface
 call cli%init(progname    = 'test_basic',                                                 &
               version     = 'v2.1.5',                                                     &
@@ -218,6 +214,4 @@ if (cli%is_passed(switch='--man_file')) then
   print '(A)','Saving man page'
   call cli%save_man_page(error=error,man_file=trim(adjustl(sval)))
 endif
-stop
-!-----------------------------------------------------------------------------------------------------------------------------------
-endprogram test_basic
+endprogram flap_test_basic
