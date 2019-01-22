@@ -13,7 +13,7 @@ ADD_LIBRARY(${LIB} ${LIB_SRC})
 #################################################################
 # External projects
 #################################################################
-FOREACH(PENF_LIB ${PENF_LIBS})
+FOREACH(PENF_LIB ${PENF_LIBS} ${FACE_LIBS})
         TARGET_LINK_LIBRARIES(${LIB} ${PENF_LIB})
 ENDFOREACH()
 
