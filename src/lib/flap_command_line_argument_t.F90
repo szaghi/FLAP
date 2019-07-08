@@ -46,6 +46,7 @@ type, extends(object) :: command_line_argument
     procedure, public :: raise_error_nargs_insufficient  !< Raise error insufficient number of argument values passed.
     procedure, public :: raise_error_value_missing       !< Raise error missing value.
     procedure, public :: raise_error_switch_unknown      !< Raise error switch_unknown.
+    procedure, public :: raise_error_duplicated_clas     !< Raise error duplicated CLAs passed.
     generic,   public :: get =>   &
                          get_cla, &
                          get_cla_list                    !< Get CLA value(s).
@@ -124,6 +125,7 @@ integer(I4P), parameter :: ERROR_STORE_STAR_POSITIONAL  = 19 !< Action store* no
 integer(I4P), parameter :: ERROR_STORE_STAR_NARGS       = 20 !< Action store* not allowed for list-values CLA.
 integer(I4P), parameter :: ERROR_STORE_STAR_ENVVAR      = 21 !< Action store* not allowed for environment variable CLA.
 integer(I4P), parameter :: ERROR_ACTION_UNKNOWN         = 22 !< Unknown CLA (switch name).
+integer(I4P), parameter :: ERROR_DUPLICATED_CLAS        = 23 !< Duplicated CLAs passed, passed multiple instance of the same CLA.
 
 contains
   ! public methods
@@ -243,6 +245,15 @@ contains
 
   call self%errored(pref=pref, error=ERROR_UNKNOWN, switch=switch)
   endsubroutine raise_error_switch_unknown
+
+  subroutine raise_error_duplicated_clas(self, switch, pref)
+  !< Raise error duplicated CLAs passed.
+  class(command_line_argument), intent(inout) :: self   !< CLA data.
+  character(*), optional,       intent(in)    :: switch !< CLA switch name.
+  character(*), optional,       intent(in)    :: pref   !< Prefixing string.
+
+  call self%errored(pref=pref, error=ERROR_DUPLICATED_CLAS, switch=switch)
+  endsubroutine raise_error_duplicated_clas
 
   subroutine sanitize_defaults(self)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -553,6 +564,8 @@ contains
                            '" has "'//action_store_star//'" action that is not allowed for environment variable option!'
     case(ERROR_ACTION_UNKNOWN)
       self%error_message = prefd//': named option "'//trim(adjustl(self%switch))//'" has unknown "'//self%act//'" action!'
+    case(ERROR_DUPLICATED_CLAS)
+      self%error_message = prefd//': switch "'//trim(adjustl(switch))//'" has been passed more than once!'
     endselect
     call self%print_error_message
   endif
