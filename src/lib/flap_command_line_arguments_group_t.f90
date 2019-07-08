@@ -277,6 +277,7 @@ contains
   class(command_line_arguments_group), intent(inout) :: self      !< CLAsG data.
   character(*), optional,              intent(in)    :: pref      !< Prefixing string.
   character(*),                        intent(in)    :: args(:)   !< Command line arguments.
+  type(command_line_argument)                        :: cla       !< CLA data.
   character(500)                                     :: envvar    !< Environment variables buffer.
   integer(I4P)                                       :: arg       !< Argument counter.
   integer(I4P)                                       :: a         !< Counter.
@@ -297,6 +298,11 @@ contains
         if (.not.self%cla(a)%is_positional) then
           if (trim(adjustl(self%cla(a)%switch   ))==trim(adjustl(args(arg))).or.&
               trim(adjustl(self%cla(a)%switch_ab))==trim(adjustl(args(arg)))) then
+            if (self%cla(a)%is_passed) then
+               ! current CLA has been already passed, raise an error
+               call self%cla(arg)%raise_error_duplicated_clas(pref=pref, switch=trim(adjustl(args(arg))))
+               self%error = self%cla(arg)%error
+            endif
             found_val = .false.
             if (self%cla(a)%act==action_store) then
               if (allocated(self%cla(a)%envvar)) then
@@ -413,6 +419,16 @@ contains
         endif
       enddo
       if (.not.found) then ! current argument (arg-th) does not correspond to a named option
+        if (arg>self%Na) then ! has been passed too much CLAs
+           ! place the error into a new positional dummy CLA
+           call cla%assign_object(self)
+           cla%is_passed = .true.
+           cla%m_exclude = ''
+           call self%add(pref=pref, cla=cla)
+           call self%cla(self%Na)%raise_error_switch_unknown(pref=pref, switch=trim(adjustl(args(arg))))
+           self%error = self%cla(self%Na)%error
+           return
+        endif
         if (.not.self%cla(arg)%is_positional) then ! current argument (arg-th) is not positional... there is a problem!
           call self%cla(arg)%raise_error_switch_unknown(pref=pref, switch=trim(adjustl(args(arg))))
           self%error = self%cla(arg)%error
