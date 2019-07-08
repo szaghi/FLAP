@@ -50,7 +50,7 @@ type, extends(object) :: command_line_argument
                          get_cla, &
                          get_cla_list                    !< Get CLA value(s).
     generic,   public :: get_varying =>                &
-#ifdef r16p
+#ifdef _R16P_SUPPORTED
                          get_cla_list_varying_R16P,    &
 #endif
                          get_cla_list_varying_R8P,     &
@@ -718,7 +718,7 @@ contains
   tmp = self%choices
   call tokenize(strin=tmp, delimiter=',', toks=toks, Nt=Nc)
   select type(val)
-#ifdef r16p
+#ifdef _R16P_SUPPORTED
   type is(real(R16P))
     val_str = str(n=val)
     do c=1, Nc
@@ -859,7 +859,7 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   select type(val)
-#ifdef r16p
+#ifdef _R16P_SUPPORTED
   type is(real(R16P))
     val = cton(pref=pref, error=self%error, str=trim(adjustl(buffer)), knd=1._R16P)
 #endif
@@ -961,7 +961,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   call tokenize(strin=buffer, delimiter=args_sep, toks=vals, Nt=Nv)
   select type(val)
-#ifdef r16p
+#ifdef _R16P_SUPPORTED
   type is(real(R16P))
     do v=1, Nv
       val(v) = cton(pref=pref,error=self%error,str=trim(adjustl(vals(v))),knd=1._R16P)

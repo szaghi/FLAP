@@ -43,7 +43,7 @@ type, extends(object), public :: command_line_interface
                          get_cla, &
                          get_cla_list                    !< Get CLA value(s) from CLAs list parsed.
     generic,   public :: get_varying =>                &
-#ifdef r16p
+#ifdef _R16P_SUPPORTED
                          get_cla_list_varying_R16P,    &
 #endif
                          get_cla_list_varying_R8P,     &

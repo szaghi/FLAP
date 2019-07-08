@@ -15,7 +15,7 @@ else
   DOBJ = exe/obj/
   DMOD = exe/mod/
   DEXE = exe/
-  RULE = $(DEXE)test_basic $(DEXE)test_choices_logical $(DEXE)test_nested $(DEXE)test_string $(DEXE)test_hidden $(DEXE)test_minimal
+  RULE = $(DEXE)flap_test_basic $(DEXE)flap_test_choices_logical $(DEXE)flap_test_nested $(DEXE)flap_test_string $(DEXE)flap_test_hidden $(DEXE)flap_test_minimal
 endif
 DSRC = src/
 LIBS =
@@ -43,41 +43,41 @@ RUTEXT = "Executed rule $@"
 firsrule: $(RULE)
 
 #building rules
-$(DEXE)test_basic: $(MKDIRS) $(DOBJ)test_basic.o
-	@rm -f $(filter-out $(DOBJ)test_basic.o,$(EXESOBJ))
+$(DEXE)flap_test_basic: $(MKDIRS) $(DOBJ)flap_test_basic.o
+	@rm -f $(filter-out $(DOBJ)flap_test_basic.o,$(EXESOBJ))
 	@echo $(LITEXT)
 	@$(FC) $(OPTSL) $(DOBJ)*.o $(LIBS) -o $@
-EXES := $(EXES) test_basic
+EXES := $(EXES) flap_test_basic
 
-$(DEXE)test_choices_logical: $(MKDIRS) $(DOBJ)test_choices_logical.o
-	@rm -f $(filter-out $(DOBJ)test_choices_logical.o,$(EXESOBJ))
+$(DEXE)flap_test_choices_logical: $(MKDIRS) $(DOBJ)flap_test_choices_logical.o
+	@rm -f $(filter-out $(DOBJ)flap_test_choices_logical.o,$(EXESOBJ))
 	@echo $(LITEXT)
 	@$(FC) $(OPTSL) $(DOBJ)*.o $(LIBS) -o $@
-EXES := $(EXES) test_choices_logical
+EXES := $(EXES) flap_test_choices_logical
 
-$(DEXE)test_nested: $(MKDIRS) $(DOBJ)test_nested.o
-	@rm -f $(filter-out $(DOBJ)test_nested.o,$(EXESOBJ))
+$(DEXE)flap_test_nested: $(MKDIRS) $(DOBJ)flap_test_nested.o
+	@rm -f $(filter-out $(DOBJ)flap_test_nested.o,$(EXESOBJ))
 	@echo $(LITEXT)
 	@$(FC) $(OPTSL) $(DOBJ)*.o $(LIBS) -o $@
-EXES := $(EXES) test_nested
+EXES := $(EXES) flap_test_nested
 
-$(DEXE)test_string: $(MKDIRS) $(DOBJ)test_string.o
-	@rm -f $(filter-out $(DOBJ)test_string.o,$(EXESOBJ))
+$(DEXE)flap_test_string: $(MKDIRS) $(DOBJ)flap_test_string.o
+	@rm -f $(filter-out $(DOBJ)flap_test_string.o,$(EXESOBJ))
 	@echo $(LITEXT)
 	@$(FC) $(OPTSL) $(DOBJ)*.o $(LIBS) -o $@
-EXES := $(EXES) test_string
+EXES := $(EXES) flap_test_string
 
-$(DEXE)test_hidden: $(MKDIRS) $(DOBJ)test_hidden.o
-	@rm -f $(filter-out $(DOBJ)test_hidden.o,$(EXESOBJ))
+$(DEXE)flap_test_hidden: $(MKDIRS) $(DOBJ)flap_test_hidden.o
+	@rm -f $(filter-out $(DOBJ)flap_test_hidden.o,$(EXESOBJ))
 	@echo $(LITEXT)
 	@$(FC) $(OPTSL) $(DOBJ)*.o $(LIBS) -o $@
-EXES := $(EXES) test_hidden
+EXES := $(EXES) flap_test_hidden
 
-$(DEXE)test_minimal: $(MKDIRS) $(DOBJ)test_minimal.o
-	@rm -f $(filter-out $(DOBJ)test_minimal.o,$(EXESOBJ))
+$(DEXE)flap_test_minimal: $(MKDIRS) $(DOBJ)flap_test_minimal.o
+	@rm -f $(filter-out $(DOBJ)flap_test_minimal.o,$(EXESOBJ))
 	@echo $(LITEXT)
 	@$(FC) $(OPTSL) $(DOBJ)*.o $(LIBS) -o $@
-EXES := $(EXES) test_minimal
+EXES := $(EXES) flap_test_minimal
 
 FLAP: $(MKDIRS) $(DOBJ)flap.o
 	@echo $(LITEXT)
@@ -108,7 +108,8 @@ $(DOBJ)flap_utils_m.o: src/lib/flap_utils_m.f90 \
 $(DOBJ)flap_command_line_argument_t.o: src/lib/flap_command_line_argument_t.F90 \
 	$(DOBJ)flap_object_t.o \
 	$(DOBJ)flap_utils_m.o \
-	$(DOBJ)penf.o
+	$(DOBJ)penf.o \
+	$(DOBJ)face.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
@@ -146,37 +147,41 @@ $(DOBJ)penf_global_parameters_variables.o: src/third_party/PENF/src/lib/penf_glo
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
-$(DOBJ)test_nested.o: src/tests/test_nested.f90 \
+$(DOBJ)face.o: src/third_party/FACE/src/lib/face.F90
+	@echo $(COTEXT)
+	@$(FC) $(OPTSC)  $< -o $@
+
+$(DOBJ)flap_test_nested.o: src/tests/flap_test_nested.f90 \
 	$(DOBJ)flap.o \
 	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
-$(DOBJ)test_hidden.o: src/tests/test_hidden.f90 \
+$(DOBJ)flap_test_hidden.o: src/tests/flap_test_hidden.f90 \
 	$(DOBJ)flap.o \
 	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
-$(DOBJ)test_minimal.o: src/tests/test_minimal.f90 \
+$(DOBJ)flap_test_minimal.o: src/tests/flap_test_minimal.f90 \
 	$(DOBJ)flap.o \
 	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
-$(DOBJ)test_choices_logical.o: src/tests/test_choices_logical.f90 \
+$(DOBJ)flap_test_choices_logical.o: src/tests/flap_test_choices_logical.f90 \
 	$(DOBJ)flap.o \
 	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
-$(DOBJ)test_string.o: src/tests/test_string.f90 \
+$(DOBJ)flap_test_string.o: src/tests/flap_test_string.f90 \
 	$(DOBJ)flap.o \
 	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
-$(DOBJ)test_basic.o: src/tests/test_basic.f90 \
+$(DOBJ)flap_test_basic.o: src/tests/flap_test_basic.f90 \
 	$(DOBJ)flap.o \
 	$(DOBJ)penf.o
 	@echo $(COTEXT)
