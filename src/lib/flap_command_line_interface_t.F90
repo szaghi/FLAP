@@ -87,10 +87,10 @@ endtype command_line_interface
 
 integer(I4P), parameter, public :: MAX_VAL_LEN = 1000 !< Maximum number of characters of CLA value.
 ! errors codes
-integer(I4P), parameter, public :: ERROR_MISSING_CLA           = 25 !< CLA not found in CLI.
-integer(I4P), parameter, public :: ERROR_MISSING_GROUP         = 26 !< Group not found in CLI.
-integer(I4P), parameter, public :: ERROR_MISSING_SELECTION_CLA = 27 !< CLA selection in CLI failing.
-integer(I4P), parameter, public :: ERROR_TOO_FEW_CLAS          = 28 !< Insufficient arguments for CLI.
+integer(I4P), parameter, public :: ERROR_MISSING_CLA           = 1000 !< CLA not found in CLI.
+integer(I4P), parameter, public :: ERROR_MISSING_GROUP         = 1001 !< Group not found in CLI.
+integer(I4P), parameter, public :: ERROR_MISSING_SELECTION_CLA = 1002 !< CLA selection in CLI failing.
+integer(I4P), parameter, public :: ERROR_TOO_FEW_CLAS          = 1003 !< Insufficient arguments for CLI.
 
 contains
   ! public methods
@@ -1403,7 +1403,7 @@ contains
                                                            "Dec"]  !< Months list.
 
   call date_and_time(values=idate)
-  man = '.TH '//self%progname//' "1" "'//month(idate(2))//' '//trim(adjustl(strz(4,idate(1))))//'" "version '//self%version//&
+  man = '.TH '//self%progname//' "1" "'//month(idate(2))//' '//trim(adjustl(strz(idate(1),4)))//'" "version '//self%version//&
     '" "'//self%progname//' Manual"'
   man = man//new_line('a')//'.SH NAME'
   man = man//new_line('a')//self%progname//' - manual page for '//self%progname//' version '//self%version
@@ -1460,15 +1460,17 @@ contains
                                                            "Dec"]  !< Months list.
 
   ! add the other tags here.
-  man = ''
+  man = '# '//self%progname//new_line('a')
+  man = man//new_line('a')//'Manual page for `'//self%progname//'` version '//self%version//new_line('a')
+  man = man//new_line('a')//'`'//self%progname//trim(adjustl(self%signature()))//'`'//new_line('a')
   ! add the short description
   if (self%description /= '') man = man//new_line('a')//'### Short description'//new_line('a')//new_line('a')//self%description
   if (self%clasg(0)%Na>0) then
     man = man//new_line('a')//new_line('a')//'### Command line options:'
-    man = man//new_line('a')//new_line('a')//self%usage(no_header=.true.,no_examples=.true.,no_epilog=.true.,g=0,markdown=.true.)
+    man = man//self%usage(no_header=.true.,no_examples=.true.,no_epilog=.true.,g=0,markdown=.true.)
   endif
   if (allocated(self%examples)) then
-    man = man//new_line('a')//'### Examples'
+    man = man//new_line('a')//new_line('a')//'### Examples'
     do e=1, size(self%examples,dim=1)
       man = man//new_line('a')
       man = man//new_line('a')//'`'//trim(self%examples(e))//'` '

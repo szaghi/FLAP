@@ -56,19 +56,15 @@ integer(I4P), parameter :: STATUS_PRINT_V = -1 !< Print version status.
 integer(I4P), parameter :: STATUS_PRINT_H = -2 !< Print help status.
 
 ! errors codes
-integer(I4P), parameter :: ERROR_CONSISTENCY = 23 !< CLAs group consistency error.
-integer(I4P), parameter :: ERROR_M_EXCLUDE   = 24 !< Two mutually exclusive CLAs group have been called.
+integer(I4P), parameter :: ERROR_CONSISTENCY = 100 !< CLAs group consistency error.
+integer(I4P), parameter :: ERROR_M_EXCLUDE   = 101 !< Two mutually exclusive CLAs group have been called.
 
 contains
   ! public methods
   elemental subroutine free(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Free dynamic memory.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_arguments_group), intent(inout) :: self !< CLAsG data.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   ! object members
   call self%free_object
   ! command_line_arguments_group members
@@ -81,21 +77,15 @@ contains
   self%Na_required = 0_I4P
   self%Na_optional = 0_I4P
   self%is_called   = .false.
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine free
 
   subroutine check(self, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Check data consistency.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_arguments_group), intent(inout) :: self  !< CLAsG data.
   character(*), optional,              intent(in)    :: pref  !< Prefixing string.
   integer(I4P)                                       :: a     !< Counter.
   integer(I4P)                                       :: aa    !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   ! verify if CLAs switches are unique
   CLA_unique: do a=1, self%Na
     if (.not.self%cla(a)%is_positional) then
@@ -120,20 +110,14 @@ contains
       endif
     endif
   enddo CLA_exclude
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check
 
   subroutine is_required_passed(self, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if required CLAs are passed.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_arguments_group), intent(inout) :: self  !< CLAsG data.
   character(*), optional,              intent(in)    :: pref  !< Prefixing string.
   integer(I4P)                                       :: a     !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (self%is_called) then
     do a=1, self%Na
       if (.not.self%cla(a)%is_required_passed(pref=pref)) then
@@ -143,22 +127,16 @@ contains
       endif
     enddo
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine is_required_passed
 
   pure function is_passed(self, switch, position)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if a CLA has been passed.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_arguments_group), intent(in) :: self      !< CLAsG data.
   character(*), optional,              intent(in) :: switch    !< Switch name.
   integer(I4P), optional,              intent(in) :: position  !< Position of positional CLA.
   logical                                         :: is_passed !< Check if a CLA has been passed.
   integer(I4P)                                    :: a         !< CLA counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   is_passed = .false.
   if (self%Na>0) then
     if (present(switch)) then
@@ -174,22 +152,16 @@ contains
       is_passed = self%cla(position)%is_passed
     endif
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction is_passed
 
   function is_defined(self, switch, pos)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if a CLA has been defined.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_arguments_group), intent(in)  :: self       !< CLAsG data.
   character(*),                        intent(in)  :: switch     !< Switch name.
   integer(I4P), optional,              intent(out) :: pos        !< CLA position.
   logical                                          :: is_defined !< Check if a CLA has been defined.
   integer(I4P)                                     :: a          !< CLA counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   is_defined = .false.
   if (present(pos)) pos = 0
   if (self%Na>0) then
@@ -203,39 +175,27 @@ contains
       endif
     enddo
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction is_defined
 
   subroutine raise_error_m_exclude(self, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Raise error mutually exclusive CLAs passed.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_arguments_group), intent(inout) :: self !< CLA data.
   character(*), optional,              intent(in)    :: pref !< Prefixing string.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   call self%errored(pref=pref, error=ERROR_M_EXCLUDE)
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine raise_error_m_exclude
 
   subroutine add(self, pref, cla)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Add CLA to CLAs list.
   !<
   !< @note If not otherwise declared the action on CLA value is set to "store" a value that must be passed after the switch name
   !< or directly passed in case of positional CLA.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_arguments_group), intent(inout) :: self            !< CLAsG data.
   character(*), optional,              intent(in)    :: pref            !< Prefixing string.
   type(command_line_argument),         intent(in)    :: cla             !< CLA data.
   type(command_line_argument), allocatable           :: cla_list_new(:) !< New (extended) CLA list.
   integer(I4P)                                       :: c               !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (self%Na>0_I4P) then
     if (.not.cla%is_positional) then
       allocate(cla_list_new(1:self%Na+1))
@@ -266,14 +226,10 @@ contains
   endif
   if (allocated(cla_list_new)) deallocate(cla_list_new)
   call self%check(pref=pref)
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine add
 
   subroutine parse(self, args, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Parse CLAsG arguments.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_arguments_group), intent(inout) :: self      !< CLAsG data.
   character(*), optional,              intent(in)    :: pref      !< Prefixing string.
   character(*),                        intent(in)    :: args(:)   !< Command line arguments.
@@ -286,9 +242,7 @@ contains
   integer(I4P)                                       :: nargs     !< Number of arguments consumed by a CLA.
   logical                                            :: found     !< Flag for checking if switch is a defined CLA.
   logical                                            :: found_val !< Flag for checking if switch value is found.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (self%is_called) then
     arg = 0
     do while (arg < size(args, dim=1)) ! loop over CLAs group arguments passed
@@ -443,14 +397,10 @@ contains
     call self%check_m_exclusive(pref=pref)
     call self%sanitize_defaults
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine parse
 
   function usage(self, pref, no_header, markdown)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get correct CLAsG usage.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_arguments_group), intent(in) :: self      !< CLAsG data.
   character(*), optional,              intent(in) :: pref      !< Prefixing string.
   logical,      optional,              intent(in) :: no_header !< Avoid insert header to usage.
@@ -459,9 +409,7 @@ contains
   integer(I4P)                                    :: a         !< Counters.
   character(len=:), allocatable                   :: prefd     !< Prefixing string.
   logical                                         :: markdownd !< Markdonw format, local variable.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   markdownd = .false. ; if (present(markdown)) markdownd = markdown
   prefd = '' ; if (present(pref)) prefd = pref
   usage = self%progname ; if (self%group/='') usage = self%progname//' '//self%group
@@ -484,26 +432,18 @@ contains
         self%cla(a)%usage(pref=prefd,markdown=markdownd)
     enddo
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction usage
 
   function signature(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLAsG signature.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_arguments_group), intent(in) :: self      !< CLAsG data.
   character(len=:), allocatable                   :: signature !< Signature.
   integer(I4P)                                    :: a         !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   signature = ''
   do a=1, self%Na
     signature = signature//self%cla(a)%signature()
   enddo
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction signature
 
   ! private methods
@@ -543,15 +483,11 @@ contains
   endsubroutine errored
 
   subroutine check_m_exclusive(self, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if two mutually exclusive CLAs have been passed.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_arguments_group), intent(inout) :: self !< CLAsG data.
   character(*), optional,              intent(in)    :: pref !< Prefixing string.
   integer(I4P)                                       :: a    !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (self%is_called) then
     do a=1, self%Na
       if (self%cla(a)%is_passed) then
@@ -565,39 +501,27 @@ contains
       endif
     enddo
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check_m_exclusive
 
   subroutine sanitize_defaults(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Sanitize defaults values.
   !<
   !< It is necessary to *sanitize* the default values of non-passed, optional CLAs.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_arguments_group), intent(inout) :: self !< CLAsG data.
   integer(I4P)                                       :: a    !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (self%is_called) then
     do a=1, self%Na
       call self%cla(a)%sanitize_defaults
     enddo
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine sanitize_defaults
 
   elemental subroutine clasg_assign_clasg(lhs, rhs)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Assignment operator.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_arguments_group), intent(INOUT) :: lhs !< Left hand side.
   type(command_line_arguments_group),  intent(IN)    :: rhs !< Right hand side.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   ! object members
   call lhs%assign_object(rhs)
   ! command_line_arguments_group members
@@ -609,20 +533,12 @@ contains
   lhs%Na_required = rhs%Na_required
   lhs%Na_optional = rhs%Na_optional
   lhs%is_called   = rhs%is_called
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine clasg_assign_clasg
 
   elemental subroutine finalize(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Free dynamic memory when finalizing.
-  !---------------------------------------------------------------------------------------------------------------------------------
   type(command_line_arguments_group), intent(inout) :: self !< CLAsG data.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   call self%free
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine finalize
 endmodule flap_command_line_arguments_group_t

@@ -39,14 +39,14 @@ type, extends(object) :: command_line_argument
   character(len=:), allocatable, public :: envvar                !< Environment variable from which take value.
   contains
     ! public methods
-    procedure, public :: free                            !< Free dynamic memory.
-    procedure, public :: check                           !< Check data consistency.
-    procedure, public :: is_required_passed              !< Check if required CLA is passed.
-    procedure, public :: raise_error_m_exclude           !< Raise error mutually exclusive CLAs passed.
-    procedure, public :: raise_error_nargs_insufficient  !< Raise error insufficient number of argument values passed.
-    procedure, public :: raise_error_value_missing       !< Raise error missing value.
-    procedure, public :: raise_error_switch_unknown      !< Raise error switch_unknown.
-    procedure, public :: raise_error_duplicated_clas     !< Raise error duplicated CLAs passed.
+    procedure, public :: free                           !< Free dynamic memory.
+    procedure, public :: check                          !< Check data consistency.
+    procedure, public :: is_required_passed             !< Check if required CLA is passed.
+    procedure, public :: raise_error_m_exclude          !< Raise error mutually exclusive CLAs passed.
+    procedure, public :: raise_error_nargs_insufficient !< Raise error insufficient number of argument values passed.
+    procedure, public :: raise_error_value_missing      !< Raise error missing value.
+    procedure, public :: raise_error_switch_unknown     !< Raise error switch_unknown.
+    procedure, public :: raise_error_duplicated_clas    !< Raise error duplicated CLAs passed.
     generic,   public :: get =>   &
                          get_cla, &
                          get_cla_list                    !< Get CLA value(s).
@@ -130,13 +130,9 @@ integer(I4P), parameter :: ERROR_DUPLICATED_CLAS        = 23 !< Duplicated CLAs 
 contains
   ! public methods
   elemental subroutine free(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Free dynamic memory.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: self !< CLA data.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   ! object members
   call self%free_object
   ! command_line_argument members
@@ -153,88 +149,56 @@ contains
   self%position      =  0_I4P
   self%is_passed     = .false.
   self%is_hidden     = .false.
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine free
 
   subroutine check(self, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Check data consistency.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: self  !< CLA data.
   character(*), optional,       intent(in)    :: pref  !< Prefixing string.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   call self%check_envvar_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_action_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_optional_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_m_exclude_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_named_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_positional_consistency(pref=pref)
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check
 
   function is_required_passed(self, pref) result(is_ok)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if required CLA is passed.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: self  !< CLA data.
   character(*), optional,       intent(in)    :: pref  !< Prefixing string.
   logical                                     :: is_ok !< Check result.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   is_ok = .true.
   if (((.not.self%is_passed).and.self%is_required).or.((.not.self%is_passed).and.(.not.allocated(self%def)))) then
     call self%errored(pref=pref, error=ERROR_MISSING_REQUIRED)
     is_ok = .false.
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction is_required_passed
 
   subroutine raise_error_m_exclude(self, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Raise error mutually exclusive CLAs passed.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: self !< CLA data.
   character(*), optional,       intent(in)    :: pref !< Prefixing string.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   call self%errored(pref=pref, error=ERROR_M_EXCLUDE)
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine raise_error_m_exclude
 
   subroutine raise_error_nargs_insufficient(self, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Raise error insufficient number of argument values passed.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: self !< CLA data.
   character(*), optional,       intent(in)    :: pref !< Prefixing string.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   call self%errored(pref=pref, error=ERROR_NARGS_INSUFFICIENT)
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine raise_error_nargs_insufficient
 
   subroutine raise_error_value_missing(self, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Raise error missing value.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: self !< CLA data.
   character(*), optional,       intent(in)    :: pref !< Prefixing string.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   call self%errored(pref=pref, error=ERROR_VALUE_MISSING)
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine raise_error_value_missing
 
   subroutine raise_error_switch_unknown(self, switch, pref)
@@ -256,15 +220,11 @@ contains
   endsubroutine raise_error_duplicated_clas
 
   subroutine sanitize_defaults(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Sanitize defaults values.
   !<
   !< It is necessary to *sanitize* the default values of non-passed, optional CLA.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: self !< CLAsG data.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (.not.self%is_passed) then
     if (allocated(self%def)) then
       ! strip leading and trailing white spaces
@@ -276,8 +236,6 @@ contains
       endif
     endif
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine sanitize_defaults
 
   function usage(self, pref, markdown)
@@ -400,16 +358,12 @@ contains
   endfunction usage
 
   function signature(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get signature.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(in) :: self      !< CLA data.
   character(len=:), allocatable            :: signature !< Signature.
   integer(I4P)                             :: nargs     !< Number of arguments consumed by CLA.
   integer(I4P)                             :: a         !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (.not.self%is_hidden) then
     if (self%act==action_store) then
       if (.not.self%is_positional) then
@@ -453,8 +407,6 @@ contains
   else
     signature = ''
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction signature
 
   ! private methods
@@ -572,14 +524,10 @@ contains
   endsubroutine errored
 
   subroutine check_envvar_consistency(self, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Check data consistency for envvar CLA.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: self  !< CLA data.
   character(*), optional,       intent(in)    :: pref  !< Prefixing string.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (allocated(self%envvar)) then
     if (self%is_positional) then
       call self%errored(pref=pref, error=ERROR_ENVVAR_POSITIONAL)
@@ -599,19 +547,13 @@ contains
       return
     endif
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check_envvar_consistency
 
   subroutine check_action_consistency(self, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Check CLA action consistency.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: self  !< CLA data.
   character(*), optional,       intent(in)    :: pref  !< Prefixing string.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (allocated(self%act)) then
     if (self%act==ACTION_STORE_STAR.and.self%is_positional) then
       call self%errored(pref=pref, error=ERROR_STORE_STAR_POSITIONAL)
@@ -635,33 +577,21 @@ contains
       return
     endif
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check_action_consistency
 
   subroutine check_optional_consistency(self, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Check optional CLA consistency.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: self  !< CLA data.
   character(*), optional,       intent(in)    :: pref  !< Prefixing string.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if ((.not.self%is_required).and.(.not.allocated(self%def))) call self%errored(pref=pref, error=ERROR_OPTIONAL_NO_DEF)
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check_optional_consistency
 
   subroutine check_m_exclude_consistency(self, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Check mutually exclusion consistency.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: self  !< CLA data.
   character(*), optional,       intent(in)    :: pref  !< Prefixing string.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if ((self%is_required).and.(self%m_exclude/='')) then
     call self%errored(pref=pref, error=ERROR_REQUIRED_M_EXCLUDE)
     return
@@ -670,50 +600,33 @@ contains
     call self%errored(pref=pref, error=ERROR_POSITIONAL_M_EXCLUDE)
     return
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check_m_exclude_consistency
 
   subroutine check_named_consistency(self, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Check named CLA consistency.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: self  !< CLA data.
   character(*), optional,       intent(in)    :: pref  !< Prefixing string.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if ((.not.self%is_positional).and.(.not.allocated(self%switch))) call self%errored(pref=pref, error=ERROR_NAMED_NO_NAME)
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check_named_consistency
 
   subroutine check_positional_consistency(self, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Check positional CLA consistency.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: self  !< CLA data.
   character(*), optional,       intent(in)    :: pref  !< Prefixing string.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if ((self%is_positional).and.(self%position==0_I4P)) then
     call self%errored(pref=pref, error=ERROR_POSITIONAL_NO_POSITION)
     return
   elseif ((self%is_positional).and.(self%act/=action_store)) then
     call self%errored(pref=pref, error=ERROR_POSITIONAL_NO_STORE)
-    return
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check_positional_consistency
 
   subroutine check_choices(self, val, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if CLA value is in allowed choices.
   !<
   !< @note This procedure can be called if and only if cla%choices has been allocated.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: self    !< CLA data.
   class(*),                     intent(in)    :: val     !< CLA value.
   character(*), optional,       intent(in)    :: pref    !< Prefixing string.
@@ -723,9 +636,7 @@ contains
   character(len=:), allocatable               :: val_str !< Value in string form.
   character(len=:), allocatable               :: tmp     !< Temporary string for avoiding GNU gfrotran bug.
   integer(I4P)                                :: c       !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   val_in = .false.
   val_str = ''
   tmp = self%choices
@@ -779,22 +690,16 @@ contains
   if (.not.val_in.and.(self%error==0)) then
     call self%errored(pref=pref, error=ERROR_NOT_IN_CHOICES, val_str=val_str)
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine check_choices
 
   function check_list_size(self, Nv, val, pref) result(is_ok)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Check CLA multiple values list size consistency.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: self  !< CLA data.
   integer(I4P),                 intent(in)    :: Nv    !< Number of values.
   character(*),                 intent(in)    :: val   !< First value.
   character(*), optional,       intent(in)    :: pref  !< Prefixing string.
   logical                                     :: is_ok !< Check result.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   is_ok = .true.
   if (Nv==1) then
     if (trim(adjustl(val))=='') then
@@ -805,21 +710,15 @@ contains
       endif
     endif
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction check_list_size
 
   subroutine get_cla(self, val, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA (single) value.
-  !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(command_line_argument), intent(inout) :: self  !< CLA data.
   class(*),                     intent(inout) :: val   !< CLA value.
   character(*), optional,       intent(in)    :: pref  !< Prefixing string.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (.not.self%is_required_passed(pref=pref)) return
   if (self%act==action_store.or.self%act==action_store_star) then
     if (self%is_passed.and.allocated(self%val)) then
@@ -855,22 +754,16 @@ contains
       endselect
     endif
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla
 
   subroutine get_cla_from_buffer(self, buffer, val, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA (single) value from parsed value.
-  !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(command_line_argument), intent(inout) :: self   !< CLA data.
   character(*),                 intent(in)    :: buffer !< Buffer containing values (parsed or default CLA value).
   class(*),                     intent(inout) :: val    !< CLA value.
   character(*), optional,       intent(in)    :: pref   !< Prefixing string.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   select type(val)
 #ifdef _R16P_SUPPORTED
   type is(real(R16P))
@@ -894,23 +787,17 @@ contains
   type is(character(*))
     val = buffer
   endselect
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_from_buffer
 
   subroutine get_cla_list(self, pref, val)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA multiple values.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: self     !< CLA data.
   character(*), optional,       intent(in)    :: pref     !< Prefixing string.
   class(*),                     intent(inout) :: val(1:)  !< CLA values.
   integer(I4P)                                :: Nv       !< Number of values.
   character(len=len(self%def)), allocatable   :: valsD(:) !< String array of values based on self%def.
   integer(I4P)                                :: v        !< Values counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (.not.self%is_required_passed(pref=pref)) return
   if (.not.allocated(self%nargs)) then
     call self%errored(pref=pref,error=ERROR_NO_LIST)
@@ -953,14 +840,10 @@ contains
       endselect
     endif
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list
 
   subroutine get_cla_list_from_buffer(self, buffer, val, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA multiple values from a buffer.
-  !---------------------------------------------------------------------------------------------------------------------------------
   implicit none
   class(command_line_argument), intent(inout) :: self    !< CLA data.
   character(*),                 intent(in)    :: buffer  !< Buffer containing values (parsed or default CLA value).
@@ -969,9 +852,7 @@ contains
   integer(I4P)                                :: Nv      !< Number of values.
   character(len=len(buffer)), allocatable     :: vals(:) !< String array of values based on buffer value.
   integer(I4P)                                :: v       !< Values counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   call tokenize(strin=buffer, delimiter=args_sep, toks=vals, Nt=Nv)
   select type(val)
 #ifdef _R16P_SUPPORTED
@@ -1033,14 +914,10 @@ contains
       if (self%error/=0) exit
     enddo
   endselect
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_from_buffer
 
   subroutine get_cla_list_varying_R16P(self, val, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA (multiple) value with varying size, real(R16P).
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: self     !< CLA data.
   real(R16P), allocatable,      intent(out)   :: val(:)   !< CLA values.
   character(*), optional,       intent(in)    :: pref     !< Prefixing string.
@@ -1048,9 +925,7 @@ contains
   character(len=len(self%val)), allocatable   :: valsV(:) !< String array of values based on self%val.
   character(len=len(self%def)), allocatable   :: valsD(:) !< String array of values based on self%def.
   integer(I4P)                                :: v        !< Values counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (.not.self%is_required_passed(pref=pref)) return
   if (.not.allocated(self%nargs)) then
     call self%errored(pref=pref, error=ERROR_NO_LIST)
@@ -1083,14 +958,10 @@ contains
       enddo
     endif
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_varying_R16P
 
   subroutine get_cla_list_varying_R8P(self, val, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA (multiple) value with varying size, real(R8P).
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: self     !< CLA data.
   real(R8P), allocatable,       intent(out)   :: val(:)   !< CLA values.
   character(*), optional,       intent(in)    :: pref     !< Prefixing string.
@@ -1098,9 +969,7 @@ contains
   character(len=len(self%val)), allocatable   :: valsV(:) !< String array of values based on self%val.
   character(len=len(self%def)), allocatable   :: valsD(:) !< String array of values based on self%def.
   integer(I4P)                                :: v        !< Values counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (.not.self%is_required_passed(pref=pref)) return
   if (.not.allocated(self%nargs)) then
     call self%errored(pref=pref, error=ERROR_NO_LIST)
@@ -1125,14 +994,10 @@ contains
       enddo
     endif
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_varying_R8P
 
   subroutine get_cla_list_varying_R4P(self, val, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA (multiple) value with varying size, real(R4P).
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: self     !< CLA data.
   real(R4P), allocatable,       intent(out)   :: val(:)   !< CLA values.
   character(*), optional,       intent(in)    :: pref     !< Prefixing string.
@@ -1140,9 +1005,7 @@ contains
   character(len=len(self%val)), allocatable   :: valsV(:) !< String array of values based on self%val.
   character(len=len(self%def)), allocatable   :: valsD(:) !< String array of values based on self%def.
   integer(I4P)                                :: v        !< Values counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (.not.self%is_required_passed(pref=pref)) return
   if (.not.allocated(self%nargs)) then
     call self%errored(pref=pref, error=ERROR_NO_LIST)
@@ -1167,14 +1030,10 @@ contains
       enddo
     endif
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_varying_R4P
 
   subroutine get_cla_list_varying_I8P(self, val, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA (multiple) value with varying size, integer(I8P).
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: self     !< CLA data.
   integer(I8P), allocatable,    intent(out)   :: val(:)   !< CLA values.
   character(*), optional,       intent(in)    :: pref     !< Prefixing string.
@@ -1182,9 +1041,7 @@ contains
   character(len=len(self%val)), allocatable   :: valsV(:) !< String array of values based on self%val.
   character(len=len(self%def)), allocatable   :: valsD(:) !< String array of values based on self%def.
   integer(I4P)                                :: v        !< Values counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (.not.self%is_required_passed(pref=pref)) return
   if (.not.allocated(self%nargs)) then
     call self%errored(pref=pref, error=ERROR_NO_LIST)
@@ -1209,14 +1066,10 @@ contains
       enddo
     endif
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_varying_I8P
 
   subroutine get_cla_list_varying_I4P(self, val, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA (multiple) value with varying size, integer(I4P).
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(INOUT) :: self     !< CLA data.
   integer(I4P), allocatable,    intent(OUT)   :: val(:)   !< CLA values.
   character(*), optional,       intent(IN)    :: pref     !< Prefixing string.
@@ -1224,9 +1077,7 @@ contains
   character(len=len(self%val)), allocatable   :: valsV(:) !< String array of values based on self%val.
   character(len=len(self%def)), allocatable   :: valsD(:) !< String array of values based on self%def.
   integer(I4P)                                :: v        !< Values counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (.not.self%is_required_passed(pref=pref)) return
   if (.not.allocated(self%nargs)) then
     call self%errored(pref=pref, error=ERROR_NO_LIST)
@@ -1251,14 +1102,10 @@ contains
       enddo
     endif
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_varying_I4P
 
   subroutine get_cla_list_varying_I2P(self, val, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA (multiple) value with varying size, integer(I2P).
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: self     !< CLA data.
   integer(I2P), allocatable,    intent(out)   :: val(:)   !< CLA values.
   character(*), optional,       intent(in)    :: pref     !< Prefixing string.
@@ -1266,9 +1113,7 @@ contains
   character(len=len(self%val)), allocatable   :: valsV(:) !< String array of values based on self%val.
   character(len=len(self%def)), allocatable   :: valsD(:) !< String array of values based on self%def.
   integer(I4P)                                :: v        !< Values counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (.not.self%is_required_passed(pref=pref)) return
   if (.not.allocated(self%nargs)) then
     call self%errored(pref=pref, error=ERROR_NO_LIST)
@@ -1293,14 +1138,10 @@ contains
       enddo
     endif
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_varying_I2P
 
   subroutine get_cla_list_varying_I1P(self, val, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA (multiple) value with varying size, integer(I1P).
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: self     !< CLA data.
   integer(I1P), allocatable,    intent(out)   :: val(:)   !< CLA values.
   character(*), optional,       intent(in)    :: pref     !< Prefixing string.
@@ -1308,9 +1149,7 @@ contains
   character(len=len(self%val)), allocatable   :: valsV(:) !< String array of values based on self%val.
   character(len=len(self%def)), allocatable   :: valsD(:) !< String array of values based on self%def.
   integer(I4P)                                :: v        !< Values counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (.not.self%is_required_passed(pref=pref)) return
   if (.not.allocated(self%nargs)) then
     call self%errored(pref=pref, error=ERROR_NO_LIST)
@@ -1335,14 +1174,10 @@ contains
       enddo
     endif
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_varying_I1P
 
   subroutine get_cla_list_varying_logical(self, val, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA (multiple) value with varying size, logical.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: self     !< CLA data.
   logical, allocatable,         intent(out)   :: val(:)   !< CLA values.
   character(*), optional,       intent(in)    :: pref     !< Prefixing string.
@@ -1350,9 +1185,7 @@ contains
   character(len=len(self%val)), allocatable   :: valsV(:) !< String array of values based on self%val.
   character(len=len(self%def)), allocatable   :: valsD(:) !< String array of values based on self%def.
   integer(I4P)                                :: v        !< Values counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (.not.self%is_required_passed(pref=pref)) return
   if (.not.allocated(self%nargs)) then
     call self%errored(pref=pref, error=ERROR_NO_LIST)
@@ -1383,14 +1216,10 @@ contains
       enddo
     endif
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_varying_logical
 
   subroutine get_cla_list_varying_char(self, val, pref)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Get CLA (multiple) value with varying size, character.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: self     !< CLA data.
   character(*), allocatable,    intent(out)   :: val(:)   !< CLA values.
   character(*), optional,       intent(in)    :: pref     !< Prefixing string.
@@ -1398,9 +1227,7 @@ contains
   character(len=len(self%val)), allocatable   :: valsV(:) !< String array of values based on self%val.
   character(len=len(self%def)), allocatable   :: valsD(:) !< String array of values based on self%def.
   integer(I4P)                                :: v        !< Values counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (.not.self%is_required_passed(pref=pref)) return
   if (.not.allocated(self%nargs)) then
     call self%errored(pref=pref, error=ERROR_NO_LIST)
@@ -1423,19 +1250,13 @@ contains
       enddo
     endif
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine get_cla_list_varying_char
 
   elemental subroutine cla_assign_cla(lhs, rhs)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Assignment operator.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(command_line_argument), intent(inout) :: lhs !< Left hand side.
   type(command_line_argument),  intent(in)    :: rhs !< Rigth hand side.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   ! object members
   call lhs%assign_object(rhs)
   ! command_line_argument members
@@ -1452,20 +1273,12 @@ contains
                                 lhs%position      = rhs%position
                                 lhs%is_passed     = rhs%is_passed
                                 lhs%is_hidden     = rhs%is_hidden
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine cla_assign_cla
 
   elemental subroutine finalize(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Free dynamic memory when finalizing.
-  !---------------------------------------------------------------------------------------------------------------------------------
   type(command_line_argument), intent(inout) :: self !< CLA data.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   call self%free
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine finalize
 endmodule flap_command_line_argument_t
