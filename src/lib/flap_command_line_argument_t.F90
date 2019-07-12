@@ -357,51 +357,63 @@ contains
   endif
   endfunction usage
 
-  function signature(self)
+  function signature(self, bash_completition)
   !< Get signature.
-  class(command_line_argument), intent(in) :: self      !< CLA data.
-  character(len=:), allocatable            :: signature !< Signature.
-  integer(I4P)                             :: nargs     !< Number of arguments consumed by CLA.
-  integer(I4P)                             :: a         !< Counter.
+  class(command_line_argument), intent(in) :: self               !< CLA data.
+  logical, optional,            intent(in) :: bash_completition  !< Return the signatura for bash completition.
+  logical                                  :: bash_completition_ !< Return the signatura for bash completition, local variable.
+  character(len=:), allocatable            :: signature          !< Signature.
+  integer(I4P)                             :: nargs              !< Number of arguments consumed by CLA.
+  integer(I4P)                             :: a                  !< Counter.
 
+  bash_completition_ = .false. ; if (present(bash_completition)) bash_completition_ = bash_completition
   if (.not.self%is_hidden) then
-    if (self%act==action_store) then
-      if (.not.self%is_positional) then
-        if (allocated(self%nargs)) then
-          select case(self%nargs)
-          case('+')
-            signature = ' value#1 [value#2 value#3...]'
-          case('*')
-            signature = ' [value#1 value#2 value#3...]'
-          case default
-            nargs = cton(str=trim(adjustl(self%nargs)),knd=1_I4P)
-            signature = ''
-            do a=1, nargs
-              signature = signature//' value#'//trim(str(a, .true.))
-            enddo
-          endselect
-        else
-          signature = ' value'
-        endif
-        if (self%is_required) then
-          signature = ' '//trim(adjustl(self%switch))//signature
-        else
-          signature = ' ['//trim(adjustl(self%switch))//signature//']'
-        endif
+    if (bash_completition_) then
+      if (trim(adjustl(self%switch))/=trim(adjustl(self%switch_ab))) then
+        signature = ' '//trim(adjustl(self%switch))//' '//trim(adjustl(self%switch_ab))
       else
-        if (self%is_required) then
-          signature = ' value'
-        else
-          signature = ' [value]'
-        endif
-      endif
-    elseif (self%act==action_store_star) then
-      signature = ' [value]'
-    else
-      if (self%is_required) then
         signature = ' '//trim(adjustl(self%switch))
+      endif
+    else
+      if (self%act==action_store) then
+        if (.not.self%is_positional) then
+          if (allocated(self%nargs)) then
+            select case(self%nargs)
+            case('+')
+              signature = ' value#1 [value#2 value#3...]'
+            case('*')
+              signature = ' [value#1 value#2 value#3...]'
+            case default
+              nargs = cton(str=trim(adjustl(self%nargs)),knd=1_I4P)
+              signature = ''
+              do a=1, nargs
+                signature = signature//' value#'//trim(str(a, .true.))
+              enddo
+            endselect
+          else
+            signature = ' value'
+          endif
+          if (self%is_required) then
+            signature = ' '//trim(adjustl(self%switch))//signature
+          else
+            signature = ' ['//trim(adjustl(self%switch))//signature//']'
+          endif
+        else
+          if (bash_completition_) return
+          if (self%is_required) then
+            signature = ' value'
+          else
+            signature = ' [value]'
+          endif
+        endif
+      elseif (self%act==action_store_star) then
+        signature = ' [value]'
       else
-        signature = ' ['//trim(adjustl(self%switch))//']'
+        if (self%is_required) then
+          signature = ' '//trim(adjustl(self%switch))
+        else
+          signature = ' ['//trim(adjustl(self%switch))//']'
+        endif
       endif
     endif
   else
