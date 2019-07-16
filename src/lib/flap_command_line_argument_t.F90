@@ -357,18 +357,18 @@ contains
   endif
   endfunction usage
 
-  function signature(self, bash_completition)
+  function signature(self, bash_completion)
   !< Get signature.
-  class(command_line_argument), intent(in) :: self               !< CLA data.
-  logical, optional,            intent(in) :: bash_completition  !< Return the signatura for bash completition.
-  logical                                  :: bash_completition_ !< Return the signatura for bash completition, local variable.
-  character(len=:), allocatable            :: signature          !< Signature.
-  integer(I4P)                             :: nargs              !< Number of arguments consumed by CLA.
-  integer(I4P)                             :: a                  !< Counter.
+  class(command_line_argument), intent(in) :: self             !< CLA data.
+  logical, optional,            intent(in) :: bash_completion  !< Return the signatura for bash completion.
+  logical                                  :: bash_completion_ !< Return the signatura for bash completion, local variable.
+  character(len=:), allocatable            :: signature        !< Signature.
+  integer(I4P)                             :: nargs            !< Number of arguments consumed by CLA.
+  integer(I4P)                             :: a                !< Counter.
 
-  bash_completition_ = .false. ; if (present(bash_completition)) bash_completition_ = bash_completition
+  bash_completion_ = .false. ; if (present(bash_completion)) bash_completion_ = bash_completion
   if (.not.self%is_hidden) then
-    if (bash_completition_) then
+    if (bash_completion_) then
       if (trim(adjustl(self%switch))/=trim(adjustl(self%switch_ab))) then
         signature = ' '//trim(adjustl(self%switch))//' '//trim(adjustl(self%switch_ab))
       else
@@ -399,7 +399,7 @@ contains
             signature = ' ['//trim(adjustl(self%switch))//signature//']'
           endif
         else
-          if (bash_completition_) return
+          if (bash_completion_) return
           if (self%is_required) then
             signature = ' value'
           else

@@ -434,16 +434,16 @@ contains
   endif
   endfunction usage
 
-  function signature(self, bash_completition)
+  function signature(self, bash_completion)
   !< Get CLAsG signature.
-  class(command_line_arguments_group), intent(in) :: self              !< CLAsG data.
-  logical, optional,                   intent(in) :: bash_completition !< Return the signatura for bash completition.
-  character(len=:), allocatable                   :: signature         !< Signature.
-  integer(I4P)                                    :: a                 !< Counter.
+  class(command_line_arguments_group), intent(in) :: self            !< CLAsG data.
+  logical, optional,                   intent(in) :: bash_completion !< Return the signatura for bash completion.
+  character(len=:), allocatable                   :: signature       !< Signature.
+  integer(I4P)                                    :: a               !< Counter.
 
   signature = ''
   do a=1, self%Na
-    signature = signature//self%cla(a)%signature(bash_completition=bash_completition)
+    signature = signature//self%cla(a)%signature(bash_completion=bash_completion)
   enddo
   endfunction signature
 

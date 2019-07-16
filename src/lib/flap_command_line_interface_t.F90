@@ -57,7 +57,7 @@ type, extends(object), public :: command_line_interface
     procedure, public :: usage                           !< Get CLI usage.
     procedure, public :: signature                       !< Get CLI signature.
     procedure, public :: print_usage                     !< Print correct usage of CLI.
-    procedure, public :: save_bash_completition          !< Save bash completition script (for named CLAs only).
+    procedure, public :: save_bash_completion            !< Save bash completion script (for named CLAs only).
     procedure, public :: save_man_page                   !< Save CLI usage as man page.
     procedure, public :: save_usage_to_markdown          !< Save CLI usage as markdown.
     ! private methods
@@ -1357,18 +1357,18 @@ contains
   if (self%epilog/=''.and.(.not.no_epilogd)) usaged = usaged//new_line('a')//prefd//self%epilog
   endfunction usage
 
-  function signature(self, bash_completition)
+  function signature(self, bash_completion)
   !< Get signature.
-  class(command_line_interface), intent(in) :: self               !< CLI data.
-  logical, optional,             intent(in) :: bash_completition  !< Return the signatura for bash completition.
-  logical                                   :: bash_completition_ !< Return the signatura for bash completition, local variable.
-  character(len=:), allocatable             :: signature          !< Signature.
-  integer(I4P)                              :: g                  !< Counter.
+  class(command_line_interface), intent(in) :: self             !< CLI data.
+  logical, optional,             intent(in) :: bash_completion  !< Return the signatura for bash completion.
+  logical                                   :: bash_completion_ !< Return the signatura for bash completion, local variable.
+  character(len=:), allocatable             :: signature        !< Signature.
+  integer(I4P)                              :: g                !< Counter.
 
-  bash_completition_ = .false. ; if (present(bash_completition)) bash_completition_ = bash_completition
-  signature = self%clasg(0)%signature(bash_completition=bash_completition)
+  bash_completion_ = .false. ; if (present(bash_completion)) bash_completion_ = bash_completion
+  signature = self%clasg(0)%signature(bash_completion=bash_completion)
   if (size(self%clasg,dim=1)>1) then
-    if (bash_completition_) then
+    if (bash_completion_) then
       signature = signature//' '//self%clasg(1)%group
       do g=2,size(self%clasg,dim=1)-1
         signature = signature//' '//self%clasg(g)%group
@@ -1391,10 +1391,10 @@ contains
   write(self%usage_lun, '(A)') self%usage(pref=pref, g=0)
   endsubroutine print_usage
 
-  subroutine save_bash_completition(self, bash_file, error)
-  !< Save bash completition script (for named CLAs only).
+  subroutine save_bash_completion(self, bash_file, error)
+  !< Save bash completion script (for named CLAs only).
   class(command_line_interface), intent(in)  :: self      !< CLI data.
-  character(*),                  intent(in)  :: bash_file !< Output file name of bash completition script.
+  character(*),                  intent(in)  :: bash_file !< Output file name of bash completion script.
   integer(I4P), optional,        intent(out) :: error     !< Error trapping flag.
   character(len=:), allocatable              :: script    !< Script text.
   integer(I4P)                               :: g         !< CLAs groups counter.
@@ -1408,20 +1408,20 @@ contains
       script = script//new_line('a')//'  prev=${COMP_WORDS[COMP_CWORD - 1]}'
       script = script//new_line('a')//'  if [ "$prev" == "'//self%clasg(1)%group//'" ] ; then'
       script = script//new_line('a')//'    COMPREPLY=( $( compgen -W "'// &
-               self%clasg(1)%signature(bash_completition=.true.)//'" -- $cur ) )'
+               self%clasg(1)%signature(bash_completion=.true.)//'" -- $cur ) )'
     do g=2,size(self%clasg,dim=1)-1
       script = script//new_line('a')//'  elif [ "$prev" == "'//self%clasg(g)%group//'" ] ; then'
       script = script//new_line('a')//'    COMPREPLY=( $( compgen -W "'// &
-               self%clasg(g)%signature(bash_completition=.true.)//'" -- $cur ) )'
+               self%clasg(g)%signature(bash_completion=.true.)//'" -- $cur ) )'
     enddo
       script = script//new_line('a')//'  else'
-      script = script//new_line('a')//'    COMPREPLY=( $( compgen -W "'//self%signature(bash_completition=.true.)//'" -- $cur ) )'
+      script = script//new_line('a')//'    COMPREPLY=( $( compgen -W "'//self%signature(bash_completion=.true.)//'" -- $cur ) )'
       script = script//new_line('a')//'  fi'
       script = script//new_line('a')//'  return 0'
       script = script//new_line('a')//'}'
-      script = script//new_line('a')//'complete -F _completion '//self%progname
+      script = script//new_line('a')//'complete -F _completion '//basename(self%progname)
   else
-    script = script//new_line('a')//'complete -W "'//self%signature(bash_completition=.true.)//'" '//self%progname
+    script = script//new_line('a')//'complete -W "'//self%signature(bash_completion=.true.)//'" '//basename(self%progname)
   endif
   open(newunit=u,file=trim(adjustl(bash_file)))
   if (present(error)) then
@@ -1430,7 +1430,22 @@ contains
     write(u, "(A)")script
   endif
   close(u)
-  endsubroutine save_bash_completition
+  contains
+    pure function basename(progname)
+      character(len=*), intent(in)  :: progname !< Program name.
+      character(len=:), allocatable :: basename !< Program name without full PATH.
+      integer(I4P)                  :: pos      !< Counter.
+
+      basename = progname
+      pos = index(basename, '/', back=.true.)
+      if (pos>0) then
+        basename = basename(pos+1:)
+      else
+        pos = index(basename, '\', back=.true.)
+        if (pos>0) basename = basename(pos+1:)
+      endif
+      endfunction basename
+  endsubroutine save_bash_completion
 
   subroutine save_man_page(self, man_file, error)
   !< Save CLI usage as man page.
