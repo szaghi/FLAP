@@ -1357,21 +1357,24 @@ contains
   if (self%epilog/=''.and.(.not.no_epilogd)) usaged = usaged//new_line('a')//prefd//self%epilog
   endfunction usage
 
-  function signature(self, bash_completion)
+  function signature(self, bash_completion, verbose)
   !< Get signature.
   class(command_line_interface), intent(in) :: self             !< CLI data.
-  logical, optional,             intent(in) :: bash_completion  !< Return the signatura for bash completion.
-  logical                                   :: bash_completion_ !< Return the signatura for bash completion, local variable.
+  logical, optional,             intent(in) :: bash_completion  !< Return the signature for bash completion.
+  logical, optional,             intent(in) :: verbose          !< Return the verbose signature.
+  logical                                   :: bash_completion_ !< Return the signature for bash completion, local variable.
+  logical                                   :: verbose_         !< Return the verbose signature, local variable.
   character(len=:), allocatable             :: signature        !< Signature.
   integer(I4P)                              :: g                !< Counter.
 
   bash_completion_ = .false. ; if (present(bash_completion)) bash_completion_ = bash_completion
+  verbose_ = .false. ; if (present(verbose)) verbose_ = verbose
   signature = self%clasg(0)%signature(bash_completion=bash_completion)
   if (size(self%clasg,dim=1)>1) then
     if (bash_completion_) then
-      signature = signature//' '//self%clasg(1)%group
+      signature = signature//new_line('a')//'    COMPREPLY+=( $( compgen -W "'//self%clasg(1)%group//'" -- $cur ) )'
       do g=2,size(self%clasg,dim=1)-1
-        signature = signature//' '//self%clasg(g)%group
+        signature = signature//new_line('a')//'    COMPREPLY+=( $( compgen -W "'//self%clasg(g)%group//'" -- $cur ) )'
       enddo
     else
       signature = signature//' {'//self%clasg(1)%group
@@ -1379,6 +1382,11 @@ contains
         signature = signature//','//self%clasg(g)%group
       enddo
       signature = signature//'} ...'
+    endif
+    if (verbose_) then
+      do g=1,size(self%clasg,dim=1)-1
+        signature = signature//new_line('a')//self%clasg(g)%group//' '//self%clasg(g)%signature()
+      enddo
     endif
   endif
   endfunction signature
@@ -1404,18 +1412,17 @@ contains
   if (size(self%clasg,dim=1)>1) then
       script = script//new_line('a')//'_completion()'
       script = script//new_line('a')//'{'
+      script = script//new_line('a')//'  group=${COMP_WORDS[1]}'
       script = script//new_line('a')//'  cur=${COMP_WORDS[COMP_CWORD]}'
       script = script//new_line('a')//'  prev=${COMP_WORDS[COMP_CWORD - 1]}'
-      script = script//new_line('a')//'  if [ "$prev" == "'//self%clasg(1)%group//'" ] ; then'
-      script = script//new_line('a')//'    COMPREPLY=( $( compgen -W "'// &
-               self%clasg(1)%signature(bash_completion=.true.)//'" -- $cur ) )'
+      script = script//new_line('a')//'  if [ "$group" == "'//self%clasg(1)%group//'" ] ; then'
+      script = script//self%clasg(1)%signature(bash_completion=.true.)
     do g=2,size(self%clasg,dim=1)-1
-      script = script//new_line('a')//'  elif [ "$prev" == "'//self%clasg(g)%group//'" ] ; then'
-      script = script//new_line('a')//'    COMPREPLY=( $( compgen -W "'// &
-               self%clasg(g)%signature(bash_completion=.true.)//'" -- $cur ) )'
+      script = script//new_line('a')//'  elif [ "$group" == "'//self%clasg(g)%group//'" ] ; then'
+      script = script//self%clasg(g)%signature(bash_completion=.true.)
     enddo
       script = script//new_line('a')//'  else'
-      script = script//new_line('a')//'    COMPREPLY=( $( compgen -W "'//self%signature(bash_completion=.true.)//'" -- $cur ) )'
+      script = script//               '    '//self%signature(bash_completion=.true.)
       script = script//new_line('a')//'  fi'
       script = script//new_line('a')//'  return 0'
       script = script//new_line('a')//'}'
