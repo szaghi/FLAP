@@ -62,9 +62,10 @@ type, extends(object) :: command_line_argument
                          get_cla_list_varying_I1P,     &
                          get_cla_list_varying_logical, &
                          get_cla_list_varying_char       !< Get CLA value(s) from varying size list.
+    procedure, public :: has_choices                     !< Return true if CLA has defined choices.
     procedure, public :: sanitize_defaults               !< Sanitize default values.
-    procedure, public :: usage                           !< Get correct usage.
     procedure, public :: signature                       !< Get signature.
+    procedure, public :: usage                           !< Get correct usage.
     ! private methods
     procedure, private :: errored                         !< Trig error occurence and print meaningful message.
     procedure, private :: check_envvar_consistency        !< Check data consistency for envvar CLA.
@@ -357,18 +358,18 @@ contains
   endif
   endfunction usage
 
-  function signature(self, bash_completition)
+  function signature(self, bash_completion)
   !< Get signature.
-  class(command_line_argument), intent(in) :: self               !< CLA data.
-  logical, optional,            intent(in) :: bash_completition  !< Return the signatura for bash completition.
-  logical                                  :: bash_completition_ !< Return the signatura for bash completition, local variable.
-  character(len=:), allocatable            :: signature          !< Signature.
-  integer(I4P)                             :: nargs              !< Number of arguments consumed by CLA.
-  integer(I4P)                             :: a                  !< Counter.
+  class(command_line_argument), intent(in) :: self             !< CLA data.
+  logical, optional,            intent(in) :: bash_completion  !< Return the signatura for bash completion.
+  logical                                  :: bash_completion_ !< Return the signatura for bash completion, local variable.
+  character(len=:), allocatable            :: signature        !< Signature.
+  integer(I4P)                             :: nargs            !< Number of arguments consumed by CLA.
+  integer(I4P)                             :: a                !< Counter.
 
-  bash_completition_ = .false. ; if (present(bash_completition)) bash_completition_ = bash_completition
+  bash_completion_ = .false. ; if (present(bash_completion)) bash_completion_ = bash_completion
   if (.not.self%is_hidden) then
-    if (bash_completition_) then
+    if (bash_completion_) then
       if (trim(adjustl(self%switch))/=trim(adjustl(self%switch_ab))) then
         signature = ' '//trim(adjustl(self%switch))//' '//trim(adjustl(self%switch_ab))
       else
@@ -399,7 +400,7 @@ contains
             signature = ' ['//trim(adjustl(self%switch))//signature//']'
           endif
         else
-          if (bash_completition_) return
+          if (bash_completion_) return
           if (self%is_required) then
             signature = ' value'
           else
@@ -420,6 +421,14 @@ contains
     signature = ''
   endif
   endfunction signature
+
+  pure function has_choices(self)
+  !< Return true if CLA has choices.
+  class(command_line_argument), intent(in) :: self        !< CLA data.
+  logical                                  :: has_choices !< Check result.
+
+  has_choices = allocated(self%choices)
+  endfunction has_choices
 
   ! private methods
   subroutine errored(self, error, pref, switch, val_str, log_value)
