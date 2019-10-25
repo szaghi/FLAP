@@ -43,9 +43,7 @@ type, extends(object), public :: command_line_interface
                          get_cla, &
                          get_cla_list                    !< Get CLA value(s) from CLAs list parsed.
     generic,   public :: get_varying =>                &
-#ifdef _R16P_SUPPORTED
                          get_cla_list_varying_R16P,    &
-#endif
                          get_cla_list_varying_R8P,     &
                          get_cla_list_varying_R4P,     &
                          get_cla_list_varying_I8P,     &
@@ -1357,36 +1355,33 @@ contains
   if (self%epilog/=''.and.(.not.no_epilogd)) usaged = usaged//new_line('a')//prefd//self%epilog
   endfunction usage
 
-  function signature(self, bash_completion, verbose)
+  function signature(self, bash_completion)
   !< Get signature.
   class(command_line_interface), intent(in) :: self             !< CLI data.
   logical, optional,             intent(in) :: bash_completion  !< Return the signature for bash completion.
-  logical, optional,             intent(in) :: verbose          !< Return the verbose signature.
   logical                                   :: bash_completion_ !< Return the signature for bash completion, local variable.
-  logical                                   :: verbose_         !< Return the verbose signature, local variable.
   character(len=:), allocatable             :: signature        !< Signature.
   integer(I4P)                              :: g                !< Counter.
 
   bash_completion_ = .false. ; if (present(bash_completion)) bash_completion_ = bash_completion
-  verbose_ = .false. ; if (present(verbose)) verbose_ = verbose
-  signature = self%clasg(0)%signature(bash_completion=bash_completion)
-  if (size(self%clasg,dim=1)>1) then
-    if (bash_completion_) then
-      signature = signature//new_line('a')//'    COMPREPLY+=( $( compgen -W "'//self%clasg(1)%group//'" -- $cur ) )'
-      do g=2,size(self%clasg,dim=1)-1
+
+  if (bash_completion_) then
+    signature = signature//new_line('a')//'    COMPREPLY=( )'
+    signature = signature//new_line('a')//'    COMPREPLY+=( $( compgen -W "'//&
+                self%clasg(0)%signature(bash_completion=bash_completion, plain=.true.)//'" -- $cur ) )'
+    if (size(self%clasg,dim=1)>1) then
+      do g=1,size(self%clasg,dim=1)-1
         signature = signature//new_line('a')//'    COMPREPLY+=( $( compgen -W "'//self%clasg(g)%group//'" -- $cur ) )'
       enddo
-    else
+    endif
+  else
+    signature = self%clasg(0)%signature()
+    if (size(self%clasg,dim=1)>1) then
       signature = signature//' {'//self%clasg(1)%group
       do g=2,size(self%clasg,dim=1)-1
         signature = signature//','//self%clasg(g)%group
       enddo
       signature = signature//'} ...'
-    endif
-    if (verbose_) then
-      do g=1,size(self%clasg,dim=1)-1
-        signature = signature//new_line('a')//self%clasg(g)%group//' '//self%clasg(g)%signature()
-      enddo
     endif
   endif
   endfunction signature
@@ -1410,13 +1405,32 @@ contains
 
   script = '#/usr/bin/env bash'
   if (size(self%clasg,dim=1)>1) then
-      script = script//new_line('a')//'_completion()'
-      script = script//new_line('a')//'{'
-      script = script//new_line('a')//'  group=${COMP_WORDS[1]}'
-      script = script//new_line('a')//'  cur=${COMP_WORDS[COMP_CWORD]}'
-      script = script//new_line('a')//'  prev=${COMP_WORDS[COMP_CWORD - 1]}'
-      script = script//new_line('a')//'  if [ "$group" == "'//self%clasg(1)%group//'" ] ; then'
-      script = script//self%clasg(1)%signature(bash_completion=.true.)
+    script = script//new_line('a')//'_completion()'
+    script = script//new_line('a')//'{'
+    script = script//new_line('a')//'  cur=${COMP_WORDS[COMP_CWORD]}'
+    script = script//new_line('a')//'  prev=${COMP_WORDS[COMP_CWORD - 1]}'
+    ! script = script//new_line('a')//'  if [[ $prev == "--help" || $prev == "-h" || $prev == "--version" || $prev == "-v" ]] ; then'
+    ! script = script//new_line('a')//'    COMPREPLY=()'
+    ! script = script//new_line('a')//'  else'
+    script = script//new_line('a')//'  groups=('
+    do g=1,size(self%clasg,dim=1)-1
+      script = script//' "'//self%clasg(g)%group//'"'
+    enddo
+    script = script//' )'
+    ! script = script//new_line('a')//'    base_clas=('//&
+    !          self%clasg(0)%signature(bash_completion=.true., plain=.true.)//' )'
+    ! do g=1,size(self%clasg,dim=1)-1
+    !   script = script//new_line('a')//'    '//self%clasg(g)%group//'_clas=('//&
+    !            self%clasg(g)%signature(bash_completion=.true., plain=.true.)//' )'
+    ! enddo
+    script = script//new_line('a')//'  for g in ${groups[@]}; do'
+    script = script//new_line('a')//'    if [ "$prev" == "$g" ] ; then'
+    script = script//new_line('a')//'      group=$prev '
+    script = script//new_line('a')//'    fi'
+    script = script//new_line('a')//'  done'
+    ! script = script//new_line('a')//'  fi'
+    script = script//new_line('a')//'  if [ "$group" == "'//self%clasg(1)%group//'" ] ; then'
+    script = script//self%clasg(1)%signature(bash_completion=.true.)
     do g=2,size(self%clasg,dim=1)-1
       script = script//new_line('a')//'  elif [ "$group" == "'//self%clasg(g)%group//'" ] ; then'
       script = script//self%clasg(g)%signature(bash_completion=.true.)
