@@ -10,6 +10,7 @@ type(command_line_interface) :: cli                                             
 character(37)                :: bash_file='flap_test_save_bash_completion.bash' !< Bash script file name.
 
 call cli%init(progname='flap_test_save_bash_completion')
+call cli%add(switch_ab='-b',  required=.false., act='store', def='no', choices='yes,no')
 call cli%add_group(group='compile', description='compile sources')
 call cli%add_group(group='clean',   description='clean compiled objects')
 call cli%add(group='compile', switch='--compiler',  switch_ab='-c',  required=.false., act='store',      def='gnu'                 )
@@ -21,5 +22,4 @@ call cli%add(group='compile', switch='--integer',   switch_ab='-i',  required=.f
 call cli%add(group='compile', switch='--real',                       required=.false., act='store',      def='1.0', choices='1.,2.')
 call cli%parse
 call cli%save_bash_completion(bash_file=trim(bash_file))
-print '(A)', cli%signature(verbose=.true.)
 endprogram flap_save_bash_completion
