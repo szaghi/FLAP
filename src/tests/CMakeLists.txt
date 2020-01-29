@@ -1,28 +1,28 @@
-#################################################################
-# TESTS
-#################################################################
+include(GNUInstallDirs)
 
-FILE(GLOB_RECURSE TESTS_SRC *.f90 *.F90)
-SET(TESTS_SRC ${TESTS_SRC} PARENT_SCOPE)
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/tests/${CMAKE_INSTALL_BINDIR}")
 
-#################################################################
-# EXTERNAL LIBRARIES
-#################################################################
+function(add_flap_test test_src libraries)
+    get_filename_component(test_name ${test_src} NAME_WE)
+    get_filename_component(test_dir ${test_src} DIRECTORY)
+    set(result_src "${test_dir}/${test_name}.result")
 
-FOREACH(TEST_SRC ${TESTS_SRC})
-    GET_FILENAME_COMPONENT(EXE_NAME ${TEST_SRC} NAME_WE)
-    ADD_EXECUTABLE(${EXE_NAME} ${TEST_SRC})
-    TARGET_LINK_LIBRARIES(${EXE_NAME} ${LIB} fortran_tester)
+    add_executable(${test_name} ${test_src})
+    foreach(lib IN LISTS libraries)
+        target_link_libraries(${test_name} ${lib})
+    endforeach()
+    add_test(NAME ${test_name} COMMAND ${test_name})
+#
+#    file(STRINGS ${result_src} result_raw)
+#    string(REGEX REPLACE "([+.])([^+.]*)" "\\\\\\1\\2" result ${result_raw})
+#
+#    set_tests_properties(${test_name} PROPERTIES
+#        PASS_REGULAR_EXPRESSION "${result}"
+#    )
+endfunction()
 
-    #################################################################
-    # External projects
-    #################################################################
-    FOREACH(PENF_LIB ${PENF_LIBS})
-            TARGET_LINK_LIBRARIES(${EXE_NAME} ${PENF_LIB})
-    ENDFOREACH()
+file(GLOB_RECURSE flap_tests *.f90)
 
-    ADD_TEST(${EXE_NAME}_TEST ${EXECUTABLE_OUTPUT_PATH}/${EXE_NAME})
-ENDFOREACH()
-
-
-
+foreach(flap_test IN LISTS flap_tests)
+    add_flap_test(${flap_test} FLAP::FLAP)
+endforeach()
