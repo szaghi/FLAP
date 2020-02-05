@@ -3,7 +3,7 @@ module flap_command_line_interface_t
 !< Command Line Interface (CLI) class.
 
 use face, only : colorize
-use flap_command_line_argument_t, only : command_line_argument, action_store
+use flap_command_line_argument_t, only : command_line_argument, ACTION_STORE, ERROR_UNKNOWN
 use flap_command_line_arguments_group_t, only : command_line_arguments_group, STATUS_PRINT_H, STATUS_PRINT_V
 use flap_object_t, only : object
 use flap_utils_m
@@ -16,16 +16,17 @@ save
 type, extends(object), public :: command_line_interface
   !< Command Line Interface (CLI) class.
   private
-  type(command_line_arguments_group), allocatable :: clasg(:)           !< CLA list [1:Na].
+  type(command_line_arguments_group), allocatable :: clasg(:)                    !< CLA list [1:Na].
 #ifdef __GFORTRAN__
-  character(512  ), allocatable                   :: args(:)            !< Actually passed command line arguments.
-  character(512  ), allocatable                   :: examples(:)        !< Examples of correct usage.
+  character(512  ), allocatable                   :: args(:)                     !< Actually passed command line arguments.
+  character(512  ), allocatable                   :: examples(:)                 !< Examples of correct usage.
 #else
-  character(len=:), allocatable                   :: args(:)            !< Actually passed command line arguments.
-  character(len=:), allocatable                   :: examples(:)        !< Examples of correct usage (not work with gfortran).
+  character(len=:), allocatable                   :: args(:)                     !< Actually passed command line arguments.
+  character(len=:), allocatable                   :: examples(:)                 !< Examples of correct usage.
 #endif
-  logical                                         :: disable_hv=.false. !< Disable automatic 'help' and 'version' CLAs.
-  logical                                         :: is_parsed_=.false. !< Parse status.
+  logical                                         :: disable_hv=.false.          !< Disable automatic 'help' and 'version' CLAs.
+  logical                                         :: ignore_unknown_clas=.false. !< Disable errors-raising for passed unknown CLAs.
+  logical                                         :: is_parsed_=.false.          !< Parse status.
   contains
     ! public methods
     procedure, public :: free                            !< Free dynamic memory.
@@ -90,6 +91,7 @@ integer(I4P), parameter, public :: ERROR_MISSING_CLA           = 1000 !< CLA not
 integer(I4P), parameter, public :: ERROR_MISSING_GROUP         = 1001 !< Group not found in CLI.
 integer(I4P), parameter, public :: ERROR_MISSING_SELECTION_CLA = 1002 !< CLA selection in CLI failing.
 integer(I4P), parameter, public :: ERROR_TOO_FEW_CLAS          = 1003 !< Insufficient arguments for CLI.
+integer(I4P), parameter, public :: ERROR_UNKNOWN_IGNORED       = 1004 !< Unknown CLAs passed, but ignored.
 
 contains
   ! public methods
@@ -109,31 +111,33 @@ contains
   endif
   if (allocated(self%args)) deallocate(self%args)
   if (allocated(self%examples)) deallocate(self%examples)
-  self%disable_hv = .false.
-  self%is_parsed_ = .false.
+  self%disable_hv          = .false.
+  self%is_parsed_          = .false.
+  self%ignore_unknown_clas = .false.
   endsubroutine free
 
   subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, &
-                  usage_lun, error_lun, version_lun, error_color, error_style)
+                  usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas)
   !< Initialize CLI.
-  class(command_line_interface), intent(inout) :: self              !< CLI data.
-  character(*), optional,        intent(in)    :: progname          !< Program name.
-  character(*), optional,        intent(in)    :: version           !< Program version.
-  character(*), optional,        intent(in)    :: help              !< Help message introducing the CLI usage.
-  character(*), optional,        intent(in)    :: description       !< Detailed description message introducing the program.
-  character(*), optional,        intent(in)    :: license           !< License description.
-  character(*), optional,        intent(in)    :: authors           !< Authors list.
-  character(*), optional,        intent(in)    :: examples(1:)      !< Examples of correct usage.
-  character(*), optional,        intent(in)    :: epilog            !< Epilog message.
-  logical,      optional,        intent(in)    :: disable_hv        !< Disable automatic insert of 'help' and 'version' CLAs.
-  integer(I4P), optional,        intent(in)    :: usage_lun         !< Unit number to print usage/help.
-  integer(I4P), optional,        intent(in)    :: version_lun       !< Unit number to print version/license info.
-  integer(I4P), optional,        intent(in)    :: error_lun         !< Unit number to print error info.
-  character(*), optional,        intent(in)    :: error_color       !< ANSI color of error messages.
-  character(*), optional,        intent(in)    :: error_style       !< ANSI style of error messages.
-  character(len=:), allocatable                :: prog_invocation   !< Complete program invocation.
-  integer(I4P)                                 :: invocation_length !< Length of invocation.
-  integer(I4P)                                 :: retrieval_status  !< Retrieval status.
+  class(command_line_interface), intent(inout) :: self                !< CLI data.
+  character(*), optional,        intent(in)    :: progname            !< Program name.
+  character(*), optional,        intent(in)    :: version             !< Program version.
+  character(*), optional,        intent(in)    :: help                !< Help message introducing the CLI usage.
+  character(*), optional,        intent(in)    :: description         !< Detailed description message introducing the program.
+  character(*), optional,        intent(in)    :: license             !< License description.
+  character(*), optional,        intent(in)    :: authors             !< Authors list.
+  character(*), optional,        intent(in)    :: examples(1:)        !< Examples of correct usage.
+  character(*), optional,        intent(in)    :: epilog              !< Epilog message.
+  logical,      optional,        intent(in)    :: disable_hv          !< Disable automatic insert of 'help' and 'version' CLAs.
+  integer(I4P), optional,        intent(in)    :: usage_lun           !< Unit number to print usage/help.
+  integer(I4P), optional,        intent(in)    :: version_lun         !< Unit number to print version/license info.
+  integer(I4P), optional,        intent(in)    :: error_lun           !< Unit number to print error info.
+  character(*), optional,        intent(in)    :: error_color         !< ANSI color of error messages.
+  character(*), optional,        intent(in)    :: error_style         !< ANSI style of error messages.
+  logical,      optional,        intent(in)    :: ignore_unknown_clas !< Disable errors-raising for passed unknown CLAs.
+  character(len=:), allocatable                :: prog_invocation     !< Complete program invocation.
+  integer(I4P)                                 :: invocation_length   !< Length of invocation.
+  integer(I4P)                                 :: retrieval_status    !< Retrieval status.
 
   call self%free
   if (present(progname)) then
@@ -162,13 +166,14 @@ contains
 #endif
     self%examples = examples
   endif
-  self%epilog      = '' ; if (present(epilog     )) self%epilog      = epilog
-                          if (present(disable_hv )) self%disable_hv  = disable_hv  ! default set by self%free
-                          if (present(usage_lun  )) self%usage_lun   = usage_lun   ! default set by self%free
-                          if (present(version_lun)) self%version_lun = version_lun ! default set by self%free
-                          if (present(error_lun  )) self%error_lun   = error_lun   ! default set by self%free
-  self%error_color = '' ; if (present(error_color)) self%error_color = error_color
-  self%error_style = '' ; if (present(error_style)) self%error_style = error_style
+  self%epilog      = '' ; if (present(epilog     ))         self%epilog              = epilog
+                          if (present(disable_hv ))         self%disable_hv          = disable_hv         ! default set by self%free
+                          if (present(usage_lun  ))         self%usage_lun           = usage_lun          ! default set by self%free
+                          if (present(version_lun))         self%version_lun         = version_lun        ! default set by self%free
+                          if (present(error_lun  ))         self%error_lun           = error_lun          ! default set by self%free
+  self%error_color = '' ; if (present(error_color))         self%error_color         = error_color
+  self%error_style = '' ; if (present(error_style))         self%error_style         = error_style
+                          if (present(ignore_unknown_clas)) self%ignore_unknown_clas = ignore_unknown_clas! default set by self%free
   ! initialize only the first default group
   allocate(self%clasg(0:0))
   call self%clasg(0)%assign_object(self)
@@ -498,8 +503,12 @@ contains
   ! check CLI consistency
   call self%check(pref=pref)
   if (self%error>0) then
-    if (present(error)) error = self%error
-    return
+    if (((self%error==ERROR_UNKNOWN).and.(.not.self%ignore_unknown_clas)).or.(self%error/=ERROR_UNKNOWN)) then
+       if (present(error)) error = self%error
+       return
+    else
+       self%error = ERROR_UNKNOWN_IGNORED
+    endif
   endif
 
   ! parse CLI
@@ -513,8 +522,12 @@ contains
     if (self%error /= 0) exit
   enddo
   if (self%error>0) then
-    if (present(error)) error = self%error
-    return
+    if (((self%error==ERROR_UNKNOWN).and.(.not.self%ignore_unknown_clas)).or.(self%error/=ERROR_UNKNOWN)) then
+       if (present(error)) error = self%error
+       return
+    else
+       self%error = ERROR_UNKNOWN_IGNORED
+    endif
   endif
 
   ! trap the special cases of version/help printing
@@ -533,8 +546,12 @@ contains
     if (self%error>0) exit
   enddo
   if (self%error>0) then
-    if (present(error)) error = self%error
-    return
+    if (((self%error==ERROR_UNKNOWN).and.(.not.self%ignore_unknown_clas)).or.(self%error/=ERROR_UNKNOWN)) then
+       if (present(error)) error = self%error
+       return
+    else
+       self%error = ERROR_UNKNOWN_IGNORED
+    endif
   endif
 
   ! check mutually exclusive interaction
@@ -735,7 +752,7 @@ contains
 
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
-    if (self%error/=0) return
+    if (self%error/=0.and.self%error/=ERROR_UNKNOWN_IGNORED) return
   endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
@@ -744,7 +761,7 @@ contains
   else
     g = 0
   endif
-  if (self%error==0) then
+  if (self%error==0.or.self%error==ERROR_UNKNOWN_IGNORED) then
     if (present(switch)) then
       ! search for the CLA corresponding to switch
       found = .false.
@@ -791,7 +808,7 @@ contains
 
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
-    if (self%error/=0) return
+    if (self%error/=0.and.self%error/=ERROR_UNKNOWN_IGNORED) return
   endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
@@ -844,7 +861,7 @@ contains
 
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
-    if (self%error/=0) return
+    if (self%error/=0.and.self%error/=ERROR_UNKNOWN_IGNORED) return
   endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
@@ -897,7 +914,7 @@ contains
 
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
-    if (self%error/=0) return
+    if (self%error/=0.and.self%error/=ERROR_UNKNOWN_IGNORED) return
   endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
@@ -950,7 +967,7 @@ contains
 
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
-    if (self%error/=0) return
+    if (self%error/=0.and.self%error/=ERROR_UNKNOWN_IGNORED) return
   endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
@@ -1003,7 +1020,7 @@ contains
 
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
-    if (self%error/=0) return
+    if (self%error/=0.and.self%error/=ERROR_UNKNOWN_IGNORED) return
   endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
@@ -1056,7 +1073,7 @@ contains
 
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
-    if (self%error/=0) return
+    if (self%error/=0.and.self%error/=ERROR_UNKNOWN_IGNORED) return
   endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
@@ -1109,7 +1126,7 @@ contains
 
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
-    if (self%error/=0) return
+    if (self%error/=0.and.self%error/=ERROR_UNKNOWN_IGNORED) return
   endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
@@ -1162,7 +1179,7 @@ contains
 
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
-    if (self%error/=0) return
+    if (self%error/=0.and.self%error/=ERROR_UNKNOWN_IGNORED) return
   endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
@@ -1215,7 +1232,7 @@ contains
 
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
-    if (self%error/=0) return
+    if (self%error/=0.and.self%error/=ERROR_UNKNOWN_IGNORED) return
   endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
@@ -1268,7 +1285,7 @@ contains
 
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
-    if (self%error/=0) return
+    if (self%error/=0.and.self%error/=ERROR_UNKNOWN_IGNORED) return
   endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then

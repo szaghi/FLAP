@@ -18,6 +18,7 @@ public :: ACTION_STORE_FALSE
 public :: ACTION_PRINT_HELP
 public :: ACTION_PRINT_VERS
 public :: ARGS_SEP
+public :: ERROR_UNKNOWN
 
 type, extends(object) :: command_line_argument
   !< Command Line Argument (CLA) class.
