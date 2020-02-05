@@ -1,23 +1,15 @@
-language: generic
+language: python
 
-sudo: false
+dist: bionic
+python:
+   - 3.8
 
 cache:
   apt: true
   pip: true
   directories:
     - $HOME/.cache/pip
-    - $HOME/.local
-
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - gfortran-6
-      - binutils
-      - python-pip
-      - graphviz
+    - $HOME/.local 
 
 env:
   global:
@@ -27,7 +19,15 @@ env:
     - MAKETAR="FoBiS.py rule -ex maketar"
 
 before_install:
-  - git submodule update --init
+   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+   - sudo apt-get -q update
+   - sudo apt-get -y install binutils
+   - sudo apt-get -y install graphviz
+   - sudo apt-get -y install gfortran-9
+   - sudo apt-get -y install python3-pip
+   - sudo apt-get -y install python3-setuptools
+   - python --version
+   - git submodule update --init
 
 install:
   - |
@@ -35,15 +35,17 @@ install:
       mkdir "$HOME/.local/bin"
     fi
   - export PATH="$HOME/.local/bin:$PATH"
-  - export FC=/usr/bin/gfortran-6
-  - ln -fs /usr/bin/gfortran-6 "$HOME/.local/bin/gfortran" && gfortran --version
-  - ls -l /usr/bin/gfortran-6
-  - ln -fs /usr/bin/gcov-6 "$HOME/.local/bin/gcov" && gcov --version
-  - pip install --user --upgrade pygooglechart
-  - pip install --user --upgrade graphviz
-  - pip install --user --upgrade FoBiS.py
-  - pip install --user --upgrade markdown-checklist 
-  - pip install --user --upgrade ford
+  - export FC=/usr/bin/gfortran-9
+  - ln -fs /usr/bin/gfortran-9 "$HOME/.local/bin/gfortran" && gfortran --version
+  - ls -l /usr/bin/gfortran-9
+  - ln -fs /usr/bin/gcov-9 "$HOME/.local/bin/gcov" && gcov --version
+  - sudo -H pip3 install --upgrade pygooglechart
+  - sudo -H pip3 install --upgrade graphviz
+  - sudo -H pip3 install --upgrade future
+  - sudo -H pip3 install --upgrade configparser
+  - sudo -H pip3 install --upgrade markdown-checklist 
+  - sudo -H pip3 install --upgrade ford
+  - sudo -H pip3 install --upgrade FoBiS.py && FoBiS.py --version
 
 script:
   - $MAKECOVERAGE
