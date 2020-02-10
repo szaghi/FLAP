@@ -228,21 +228,24 @@ contains
   call self%check(pref=pref)
   endsubroutine add
 
-  subroutine parse(self, args, pref)
+  subroutine parse(self, args, ignore_unknown_clas, pref, error_unknown_clas)
   !< Parse CLAsG arguments.
-  class(command_line_arguments_group), intent(inout) :: self      !< CLAsG data.
-  character(*), optional,              intent(in)    :: pref      !< Prefixing string.
-  character(*),                        intent(in)    :: args(:)   !< Command line arguments.
-  type(command_line_argument)                        :: cla       !< CLA data.
-  character(500)                                     :: envvar    !< Environment variables buffer.
-  integer(I4P)                                       :: arg       !< Argument counter.
-  integer(I4P)                                       :: a         !< Counter.
-  integer(I4P)                                       :: aa        !< Counter.
-  integer(I4P)                                       :: aaa       !< Counter.
-  integer(I4P)                                       :: nargs     !< Number of arguments consumed by a CLA.
-  logical                                            :: found     !< Flag for checking if switch is a defined CLA.
-  logical                                            :: found_val !< Flag for checking if switch value is found.
+  class(command_line_arguments_group), intent(inout) :: self                !< CLAsG data.
+  character(*),                        intent(in)    :: args(:)             !< Command line arguments.
+  logical,                             intent(in)    :: ignore_unknown_clas !< Disable errors-raising for passed unknown CLAs.
+  character(*), optional,              intent(in)    :: pref                !< Prefixing string.
+  integer(I4P),                        intent(out)   :: error_unknown_clas  !< Error flag for passed unknown CLAs.
+  type(command_line_argument)                        :: cla                 !< CLA data.
+  character(500)                                     :: envvar              !< Environment variables buffer.
+  integer(I4P)                                       :: arg                 !< Argument counter.
+  integer(I4P)                                       :: a                   !< Counter.
+  integer(I4P)                                       :: aa                  !< Counter.
+  integer(I4P)                                       :: aaa                 !< Counter.
+  integer(I4P)                                       :: nargs               !< Number of arguments consumed by a CLA.
+  logical                                            :: found               !< Flag for checking if switch is a defined CLA.
+  logical                                            :: found_val           !< Flag for checking if switch value is found.
 
+  error_unknown_clas = 0
   if (self%is_called) then
     arg = 0
     do while (arg < size(args, dim=1)) ! loop over CLAs group arguments passed
@@ -386,7 +389,8 @@ contains
         if (.not.self%cla(arg)%is_positional) then ! current argument (arg-th) is not positional... there is a problem!
           call self%cla(arg)%raise_error_switch_unknown(pref=pref, switch=trim(adjustl(args(arg))))
           self%error = self%cla(arg)%error
-          return
+          error_unknown_clas = self%error
+          if (.not.ignore_unknown_clas) return
         else
           ! positional CLA always stores a value
           self%cla(arg)%val = trim(adjustl(args(arg)))

@@ -25,8 +25,9 @@ type, extends(object), public :: command_line_interface
   character(len=:), allocatable                   :: examples(:)                 !< Examples of correct usage.
 #endif
   logical                                         :: disable_hv=.false.          !< Disable automatic 'help' and 'version' CLAs.
-  logical                                         :: ignore_unknown_clas=.false. !< Disable errors-raising for passed unknown CLAs.
   logical                                         :: is_parsed_=.false.          !< Parse status.
+  logical                                         :: ignore_unknown_clas=.false. !< Disable errors-raising for passed unknown CLAs.
+  integer(I4P)                                    :: error_unknown_clas=0_I4P    !< Error trapping flag for unknown CLAs.
   contains
     ! public methods
     procedure, public :: free                            !< Free dynamic memory.
@@ -91,7 +92,7 @@ integer(I4P), parameter, public :: ERROR_MISSING_CLA           = 1000 !< CLA not
 integer(I4P), parameter, public :: ERROR_MISSING_GROUP         = 1001 !< Group not found in CLI.
 integer(I4P), parameter, public :: ERROR_MISSING_SELECTION_CLA = 1002 !< CLA selection in CLI failing.
 integer(I4P), parameter, public :: ERROR_TOO_FEW_CLAS          = 1003 !< Insufficient arguments for CLI.
-integer(I4P), parameter, public :: ERROR_UNKNOWN_IGNORED       = 1004 !< Unknown CLAs passed, but ignored.
+integer(I4P), parameter, public :: ERROR_UNKNOWN_CLAS_IGNORED  = 1004 !< Unknown CLAs passed, but ignored.
 
 contains
   ! public methods
@@ -114,6 +115,7 @@ contains
   self%disable_hv          = .false.
   self%is_parsed_          = .false.
   self%ignore_unknown_clas = .false.
+  self%error_unknown_clas  = 0_I4P
   endsubroutine free
 
   subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, &
@@ -507,26 +509,34 @@ contains
        if (present(error)) error = self%error
        return
     else
-       self%error = ERROR_UNKNOWN_IGNORED
+       self%error_unknown_clas = ERROR_UNKNOWN_CLAS_IGNORED
     endif
   endif
 
   ! parse CLI
   do g=0,size(ai,dim=1)-1
     if (ai(g,1)>0) then
-      call self%clasg(g)%parse(args=self%args(ai(g,1):ai(g,2)), pref=pref)
+      call self%clasg(g)%parse(args=self%args(ai(g,1):ai(g,2)), ignore_unknown_clas=self%ignore_unknown_clas, &
+                               pref=pref, error_unknown_clas=self%error_unknown_clas)
     else
       call self%clasg(g)%sanitize_defaults
     endif
     self%error = self%clasg(g)%error
-    if (self%error /= 0) exit
+    if (self%error > 0) then
+       if (((self%error==ERROR_UNKNOWN).and.(.not.self%ignore_unknown_clas)).or.(self%error/=ERROR_UNKNOWN)) then
+          if (present(error)) error = self%error
+          exit
+       else
+          self%error_unknown_clas = ERROR_UNKNOWN_CLAS_IGNORED
+       endif
+    endif
   enddo
   if (self%error>0) then
     if (((self%error==ERROR_UNKNOWN).and.(.not.self%ignore_unknown_clas)).or.(self%error/=ERROR_UNKNOWN)) then
        if (present(error)) error = self%error
        return
     else
-       self%error = ERROR_UNKNOWN_IGNORED
+       self%error_unknown_clas = ERROR_UNKNOWN_CLAS_IGNORED
     endif
   endif
 
@@ -543,14 +553,21 @@ contains
   do g=0, size(ai,dim=1)-1
     call self%clasg(g)%is_required_passed(pref=pref)
     self%error = self%clasg(g)%error
-    if (self%error>0) exit
+    if (self%error>0) then
+       if (((self%error==ERROR_UNKNOWN).and.(.not.self%ignore_unknown_clas)).or.(self%error/=ERROR_UNKNOWN)) then
+          if (present(error)) error = self%error
+          exit
+       else
+          self%error_unknown_clas = ERROR_UNKNOWN_CLAS_IGNORED
+       endif
+    endif
   enddo
   if (self%error>0) then
     if (((self%error==ERROR_UNKNOWN).and.(.not.self%ignore_unknown_clas)).or.(self%error/=ERROR_UNKNOWN)) then
        if (present(error)) error = self%error
        return
     else
-       self%error = ERROR_UNKNOWN_IGNORED
+       self%error_unknown_clas = ERROR_UNKNOWN_CLAS_IGNORED
     endif
   endif
 
@@ -558,6 +575,9 @@ contains
   call self%check_m_exclusive(pref=pref)
 
   self%is_parsed_ = .true.
+
+  ! check if the only error found is for unknown passed CLAs and if it is ignored by the user
+  if (self%error==ERROR_UNKNOWN.and.self%error_unknown_clas==ERROR_UNKNOWN_CLAS_IGNORED) self%error = ERROR_UNKNOWN_CLAS_IGNORED
 
   if (present(error)) error = self%error
   endsubroutine parse
@@ -752,7 +772,7 @@ contains
 
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
-    if (self%error/=0.and.self%error/=ERROR_UNKNOWN_IGNORED) return
+    if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
@@ -761,7 +781,7 @@ contains
   else
     g = 0
   endif
-  if (self%error==0.or.self%error==ERROR_UNKNOWN_IGNORED) then
+  if (self%error==0.or.self%error_unknown_clas==ERROR_UNKNOWN_CLAS_IGNORED) then
     if (present(switch)) then
       ! search for the CLA corresponding to switch
       found = .false.
@@ -784,6 +804,8 @@ contains
       call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
     endif
   endif
+  ! check if the only error found is for unknown passed CLAs and if it is ignored by the user
+  if (self%error==ERROR_UNKNOWN.and.self%error_unknown_clas==ERROR_UNKNOWN_CLAS_IGNORED) self%error = ERROR_UNKNOWN_CLAS_IGNORED
   if (self%error==0.and.(.not.self%clasg(g)%is_called)) then
     ! TODO warn (if liked) for non invoked group querying
   endif
@@ -808,7 +830,7 @@ contains
 
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
-    if (self%error/=0.and.self%error/=ERROR_UNKNOWN_IGNORED) return
+    if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
@@ -838,6 +860,8 @@ contains
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
+  ! check if the only error found is for unknown passed CLAs and if it is ignored by the user
+  if (self%error==ERROR_UNKNOWN.and.self%error_unknown_clas==ERROR_UNKNOWN_CLAS_IGNORED) self%error = ERROR_UNKNOWN_CLAS_IGNORED
   if (present(error)) error = self%error
   endsubroutine get_cla_list
 
@@ -861,7 +885,7 @@ contains
 
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
-    if (self%error/=0.and.self%error/=ERROR_UNKNOWN_IGNORED) return
+    if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
@@ -891,6 +915,8 @@ contains
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
+  ! check if the only error found is for unknown passed CLAs and if it is ignored by the user
+  if (self%error==ERROR_UNKNOWN.and.self%error_unknown_clas==ERROR_UNKNOWN_CLAS_IGNORED) self%error = ERROR_UNKNOWN_CLAS_IGNORED
   if (present(error)) error = self%error
   endsubroutine get_cla_list_varying_R16P
 
@@ -914,7 +940,7 @@ contains
 
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
-    if (self%error/=0.and.self%error/=ERROR_UNKNOWN_IGNORED) return
+    if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
@@ -944,6 +970,8 @@ contains
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
+  ! check if the only error found is for unknown passed CLAs and if it is ignored by the user
+  if (self%error==ERROR_UNKNOWN.and.self%error_unknown_clas==ERROR_UNKNOWN_CLAS_IGNORED) self%error = ERROR_UNKNOWN_CLAS_IGNORED
   if (present(error)) error = self%error
   endsubroutine get_cla_list_varying_R8P
 
@@ -967,7 +995,7 @@ contains
 
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
-    if (self%error/=0.and.self%error/=ERROR_UNKNOWN_IGNORED) return
+    if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
@@ -997,6 +1025,8 @@ contains
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
+  ! check if the only error found is for unknown passed CLAs and if it is ignored by the user
+  if (self%error==ERROR_UNKNOWN.and.self%error_unknown_clas==ERROR_UNKNOWN_CLAS_IGNORED) self%error = ERROR_UNKNOWN_CLAS_IGNORED
   if (present(error)) error = self%error
   endsubroutine get_cla_list_varying_R4P
 
@@ -1020,7 +1050,7 @@ contains
 
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
-    if (self%error/=0.and.self%error/=ERROR_UNKNOWN_IGNORED) return
+    if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
@@ -1050,6 +1080,8 @@ contains
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
+  ! check if the only error found is for unknown passed CLAs and if it is ignored by the user
+  if (self%error==ERROR_UNKNOWN.and.self%error_unknown_clas==ERROR_UNKNOWN_CLAS_IGNORED) self%error = ERROR_UNKNOWN_CLAS_IGNORED
   if (present(error)) error = self%error
   endsubroutine get_cla_list_varying_I8P
 
@@ -1073,7 +1105,7 @@ contains
 
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
-    if (self%error/=0.and.self%error/=ERROR_UNKNOWN_IGNORED) return
+    if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
@@ -1103,6 +1135,8 @@ contains
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
+  ! check if the only error found is for unknown passed CLAs and if it is ignored by the user
+  if (self%error==ERROR_UNKNOWN.and.self%error_unknown_clas==ERROR_UNKNOWN_CLAS_IGNORED) self%error = ERROR_UNKNOWN_CLAS_IGNORED
   if (present(error)) error = self%error
   endsubroutine get_cla_list_varying_I4P
 
@@ -1126,7 +1160,7 @@ contains
 
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
-    if (self%error/=0.and.self%error/=ERROR_UNKNOWN_IGNORED) return
+    if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
@@ -1156,6 +1190,8 @@ contains
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
+  ! check if the only error found is for unknown passed CLAs and if it is ignored by the user
+  if (self%error==ERROR_UNKNOWN.and.self%error_unknown_clas==ERROR_UNKNOWN_CLAS_IGNORED) self%error = ERROR_UNKNOWN_CLAS_IGNORED
   if (present(error)) error = self%error
   endsubroutine get_cla_list_varying_I2P
 
@@ -1179,7 +1215,7 @@ contains
 
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
-    if (self%error/=0.and.self%error/=ERROR_UNKNOWN_IGNORED) return
+    if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
@@ -1209,6 +1245,8 @@ contains
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
+  ! check if the only error found is for unknown passed CLAs and if it is ignored by the user
+  if (self%error==ERROR_UNKNOWN.and.self%error_unknown_clas==ERROR_UNKNOWN_CLAS_IGNORED) self%error = ERROR_UNKNOWN_CLAS_IGNORED
   if (present(error)) error = self%error
   endsubroutine get_cla_list_varying_I1P
 
@@ -1232,7 +1270,7 @@ contains
 
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
-    if (self%error/=0.and.self%error/=ERROR_UNKNOWN_IGNORED) return
+    if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
@@ -1262,6 +1300,8 @@ contains
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
+  ! check if the only error found is for unknown passed CLAs and if it is ignored by the user
+  if (self%error==ERROR_UNKNOWN.and.self%error_unknown_clas==ERROR_UNKNOWN_CLAS_IGNORED) self%error = ERROR_UNKNOWN_CLAS_IGNORED
   if (present(error)) error = self%error
   endsubroutine get_cla_list_varying_logical
 
@@ -1285,7 +1325,7 @@ contains
 
   if (.not.self%is_parsed_) then
     call self%parse(pref=pref, args=args, error=error)
-    if (self%error/=0.and.self%error/=ERROR_UNKNOWN_IGNORED) return
+    if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
@@ -1315,6 +1355,8 @@ contains
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
+  ! check if the only error found is for unknown passed CLAs and if it is ignored by the user
+  if (self%error==ERROR_UNKNOWN.and.self%error_unknown_clas==ERROR_UNKNOWN_CLAS_IGNORED) self%error = ERROR_UNKNOWN_CLAS_IGNORED
   if (present(error)) error = self%error
   endsubroutine get_cla_list_varying_char
 
