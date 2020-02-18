@@ -522,6 +522,7 @@ contains
       call self%clasg(g)%sanitize_defaults
     endif
     self%error = self%clasg(g)%error
+    if (self%error < 0) exit
     if (self%error > 0) then
        if (((self%error==ERROR_UNKNOWN).and.(.not.self%ignore_unknown_clas)).or.(self%error/=ERROR_UNKNOWN)) then
           if (present(error)) error = self%error
