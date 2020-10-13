@@ -45,7 +45,9 @@ type, extends(object), public :: command_line_interface
                          get_cla, &
                          get_cla_list                    !< Get CLA value(s) from CLAs list parsed.
     generic,   public :: get_varying =>                &
+#if defined _R16P
                          get_cla_list_varying_R16P,    &
+#endif
                          get_cla_list_varying_R8P,     &
                          get_cla_list_varying_R4P,     &
                          get_cla_list_varying_I8P,     &

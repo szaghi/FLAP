@@ -52,7 +52,9 @@ type, extends(object) :: command_line_argument
                          get_cla, &
                          get_cla_list                    !< Get CLA value(s).
     generic,   public :: get_varying =>                &
+#if defined _R16P
                          get_cla_list_varying_R16P,    &
+#endif
                          get_cla_list_varying_R8P,     &
                          get_cla_list_varying_R4P,     &
                          get_cla_list_varying_I8P,     &
@@ -702,11 +704,13 @@ contains
   tmp = self%choices
   call tokenize(strin=tmp, delimiter=',', toks=toks, Nt=Nc)
   select type(val)
+#if defined _R16P
   type is(real(R16P))
     val_str = str(n=val)
     do c=1, Nc
       if (val==cton(str=trim(adjustl(toks(c))), knd=1._R16P)) val_in = .true.
     enddo
+#endif
   type is(real(R8P))
     val_str = str(n=val)
     do c=1, Nc
@@ -823,8 +827,10 @@ contains
   character(*), optional,       intent(in)    :: pref   !< Prefixing string.
 
   select type(val)
+#if defined _R16P
   type is(real(R16P))
     val = cton(pref=pref, error=self%error, str=trim(adjustl(buffer)), knd=1._R16P)
+#endif
   type is(real(R8P))
     val = cton(pref=pref, error=self%error, str=trim(adjustl(buffer)), knd=1._R8P)
   type is(real(R4P))
@@ -911,12 +917,14 @@ contains
 
   call tokenize(strin=buffer, delimiter=args_sep, toks=vals, Nt=Nv)
   select type(val)
+#if defined _R16P
   type is(real(R16P))
     do v=1, Nv
       val(v) = cton(pref=pref,error=self%error,str=trim(adjustl(vals(v))),knd=1._R16P)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref)
       if (self%error/=0) exit
     enddo
+#endif
   type is(real(R8P))
     do v=1, Nv
       val(v) = cton(pref=pref,error=self%error,str=trim(adjustl(vals(v))),knd=1._R8P)
