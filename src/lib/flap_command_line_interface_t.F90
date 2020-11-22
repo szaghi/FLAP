@@ -548,8 +548,12 @@ contains
     call self%print_version(pref=pref)
     stop
   elseif (self%error == STATUS_PRINT_H) then
-    write(self%usage_lun,'(A)') self%usage(pref=pref, g=0)
-    stop
+    do g=0,size(ai,dim=1)-1
+      if(self%clasg(g)%error == STATUS_PRINT_H) then
+        write(self%usage_lun,'(A)') self%usage(pref=pref, g=g)
+        stop
+      endif
+    enddo
   endif
 
   ! check if all required CLAs have been passed
