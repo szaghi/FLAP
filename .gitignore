@@ -31,3 +31,10 @@ wiki/
 
 # special files
 get_automatic_changelog.sh
+flap_test_save_bash_completion.bash
+test.man 
+test.md
+
+# mac
+.DS_Store
+
