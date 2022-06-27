@@ -11,7 +11,7 @@ FACE = { git="https://github.com/szaghi/FACE.git", rev="5102983a77ab76dc563ef36e
 PENF = { git="https://github.com/jacobwilliams/PENF.git", branch="fpm-support" }
 
 [library]
-source-dir = "src"
+source-dir = "src/lib"
 
 [install]
 library = true
