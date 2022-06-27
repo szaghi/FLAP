@@ -6,6 +6,10 @@ description = "Fortran command Line Arguments Parser for poor people"
 maintainer = "Stefano Zaghi"
 homepage = "https://github.com/szaghi/FLAP"
 
+[dependencies]
+FACE = { git="https://github.com/szaghi/FACE.git" }
+PENF = { git="https://github.com/jacobwilliams/PENF.git", branch="fpm-support" }
+
 [library]
 source-dir = "src"
 
@@ -87,3 +91,5 @@ name = "flap_test_string"
 source-dir = "src/tests"
 main = "flap_test_string.f90"
 
+[test.dependencies]
+fortran_tester = { git="https://github.com/pdebuyl/fortran_tester.git" }
