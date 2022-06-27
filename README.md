@@ -314,6 +314,7 @@ The script operation modes are 2 (*collapsible* into one-single-mode):
   + [FoBiS.py](https://github.com/szaghi/FoBiS);
   + [GNU Make](https://www.gnu.org/software/make/);
   + [CMake](https://cmake.org/);
+  * [Fortran Package Manager](https://fpm.fortran-lang.org/en/index.html);
 
 > you can mix any of the above combinations accordingly to the tools available.
 
@@ -497,5 +498,29 @@ cmake -DFLAP_ENABLE_TESTS=ON $YOUR_FLAP_PATH
 cmake --build .
 ctest
 ```
+
+#### Build by means of FPM
+
+A [Fortran Package Manager](https://github.com/fortran-lang/fpm) manifest file is also included, so that the library and test cases can be compiled with FPM. For example:
+
+```
+fpm build --profile release
+fpm test --profile release
+```
+
+To use `FLAP` within your fpm project, add the following to your `fpm.toml` file:
+```toml
+[dependencies]
+FLAP = { git="https://github.com/jacobwilliams/FLAP.git" }
+```
+
+Or, to use a specific revision:
+
+```toml
+[dependencies]
+FLAP = { git="https://github.com/jacobwilliams/FLAP.git", rev = "11cb276228d678c1d9ce755badf0ce82094b0852" }
+```
+
+Note that, when compiling with FPM, the git submodules in the `src/third_party` directory are not used, but FPM will download these separately, based on the versions specified in the `fpm.toml` file.
 
 Go to [Top](#top)

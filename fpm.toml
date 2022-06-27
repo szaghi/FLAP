@@ -1,0 +1,95 @@
+name = "FLAP"
+author = "Stefano Zaghi"
+copyright = "Copyright © 2016, Stefano Zaghi"
+license = "Multiple licenses"
+description = "Fortran command Line Arguments Parser for poor people"
+maintainer = "Stefano Zaghi"
+homepage = "https://github.com/szaghi/FLAP"
+
+[dependencies]
+FACE = { git="https://github.com/szaghi/FACE.git", rev="5102983a77ab76dc563ef36ebaf8a6839c0bfe6d" }
+PENF = { git="https://github.com/jacobwilliams/PENF.git", branch="fpm-support" }
+
+[library]
+source-dir = "src/lib"
+
+[install]
+library = true
+
+[build]
+auto-executables = false
+auto-examples = false
+auto-tests = false
+
+[[test]]
+name = "flap_test_ansi_color_style"
+source-dir = "src/tests"
+main = "flap_test_ansi_color_style.f90"
+
+[[test]]
+name = "flap_test_basic"
+source-dir = "src/tests"
+main = "flap_test_basic.f90"
+
+[[test]]
+name = "flap_test_choices_logical"
+source-dir = "src/tests"
+main = "flap_test_choices_logical.f90"
+
+[[test]]
+name = "flap_test_duplicated_clas"
+source-dir = "src/tests"
+main = "flap_test_duplicated_clas.f90"
+
+[[test]]
+name = "flap_test_group_examples"
+source-dir = "src/tests"
+main = "flap_test_group_examples.f90"
+
+[[test]]
+name = "flap_test_group"
+source-dir = "src/tests"
+main = "flap_test_group.f90"
+
+[[test]]
+name = "flap_test_hidden"
+source-dir = "src/tests"
+main = "flap_test_hidden.f90"
+
+[[test]]
+name = "flap_test_ignore_unknown_clas"
+source-dir = "src/tests"
+main = "flap_test_ignore_unknown_clas.f90"
+
+[[test]]
+name = "flap_test_minimal"
+source-dir = "src/tests"
+main = "flap_test_minimal.f90"
+
+[[test]]
+name = "flap_test_nested"
+source-dir = "src/tests"
+main = "flap_test_nested.f90"
+
+[[test]]
+name = "flap_test_save_bash_completion"
+source-dir = "src/tests"
+main = "flap_test_save_bash_completion.f90"
+
+[[test]]
+name = "flap_test_save_man_page"
+source-dir = "src/tests"
+main = "flap_test_save_man_page.f90"
+
+[[test]]
+name = "flap_test_save_usage_to_markdown"
+source-dir = "src/tests"
+main = "flap_test_save_usage_to_markdown.f90"
+
+[[test]]
+name = "flap_test_string"
+source-dir = "src/tests"
+main = "flap_test_string.f90"
+
+[test.dependencies]
+fortran_tester = { git="https://github.com/pdebuyl/fortran_tester.git", rev="806a1da52b4cd1ed0fe1650e241bf612e5776db2" }
