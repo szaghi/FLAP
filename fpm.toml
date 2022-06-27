@@ -7,7 +7,7 @@ maintainer = "Stefano Zaghi"
 homepage = "https://github.com/szaghi/FLAP"
 
 [dependencies]
-FACE = { git="https://github.com/szaghi/FACE.git" }
+FACE = { git="https://github.com/szaghi/FACE.git", rev="5102983a77ab76dc563ef36ebaf8a6839c0bfe6d" }
 PENF = { git="https://github.com/jacobwilliams/PENF.git", branch="fpm-support" }
 
 [library]
@@ -92,4 +92,4 @@ source-dir = "src/tests"
 main = "flap_test_string.f90"
 
 [test.dependencies]
-fortran_tester = { git="https://github.com/pdebuyl/fortran_tester.git" }
+fortran_tester = { git="https://github.com/pdebuyl/fortran_tester.git", rev="806a1da52b4cd1ed0fe1650e241bf612e5776db2" }
