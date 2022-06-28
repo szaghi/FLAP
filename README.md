@@ -23,9 +23,6 @@ A KISS pure Fortran Library for building powerful, easy-to-use, elegant command 
 #### Issues
 
 [![GitHub issues](https://img.shields.io/github/issues/szaghi/FLAP.svg)]()
-[![Ready in backlog](https://badge.waffle.io/szaghi/FLAP.png?label=ready&title=Ready)](https://waffle.io/szaghi/FLAP)
-[![In Progress](https://badge.waffle.io/szaghi/FLAP.png?label=in%20progress&title=In%20Progress)](https://waffle.io/szaghi/FLAP)
-[![Open bugs](https://badge.waffle.io/szaghi/FLAP.png?label=bug&title=Open%20Bugs)](https://waffle.io/szaghi/FLAP)
 
 #### Compiler Support
 
@@ -511,14 +508,14 @@ fpm test --profile release
 To use `FLAP` within your fpm project, add the following to your `fpm.toml` file:
 ```toml
 [dependencies]
-FLAP = { git="https://github.com/jacobwilliams/FLAP.git" }
+FLAP = { git="https://github.com/szaghi/FLAP.git" }
 ```
 
 Or, to use a specific revision:
 
 ```toml
 [dependencies]
-FLAP = { git="https://github.com/jacobwilliams/FLAP.git", rev = "11cb276228d678c1d9ce755badf0ce82094b0852" }
+FLAP = { git="https://github.com/szaghi/FLAP.git", rev = "11cb276228d678c1d9ce755badf0ce82094b0852" }
 ```
 
 Note that, when compiling with FPM, the git submodules in the `src/third_party` directory are not used, but FPM will download these separately, based on the versions specified in the `fpm.toml` file.
