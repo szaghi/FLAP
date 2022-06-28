@@ -19,10 +19,8 @@ type, extends(object), public :: command_line_interface
   type(command_line_arguments_group), allocatable :: clasg(:)                    !< CLA list [1:Na].
 #ifdef __GFORTRAN__
   character(512  ), allocatable                   :: args(:)                     !< Actually passed command line arguments.
-  character(512  ), allocatable                   :: examples(:)                 !< Examples of correct usage.
 #else
   character(len=:), allocatable                   :: args(:)                     !< Actually passed command line arguments.
-  character(len=:), allocatable                   :: examples(:)                 !< Examples of correct usage.
 #endif
   logical                                         :: disable_hv=.false.          !< Disable automatic 'help' and 'version' CLAs.
   logical                                         :: is_parsed_=.false.          !< Parse status.
@@ -162,14 +160,7 @@ contains
   self%description = ''        ; if (present(description)) self%description = description
   self%license     = ''        ; if (present(license    )) self%license     = license
   self%authors     = ''        ; if (present(authors    )) self%authors     = authors
-  if (present(examples)) then
-#ifdef __GFORTRAN__
-    allocate(self%examples(1:size(examples)))
-#else
-    allocate(character(len=len(examples(1))):: self%examples(1:size(examples))) ! does not work with gfortran 4.9.2
-#endif
-    self%examples = examples
-  endif
+  call self%set_examples(examples)
   self%epilog      = '' ; if (present(epilog     ))         self%epilog              = epilog
                           if (present(disable_hv ))         self%disable_hv          = disable_hv         ! default set by self%free
                           if (present(usage_lun  ))         self%usage_lun           = usage_lun          ! default set by self%free
@@ -184,12 +175,13 @@ contains
   self%clasg(0)%group = ''
   endsubroutine init
 
-  subroutine add_group(self, help, description, exclude, group)
+  subroutine add_group(self, help, description, exclude, examples, group)
   !< Add CLAs group to CLI.
   class(command_line_interface), intent(inout)    :: self              !< CLI data.
   character(*), optional,        intent(in)       :: help              !< Help message.
   character(*), optional,        intent(in)       :: description       !< Detailed description.
   character(*), optional,        intent(in)       :: exclude           !< Group name of the mutually exclusive group.
+  character(*), optional,        intent(in)       :: examples(1:)      !< Examples of correct usage of the group.
   character(*),                  intent(in)       :: group             !< Name of the grouped CLAs.
   type(command_line_arguments_group), allocatable :: clasg_list_new(:) !< New (extended) CLAs group list.
   character(len=:), allocatable                   :: helpd             !< Help message.
@@ -213,6 +205,7 @@ contains
     clasg_list_new(Ng)%description = descriptiond
     clasg_list_new(Ng)%group       = group
     clasg_list_new(Ng)%m_exclude   = excluded
+    call clasg_list_new(Ng)%set_examples(examples)
     deallocate(self%clasg)
     allocate(self%clasg(0:Ng))
     self%clasg = clasg_list_new
@@ -548,8 +541,12 @@ contains
     call self%print_version(pref=pref)
     stop
   elseif (self%error == STATUS_PRINT_H) then
-    write(self%usage_lun,'(A)') self%usage(pref=pref, g=0)
-    stop
+    do g=0,size(ai,dim=1)-1
+      if(self%clasg(g)%error == STATUS_PRINT_H) then
+        write(self%usage_lun,'(A)') self%usage(pref=pref, g=g)
+        stop
+      endif
+    enddo
   endif
 
   ! check if all required CLAs have been passed
@@ -1365,29 +1362,34 @@ contains
 
   function usage(self, g, pref, no_header, no_examples, no_epilog, markdown) result(usaged)
   !< Print correct usage of CLI.
-  class(command_line_interface), intent(in) :: self         !< CLI data.
-  integer(I4P),                  intent(in) :: g            !< Group index.
-  character(*), optional,        intent(in) :: pref         !< Prefixing string.
-  logical,      optional,        intent(in) :: no_header    !< Avoid insert header to usage.
-  logical,      optional,        intent(in) :: no_examples  !< Avoid insert examples to usage.
-  logical,      optional,        intent(in) :: no_epilog    !< Avoid insert epilogue to usage.
-  logical,      optional,        intent(in) :: markdown     !< Format things with markdown
-  character(len=:), allocatable             :: prefd        !< Prefixing string.
-  character(len=:), allocatable             :: usaged       !< Usage string.
-  logical                                   :: no_headerd   !< Avoid insert header to usage.
-  logical                                   :: no_examplesd !< Avoid insert examples to usage.
-  logical                                   :: no_epilogd   !< Avoid insert epilogue to usage.
-  logical                                   :: markdownd    !< Format for markdown.
-  integer(I4P)                              :: gi           !< Counter.
-  integer(I4P)                              :: e            !< Counter.
+  class(command_line_interface), intent(in) :: self             !< CLI data.
+  integer(I4P),                  intent(in) :: g                !< Group index.
+  character(*), optional,        intent(in) :: pref             !< Prefixing string.
+  logical,      optional,        intent(in) :: no_header        !< Avoid insert header to usage.
+  logical,      optional,        intent(in) :: no_examples      !< Avoid insert examples to usage.
+  logical,      optional,        intent(in) :: no_epilog        !< Avoid insert epilogue to usage.
+  logical,      optional,        intent(in) :: markdown         !< Format things with markdown
+  character(len=:), allocatable             :: prefd            !< Prefixing string.
+  character(len=:), allocatable             :: usaged           !< Usage string.
+  logical                                   :: no_headerd       !< Avoid insert header to usage.
+  logical                                   :: no_examplesd     !< Avoid insert examples to usage.
+  logical                                   :: no_epilogd       !< Avoid insert epilogue to usage.
+  logical                                   :: markdownd        !< Format for markdown.
+  logical                                   :: grouped_examples !< Will show examples of group usage.
+  integer(I4P)                              :: gi               !< Counter.
 
   no_headerd = .false. ; if (present(no_header)) no_headerd = no_header
   no_examplesd = .false. ; if (present(no_examples)) no_examplesd = no_examples
   no_epilogd = .false. ; if (present(no_epilog)) no_epilogd = no_epilog
   markdownd = .false. ; if (present(markdown)) markdownd = markdown
   prefd = '' ; if (present(pref)) prefd = pref
+  grouped_examples = .false.
   if (g>0) then ! usage of a specific command
     usaged = self%clasg(g)%usage(pref=prefd,no_header=no_headerd,markdown=markdownd)
+    if(allocated(self%clasg(g)%examples).and.(.not.no_examplesd)) then 
+      usaged = usaged//print_examples(prefd, self%clasg(g)%examples)
+      grouped_examples = .true.
+    endif
   else ! usage of whole CLI
     if (no_headerd) then
       usaged = ''
@@ -1408,13 +1410,24 @@ contains
       enddo
     endif
   endif
-  if (allocated(self%examples).and.(.not.no_examplesd)) then
-    usaged = usaged//new_line('a')//new_line('a')//prefd//'Examples:'
-    do e=1, size(self%examples,dim=1)
-      usaged = usaged//new_line('a')//prefd//'   '//trim(self%examples(e))
-    enddo
+  if (allocated(self%examples).and.(.not.no_examplesd).and.(.not.grouped_examples)) then
+    usaged = usaged//print_examples(prefd, self%examples)
   endif
   if (self%epilog/=''.and.(.not.no_epilogd)) usaged = usaged//new_line('a')//prefd//self%epilog
+
+  contains
+    function print_examples(prefd, examples) result(exampled)
+    !< Print examples of the correct usage.
+      character(*),     intent(in)  :: prefd          !< Prefixing string.
+      character(*),     intent(in)  :: examples(1:)   !< Examples to be printed.
+      character(len=:), allocatable :: exampled       !< Examples string.
+      integer(I4P)                  :: e              !< Counter.
+  
+      exampled = new_line('a')//new_line('a')//prefd//'Examples:'
+      do e=1, size(examples,dim=1)
+        exampled = exampled//new_line('a')//prefd//'   '//trim(examples(e))
+      enddo
+    endfunction print_examples
   endfunction usage
 
   function signature(self, bash_completion)
