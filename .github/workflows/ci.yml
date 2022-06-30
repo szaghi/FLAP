@@ -18,23 +18,34 @@ jobs:
         sudo apt install graphviz
         # pip install --upgrade ford && ford --version
         pip install --upgrade FoBiS.py && FoBiS.py --version
-
+    
     - name: CHECKOUT
       run: |
-        git clone --recursive https://github.com/szaghi/FLAP
-        cd FLAP
+        git clone --recursive https://github.com/szaghi/FLAP ./
         git log -n 1
 
-    - name: MAKE COVERAGE
-      run: |
-        cd FLAP
-        FoBiS.py rule -ex makecoverage
+    # - name: MAKE COVERAGE
+    #   run: |
+    #     cd FLAP
+    #     FoBiS.py rule -ex makecoverage
 
     - name: MAKE TAR
       run: |
-        cd FLAP
+        version=`git tag | tail -n 1`
+        echo $version
         FoBiS.py rule -ex maketar
+        mv FLAP.tar.gz FLAP-$version.tar.gz
         ls *.tar.gz
+
+    - name: DEPLOY ASSET
+      uses: softprops/action-gh-release@v1
+    #   if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: |
+          FLAP-$version.tar.gz
+      env:
+          GITHUB_TOKEN: ${{ github.token }}
+
 
     # - name: MAKE DOC
     #   run: |
