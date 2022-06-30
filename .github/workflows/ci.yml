@@ -37,12 +37,17 @@ jobs:
         mv FLAP.tar.gz FLAP-$version.tar.gz
         ls *.tar.gz
 
+    - name: 'Get Previous tag'
+      id: previous_tag
+      uses: "WyriHaximus/github-action-get-previous-tag@v1"
+
     - name: DEPLOY ASSET
       uses: softprops/action-gh-release@v1
-    #   if: startsWith(github.ref, 'refs/tags/')
+      # if: startsWith(github.ref, 'refs/tags/')
       with:
+        tag_name: ${{steps.previous_tag.outputs.tag}}
         files: |
-          FLAP-$version.tar.gz
+          FLAP-*.tar.gz
       env:
           GITHUB_TOKEN: ${{ github.token }}
 
