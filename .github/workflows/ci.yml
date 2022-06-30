@@ -20,12 +20,12 @@ jobs:
         pip install --upgrade FoBiS.py && FoBiS.py --version
     
     - name: CHECKOUT
+      id: checkout
       run: |
         git clone --recursive https://github.com/szaghi/FLAP ./
         git log -n 1
         tag=`git tag | tail -n 1`
-        export RELEASE="$tag"
-        echo "::set-env name=RELEASE::$RELEASE"
+        echo "RELEASE=$tag" >> $GITHUB_ENV
 
     # - name: MAKE COVERAGE
     #   run: |
@@ -34,9 +34,9 @@ jobs:
 
     - name: MAKE TAR
       run: |
-        echo "repository release version:" $RELEASE
+        echo "repository release version:" ${{ env.RELEASE }}
         FoBiS.py rule -ex maketar
-        mv FLAP.tar.gz FLAP-$RELEASE.tar.gz
+        mv FLAP.tar.gz FLAP-${{ env.RELEASE }}.tar.gz
         ls *.tar.gz
 
     - name: DEPLOY ASSET
@@ -46,7 +46,7 @@ jobs:
         # automatic_release_tag: "latest"
         # prerelease: true
         prerelease: false
-        title: $RELEASE
+        title: ${{ env.RELEASE }}
         files: |
           FLAP*.tar.gz
 
