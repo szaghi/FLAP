@@ -7,7 +7,7 @@ jobs:
 
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
 
     steps:
     - name: PREPARE SYSTEM
@@ -42,10 +42,14 @@ jobs:
       uses: "WyriHaximus/github-action-get-previous-tag@v1"
 
     - name: DEPLOY ASSET
-      uses: ncipollo/release-action@v1
-      with:
-        artifacts: "FLAP-*.tar.gz"
-        token: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        gh --version
+        gh auth login --with-token ${{ secrets.GITHUB_TOKEN }}
+        gh release upload ${{steps.previous_tag.outputs.tag}} FLAP-*.tar.gz
+      # uses: ncipollo/release-action@v1
+      # with:
+      #   artifacts: "FLAP-*.tar.gz"
+      #   token: ${{ secrets.GITHUB_TOKEN }}
       # uses: softprops/action-gh-release@v1
       # # if: startsWith(github.ref, 'refs/tags/')
       # with:
