@@ -15,7 +15,7 @@ jobs:
         python --version
         gfortran --version
         gcov --version
-        apt install graphviz
+        sudo apt install graphviz
         pip install --upgrade ford && ford --version
         pip install --upgrade FoBiS.py && FoBiS.py --version
 
