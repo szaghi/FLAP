@@ -16,7 +16,7 @@ jobs:
         gfortran --version
         gcov --version
         sudo apt install graphviz
-        pip install --upgrade ford && ford --version
+        # pip install --upgrade ford && ford --version
         pip install --upgrade FoBiS.py && FoBiS.py --version
 
     - name: CHECKOUT
