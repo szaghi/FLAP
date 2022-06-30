@@ -42,6 +42,10 @@ jobs:
       uses: "WyriHaximus/github-action-get-previous-tag@v1"
 
     - name: DEPLOY ASSET
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "FLAP-*.tar.gz"
+        token: ${{ secrets.GITHUB_TOKEN }}
       # uses: softprops/action-gh-release@v1
       # # if: startsWith(github.ref, 'refs/tags/')
       # with:
@@ -50,10 +54,6 @@ jobs:
       #     FLAP-*.tar.gz
       # env:
       #     GITHUB_TOKEN: ${{ github.token }}
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: "FLAP-*.tar.gz"
-          token: ${{ secrets.GITHUB_TOKEN }}
 
 
     # - name: MAKE DOC
