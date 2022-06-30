@@ -45,7 +45,7 @@ jobs:
       run: |
         gh --version
         gh auth login --with-token ${{ secrets.GITHUB_TOKEN }}
-        gh release upload ${{steps.previous_tag.outputs.tag}} FLAP-*.tar.gz
+        # gh release upload ${{steps.previous_tag.outputs.tag}} FLAP-*.tar.gz
       # uses: ncipollo/release-action@v1
       # with:
       #   artifacts: "FLAP-*.tar.gz"
