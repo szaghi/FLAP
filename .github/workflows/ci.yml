@@ -23,6 +23,9 @@ jobs:
       run: |
         git clone --recursive https://github.com/szaghi/FLAP ./
         git log -n 1
+        tag=`git tag | tail -n 1`
+        export RELEASE="$tag"
+        echo "::set-env name=RELEASE::$RELEASE"
 
     # - name: MAKE COVERAGE
     #   run: |
@@ -31,19 +34,19 @@ jobs:
 
     - name: MAKE TAR
       run: |
-        version=`git tag | tail -n 1`
-        echo $version
+        echo "repository release version:" $RELEASE
         FoBiS.py rule -ex maketar
-        mv FLAP.tar.gz FLAP-$version.tar.gz
+        mv FLAP.tar.gz FLAP-$RELEASE.tar.gz
         ls *.tar.gz
 
-    - name: Upload Release Asset
+    - name: DEPLOY ASSET
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "latest"
-        prerelease: true
-        title: "Development Build"
+        # automatic_release_tag: "latest"
+        # prerelease: true
+        prerelease: false
+        title: $RELEASE
         files: |
           FLAP*.tar.gz
 
