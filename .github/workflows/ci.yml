@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [ $default-branch ]
+  pull_request:
+    branches: [ $default-branch ]
+
+jobs:
+  test-deploy:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+    - name: PREPARE SYSTEM
+      run: |
+        python --version
+        gfortran --version
+        gcov --version
+        apt install graphviz
+        pip install --upgrade ford && ford --version
+        pip install --upgrade FoBiS.py && FoBiS.py --version
+
+    - name: CHECKOUT
+      run: |
+        git clone --recursive https://github.com/szaghi/FLAP
+        cd FLAP
+        git log -n 1
+
+    - name: MAKE COVERAGE
+      run: |
+        cd FLAP
+        FoBiS.py rule -ex makecoverage
+
+    - name: MAKE TAR
+      run: |
+        cd FLAP
+        FoBiS.py rule -ex maketar
+        ls *.tar.gz
+
+    # - name: MAKE DOC
+    #   run: |
+    #     cd FLAP
+    #     FoBiS.py rule -ex makedoc
