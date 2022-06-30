@@ -42,10 +42,11 @@ jobs:
       uses: "WyriHaximus/github-action-get-previous-tag@v1"
 
     - name: DEPLOY ASSET
-      run: |
-        gh --version
-        gh auth login
-        gh release upload ${{steps.previous_tag.outputs.tag}} FLAP-*.tar.gz
+      uses: alexellis/upload-assets@0.2.2
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          asset_paths: '["./FLAP-*.tar.gz"]'
       # uses: ncipollo/release-action@v1
       # with:
       #   artifacts: "FLAP-*.tar.gz"
