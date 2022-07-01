@@ -16,7 +16,7 @@ jobs:
         gfortran --version
         gcov --version
         sudo apt install graphviz
-        # pip install --upgrade ford && ford --version
+        pip install --upgrade ford && ford --version
         pip install --upgrade FoBiS.py && FoBiS.py --version
     
     - name: CHECKOUT
@@ -53,6 +53,12 @@ jobs:
           *.tar.gz
           ./scripts/install.sh
 
-    # - name: MAKE DOC
-    #   run: |
-    #     FoBiS.py rule -ex makedoc
+    - name: MAKE DOC
+      run: |
+        FoBiS.py rule -ex makedoc
+
+    - name: PUSH DOC to GH Pages
+      if: ${{ !env.ACT }}
+      uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: doc/html
