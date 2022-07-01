@@ -22,7 +22,7 @@ jobs:
     - name: CHECKOUT
       id: checkout
       run: |
-        git clone --recursive https://github.com/${{ env.GITHUB_REPOSITORY }} ./
+        git clone --recursive https://github.com/$GITHUB_REPOSITORY ./
         git log -n 1
         tag=`git tag | tail -n 1`
         echo "RELEASE=$tag" >> $GITHUB_ENV
