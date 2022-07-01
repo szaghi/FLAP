@@ -50,6 +50,7 @@
 ./exe/flap_test_ignore_unknown_clas --string hello -u
 ./exe/flap_test_hidden -s 'hello' -i 2
 ./exe/flap_test_minimal -s 'hello'
+./exe/flap_test_nargs_insufficient -i 1 2
 ./exe/flap_test_nested
 ./exe/flap_test_nested -h
 ./exe/flap_test_nested -a
@@ -61,3 +62,4 @@
 ./exe/flap_test_save_man_page
 ./exe/flap_test_save_usage_to_markdown
 ./exe/flap_test_string
+./exe/flap_test_value_missing -i
