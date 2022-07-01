@@ -32,6 +32,7 @@ jobs:
         FoBiS.py rule -ex makecoverage
 
     - name: UPLOAD COVERAGE to CODECOV
+      if: ${{ !env.ACT }}
       uses: codecov/codecov-action@v3
 
     - name: MAKE TAR
@@ -41,6 +42,7 @@ jobs:
         ls *.tar.gz
 
     - name: DEPLOY ASSET
+      if: ${{ !env.ACT }}
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
