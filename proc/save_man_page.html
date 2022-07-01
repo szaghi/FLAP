@@ -4,10 +4,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	 
-	 <meta name="description" content="Fortran command Line Arguments Parser for poor people">
-    
-    <meta name="author" content="Chris MacMackin" >
+   <meta name="description" content="Fortran command Line Arguments Parser for poor people">
+    <meta name="author" content="Stefano Zaghi" >
     <link rel="icon" href="../favicon.png">
 
     <title>save_man_page &ndash; FLAP</title>
@@ -16,7 +14,7 @@
     <link href="../css/pygments.css" rel="stylesheet">
     <link href="../css/font-awesome.min.css" rel="stylesheet">
     <link href="../css/local.css" rel="stylesheet">
-    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -26,13 +24,6 @@
     
     <script src="../js/jquery-2.1.3.min.js"></script>
     <script src="../js/svg-pan-zoom.min.js"></script>
-
-    
-    <script src="../tipuesearch/tipuesearch_content.js"></script>
-    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
-    <script src="../tipuesearch/tipuesearch_set.js"></script>
-    <script src="../tipuesearch/tipuesearch.js"></script>
-    
 
   </head>
 
@@ -52,24 +43,27 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-				
-                
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
             <li><a href="../lists/files.html">Source Files</a></li>
-				
-				
             <li><a href="../lists/modules.html">Modules</a></li>
-				
-				
             <li><a href="../lists/procedures.html">Procedures</a></li>
-				
-								
-            <li><a href="../lists/types.html">Derived Types</a></li>
-				
-				
+                   <li><a href="../lists/types.html">Derived Types</a></li>
             <li><a href="../lists/programs.html">Programs</a></li>
-				
-          </ul>
+       
+            </ul>
         
+            </li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+                             <li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/programs.html">Programs</a></li>
+          </ul>
         <form action="../search.html" class="navbar-form navbar-right" role="search">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
@@ -78,640 +72,295 @@
         <button type="submit" class="btn btn-default">Submit</button>
 -->
         </form>
-        
         </div><!--/.nav-collapse -->
       </div>
     </nav>
 
     <div class="container">
-    
-  
   <div class="row">
     <h1>save_man_page
-    <small>Subroutine</small>
-    
+      <small>Subroutine</small>
     </h1>
-	 
-<div class="row">
-<div class="col-lg-12">
+    <div class="row">
+  <div class="col-lg-12">
 <div class="well well-sm">
   <ul class="list-inline" style="margin-bottom:0px;display:inline">
-     
-     
-     
-     
-    
-    
-    <li><i class="fa fa-code"></i><a href="../src/Data_Type_Command_Line_Interface.F90"> Source File</a></li>
-     
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 1.2% of total for procedures.">42 statements</a>
+     </li> 
+    <li><i class="fa fa-code"></i><a href="../src/flap_command_line_interface_t.F90"> Source File</a></li>
   </ul>
   <ol class="breadcrumb in-well text-right">
-  
-     <li><a href='../sourcefile/data_type_command_line_interface.f90.html'>Data_Type_Command_Line_Interface.F90</a></li>
-  
-     <li><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></li>
-  
+     <li><a href='../sourcefile/flap_command_line_interface_t.f90.html'>flap_command_line_interface_t.F90</a></li>
+     <li><a href='../module/flap_command_line_interface_t.html'>flap_command_line_interface_t</a></li>
      <li class="active">save_man_page</li>
   </ol>
 </div>
 </div>
 </div>
-    
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
   </div>
   
   <div class="row">
-    <div class="col-lg-3">
-    
-<div id="sidebar">
-  
-  
-  
-  <div class="panel panel-primary">
-    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#vars">Variables</a></h3></div>
-    <div id="vars" class="panel-collapse collapse">
-      <div class="list-group">
-        
-        <a class="list-group-item" href="../proc/save_man_page.html#variable-man">man</a>
-        
-        <a class="list-group-item" href="../proc/save_man_page.html#variable-idate">idate</a>
-        
-        <a class="list-group-item" href="../proc/save_man_page.html#variable-e%7E2">e</a>
-        
-        <a class="list-group-item" href="../proc/save_man_page.html#variable-u">u</a>
-        
-        <a class="list-group-item" href="../proc/save_man_page.html#variable-month">month</a>
-        
-      </div>
-    </div>
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    <div id="sidebar">
+  <h3>Contents</h3>
+ 
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/save_man_page.html#src">save_man_page</a>
   </div>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  <div class="panel panel-primary">
-    <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
-    <div class="list-group">
-      <a class="list-group-item" href="../proc/save_man_page.html#src">save_man_page</a>
-    </div>
-  </div>
-  
-  <hr>
-  
-  <div class="panel panel-default">
-    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#allprocs">All Procedures</a></h3></div>
-    <div id="allprocs" class="panel-collapse collapse">
-        <div class="list-group">
-          
-          <a class="list-group-item" href="../proc/add.html">add</a>
-          
-          <a class="list-group-item" href="../proc/add_cla_clasg.html">add_cla_clasg</a>
-          
-          <a class="list-group-item" href="../proc/add_group.html">add_group</a>
-          
-          <a class="list-group-item" href="../proc/assign_cla.html">assign_cla</a>
-          
-          <a class="list-group-item" href="../proc/assign_clasg.html">assign_clasg</a>
-          
-          <a class="list-group-item" href="../proc/assign_cli.html">assign_cli</a>
-          
-          <a class="list-group-item" href="../proc/assign_object.html">assign_object</a>
-          
-          <a class="list-group-item" href="../proc/called_group.html">called_group</a>
-          
-          <a class="list-group-item" href="../proc/check.html">check</a>
-          
-          <a class="list-group-item" href="../proc/check_choices_cla.html">check_choices_cla</a>
-          
-          <a class="list-group-item" href="../proc/check_cla.html">check_cla</a>
-          
-          <a class="list-group-item" href="../proc/check_clasg.html">check_clasg</a>
-          
-          <a class="list-group-item" href="../proc/check_list_size_cla.html">check_list_size_cla</a>
-          
-          <a class="list-group-item" href="../proc/check_m_exclusive.html">check_m_exclusive</a>
-          
-          <a class="list-group-item" href="../proc/check_m_exclusive_clasg.html">check_m_exclusive_clasg</a>
-          
-          <a class="list-group-item" href="../proc/check_required_clasg.html">check_required_clasg</a>
-          
-          <a class="list-group-item" href="../proc/defined.html">defined</a>
-          
-          <a class="list-group-item" href="../proc/defined_clasg.html">defined_clasg</a>
-          
-          <a class="list-group-item" href="../proc/defined_group.html">defined_group</a>
-          
-          <a class="list-group-item" href="../proc/errored.html">errored</a>
-          
-          <a class="list-group-item" href="../proc/finalize.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize_cla.html">finalize_cla</a>
-          
-          <a class="list-group-item" href="../proc/finalize_clasg.html">finalize_clasg</a>
-          
-          <a class="list-group-item" href="../proc/free.html">free</a>
-          
-          <a class="list-group-item" href="../proc/free_cla.html">free_cla</a>
-          
-          <a class="list-group-item" href="../proc/free_clasg.html">free_clasg</a>
-          
-          <a class="list-group-item" href="../proc/free_object.html">free_object</a>
-          
-          <a class="list-group-item" href="../proc/get_args_from_invocation.html">get_args_from_invocation</a>
-          
-          <a class="list-group-item" href="../proc/get_args_from_string.html">get_args_from_string</a>
-          
-          <a class="list-group-item" href="../proc/get_cla.html">get_cla</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_cli.html">get_cla_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list.html">get_cla_list</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_cli.html">get_cla_list_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_char.html">get_cla_list_varying_char</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_char_cli.html">get_cla_list_varying_char_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_i1p.html">get_cla_list_varying_I1P</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_i1p_cli.html">get_cla_list_varying_I1P_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_i2p.html">get_cla_list_varying_I2P</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_i2p_cli.html">get_cla_list_varying_I2P_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_i4p.html">get_cla_list_varying_I4P</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_i4p_cli.html">get_cla_list_varying_I4P_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_i8p.html">get_cla_list_varying_I8P</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_i8p_cli.html">get_cla_list_varying_I8P_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_logical.html">get_cla_list_varying_logical</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_logical_cli.html">get_cla_list_varying_logical_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_r16p.html">get_cla_list_varying_R16P</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_r16p_cli.html">get_cla_list_varying_R16P_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_r4p.html">get_cla_list_varying_R4P</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_r4p_cli.html">get_cla_list_varying_R4P_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_r8p.html">get_cla_list_varying_R8P</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_r8p_cli.html">get_cla_list_varying_R8P_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_clasg_indexes.html">get_clasg_indexes</a>
-          
-          <a class="list-group-item" href="../proc/init.html">init</a>
-          
-          <a class="list-group-item" href="../proc/parse.html">parse</a>
-          
-          <a class="list-group-item" href="../proc/parse_clasg.html">parse_clasg</a>
-          
-          <a class="list-group-item" href="../proc/passed.html">passed</a>
-          
-          <a class="list-group-item" href="../proc/passed_clasg.html">passed_clasg</a>
-          
-          <a class="list-group-item" href="../proc/print_usage.html">print_usage</a>
-          
-          <a class="list-group-item" href="../proc/print_version.html">print_version</a>
-          
-          <a class="list-group-item" href="../proc/save_man_page.html">save_man_page</a>
-          
-          <a class="list-group-item" href="../proc/set_mutually_exclusive_groups.html">set_mutually_exclusive_groups</a>
-          
-          <a class="list-group-item" href="../proc/signature.html">signature</a>
-          
-          <a class="list-group-item" href="../proc/signature_cla.html">signature_cla</a>
-          
-          <a class="list-group-item" href="../proc/signature_clasg.html">signature_clasg</a>
-          
-          <a class="list-group-item" href="../proc/tokenize.html">tokenize</a>
-          
-          <a class="list-group-item" href="../proc/upper_case.html">Upper_Case</a>
-          
-          <a class="list-group-item" href="../proc/usage.html">usage</a>
-          
-          <a class="list-group-item" href="../proc/usage_cla.html">usage_cla</a>
-          
-          <a class="list-group-item" href="../proc/usage_clasg.html">usage_clasg</a>
-          
-        </div>
-    </div>
-  </div>
-  
+</div>
+
 </div>
 
     </div>
     
-    <div class="col-lg-9" id='text'>
-    <h2>
-private subroutine save_man_page(cli, man_file, error)
+    <div class="col-md-9" id='text'>
+    <h2>private subroutine save_man_page(self, man_file, error)</h2>
     
-    
-    
-</h2>
-    
-  
 
-
+    <p>Save CLI usage as man page.</p>
 
     <h3>Arguments</h3>
-    
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
+      <table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
-
-  
-  
-  
-  
 <tr>
-  
-  <td><span class="anchor" id="variable-cli%7E31"></span>class(<a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a>),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>cli</strong></td><td><p>CLI data.</p></td>
-  
+  <td><span class="anchor" id="variable-self~36"></span>class(<a href='../type/command_line_interface.html'>command_line_interface</a>),</td>
+<td>intent(in)</td>
+  <td></td>  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>CLI data.</p></td>
 </tr>
-
-  
-  
-  
-  
 <tr>
-  
-  <td><span class="anchor" id="variable-man_file"></span>character(len=*),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
+  <td><span class="anchor" id="variable-man_file"></span>character,</td>
+<td>intent(in)</td>
+  <td></td>  <td></td><td>::</td>
   <td><strong>man_file</strong></td><td><p>Output file name for saving man page.</p></td>
-  
 </tr>
-
-  
-  
-  
-  
 <tr>
-  
-  <td><span class="anchor" id="variable-error%7E17"></span>integer(kind=I4P),</td>
-  <td>intent(out),</td>
-  <td>optional</td>
-  
-  <td></td><td>::</td>
+  <td><span class="anchor" id="variable-error~17"></span>integer(kind=I4P),</td>
+<td>intent(out),</td>
+  <td>optional</td>  <td></td><td>::</td>
   <td><strong>error</strong></td><td><p>Error trapping flag.</p></td>
-  
 </tr>
-
 </tbody>
 </table>
 
-    
-    
-    
-    <h3>Description</h3>
-    <p>Save man page build on the CLI.</p>
-    
-    
-     <h3>Calls</h3>
-     
-                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+    <br>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Calls</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.38.0 (20140413.2041)
+<!-- Generated by graphviz version 2.43.0 (0)
  -->
 <!-- Title: proc~~save_man_page~~CallsGraph Pages: 1 -->
-<svg id="procsave_man_pageCallsGraph" width="190pt" height="32pt"
- viewBox="0.00 0.00 190.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg id="procsave_man_pageCallsGraph" width="197pt" height="32pt"
+ viewBox="0.00 0.00 197.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="proc~~save_man_page~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
 <title>proc~~save_man_page~~CallsGraph</title>
-<polygon fill="white" stroke="none" points="-4,4 -4,-28 186,-28 186,4 -4,4"/>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 193,-28 193,4 -4,4"/>
 <!-- proc~save_man_page -->
-<g id="proc~~save_man_page~~CallsGraph_node1" class="node"><title>proc~save_man_page</title>
-<polygon fill="none" stroke="black" points="92,-24 0,-24 0,-0 92,-0 92,-24"/>
-<text text-anchor="middle" x="46" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">save_man_page</text>
+<g id="proc~~save_man_page~~CallsGraph_node1" class="node">
+<title>proc~save_man_page</title>
+<polygon fill="none" stroke="black" points="99,-24 0,-24 0,0 99,0 99,-24"/>
+<text text-anchor="middle" x="49.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">save_man_page</text>
 </g>
 <!-- strz -->
-<g id="proc~~save_man_page~~CallsGraph_node2" class="node"><title>strz</title>
-<polygon fill="#777777" stroke="#777777" points="182,-24 128,-24 128,-0 182,-0 182,-24"/>
-<text text-anchor="middle" x="155" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">strz</text>
+<g id="proc~~save_man_page~~CallsGraph_node2" class="node">
+<title>strz</title>
+<polygon fill="#777777" stroke="#777777" points="189,-24 135,-24 135,0 189,0 189,-24"/>
+<text text-anchor="middle" x="162" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">strz</text>
 </g>
 <!-- proc~save_man_page&#45;&gt;strz -->
-<g id="proc~~save_man_page~~CallsGraph_edge1" class="edge"><title>proc~save_man_page&#45;&gt;strz</title>
-<path fill="none" stroke="black" d="M92.0675,-12C100.661,-12 109.553,-12 117.825,-12"/>
-<polygon fill="black" stroke="black" points="117.903,-15.5001 127.903,-12 117.903,-8.5001 117.903,-15.5001"/>
+<g id="proc~~save_man_page~~CallsGraph_edge1" class="edge">
+<title>proc~save_man_page&#45;&gt;strz</title>
+<path fill="none" stroke="#000000" d="M99.29,-12C107.81,-12 116.54,-12 124.65,-12"/>
+<polygon fill="#000000" stroke="#000000" points="124.89,-15.5 134.89,-12 124.89,-8.5 124.89,-15.5"/>
 </g>
 </g>
 </svg>
-</div>
-                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
-                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
-                  <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
-                      </div>
-                      <div class="modal-body">
-                        
-Nodes of different colours represent the following:
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.38.0 (20140413.2041)
+<!-- Generated by graphviz version 2.43.0 (0)
  -->
 <!-- Title: Graph Key Pages: 1 -->
-<svg width="641pt" height="26pt"
- viewBox="0.00 0.00 641.00 25.98" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(0.811906 0.811906) rotate(0) translate(4 28)">
+<svg width="594pt" height="32pt"
+ viewBox="0.00 0.00 594.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
 <title>Graph Key</title>
-<polygon fill="white" stroke="none" points="-4,4 -4,-28 785.5,-28 785.5,4 -4,4"/>
-<!-- Module -->
-<g id="node1" class="node"><title>Module</title>
-<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,-0 54,-0 54,-24"/>
-<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
-</g>
-<!-- Submodule -->
-<g id="node2" class="node"><title>Submodule</title>
-<polygon fill="#5bc0de" stroke="#5bc0de" points="139.5,-24 72.5,-24 72.5,-0 139.5,-0 139.5,-24"/>
-<text text-anchor="middle" x="106" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
-</g>
-<!-- Type -->
-<g id="node3" class="node"><title>Type</title>
-<polygon fill="#5cb85c" stroke="#5cb85c" points="212,-24 158,-24 158,-0 212,-0 212,-24"/>
-<text text-anchor="middle" x="185" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type</text>
-</g>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 590,-28 590,4 -4,4"/>
 <!-- Subroutine -->
-<g id="node4" class="node"><title>Subroutine</title>
-<polygon fill="#d9534f" stroke="#d9534f" points="294,-24 230,-24 230,-0 294,-0 294,-24"/>
-<text text-anchor="middle" x="262" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
 </g>
 <!-- Function -->
-<g id="node5" class="node"><title>Function</title>
-<polygon fill="#d94e8f" stroke="#d94e8f" points="366,-24 312,-24 312,-0 366,-0 366,-24"/>
-<text text-anchor="middle" x="339" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="146,-24 88,-24 88,0 146,0 146,-24"/>
+<text text-anchor="middle" x="117" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
 </g>
 <!-- Interface -->
-<g id="node6" class="node"><title>Interface</title>
-<polygon fill="#a7506f" stroke="#a7506f" points="439.5,-24 384.5,-24 384.5,-0 439.5,-0 439.5,-24"/>
-<text text-anchor="middle" x="412" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="225.5,-24 164.5,-24 164.5,0 225.5,0 225.5,-24"/>
+<text text-anchor="middle" x="195" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
 </g>
 <!-- Unknown Procedure Type -->
-<g id="node7" class="node"><title>Unknown Procedure Type</title>
-<polygon fill="#777777" stroke="#777777" points="594,-24 458,-24 458,-0 594,-0 594,-24"/>
-<text text-anchor="middle" x="526" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="388,-24 244,-24 244,0 388,0 388,-24"/>
+<text text-anchor="middle" x="316" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
 </g>
 <!-- Program -->
-<g id="node8" class="node"><title>Program</title>
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="666,-24 612,-24 612,-0 666,-0 666,-24"/>
-<text text-anchor="middle" x="639" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="463.5,-24 406.5,-24 406.5,0 463.5,0 463.5,-24"/>
+<text text-anchor="middle" x="435" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
 </g>
 <!-- This Page&#39;s Entity -->
-<g id="node9" class="node"><title>This Page&#39;s Entity</title>
-<polygon fill="none" stroke="black" points="781.5,-24 684.5,-24 684.5,-0 781.5,-0 781.5,-24"/>
-<text text-anchor="middle" x="733" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="586,-24 482,-24 482,0 586,0 586,-24"/>
+<text text-anchor="middle" x="534" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
 </g>
 </g>
 </svg>
 
-<h5>Module Graph</h5>
-<p>Solid arrows point from a parent (sub)module to the submodule which is
-descended from it. Dashed arrows point from a module being used to the
-module using it.</p>
-<h5>Type Graph</h5>
-<p>Solid arrows point from one derived type to another which extends
-(inherits from) it. Dashed arrows point from a derived type to another
-type containing it as a components, with a label listing the name(s) of
-said component(s).</p>
-<h5>Call Graph</h5>
-<p>Solid arrows point from a procedure to one which it calls. Dashed 
-arrows point from an interface to procedures which implement that interface.
-This could include the module procedures in a generic interface or the
-implementation in a submodule of an interface in a parent module.</p>
-
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-     
-     
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
     <br>
-    
-    <section>
-    <h2>Variables</h2>
-    
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th><th>Visibility</th>
 
-<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-man"></span>character(len=:),</td>
-  
-  <td>public,</td>
-  <td>allocatable</td><td>::</td>
-  <td><strong>man</strong></td><td></td><td></td><td><p>Man page.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-idate"></span>integer(kind=I4P),</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>idate</strong>(1:8)</td><td></td><td></td><td><p>Integer array for handling the date.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-e%7E2"></span>integer(kind=I4P),</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>e</strong></td><td></td><td></td><td><p>Counter.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-u"></span>integer(kind=I4P),</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>u</strong></td><td></td><td></td><td><p>Unit file handler.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-month"></span>character(len=*),</td>
-  
-  <td>public,</td>
-  <td>parameter</td><td>::</td>
-  <td><strong>month</strong>(12)</td><td> =</td><td>["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]</td><td><p>Months list.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
+    <section class="visible-xs visible-sm hidden-md">
+      <h3>Contents</h3>
+ 
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/save_man_page.html#src">save_man_page</a>
+  </div>
+</div>
 
     </section>
-    <br>
-    
-    
-    
+    <br class="visible-xs visible-sm hidden-md">
+
+
     
     
 
     
     
-    
-    
-    
 
 
-    
-    
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">save_man_page</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span> <span class="n">man_file</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Save man page build on the CLI.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">Type_Command_Line_Interface</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">cli</span>                <span class="c">!&lt; CLI data.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span>                       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">man_file</span>           <span class="c">!&lt; Output file name for saving man page.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>             <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">error</span>              <span class="c">!&lt; Error trapping flag.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>                   <span class="kd">::</span> <span class="n">man</span>                <span class="c">!&lt; Man page.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                    <span class="kd">::</span> <span class="nb">idate</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">)</span>         <span class="c">!&lt; Integer array for handling the date.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                    <span class="kd">::</span> <span class="n">e</span>                  <span class="c">!&lt; Counter.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                    <span class="kd">::</span> <span class="n">u</span>                  <span class="c">!&lt; Unit file handler.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">parameter</span>                         <span class="kd">::</span> <span class="n">month</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Jan&quot;</span><span class="p">,&amp;</span>
-                                                                <span class="s2">&quot;Feb&quot;</span><span class="p">,&amp;</span>
-                                                                <span class="s2">&quot;Mar&quot;</span><span class="p">,&amp;</span>
-                                                                <span class="s2">&quot;Apr&quot;</span><span class="p">,&amp;</span>
-                                                                <span class="s2">&quot;May&quot;</span><span class="p">,&amp;</span>
-                                                                <span class="s2">&quot;Jun&quot;</span><span class="p">,&amp;</span>
-                                                                <span class="s2">&quot;Jul&quot;</span><span class="p">,&amp;</span>
-                                                                <span class="s2">&quot;Aug&quot;</span><span class="p">,&amp;</span>
-                                                                <span class="s2">&quot;Sep&quot;</span><span class="p">,&amp;</span>
-                                                                <span class="s2">&quot;Oct&quot;</span><span class="p">,&amp;</span>
-                                                                <span class="s2">&quot;Nov&quot;</span><span class="p">,&amp;</span>
-                                                                <span class="s2">&quot;Dec&quot;</span><span class="p">]</span>  <span class="c">!&lt; Months list.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+    <div class="highlight"><pre><span></span><span class="w">  </span><span class="k">subroutine </span><span class="n">save_man_page</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">man_file</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="c">!&lt; Save CLI usage as man page.</span>
+<span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="n">command_line_interface</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">  </span><span class="kd">::</span><span class="w"> </span><span class="n">self</span><span class="w">               </span><span class="c">!&lt; CLI data.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w">                  </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">  </span><span class="kd">::</span><span class="w"> </span><span class="n">man_file</span><span class="w">           </span><span class="c">!&lt; Output file name for saving man page.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">error</span><span class="w">              </span><span class="c">!&lt; Error trapping flag.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w">              </span><span class="kd">::</span><span class="w"> </span><span class="n">man</span><span class="w">                </span><span class="c">!&lt; Man page.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                               </span><span class="kd">::</span><span class="w"> </span><span class="nb">idate</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">)</span><span class="w">         </span><span class="c">!&lt; Integer array for handling the date.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                               </span><span class="kd">::</span><span class="w"> </span><span class="n">e</span><span class="w">                  </span><span class="c">!&lt; Counter.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                               </span><span class="kd">::</span><span class="w"> </span><span class="n">u</span><span class="w">                  </span><span class="c">!&lt; Unit file handler.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">parameter</span><span class="w">                    </span><span class="kd">::</span><span class="w"> </span><span class="n">month</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Jan&quot;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="w">                                                           </span><span class="s2">&quot;Feb&quot;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="w">                                                           </span><span class="s2">&quot;Mar&quot;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="w">                                                           </span><span class="s2">&quot;Apr&quot;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="w">                                                           </span><span class="s2">&quot;May&quot;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="w">                                                           </span><span class="s2">&quot;Jun&quot;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="w">                                                           </span><span class="s2">&quot;Jul&quot;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="w">                                                           </span><span class="s2">&quot;Aug&quot;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="w">                                                           </span><span class="s2">&quot;Sep&quot;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="w">                                                           </span><span class="s2">&quot;Oct&quot;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="w">                                                           </span><span class="s2">&quot;Nov&quot;</span><span class="p">,&amp;</span><span class="w"></span>
+<span class="w">                                                           </span><span class="s2">&quot;Dec&quot;</span><span class="p">]</span><span class="w">  </span><span class="c">!&lt; Months list.</span>
 
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">call </span><span class="nb">date_and_time</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="nb">idate</span><span class="p">)</span>
-  <span class="n">man</span> <span class="o">=</span> <span class="s1">&#39;.TH &#39;</span><span class="o">//</span><span class="n">cli</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="s1">&#39; &quot;1&quot; &quot;&#39;</span><span class="o">//</span><span class="n">month</span><span class="p">(</span><span class="nb">idate</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">strz</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="nb">idate</span><span class="p">(</span><span class="mi">1</span><span class="p">))))</span><span class="o">//</span><span class="s1">&#39;&quot; &quot;version &#39;</span><span class="o">//</span><span class="n">cli</span><span class="p">%</span><span class="n">version</span><span class="o">//</span><span class="p">&amp;</span>
-    <span class="s1">&#39;&quot; &quot;&#39;</span><span class="o">//</span><span class="n">cli</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="s1">&#39; Manual&quot;&#39;</span>
-  <span class="n">man</span> <span class="o">=</span> <span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.SH NAME&#39;</span>
-  <span class="n">man</span> <span class="o">=</span> <span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">cli</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="s1">&#39; - manual page for &#39;</span><span class="o">//</span><span class="n">cli</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="s1">&#39; version &#39;</span><span class="o">//</span><span class="n">cli</span><span class="p">%</span><span class="n">version</span>
-  <span class="n">man</span> <span class="o">=</span> <span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.SH SYNOPSIS&#39;</span>
-  <span class="n">man</span> <span class="o">=</span> <span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.B &#39;</span><span class="o">//</span><span class="n">cli</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">signature</span><span class="p">()))</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">description</span> <span class="o">/=</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="n">man</span> <span class="o">=</span> <span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.SH DESCRIPTION&#39;</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">cli</span><span class="p">%</span><span class="n">description</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="mi">0</span><span class="p">)%</span><span class="n">Na</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">    </span><span class="n">man</span> <span class="o">=</span> <span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.SH OPTIONS&#39;</span>
-    <span class="n">man</span> <span class="o">=</span> <span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">cli</span><span class="p">%</span><span class="n">usage</span><span class="p">(</span><span class="n">no_header</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="n">no_examples</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="n">no_epilog</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="n">g</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-  <span class="n">endif</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">examples</span><span class="p">))</span> <span class="k">then</span>
-<span class="k">    </span><span class="n">man</span> <span class="o">=</span> <span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.SH EXAMPLES&#39;</span>
-    <span class="n">man</span> <span class="o">=</span> <span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.PP&#39;</span>
-    <span class="n">man</span> <span class="o">=</span> <span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.nf&#39;</span>
-    <span class="n">man</span> <span class="o">=</span> <span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.RS&#39;</span>
-    <span class="k">do </span><span class="n">e</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">examples</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-      <span class="n">man</span> <span class="o">=</span> <span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">examples</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
-    <span class="n">enddo</span>
-    <span class="n">man</span> <span class="o">=</span> <span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.RE&#39;</span>
-    <span class="n">man</span> <span class="o">=</span> <span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.fi&#39;</span>
-    <span class="n">man</span> <span class="o">=</span> <span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.PP&#39;</span>
-  <span class="n">endif</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">authors</span> <span class="o">/=</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="n">man</span> <span class="o">=</span> <span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.SH AUTHOR&#39;</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">cli</span><span class="p">%</span><span class="n">authors</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">license</span> <span class="o">/=</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="n">man</span> <span class="o">=</span> <span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.SH COPYRIGHT&#39;</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">cli</span><span class="p">%</span><span class="n">license</span>
-  <span class="k">open</span><span class="p">(</span><span class="n">newunit</span><span class="o">=</span><span class="n">u</span><span class="p">,</span><span class="k">file</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">man_file</span><span class="p">)))</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">error</span><span class="p">))</span> <span class="k">then</span>
-<span class="k">    write</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="s2">&quot;(A)&quot;</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">error</span><span class="p">)</span><span class="n">man</span>
-  <span class="k">else</span>
-<span class="k">    write</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="s2">&quot;(A)&quot;</span><span class="p">)</span><span class="n">man</span>
-  <span class="n">endif</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endsubroutine</span> <span class="n">save_man_page</span>
+<span class="w">  </span><span class="k">call </span><span class="nb">date_and_time</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="nb">idate</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="n">man</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;.TH &#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="s1">&#39; &quot;1&quot; &quot;&#39;</span><span class="o">//</span><span class="n">month</span><span class="p">(</span><span class="nb">idate</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">strz</span><span class="p">(</span><span class="nb">idate</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="mi">4</span><span class="p">)))</span><span class="o">//</span><span class="s1">&#39;&quot; &quot;version &#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">version</span><span class="o">//</span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">    </span><span class="s1">&#39;&quot; &quot;&#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="s1">&#39; Manual&quot;&#39;</span><span class="w"></span>
+<span class="w">  </span><span class="n">man</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.SH NAME&#39;</span><span class="w"></span>
+<span class="w">  </span><span class="n">man</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="s1">&#39; - manual page for &#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="s1">&#39; version &#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">version</span><span class="w"></span>
+<span class="w">  </span><span class="n">man</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.SH SYNOPSIS&#39;</span><span class="w"></span>
+<span class="w">  </span><span class="n">man</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.B &#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">signature</span><span class="p">()))</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">description</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"> </span><span class="n">man</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.SH DESCRIPTION&#39;</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">description</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="mi">0</span><span class="p">)%</span><span class="n">Na</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">    </span><span class="n">man</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.SH OPTIONS&#39;</span><span class="w"></span>
+<span class="w">    </span><span class="n">man</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">usage</span><span class="p">(</span><span class="n">no_header</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="n">no_examples</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="n">no_epilog</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="n">g</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="k">endif</span>
+<span class="k">  if</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">examples</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">    </span><span class="n">man</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.SH EXAMPLES&#39;</span><span class="w"></span>
+<span class="w">    </span><span class="n">man</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.PP&#39;</span><span class="w"></span>
+<span class="w">    </span><span class="n">man</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.nf&#39;</span><span class="w"></span>
+<span class="w">    </span><span class="n">man</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.RS&#39;</span><span class="w"></span>
+<span class="w">    </span><span class="k">do </span><span class="n">e</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">examples</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="n">man</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">examples</span><span class="p">(</span><span class="n">e</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="k">enddo</span>
+<span class="k">    </span><span class="n">man</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.RE&#39;</span><span class="w"></span>
+<span class="w">    </span><span class="n">man</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.fi&#39;</span><span class="w"></span>
+<span class="w">    </span><span class="n">man</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.PP&#39;</span><span class="w"></span>
+<span class="w">  </span><span class="k">endif</span>
+<span class="k">  if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">authors</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"> </span><span class="n">man</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.SH AUTHOR&#39;</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">authors</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">license</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"> </span><span class="n">man</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">man</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.SH COPYRIGHT&#39;</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">license</span><span class="w"></span>
+<span class="w">  </span><span class="k">open</span><span class="p">(</span><span class="n">newunit</span><span class="o">=</span><span class="n">u</span><span class="p">,</span><span class="k">file</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">man_file</span><span class="p">)))</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">error</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">    write</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;(A)&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">iostat</span><span class="o">=</span><span class="n">error</span><span class="p">)</span><span class="n">man</span><span class="w"></span>
+<span class="w">  </span><span class="k">else</span>
+<span class="k">    write</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;(A)&quot;</span><span class="p">)</span><span class="n">man</span><span class="w"></span>
+<span class="w">  </span><span class="k">endif</span>
+<span class="k">  close</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="k">endsubroutine </span><span class="n">save_man_page</span><span class="w"></span>
 </pre></div>
 
     </section>
     <br>
     
-    
     </div>
   </div>
 
-    <hr>
-    <footer>
-        <div class="row">
-        <div class="col-md-6">&copy; 2015 FLAP was written by Stefano Zaghi. </div>
-        <div class="col-md-6"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a>.</span></div>
-        </div>
-        <br>
-    </footer>
+    <hr>    
     </div> <!-- /container -->
-
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-6"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2022 
+</p>
+        </div>
+        <div class="col-xs-6 col-md-6">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+          </p>
+        </div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -730,12 +379,14 @@ implementation in a submodule of an interface in a parent module.</p>
       MathJax.Hub.Config({
         TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
         jax: ['input/TeX','input/MathML','output/HTML-CSS'],
-        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'],
-        'HTML-CSS': { 
-           styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: '#000000 ! important'} }
-        }
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
       });
     </script>
-    <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
   </body>
 </html>

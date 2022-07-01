@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta name="description" content="Fortran command Line Arguments Parser for poor people">
+    <meta name="author" content="Stefano Zaghi" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>flap_object_t &ndash; FLAP</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">FLAP </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+            <li><a href="../lists/files.html">Source Files</a></li>
+            <li><a href="../lists/modules.html">Modules</a></li>
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+                   <li><a href="../lists/types.html">Derived Types</a></li>
+            <li><a href="../lists/programs.html">Programs</a></li>
+       
+            </ul>
+        
+            </li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+                             <li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/programs.html">Programs</a></li>
+          </ul>
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+  <div class="row">
+    <h1>flap_object_t 
+    <small>Module</small>
+    </h1>
+    <div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 2.7% of total for modules and submodules.">105 statements</a>
+     </li> 
+    <li><i class="fa fa-code"></i><a href="../src/flap_object_t.F90"> Source File</a></li>
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+     <li><a href='../sourcefile/flap_object_t.f90.html'>flap_object_t.F90</a></li>
+     <li class="active">flap_object_t</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    <div id="sidebar">
+  <h3>Contents</h3>
+ 
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#types-0">Derived Types</a></h3></div>
+  <div id="types-0" class="panel-collapse collapse">
+    <div class="list-group">
+      <a class="list-group-item" href="../module/flap_object_t.html#type-object">object</a>
+    </div>
+  </div>
+</div>
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#subs-0">Subroutines</a></h3></div>
+  <div class="list-group">
+    <div id="subs-0" class="panel-collapse collapse">
+      <a class="list-group-item" href="../module/flap_object_t.html#proc-free_object">free_object</a>
+      <a class="list-group-item" href="../module/flap_object_t.html#proc-print_version">print_version</a>
+      <a class="list-group-item" href="../module/flap_object_t.html#proc-print_error_message">print_error_message</a>
+      <a class="list-group-item" href="../module/flap_object_t.html#proc-set_examples">set_examples</a>
+      <a class="list-group-item" href="../module/flap_object_t.html#proc-assign_object">assign_object</a>
+    </div>
+  </div>
+</div>
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <p>Base (abstract) class upon which FLAP&rsquo;s concrete classes are built.</p>
+<br>        <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Uses</h3>
+      </div>
+      <ul class="list-group">
+      <li class="list-group-item">
+  <ul class="list-inline">
+    <li>penf</li>
+    <li><a href="https://gcc.gnu.org/onlinedocs/gfortran/ISO_005fFORTRAN_005fENV.html">iso_fortran_env</a></li>
+  </ul>
+      </li>
+      <li class="list-group-item">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: module~~flap_object_t~~UsesGraph Pages: 1 -->
+<svg id="moduleflap_object_tUsesGraph" width="218pt" height="74pt"
+ viewBox="0.00 0.00 218.00 74.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~flap_object_t~~UsesGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 70)">
+<title>module~~flap_object_t~~UsesGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-70 214,-70 214,4 -4,4"/>
+<!-- module~flap_object_t -->
+<g id="module~~flap_object_t~~UsesGraph_node1" class="node">
+<title>module~flap_object_t</title>
+<polygon fill="none" stroke="black" points="210,-45 130,-45 130,-21 210,-21 210,-45"/>
+<text text-anchor="middle" x="170" y="-30.6" font-family="Helvetica,sans-Serif" font-size="10.50">flap_object_t</text>
+</g>
+<!-- penf -->
+<g id="module~~flap_object_t~~UsesGraph_node2" class="node">
+<title>penf</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="74,-66 20,-66 20,-42 74,-42 74,-66"/>
+<text text-anchor="middle" x="47" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">penf</text>
+</g>
+<!-- module~flap_object_t&#45;&gt;penf -->
+<g id="module~~flap_object_t~~UsesGraph_edge1" class="edge">
+<title>module~flap_object_t&#45;&gt;penf</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M129.71,-39.82C115.06,-42.36 98.49,-45.24 84.13,-47.73"/>
+<polygon fill="#000000" stroke="#000000" points="83.37,-44.31 74.12,-49.47 84.57,-51.21 83.37,-44.31"/>
+</g>
+<!-- iso_fortran_env -->
+<g id="module~~flap_object_t~~UsesGraph_node3" class="node">
+<title>iso_fortran_env</title>
+<g id="a_module~~flap_object_t~~UsesGraph_node3"><a xlink:href="https://gcc.gnu.org/onlinedocs/gfortran/ISO_005fFORTRAN_005fENV.html" xlink:title="iso_fortran_env">
+<polygon fill="#337ab7" stroke="#337ab7" points="94,-24 0,-24 0,0 94,0 94,-24"/>
+<text text-anchor="middle" x="47" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">iso_fortran_env</text>
+</a>
+</g>
+</g>
+<!-- module~flap_object_t&#45;&gt;iso_fortran_env -->
+<g id="module~~flap_object_t~~UsesGraph_edge2" class="edge">
+<title>module~flap_object_t&#45;&gt;iso_fortran_env</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M129.71,-26.18C121.58,-24.77 112.86,-23.26 104.26,-21.76"/>
+<polygon fill="#000000" stroke="#000000" points="104.7,-18.29 94.25,-20.03 103.5,-25.19 104.7,-18.29"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="516pt" height="32pt"
+ viewBox="0.00 0.00 516.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 512,-28 512,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="145.5,-24 72.5,-24 72.5,0 145.5,0 145.5,-24"/>
+<text text-anchor="middle" x="109" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="234,-24 164,-24 164,0 234,0 234,-24"/>
+<text text-anchor="middle" x="199" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="310,-24 252,-24 252,0 310,0 310,-24"/>
+<text text-anchor="middle" x="281" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="385.5,-24 328.5,-24 328.5,0 385.5,0 385.5,-24"/>
+<text text-anchor="middle" x="357" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="508,-24 404,-24 404,0 508,0 508,-24"/>
+<text text-anchor="middle" x="456" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a submodule to the (sub)module which it is
+    descended from. Dashed arrows point from a module or program unit to 
+    modules which it uses.
+    </p>
+    </div></div></div></div>
+      </li>
+      </ul>
+    </div>
+
+        <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Used by</h3>
+      </div>
+      <ul class="list-group">
+  <li class="list-group-item">
+    <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: module~~flap_object_t~~UsedByGraph Pages: 1 -->
+<svg id="moduleflap_object_tUsedByGraph" width="641pt" height="390pt"
+ viewBox="0.00 0.00 641.00 390.02" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~flap_object_t~~UsedByGraph" class="graph" transform="scale(1.7 1.7) rotate(0) translate(4 658)">
+<title>module~~flap_object_t~~UsedByGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-658 1084,-658 1084,4 -4,4"/>
+<!-- module~flap_object_t -->
+<g id="module~~flap_object_t~~UsedByGraph_node1" class="node">
+<title>module~flap_object_t</title>
+<polygon fill="none" stroke="black" points="80,-319 0,-319 0,-295 80,-295 80,-319"/>
+<text text-anchor="middle" x="40" y="-304.6" font-family="Helvetica,sans-Serif" font-size="10.50">flap_object_t</text>
+</g>
+<!-- module~flap_command_line_interface_t -->
+<g id="module~~flap_object_t~~UsedByGraph_node2" class="node">
+<title>module~flap_command_line_interface_t</title>
+<g id="a_module~~flap_object_t~~UsedByGraph_node2"><a xlink:href=".././module/flap_command_line_interface_t.html" xlink:title="flap_command_line_interface_t">
+<polygon fill="#337ab7" stroke="#337ab7" points="776,-339 597,-339 597,-315 776,-315 776,-339"/>
+<text text-anchor="middle" x="686.5" y="-324.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t</text>
+</a>
+</g>
+</g>
+<!-- module~flap_command_line_interface_t&#45;&gt;module~flap_object_t -->
+<g id="module~~flap_object_t~~UsedByGraph_edge1" class="edge">
+<title>module~flap_command_line_interface_t&#45;&gt;module~flap_object_t</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M447.5,-327C341.59,-322.6 314.46,-337.66 209,-327"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M207,-327C167.78,-323.04 123.46,-317.65 90.48,-313.47"/>
+<polygon fill="#000000" stroke="#000000" points="90.56,-309.95 80.19,-312.15 89.67,-316.89 90.56,-309.95"/>
+</g>
+<!-- module~flap_command_line_argument_t -->
+<g id="module~~flap_object_t~~UsedByGraph_node3" class="node">
+<title>module~flap_command_line_argument_t</title>
+<g id="a_module~~flap_object_t~~UsedByGraph_node3"><a xlink:href=".././module/flap_command_line_argument_t.html" xlink:title="flap_command_line_argument_t">
+<polygon fill="#337ab7" stroke="#337ab7" points="300,-299 116,-299 116,-275 300,-275 300,-299"/>
+<text text-anchor="middle" x="208" y="-284.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t</text>
+</a>
+</g>
+</g>
+<!-- module~flap_command_line_interface_t&#45;&gt;module~flap_command_line_argument_t -->
+<g id="module~~flap_object_t~~UsedByGraph_edge5" class="edge">
+<title>module~flap_command_line_interface_t&#45;&gt;module~flap_command_line_argument_t</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M596.93,-328.74C552.64,-329.16 498.21,-329.02 449.5,-327"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M447.5,-327C386.01,-324.45 316.75,-311.71 268.77,-301.28"/>
+<polygon fill="#000000" stroke="#000000" points="269.39,-297.83 258.87,-299.09 267.88,-304.67 269.39,-297.83"/>
+</g>
+<!-- module~flap_command_line_arguments_group_t -->
+<g id="module~~flap_object_t~~UsedByGraph_node4" class="node">
+<title>module~flap_command_line_arguments_group_t</title>
+<g id="a_module~~flap_object_t~~UsedByGraph_node4"><a xlink:href=".././module/flap_command_line_arguments_group_t.html" xlink:title="flap_command_line_arguments_group_t">
+<polygon fill="#337ab7" stroke="#337ab7" points="561,-379 336,-379 336,-355 561,-355 561,-379"/>
+<text text-anchor="middle" x="448.5" y="-364.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_arguments_group_t</text>
+</a>
+</g>
+</g>
+<!-- module~flap_command_line_interface_t&#45;&gt;module~flap_command_line_arguments_group_t -->
+<g id="module~~flap_object_t~~UsedByGraph_edge8" class="edge">
+<title>module~flap_command_line_interface_t&#45;&gt;module~flap_command_line_arguments_group_t</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M614.69,-339C588.21,-343.49 557.93,-348.62 530.59,-353.26"/>
+<polygon fill="#000000" stroke="#000000" points="529.94,-349.82 520.67,-354.94 531.11,-356.72 529.94,-349.82"/>
+</g>
+<!-- module~flap_command_line_argument_t&#45;&gt;module~flap_object_t -->
+<g id="module~~flap_object_t~~UsedByGraph_edge2" class="edge">
+<title>module~flap_command_line_argument_t&#45;&gt;module~flap_object_t</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M115.74,-297.99C106.95,-299.05 98.28,-300.1 90.14,-301.08"/>
+<polygon fill="#000000" stroke="#000000" points="89.64,-297.61 80.13,-302.29 90.48,-304.56 89.64,-297.61"/>
+</g>
+<!-- module~flap_command_line_arguments_group_t&#45;&gt;module~flap_object_t -->
+<g id="module~~flap_object_t~~UsedByGraph_edge3" class="edge">
+<title>module~flap_command_line_arguments_group_t&#45;&gt;module~flap_object_t</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M388.98,-354.99C340.88,-345.64 270.82,-333.25 209,-327"/>
+</g>
+<!-- module~flap_command_line_arguments_group_t&#45;&gt;module~flap_command_line_argument_t -->
+<g id="module~~flap_object_t~~UsedByGraph_edge6" class="edge">
+<title>module~flap_command_line_arguments_group_t&#45;&gt;module~flap_command_line_argument_t</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M375.16,-354.94C361.79,-351.38 348.2,-346.82 336,-341 317.7,-332.27 318.07,-322.17 300,-313 291.82,-308.85 282.89,-305.27 273.91,-302.22"/>
+<polygon fill="#000000" stroke="#000000" points="274.78,-298.82 264.19,-299.1 272.64,-305.49 274.78,-298.82"/>
+</g>
+<!-- module~flap -->
+<g id="module~~flap_object_t~~UsedByGraph_node5" class="node">
+<title>module~flap</title>
+<g id="a_module~~flap_object_t~~UsedByGraph_node5"><a xlink:href=".././module/flap.html" xlink:title="flap">
+<polygon fill="#337ab7" stroke="#337ab7" points="866,-339 812,-339 812,-315 866,-315 866,-339"/>
+<text text-anchor="middle" x="839" y="-324.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap</text>
+</a>
+</g>
+</g>
+<!-- module~flap&#45;&gt;module~flap_command_line_interface_t -->
+<g id="module~~flap_object_t~~UsedByGraph_edge4" class="edge">
+<title>module~flap&#45;&gt;module~flap_command_line_interface_t</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M811.78,-327C804.24,-327 795.53,-327 786.29,-327"/>
+<polygon fill="#000000" stroke="#000000" points="786.09,-323.5 776.09,-327 786.09,-330.5 786.09,-323.5"/>
+</g>
+<!-- module~flap&#45;&gt;module~flap_command_line_argument_t -->
+<g id="module~~flap_object_t~~UsedByGraph_edge7" class="edge">
+<title>module~flap&#45;&gt;module~flap_command_line_argument_t</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M811.9,-316.26C801,-312.28 788.08,-308.2 776,-306 615.15,-276.72 424.51,-277.43 310.34,-281.54"/>
+<polygon fill="#000000" stroke="#000000" points="310.08,-278.04 300.21,-281.92 310.34,-285.04 310.08,-278.04"/>
+</g>
+<!-- module~flap&#45;&gt;module~flap_command_line_arguments_group_t -->
+<g id="module~~flap_object_t~~UsedByGraph_edge9" class="edge">
+<title>module~flap&#45;&gt;module~flap_command_line_arguments_group_t</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M811.87,-337.59C800.96,-341.55 788.05,-345.65 776,-348 709.08,-361.03 633.12,-366.02 571.31,-367.64"/>
+<polygon fill="#000000" stroke="#000000" points="571.04,-364.15 561.12,-367.88 571.2,-371.15 571.04,-364.15"/>
+</g>
+<!-- program~flap_test_choices_logical -->
+<g id="module~~flap_object_t~~UsedByGraph_node6" class="node">
+<title>program~flap_test_choices_logical</title>
+<g id="a_module~~flap_object_t~~UsedByGraph_node6"><a xlink:href=".././program/flap_test_choices_logical.html" xlink:title="flap_test_choices_logical">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1063,-654 919,-654 919,-630 1063,-630 1063,-654"/>
+<text text-anchor="middle" x="991" y="-639.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_choices_logical</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_choices_logical&#45;&gt;module~flap -->
+<g id="module~~flap_object_t~~UsedByGraph_edge10" class="edge">
+<title>program~flap_test_choices_logical&#45;&gt;module~flap</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M918.83,-632.83C912.59,-629.82 906.82,-625.95 902,-621 864.05,-582.04 846.79,-411.49 841.69,-349.57"/>
+<polygon fill="#000000" stroke="#000000" points="845.16,-349.02 840.88,-339.32 838.18,-349.57 845.16,-349.02"/>
+</g>
+<!-- program~flap_test_hidden -->
+<g id="module~~flap_object_t~~UsedByGraph_node7" class="node">
+<title>program~flap_test_hidden</title>
+<g id="a_module~~flap_object_t~~UsedByGraph_node7"><a xlink:href=".././program/flap_test_hidden.html" xlink:title="flap_test_hidden">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1041,-612 941,-612 941,-588 1041,-588 1041,-612"/>
+<text text-anchor="middle" x="991" y="-597.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_hidden</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_hidden&#45;&gt;module~flap -->
+<g id="module~~flap_object_t~~UsedByGraph_edge11" class="edge">
+<title>program~flap_test_hidden&#45;&gt;module~flap</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M940.55,-597.72C926.5,-594.76 912.25,-589.18 902,-579 869.25,-546.48 849.21,-404.6 842.51,-349.24"/>
+<polygon fill="#000000" stroke="#000000" points="845.96,-348.61 841.32,-339.09 839.01,-349.43 845.96,-348.61"/>
+</g>
+<!-- program~flap_save_bash_completion -->
+<g id="module~~flap_object_t~~UsedByGraph_node8" class="node">
+<title>program~flap_save_bash_completion</title>
+<g id="a_module~~flap_object_t~~UsedByGraph_node8"><a xlink:href=".././program/flap_save_bash_completion.html" xlink:title="flap_save_bash_completion">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1070.5,-570 911.5,-570 911.5,-546 1070.5,-546 1070.5,-570"/>
+<text text-anchor="middle" x="991" y="-555.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_save_bash_completion</text>
+</a>
+</g>
+</g>
+<!-- program~flap_save_bash_completion&#45;&gt;module~flap -->
+<g id="module~~flap_object_t~~UsedByGraph_edge13" class="edge">
+<title>program~flap_save_bash_completion&#45;&gt;module~flap</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M914.16,-545.85C909.76,-543.38 905.65,-540.46 902,-537 848.58,-486.33 840.5,-392.12 839.74,-349.26"/>
+<polygon fill="#000000" stroke="#000000" points="843.24,-349.05 839.68,-339.07 836.24,-349.09 843.24,-349.05"/>
+</g>
+<!-- program~flap_test_group -->
+<g id="module~~flap_object_t~~UsedByGraph_node9" class="node">
+<title>program~flap_test_group</title>
+<g id="a_module~~flap_object_t~~UsedByGraph_node9"><a xlink:href=".././program/flap_test_group.html" xlink:title="flap_test_group">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1038,-528 944,-528 944,-504 1038,-504 1038,-528"/>
+<text text-anchor="middle" x="991" y="-513.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_group</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_group&#45;&gt;module~flap -->
+<g id="module~~flap_object_t~~UsedByGraph_edge12" class="edge">
+<title>program~flap_test_group&#45;&gt;module~flap</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M943.97,-513.55C929.11,-510.69 913.51,-505.22 902,-495 858.8,-456.67 845.65,-385.49 841.68,-349.33"/>
+<polygon fill="#000000" stroke="#000000" points="845.16,-348.93 840.73,-339.31 838.19,-349.6 845.16,-348.93"/>
+</g>
+<!-- program~flap_save_man_page -->
+<g id="module~~flap_object_t~~UsedByGraph_node10" class="node">
+<title>program~flap_save_man_page</title>
+<g id="a_module~~flap_object_t~~UsedByGraph_node10"><a xlink:href=".././program/flap_save_man_page.html" xlink:title="flap_save_man_page">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1053,-486 929,-486 929,-462 1053,-462 1053,-486"/>
+<text text-anchor="middle" x="991" y="-471.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_save_man_page</text>
+</a>
+</g>
+</g>
+<!-- program~flap_save_man_page&#45;&gt;module~flap -->
+<g id="module~~flap_object_t~~UsedByGraph_edge14" class="edge">
+<title>program~flap_save_man_page&#45;&gt;module~flap</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M928.55,-466.72C918.99,-463.58 909.73,-459.17 902,-453 868.72,-426.42 851.99,-377.45 844.72,-349.02"/>
+<polygon fill="#000000" stroke="#000000" points="848.11,-348.13 842.38,-339.22 841.3,-349.76 848.11,-348.13"/>
+</g>
+<!-- program~flap_test_group_examples -->
+<g id="module~~flap_object_t~~UsedByGraph_node11" class="node">
+<title>program~flap_test_group_examples</title>
+<g id="a_module~~flap_object_t~~UsedByGraph_node11"><a xlink:href=".././program/flap_test_group_examples.html" xlink:title="flap_test_group_examples">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1066,-444 916,-444 916,-420 1066,-420 1066,-444"/>
+<text text-anchor="middle" x="991" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_group_examples</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_group_examples&#45;&gt;module~flap -->
+<g id="module~~flap_object_t~~UsedByGraph_edge15" class="edge">
+<title>program~flap_test_group_examples&#45;&gt;module~flap</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M919.41,-419.96C913.28,-417.51 907.37,-414.55 902,-411 878.34,-395.34 860.43,-367.42 850.09,-348.09"/>
+<polygon fill="#000000" stroke="#000000" points="853.17,-346.44 845.5,-339.13 846.94,-349.63 853.17,-346.44"/>
+</g>
+<!-- program~flap_test_duplicated_clas -->
+<g id="module~~flap_object_t~~UsedByGraph_node12" class="node">
+<title>program~flap_test_duplicated_clas</title>
+<g id="a_module~~flap_object_t~~UsedByGraph_node12"><a xlink:href=".././program/flap_test_duplicated_clas.html" xlink:title="flap_test_duplicated_clas">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1063.5,-402 918.5,-402 918.5,-378 1063.5,-378 1063.5,-402"/>
+<text text-anchor="middle" x="991" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_duplicated_clas</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_duplicated_clas&#45;&gt;module~flap -->
+<g id="module~~flap_object_t~~UsedByGraph_edge16" class="edge">
+<title>program~flap_test_duplicated_clas&#45;&gt;module~flap</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M927.06,-377.93C918.48,-375.44 909.91,-372.48 902,-369 888.16,-362.9 874.09,-353.67 862.86,-345.42"/>
+<polygon fill="#000000" stroke="#000000" points="864.96,-342.62 854.88,-339.36 860.73,-348.19 864.96,-342.62"/>
+</g>
+<!-- program~flap_test_string -->
+<g id="module~~flap_object_t~~UsedByGraph_node13" class="node">
+<title>program~flap_test_string</title>
+<g id="a_module~~flap_object_t~~UsedByGraph_node13"><a xlink:href=".././program/flap_test_string.html" xlink:title="flap_test_string">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1037.5,-360 944.5,-360 944.5,-336 1037.5,-336 1037.5,-360"/>
+<text text-anchor="middle" x="991" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_string</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_string&#45;&gt;module~flap -->
+<g id="module~~flap_object_t~~UsedByGraph_edge17" class="edge">
+<title>program~flap_test_string&#45;&gt;module~flap</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M944.18,-341.59C922.46,-338.54 896.88,-334.96 876.5,-332.11"/>
+<polygon fill="#000000" stroke="#000000" points="876.75,-328.61 866.36,-330.69 875.78,-335.54 876.75,-328.61"/>
+</g>
+<!-- program~flap_test_nargs_insufficient~2 -->
+<g id="module~~flap_object_t~~UsedByGraph_node14" class="node">
+<title>program~flap_test_nargs_insufficient~2</title>
+<g id="a_module~~flap_object_t~~UsedByGraph_node14"><a xlink:href=".././program/flap_test_nargs_insufficient~2.html" xlink:title="flap_test_nargs_insufficient">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1069.5,-318 912.5,-318 912.5,-294 1069.5,-294 1069.5,-318"/>
+<text text-anchor="middle" x="991" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_nargs_insufficient</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_nargs_insufficient~2&#45;&gt;module~flap -->
+<g id="module~~flap_object_t~~UsedByGraph_edge18" class="edge">
+<title>program~flap_test_nargs_insufficient~2&#45;&gt;module~flap</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M912.36,-316.87C899.69,-318.64 887.11,-320.4 876.09,-321.95"/>
+<polygon fill="#000000" stroke="#000000" points="875.46,-318.5 866.04,-323.35 876.43,-325.43 875.46,-318.5"/>
+</g>
+<!-- program~flap_test_minimal -->
+<g id="module~~flap_object_t~~UsedByGraph_node15" class="node">
+<title>program~flap_test_minimal</title>
+<g id="a_module~~flap_object_t~~UsedByGraph_node15"><a xlink:href=".././program/flap_test_minimal.html" xlink:title="flap_test_minimal">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1044,-276 938,-276 938,-252 1044,-252 1044,-276"/>
+<text text-anchor="middle" x="991" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_minimal</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_minimal&#45;&gt;module~flap -->
+<g id="module~~flap_object_t~~UsedByGraph_edge19" class="edge">
+<title>program~flap_test_minimal&#45;&gt;module~flap</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M937.79,-273.18C925.76,-276.18 913.21,-280.06 902,-285 888.16,-291.1 874.09,-300.33 862.86,-308.58"/>
+<polygon fill="#000000" stroke="#000000" points="860.73,-305.81 854.88,-314.64 864.96,-311.38 860.73,-305.81"/>
+</g>
+<!-- program~flap_save_usage_to_markdown -->
+<g id="module~~flap_object_t~~UsedByGraph_node16" class="node">
+<title>program~flap_save_usage_to_markdown</title>
+<g id="a_module~~flap_object_t~~UsedByGraph_node16"><a xlink:href=".././program/flap_save_usage_to_markdown.html" xlink:title="flap_save_usage_to_markdown">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1080,-234 902,-234 902,-210 1080,-210 1080,-234"/>
+<text text-anchor="middle" x="991" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_save_usage_to_markdown</text>
+</a>
+</g>
+</g>
+<!-- program~flap_save_usage_to_markdown&#45;&gt;module~flap -->
+<g id="module~~flap_object_t~~UsedByGraph_edge20" class="edge">
+<title>program~flap_save_usage_to_markdown&#45;&gt;module~flap</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M919.41,-234.04C913.28,-236.49 907.37,-239.45 902,-243 878.34,-258.66 860.43,-286.58 850.09,-305.91"/>
+<polygon fill="#000000" stroke="#000000" points="846.94,-304.37 845.5,-314.87 853.17,-307.56 846.94,-304.37"/>
+</g>
+<!-- program~flap_test_ansi_color_style -->
+<g id="module~~flap_object_t~~UsedByGraph_node17" class="node">
+<title>program~flap_test_ansi_color_style</title>
+<g id="a_module~~flap_object_t~~UsedByGraph_node17"><a xlink:href=".././program/flap_test_ansi_color_style.html" xlink:title="flap_test_ansi_color_style">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1064.5,-192 917.5,-192 917.5,-168 1064.5,-168 1064.5,-192"/>
+<text text-anchor="middle" x="991" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_ansi_color_style</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_ansi_color_style&#45;&gt;module~flap -->
+<g id="module~~flap_object_t~~UsedByGraph_edge21" class="edge">
+<title>program~flap_test_ansi_color_style&#45;&gt;module~flap</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M917.39,-191.65C911.88,-194.19 906.66,-197.28 902,-201 868.72,-227.58 851.99,-276.55 844.72,-304.98"/>
+<polygon fill="#000000" stroke="#000000" points="841.3,-304.24 842.38,-314.78 848.11,-305.87 841.3,-304.24"/>
+</g>
+<!-- program~flap_test_nargs_insufficient -->
+<g id="module~~flap_object_t~~UsedByGraph_node18" class="node">
+<title>program~flap_test_nargs_insufficient</title>
+<g id="a_module~~flap_object_t~~UsedByGraph_node18"><a xlink:href=".././program/flap_test_nargs_insufficient.html" xlink:title="flap_test_nargs_insufficient">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1069.5,-150 912.5,-150 912.5,-126 1069.5,-126 1069.5,-150"/>
+<text text-anchor="middle" x="991" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_nargs_insufficient</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_nargs_insufficient&#45;&gt;module~flap -->
+<g id="module~~flap_object_t~~UsedByGraph_edge22" class="edge">
+<title>program~flap_test_nargs_insufficient&#45;&gt;module~flap</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M914.84,-150.21C910.22,-152.66 905.88,-155.56 902,-159 858.8,-197.33 845.65,-268.51 841.68,-304.67"/>
+<polygon fill="#000000" stroke="#000000" points="838.19,-304.4 840.73,-314.69 845.16,-305.07 838.19,-304.4"/>
+</g>
+<!-- program~flap_test_basic -->
+<g id="module~~flap_object_t~~UsedByGraph_node19" class="node">
+<title>program~flap_test_basic</title>
+<g id="a_module~~flap_object_t~~UsedByGraph_node19"><a xlink:href=".././program/flap_test_basic.html" xlink:title="flap_test_basic">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1036.5,-108 945.5,-108 945.5,-84 1036.5,-84 1036.5,-108"/>
+<text text-anchor="middle" x="991" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_basic</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_basic&#45;&gt;module~flap -->
+<g id="module~~flap_object_t~~UsedByGraph_edge23" class="edge">
+<title>program~flap_test_basic&#45;&gt;module~flap</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M945.4,-97.69C929.96,-100.4 913.62,-105.97 902,-117 848.58,-167.67 840.5,-261.88 839.74,-304.74"/>
+<polygon fill="#000000" stroke="#000000" points="836.24,-304.91 839.68,-314.93 843.24,-304.95 836.24,-304.91"/>
+</g>
+<!-- program~flap_test_nested -->
+<g id="module~~flap_object_t~~UsedByGraph_node20" class="node">
+<title>program~flap_test_nested</title>
+<g id="a_module~~flap_object_t~~UsedByGraph_node20"><a xlink:href=".././program/flap_test_nested.html" xlink:title="flap_test_nested">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1040.5,-66 941.5,-66 941.5,-42 1040.5,-42 1040.5,-66"/>
+<text text-anchor="middle" x="991" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_nested</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_nested&#45;&gt;module~flap -->
+<g id="module~~flap_object_t~~UsedByGraph_edge24" class="edge">
+<title>program~flap_test_nested&#45;&gt;module~flap</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M941.47,-56.09C927.12,-59 912.48,-64.6 902,-75 869.25,-107.52 849.21,-249.4 842.51,-304.76"/>
+<polygon fill="#000000" stroke="#000000" points="839.01,-304.57 841.32,-314.91 845.96,-305.39 839.01,-304.57"/>
+</g>
+<!-- program~flap_test_ignore_unknown_clas -->
+<g id="module~~flap_object_t~~UsedByGraph_node21" class="node">
+<title>program~flap_test_ignore_unknown_clas</title>
+<g id="a_module~~flap_object_t~~UsedByGraph_node21"><a xlink:href=".././program/flap_test_ignore_unknown_clas.html" xlink:title="flap_test_ignore_unknown_clas">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1079,-24 903,-24 903,0 1079,0 1079,-24"/>
+<text text-anchor="middle" x="991" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_ignore_unknown_clas</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_ignore_unknown_clas&#45;&gt;module~flap -->
+<g id="module~~flap_object_t~~UsedByGraph_edge25" class="edge">
+<title>program~flap_test_ignore_unknown_clas&#45;&gt;module~flap</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M913.43,-24.07C909.26,-26.56 905.4,-29.51 902,-33 864.05,-71.96 846.79,-242.51 841.69,-304.43"/>
+<polygon fill="#000000" stroke="#000000" points="838.18,-304.43 840.88,-314.68 845.16,-304.98 838.18,-304.43"/>
+</g>
+</g>
+</svg>
+</div><script>var panmoduleflap_object_tUsedByGraph = svgPanZoom('#moduleflap_object_tUsedByGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="516pt" height="32pt"
+ viewBox="0.00 0.00 516.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 512,-28 512,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="145.5,-24 72.5,-24 72.5,0 145.5,0 145.5,-24"/>
+<text text-anchor="middle" x="109" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="234,-24 164,-24 164,0 234,0 234,-24"/>
+<text text-anchor="middle" x="199" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="310,-24 252,-24 252,0 310,0 310,-24"/>
+<text text-anchor="middle" x="281" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="385.5,-24 328.5,-24 328.5,0 385.5,0 385.5,-24"/>
+<text text-anchor="middle" x="357" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="508,-24 404,-24 404,0 508,0 508,-24"/>
+<text text-anchor="middle" x="456" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a submodule to the (sub)module which it is
+    descended from. Dashed arrows point from a module or program unit to 
+    modules which it uses.
+    </p>
+    </div></div></div></div>
+  </li>
+      </ul>
+    </div>
+
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      <h3>Contents</h3>
+ 
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#types-1">Derived Types</a></h3></div>
+  <div id="types-1" class="panel-collapse collapse">
+    <div class="list-group">
+      <a class="list-group-item" href="../module/flap_object_t.html#type-object">object</a>
+    </div>
+  </div>
+</div>
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#subs-1">Subroutines</a></h3></div>
+  <div class="list-group">
+    <div id="subs-1" class="panel-collapse collapse">
+      <a class="list-group-item" href="../module/flap_object_t.html#proc-free_object">free_object</a>
+      <a class="list-group-item" href="../module/flap_object_t.html#proc-print_version">print_version</a>
+      <a class="list-group-item" href="../module/flap_object_t.html#proc-print_error_message">print_error_message</a>
+      <a class="list-group-item" href="../module/flap_object_t.html#proc-set_examples">set_examples</a>
+      <a class="list-group-item" href="../module/flap_object_t.html#proc-assign_object">assign_object</a>
+    </div>
+  </div>
+</div>
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+
+    
+    
+
+    
+    <section>
+     <h2>Derived Types</h2>
+     <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="type-object"></span><h3>type, public, abstract :: <a href='../type/object.html'>object</a>  </h3></div>
+  <div class="panel-body">
+    <p>Base (abstract) class upon which FLAP&rsquo;s concrete classes are built.</p>
+     <h4>Components</h4>
+    <table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Visibility</th><th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
+<tbody>
+<tr>
+  <td><span class="anchor" id="variable-progname"></span>character(len=:),</td>
+<td>public,</td>  <td>allocatable</td><td>::</td>
+  <td><strong>progname</strong></td><td></td><td></td><td><p>Program name.</p></td>
+</tr>
+<tr>
+  <td><span class="anchor" id="variable-version"></span>character(len=:),</td>
+<td>public,</td>  <td>allocatable</td><td>::</td>
+  <td><strong>version</strong></td><td></td><td></td><td><p>Program version.</p></td>
+</tr>
+<tr>
+  <td><span class="anchor" id="variable-help"></span>character(len=:),</td>
+<td>public,</td>  <td>allocatable</td><td>::</td>
+  <td><strong>help</strong></td><td></td><td></td><td><p>Help message.</p></td>
+</tr>
+<tr>
+  <td><span class="anchor" id="variable-help_color"></span>character(len=:),</td>
+<td>public,</td>  <td>allocatable</td><td>::</td>
+  <td><strong>help_color</strong></td><td></td><td></td><td><p>ANSI color of help messages.</p></td>
+</tr>
+<tr>
+  <td><span class="anchor" id="variable-help_style"></span>character(len=:),</td>
+<td>public,</td>  <td>allocatable</td><td>::</td>
+  <td><strong>help_style</strong></td><td></td><td></td><td><p>ANSI style of help messages.</p></td>
+</tr>
+<tr>
+  <td><span class="anchor" id="variable-help_markdown"></span>character(len=:),</td>
+<td>public,</td>  <td>allocatable</td><td>::</td>
+  <td><strong>help_markdown</strong></td><td></td><td></td><td><p>Longer help message, markdown formatted.</p></td>
+</tr>
+<tr>
+  <td><span class="anchor" id="variable-description"></span>character(len=:),</td>
+<td>public,</td>  <td>allocatable</td><td>::</td>
+  <td><strong>description</strong></td><td></td><td></td><td><p>Detailed description.</p></td>
+</tr>
+<tr>
+  <td><span class="anchor" id="variable-license"></span>character(len=:),</td>
+<td>public,</td>  <td>allocatable</td><td>::</td>
+  <td><strong>license</strong></td><td></td><td></td><td><p>License description.</p></td>
+</tr>
+<tr>
+  <td><span class="anchor" id="variable-authors"></span>character(len=:),</td>
+<td>public,</td>  <td>allocatable</td><td>::</td>
+  <td><strong>authors</strong></td><td></td><td></td><td><p>Authors list.</p></td>
+</tr>
+<tr>
+  <td><span class="anchor" id="variable-epilog"></span>character(len=:),</td>
+<td>public,</td>  <td>allocatable</td><td>::</td>
+  <td><strong>epilog</strong></td><td></td><td></td><td><p>Epilogue message.</p></td>
+</tr>
+<tr>
+  <td><span class="anchor" id="variable-m_exclude"></span>character(len=:),</td>
+<td>public,</td>  <td>allocatable</td><td>::</td>
+  <td><strong>m_exclude</strong></td><td></td><td></td><td><p>Mutually exclude other CLA(s group).</p></td>
+</tr>
+<tr>
+  <td><span class="anchor" id="variable-error_message"></span>character(len=:),</td>
+<td>public,</td>  <td>allocatable</td><td>::</td>
+  <td><strong>error_message</strong></td><td></td><td></td><td><p>Meaningful error message to standard-error.</p></td>
+</tr>
+<tr>
+  <td><span class="anchor" id="variable-error_color"></span>character(len=:),</td>
+<td>public,</td>  <td>allocatable</td><td>::</td>
+  <td><strong>error_color</strong></td><td></td><td></td><td><p>ANSI color of error messages.</p></td>
+</tr>
+<tr>
+  <td><span class="anchor" id="variable-error_style"></span>character(len=:),</td>
+<td>public,</td>  <td>allocatable</td><td>::</td>
+  <td><strong>error_style</strong></td><td></td><td></td><td><p>ANSI style of error messages.</p></td>
+</tr>
+<tr>
+  <td><span class="anchor" id="variable-examples"></span>character(len=512),</td>
+<td>public,</td>  <td>allocatable</td><td>::</td>
+  <td><strong>examples</strong>(:)</td><td></td><td></td><td><p>Examples of correct usage.</p></td>
+</tr>
+<tr>
+  <td><span class="anchor" id="variable-error"></span>integer(kind=I4P),</td>
+<td>public</td>  <td></td><td>::</td>
+  <td><strong>error</strong></td><td> =</td><td>0_I4P</td><td><p>Error trapping flag.</p></td>
+</tr>
+<tr>
+  <td><span class="anchor" id="variable-usage_lun"></span>integer(kind=I4P),</td>
+<td>public</td>  <td></td><td>::</td>
+  <td><strong>usage_lun</strong></td><td> =</td><td>stderr</td><td><p>Output unit to print help/usage messages</p></td>
+</tr>
+<tr>
+  <td><span class="anchor" id="variable-version_lun"></span>integer(kind=I4P),</td>
+<td>public</td>  <td></td><td>::</td>
+  <td><strong>version_lun</strong></td><td> =</td><td>stdout</td><td><p>Output unit to print version message</p></td>
+</tr>
+<tr>
+  <td><span class="anchor" id="variable-error_lun"></span>integer(kind=I4P),</td>
+<td>public</td>  <td></td><td>::</td>
+  <td><strong>error_lun</strong></td><td> =</td><td>stderr</td><td><p>Error unit to print error messages</p></td>
+</tr>
+</tbody>
+</table>
+
+     
+     <h4>Type-Bound Procedures</h4>
+      <table class="table table-striped varlist">
+      <tbody>
+       <tr><td>procedure, public, pass(self) :: <strong><a href='../type/object.html#boundprocedure-free_object'>free_object</a></strong>  </td>
+       <td><p>Free dynamic memory.</p></td></tr>
+       <tr><td>procedure, public, pass(self) :: <strong><a href='../type/object.html#boundprocedure-print_version'>print_version</a></strong>  </td>
+       <td><p>Print version.</p></td></tr>
+       <tr><td>procedure, public, pass(self) :: <strong><a href='../type/object.html#boundprocedure-print_error_message'>print_error_message</a></strong>  </td>
+       <td><p>Print meaningful error message.</p></td></tr>
+       <tr><td>procedure, public, pass(self) :: <strong><a href='../type/object.html#boundprocedure-set_examples'>set_examples</a></strong>  </td>
+       <td><p>Set examples of correct usage.</p></td></tr>
+       <tr><td>procedure, public, pass(lhs ) :: <strong><a href='../type/object.html#boundprocedure-assign_object'>assign_object</a></strong>  </td>
+       <td><p>Assignment overloading.</p></td></tr>
+       </tbody>
+       </table>
+  </div>
+</div>
+
+    </section>
+  <br>
+    
+
+    <section>
+    <h2>Subroutines</h2>
+      <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-free_object"></span><h3>private elemental subroutine <a href='../proc/free_object.html'>free_object</a>(self)</h3></div>
+  <div class="panel-body">
+       
+<p>Free dynamic memory.</p>
+    
+<h4>Arguments</h4>      <table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
+<tbody>
+<tr>
+  <td><span class="anchor" ></span>class(<a href='../type/object.html'>object</a>),</td>
+<td>intent(inout)</td>
+  <td></td>  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Object data.</p></td>
+</tr>
+</tbody>
+</table>
+
+
+  </div>
+  </div>
+
+      <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-print_version"></span><h3>private subroutine <a href='../proc/print_version.html'>print_version</a>(self, pref)</h3></div>
+  <div class="panel-body">
+       
+<p>Print version.</p>
+    
+<h4>Arguments</h4>      <table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
+<tbody>
+<tr>
+  <td><span class="anchor" ></span>class(<a href='../type/object.html'>object</a>),</td>
+<td>intent(in)</td>
+  <td></td>  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Object data.</p></td>
+</tr>
+<tr>
+  <td><span class="anchor" ></span>character,</td>
+<td>intent(in),</td>
+  <td>optional</td>  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+</tr>
+</tbody>
+</table>
+
+
+  </div>
+  </div>
+
+      <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-print_error_message"></span><h3>private subroutine <a href='../proc/print_error_message.html'>print_error_message</a>(self)</h3></div>
+  <div class="panel-body">
+       
+<p>Print meaningful error message to standard-error.</p>
+    
+<h4>Arguments</h4>      <table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
+<tbody>
+<tr>
+  <td><span class="anchor" ></span>class(<a href='../type/object.html'>object</a>),</td>
+<td>intent(in)</td>
+  <td></td>  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Object data.</p></td>
+</tr>
+</tbody>
+</table>
+
+
+  </div>
+  </div>
+
+      <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-set_examples"></span><h3>private subroutine <a href='../proc/set_examples.html'>set_examples</a>(self, examples)</h3></div>
+  <div class="panel-body">
+       
+<p>Set examples of correct usage.</p>
+    
+<h4>Arguments</h4>      <table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
+<tbody>
+<tr>
+  <td><span class="anchor" ></span>class(<a href='../type/object.html'>object</a>),</td>
+<td>intent(inout)</td>
+  <td></td>  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Object data.</p></td>
+</tr>
+<tr>
+  <td><span class="anchor" ></span>character,</td>
+<td>intent(in),</td>
+  <td>optional</td>  <td></td><td>::</td>
+  <td><strong>examples</strong>(1:)</td><td><p>Examples of correct usage.</p></td>
+</tr>
+</tbody>
+</table>
+
+
+  </div>
+  </div>
+
+      <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-assign_object"></span><h3>private elemental subroutine <a href='../proc/assign_object.html'>assign_object</a>(lhs, rhs)</h3></div>
+  <div class="panel-body">
+       
+<p>Assign two abstract objects.</p>
+    
+<h4>Arguments</h4>      <table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
+<tbody>
+<tr>
+  <td><span class="anchor" ></span>class(<a href='../type/object.html'>object</a>),</td>
+<td>intent(inout)</td>
+  <td></td>  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+</tr>
+<tr>
+  <td><span class="anchor" ></span>class(<a href='../type/object.html'>object</a>),</td>
+<td>intent(in)</td>
+  <td></td>  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Rigth hand side.</p></td>
+</tr>
+</tbody>
+</table>
+
+
+  </div>
+  </div>
+
+    </section>    
+    <br>
+    
+    </div>
+  </div>
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-6"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2022 
+</p>
+        </div>
+        <div class="col-xs-6 col-md-6">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+          </p>
+        </div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+  </body>
+</html>

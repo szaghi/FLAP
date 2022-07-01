@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta name="description" content="Fortran command Line Arguments Parser for poor people">
+    <meta name="author" content="Stefano Zaghi" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>flap_utils_m.f90 &ndash; FLAP</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">FLAP </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+            <li><a href="../lists/files.html">Source Files</a></li>
+            <li><a href="../lists/modules.html">Modules</a></li>
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+                   <li><a href="../lists/types.html">Derived Types</a></li>
+            <li><a href="../lists/programs.html">Programs</a></li>
+       
+            </ul>
+        
+            </li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+                             <li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/programs.html">Programs</a></li>
+          </ul>
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+  <div class="row">
+    <h1>flap_utils_m.f90
+    <small>Source File</small>
+    </h1>
+    <div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 3.1% of total for source files.">144 statements</a>
+     </li> 
+    <li><i class="fa fa-code"></i><a href="../src/flap_utils_m.f90"> Source File</a></li>
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+     <li class="active">flap_utils_m.f90</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    <div id="sidebar">
+  <h3>Contents</h3>
+ 
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-0">Modules</a></h3></div>
+  <div id="mods-0" class="panel-collapse collapse">
+    <div class="list-group">
+      <a class="list-group-item" href="../module/flap_utils_m.html">flap_utils_m</a>
+    </div>
+  </div>
+</div>
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/flap_utils_m.f90.html#src">flap_utils_m.f90</a>
+  </div>
+</div>
+
+</div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      <p>FLAP utils.</p>
+      <br>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Files dependent on this one</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~flap_utils_m.f90~~AfferentGraph Pages: 1 -->
+<svg id="sourcefileflap_utils_mf90AfferentGraph" width="641pt" height="350pt"
+ viewBox="0.00 0.00 641.00 349.54" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph" class="graph" transform="scale(1.89 1.89) rotate(0) translate(4 658)">
+<title>sourcefile~~flap_utils_m.f90~~AfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-658 1210,-658 1210,4 -4,4"/>
+<!-- sourcefile~flap_utils_m.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_node1" class="node">
+<title>sourcefile~flap_utils_m.f90</title>
+<polygon fill="none" stroke="black" points="96,-299 0,-299 0,-275 96,-275 96,-299"/>
+<text text-anchor="middle" x="48" y="-284.6" font-family="Helvetica,sans-Serif" font-size="10.50">flap_utils_m.f90</text>
+</g>
+<!-- sourcefile~flap_command_line_argument_t.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_node2" class="node">
+<title>sourcefile~flap_command_line_argument_t.f90</title>
+<g id="a_sourcefile~~flap_utils_m.f90~~AfferentGraph_node2"><a xlink:href=".././sourcefile/flap_command_line_argument_t.f90.html" xlink:title="flap_command_line_argument_t.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="338,-319 132,-319 132,-295 338,-295 338,-319"/>
+<text text-anchor="middle" x="235" y="-304.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~flap_command_line_argument_t.f90&#45;&gt;sourcefile~flap_utils_m.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_edge1" class="edge">
+<title>sourcefile~flap_command_line_argument_t.f90&#45;&gt;sourcefile~flap_utils_m.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M131.76,-295.95C123.06,-295.01 114.48,-294.08 106.33,-293.2"/>
+<polygon fill="#000000" stroke="#000000" points="106.58,-289.7 96.26,-292.11 105.83,-296.66 106.58,-289.7"/>
+</g>
+<!-- sourcefile~flap_command_line_interface_t.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_node3" class="node">
+<title>sourcefile~flap_command_line_interface_t.f90</title>
+<g id="a_sourcefile~~flap_utils_m.f90~~AfferentGraph_node3"><a xlink:href=".././sourcefile/flap_command_line_interface_t.f90.html" xlink:title="flap_command_line_interface_t.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="857,-319 655,-319 655,-295 857,-295 857,-319"/>
+<text text-anchor="middle" x="756" y="-304.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~flap_command_line_interface_t.f90&#45;&gt;sourcefile~flap_utils_m.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_edge2" class="edge">
+<title>sourcefile~flap_command_line_interface_t.f90&#45;&gt;sourcefile~flap_utils_m.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M701.1,-294.9C649.25,-284.15 568.48,-269.72 497.5,-267"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M495.5,-267C355.75,-261.64 191.46,-273.74 106.46,-281.37"/>
+<polygon fill="#000000" stroke="#000000" points="105.89,-277.91 96.24,-282.3 106.52,-284.88 105.89,-277.91"/>
+</g>
+<!-- sourcefile~flap_command_line_interface_t.f90&#45;&gt;sourcefile~flap_command_line_argument_t.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_edge3" class="edge">
+<title>sourcefile~flap_command_line_interface_t.f90&#45;&gt;sourcefile~flap_command_line_argument_t.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M495.5,-267C423.82,-264.25 342.21,-280 289.97,-292.54"/>
+<polygon fill="#000000" stroke="#000000" points="289.12,-289.14 280.24,-294.92 290.79,-295.94 289.12,-289.14"/>
+</g>
+<!-- sourcefile~flap_command_line_arguments_group_t.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_node5" class="node">
+<title>sourcefile~flap_command_line_arguments_group_t.f90</title>
+<g id="a_sourcefile~~flap_utils_m.f90~~AfferentGraph_node5"><a xlink:href=".././sourcefile/flap_command_line_arguments_group_t.f90.html" xlink:title="flap_command_line_arguments_group_t.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="619,-319 374,-319 374,-295 619,-295 619,-319"/>
+<text text-anchor="middle" x="496.5" y="-304.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_arguments_group_t.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~flap_command_line_interface_t.f90&#45;&gt;sourcefile~flap_command_line_arguments_group_t.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_edge23" class="edge">
+<title>sourcefile~flap_command_line_interface_t.f90&#45;&gt;sourcefile~flap_command_line_arguments_group_t.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M654.71,-307C646.47,-307 638.08,-307 629.66,-307"/>
+<polygon fill="#000000" stroke="#000000" points="629.4,-303.5 619.4,-307 629.4,-310.5 629.4,-303.5"/>
+</g>
+<!-- sourcefile~flap.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_node4" class="node">
+<title>sourcefile~flap.f90</title>
+<g id="a_sourcefile~~flap_utils_m.f90~~AfferentGraph_node4"><a xlink:href=".././sourcefile/flap.f90.html" xlink:title="flap.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="947,-339 893,-339 893,-315 947,-315 947,-339"/>
+<text text-anchor="middle" x="920" y="-324.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~flap.f90&#45;&gt;sourcefile~flap_command_line_argument_t.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_edge4" class="edge">
+<title>sourcefile~flap.f90&#45;&gt;sourcefile~flap_command_line_argument_t.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M755,-347C585.5,-350.77 542.69,-345 374,-328 355.09,-326.1 334.82,-323.39 315.8,-320.55"/>
+<polygon fill="#000000" stroke="#000000" points="316.09,-317.05 305.68,-319.01 315.04,-323.97 316.09,-317.05"/>
+</g>
+<!-- sourcefile~flap.f90&#45;&gt;sourcefile~flap_command_line_interface_t.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_edge6" class="edge">
+<title>sourcefile~flap.f90&#45;&gt;sourcefile~flap_command_line_interface_t.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M892.97,-323.79C884.7,-322.77 874.99,-321.57 864.62,-320.29"/>
+<polygon fill="#000000" stroke="#000000" points="864.85,-316.79 854.5,-319.04 863.99,-323.74 864.85,-316.79"/>
+</g>
+<!-- sourcefile~flap.f90&#45;&gt;sourcefile~flap_command_line_arguments_group_t.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_edge24" class="edge">
+<title>sourcefile~flap.f90&#45;&gt;sourcefile~flap_command_line_arguments_group_t.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M892.74,-331.89C860.8,-337.46 805.16,-345.93 757,-347"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M755,-347C719.74,-347.78 631.92,-332.78 568.64,-320.92"/>
+<polygon fill="#000000" stroke="#000000" points="569.18,-317.46 558.7,-319.05 567.88,-324.34 569.18,-317.46"/>
+</g>
+<!-- sourcefile~flap_command_line_arguments_group_t.f90&#45;&gt;sourcefile~flap_command_line_argument_t.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_edge5" class="edge">
+<title>sourcefile~flap_command_line_arguments_group_t.f90&#45;&gt;sourcefile~flap_command_line_argument_t.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M373.73,-307C365.3,-307 356.83,-307 348.46,-307"/>
+<polygon fill="#000000" stroke="#000000" points="348.3,-303.5 338.3,-307 348.3,-310.5 348.3,-303.5"/>
+</g>
+<!-- sourcefile~flap_test_hidden.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_node6" class="node">
+<title>sourcefile~flap_test_hidden.f90</title>
+<g id="a_sourcefile~~flap_utils_m.f90~~AfferentGraph_node6"><a xlink:href=".././sourcefile/flap_test_hidden.f90.html" xlink:title="flap_test_hidden.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1154.5,-654 1034.5,-654 1034.5,-630 1154.5,-630 1154.5,-654"/>
+<text text-anchor="middle" x="1094.5" y="-639.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_hidden.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~flap_test_hidden.f90&#45;&gt;sourcefile~flap.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_edge7" class="edge">
+<title>sourcefile~flap_test_hidden.f90&#45;&gt;sourcefile~flap.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1034.23,-643.1C1015.67,-640.48 996.53,-634.26 983,-621 944.07,-582.84 927.38,-411.05 922.57,-349.24"/>
+<polygon fill="#000000" stroke="#000000" points="926.04,-348.75 921.8,-339.04 919.06,-349.27 926.04,-348.75"/>
+</g>
+<!-- sourcefile~flap_test_basic.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_node7" class="node">
+<title>sourcefile~flap_test_basic.f90</title>
+<g id="a_sourcefile~~flap_utils_m.f90~~AfferentGraph_node7"><a xlink:href=".././sourcefile/flap_test_basic.f90.html" xlink:title="flap_test_basic.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1150,-612 1039,-612 1039,-588 1150,-588 1150,-612"/>
+<text text-anchor="middle" x="1094.5" y="-597.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_basic.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~flap_test_basic.f90&#45;&gt;sourcefile~flap.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_edge8" class="edge">
+<title>sourcefile~flap_test_basic.f90&#45;&gt;sourcefile~flap.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1038.77,-601.39C1018.94,-599.12 997.81,-593.04 983,-579 949.5,-547.25 929.91,-404.91 923.42,-349.33"/>
+<polygon fill="#000000" stroke="#000000" points="926.87,-348.69 922.27,-339.14 919.92,-349.47 926.87,-348.69"/>
+</g>
+<!-- sourcefile~flap_test_choices_logical.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_node8" class="node">
+<title>sourcefile~flap_test_choices_logical.f90</title>
+<g id="a_sourcefile~~flap_utils_m.f90~~AfferentGraph_node8"><a xlink:href=".././sourcefile/flap_test_choices_logical.f90.html" xlink:title="flap_test_choices_logical.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1176.5,-570 1012.5,-570 1012.5,-546 1176.5,-546 1176.5,-570"/>
+<text text-anchor="middle" x="1094.5" y="-555.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_choices_logical.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~flap_test_choices_logical.f90&#45;&gt;sourcefile~flap.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_edge9" class="edge">
+<title>sourcefile~flap_test_choices_logical.f90&#45;&gt;sourcefile~flap.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1012.23,-553.29C1001.48,-549.75 991.32,-544.54 983,-537 928.3,-487.48 920.91,-392.33 920.53,-349.21"/>
+<polygon fill="#000000" stroke="#000000" points="924.03,-349.21 920.56,-339.2 917.03,-349.18 924.03,-349.21"/>
+</g>
+<!-- sourcefile~flap_test_string.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_node9" class="node">
+<title>sourcefile~flap_test_string.f90</title>
+<g id="a_sourcefile~~flap_utils_m.f90~~AfferentGraph_node9"><a xlink:href=".././sourcefile/flap_test_string.f90.html" xlink:title="flap_test_string.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1151,-528 1038,-528 1038,-504 1151,-504 1151,-528"/>
+<text text-anchor="middle" x="1094.5" y="-513.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_string.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~flap_test_string.f90&#45;&gt;sourcefile~flap.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_edge11" class="edge">
+<title>sourcefile~flap_test_string.f90&#45;&gt;sourcefile~flap.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1037.87,-516.28C1018.63,-513.76 998.13,-507.81 983,-495 938.92,-457.68 926.16,-386.05 922.49,-349.56"/>
+<polygon fill="#000000" stroke="#000000" points="925.96,-349.1 921.61,-339.44 918.98,-349.71 925.96,-349.1"/>
+</g>
+<!-- sourcefile~flap_test_duplicated_clas.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_node10" class="node">
+<title>sourcefile~flap_test_duplicated_clas.f90</title>
+<g id="a_sourcefile~~flap_utils_m.f90~~AfferentGraph_node10"><a xlink:href=".././sourcefile/flap_test_duplicated_clas.f90.html" xlink:title="flap_test_duplicated_clas.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1177.5,-486 1011.5,-486 1011.5,-462 1177.5,-462 1177.5,-486"/>
+<text text-anchor="middle" x="1094.5" y="-471.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_duplicated_clas.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~flap_test_duplicated_clas.f90&#45;&gt;sourcefile~flap.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_edge20" class="edge">
+<title>sourcefile~flap_test_duplicated_clas.f90&#45;&gt;sourcefile~flap.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1011.35,-467.34C1001.16,-464.01 991.39,-459.39 983,-453 949.11,-427.2 932.6,-377.95 925.54,-349.25"/>
+<polygon fill="#000000" stroke="#000000" points="928.91,-348.33 923.27,-339.36 922.09,-349.89 928.91,-348.33"/>
+</g>
+<!-- sourcefile~flap_test_group_examples.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_node11" class="node">
+<title>sourcefile~flap_test_group_examples.f90</title>
+<g id="a_sourcefile~~flap_utils_m.f90~~AfferentGraph_node11"><a xlink:href=".././sourcefile/flap_test_group_examples.f90.html" xlink:title="flap_test_group_examples.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1179.5,-444 1009.5,-444 1009.5,-420 1179.5,-420 1179.5,-444"/>
+<text text-anchor="middle" x="1094.5" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_group_examples.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~flap_test_group_examples.f90&#45;&gt;sourcefile~flap.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_edge12" class="edge">
+<title>sourcefile~flap_test_group_examples.f90&#45;&gt;sourcefile~flap.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1009.48,-423C1000.15,-420.01 991.1,-416.09 983,-411 958.98,-395.89 941.15,-367.85 930.93,-348.34"/>
+<polygon fill="#000000" stroke="#000000" points="934,-346.67 926.4,-339.29 927.74,-349.8 934,-346.67"/>
+</g>
+<!-- sourcefile~flap_test_ignore_unknown_clas.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_node12" class="node">
+<title>sourcefile~flap_test_ignore_unknown_clas.f90</title>
+<g id="a_sourcefile~~flap_utils_m.f90~~AfferentGraph_node12"><a xlink:href=".././sourcefile/flap_test_ignore_unknown_clas.f90.html" xlink:title="flap_test_ignore_unknown_clas.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1192.5,-402 996.5,-402 996.5,-378 1192.5,-378 1192.5,-402"/>
+<text text-anchor="middle" x="1094.5" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_ignore_unknown_clas.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~flap_test_ignore_unknown_clas.f90&#45;&gt;sourcefile~flap.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_edge13" class="edge">
+<title>sourcefile~flap_test_ignore_unknown_clas.f90&#45;&gt;sourcefile~flap.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1010.06,-377.95C1000.77,-375.49 991.57,-372.54 983,-369 968.83,-363.15 954.55,-353.77 943.28,-345.36"/>
+<polygon fill="#000000" stroke="#000000" points="945.35,-342.54 935.3,-339.2 941.07,-348.08 945.35,-342.54"/>
+</g>
+<!-- sourcefile~flap_test_ansi_color_style.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_node13" class="node">
+<title>sourcefile~flap_test_ansi_color_style.f90</title>
+<g id="a_sourcefile~~flap_utils_m.f90~~AfferentGraph_node13"><a xlink:href=".././sourcefile/flap_test_ansi_color_style.f90.html" xlink:title="flap_test_ansi_color_style.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1178,-360 1011,-360 1011,-336 1178,-336 1178,-360"/>
+<text text-anchor="middle" x="1094.5" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_ansi_color_style.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~flap_test_ansi_color_style.f90&#45;&gt;sourcefile~flap.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_edge14" class="edge">
+<title>sourcefile~flap_test_ansi_color_style.f90&#45;&gt;sourcefile~flap.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1010.79,-337.93C992.1,-335.66 973.19,-333.35 957.58,-331.45"/>
+<polygon fill="#000000" stroke="#000000" points="957.69,-327.94 947.34,-330.21 956.84,-334.89 957.69,-327.94"/>
+</g>
+<!-- sourcefile~flap_test_group.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_node14" class="node">
+<title>sourcefile~flap_test_group.f90</title>
+<g id="a_sourcefile~~flap_utils_m.f90~~AfferentGraph_node14"><a xlink:href=".././sourcefile/flap_test_group.f90.html" xlink:title="flap_test_group.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1151.5,-318 1037.5,-318 1037.5,-294 1151.5,-294 1151.5,-318"/>
+<text text-anchor="middle" x="1094.5" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_group.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~flap_test_group.f90&#45;&gt;sourcefile~flap.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_edge15" class="edge">
+<title>sourcefile~flap_test_group.f90&#45;&gt;sourcefile~flap.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1037.49,-312.82C1011.22,-316.02 980.65,-319.74 957.43,-322.57"/>
+<polygon fill="#000000" stroke="#000000" points="956.82,-319.11 947.31,-323.8 957.66,-326.06 956.82,-319.11"/>
+</g>
+<!-- sourcefile~flap_test_save_bash_completion.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_node15" class="node">
+<title>sourcefile~flap_test_save_bash_completion.f90</title>
+<g id="a_sourcefile~~flap_utils_m.f90~~AfferentGraph_node15"><a xlink:href=".././sourcefile/flap_test_save_bash_completion.f90.html" xlink:title="flap_test_save_bash_completion.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1196.5,-276 992.5,-276 992.5,-252 1196.5,-252 1196.5,-276"/>
+<text text-anchor="middle" x="1094.5" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_save_bash_completion.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~flap_test_save_bash_completion.f90&#45;&gt;sourcefile~flap.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_edge16" class="edge">
+<title>sourcefile~flap_test_save_bash_completion.f90&#45;&gt;sourcefile~flap.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1010.06,-276.05C1000.77,-278.51 991.57,-281.46 983,-285 968.83,-290.85 954.55,-300.23 943.28,-308.64"/>
+<polygon fill="#000000" stroke="#000000" points="941.07,-305.92 935.3,-314.8 945.35,-311.46 941.07,-305.92"/>
+</g>
+<!-- sourcefile~flap_test_nargs_insufficient.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_node16" class="node">
+<title>sourcefile~flap_test_nargs_insufficient.f90</title>
+<g id="a_sourcefile~~flap_utils_m.f90~~AfferentGraph_node16"><a xlink:href=".././sourcefile/flap_test_nargs_insufficient.f90.html" xlink:title="flap_test_nargs_insufficient.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1183,-234 1006,-234 1006,-210 1183,-210 1183,-234"/>
+<text text-anchor="middle" x="1094.5" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_nargs_insufficient.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~flap_test_nargs_insufficient.f90&#45;&gt;sourcefile~flap.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_edge17" class="edge">
+<title>sourcefile~flap_test_nargs_insufficient.f90&#45;&gt;sourcefile~flap.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1005.78,-232.24C997.76,-235.05 990.03,-238.58 983,-243 958.98,-258.11 941.15,-286.15 930.93,-305.66"/>
+<polygon fill="#000000" stroke="#000000" points="927.74,-304.2 926.4,-314.71 934,-307.33 927.74,-304.2"/>
+</g>
+<!-- sourcefile~flap_test_save_usage_to_markdown.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_node17" class="node">
+<title>sourcefile~flap_test_save_usage_to_markdown.f90</title>
+<g id="a_sourcefile~~flap_utils_m.f90~~AfferentGraph_node17"><a xlink:href=".././sourcefile/flap_test_save_usage_to_markdown.f90.html" xlink:title="flap_test_save_usage_to_markdown.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1206,-192 983,-192 983,-168 1206,-168 1206,-192"/>
+<text text-anchor="middle" x="1094.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_save_usage_to_markdown.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~flap_test_save_usage_to_markdown.f90&#45;&gt;sourcefile~flap.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_edge18" class="edge">
+<title>sourcefile~flap_test_save_usage_to_markdown.f90&#45;&gt;sourcefile~flap.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M997.83,-192.03C992.58,-194.55 987.58,-197.51 983,-201 949.11,-226.8 932.6,-276.05 925.54,-304.75"/>
+<polygon fill="#000000" stroke="#000000" points="922.09,-304.11 923.27,-314.64 928.91,-305.67 922.09,-304.11"/>
+</g>
+<!-- sourcefile~flap_test_save_man_page.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_node18" class="node">
+<title>sourcefile~flap_test_save_man_page.f90</title>
+<g id="a_sourcefile~~flap_utils_m.f90~~AfferentGraph_node18"><a xlink:href=".././sourcefile/flap_test_save_man_page.f90.html" xlink:title="flap_test_save_man_page.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1179,-150 1010,-150 1010,-126 1179,-126 1179,-150"/>
+<text text-anchor="middle" x="1094.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_save_man_page.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~flap_test_save_man_page.f90&#45;&gt;sourcefile~flap.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_edge19" class="edge">
+<title>sourcefile~flap_test_save_man_page.f90&#45;&gt;sourcefile~flap.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1009.87,-144.16C1000.09,-147.59 990.82,-152.38 983,-159 938.92,-196.32 926.16,-267.95 922.49,-304.44"/>
+<polygon fill="#000000" stroke="#000000" points="918.98,-304.29 921.61,-314.56 925.96,-304.9 918.98,-304.29"/>
+</g>
+<!-- sourcefile~flap_test_value_missing.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_node19" class="node">
+<title>sourcefile~flap_test_value_missing.f90</title>
+<g id="a_sourcefile~~flap_utils_m.f90~~AfferentGraph_node19"><a xlink:href=".././sourcefile/flap_test_value_missing.f90.html" xlink:title="flap_test_value_missing.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1173.5,-108 1015.5,-108 1015.5,-84 1173.5,-84 1173.5,-108"/>
+<text text-anchor="middle" x="1094.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_value_missing.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~flap_test_value_missing.f90&#45;&gt;sourcefile~flap.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_edge10" class="edge">
+<title>sourcefile~flap_test_value_missing.f90&#45;&gt;sourcefile~flap.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1015.33,-99.73C1003.44,-103.28 992.12,-108.74 983,-117 928.3,-166.52 920.91,-261.67 920.53,-304.79"/>
+<polygon fill="#000000" stroke="#000000" points="917.03,-304.82 920.56,-314.8 924.03,-304.79 917.03,-304.82"/>
+</g>
+<!-- sourcefile~flap_test_nested.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_node20" class="node">
+<title>sourcefile~flap_test_nested.f90</title>
+<g id="a_sourcefile~~flap_utils_m.f90~~AfferentGraph_node20"><a xlink:href=".././sourcefile/flap_test_nested.f90.html" xlink:title="flap_test_nested.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1154,-66 1035,-66 1035,-42 1154,-42 1154,-66"/>
+<text text-anchor="middle" x="1094.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_nested.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~flap_test_nested.f90&#45;&gt;sourcefile~flap.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_edge21" class="edge">
+<title>sourcefile~flap_test_nested.f90&#45;&gt;sourcefile~flap.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1034.77,-53.12C1016.14,-55.73 996.82,-61.9 983,-75 949.5,-106.75 929.91,-249.09 923.42,-304.67"/>
+<polygon fill="#000000" stroke="#000000" points="919.92,-304.53 922.27,-314.86 926.87,-305.31 919.92,-304.53"/>
+</g>
+<!-- sourcefile~flap_test_minimal.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_node21" class="node">
+<title>sourcefile~flap_test_minimal.f90</title>
+<g id="a_sourcefile~~flap_utils_m.f90~~AfferentGraph_node21"><a xlink:href=".././sourcefile/flap_test_minimal.f90.html" xlink:title="flap_test_minimal.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1158,-24 1031,-24 1031,0 1158,0 1158,-24"/>
+<text text-anchor="middle" x="1094.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_minimal.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~flap_test_minimal.f90&#45;&gt;sourcefile~flap.f90 -->
+<g id="sourcefile~~flap_utils_m.f90~~AfferentGraph_edge22" class="edge">
+<title>sourcefile~flap_test_minimal.f90&#45;&gt;sourcefile~flap.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1030.78,-11.42C1013.32,-14.31 995.69,-20.56 983,-33 944.07,-71.16 927.38,-242.95 922.57,-304.76"/>
+<polygon fill="#000000" stroke="#000000" points="919.06,-304.73 921.8,-314.96 926.04,-305.25 919.06,-304.73"/>
+</g>
+</g>
+</svg>
+</div><script>var pansourcefileflap_utils_mf90AfferentGraph = svgPanZoom('#sourcefileflap_utils_mf90AfferentGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="71,-24 0,-24 0,0 71,0 71,-24"/>
+<text text-anchor="middle" x="35.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 89.5,-24 89.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a file to a file which it depends on. A file
+    is dependent upon another if the latter must be compiled before the former
+    can be.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+<br>
+    <section class="visible-xs visible-sm hidden-md">
+      <h3>Contents</h3>
+ 
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-1">Modules</a></h3></div>
+  <div id="mods-1" class="panel-collapse collapse">
+    <div class="list-group">
+      <a class="list-group-item" href="../module/flap_utils_m.html">flap_utils_m</a>
+    </div>
+  </div>
+</div>
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/flap_utils_m.f90.html#src">flap_utils_m.f90</a>
+  </div>
+</div>
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    <section>
+      <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl"><pre><span></span><a id="ln-1" name="ln-1" href="#ln-1"></a><span class="c">!&lt; FLAP utils.</span>
+<a id="ln-2" name="ln-2" href="#ln-2"></a><span class="k">module </span><span class="n">flap_utils_m</span><span class="w"></span>
+<a id="ln-3" name="ln-3" href="#ln-3"></a><span class="c">!&lt; FLAP utils.</span>
+<a id="ln-4" name="ln-4" href="#ln-4"></a><span class="k">use </span><span class="n">penf</span><span class="w"></span>
+<a id="ln-5" name="ln-5" href="#ln-5"></a>
+<a id="ln-6" name="ln-6" href="#ln-6"></a><span class="k">implicit none</span>
+<a id="ln-7" name="ln-7" href="#ln-7"></a><span class="k">private</span>
+<a id="ln-8" name="ln-8" href="#ln-8"></a><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="nb">count</span>
+<a id="ln-9" name="ln-9" href="#ln-9"></a><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">replace</span><span class="w"></span>
+<a id="ln-10" name="ln-10" href="#ln-10"></a><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">replace_all</span><span class="w"></span>
+<a id="ln-11" name="ln-11" href="#ln-11"></a><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">tokenize</span><span class="w"></span>
+<a id="ln-12" name="ln-12" href="#ln-12"></a><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">unique</span><span class="w"></span>
+<a id="ln-13" name="ln-13" href="#ln-13"></a><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">upper_case</span><span class="w"></span>
+<a id="ln-14" name="ln-14" href="#ln-14"></a><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">wstrip</span><span class="w"></span>
+<a id="ln-15" name="ln-15" href="#ln-15"></a>
+<a id="ln-16" name="ln-16" href="#ln-16"></a><span class="k">interface </span><span class="nb">count</span><span class="w"></span>
+<a id="ln-17" name="ln-17" href="#ln-17"></a><span class="w">  </span><span class="c">!&lt; Overload intrinsic function count for counting substring occurences into strings.</span>
+<a id="ln-18" name="ln-18" href="#ln-18"></a><span class="w">  </span><span class="k">module procedure </span><span class="n">count_substring</span><span class="w"></span>
+<a id="ln-19" name="ln-19" href="#ln-19"></a><span class="k">endinterface</span>
+<a id="ln-20" name="ln-20" href="#ln-20"></a><span class="k">contains</span>
+<a id="ln-21" name="ln-21" href="#ln-21"></a><span class="k">  elemental function </span><span class="n">count_substring</span><span class="p">(</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">substring</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">No</span><span class="p">)</span><span class="w"></span>
+<a id="ln-22" name="ln-22" href="#ln-22"></a><span class="w">  </span><span class="c">!&lt; Count the number of occurences of a substring into a string.</span>
+<a id="ln-23" name="ln-23" href="#ln-23"></a><span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">string</span><span class="w">    </span><span class="c">!&lt; String.</span>
+<a id="ln-24" name="ln-24" href="#ln-24"></a><span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">substring</span><span class="w"> </span><span class="c">!&lt; Substring.</span>
+<a id="ln-25" name="ln-25" href="#ln-25"></a><span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">             </span><span class="kd">::</span><span class="w"> </span><span class="n">No</span><span class="w">        </span><span class="c">!&lt; Number of occurrences.</span>
+<a id="ln-26" name="ln-26" href="#ln-26"></a><span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">             </span><span class="kd">::</span><span class="w"> </span><span class="n">c1</span><span class="w">        </span><span class="c">!&lt; Counters.</span>
+<a id="ln-27" name="ln-27" href="#ln-27"></a><span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">             </span><span class="kd">::</span><span class="w"> </span><span class="n">c2</span><span class="w">        </span><span class="c">!&lt; Counters.</span>
+<a id="ln-28" name="ln-28" href="#ln-28"></a>
+<a id="ln-29" name="ln-29" href="#ln-29"></a><span class="w">  </span><span class="n">No</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<a id="ln-30" name="ln-30" href="#ln-30"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">substring</span><span class="p">)</span><span class="o">&gt;</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">))</span><span class="w"> </span><span class="k">return</span>
+<a id="ln-31" name="ln-31" href="#ln-31"></a><span class="k">  </span><span class="n">c1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<a id="ln-32" name="ln-32" href="#ln-32"></a><span class="w">  </span><span class="k">do</span>
+<a id="ln-33" name="ln-33" href="#ln-33"></a><span class="k">    </span><span class="n">c2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">index</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="n">string</span><span class="p">(</span><span class="n">c1</span><span class="p">:),</span><span class="w"> </span><span class="n">substring</span><span class="o">=</span><span class="n">substring</span><span class="p">)</span><span class="w"></span>
+<a id="ln-34" name="ln-34" href="#ln-34"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">c2</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">return</span>
+<a id="ln-35" name="ln-35" href="#ln-35"></a><span class="k">    </span><span class="n">No</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">No</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<a id="ln-36" name="ln-36" href="#ln-36"></a><span class="w">    </span><span class="n">c1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">c2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">substring</span><span class="p">)</span><span class="w"></span>
+<a id="ln-37" name="ln-37" href="#ln-37"></a><span class="w">  </span><span class="k">enddo</span>
+<a id="ln-38" name="ln-38" href="#ln-38"></a><span class="k">  endfunction </span><span class="n">count_substring</span><span class="w"></span>
+<a id="ln-39" name="ln-39" href="#ln-39"></a>
+<a id="ln-40" name="ln-40" href="#ln-40"></a><span class="w">  </span><span class="k">pure function </span><span class="n">replace</span><span class="p">(</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">substring</span><span class="p">,</span><span class="w"> </span><span class="n">restring</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">newstring</span><span class="p">)</span><span class="w"></span>
+<a id="ln-41" name="ln-41" href="#ln-41"></a><span class="w">  </span><span class="c">!&lt; Replace substring (only first occurrence) into a string.</span>
+<a id="ln-42" name="ln-42" href="#ln-42"></a><span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">  </span><span class="kd">::</span><span class="w"> </span><span class="n">string</span><span class="w">    </span><span class="c">!&lt; String to be modified.</span>
+<a id="ln-43" name="ln-43" href="#ln-43"></a><span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">  </span><span class="kd">::</span><span class="w"> </span><span class="n">substring</span><span class="w"> </span><span class="c">!&lt; Substring to be replaced.</span>
+<a id="ln-44" name="ln-44" href="#ln-44"></a><span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">  </span><span class="kd">::</span><span class="w"> </span><span class="n">restring</span><span class="w">  </span><span class="c">!&lt; String to be inserted.</span>
+<a id="ln-45" name="ln-45" href="#ln-45"></a><span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">newstring</span><span class="w"> </span><span class="c">!&lt; New modified string.</span>
+<a id="ln-46" name="ln-46" href="#ln-46"></a><span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                  </span><span class="kd">::</span><span class="w"> </span><span class="n">pos</span><span class="w">       </span><span class="c">!&lt; Position from which replace the substring.</span>
+<a id="ln-47" name="ln-47" href="#ln-47"></a>
+<a id="ln-48" name="ln-48" href="#ln-48"></a><span class="w">  </span><span class="n">pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">index</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">substring</span><span class="o">=</span><span class="n">substring</span><span class="p">)</span><span class="w"></span>
+<a id="ln-49" name="ln-49" href="#ln-49"></a><span class="w">  </span><span class="n">newstring</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">string</span><span class="w"></span>
+<a id="ln-50" name="ln-50" href="#ln-50"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pos</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-51" name="ln-51" href="#ln-51"></a><span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">pos</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-52" name="ln-52" href="#ln-52"></a><span class="k">      </span><span class="n">newstring</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">restring</span><span class="o">//</span><span class="n">string</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">substring</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">:)</span><span class="w"></span>
+<a id="ln-53" name="ln-53" href="#ln-53"></a><span class="w">    </span><span class="k">else</span>
+<a id="ln-54" name="ln-54" href="#ln-54"></a><span class="k">      </span><span class="n">newstring</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">string</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">pos</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="n">restring</span><span class="o">//</span><span class="n">string</span><span class="p">(</span><span class="n">pos</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="n">substring</span><span class="p">):)</span><span class="w"></span>
+<a id="ln-55" name="ln-55" href="#ln-55"></a><span class="w">    </span><span class="k">endif</span>
+<a id="ln-56" name="ln-56" href="#ln-56"></a><span class="k">  endif</span>
+<a id="ln-57" name="ln-57" href="#ln-57"></a><span class="k">  endfunction </span><span class="n">replace</span><span class="w"></span>
+<a id="ln-58" name="ln-58" href="#ln-58"></a>
+<a id="ln-59" name="ln-59" href="#ln-59"></a><span class="w">  </span><span class="k">pure function </span><span class="n">replace_all</span><span class="p">(</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">substring</span><span class="p">,</span><span class="w"> </span><span class="n">restring</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">newstring</span><span class="p">)</span><span class="w"></span>
+<a id="ln-60" name="ln-60" href="#ln-60"></a><span class="w">  </span><span class="c">!&lt; Replace substring (all occurrences) into a string.</span>
+<a id="ln-61" name="ln-61" href="#ln-61"></a><span class="w">  </span><span class="c">!&lt;</span>
+<a id="ln-62" name="ln-62" href="#ln-62"></a><span class="w">  </span><span class="c">!&lt; @note Leading and trailing white spaces are stripped out.</span>
+<a id="ln-63" name="ln-63" href="#ln-63"></a><span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">  </span><span class="kd">::</span><span class="w"> </span><span class="n">string</span><span class="w">             </span><span class="c">!&lt; String to be modified.</span>
+<a id="ln-64" name="ln-64" href="#ln-64"></a><span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">  </span><span class="kd">::</span><span class="w"> </span><span class="n">substring</span><span class="w">          </span><span class="c">!&lt; Substring to be replaced.</span>
+<a id="ln-65" name="ln-65" href="#ln-65"></a><span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">  </span><span class="kd">::</span><span class="w"> </span><span class="n">restring</span><span class="w">           </span><span class="c">!&lt; String to be inserted.</span>
+<a id="ln-66" name="ln-66" href="#ln-66"></a><span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">newstring</span><span class="w">          </span><span class="c">!&lt; New modified string.</span>
+<a id="ln-67" name="ln-67" href="#ln-67"></a>
+<a id="ln-68" name="ln-68" href="#ln-68"></a><span class="w">  </span><span class="n">newstring</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">wstrip</span><span class="p">(</span><span class="n">string</span><span class="p">)</span><span class="w"></span>
+<a id="ln-69" name="ln-69" href="#ln-69"></a><span class="w">  </span><span class="k">do</span>
+<a id="ln-70" name="ln-70" href="#ln-70"></a><span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="nb">index</span><span class="p">(</span><span class="n">newstring</span><span class="p">,</span><span class="w"> </span><span class="n">substring</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-71" name="ln-71" href="#ln-71"></a><span class="k">      </span><span class="n">newstring</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">replace</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="n">newstring</span><span class="p">,</span><span class="w"> </span><span class="n">substring</span><span class="o">=</span><span class="n">substring</span><span class="p">,</span><span class="w"> </span><span class="n">restring</span><span class="o">=</span><span class="n">restring</span><span class="p">)</span><span class="w"></span>
+<a id="ln-72" name="ln-72" href="#ln-72"></a><span class="w">    </span><span class="k">else</span>
+<a id="ln-73" name="ln-73" href="#ln-73"></a><span class="k">      exit</span>
+<a id="ln-74" name="ln-74" href="#ln-74"></a><span class="k">    endif</span>
+<a id="ln-75" name="ln-75" href="#ln-75"></a><span class="k">  enddo</span>
+<a id="ln-76" name="ln-76" href="#ln-76"></a><span class="k">  endfunction </span><span class="n">replace_all</span><span class="w"></span>
+<a id="ln-77" name="ln-77" href="#ln-77"></a>
+<a id="ln-78" name="ln-78" href="#ln-78"></a><span class="w">  </span><span class="k">pure subroutine </span><span class="n">tokenize</span><span class="p">(</span><span class="n">strin</span><span class="p">,</span><span class="w"> </span><span class="n">delimiter</span><span class="p">,</span><span class="w"> </span><span class="n">toks</span><span class="p">,</span><span class="w"> </span><span class="n">Nt</span><span class="p">)</span><span class="w"></span>
+<a id="ln-79" name="ln-79" href="#ln-79"></a><span class="w">  </span><span class="c">!&lt; Tokenize a string in order to parse it.</span>
+<a id="ln-80" name="ln-80" href="#ln-80"></a><span class="w">  </span><span class="c">!&lt;</span>
+<a id="ln-81" name="ln-81" href="#ln-81"></a><span class="w">  </span><span class="c">!&lt; @note The dummy array containing tokens must allocatable and its character elements must have the same length of the input</span>
+<a id="ln-82" name="ln-82" href="#ln-82"></a><span class="w">  </span><span class="c">!&lt; string. If the length of the delimiter is higher than the input string one then the output tokens array is allocated with</span>
+<a id="ln-83" name="ln-83" href="#ln-83"></a><span class="w">  </span><span class="c">!&lt; only one element set to input string.</span>
+<a id="ln-84" name="ln-84" href="#ln-84"></a><span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="w">          </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">               </span><span class="kd">::</span><span class="w"> </span><span class="n">strin</span><span class="w">     </span><span class="c">!&lt; String to be tokenized.</span>
+<a id="ln-85" name="ln-85" href="#ln-85"></a><span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="w">          </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">               </span><span class="kd">::</span><span class="w"> </span><span class="n">delimiter</span><span class="w"> </span><span class="c">!&lt; Delimiter of tokens.</span>
+<a id="ln-86" name="ln-86" href="#ln-86"></a><span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">strin</span><span class="p">)),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">toks</span><span class="p">(:)</span><span class="w">   </span><span class="c">!&lt; Tokens.</span>
+<a id="ln-87" name="ln-87" href="#ln-87"></a><span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span><span class="w">              </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">Nt</span><span class="w">        </span><span class="c">!&lt; Number of tokens.</span>
+<a id="ln-88" name="ln-88" href="#ln-88"></a><span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">strin</span><span class="p">))</span><span class="w">                           </span><span class="kd">::</span><span class="w"> </span><span class="n">strsub</span><span class="w">    </span><span class="c">!&lt; Temporary string.</span>
+<a id="ln-89" name="ln-89" href="#ln-89"></a><span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                                        </span><span class="kd">::</span><span class="w"> </span><span class="n">dlen</span><span class="w">      </span><span class="c">!&lt; Delimiter length.</span>
+<a id="ln-90" name="ln-90" href="#ln-90"></a><span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                                        </span><span class="kd">::</span><span class="w"> </span><span class="n">c</span><span class="w">         </span><span class="c">!&lt; Counter.</span>
+<a id="ln-91" name="ln-91" href="#ln-91"></a><span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                                        </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span><span class="w">         </span><span class="c">!&lt; Counter.</span>
+<a id="ln-92" name="ln-92" href="#ln-92"></a><span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                                        </span><span class="kd">::</span><span class="w"> </span><span class="n">t</span><span class="w">         </span><span class="c">!&lt; Counter.</span>
+<a id="ln-93" name="ln-93" href="#ln-93"></a>
+<a id="ln-94" name="ln-94" href="#ln-94"></a><span class="w">  </span><span class="c">! initialization</span>
+<a id="ln-95" name="ln-95" href="#ln-95"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">toks</span><span class="p">))</span><span class="w"> </span><span class="k">deallocate</span><span class="p">(</span><span class="n">toks</span><span class="p">)</span><span class="w"></span>
+<a id="ln-96" name="ln-96" href="#ln-96"></a><span class="w">  </span><span class="n">strsub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">strin</span><span class="w"></span>
+<a id="ln-97" name="ln-97" href="#ln-97"></a><span class="w">  </span><span class="n">dlen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">delimiter</span><span class="p">)</span><span class="w"></span>
+<a id="ln-98" name="ln-98" href="#ln-98"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dlen</span><span class="o">&gt;</span><span class="nb">len</span><span class="p">(</span><span class="n">strin</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-99" name="ln-99" href="#ln-99"></a><span class="k">    allocate</span><span class="p">(</span><span class="n">toks</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="n">toks</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">strin</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">Nt</span><span class="p">))</span><span class="w"> </span><span class="n">Nt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">return</span>
+<a id="ln-100" name="ln-100" href="#ln-100"></a><span class="k">  endif</span><span class="w"></span>
+<a id="ln-101" name="ln-101" href="#ln-101"></a><span class="w">  </span><span class="c">! compute the number of tokens</span>
+<a id="ln-102" name="ln-102" href="#ln-102"></a><span class="w">  </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<a id="ln-103" name="ln-103" href="#ln-103"></a><span class="w">  </span><span class="k">do </span><span class="n">c</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">strsub</span><span class="p">)</span><span class="o">-</span><span class="n">dlen</span><span class="w"> </span><span class="c">! loop over string characters</span>
+<a id="ln-104" name="ln-104" href="#ln-104"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strsub</span><span class="p">(</span><span class="n">c</span><span class="p">:</span><span class="n">c</span><span class="o">+</span><span class="n">dlen</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">==</span><span class="n">delimiter</span><span class="p">)</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<a id="ln-105" name="ln-105" href="#ln-105"></a><span class="w">  </span><span class="k">enddo</span>
+<a id="ln-106" name="ln-106" href="#ln-106"></a><span class="k">  allocate</span><span class="p">(</span><span class="n">toks</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">n</span><span class="p">))</span><span class="w"></span>
+<a id="ln-107" name="ln-107" href="#ln-107"></a><span class="w">  </span><span class="c">! tokenization</span>
+<a id="ln-108" name="ln-108" href="#ln-108"></a><span class="w">  </span><span class="k">do </span><span class="n">t</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="w"> </span><span class="c">! loop over tokens</span>
+<a id="ln-109" name="ln-109" href="#ln-109"></a><span class="w">    </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">index</span><span class="p">(</span><span class="n">strsub</span><span class="p">,</span><span class="w"> </span><span class="n">delimiter</span><span class="p">)</span><span class="w"></span>
+<a id="ln-110" name="ln-110" href="#ln-110"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">c</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-111" name="ln-111" href="#ln-111"></a><span class="k">      </span><span class="n">toks</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">strsub</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">c</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<a id="ln-112" name="ln-112" href="#ln-112"></a><span class="w">      </span><span class="n">strsub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">strsub</span><span class="p">(</span><span class="n">c</span><span class="o">+</span><span class="n">dlen</span><span class="p">:)</span><span class="w"></span>
+<a id="ln-113" name="ln-113" href="#ln-113"></a><span class="w">    </span><span class="k">else</span>
+<a id="ln-114" name="ln-114" href="#ln-114"></a><span class="k">      </span><span class="n">toks</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">strsub</span><span class="w"></span>
+<a id="ln-115" name="ln-115" href="#ln-115"></a><span class="w">    </span><span class="k">endif</span>
+<a id="ln-116" name="ln-116" href="#ln-116"></a><span class="k">  enddo</span>
+<a id="ln-117" name="ln-117" href="#ln-117"></a><span class="k">  if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">Nt</span><span class="p">))</span><span class="w"> </span><span class="n">Nt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="w"></span>
+<a id="ln-118" name="ln-118" href="#ln-118"></a><span class="w">  </span><span class="k">endsubroutine </span><span class="n">tokenize</span><span class="w"></span>
+<a id="ln-119" name="ln-119" href="#ln-119"></a>
+<a id="ln-120" name="ln-120" href="#ln-120"></a><span class="w">  </span><span class="k">elemental function </span><span class="n">unique</span><span class="p">(</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">substring</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">uniq</span><span class="p">)</span><span class="w"></span>
+<a id="ln-121" name="ln-121" href="#ln-121"></a><span class="w">  </span><span class="c">!&lt; Reduce to one (unique) multiple (sequential) occurrences of a characters substring into a string.</span>
+<a id="ln-122" name="ln-122" href="#ln-122"></a><span class="w">  </span><span class="c">!&lt;</span>
+<a id="ln-123" name="ln-123" href="#ln-123"></a><span class="w">  </span><span class="c">!&lt; For example the string &#39; ab-cre-cre-ab&#39; is reduce to &#39;ab-cre-ab&#39; if the substring is &#39;-cre&#39;.</span>
+<a id="ln-124" name="ln-124" href="#ln-124"></a><span class="w">  </span><span class="c">!&lt; @note Eventual multiple trailing white space are not reduced to one occurrence.</span>
+<a id="ln-125" name="ln-125" href="#ln-125"></a><span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">string</span><span class="w">    </span><span class="c">!&lt; String to be parsed.</span>
+<a id="ln-126" name="ln-126" href="#ln-126"></a><span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">substring</span><span class="w"> </span><span class="c">!&lt; Substring which multiple occurences must be reduced to one.</span>
+<a id="ln-127" name="ln-127" href="#ln-127"></a><span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">))</span><span class="w">   </span><span class="kd">::</span><span class="w"> </span><span class="n">uniq</span><span class="w">      </span><span class="c">!&lt; String parsed.</span>
+<a id="ln-128" name="ln-128" href="#ln-128"></a><span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                 </span><span class="kd">::</span><span class="w"> </span><span class="n">Lsub</span><span class="w">      </span><span class="c">!&lt; Lenght of substring.</span>
+<a id="ln-129" name="ln-129" href="#ln-129"></a><span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                 </span><span class="kd">::</span><span class="w"> </span><span class="n">c1</span><span class="w">        </span><span class="c">!&lt; Counter.</span>
+<a id="ln-130" name="ln-130" href="#ln-130"></a><span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                 </span><span class="kd">::</span><span class="w"> </span><span class="n">c2</span><span class="w">        </span><span class="c">!&lt; Counter.</span>
+<a id="ln-131" name="ln-131" href="#ln-131"></a>
+<a id="ln-132" name="ln-132" href="#ln-132"></a><span class="w">  </span><span class="n">uniq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">string</span><span class="w"></span>
+<a id="ln-133" name="ln-133" href="#ln-133"></a><span class="w">  </span><span class="n">Lsub</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">substring</span><span class="p">)</span><span class="w"></span>
+<a id="ln-134" name="ln-134" href="#ln-134"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">Lsub</span><span class="o">&gt;</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">))</span><span class="w"> </span><span class="k">return</span>
+<a id="ln-135" name="ln-135" href="#ln-135"></a><span class="k">  </span><span class="n">c1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<a id="ln-136" name="ln-136" href="#ln-136"></a><span class="w">  </span><span class="n">Loop1</span><span class="p">:</span><span class="w"> </span><span class="k">do</span>
+<a id="ln-137" name="ln-137" href="#ln-137"></a><span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">c1</span><span class="o">&gt;=</span><span class="nb">len_trim</span><span class="p">(</span><span class="n">uniq</span><span class="p">))</span><span class="w"> </span><span class="k">exit </span><span class="n">Loop1</span><span class="w"></span>
+<a id="ln-138" name="ln-138" href="#ln-138"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">uniq</span><span class="p">(</span><span class="n">c1</span><span class="p">:</span><span class="n">c1</span><span class="o">+</span><span class="n">Lsub</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">==</span><span class="n">substring</span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="n">uniq</span><span class="p">(</span><span class="n">c1</span><span class="o">+</span><span class="n">Lsub</span><span class="p">:</span><span class="n">c1</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">Lsub</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">==</span><span class="n">substring</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-139" name="ln-139" href="#ln-139"></a><span class="k">      </span><span class="n">c2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Lsub</span><span class="w"></span>
+<a id="ln-140" name="ln-140" href="#ln-140"></a><span class="w">      </span><span class="n">Loop2</span><span class="p">:</span><span class="w"> </span><span class="k">do</span>
+<a id="ln-141" name="ln-141" href="#ln-141"></a><span class="k">        if</span><span class="w"> </span><span class="p">(</span><span class="n">c2</span><span class="o">&gt;=</span><span class="nb">len_trim</span><span class="p">(</span><span class="n">uniq</span><span class="p">))</span><span class="w"> </span><span class="k">exit </span><span class="n">Loop2</span><span class="w"></span>
+<a id="ln-142" name="ln-142" href="#ln-142"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">uniq</span><span class="p">(</span><span class="n">c2</span><span class="p">:</span><span class="n">c2</span><span class="o">+</span><span class="n">Lsub</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">==</span><span class="n">substring</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-143" name="ln-143" href="#ln-143"></a><span class="k">          </span><span class="n">c2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Lsub</span><span class="w"></span>
+<a id="ln-144" name="ln-144" href="#ln-144"></a><span class="w">        </span><span class="k">else</span>
+<a id="ln-145" name="ln-145" href="#ln-145"></a><span class="k">          exit </span><span class="n">Loop2</span><span class="w"></span>
+<a id="ln-146" name="ln-146" href="#ln-146"></a><span class="w">        </span><span class="k">endif</span>
+<a id="ln-147" name="ln-147" href="#ln-147"></a><span class="k">      enddo </span><span class="n">Loop2</span><span class="w"></span>
+<a id="ln-148" name="ln-148" href="#ln-148"></a><span class="w">      </span><span class="n">uniq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">uniq</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">c1</span><span class="p">)</span><span class="o">//</span><span class="n">uniq</span><span class="p">(</span><span class="n">c2</span><span class="p">:)</span><span class="w"></span>
+<a id="ln-149" name="ln-149" href="#ln-149"></a><span class="w">    </span><span class="k">else</span>
+<a id="ln-150" name="ln-150" href="#ln-150"></a><span class="k">      </span><span class="n">c1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Lsub</span><span class="w"></span>
+<a id="ln-151" name="ln-151" href="#ln-151"></a><span class="w">    </span><span class="k">endif</span>
+<a id="ln-152" name="ln-152" href="#ln-152"></a><span class="k">  enddo </span><span class="n">Loop1</span><span class="w"></span>
+<a id="ln-153" name="ln-153" href="#ln-153"></a><span class="w">  </span><span class="k">endfunction </span><span class="n">unique</span><span class="w"></span>
+<a id="ln-154" name="ln-154" href="#ln-154"></a>
+<a id="ln-155" name="ln-155" href="#ln-155"></a><span class="w">  </span><span class="k">elemental function </span><span class="n">upper_case</span><span class="p">(</span><span class="n">string</span><span class="p">)</span><span class="w"></span>
+<a id="ln-156" name="ln-156" href="#ln-156"></a><span class="w">  </span><span class="c">!&lt; Convert the lower case characters of a string to upper case one.</span>
+<a id="ln-157" name="ln-157" href="#ln-157"></a><span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">string</span><span class="w">                                        </span><span class="c">!&lt; String to be converted.</span>
+<a id="ln-158" name="ln-158" href="#ln-158"></a><span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">))</span><span class="w">   </span><span class="kd">::</span><span class="w"> </span><span class="n">upper_case</span><span class="w">                                    </span><span class="c">!&lt; Converted string.</span>
+<a id="ln-159" name="ln-159" href="#ln-159"></a><span class="w">  </span><span class="kt">integer</span><span class="w">                      </span><span class="kd">::</span><span class="w"> </span><span class="n">n1</span><span class="w">                                            </span><span class="c">!&lt; Characters counter.</span>
+<a id="ln-160" name="ln-160" href="#ln-160"></a><span class="w">  </span><span class="kt">integer</span><span class="w">                      </span><span class="kd">::</span><span class="w"> </span><span class="n">n2</span><span class="w">                                            </span><span class="c">!&lt; Characters counter.</span>
+<a id="ln-161" name="ln-161" href="#ln-161"></a><span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">26</span><span class="p">),</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">upper_alphabet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;ABCDEFGHIJKLMNOPQRSTUVWXYZ&#39;</span><span class="w"> </span><span class="c">!&lt; Upper case alphabet.</span>
+<a id="ln-162" name="ln-162" href="#ln-162"></a><span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">26</span><span class="p">),</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">lower_alphabet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;abcdefghijklmnopqrstuvwxyz&#39;</span><span class="w"> </span><span class="c">!&lt; Lower case alphabet.</span>
+<a id="ln-163" name="ln-163" href="#ln-163"></a>
+<a id="ln-164" name="ln-164" href="#ln-164"></a><span class="w">  </span><span class="n">upper_case</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">string</span><span class="w"></span>
+<a id="ln-165" name="ln-165" href="#ln-165"></a><span class="w">  </span><span class="k">do </span><span class="n">n1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span><span class="w"></span>
+<a id="ln-166" name="ln-166" href="#ln-166"></a><span class="w">    </span><span class="n">n2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">index</span><span class="p">(</span><span class="n">lower_alphabet</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n1</span><span class="p">))</span><span class="w"></span>
+<a id="ln-167" name="ln-167" href="#ln-167"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n2</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">upper_case</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">upper_alphabet</span><span class="p">(</span><span class="n">n2</span><span class="p">:</span><span class="n">n2</span><span class="p">)</span><span class="w"></span>
+<a id="ln-168" name="ln-168" href="#ln-168"></a><span class="w">  </span><span class="k">enddo</span>
+<a id="ln-169" name="ln-169" href="#ln-169"></a><span class="k">  endfunction </span><span class="n">upper_case</span><span class="w"></span>
+<a id="ln-170" name="ln-170" href="#ln-170"></a>
+<a id="ln-171" name="ln-171" href="#ln-171"></a><span class="w">  </span><span class="k">pure function </span><span class="n">wstrip</span><span class="p">(</span><span class="n">string</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">newstring</span><span class="p">)</span><span class="w"></span>
+<a id="ln-172" name="ln-172" href="#ln-172"></a><span class="w">  </span><span class="c">!&lt; Strip out leading and trailing white spaces from a string.</span>
+<a id="ln-173" name="ln-173" href="#ln-173"></a><span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">  </span><span class="kd">::</span><span class="w"> </span><span class="n">string</span><span class="w">    </span><span class="c">!&lt; String to be modified.</span>
+<a id="ln-174" name="ln-174" href="#ln-174"></a><span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">newstring</span><span class="w"> </span><span class="c">!&lt; New modified string.</span>
+<a id="ln-175" name="ln-175" href="#ln-175"></a>
+<a id="ln-176" name="ln-176" href="#ln-176"></a><span class="w">  </span><span class="k">allocate</span><span class="p">(</span><span class="n">newstring</span><span class="p">,</span><span class="w"> </span><span class="n">source</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">string</span><span class="p">)))</span><span class="w"></span>
+<a id="ln-177" name="ln-177" href="#ln-177"></a><span class="w">  </span><span class="k">endfunction </span><span class="n">wstrip</span><span class="w"></span>
+<a id="ln-178" name="ln-178" href="#ln-178"></a><span class="k">endmodule </span><span class="n">flap_utils_m</span><span class="w"></span>
+</pre></div>
+
+    </section>
+    </div>
+  </div>
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-6"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2022 
+</p>
+        </div>
+        <div class="col-xs-6 col-md-6">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+          </p>
+        </div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+  </body>
+</html>

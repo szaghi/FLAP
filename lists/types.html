@@ -4,21 +4,18 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	 
-	 <meta name="description" content="Fortran command Line Arguments Parser for poor people">
-    
-    <meta name="author" content="Chris MacMackin" >
+   <meta name="description" content="Fortran command Line Arguments Parser for poor people">
+    <meta name="author" content="Stefano Zaghi" >
     <link rel="icon" href="../favicon.png">
 
-    <title>
-All Types &ndash; FLAP
+    <title>All Types &ndash; FLAP
 </title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
     <link href="../css/font-awesome.min.css" rel="stylesheet">
     <link href="../css/local.css" rel="stylesheet">
-    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -28,13 +25,6 @@ All Types &ndash; FLAP
     
     <script src="../js/jquery-2.1.3.min.js"></script>
     <script src="../js/svg-pan-zoom.min.js"></script>
-
-    
-    <script src="../tipuesearch/tipuesearch_content.js"></script>
-    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
-    <script src="../tipuesearch/tipuesearch_set.js"></script>
-    <script src="../tipuesearch/tipuesearch.js"></script>
-    
 
   </head>
 
@@ -54,24 +44,27 @@ All Types &ndash; FLAP
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-				
-                
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
             <li><a href="../lists/files.html">Source Files</a></li>
-				
-				
             <li><a href="../lists/modules.html">Modules</a></li>
-				
-				
             <li><a href="../lists/procedures.html">Procedures</a></li>
-				
-								
-            <li><a href="../lists/types.html">Derived Types</a></li>
-				
-				
+                   <li><a href="../lists/types.html">Derived Types</a></li>
             <li><a href="../lists/programs.html">Programs</a></li>
-				
-          </ul>
+       
+            </ul>
         
+            </li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+                             <li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/programs.html">Programs</a></li>
+          </ul>
         <form action="../search.html" class="navbar-form navbar-right" role="search">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
@@ -80,13 +73,11 @@ All Types &ndash; FLAP
         <button type="submit" class="btn btn-default">Submit</button>
 -->
         </form>
-        
         </div><!--/.nav-collapse -->
       </div>
     </nav>
 
     <div class="container">
-    
       <div class="row">
         <div class="col-lg-12" id='text'>
 			 <h1>Derived Types</h1>
@@ -94,196 +85,156 @@ All Types &ndash; FLAP
 			 <thead>
 			 <tr><th>Type</th><th>Location</th><th>Extends</th><th>Description</th></tr>
 			 </thead><tbody>
-			 
-			   <tr><td><a href='../type/type_command_line_argument.html'>Type_Command_Line_Argument</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td><a href='../type/type_object.html'>Type_Object</a></td><td><p>Command line arguments (CLA).</p></td></tr>
-			 
-			   <tr><td><a href='../type/type_command_line_arguments_group.html'>Type_Command_Line_Arguments_Group</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td><a href='../type/type_object.html'>Type_Object</a></td><td><p>Group of CLAs for building nested commands.
- Free dynamic memory when finalizing.</p></td></tr>
-			 
-			   <tr><td><a href='../type/type_command_line_interface.html'>Type_Command_Line_Interface</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td><a href='../type/type_object.html'>Type_Object</a></td><td><p>Command Line Interface (CLI).
- Free dynamic memory when finalizing.</p></td></tr>
-			 
-			   <tr><td><a href='../type/type_object.html'>Type_Object</a></td><td><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></td><td>None</td><td><p>Abstract object defining data and methods that are common to CLA, CLAG and CLI.</p></td></tr>
-			 
+			   <tr><td><a href='../type/command_line_argument.html'>command_line_argument</a></td><td><a href='../module/flap_command_line_argument_t.html'>flap_command_line_argument_t</a></td><td><a href='../type/object.html'>object</a></td><td><p>Command Line Argument (CLA) class.</p><a href="../type/command_line_argument.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
+			   <tr><td><a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a></td><td><a href='../module/flap_command_line_arguments_group_t.html'>flap_command_line_arguments_group_t</a></td><td><a href='../type/object.html'>object</a></td><td><p>Command Line Arguments Group (CLAsG) class.</p><a href="../type/command_line_arguments_group.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
+			   <tr><td><a href='../type/command_line_interface.html'>command_line_interface</a></td><td><a href='../module/flap_command_line_interface_t.html'>flap_command_line_interface_t</a></td><td><a href='../type/object.html'>object</a></td><td><p>Command Line Interface (CLI) class.</p></td></tr>
+			   <tr><td><a href='../type/object.html'>object</a></td><td><a href='../module/flap_object_t.html'>flap_object_t</a></td><td>None</td><td><p>Base (abstract) class upon which FLAP&rsquo;s concrete classes are built.</p></td></tr>
+			   <tr><td><a href='../type/tester_t.html'>tester_t</a></td><td><a href='../module/tester.html'>tester</a></td><td>None</td><td><p>The main <strong>tester</strong> class.</p></td></tr>
 			 </tbody></table>
-             
-                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+             <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.38.0 (20140413.2041)
+<!-- Generated by graphviz version 2.43.0 (0)
  -->
 <!-- Title: type~~graph~~TypeGraph Pages: 1 -->
-<svg id="typegraphTypeGraph" width="774pt" height="105pt"
- viewBox="0.00 0.00 774.00 105.05" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="type~~graph~~TypeGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 101.051)">
+<svg id="typegraphTypeGraph" width="696pt" height="117pt"
+ viewBox="0.00 0.00 696.00 117.01" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="type~~graph~~TypeGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 113.01)">
 <title>type~~graph~~TypeGraph</title>
-<polygon fill="white" stroke="none" points="-4,4 -4,-101.051 770,-101.051 770,4 -4,4"/>
-<!-- type~type_object -->
-<g id="type~~graph~~TypeGraph_node1" class="node"><title>type~type_object</title>
-<g id="a_type~~graph~~TypeGraph_node1"><a xlink:href="../type/type_object.html" xlink:title="Type_Object">
-<polygon fill="#5cb85c" stroke="#5cb85c" points="73,-49.0119 0,-49.0119 0,-25.0119 73,-25.0119 73,-49.0119"/>
-<text text-anchor="middle" x="36.5" y="-34.6119" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type_Object</text>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-113.01 692,-113.01 692,4 -4,4"/>
+<!-- type~command_line_argument -->
+<g id="type~~graph~~TypeGraph_node1" class="node">
+<title>type~command_line_argument</title>
+<g id="a_type~~graph~~TypeGraph_node1"><a xlink:href=".././type/command_line_argument.html" xlink:title="command_line_argument">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="240,-47.01 91,-47.01 91,-23.01 240,-23.01 240,-47.01"/>
+<text text-anchor="middle" x="165.5" y="-32.61" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">command_line_argument</text>
 </a>
 </g>
 </g>
-<!-- type~type_command_line_interface -->
-<g id="type~~graph~~TypeGraph_node2" class="node"><title>type~type_command_line_interface</title>
-<g id="a_type~~graph~~TypeGraph_node2"><a xlink:href="../type/type_command_line_interface.html" xlink:title="Type_Command_Line_Interface">
-<polygon fill="#5cb85c" stroke="#5cb85c" points="766,-73.0119 600,-73.0119 600,-49.0119 766,-49.0119 766,-73.0119"/>
-<text text-anchor="middle" x="683" y="-58.6119" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type_Command_Line_Interface</text>
+<!-- type~object -->
+<g id="type~~graph~~TypeGraph_node3" class="node">
+<title>type~object</title>
+<g id="a_type~~graph~~TypeGraph_node3"><a xlink:href=".././type/object.html" xlink:title="object">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="54,-47.01 0,-47.01 0,-23.01 54,-23.01 54,-47.01"/>
+<text text-anchor="middle" x="27" y="-32.61" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">object</text>
 </a>
 </g>
 </g>
-<!-- type~type_object&#45;&gt;type~type_command_line_interface -->
-<g id="type~~graph~~TypeGraph_edge2" class="edge"><title>type~type_object&#45;&gt;type~type_command_line_interface</title>
-<path fill="none" stroke="black" d="M92,-37.0119C104.291,-37.2285 98.8606,-52.8133 110,-58.0119 291.247,-142.597 359.991,-61.9007 560,-63.0119 569.778,-63.0662 572.223,-63.1096 582,-63.0119 584.545,-62.9864 587.126,-62.9573 589.731,-62.9251"/>
-<polygon fill="black" stroke="black" points="589.92,-66.4229 599.871,-62.7863 589.824,-59.4236 589.92,-66.4229"/>
+<!-- type~command_line_argument&#45;&gt;type~object -->
+<g id="type~~graph~~TypeGraph_edge1" class="edge">
+<title>type~command_line_argument&#45;&gt;type~object</title>
+<path fill="none" stroke="#000000" d="M90.59,-35.01C84.64,-35.01 78.72,-35.01 73,-35.01"/>
 </g>
-<!-- type~type_command_line_argument -->
-<g id="type~~graph~~TypeGraph_node3" class="node"><title>type~type_command_line_argument</title>
-<g id="a_type~~graph~~TypeGraph_node3"><a xlink:href="../type/type_command_line_argument.html" xlink:title="Type_Command_Line_Argument">
-<polygon fill="#5cb85c" stroke="#5cb85c" points="281,-49.0119 110,-49.0119 110,-25.0119 281,-25.0119 281,-49.0119"/>
-<text text-anchor="middle" x="195.5" y="-34.6119" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type_Command_Line_Argument</text>
+<!-- type~command_line_interface -->
+<g id="type~~graph~~TypeGraph_node2" class="node">
+<title>type~command_line_interface</title>
+<g id="a_type~~graph~~TypeGraph_node2"><a xlink:href=".././type/command_line_interface.html" xlink:title="command_line_interface">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="688,-67.01 543,-67.01 543,-43.01 688,-43.01 688,-67.01"/>
+<text text-anchor="middle" x="615.5" y="-52.61" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">command_line_interface</text>
 </a>
 </g>
 </g>
-<!-- type~type_object&#45;&gt;type~type_command_line_argument -->
-<g id="type~~graph~~TypeGraph_edge3" class="edge"><title>type~type_object&#45;&gt;type~type_command_line_argument</title>
-<path fill="none" stroke="black" d="M92,-37.0119C94.5302,-37.0119 97.0956,-37.0119 99.6844,-37.0119"/>
-<polygon fill="black" stroke="black" points="99.7611,-40.512 109.761,-37.0119 99.7611,-33.512 99.7611,-40.512"/>
+<!-- type~command_line_interface&#45;&gt;type~object -->
+<g id="type~~graph~~TypeGraph_edge3" class="edge">
+<title>type~command_line_interface&#45;&gt;type~object</title>
+<path fill="none" stroke="#000000" d="M542.71,-59.38C536.72,-59.63 530.76,-59.85 525,-60.01 513.45,-60.33 510.56,-60.07 499,-60.01 317.66,-59.12 255.38,-132.59 91,-56.01 79.86,-50.82 85.29,-35.3 73,-35.01"/>
 </g>
-<!-- type~type_command_line_arguments_group -->
-<g id="type~~graph~~TypeGraph_node4" class="node"><title>type~type_command_line_arguments_group</title>
-<g id="a_type~~graph~~TypeGraph_node4"><a xlink:href="../type/type_command_line_arguments_group.html" xlink:title="Type_Command_Line_Arguments_Group">
-<polygon fill="#5cb85c" stroke="#5cb85c" points="542,-49.0119 330,-49.0119 330,-25.0119 542,-25.0119 542,-49.0119"/>
-<text text-anchor="middle" x="436" y="-34.6119" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type_Command_Line_Arguments_Group</text>
+<!-- type~command_line_arguments_group -->
+<g id="type~~graph~~TypeGraph_node5" class="node">
+<title>type~command_line_arguments_group</title>
+<g id="a_type~~graph~~TypeGraph_node5"><a xlink:href=".././type/command_line_arguments_group.html" xlink:title="command_line_arguments_group">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="481,-47.01 291,-47.01 291,-23.01 481,-23.01 481,-47.01"/>
+<text text-anchor="middle" x="386" y="-32.61" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">command_line_arguments_group</text>
 </a>
 </g>
 </g>
-<!-- type~type_object&#45;&gt;type~type_command_line_arguments_group -->
-<g id="type~~graph~~TypeGraph_edge5" class="edge"><title>type~type_object&#45;&gt;type~type_command_line_arguments_group</title>
-<path fill="none" stroke="black" d="M73.1846,-37.0119C79.134,-37.0119 85.2413,-37.0119 91,-37.0119"/>
-<path fill="none" stroke="black" d="M92,-37.0119C104.293,-37.0119 98.8319,-21.1485 110,-16.0119 179.047,15.7453 205.174,-10.8657 281,-16.0119 304.099,-17.5796 329.014,-20.4555 351.933,-23.5865"/>
-<polygon fill="black" stroke="black" points="351.576,-27.0705 361.964,-24.9899 352.546,-20.138 351.576,-27.0705"/>
+<!-- type~command_line_interface&#45;&gt;type~command_line_arguments_group -->
+<g id="type~~graph~~TypeGraph_edge2" class="edge">
+<title>type~command_line_interface&#45;&gt;type~command_line_arguments_group</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M542.83,-48.71C526.5,-47.28 508.82,-45.72 491.43,-44.19"/>
+<polygon fill="#000000" stroke="#000000" points="491.51,-40.69 481.24,-43.3 490.9,-47.66 491.51,-40.69"/>
+<text text-anchor="middle" x="512" y="-48.41" font-family="Helvetica,sans-Serif" font-size="9.50">clasg</text>
 </g>
-<!-- type~type_command_line_argument&#45;&gt;type~type_command_line_arguments_group -->
-<g id="type~~graph~~TypeGraph_edge4" class="edge"><title>type~type_command_line_argument&#45;&gt;type~type_command_line_arguments_group</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M281.258,-37.0119C293.618,-37.0119 306.52,-37.0119 319.366,-37.0119"/>
-<polygon fill="black" stroke="black" points="319.645,-40.512 329.645,-37.0119 319.645,-33.512 319.645,-40.512"/>
-<text text-anchor="middle" x="305.5" y="-39.4119" font-family="Helvetica,sans-Serif" font-size="9.50">cla</text>
+<!-- type~tester_t -->
+<g id="type~~graph~~TypeGraph_node4" class="node">
+<title>type~tester_t</title>
+<g id="a_type~~graph~~TypeGraph_node4"><a xlink:href=".././type/tester_t.html" xlink:title="tester_t">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="642.5,-109.01 588.5,-109.01 588.5,-85.01 642.5,-85.01 642.5,-109.01"/>
+<text text-anchor="middle" x="615.5" y="-94.61" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">tester_t</text>
+</a>
 </g>
-<!-- type~type_command_line_arguments_group&#45;&gt;type~type_command_line_interface -->
-<g id="type~~graph~~TypeGraph_edge1" class="edge"><title>type~type_command_line_arguments_group&#45;&gt;type~type_command_line_interface</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M542.324,-47.3293C558.07,-48.8717 574.201,-50.452 589.651,-51.9654"/>
-<polygon fill="black" stroke="black" points="589.401,-55.4576 599.694,-52.9493 590.083,-48.4909 589.401,-55.4576"/>
-<text text-anchor="middle" x="571" y="-53.4119" font-family="Helvetica,sans-Serif" font-size="9.50">clasg</text>
+</g>
+<!-- type~command_line_arguments_group&#45;&gt;type~command_line_argument -->
+<g id="type~~graph~~TypeGraph_edge4" class="edge">
+<title>type~command_line_arguments_group&#45;&gt;type~command_line_argument</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M290.75,-35.01C277.22,-35.01 263.38,-35.01 250.07,-35.01"/>
+<polygon fill="#000000" stroke="#000000" points="250.02,-31.51 240.02,-35.01 250.02,-38.51 250.02,-31.51"/>
+<text text-anchor="middle" x="265.5" y="-37.41" font-family="Helvetica,sans-Serif" font-size="9.50">cla</text>
+</g>
+<!-- type~command_line_arguments_group&#45;&gt;type~object -->
+<g id="type~~graph~~TypeGraph_edge5" class="edge">
+<title>type~command_line_arguments_group&#45;&gt;type~object</title>
+<path fill="none" stroke="#000000" d="M316.26,-22.99C292.22,-19.34 264.99,-15.81 240,-14.01 173.95,-9.25 151.16,13.66 91,-14.01 79.83,-19.15 85.29,-35.01 73,-35.01"/>
+<path fill="none" stroke="#000000" d="M72,-35.01C69.46,-34.95 66.84,-34.91 64.2,-34.88"/>
+<polygon fill="#000000" stroke="#000000" points="64.08,-31.38 54.06,-34.81 64.04,-38.38 64.08,-31.38"/>
 </g>
 </g>
 </svg>
-</div>
-                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
-                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
-                  <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
-                      </div>
-                      <div class="modal-body">
-                        
-Nodes of different colours represent the following:
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.38.0 (20140413.2041)
+<!-- Generated by graphviz version 2.43.0 (0)
  -->
 <!-- Title: Graph Key Pages: 1 -->
-<svg width="641pt" height="26pt"
- viewBox="0.00 0.00 641.00 25.98" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(0.811906 0.811906) rotate(0) translate(4 28)">
+<svg width="184pt" height="32pt"
+ viewBox="0.00 0.00 184.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
 <title>Graph Key</title>
-<polygon fill="white" stroke="none" points="-4,4 -4,-28 785.5,-28 785.5,4 -4,4"/>
-<!-- Module -->
-<g id="node1" class="node"><title>Module</title>
-<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,-0 54,-0 54,-24"/>
-<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
-</g>
-<!-- Submodule -->
-<g id="node2" class="node"><title>Submodule</title>
-<polygon fill="#5bc0de" stroke="#5bc0de" points="139.5,-24 72.5,-24 72.5,-0 139.5,-0 139.5,-24"/>
-<text text-anchor="middle" x="106" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
-</g>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 180,-28 180,4 -4,4"/>
 <!-- Type -->
-<g id="node3" class="node"><title>Type</title>
-<polygon fill="#5cb85c" stroke="#5cb85c" points="212,-24 158,-24 158,-0 212,-0 212,-24"/>
-<text text-anchor="middle" x="185" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type</text>
-</g>
-<!-- Subroutine -->
-<g id="node4" class="node"><title>Subroutine</title>
-<polygon fill="#d9534f" stroke="#d9534f" points="294,-24 230,-24 230,-0 294,-0 294,-24"/>
-<text text-anchor="middle" x="262" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
-</g>
-<!-- Function -->
-<g id="node5" class="node"><title>Function</title>
-<polygon fill="#d94e8f" stroke="#d94e8f" points="366,-24 312,-24 312,-0 366,-0 366,-24"/>
-<text text-anchor="middle" x="339" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
-</g>
-<!-- Interface -->
-<g id="node6" class="node"><title>Interface</title>
-<polygon fill="#a7506f" stroke="#a7506f" points="439.5,-24 384.5,-24 384.5,-0 439.5,-0 439.5,-24"/>
-<text text-anchor="middle" x="412" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
-</g>
-<!-- Unknown Procedure Type -->
-<g id="node7" class="node"><title>Unknown Procedure Type</title>
-<polygon fill="#777777" stroke="#777777" points="594,-24 458,-24 458,-0 594,-0 594,-24"/>
-<text text-anchor="middle" x="526" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
-</g>
-<!-- Program -->
-<g id="node8" class="node"><title>Program</title>
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="666,-24 612,-24 612,-0 666,-0 666,-24"/>
-<text text-anchor="middle" x="639" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+<g id="node1" class="node">
+<title>Type</title>
+<polygon fill="#5cb85c" stroke="#5cb85c" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type</text>
 </g>
 <!-- This Page&#39;s Entity -->
-<g id="node9" class="node"><title>This Page&#39;s Entity</title>
-<polygon fill="none" stroke="black" points="781.5,-24 684.5,-24 684.5,-0 781.5,-0 781.5,-24"/>
-<text text-anchor="middle" x="733" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="176,-24 72,-24 72,0 176,0 176,-24"/>
+<text text-anchor="middle" x="124" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
 </g>
 </g>
 </svg>
 
-<h5>Module Graph</h5>
-<p>Solid arrows point from a parent (sub)module to the submodule which is
-descended from it. Dashed arrows point from a module being used to the
-module using it.</p>
-<h5>Type Graph</h5>
-<p>Solid arrows point from one derived type to another which extends
-(inherits from) it. Dashed arrows point from a derived type to another
-type containing it as a components, with a label listing the name(s) of
-said component(s).</p>
-<h5>Call Graph</h5>
-<p>Solid arrows point from a procedure to one which it calls. Dashed 
-arrows point from an interface to procedures which implement that interface.
-This could include the module procedures in a generic interface or the
-implementation in a submodule of an interface in a parent module.</p>
-
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
+    
+    <p>Solid arrows point from a derived type to the parent type which it
+    extends. Dashed arrows point from a derived type to the other
+    types it contains as a components, with a label listing the name(s) of
+    said component(s).
+    </p>
+    </div></div></div></div>
         </div>
       </div>
-
-    <hr>
-    <footer>
-        <div class="row">
-        <div class="col-md-6">&copy; 2015 FLAP was written by Stefano Zaghi. </div>
-        <div class="col-md-6"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a>.</span></div>
-        </div>
-        <br>
-    </footer>
+    <hr>    
     </div> <!-- /container -->
-
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-6"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2022 
+</p>
+        </div>
+        <div class="col-xs-6 col-md-6">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+          </p>
+        </div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -302,12 +253,14 @@ implementation in a submodule of an interface in a parent module.</p>
       MathJax.Hub.Config({
         TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
         jax: ['input/TeX','input/MathML','output/HTML-CSS'],
-        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'],
-        'HTML-CSS': { 
-           styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: '#000000 ! important'} }
-        }
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
       });
     </script>
-    <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
   </body>
 </html>

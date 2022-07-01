@@ -4,21 +4,18 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	 
-	 <meta name="description" content="Fortran command Line Arguments Parser for poor people">
-    
-    <meta name="author" content="Chris MacMackin" >
+   <meta name="description" content="Fortran command Line Arguments Parser for poor people">
+    <meta name="author" content="Stefano Zaghi" >
     <link rel="icon" href="../favicon.png">
 
-    <title>
-All Programs &ndash; FLAP
+    <title>All Programs &ndash; FLAP
 </title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
     <link href="../css/font-awesome.min.css" rel="stylesheet">
     <link href="../css/local.css" rel="stylesheet">
-    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -28,13 +25,6 @@ All Programs &ndash; FLAP
     
     <script src="../js/jquery-2.1.3.min.js"></script>
     <script src="../js/svg-pan-zoom.min.js"></script>
-
-    
-    <script src="../tipuesearch/tipuesearch_content.js"></script>
-    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
-    <script src="../tipuesearch/tipuesearch_set.js"></script>
-    <script src="../tipuesearch/tipuesearch.js"></script>
-    
 
   </head>
 
@@ -54,24 +44,27 @@ All Programs &ndash; FLAP
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-				
-                
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
             <li><a href="../lists/files.html">Source Files</a></li>
-				
-				
             <li><a href="../lists/modules.html">Modules</a></li>
-				
-				
             <li><a href="../lists/procedures.html">Procedures</a></li>
-				
-								
-            <li><a href="../lists/types.html">Derived Types</a></li>
-				
-				
+                   <li><a href="../lists/types.html">Derived Types</a></li>
             <li><a href="../lists/programs.html">Programs</a></li>
-				
-          </ul>
+       
+            </ul>
         
+            </li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+                             <li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/programs.html">Programs</a></li>
+          </ul>
         <form action="../search.html" class="navbar-form navbar-right" role="search">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
@@ -80,42 +73,67 @@ All Programs &ndash; FLAP
         <button type="submit" class="btn btn-default">Submit</button>
 -->
         </form>
-        
         </div><!--/.nav-collapse -->
       </div>
     </nav>
 
     <div class="container">
-    
       <div class="row">
         <div class="col-lg-12" id='text'>
 			 <h1>Programs</h1>
 			 <table class="table table-striped nostretch">
 			 <thead><tr><th>Program</th><th>Source File</th><th>Description</th></tr></thead>
 			 <tbody>
-			 
-			   <tr><td><a href='../program/test_basic.html'>test_basic</a></td><td><a href='../sourcefile/test_basic.f90.html'>test_basic.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p></td></tr>
-			 
-			   <tr><td><a href='../program/test_choices_logical.html'>test_choices_logical</a></td><td><a href='../sourcefile/test_choices_logical.f90.html'>test_choices_logical.f90</a></td><td><p>Test FLAP for bad usage of choices option with logical</p></td></tr>
-			 
-			   <tr><td><a href='../program/test_nested.html'>test_nested</a></td><td><a href='../sourcefile/test_nested.f90.html'>test_nested.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p></td></tr>
-			 
-			   <tr><td><a href='../program/test_string.html'>test_string</a></td><td><a href='../sourcefile/test_string.f90.html'>test_string.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p></td></tr>
-			 
+			   <tr><td><a href='../program/face_test_basic.html'>face_test_basic</a></td><td><a href='../sourcefile/face_test_basic.f90.html'>face_test_basic.f90</a></td><td><p>FACE test.</p></td></tr>
+			   <tr><td><a href='../program/face_test_colors.html'>face_test_colors</a></td><td><a href='../sourcefile/face_test_colors.f90.html'>face_test_colors.f90</a></td><td><p>FACE test.</p></td></tr>
+			   <tr><td><a href='../program/face_test_styles.html'>face_test_styles</a></td><td><a href='../sourcefile/face_test_styles.f90.html'>face_test_styles.f90</a></td><td><p>FACE test.</p></td></tr>
+			   <tr><td><a href='../program/face_test_ucs4.html'>face_test_ucs4</a></td><td><a href='../sourcefile/face_test_ucs4.f90.html'>face_test_ucs4.F90</a></td><td><p>FACE test.</p></td></tr>
+			   <tr><td><a href='../program/flap_save_bash_completion.html'>flap_save_bash_completion</a></td><td><a href='../sourcefile/flap_test_save_bash_completion.f90.html'>flap_test_save_bash_completion.f90</a></td><td><p>Test <code>save_bash_completion</code> method.</p></td></tr>
+			   <tr><td><a href='../program/flap_save_man_page.html'>flap_save_man_page</a></td><td><a href='../sourcefile/flap_test_save_man_page.f90.html'>flap_test_save_man_page.f90</a></td><td><p>Test <code>save_man_page</code> method.</p></td></tr>
+			   <tr><td><a href='../program/flap_save_usage_to_markdown.html'>flap_save_usage_to_markdown</a></td><td><a href='../sourcefile/flap_test_save_usage_to_markdown.f90.html'>flap_test_save_usage_to_markdown.f90</a></td><td><p>Test <code>save_usage_to_markdown</code> method.</p></td></tr>
+			   <tr><td><a href='../program/flap_test_ansi_color_style.html'>flap_test_ansi_color_style</a></td><td><a href='../sourcefile/flap_test_ansi_color_style.f90.html'>flap_test_ansi_color_style.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p></td></tr>
+			   <tr><td><a href='../program/flap_test_basic.html'>flap_test_basic</a></td><td><a href='../sourcefile/flap_test_basic.f90.html'>flap_test_basic.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_basic.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
+			   <tr><td><a href='../program/flap_test_choices_logical.html'>flap_test_choices_logical</a></td><td><a href='../sourcefile/flap_test_choices_logical.f90.html'>flap_test_choices_logical.f90</a></td><td><p>Test FLAP for bad usage of choices option with logical</p></td></tr>
+			   <tr><td><a href='../program/flap_test_duplicated_clas.html'>flap_test_duplicated_clas</a></td><td><a href='../sourcefile/flap_test_duplicated_clas.f90.html'>flap_test_duplicated_clas.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_duplicated_clas.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
+			   <tr><td><a href='../program/flap_test_group.html'>flap_test_group</a></td><td><a href='../sourcefile/flap_test_group.f90.html'>flap_test_group.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_group.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
+			   <tr><td><a href='../program/flap_test_group_examples.html'>flap_test_group_examples</a></td><td><a href='../sourcefile/flap_test_group_examples.f90.html'>flap_test_group_examples.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_group_examples.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
+			   <tr><td><a href='../program/flap_test_hidden.html'>flap_test_hidden</a></td><td><a href='../sourcefile/flap_test_hidden.f90.html'>flap_test_hidden.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_hidden.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
+			   <tr><td><a href='../program/flap_test_ignore_unknown_clas.html'>flap_test_ignore_unknown_clas</a></td><td><a href='../sourcefile/flap_test_ignore_unknown_clas.f90.html'>flap_test_ignore_unknown_clas.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_ignore_unknown_clas.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
+			   <tr><td><a href='../program/flap_test_minimal.html'>flap_test_minimal</a></td><td><a href='../sourcefile/flap_test_minimal.f90.html'>flap_test_minimal.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_minimal.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
+			   <tr><td><a href='../program/flap_test_nargs_insufficient.html'>flap_test_nargs_insufficient</a></td><td><a href='../sourcefile/flap_test_value_missing.f90.html'>flap_test_value_missing.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_nargs_insufficient.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
+			   <tr><td><a href='../program/flap_test_nargs_insufficient~2.html'>flap_test_nargs_insufficient</a></td><td><a href='../sourcefile/flap_test_nargs_insufficient.f90.html'>flap_test_nargs_insufficient.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_nargs_insufficient~2.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
+			   <tr><td><a href='../program/flap_test_nested.html'>flap_test_nested</a></td><td><a href='../sourcefile/flap_test_nested.f90.html'>flap_test_nested.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_nested.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
+			   <tr><td><a href='../program/flap_test_string.html'>flap_test_string</a></td><td><a href='../sourcefile/flap_test_string.f90.html'>flap_test_string.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_string.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
+			   <tr><td><a href='../program/test_tester_05.html'>test_tester_05</a></td><td><a href='../sourcefile/test_tester_05.f90.html'>test_tester_05.f90</a></td><td></td></tr>
+			   <tr><td><a href='../program/test_tester_1.html'>test_tester_1</a></td><td><a href='../sourcefile/test_tester_01.f90.html'>test_tester_01.f90</a></td><td></td></tr>
+			   <tr><td><a href='../program/test_tester_1~2.html'>test_tester_1</a></td><td><a href='../sourcefile/test_tester_03.f90.html'>test_tester_03.f90</a></td><td></td></tr>
+			   <tr><td><a href='../program/test_tester_2.html'>test_tester_2</a></td><td><a href='../sourcefile/test_fail_01.f90.html'>test_fail_01.f90</a></td><td></td></tr>
+			   <tr><td><a href='../program/test_tester_3.html'>test_tester_3</a></td><td><a href='../sourcefile/test_tester_02.f90.html'>test_tester_02.f90</a></td><td></td></tr>
+			   <tr><td><a href='../program/test_tester_4.html'>test_tester_4</a></td><td><a href='../sourcefile/test_fail_02.f90.html'>test_fail_02.f90</a></td><td></td></tr>
+			   <tr><td><a href='../program/test_tester_6.html'>test_tester_6</a></td><td><a href='../sourcefile/test_tester_04.f90.html'>test_tester_04.f90</a></td><td></td></tr>
+			   <tr><td><a href='../program/test_tester_7.html'>test_tester_7</a></td><td><a href='../sourcefile/test_fail_03.f90.html'>test_fail_03.f90</a></td><td></td></tr>
+			   <tr><td><a href='../program/test_tester_8.html'>test_tester_8</a></td><td><a href='../sourcefile/test_fail_04.f90.html'>test_fail_04.f90</a></td><td></td></tr>
 			 </tbody></table>
         </div>
       </div>
-
-    <hr>
-    <footer>
-        <div class="row">
-        <div class="col-md-6">&copy; 2015 FLAP was written by Stefano Zaghi. </div>
-        <div class="col-md-6"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a>.</span></div>
-        </div>
-        <br>
-    </footer>
+    <hr>    
     </div> <!-- /container -->
-
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-6"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2022 
+</p>
+        </div>
+        <div class="col-xs-6 col-md-6">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+          </p>
+        </div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -134,12 +152,14 @@ All Programs &ndash; FLAP
       MathJax.Hub.Config({
         TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
         jax: ['input/TeX','input/MathML','output/HTML-CSS'],
-        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'],
-        'HTML-CSS': { 
-           styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: '#000000 ! important'} }
-        }
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
       });
     </script>
-    <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
   </body>
 </html>

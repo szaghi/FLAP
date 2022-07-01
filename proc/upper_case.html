@@ -4,19 +4,17 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	 
-	 <meta name="description" content="Fortran command Line Arguments Parser for poor people">
-    
-    <meta name="author" content="Chris MacMackin" >
+   <meta name="description" content="Fortran command Line Arguments Parser for poor people">
+    <meta name="author" content="Stefano Zaghi" >
     <link rel="icon" href="../favicon.png">
 
-    <title>Upper_Case &ndash; FLAP</title>
+    <title>upper_case &ndash; FLAP</title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
     <link href="../css/font-awesome.min.css" rel="stylesheet">
     <link href="../css/local.css" rel="stylesheet">
-    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -26,13 +24,6 @@
     
     <script src="../js/jquery-2.1.3.min.js"></script>
     <script src="../js/svg-pan-zoom.min.js"></script>
-
-    
-    <script src="../tipuesearch/tipuesearch_content.js"></script>
-    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
-    <script src="../tipuesearch/tipuesearch_set.js"></script>
-    <script src="../tipuesearch/tipuesearch.js"></script>
-    
 
   </head>
 
@@ -52,24 +43,27 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-				
-                
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
             <li><a href="../lists/files.html">Source Files</a></li>
-				
-				
             <li><a href="../lists/modules.html">Modules</a></li>
-				
-				
             <li><a href="../lists/procedures.html">Procedures</a></li>
-				
-								
-            <li><a href="../lists/types.html">Derived Types</a></li>
-				
-				
+                   <li><a href="../lists/types.html">Derived Types</a></li>
             <li><a href="../lists/programs.html">Programs</a></li>
-				
-          </ul>
+       
+            </ul>
         
+            </li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+                             <li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/programs.html">Programs</a></li>
+          </ul>
         <form action="../search.html" class="navbar-form navbar-right" role="search">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
@@ -78,569 +72,247 @@
         <button type="submit" class="btn btn-default">Submit</button>
 -->
         </form>
-        
         </div><!--/.nav-collapse -->
       </div>
     </nav>
 
     <div class="container">
-    
-  
   <div class="row">
-    <h1>Upper_Case
-    <small>Function</small>
-    
+    <h1>upper_case
+      <small>Function</small>
     </h1>
-	 
-<div class="row">
-<div class="col-lg-12">
+    <div class="row">
+  <div class="col-lg-12">
 <div class="well well-sm">
   <ul class="list-inline" style="margin-bottom:0px;display:inline">
-     
-     
-     
-     
-    
-    
-    <li><i class="fa fa-code"></i><a href="../src/Data_Type_Command_Line_Interface.F90"> Source File</a></li>
-     
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.4% of total for procedures.">13 statements</a>
+     </li> 
+    <li><i class="fa fa-code"></i><a href="../src/flap_utils_m.f90"> Source File</a></li>
   </ul>
   <ol class="breadcrumb in-well text-right">
-  
-     <li><a href='../sourcefile/data_type_command_line_interface.f90.html'>Data_Type_Command_Line_Interface.F90</a></li>
-  
-     <li><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></li>
-  
-     <li class="active">Upper_Case</li>
+     <li><a href='../sourcefile/flap_utils_m.f90.html'>flap_utils_m.f90</a></li>
+     <li><a href='../module/flap_utils_m.html'>flap_utils_m</a></li>
+     <li class="active">upper_case</li>
   </ol>
 </div>
 </div>
 </div>
-    
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
   </div>
   
   <div class="row">
-    <div class="col-lg-3">
-    
-<div id="sidebar">
-  
-  
-  
-  <div class="panel panel-primary">
-    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#vars">Variables</a></h3></div>
-    <div id="vars" class="panel-collapse collapse">
-      <div class="list-group">
-        
-        <a class="list-group-item" href="../proc/upper_case.html#variable-n1">n1</a>
-        
-        <a class="list-group-item" href="../proc/upper_case.html#variable-n2">n2</a>
-        
-        <a class="list-group-item" href="../proc/upper_case.html#variable-upper_alphabet">upper_alphabet</a>
-        
-        <a class="list-group-item" href="../proc/upper_case.html#variable-lower_alphabet">lower_alphabet</a>
-        
-      </div>
-    </div>
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    <div id="sidebar">
+  <h3>Contents</h3>
+ 
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/upper_case.html#src">upper_case</a>
   </div>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  <div class="panel panel-primary">
-    <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
-    <div class="list-group">
-      <a class="list-group-item" href="../proc/upper_case.html#src">Upper_Case</a>
-    </div>
-  </div>
-  
-  <hr>
-  
-  <div class="panel panel-default">
-    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#allprocs">All Procedures</a></h3></div>
-    <div id="allprocs" class="panel-collapse collapse">
-        <div class="list-group">
-          
-          <a class="list-group-item" href="../proc/add.html">add</a>
-          
-          <a class="list-group-item" href="../proc/add_cla_clasg.html">add_cla_clasg</a>
-          
-          <a class="list-group-item" href="../proc/add_group.html">add_group</a>
-          
-          <a class="list-group-item" href="../proc/assign_cla.html">assign_cla</a>
-          
-          <a class="list-group-item" href="../proc/assign_clasg.html">assign_clasg</a>
-          
-          <a class="list-group-item" href="../proc/assign_cli.html">assign_cli</a>
-          
-          <a class="list-group-item" href="../proc/assign_object.html">assign_object</a>
-          
-          <a class="list-group-item" href="../proc/called_group.html">called_group</a>
-          
-          <a class="list-group-item" href="../proc/check.html">check</a>
-          
-          <a class="list-group-item" href="../proc/check_choices_cla.html">check_choices_cla</a>
-          
-          <a class="list-group-item" href="../proc/check_cla.html">check_cla</a>
-          
-          <a class="list-group-item" href="../proc/check_clasg.html">check_clasg</a>
-          
-          <a class="list-group-item" href="../proc/check_list_size_cla.html">check_list_size_cla</a>
-          
-          <a class="list-group-item" href="../proc/check_m_exclusive.html">check_m_exclusive</a>
-          
-          <a class="list-group-item" href="../proc/check_m_exclusive_clasg.html">check_m_exclusive_clasg</a>
-          
-          <a class="list-group-item" href="../proc/check_required_clasg.html">check_required_clasg</a>
-          
-          <a class="list-group-item" href="../proc/defined.html">defined</a>
-          
-          <a class="list-group-item" href="../proc/defined_clasg.html">defined_clasg</a>
-          
-          <a class="list-group-item" href="../proc/defined_group.html">defined_group</a>
-          
-          <a class="list-group-item" href="../proc/errored.html">errored</a>
-          
-          <a class="list-group-item" href="../proc/finalize.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize_cla.html">finalize_cla</a>
-          
-          <a class="list-group-item" href="../proc/finalize_clasg.html">finalize_clasg</a>
-          
-          <a class="list-group-item" href="../proc/free.html">free</a>
-          
-          <a class="list-group-item" href="../proc/free_cla.html">free_cla</a>
-          
-          <a class="list-group-item" href="../proc/free_clasg.html">free_clasg</a>
-          
-          <a class="list-group-item" href="../proc/free_object.html">free_object</a>
-          
-          <a class="list-group-item" href="../proc/get_args_from_invocation.html">get_args_from_invocation</a>
-          
-          <a class="list-group-item" href="../proc/get_args_from_string.html">get_args_from_string</a>
-          
-          <a class="list-group-item" href="../proc/get_cla.html">get_cla</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_cli.html">get_cla_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list.html">get_cla_list</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_cli.html">get_cla_list_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_char.html">get_cla_list_varying_char</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_char_cli.html">get_cla_list_varying_char_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_i1p.html">get_cla_list_varying_I1P</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_i1p_cli.html">get_cla_list_varying_I1P_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_i2p.html">get_cla_list_varying_I2P</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_i2p_cli.html">get_cla_list_varying_I2P_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_i4p.html">get_cla_list_varying_I4P</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_i4p_cli.html">get_cla_list_varying_I4P_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_i8p.html">get_cla_list_varying_I8P</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_i8p_cli.html">get_cla_list_varying_I8P_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_logical.html">get_cla_list_varying_logical</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_logical_cli.html">get_cla_list_varying_logical_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_r16p.html">get_cla_list_varying_R16P</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_r16p_cli.html">get_cla_list_varying_R16P_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_r4p.html">get_cla_list_varying_R4P</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_r4p_cli.html">get_cla_list_varying_R4P_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_r8p.html">get_cla_list_varying_R8P</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_r8p_cli.html">get_cla_list_varying_R8P_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_clasg_indexes.html">get_clasg_indexes</a>
-          
-          <a class="list-group-item" href="../proc/init.html">init</a>
-          
-          <a class="list-group-item" href="../proc/parse.html">parse</a>
-          
-          <a class="list-group-item" href="../proc/parse_clasg.html">parse_clasg</a>
-          
-          <a class="list-group-item" href="../proc/passed.html">passed</a>
-          
-          <a class="list-group-item" href="../proc/passed_clasg.html">passed_clasg</a>
-          
-          <a class="list-group-item" href="../proc/print_usage.html">print_usage</a>
-          
-          <a class="list-group-item" href="../proc/print_version.html">print_version</a>
-          
-          <a class="list-group-item" href="../proc/save_man_page.html">save_man_page</a>
-          
-          <a class="list-group-item" href="../proc/set_mutually_exclusive_groups.html">set_mutually_exclusive_groups</a>
-          
-          <a class="list-group-item" href="../proc/signature.html">signature</a>
-          
-          <a class="list-group-item" href="../proc/signature_cla.html">signature_cla</a>
-          
-          <a class="list-group-item" href="../proc/signature_clasg.html">signature_clasg</a>
-          
-          <a class="list-group-item" href="../proc/tokenize.html">tokenize</a>
-          
-          <a class="list-group-item" href="../proc/upper_case.html">Upper_Case</a>
-          
-          <a class="list-group-item" href="../proc/usage.html">usage</a>
-          
-          <a class="list-group-item" href="../proc/usage_cla.html">usage_cla</a>
-          
-          <a class="list-group-item" href="../proc/usage_clasg.html">usage_clasg</a>
-          
-        </div>
-    </div>
-  </div>
-  
+</div>
+
 </div>
 
     </div>
     
-    <div class="col-lg-9" id='text'>
-    <h2>
-private purefunction Upper_Case(string)
+    <div class="col-md-9" id='text'>
+    <h2>public elemental function upper_case(string)</h2>
     
-    
-    
-</h2>
-    
-  
 
-
+    <p>Convert the lower case characters of a string to upper case one.</p>
 
     <h3>Arguments</h3>
-    
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
+      <table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
-
-  
-  
-  
-  
 <tr>
-  
-  <td><span class="anchor" id="variable-string"></span>character(len=*),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
+  <td><span class="anchor" id="variable-string~5"></span>character(len=*),</td>
+<td>intent(in)</td>
+  <td></td>  <td></td><td>::</td>
   <td><strong>string</strong></td><td><p>String to be converted.</p></td>
-  
 </tr>
-
 </tbody>
 </table>
 
-    
-    
-    
-    
-    
-    
-    
-	 <h3>Return Value <small><span class="anchor" id="variable-upper_case"></span>character(len=len(string))
-  </small></h3>
+   <h3>Return Value <small><span class="anchor" id="variable-upper_case"></span>character(len=len)</small></h3>
     <p>Converted string.</p>
-    
-    
-    <h3>Description</h3>
-    <p>Convert the lower case characters of a string to upper case one.</p>
-    
-    
-     
-     <h3>Called By</h3>
-     
-                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+    <br>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Called by</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.38.0 (20140413.2041)
+<!-- Generated by graphviz version 2.43.0 (0)
  -->
 <!-- Title: proc~~upper_case~~CalledByGraph Pages: 1 -->
-<svg id="procupper_caseCalledByGraph" width="171pt" height="32pt"
- viewBox="0.00 0.00 171.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg id="procupper_caseCalledByGraph" width="172pt" height="32pt"
+ viewBox="0.00 0.00 172.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="proc~~upper_case~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
 <title>proc~~upper_case~~CalledByGraph</title>
-<polygon fill="white" stroke="none" points="-4,4 -4,-28 167,-28 167,4 -4,4"/>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 168,-28 168,4 -4,4"/>
 <!-- proc~upper_case -->
-<g id="proc~~upper_case~~CalledByGraph_node1" class="node"><title>proc~upper_case</title>
-<polygon fill="none" stroke="black" points="163,-24 90,-24 90,-0 163,-0 163,-24"/>
-<text text-anchor="middle" x="126.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">Upper_Case</text>
+<g id="proc~~upper_case~~CalledByGraph_node1" class="node">
+<title>proc~upper_case</title>
+<polygon fill="none" stroke="black" points="164,-24 90,-24 90,0 164,0 164,-24"/>
+<text text-anchor="middle" x="127" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">upper_case</text>
 </g>
 <!-- proc~add -->
-<g id="proc~~upper_case~~CalledByGraph_node2" class="node"><title>proc~add</title>
-<g id="a_proc~~upper_case~~CalledByGraph_node2"><a xlink:href="../proc/add.html" xlink:title="add">
-<polygon fill="#d9534f" stroke="#d9534f" points="54,-24 0,-24 0,-0 54,-0 54,-24"/>
+<g id="proc~~upper_case~~CalledByGraph_node2" class="node">
+<title>proc~add</title>
+<g id="a_proc~~upper_case~~CalledByGraph_node2"><a xlink:href=".././proc/add.html" xlink:title="add">
+<polygon fill="#d9534f" stroke="#d9534f" points="54,-24 0,-24 0,0 54,0 54,-24"/>
 <text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">add</text>
 </a>
 </g>
 </g>
 <!-- proc~add&#45;&gt;proc~upper_case -->
-<g id="proc~~upper_case~~CalledByGraph_edge1" class="edge"><title>proc~add&#45;&gt;proc~upper_case</title>
-<path fill="none" stroke="black" d="M54.1282,-12C61.9935,-12 70.8683,-12 79.6194,-12"/>
-<polygon fill="black" stroke="black" points="79.7677,-15.5001 89.7677,-12 79.7676,-8.5001 79.7677,-15.5001"/>
+<g id="proc~~upper_case~~CalledByGraph_edge1" class="edge">
+<title>proc~add&#45;&gt;proc~upper_case</title>
+<path fill="none" stroke="#000000" d="M54,-12C61.91,-12 70.85,-12 79.68,-12"/>
+<polygon fill="#000000" stroke="#000000" points="79.91,-15.5 89.91,-12 79.91,-8.5 79.91,-15.5"/>
 </g>
 </g>
 </svg>
-</div>
-                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
-                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
-                  <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
-                      </div>
-                      <div class="modal-body">
-                        
-Nodes of different colours represent the following:
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.38.0 (20140413.2041)
+<!-- Generated by graphviz version 2.43.0 (0)
  -->
 <!-- Title: Graph Key Pages: 1 -->
-<svg width="641pt" height="26pt"
- viewBox="0.00 0.00 641.00 25.98" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(0.811906 0.811906) rotate(0) translate(4 28)">
+<svg width="594pt" height="32pt"
+ viewBox="0.00 0.00 594.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
 <title>Graph Key</title>
-<polygon fill="white" stroke="none" points="-4,4 -4,-28 785.5,-28 785.5,4 -4,4"/>
-<!-- Module -->
-<g id="node1" class="node"><title>Module</title>
-<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,-0 54,-0 54,-24"/>
-<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
-</g>
-<!-- Submodule -->
-<g id="node2" class="node"><title>Submodule</title>
-<polygon fill="#5bc0de" stroke="#5bc0de" points="139.5,-24 72.5,-24 72.5,-0 139.5,-0 139.5,-24"/>
-<text text-anchor="middle" x="106" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
-</g>
-<!-- Type -->
-<g id="node3" class="node"><title>Type</title>
-<polygon fill="#5cb85c" stroke="#5cb85c" points="212,-24 158,-24 158,-0 212,-0 212,-24"/>
-<text text-anchor="middle" x="185" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type</text>
-</g>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 590,-28 590,4 -4,4"/>
 <!-- Subroutine -->
-<g id="node4" class="node"><title>Subroutine</title>
-<polygon fill="#d9534f" stroke="#d9534f" points="294,-24 230,-24 230,-0 294,-0 294,-24"/>
-<text text-anchor="middle" x="262" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
 </g>
 <!-- Function -->
-<g id="node5" class="node"><title>Function</title>
-<polygon fill="#d94e8f" stroke="#d94e8f" points="366,-24 312,-24 312,-0 366,-0 366,-24"/>
-<text text-anchor="middle" x="339" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="146,-24 88,-24 88,0 146,0 146,-24"/>
+<text text-anchor="middle" x="117" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
 </g>
 <!-- Interface -->
-<g id="node6" class="node"><title>Interface</title>
-<polygon fill="#a7506f" stroke="#a7506f" points="439.5,-24 384.5,-24 384.5,-0 439.5,-0 439.5,-24"/>
-<text text-anchor="middle" x="412" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="225.5,-24 164.5,-24 164.5,0 225.5,0 225.5,-24"/>
+<text text-anchor="middle" x="195" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
 </g>
 <!-- Unknown Procedure Type -->
-<g id="node7" class="node"><title>Unknown Procedure Type</title>
-<polygon fill="#777777" stroke="#777777" points="594,-24 458,-24 458,-0 594,-0 594,-24"/>
-<text text-anchor="middle" x="526" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="388,-24 244,-24 244,0 388,0 388,-24"/>
+<text text-anchor="middle" x="316" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
 </g>
 <!-- Program -->
-<g id="node8" class="node"><title>Program</title>
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="666,-24 612,-24 612,-0 666,-0 666,-24"/>
-<text text-anchor="middle" x="639" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="463.5,-24 406.5,-24 406.5,0 463.5,0 463.5,-24"/>
+<text text-anchor="middle" x="435" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
 </g>
 <!-- This Page&#39;s Entity -->
-<g id="node9" class="node"><title>This Page&#39;s Entity</title>
-<polygon fill="none" stroke="black" points="781.5,-24 684.5,-24 684.5,-0 781.5,-0 781.5,-24"/>
-<text text-anchor="middle" x="733" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="586,-24 482,-24 482,0 586,0 586,-24"/>
+<text text-anchor="middle" x="534" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
 </g>
 </g>
 </svg>
 
-<h5>Module Graph</h5>
-<p>Solid arrows point from a parent (sub)module to the submodule which is
-descended from it. Dashed arrows point from a module being used to the
-module using it.</p>
-<h5>Type Graph</h5>
-<p>Solid arrows point from one derived type to another which extends
-(inherits from) it. Dashed arrows point from a derived type to another
-type containing it as a components, with a label listing the name(s) of
-said component(s).</p>
-<h5>Call Graph</h5>
-<p>Solid arrows point from a procedure to one which it calls. Dashed 
-arrows point from an interface to procedures which implement that interface.
-This could include the module procedures in a generic interface or the
-implementation in a submodule of an interface in a parent module.</p>
-
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-     
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
     <br>
-    
-    <section>
-    <h2>Variables</h2>
-    
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th><th>Visibility</th>
 
-<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-n1"></span>integer,</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>n1</strong></td><td></td><td></td><td><p>Characters counter.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-n2"></span>integer,</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>n2</strong></td><td></td><td></td><td><p>Characters counter.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-upper_alphabet"></span>character(len=26),</td>
-  
-  <td>public,</td>
-  <td>parameter</td><td>::</td>
-  <td><strong>upper_alphabet</strong></td><td> =</td><td>'ABCDEFGHIJKLMNOPQRSTUVWXYZ'</td><td><p>Upper case alphabet.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-lower_alphabet"></span>character(len=26),</td>
-  
-  <td>public,</td>
-  <td>parameter</td><td>::</td>
-  <td><strong>lower_alphabet</strong></td><td> =</td><td>'abcdefghijklmnopqrstuvwxyz'</td><td><p>Lower case alphabet.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
+    <section class="visible-xs visible-sm hidden-md">
+      <h3>Contents</h3>
+ 
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/upper_case.html#src">upper_case</a>
+  </div>
+</div>
 
     </section>
-    <br>
-    
-    
-    
+    <br class="visible-xs visible-sm hidden-md">
+
+
     
     
 
     
     
-    
-    
-    
 
 
-    
-    
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">pure function </span><span class="n">Upper_Case</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
-  <span class="c">! elemental function Upper_Case(string)</span>
-  <span class="c">! 1513-209 (S) The result of an elemental function must be a nonpointer, nonallocatable scalar, and its type parameters must be constant expressions.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Convert the lower case characters of a string to upper case one.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">implicit none</span>
-<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="kd">::</span> <span class="n">string</span>                                        <span class="c">!&lt; String to be converted.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">))</span><span class="kd">::</span>   <span class="n">Upper_Case</span>                                    <span class="c">!&lt; Converted string.</span>
-  <span class="kt">integer</span><span class="kd">::</span>                      <span class="n">n1</span>                                            <span class="c">!&lt; Characters counter.</span>
-  <span class="kt">integer</span><span class="kd">::</span>                      <span class="n">n2</span>                                            <span class="c">!&lt; Characters counter.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">26</span><span class="p">),</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">upper_alphabet</span> <span class="o">=</span> <span class="s1">&#39;ABCDEFGHIJKLMNOPQRSTUVWXYZ&#39;</span> <span class="c">!&lt; Upper case alphabet.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">26</span><span class="p">),</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">lower_alphabet</span> <span class="o">=</span> <span class="s1">&#39;abcdefghijklmnopqrstuvwxyz&#39;</span> <span class="c">!&lt; Lower case alphabet.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+    <div class="highlight"><pre><span></span><span class="w">  </span><span class="k">elemental function </span><span class="n">upper_case</span><span class="p">(</span><span class="n">string</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="c">!&lt; Convert the lower case characters of a string to upper case one.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">string</span><span class="w">                                        </span><span class="c">!&lt; String to be converted.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">))</span><span class="w">   </span><span class="kd">::</span><span class="w"> </span><span class="n">upper_case</span><span class="w">                                    </span><span class="c">!&lt; Converted string.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="w">                      </span><span class="kd">::</span><span class="w"> </span><span class="n">n1</span><span class="w">                                            </span><span class="c">!&lt; Characters counter.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="w">                      </span><span class="kd">::</span><span class="w"> </span><span class="n">n2</span><span class="w">                                            </span><span class="c">!&lt; Characters counter.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">26</span><span class="p">),</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">upper_alphabet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;ABCDEFGHIJKLMNOPQRSTUVWXYZ&#39;</span><span class="w"> </span><span class="c">!&lt; Upper case alphabet.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">26</span><span class="p">),</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">lower_alphabet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;abcdefghijklmnopqrstuvwxyz&#39;</span><span class="w"> </span><span class="c">!&lt; Lower case alphabet.</span>
 
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">Upper_Case</span> <span class="o">=</span> <span class="n">string</span>
-  <span class="k">do </span><span class="n">n1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
-    <span class="n">n2</span> <span class="o">=</span> <span class="nb">index</span><span class="p">(</span><span class="n">lower_alphabet</span><span class="p">,</span><span class="n">string</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n1</span><span class="p">))</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">n2</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="n">Upper_Case</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n1</span><span class="p">)</span> <span class="o">=</span> <span class="n">upper_alphabet</span><span class="p">(</span><span class="n">n2</span><span class="p">:</span><span class="n">n2</span><span class="p">)</span>
-  <span class="n">enddo</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endfunction</span> <span class="n">Upper_Case</span>
+<span class="w">  </span><span class="n">upper_case</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">string</span><span class="w"></span>
+<span class="w">  </span><span class="k">do </span><span class="n">n1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">n2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">index</span><span class="p">(</span><span class="n">lower_alphabet</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n1</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n2</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">upper_case</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">upper_alphabet</span><span class="p">(</span><span class="n">n2</span><span class="p">:</span><span class="n">n2</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="k">enddo</span>
+<span class="k">  endfunction </span><span class="n">upper_case</span><span class="w"></span>
 </pre></div>
 
     </section>
     <br>
     
-    
     </div>
   </div>
 
-    <hr>
-    <footer>
-        <div class="row">
-        <div class="col-md-6">&copy; 2015 FLAP was written by Stefano Zaghi. </div>
-        <div class="col-md-6"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a>.</span></div>
-        </div>
-        <br>
-    </footer>
+    <hr>    
     </div> <!-- /container -->
-
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-6"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2022 
+</p>
+        </div>
+        <div class="col-xs-6 col-md-6">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+          </p>
+        </div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -659,12 +331,14 @@ implementation in a submodule of an interface in a parent module.</p>
       MathJax.Hub.Config({
         TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
         jax: ['input/TeX','input/MathML','output/HTML-CSS'],
-        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'],
-        'HTML-CSS': { 
-           styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: '#000000 ! important'} }
-        }
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
       });
     </script>
-    <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
   </body>
 </html>

@@ -1,4 +1,4 @@
-    body {
+body {
       padding-top: 70px;
     }
     table.nostretch {
@@ -10,6 +10,10 @@
     .nostretch tr td{
       width:1%;
       white-space:nowrap;
+    }
+
+    html {
+      scroll-padding-top: 70px;
     }
 
     ol.hierarchy {
@@ -47,6 +51,57 @@
       white-space: pre
     }
     
+    /* .hl is for when line numbers are included, .highlight is for all
+       other cases. */
+    .hl pre { 
+      counter-reset: line-numbering;
+      overflow-x: auto; 
+      overflow-wrap: normal; 
+      white-space: pre;
+      padding: 0;
+      padding-right: 9.5px;
+      overflow-y: hidden;
+      padding-bottom: 9.5px;
+    }
+    
+    .hl pre a::before {
+      content: counter(line-numbering);
+      counter-increment: line-numbering;
+      padding-right: 0.7em; /* space after numbers */
+      margin-top: 4.5em;
+      width: 60px;
+      text-align: right;
+      opacity: 0.7;
+      display: inline-block;
+      color: #aaa;
+      background: #eee;
+      margin-right: 10px;
+      border-right: 1px solid #ccc;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    
+    .hl pre a:first-of-type::before {
+      padding-top: 9.5px;
+    }
+    
+    .hl pre a:last-of-type::before {
+      padding-bottom: 9.5px;
+    }
+    
+    .hl pre a:only-of-type::before {
+      padding: 9.5px;
+    }
+
+    .hl pre a {
+	display: inline-block;
+	height: 4.5em;
+	margin: -4.5em 0 0;
+    }
     .codesum h3 {
       margin-top: 2px;
       margin-bottom: 2px;
@@ -125,3 +180,105 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+    
+    .highlighttable {
+      width: auto;
+      table-layout: fixed;
+    }
+
+    ul.checklist {
+      list-style-type: none;
+    }
+
+    ul.checklist input[type="checkbox"] {
+      margin-left: -20.8px;
+      margin-right: 4.55px;
+    }
+
+    .gitter-chat-embed {
+      z-index: 100000;
+    }
+
+table.graph {
+    text-align: center;
+}
+
+
+.graph td.root {
+  border:2px solid black;
+  padding:10px;
+}
+
+.graph td.triangle-right:after {
+    content: "";
+    display: block;
+    border-top: 7px solid  transparent;
+    border-bottom: 7px solid  transparent;
+    border-left: 7px solid black;
+}
+
+.graph td.triangle-left:after {
+    content: "";
+    display: block;
+    border-top: 7px solid  transparent;
+    border-bottom: 7px solid  transparent;
+    border-right: 7px solid black;
+}
+
+.graph td.node {
+  color: white;
+  padding:10px;
+  border-style: solid;
+  border-width: 3px 0px 3px 0px;
+  border-color: white;
+}
+
+.graph td.node a{
+  color: white;
+}
+
+.graph td.dashedText,
+.graph td.solidText {
+    padding: 0px 10px 0px 10px;
+    min-width: 40px;
+    color: black;
+    border-color: black;
+}
+
+.graph td.dashedText {
+    border-bottom-style: dashed;
+}
+
+.graph td.solidText {
+    border-bottom-style: solid;
+}
+
+.graph td.dashedBottom,
+.graph td.dashedTop,
+.graph td.solidTop,
+.graph td.solidBottom {
+    min-width: 40px;
+    color: transparent;
+    border-color: black;
+}
+
+.graph td.dashedBottom {
+    border-bottom-style: dashed;
+}
+
+.graph td.dashedTop {
+    border-top-style: dashed;
+}
+
+.graph td.solidBottom {
+    border-bottom-style: solid;
+}
+
+.graph td.solidTop {
+    border-top-style: solid;
+}
+
+/* Ensure tables in Pages don't collapse horizontally */
+td, th {
+    padding-right: 10px;
+}

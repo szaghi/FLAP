@@ -4,10 +4,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	 
-	 <meta name="description" content="Fortran command Line Arguments Parser for poor people">
-    
-    <meta name="author" content="Chris MacMackin" >
+   <meta name="description" content="Fortran command Line Arguments Parser for poor people">
+    <meta name="author" content="Stefano Zaghi" >
     <link rel="icon" href="../favicon.png">
 
     <title>tokenize &ndash; FLAP</title>
@@ -16,7 +14,7 @@
     <link href="../css/pygments.css" rel="stylesheet">
     <link href="../css/font-awesome.min.css" rel="stylesheet">
     <link href="../css/local.css" rel="stylesheet">
-    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -26,13 +24,6 @@
     
     <script src="../js/jquery-2.1.3.min.js"></script>
     <script src="../js/svg-pan-zoom.min.js"></script>
-
-    
-    <script src="../tipuesearch/tipuesearch_content.js"></script>
-    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
-    <script src="../tipuesearch/tipuesearch_set.js"></script>
-    <script src="../tipuesearch/tipuesearch.js"></script>
-    
 
   </head>
 
@@ -52,24 +43,27 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-				
-                
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
             <li><a href="../lists/files.html">Source Files</a></li>
-				
-				
             <li><a href="../lists/modules.html">Modules</a></li>
-				
-				
             <li><a href="../lists/procedures.html">Procedures</a></li>
-				
-								
-            <li><a href="../lists/types.html">Derived Types</a></li>
-				
-				
+                   <li><a href="../lists/types.html">Derived Types</a></li>
             <li><a href="../lists/programs.html">Programs</a></li>
-				
-          </ul>
+       
+            </ul>
         
+            </li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+                             <li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/programs.html">Programs</a></li>
+          </ul>
         <form action="../search.html" class="navbar-form navbar-right" role="search">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
@@ -78,805 +72,472 @@
         <button type="submit" class="btn btn-default">Submit</button>
 -->
         </form>
-        
         </div><!--/.nav-collapse -->
       </div>
     </nav>
 
     <div class="container">
-    
-  
   <div class="row">
     <h1>tokenize
-    <small>Subroutine</small>
-    
+      <small>Subroutine</small>
     </h1>
-	 
-<div class="row">
-<div class="col-lg-12">
+    <div class="row">
+  <div class="col-lg-12">
 <div class="well well-sm">
   <ul class="list-inline" style="margin-bottom:0px;display:inline">
-     
-     
-     
-     
-    
-    
-    <li><i class="fa fa-code"></i><a href="../src/Data_Type_Command_Line_Interface.F90"> Source File</a></li>
-     
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 1.0% of total for procedures.">35 statements</a>
+     </li> 
+    <li><i class="fa fa-code"></i><a href="../src/flap_utils_m.f90"> Source File</a></li>
   </ul>
   <ol class="breadcrumb in-well text-right">
-  
-     <li><a href='../sourcefile/data_type_command_line_interface.f90.html'>Data_Type_Command_Line_Interface.F90</a></li>
-  
-     <li><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></li>
-  
+     <li><a href='../sourcefile/flap_utils_m.f90.html'>flap_utils_m.f90</a></li>
+     <li><a href='../module/flap_utils_m.html'>flap_utils_m</a></li>
      <li class="active">tokenize</li>
   </ol>
 </div>
 </div>
 </div>
-    
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
   </div>
   
   <div class="row">
-    <div class="col-lg-3">
-    
-<div id="sidebar">
-  
-  
-  
-  <div class="panel panel-primary">
-    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#vars">Variables</a></h3></div>
-    <div id="vars" class="panel-collapse collapse">
-      <div class="list-group">
-        
-        <a class="list-group-item" href="../proc/tokenize.html#variable-strsub">strsub</a>
-        
-        <a class="list-group-item" href="../proc/tokenize.html#variable-dlen">dlen</a>
-        
-        <a class="list-group-item" href="../proc/tokenize.html#variable-c">c</a>
-        
-        <a class="list-group-item" href="../proc/tokenize.html#variable-n">n</a>
-        
-        <a class="list-group-item" href="../proc/tokenize.html#variable-t">t</a>
-        
-      </div>
-    </div>
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    <div id="sidebar">
+  <h3>Contents</h3>
+ 
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/tokenize.html#src">tokenize</a>
   </div>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  <div class="panel panel-primary">
-    <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
-    <div class="list-group">
-      <a class="list-group-item" href="../proc/tokenize.html#src">tokenize</a>
-    </div>
-  </div>
-  
-  <hr>
-  
-  <div class="panel panel-default">
-    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#allprocs">All Procedures</a></h3></div>
-    <div id="allprocs" class="panel-collapse collapse">
-        <div class="list-group">
-          
-          <a class="list-group-item" href="../proc/add.html">add</a>
-          
-          <a class="list-group-item" href="../proc/add_cla_clasg.html">add_cla_clasg</a>
-          
-          <a class="list-group-item" href="../proc/add_group.html">add_group</a>
-          
-          <a class="list-group-item" href="../proc/assign_cla.html">assign_cla</a>
-          
-          <a class="list-group-item" href="../proc/assign_clasg.html">assign_clasg</a>
-          
-          <a class="list-group-item" href="../proc/assign_cli.html">assign_cli</a>
-          
-          <a class="list-group-item" href="../proc/assign_object.html">assign_object</a>
-          
-          <a class="list-group-item" href="../proc/called_group.html">called_group</a>
-          
-          <a class="list-group-item" href="../proc/check.html">check</a>
-          
-          <a class="list-group-item" href="../proc/check_choices_cla.html">check_choices_cla</a>
-          
-          <a class="list-group-item" href="../proc/check_cla.html">check_cla</a>
-          
-          <a class="list-group-item" href="../proc/check_clasg.html">check_clasg</a>
-          
-          <a class="list-group-item" href="../proc/check_list_size_cla.html">check_list_size_cla</a>
-          
-          <a class="list-group-item" href="../proc/check_m_exclusive.html">check_m_exclusive</a>
-          
-          <a class="list-group-item" href="../proc/check_m_exclusive_clasg.html">check_m_exclusive_clasg</a>
-          
-          <a class="list-group-item" href="../proc/check_required_clasg.html">check_required_clasg</a>
-          
-          <a class="list-group-item" href="../proc/defined.html">defined</a>
-          
-          <a class="list-group-item" href="../proc/defined_clasg.html">defined_clasg</a>
-          
-          <a class="list-group-item" href="../proc/defined_group.html">defined_group</a>
-          
-          <a class="list-group-item" href="../proc/errored.html">errored</a>
-          
-          <a class="list-group-item" href="../proc/finalize.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize_cla.html">finalize_cla</a>
-          
-          <a class="list-group-item" href="../proc/finalize_clasg.html">finalize_clasg</a>
-          
-          <a class="list-group-item" href="../proc/free.html">free</a>
-          
-          <a class="list-group-item" href="../proc/free_cla.html">free_cla</a>
-          
-          <a class="list-group-item" href="../proc/free_clasg.html">free_clasg</a>
-          
-          <a class="list-group-item" href="../proc/free_object.html">free_object</a>
-          
-          <a class="list-group-item" href="../proc/get_args_from_invocation.html">get_args_from_invocation</a>
-          
-          <a class="list-group-item" href="../proc/get_args_from_string.html">get_args_from_string</a>
-          
-          <a class="list-group-item" href="../proc/get_cla.html">get_cla</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_cli.html">get_cla_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list.html">get_cla_list</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_cli.html">get_cla_list_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_char.html">get_cla_list_varying_char</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_char_cli.html">get_cla_list_varying_char_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_i1p.html">get_cla_list_varying_I1P</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_i1p_cli.html">get_cla_list_varying_I1P_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_i2p.html">get_cla_list_varying_I2P</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_i2p_cli.html">get_cla_list_varying_I2P_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_i4p.html">get_cla_list_varying_I4P</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_i4p_cli.html">get_cla_list_varying_I4P_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_i8p.html">get_cla_list_varying_I8P</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_i8p_cli.html">get_cla_list_varying_I8P_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_logical.html">get_cla_list_varying_logical</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_logical_cli.html">get_cla_list_varying_logical_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_r16p.html">get_cla_list_varying_R16P</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_r16p_cli.html">get_cla_list_varying_R16P_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_r4p.html">get_cla_list_varying_R4P</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_r4p_cli.html">get_cla_list_varying_R4P_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_r8p.html">get_cla_list_varying_R8P</a>
-          
-          <a class="list-group-item" href="../proc/get_cla_list_varying_r8p_cli.html">get_cla_list_varying_R8P_cli</a>
-          
-          <a class="list-group-item" href="../proc/get_clasg_indexes.html">get_clasg_indexes</a>
-          
-          <a class="list-group-item" href="../proc/init.html">init</a>
-          
-          <a class="list-group-item" href="../proc/parse.html">parse</a>
-          
-          <a class="list-group-item" href="../proc/parse_clasg.html">parse_clasg</a>
-          
-          <a class="list-group-item" href="../proc/passed.html">passed</a>
-          
-          <a class="list-group-item" href="../proc/passed_clasg.html">passed_clasg</a>
-          
-          <a class="list-group-item" href="../proc/print_usage.html">print_usage</a>
-          
-          <a class="list-group-item" href="../proc/print_version.html">print_version</a>
-          
-          <a class="list-group-item" href="../proc/save_man_page.html">save_man_page</a>
-          
-          <a class="list-group-item" href="../proc/set_mutually_exclusive_groups.html">set_mutually_exclusive_groups</a>
-          
-          <a class="list-group-item" href="../proc/signature.html">signature</a>
-          
-          <a class="list-group-item" href="../proc/signature_cla.html">signature_cla</a>
-          
-          <a class="list-group-item" href="../proc/signature_clasg.html">signature_clasg</a>
-          
-          <a class="list-group-item" href="../proc/tokenize.html">tokenize</a>
-          
-          <a class="list-group-item" href="../proc/upper_case.html">Upper_Case</a>
-          
-          <a class="list-group-item" href="../proc/usage.html">usage</a>
-          
-          <a class="list-group-item" href="../proc/usage_cla.html">usage_cla</a>
-          
-          <a class="list-group-item" href="../proc/usage_clasg.html">usage_clasg</a>
-          
-        </div>
-    </div>
-  </div>
-  
+</div>
+
 </div>
 
     </div>
     
-    <div class="col-lg-9" id='text'>
-    <h2>
-private puresubroutine tokenize(strin, delimiter, toks, Nt)
+    <div class="col-md-9" id='text'>
+    <h2>public pure subroutine tokenize(strin, delimiter, toks, Nt)</h2>
     
-    
-    
-</h2>
-    
-  
 
-
+    <p>Tokenize a string in order to parse it.</p>
+<p></p><div class="alert alert-info" role="alert"><h4>Note</h4><p>The dummy array containing tokens must allocatable and its character elements must have the same length of the input
+string. If the length of the delimiter is higher than the input string one then the output tokens array is allocated with
+only one element set to input string.</p></div>
 
     <h3>Arguments</h3>
-    
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
+      <table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
-
-  
-  
-  
-  
 <tr>
-  
   <td><span class="anchor" id="variable-strin"></span>character(len=*),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
+<td>intent(in)</td>
+  <td></td>  <td></td><td>::</td>
   <td><strong>strin</strong></td><td><p>String to be tokenized.</p></td>
-  
 </tr>
-
-  
-  
-  
-  
 <tr>
-  
   <td><span class="anchor" id="variable-delimiter"></span>character(len=*),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
+<td>intent(in)</td>
+  <td></td>  <td></td><td>::</td>
   <td><strong>delimiter</strong></td><td><p>Delimiter of tokens.</p></td>
-  
 </tr>
-
-  
-  
-  
-  
 <tr>
-  
-  <td><span class="anchor" id="variable-toks"></span>character(len=len(strin)),</td>
-  <td>intent(out),</td>
-  <td></td>
-  
-  <td>allocatable</td><td>::</td>
+  <td><span class="anchor" id="variable-toks"></span>character(len=len),</td>
+<td>intent(out),</td>
+  <td></td>  <td>allocatable</td><td>::</td>
   <td><strong>toks</strong>(:)</td><td><p>Tokens.</p></td>
-  
 </tr>
-
-  
-  
-  
-  
 <tr>
-  
   <td><span class="anchor" id="variable-nt"></span>integer(kind=I4P),</td>
-  <td>intent(out),</td>
-  <td>optional</td>
-  
-  <td></td><td>::</td>
+<td>intent(out),</td>
+  <td>optional</td>  <td></td><td>::</td>
   <td><strong>Nt</strong></td><td><p>Number of tokens.</p></td>
-  
 </tr>
-
 </tbody>
 </table>
 
-    
-    
-    
-    <h3>Description</h3>
-    <p>Tokenize a string in order to parse it.</p>
-<p></p><div class="alert alert-info" role="alert"><h4>Note</h4>The dummy array containing tokens must allocatable and its character elements must have the same length of the input
- string. If the length of the delimiter is higher than the input string one then the output tokens array is allocated with
- only one element set to char(0).</div>
-    
-    
-     
-     <h3>Called By</h3>
-     
-                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+    <br>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Called by</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.38.0 (20140413.2041)
+<!-- Generated by graphviz version 2.43.0 (0)
  -->
 <!-- Title: proc~~tokenize~~CalledByGraph Pages: 1 -->
-<svg id="proctokenizeCalledByGraph" width="391pt" height="532pt"
- viewBox="0.00 0.00 391.00 532.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="proc~~tokenize~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 528)">
+<svg id="proctokenizeCalledByGraph" width="258pt" height="536pt"
+ viewBox="0.00 0.00 258.00 536.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~tokenize~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 532)">
 <title>proc~~tokenize~~CalledByGraph</title>
-<polygon fill="white" stroke="none" points="-4,4 -4,-528 387,-528 387,4 -4,4"/>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-532 254,-532 254,4 -4,4"/>
 <!-- proc~tokenize -->
-<g id="proc~~tokenize~~CalledByGraph_node1" class="node"><title>proc~tokenize</title>
-<polygon fill="none" stroke="black" points="383,-276 329,-276 329,-252 383,-252 383,-276"/>
-<text text-anchor="middle" x="356" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50">tokenize</text>
+<g id="proc~~tokenize~~CalledByGraph_node1" class="node">
+<title>proc~tokenize</title>
+<polygon fill="none" stroke="black" points="250,-276 193,-276 193,-252 250,-252 250,-276"/>
+<text text-anchor="middle" x="221.5" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50">tokenize</text>
 </g>
-<!-- proc~check_choices_cla -->
-<g id="proc~~tokenize~~CalledByGraph_node2" class="node"><title>proc~check_choices_cla</title>
-<g id="a_proc~~tokenize~~CalledByGraph_node2"><a xlink:href="../proc/check_choices_cla.html" xlink:title="check_choices_cla">
-<polygon fill="#d9534f" stroke="#d9534f" points="273,-524 171,-524 171,-500 273,-500 273,-524"/>
-<text text-anchor="middle" x="222" y="-509.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">check_choices_cla</text>
+<!-- proc~get_cla_list_varying_i8p~2 -->
+<g id="proc~~tokenize~~CalledByGraph_node2" class="node">
+<title>proc~get_cla_list_varying_i8p~2</title>
+<g id="a_proc~~tokenize~~CalledByGraph_node2"><a xlink:href=".././proc/get_cla_list_varying_i8p~2.html" xlink:title="get_cla_list_varying_I8P">
+<polygon fill="#d9534f" stroke="#d9534f" points="147,-528 10,-528 10,-504 147,-504 147,-528"/>
+<text text-anchor="middle" x="78.5" y="-513.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_I8P</text>
 </a>
 </g>
 </g>
-<!-- proc~check_choices_cla&#45;&gt;proc~tokenize -->
-<g id="proc~~tokenize~~CalledByGraph_edge2" class="edge"><title>proc~check_choices_cla&#45;&gt;proc~tokenize</title>
-<path fill="none" stroke="black" d="M273.208,-503.8C280.569,-500.766 287.507,-496.631 293,-491 348.883,-433.711 355.545,-331.175 355.593,-286.188"/>
-<polygon fill="black" stroke="black" points="359.092,-286.016 355.489,-276.052 352.092,-286.088 359.092,-286.016"/>
+<!-- proc~get_cla_list_varying_i8p~2&#45;&gt;proc~tokenize -->
+<g id="proc~~tokenize~~CalledByGraph_edge1" class="edge">
+<title>proc~get_cla_list_varying_i8p~2&#45;&gt;proc~tokenize</title>
+<path fill="none" stroke="#000000" d="M144.96,-503.98C149.36,-501.5 153.44,-498.54 157,-495 214.98,-437.23 221.34,-331.79 221.19,-286.09"/>
+<polygon fill="#000000" stroke="#000000" points="224.69,-286.02 221.04,-276.07 217.69,-286.12 224.69,-286.02"/>
 </g>
-<!-- proc~get_cla_list_varying_i8p -->
-<g id="proc~~tokenize~~CalledByGraph_node3" class="node"><title>proc~get_cla_list_varying_i8p</title>
-<g id="a_proc~~tokenize~~CalledByGraph_node3"><a xlink:href="../proc/get_cla_list_varying_i8p.html" xlink:title="get_cla_list_varying_I8P">
-<polygon fill="#d9534f" stroke="#d9534f" points="286,-482 158,-482 158,-458 286,-458 286,-482"/>
-<text text-anchor="middle" x="222" y="-467.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_I8P</text>
+<!-- proc~get_cla_list_varying_i2p~2 -->
+<g id="proc~~tokenize~~CalledByGraph_node3" class="node">
+<title>proc~get_cla_list_varying_i2p~2</title>
+<g id="a_proc~~tokenize~~CalledByGraph_node3"><a xlink:href=".././proc/get_cla_list_varying_i2p~2.html" xlink:title="get_cla_list_varying_I2P">
+<polygon fill="#d9534f" stroke="#d9534f" points="147,-486 10,-486 10,-462 147,-462 147,-486"/>
+<text text-anchor="middle" x="78.5" y="-471.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_I2P</text>
 </a>
 </g>
 </g>
-<!-- proc~get_cla_list_varying_i8p&#45;&gt;proc~tokenize -->
-<g id="proc~~tokenize~~CalledByGraph_edge3" class="edge"><title>proc~get_cla_list_varying_i8p&#45;&gt;proc~tokenize</title>
-<path fill="none" stroke="black" d="M280.621,-457.919C285.139,-455.471 289.355,-452.531 293,-449 338.841,-404.599 350.789,-325.352 353.903,-286.597"/>
-<polygon fill="black" stroke="black" points="357.411,-286.589 354.591,-276.377 350.427,-286.119 357.411,-286.589"/>
+<!-- proc~get_cla_list_varying_i2p~2&#45;&gt;proc~tokenize -->
+<g id="proc~~tokenize~~CalledByGraph_edge2" class="edge">
+<title>proc~get_cla_list_varying_i2p~2&#45;&gt;proc~tokenize</title>
+<path fill="none" stroke="#000000" d="M144.37,-461.95C148.96,-459.49 153.25,-456.54 157,-453 204.8,-407.97 216.63,-325.88 219.55,-286.39"/>
+<polygon fill="#000000" stroke="#000000" points="223.05,-286.43 220.17,-276.23 216.06,-286 223.05,-286.43"/>
 </g>
-<!-- proc~get_cla_list_varying_i2p -->
-<g id="proc~~tokenize~~CalledByGraph_node4" class="node"><title>proc~get_cla_list_varying_i2p</title>
-<g id="a_proc~~tokenize~~CalledByGraph_node4"><a xlink:href="../proc/get_cla_list_varying_i2p.html" xlink:title="get_cla_list_varying_I2P">
-<polygon fill="#d9534f" stroke="#d9534f" points="286,-440 158,-440 158,-416 286,-416 286,-440"/>
-<text text-anchor="middle" x="222" y="-425.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_I2P</text>
+<!-- proc~get_cla_list_varying_i4p~2 -->
+<g id="proc~~tokenize~~CalledByGraph_node4" class="node">
+<title>proc~get_cla_list_varying_i4p~2</title>
+<g id="a_proc~~tokenize~~CalledByGraph_node4"><a xlink:href=".././proc/get_cla_list_varying_i4p~2.html" xlink:title="get_cla_list_varying_I4P">
+<polygon fill="#d9534f" stroke="#d9534f" points="147,-444 10,-444 10,-420 147,-420 147,-444"/>
+<text text-anchor="middle" x="78.5" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_I4P</text>
 </a>
 </g>
 </g>
-<!-- proc~get_cla_list_varying_i2p&#45;&gt;proc~tokenize -->
-<g id="proc~~tokenize~~CalledByGraph_edge4" class="edge"><title>proc~get_cla_list_varying_i2p&#45;&gt;proc~tokenize</title>
-<path fill="none" stroke="black" d="M271.115,-415.953C279.072,-412.405 286.752,-407.845 293,-402 326.994,-370.198 343.636,-316.286 350.658,-286.121"/>
-<polygon fill="black" stroke="black" points="354.118,-286.683 352.824,-276.167 347.278,-285.194 354.118,-286.683"/>
+<!-- proc~get_cla_list_varying_i4p~2&#45;&gt;proc~tokenize -->
+<g id="proc~~tokenize~~CalledByGraph_edge4" class="edge">
+<title>proc~get_cla_list_varying_i4p~2&#45;&gt;proc~tokenize</title>
+<path fill="none" stroke="#000000" d="M143.29,-419.99C148.23,-417.52 152.89,-414.56 157,-411 194.78,-378.27 210.82,-319 217.01,-286.62"/>
+<polygon fill="#000000" stroke="#000000" points="220.53,-286.83 218.81,-276.37 213.64,-285.62 220.53,-286.83"/>
+</g>
+<!-- proc~get_cla_list~2 -->
+<g id="proc~~tokenize~~CalledByGraph_node5" class="node">
+<title>proc~get_cla_list~2</title>
+<g id="a_proc~~tokenize~~CalledByGraph_node5"><a xlink:href=".././proc/get_cla_list~2.html" xlink:title="get_cla_list">
+<polygon fill="#d9534f" stroke="#d9534f" points="114,-402 43,-402 43,-378 114,-378 114,-402"/>
+<text text-anchor="middle" x="78.5" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla_list~2&#45;&gt;proc~tokenize -->
+<g id="proc~~tokenize~~CalledByGraph_edge5" class="edge">
+<title>proc~get_cla_list~2&#45;&gt;proc~tokenize</title>
+<path fill="none" stroke="#000000" d="M114.03,-386.38C128.43,-383.5 144.64,-378.31 157,-369 185.31,-347.67 203.64,-309.71 213.01,-285.75"/>
+<polygon fill="#000000" stroke="#000000" points="216.38,-286.73 216.58,-276.13 209.82,-284.29 216.38,-286.73"/>
+</g>
+<!-- proc~get_cla_list_varying_logical~2 -->
+<g id="proc~~tokenize~~CalledByGraph_node6" class="node">
+<title>proc~get_cla_list_varying_logical~2</title>
+<g id="a_proc~~tokenize~~CalledByGraph_node6"><a xlink:href=".././proc/get_cla_list_varying_logical~2.html" xlink:title="get_cla_list_varying_logical">
+<polygon fill="#d9534f" stroke="#d9534f" points="157,-360 0,-360 0,-336 157,-336 157,-360"/>
+<text text-anchor="middle" x="78.5" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_logical</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla_list_varying_logical~2&#45;&gt;proc~tokenize -->
+<g id="proc~~tokenize~~CalledByGraph_edge6" class="edge">
+<title>proc~get_cla_list_varying_logical~2&#45;&gt;proc~tokenize</title>
+<path fill="none" stroke="#000000" d="M137.15,-336C144.06,-333.52 150.84,-330.55 157,-327 175.94,-316.08 193.25,-298.12 205,-284.16"/>
+<polygon fill="#000000" stroke="#000000" points="207.97,-286.06 211.56,-276.09 202.54,-281.64 207.97,-286.06"/>
+</g>
+<!-- proc~get_cla_list_varying_r16p~2 -->
+<g id="proc~~tokenize~~CalledByGraph_node7" class="node">
+<title>proc~get_cla_list_varying_r16p~2</title>
+<g id="a_proc~~tokenize~~CalledByGraph_node7"><a xlink:href=".././proc/get_cla_list_varying_r16p~2.html" xlink:title="get_cla_list_varying_R16P">
+<polygon fill="#d9534f" stroke="#d9534f" points="152.5,-318 4.5,-318 4.5,-294 152.5,-294 152.5,-318"/>
+<text text-anchor="middle" x="78.5" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_R16P</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla_list_varying_r16p~2&#45;&gt;proc~tokenize -->
+<g id="proc~~tokenize~~CalledByGraph_edge7" class="edge">
+<title>proc~get_cla_list_varying_r16p~2&#45;&gt;proc~tokenize</title>
+<path fill="none" stroke="#000000" d="M125.52,-293.98C135.9,-291.14 146.85,-288.05 157,-285 165.47,-282.45 174.53,-279.56 183.06,-276.76"/>
+<polygon fill="#000000" stroke="#000000" points="184.4,-280 192.79,-273.53 182.19,-273.36 184.4,-280"/>
+</g>
+<!-- proc~get_cla_list_varying_r8p~2 -->
+<g id="proc~~tokenize~~CalledByGraph_node8" class="node">
+<title>proc~get_cla_list_varying_r8p~2</title>
+<g id="a_proc~~tokenize~~CalledByGraph_node8"><a xlink:href=".././proc/get_cla_list_varying_r8p~2.html" xlink:title="get_cla_list_varying_R8P">
+<polygon fill="#d9534f" stroke="#d9534f" points="149.5,-276 7.5,-276 7.5,-252 149.5,-252 149.5,-276"/>
+<text text-anchor="middle" x="78.5" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_R8P</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla_list_varying_r8p~2&#45;&gt;proc~tokenize -->
+<g id="proc~~tokenize~~CalledByGraph_edge11" class="edge">
+<title>proc~get_cla_list_varying_r8p~2&#45;&gt;proc~tokenize</title>
+<path fill="none" stroke="#000000" d="M149.59,-264C160.97,-264 172.38,-264 182.61,-264"/>
+<polygon fill="#000000" stroke="#000000" points="182.79,-267.5 192.79,-264 182.79,-260.5 182.79,-267.5"/>
 </g>
 <!-- proc~get_args_from_string -->
-<g id="proc~~tokenize~~CalledByGraph_node5" class="node"><title>proc~get_args_from_string</title>
-<g id="a_proc~~tokenize~~CalledByGraph_node5"><a xlink:href="../proc/get_args_from_string.html" xlink:title="get_args_from_string">
-<polygon fill="#d9534f" stroke="#d9534f" points="115,-380 7.10543e-15,-380 7.10543e-15,-356 115,-356 115,-380"/>
-<text text-anchor="middle" x="57.5" y="-365.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_args_from_string</text>
+<g id="proc~~tokenize~~CalledByGraph_node9" class="node">
+<title>proc~get_args_from_string</title>
+<g id="a_proc~~tokenize~~CalledByGraph_node9"><a xlink:href=".././proc/get_args_from_string.html" xlink:title="get_args_from_string">
+<polygon fill="#d9534f" stroke="#d9534f" points="140.5,-234 16.5,-234 16.5,-210 140.5,-210 140.5,-234"/>
+<text text-anchor="middle" x="78.5" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_args_from_string</text>
 </a>
 </g>
 </g>
 <!-- proc~get_args_from_string&#45;&gt;proc~tokenize -->
-<g id="proc~~tokenize~~CalledByGraph_edge5" class="edge"><title>proc~get_args_from_string&#45;&gt;proc~tokenize</title>
-<path fill="none" stroke="black" d="M100.638,-380.086C150.19,-391.748 233.247,-403.11 293,-369 324.048,-351.276 341.113,-311.244 349.133,-286.049"/>
-<polygon fill="black" stroke="black" points="352.546,-286.849 352.03,-276.267 345.834,-284.861 352.546,-286.849"/>
+<g id="proc~~tokenize~~CalledByGraph_edge8" class="edge">
+<title>proc~get_args_from_string&#45;&gt;proc~tokenize</title>
+<path fill="none" stroke="#000000" d="M125.52,-234.02C135.9,-236.86 146.85,-239.95 157,-243 165.47,-245.55 174.53,-248.44 183.06,-251.24"/>
+<polygon fill="#000000" stroke="#000000" points="182.19,-254.64 192.79,-254.47 184.4,-248 182.19,-254.64"/>
 </g>
-<!-- none~sanitize_args -->
-<g id="proc~~tokenize~~CalledByGraph_node9" class="node"><title>none~sanitize_args</title>
-<polygon fill="#d94e8f" stroke="#d94e8f" points="260,-360 184,-360 184,-336 260,-336 260,-360"/>
-<text text-anchor="middle" x="222" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">sanitize_args</text>
-</g>
-<!-- proc~get_args_from_string&#45;&gt;none~sanitize_args -->
-<g id="proc~~tokenize~~CalledByGraph_edge1" class="edge"><title>proc~get_args_from_string&#45;&gt;none~sanitize_args</title>
-<path fill="none" stroke="black" d="M115.335,-361.005C134.397,-358.659 155.437,-356.069 173.69,-353.823"/>
-<polygon fill="black" stroke="black" points="174.298,-357.274 183.796,-352.579 173.443,-350.327 174.298,-357.274"/>
-</g>
-<!-- proc~get_cla_list_varying_i1p -->
-<g id="proc~~tokenize~~CalledByGraph_node6" class="node"><title>proc~get_cla_list_varying_i1p</title>
-<g id="a_proc~~tokenize~~CalledByGraph_node6"><a xlink:href="../proc/get_cla_list_varying_i1p.html" xlink:title="get_cla_list_varying_I1P">
-<polygon fill="#d9534f" stroke="#d9534f" points="286,-318 158,-318 158,-294 286,-294 286,-318"/>
-<text text-anchor="middle" x="222" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_I1P</text>
+<!-- proc~get_cla_list_varying_r4p~2 -->
+<g id="proc~~tokenize~~CalledByGraph_node10" class="node">
+<title>proc~get_cla_list_varying_r4p~2</title>
+<g id="a_proc~~tokenize~~CalledByGraph_node10"><a xlink:href=".././proc/get_cla_list_varying_r4p~2.html" xlink:title="get_cla_list_varying_R4P">
+<polygon fill="#d9534f" stroke="#d9534f" points="149.5,-192 7.5,-192 7.5,-168 149.5,-168 149.5,-192"/>
+<text text-anchor="middle" x="78.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_R4P</text>
 </a>
 </g>
 </g>
-<!-- proc~get_cla_list_varying_i1p&#45;&gt;proc~tokenize -->
-<g id="proc~~tokenize~~CalledByGraph_edge6" class="edge"><title>proc~get_cla_list_varying_i1p&#45;&gt;proc~tokenize</title>
-<path fill="none" stroke="black" d="M264.16,-293.915C273.652,-291.055 283.693,-287.971 293,-285 301.482,-282.292 310.579,-279.275 319.12,-276.391"/>
-<polygon fill="black" stroke="black" points="320.48,-279.626 328.821,-273.094 318.227,-272.998 320.48,-279.626"/>
+<!-- proc~get_cla_list_varying_r4p~2&#45;&gt;proc~tokenize -->
+<g id="proc~~tokenize~~CalledByGraph_edge9" class="edge">
+<title>proc~get_cla_list_varying_r4p~2&#45;&gt;proc~tokenize</title>
+<path fill="none" stroke="#000000" d="M137.15,-192C144.06,-194.48 150.84,-197.45 157,-201 175.94,-211.92 193.25,-229.88 205,-243.84"/>
+<polygon fill="#000000" stroke="#000000" points="202.54,-246.36 211.56,-251.91 207.97,-241.94 202.54,-246.36"/>
 </g>
-<!-- proc~get_cla_list_varying_i4p -->
-<g id="proc~~tokenize~~CalledByGraph_node7" class="node"><title>proc~get_cla_list_varying_i4p</title>
-<g id="a_proc~~tokenize~~CalledByGraph_node7"><a xlink:href="../proc/get_cla_list_varying_i4p.html" xlink:title="get_cla_list_varying_I4P">
-<polygon fill="#d9534f" stroke="#d9534f" points="286,-276 158,-276 158,-252 286,-252 286,-276"/>
-<text text-anchor="middle" x="222" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_I4P</text>
+<!-- proc~check_choices -->
+<g id="proc~~tokenize~~CalledByGraph_node11" class="node">
+<title>proc~check_choices</title>
+<g id="a_proc~~tokenize~~CalledByGraph_node11"><a xlink:href=".././proc/check_choices.html" xlink:title="check_choices">
+<polygon fill="#d9534f" stroke="#d9534f" points="123.5,-150 33.5,-150 33.5,-126 123.5,-126 123.5,-150"/>
+<text text-anchor="middle" x="78.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">check_choices</text>
 </a>
 </g>
 </g>
-<!-- proc~get_cla_list_varying_i4p&#45;&gt;proc~tokenize -->
-<g id="proc~~tokenize~~CalledByGraph_edge7" class="edge"><title>proc~get_cla_list_varying_i4p&#45;&gt;proc~tokenize</title>
-<path fill="none" stroke="black" d="M286.294,-264C297.49,-264 308.791,-264 318.904,-264"/>
-<polygon fill="black" stroke="black" points="318.958,-267.5 328.958,-264 318.958,-260.5 318.958,-267.5"/>
+<!-- proc~check_choices&#45;&gt;proc~tokenize -->
+<g id="proc~~tokenize~~CalledByGraph_edge10" class="edge">
+<title>proc~check_choices&#45;&gt;proc~tokenize</title>
+<path fill="none" stroke="#000000" d="M123.57,-143.83C135.26,-146.94 147.31,-151.7 157,-159 185.31,-180.33 203.64,-218.29 213.01,-242.25"/>
+<polygon fill="#000000" stroke="#000000" points="209.82,-243.71 216.58,-251.87 216.38,-241.27 209.82,-243.71"/>
 </g>
-<!-- proc~get_cla_list_varying_logical -->
-<g id="proc~~tokenize~~CalledByGraph_node8" class="node"><title>proc~get_cla_list_varying_logical</title>
-<g id="a_proc~~tokenize~~CalledByGraph_node8"><a xlink:href="../proc/get_cla_list_varying_logical.html" xlink:title="get_cla_list_varying_logical">
-<polygon fill="#d9534f" stroke="#d9534f" points="293,-234 151,-234 151,-210 293,-210 293,-234"/>
-<text text-anchor="middle" x="222" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_logical</text>
+<!-- proc~get_cla_list_varying_char~2 -->
+<g id="proc~~tokenize~~CalledByGraph_node12" class="node">
+<title>proc~get_cla_list_varying_char~2</title>
+<g id="a_proc~~tokenize~~CalledByGraph_node12"><a xlink:href=".././proc/get_cla_list_varying_char~2.html" xlink:title="get_cla_list_varying_char">
+<polygon fill="#d9534f" stroke="#d9534f" points="151,-108 6,-108 6,-84 151,-84 151,-108"/>
+<text text-anchor="middle" x="78.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_char</text>
 </a>
 </g>
 </g>
-<!-- proc~get_cla_list_varying_logical&#45;&gt;proc~tokenize -->
-<g id="proc~~tokenize~~CalledByGraph_edge8" class="edge"><title>proc~get_cla_list_varying_logical&#45;&gt;proc~tokenize</title>
-<path fill="none" stroke="black" d="M264.16,-234.085C273.652,-236.945 283.693,-240.029 293,-243 301.482,-245.708 310.579,-248.725 319.12,-251.609"/>
-<polygon fill="black" stroke="black" points="318.227,-255.002 328.821,-254.906 320.48,-248.374 318.227,-255.002"/>
+<!-- proc~get_cla_list_varying_char~2&#45;&gt;proc~tokenize -->
+<g id="proc~~tokenize~~CalledByGraph_edge3" class="edge">
+<title>proc~get_cla_list_varying_char~2&#45;&gt;proc~tokenize</title>
+<path fill="none" stroke="#000000" d="M143.29,-108.01C148.23,-110.48 152.89,-113.44 157,-117 194.78,-149.73 210.82,-209 217.01,-241.38"/>
+<polygon fill="#000000" stroke="#000000" points="213.64,-242.38 218.81,-251.63 220.53,-241.17 213.64,-242.38"/>
 </g>
-<!-- none~sanitize_args&#45;&gt;proc~tokenize -->
-<g id="proc~~tokenize~~CalledByGraph_edge9" class="edge"><title>none~sanitize_args&#45;&gt;proc~tokenize</title>
-<path fill="none" stroke="black" d="M260.068,-340.606C271.15,-337.433 283.003,-333.026 293,-327 311.285,-315.979 328.007,-298.33 339.465,-284.512"/>
-<polygon fill="black" stroke="black" points="342.365,-286.49 345.885,-276.497 336.902,-282.114 342.365,-286.49"/>
-</g>
-<!-- proc~get_cla_list -->
-<g id="proc~~tokenize~~CalledByGraph_node10" class="node"><title>proc~get_cla_list</title>
-<g id="a_proc~~tokenize~~CalledByGraph_node10"><a xlink:href="../proc/get_cla_list.html" xlink:title="get_cla_list">
-<polygon fill="#d9534f" stroke="#d9534f" points="255,-192 189,-192 189,-168 255,-168 255,-192"/>
-<text text-anchor="middle" x="222" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list</text>
+<!-- proc~get_cla_list_from_buffer -->
+<g id="proc~~tokenize~~CalledByGraph_node13" class="node">
+<title>proc~get_cla_list_from_buffer</title>
+<g id="a_proc~~tokenize~~CalledByGraph_node13"><a xlink:href=".././proc/get_cla_list_from_buffer.html" xlink:title="get_cla_list_from_buffer">
+<polygon fill="#d9534f" stroke="#d9534f" points="148,-66 9,-66 9,-42 148,-42 148,-66"/>
+<text text-anchor="middle" x="78.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_from_buffer</text>
 </a>
 </g>
 </g>
-<!-- proc~get_cla_list&#45;&gt;proc~tokenize -->
-<g id="proc~~tokenize~~CalledByGraph_edge10" class="edge"><title>proc~get_cla_list&#45;&gt;proc~tokenize</title>
-<path fill="none" stroke="black" d="M255.071,-186.03C267.5,-189.264 281.481,-194.057 293,-201 311.285,-212.021 328.007,-229.67 339.465,-243.488"/>
-<polygon fill="black" stroke="black" points="336.902,-245.886 345.885,-251.503 342.365,-241.51 336.902,-245.886"/>
+<!-- proc~get_cla_list_from_buffer&#45;&gt;proc~tokenize -->
+<g id="proc~~tokenize~~CalledByGraph_edge12" class="edge">
+<title>proc~get_cla_list_from_buffer&#45;&gt;proc~tokenize</title>
+<path fill="none" stroke="#000000" d="M144.37,-66.05C148.96,-68.51 153.25,-71.46 157,-75 204.8,-120.03 216.63,-202.12 219.55,-241.61"/>
+<polygon fill="#000000" stroke="#000000" points="216.06,-242 220.17,-251.77 223.05,-241.57 216.06,-242"/>
 </g>
-<!-- proc~get_cla_list_varying_r4p -->
-<g id="proc~~tokenize~~CalledByGraph_node11" class="node"><title>proc~get_cla_list_varying_r4p</title>
-<g id="a_proc~~tokenize~~CalledByGraph_node11"><a xlink:href="../proc/get_cla_list_varying_r4p.html" xlink:title="get_cla_list_varying_R4P">
-<polygon fill="#d9534f" stroke="#d9534f" points="288.5,-150 155.5,-150 155.5,-126 288.5,-126 288.5,-150"/>
-<text text-anchor="middle" x="222" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_R4P</text>
+<!-- proc~get_cla_list_varying_i1p~2 -->
+<g id="proc~~tokenize~~CalledByGraph_node14" class="node">
+<title>proc~get_cla_list_varying_i1p~2</title>
+<g id="a_proc~~tokenize~~CalledByGraph_node14"><a xlink:href=".././proc/get_cla_list_varying_i1p~2.html" xlink:title="get_cla_list_varying_I1P">
+<polygon fill="#d9534f" stroke="#d9534f" points="147,-24 10,-24 10,0 147,0 147,-24"/>
+<text text-anchor="middle" x="78.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_I1P</text>
 </a>
 </g>
 </g>
-<!-- proc~get_cla_list_varying_r4p&#45;&gt;proc~tokenize -->
-<g id="proc~~tokenize~~CalledByGraph_edge11" class="edge"><title>proc~get_cla_list_varying_r4p&#45;&gt;proc~tokenize</title>
-<path fill="none" stroke="black" d="M278.111,-150.107C283.427,-152.548 288.505,-155.479 293,-159 320.729,-180.718 338.603,-218.558 347.72,-242.39"/>
-<polygon fill="black" stroke="black" points="344.49,-243.749 351.195,-251.952 351.069,-241.358 344.49,-243.749"/>
-</g>
-<!-- proc~get_cla_list_varying_r8p -->
-<g id="proc~~tokenize~~CalledByGraph_node12" class="node"><title>proc~get_cla_list_varying_r8p</title>
-<g id="a_proc~~tokenize~~CalledByGraph_node12"><a xlink:href="../proc/get_cla_list_varying_r8p.html" xlink:title="get_cla_list_varying_R8P">
-<polygon fill="#d9534f" stroke="#d9534f" points="288.5,-108 155.5,-108 155.5,-84 288.5,-84 288.5,-108"/>
-<text text-anchor="middle" x="222" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_R8P</text>
-</a>
-</g>
-</g>
-<!-- proc~get_cla_list_varying_r8p&#45;&gt;proc~tokenize -->
-<g id="proc~~tokenize~~CalledByGraph_edge12" class="edge"><title>proc~get_cla_list_varying_r8p&#45;&gt;proc~tokenize</title>
-<path fill="none" stroke="black" d="M279.653,-108.027C284.486,-110.483 289.035,-113.44 293,-117 330.059,-150.269 345.645,-209.319 351.641,-241.524"/>
-<polygon fill="black" stroke="black" points="348.247,-242.442 353.381,-251.71 355.147,-241.263 348.247,-242.442"/>
-</g>
-<!-- proc~get_cla_list_varying_r16p -->
-<g id="proc~~tokenize~~CalledByGraph_node13" class="node"><title>proc~get_cla_list_varying_r16p</title>
-<g id="a_proc~~tokenize~~CalledByGraph_node13"><a xlink:href="../proc/get_cla_list_varying_r16p.html" xlink:title="get_cla_list_varying_R16P">
-<polygon fill="#d9534f" stroke="#d9534f" points="291.5,-66 152.5,-66 152.5,-42 291.5,-42 291.5,-66"/>
-<text text-anchor="middle" x="222" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_R16P</text>
-</a>
-</g>
-</g>
-<!-- proc~get_cla_list_varying_r16p&#45;&gt;proc~tokenize -->
-<g id="proc~~tokenize~~CalledByGraph_edge13" class="edge"><title>proc~get_cla_list_varying_r16p&#45;&gt;proc~tokenize</title>
-<path fill="none" stroke="black" d="M280.645,-66.0561C285.158,-68.5092 289.366,-71.4574 293,-75 339.914,-120.731 351.344,-202.482 354.118,-241.749"/>
-<polygon fill="black" stroke="black" points="350.631,-242.065 354.703,-251.846 357.619,-241.66 350.631,-242.065"/>
-</g>
-<!-- proc~get_cla_list_varying_char -->
-<g id="proc~~tokenize~~CalledByGraph_node14" class="node"><title>proc~get_cla_list_varying_char</title>
-<g id="a_proc~~tokenize~~CalledByGraph_node14"><a xlink:href="../proc/get_cla_list_varying_char.html" xlink:title="get_cla_list_varying_char">
-<polygon fill="#d9534f" stroke="#d9534f" points="288.5,-24 155.5,-24 155.5,-0 288.5,-0 288.5,-24"/>
-<text text-anchor="middle" x="222" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_char</text>
-</a>
-</g>
-</g>
-<!-- proc~get_cla_list_varying_char&#45;&gt;proc~tokenize -->
-<g id="proc~~tokenize~~CalledByGraph_edge14" class="edge"><title>proc~get_cla_list_varying_char&#45;&gt;proc~tokenize</title>
-<path fill="none" stroke="black" d="M281.19,-24.0347C285.531,-26.4947 289.553,-29.4503 293,-33 349.792,-91.4772 355.942,-196.109 355.722,-241.721"/>
-<polygon fill="black" stroke="black" points="352.222,-241.686 355.563,-251.74 359.222,-241.797 352.222,-241.686"/>
+<!-- proc~get_cla_list_varying_i1p~2&#45;&gt;proc~tokenize -->
+<g id="proc~~tokenize~~CalledByGraph_edge13" class="edge">
+<title>proc~get_cla_list_varying_i1p~2&#45;&gt;proc~tokenize</title>
+<path fill="none" stroke="#000000" d="M144.96,-24.02C149.36,-26.5 153.44,-29.46 157,-33 214.98,-90.77 221.34,-196.21 221.19,-241.91"/>
+<polygon fill="#000000" stroke="#000000" points="217.69,-241.88 221.04,-251.93 224.69,-241.98 217.69,-241.88"/>
 </g>
 </g>
 </svg>
-</div>
-                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
-                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
-                  <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
-                      </div>
-                      <div class="modal-body">
-                        
-Nodes of different colours represent the following:
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.38.0 (20140413.2041)
+<!-- Generated by graphviz version 2.43.0 (0)
  -->
 <!-- Title: Graph Key Pages: 1 -->
-<svg width="641pt" height="26pt"
- viewBox="0.00 0.00 641.00 25.98" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(0.811906 0.811906) rotate(0) translate(4 28)">
+<svg width="594pt" height="32pt"
+ viewBox="0.00 0.00 594.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
 <title>Graph Key</title>
-<polygon fill="white" stroke="none" points="-4,4 -4,-28 785.5,-28 785.5,4 -4,4"/>
-<!-- Module -->
-<g id="node1" class="node"><title>Module</title>
-<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,-0 54,-0 54,-24"/>
-<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
-</g>
-<!-- Submodule -->
-<g id="node2" class="node"><title>Submodule</title>
-<polygon fill="#5bc0de" stroke="#5bc0de" points="139.5,-24 72.5,-24 72.5,-0 139.5,-0 139.5,-24"/>
-<text text-anchor="middle" x="106" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
-</g>
-<!-- Type -->
-<g id="node3" class="node"><title>Type</title>
-<polygon fill="#5cb85c" stroke="#5cb85c" points="212,-24 158,-24 158,-0 212,-0 212,-24"/>
-<text text-anchor="middle" x="185" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type</text>
-</g>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 590,-28 590,4 -4,4"/>
 <!-- Subroutine -->
-<g id="node4" class="node"><title>Subroutine</title>
-<polygon fill="#d9534f" stroke="#d9534f" points="294,-24 230,-24 230,-0 294,-0 294,-24"/>
-<text text-anchor="middle" x="262" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
 </g>
 <!-- Function -->
-<g id="node5" class="node"><title>Function</title>
-<polygon fill="#d94e8f" stroke="#d94e8f" points="366,-24 312,-24 312,-0 366,-0 366,-24"/>
-<text text-anchor="middle" x="339" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="146,-24 88,-24 88,0 146,0 146,-24"/>
+<text text-anchor="middle" x="117" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
 </g>
 <!-- Interface -->
-<g id="node6" class="node"><title>Interface</title>
-<polygon fill="#a7506f" stroke="#a7506f" points="439.5,-24 384.5,-24 384.5,-0 439.5,-0 439.5,-24"/>
-<text text-anchor="middle" x="412" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="225.5,-24 164.5,-24 164.5,0 225.5,0 225.5,-24"/>
+<text text-anchor="middle" x="195" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
 </g>
 <!-- Unknown Procedure Type -->
-<g id="node7" class="node"><title>Unknown Procedure Type</title>
-<polygon fill="#777777" stroke="#777777" points="594,-24 458,-24 458,-0 594,-0 594,-24"/>
-<text text-anchor="middle" x="526" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="388,-24 244,-24 244,0 388,0 388,-24"/>
+<text text-anchor="middle" x="316" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
 </g>
 <!-- Program -->
-<g id="node8" class="node"><title>Program</title>
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="666,-24 612,-24 612,-0 666,-0 666,-24"/>
-<text text-anchor="middle" x="639" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="463.5,-24 406.5,-24 406.5,0 463.5,0 463.5,-24"/>
+<text text-anchor="middle" x="435" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
 </g>
 <!-- This Page&#39;s Entity -->
-<g id="node9" class="node"><title>This Page&#39;s Entity</title>
-<polygon fill="none" stroke="black" points="781.5,-24 684.5,-24 684.5,-0 781.5,-0 781.5,-24"/>
-<text text-anchor="middle" x="733" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="586,-24 482,-24 482,0 586,0 586,-24"/>
+<text text-anchor="middle" x="534" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
 </g>
 </g>
 </svg>
 
-<h5>Module Graph</h5>
-<p>Solid arrows point from a parent (sub)module to the submodule which is
-descended from it. Dashed arrows point from a module being used to the
-module using it.</p>
-<h5>Type Graph</h5>
-<p>Solid arrows point from one derived type to another which extends
-(inherits from) it. Dashed arrows point from a derived type to another
-type containing it as a components, with a label listing the name(s) of
-said component(s).</p>
-<h5>Call Graph</h5>
-<p>Solid arrows point from a procedure to one which it calls. Dashed 
-arrows point from an interface to procedures which implement that interface.
-This could include the module procedures in a generic interface or the
-implementation in a submodule of an interface in a parent module.</p>
-
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-     
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
     <br>
-    
-    <section>
-    <h2>Variables</h2>
-    
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th><th>Visibility</th>
 
-<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-strsub"></span>character(len=len(strin)),</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>strsub</strong></td><td></td><td></td><td><p>Temporary string.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-dlen"></span>integer(kind=I4P),</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>dlen</strong></td><td></td><td></td><td><p>Delimiter length.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-c"></span>integer(kind=I4P),</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>c</strong></td><td></td><td></td><td><p>Counter.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-n"></span>integer(kind=I4P),</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>n</strong></td><td></td><td></td><td><p>Counter.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-t"></span>integer(kind=I4P),</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>t</strong></td><td></td><td></td><td><p>Counter.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
+    <section class="visible-xs visible-sm hidden-md">
+      <h3>Contents</h3>
+ 
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/tokenize.html#src">tokenize</a>
+  </div>
+</div>
 
     </section>
-    <br>
-    
-    
-    
+    <br class="visible-xs visible-sm hidden-md">
+
+
     
     
 
     
     
-    
-    
-    
 
 
-    
-    
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">pure subroutine </span><span class="n">tokenize</span><span class="p">(</span><span class="n">strin</span><span class="p">,</span> <span class="n">delimiter</span><span class="p">,</span> <span class="n">toks</span><span class="p">,</span> <span class="n">Nt</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Tokenize a string in order to parse it.</span>
-  <span class="c">!&lt;</span>
-  <span class="c">!&lt; @note The dummy array containing tokens must allocatable and its character elements must have the same length of the input</span>
-  <span class="c">!&lt; string. If the length of the delimiter is higher than the input string one then the output tokens array is allocated with</span>
-  <span class="c">!&lt; only one element set to char(0).</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span>          <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>               <span class="kd">::</span> <span class="n">strin</span>     <span class="c">!&lt; String to be tokenized.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span>          <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>               <span class="kd">::</span> <span class="n">delimiter</span> <span class="c">!&lt; Delimiter of tokens.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">strin</span><span class="p">)),</span> <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">toks</span><span class="p">(:)</span>   <span class="c">!&lt; Tokens.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span>              <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">),</span> <span class="k">optional</span>    <span class="kd">::</span> <span class="n">Nt</span>        <span class="c">!&lt; Number of tokens.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">strin</span><span class="p">))</span>                           <span class="kd">::</span> <span class="n">strsub</span>    <span class="c">!&lt; Temporary string.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                        <span class="kd">::</span> <span class="n">dlen</span>      <span class="c">!&lt; Delimiter length.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                        <span class="kd">::</span> <span class="n">c</span>         <span class="c">!&lt; Counter.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                        <span class="kd">::</span> <span class="n">n</span>         <span class="c">!&lt; Counter.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                        <span class="kd">::</span> <span class="n">t</span>         <span class="c">!&lt; Counter.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+    <div class="highlight"><pre><span></span><span class="w">  </span><span class="k">pure subroutine </span><span class="n">tokenize</span><span class="p">(</span><span class="n">strin</span><span class="p">,</span><span class="w"> </span><span class="n">delimiter</span><span class="p">,</span><span class="w"> </span><span class="n">toks</span><span class="p">,</span><span class="w"> </span><span class="n">Nt</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="c">!&lt; Tokenize a string in order to parse it.</span>
+<span class="w">  </span><span class="c">!&lt;</span>
+<span class="w">  </span><span class="c">!&lt; @note The dummy array containing tokens must allocatable and its character elements must have the same length of the input</span>
+<span class="w">  </span><span class="c">!&lt; string. If the length of the delimiter is higher than the input string one then the output tokens array is allocated with</span>
+<span class="w">  </span><span class="c">!&lt; only one element set to input string.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="w">          </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">               </span><span class="kd">::</span><span class="w"> </span><span class="n">strin</span><span class="w">     </span><span class="c">!&lt; String to be tokenized.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="w">          </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">               </span><span class="kd">::</span><span class="w"> </span><span class="n">delimiter</span><span class="w"> </span><span class="c">!&lt; Delimiter of tokens.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">strin</span><span class="p">)),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">toks</span><span class="p">(:)</span><span class="w">   </span><span class="c">!&lt; Tokens.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span><span class="w">              </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">Nt</span><span class="w">        </span><span class="c">!&lt; Number of tokens.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">strin</span><span class="p">))</span><span class="w">                           </span><span class="kd">::</span><span class="w"> </span><span class="n">strsub</span><span class="w">    </span><span class="c">!&lt; Temporary string.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                                        </span><span class="kd">::</span><span class="w"> </span><span class="n">dlen</span><span class="w">      </span><span class="c">!&lt; Delimiter length.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                                        </span><span class="kd">::</span><span class="w"> </span><span class="n">c</span><span class="w">         </span><span class="c">!&lt; Counter.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                                        </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span><span class="w">         </span><span class="c">!&lt; Counter.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                                        </span><span class="kd">::</span><span class="w"> </span><span class="n">t</span><span class="w">         </span><span class="c">!&lt; Counter.</span>
 
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">! initialization</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">toks</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">toks</span><span class="p">)</span>
-  <span class="n">strsub</span> <span class="o">=</span> <span class="n">strin</span>
-  <span class="n">dlen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">delimiter</span><span class="p">)</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">dlen</span><span class="o">&gt;</span><span class="nb">len</span><span class="p">(</span><span class="n">strin</span><span class="p">))</span> <span class="k">then</span>
-<span class="k">    allocate</span><span class="p">(</span><span class="n">toks</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="p">))</span> <span class="p">;</span> <span class="n">toks</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="nb">char</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">Nt</span><span class="p">))</span> <span class="n">Nt</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">;</span> <span class="k">return</span>
-<span class="k">  </span><span class="n">endif</span>
-  <span class="c">! compute the number of tokens</span>
-  <span class="n">n</span> <span class="o">=</span> <span class="mi">1</span>
-  <span class="k">do </span><span class="n">c</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">strsub</span><span class="p">)</span><span class="o">-</span><span class="n">dlen</span> <span class="c">! loop over string characters</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">strsub</span><span class="p">(</span><span class="n">c</span><span class="p">:</span><span class="n">c</span><span class="o">+</span><span class="n">dlen</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">==</span><span class="n">delimiter</span><span class="p">)</span> <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
-  <span class="n">enddo</span>
-  <span class="k">allocate</span><span class="p">(</span><span class="n">toks</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">n</span><span class="p">))</span>
-  <span class="c">! tokenization</span>
-  <span class="k">do </span><span class="n">t</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span> <span class="c">! loop over tokens</span>
-    <span class="n">c</span> <span class="o">=</span> <span class="nb">index</span><span class="p">(</span><span class="n">strsub</span><span class="p">,</span><span class="n">delimiter</span><span class="p">)</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">      </span><span class="n">toks</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">=</span> <span class="n">strsub</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">c</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-      <span class="n">strsub</span> <span class="o">=</span> <span class="n">strsub</span><span class="p">(</span><span class="n">c</span><span class="o">+</span><span class="n">dlen</span><span class="p">:)</span>
-    <span class="k">else</span>
-<span class="k">      </span><span class="n">toks</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">=</span> <span class="n">strsub</span>
-    <span class="n">endif</span>
-  <span class="n">enddo</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">Nt</span><span class="p">))</span> <span class="n">Nt</span> <span class="o">=</span> <span class="n">n</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endsubroutine</span> <span class="n">tokenize</span>
+<span class="w">  </span><span class="c">! initialization</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">toks</span><span class="p">))</span><span class="w"> </span><span class="k">deallocate</span><span class="p">(</span><span class="n">toks</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="n">strsub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">strin</span><span class="w"></span>
+<span class="w">  </span><span class="n">dlen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">delimiter</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dlen</span><span class="o">&gt;</span><span class="nb">len</span><span class="p">(</span><span class="n">strin</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">    allocate</span><span class="p">(</span><span class="n">toks</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="n">toks</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">strin</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">Nt</span><span class="p">))</span><span class="w"> </span><span class="n">Nt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">return</span>
+<span class="k">  endif</span><span class="w"></span>
+<span class="w">  </span><span class="c">! compute the number of tokens</span>
+<span class="w">  </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">  </span><span class="k">do </span><span class="n">c</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">strsub</span><span class="p">)</span><span class="o">-</span><span class="n">dlen</span><span class="w"> </span><span class="c">! loop over string characters</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strsub</span><span class="p">(</span><span class="n">c</span><span class="p">:</span><span class="n">c</span><span class="o">+</span><span class="n">dlen</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">==</span><span class="n">delimiter</span><span class="p">)</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">  </span><span class="k">enddo</span>
+<span class="k">  allocate</span><span class="p">(</span><span class="n">toks</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">n</span><span class="p">))</span><span class="w"></span>
+<span class="w">  </span><span class="c">! tokenization</span>
+<span class="w">  </span><span class="k">do </span><span class="n">t</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="w"> </span><span class="c">! loop over tokens</span>
+<span class="w">    </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">index</span><span class="p">(</span><span class="n">strsub</span><span class="p">,</span><span class="w"> </span><span class="n">delimiter</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">c</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">      </span><span class="n">toks</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">strsub</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">c</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="n">strsub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">strsub</span><span class="p">(</span><span class="n">c</span><span class="o">+</span><span class="n">dlen</span><span class="p">:)</span><span class="w"></span>
+<span class="w">    </span><span class="k">else</span>
+<span class="k">      </span><span class="n">toks</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">strsub</span><span class="w"></span>
+<span class="w">    </span><span class="k">endif</span>
+<span class="k">  enddo</span>
+<span class="k">  if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">Nt</span><span class="p">))</span><span class="w"> </span><span class="n">Nt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="w"></span>
+<span class="w">  </span><span class="k">endsubroutine </span><span class="n">tokenize</span><span class="w"></span>
 </pre></div>
 
     </section>
     <br>
     
-    
     </div>
   </div>
 
-    <hr>
-    <footer>
-        <div class="row">
-        <div class="col-md-6">&copy; 2015 FLAP was written by Stefano Zaghi. </div>
-        <div class="col-md-6"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a>.</span></div>
-        </div>
-        <br>
-    </footer>
+    <hr>    
     </div> <!-- /container -->
-
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-6"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2022 
+</p>
+        </div>
+        <div class="col-xs-6 col-md-6">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+          </p>
+        </div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -895,12 +556,14 @@ implementation in a submodule of an interface in a parent module.</p>
       MathJax.Hub.Config({
         TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
         jax: ['input/TeX','input/MathML','output/HTML-CSS'],
-        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'],
-        'HTML-CSS': { 
-           styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: '#000000 ! important'} }
-        }
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
       });
     </script>
-    <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
   </body>
 </html>
