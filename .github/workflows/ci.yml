@@ -31,6 +31,9 @@ jobs:
       run: |
         FoBiS.py rule -ex makecoverage
 
+    - name: UPLOAD COVERAGE to CODECOV
+      uses: codecov/codecov-action@v3
+
     - name: MAKE TAR
       run: |
         echo "release version:" ${{ env.RELEASE }}
