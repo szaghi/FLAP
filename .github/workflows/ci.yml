@@ -60,5 +60,5 @@ jobs:
     - name: PUSH DOC to GH Pages
       if: ${{ !env.ACT }}
       uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: doc/html
+      with:
+        folder: doc/html
