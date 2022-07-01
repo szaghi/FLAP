@@ -8,8 +8,8 @@
 [![License](https://img.shields.io/badge/license-MIT-red.svg)]()
 
 [![Status](https://img.shields.io/badge/status-stable-brightgreen.svg)]()
-[![CI Status](https://github.com/szaghi/FLAP/actions/workflows/ci.yml/badge.svg)]()
-[![Coverage Status](https://img.shields.io/codecov/c/github/szaghi/FLAP.svg)](http://codecov.io/github/szaghi/FLAP/branch/master)
+[![CI Status](https://github.com/szaghi/FLAP/actions/workflows/ci.yml/badge.svg)](https://github.com/szaghi/FLAP/actions)
+[![Coverage Status](https://img.shields.io/codecov/c/github/szaghi/FLAP.svg)](https://app.codecov.io/gh/szaghi/FLAP)
 
 ### FLAP, Fortran command Line Arguments Parser for poor people
 
