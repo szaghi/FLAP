@@ -22,21 +22,19 @@ jobs:
     - name: CHECKOUT
       id: checkout
       run: |
-        git clone --recursive https://github.com/szaghi/FLAP ./
+        git clone --recursive https://github.com/${{ env.GITHUB_REPOSITORY }} ./
         git log -n 1
         tag=`git tag | tail -n 1`
         echo "RELEASE=$tag" >> $GITHUB_ENV
 
-    # - name: MAKE COVERAGE
-    #   run: |
-    #     cd FLAP
-    #     FoBiS.py rule -ex makecoverage
+    - name: MAKE COVERAGE
+      run: |
+        FoBiS.py rule -ex makecoverage
 
     - name: MAKE TAR
       run: |
-        echo "repository release version:" ${{ env.RELEASE }}
+        echo "release version:" ${{ env.RELEASE }}
         FoBiS.py rule -ex maketar
-        mv FLAP.tar.gz FLAP-${{ env.RELEASE }}.tar.gz
         ls *.tar.gz
 
     - name: DEPLOY ASSET
@@ -47,10 +45,9 @@ jobs:
         prerelease: false
         title: ${{ env.RELEASE }}
         files: |
-          FLAP*.tar.gz
+          *.tar.gz
           ./scripts/install.sh
 
     # - name: MAKE DOC
     #   run: |
-    #     cd FLAP
     #     FoBiS.py rule -ex makedoc
