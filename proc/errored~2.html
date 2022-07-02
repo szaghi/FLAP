@@ -88,13 +88,13 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title=" 0.8% of total for procedures.">28 statements</a>
+    title=" 0.7% of total for procedures.">25 statements</a>
      </li> 
-    <li><i class="fa fa-code"></i><a href="../src/flap_command_line_arguments_group_t.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/flap_command_line_interface_t.F90"> Source File</a></li>
   </ul>
   <ol class="breadcrumb in-well text-right">
-     <li><a href='../sourcefile/flap_command_line_arguments_group_t.f90.html'>flap_command_line_arguments_group_t.f90</a></li>
-     <li><a href='../module/flap_command_line_arguments_group_t.html'>flap_command_line_arguments_group_t</a></li>
+     <li><a href='../sourcefile/flap_command_line_interface_t.f90.html'>flap_command_line_interface_t.F90</a></li>
+     <li><a href='../module/flap_command_line_interface_t.html'>flap_command_line_interface_t</a></li>
      <li class="active">errored</li>
   </ol>
 </div>
@@ -125,7 +125,7 @@
     </div>
     
     <div class="col-md-9" id='text'>
-    <h2>private subroutine errored(self, error, pref, a1, a2)</h2>
+    <h2>private subroutine errored(self, error, pref, group, switch)</h2>
     
 
     <p>Trig error occurrence and print meaningful message.</p>
@@ -135,10 +135,10 @@
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
 <tr>
-  <td><span class="anchor" id="variable-self~50"></span>class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),</td>
+  <td><span class="anchor" id="variable-self~52"></span>class(<a href='../type/command_line_interface.html'>command_line_interface</a>),</td>
 <td>intent(inout)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>CLAsG data.</p></td>
+  <td><strong>self</strong></td><td><p>Object data.</p></td>
 </tr>
 <tr>
   <td><span class="anchor" id="variable-error~20"></span>integer(kind=I4P),</td>
@@ -147,22 +147,22 @@
   <td><strong>error</strong></td><td><p>Error occurred.</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" id="variable-pref~26"></span>character,</td>
+  <td><span class="anchor" id="variable-pref~27"></span>character,</td>
 <td>intent(in),</td>
   <td>optional</td>  <td></td><td>::</td>
   <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" id="variable-a1"></span>integer(kind=I4P),</td>
+  <td><span class="anchor" id="variable-group~19"></span>character,</td>
 <td>intent(in),</td>
   <td>optional</td>  <td></td><td>::</td>
-  <td><strong>a1</strong></td><td><p>First index CLAs group inconsistent.</p></td>
+  <td><strong>group</strong></td><td><p>Group name.</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" id="variable-a2"></span>integer(kind=I4P),</td>
+  <td><span class="anchor" id="variable-switch~18"></span>character,</td>
 <td>intent(in),</td>
   <td>optional</td>  <td></td><td>::</td>
-  <td><strong>a2</strong></td><td><p>Second index CLAs group inconsistent.</p></td>
+  <td><strong>switch</strong></td><td><p>CLA switch name.</p></td>
 </tr>
 </tbody>
 </table>
@@ -187,85 +187,73 @@
 <!-- proc~errored~2 -->
 <g id="proc~~errored~2~~CallsGraph_node1" class="node">
 <title>proc~errored~2</title>
-<polygon fill="none" stroke="black" points="54,-87 0,-87 0,-63 54,-63 54,-87"/>
-<text text-anchor="middle" x="27" y="-72.6" font-family="Helvetica,sans-Serif" font-size="10.50">errored</text>
-</g>
-<!-- str -->
-<g id="proc~~errored~2~~CallsGraph_node2" class="node">
-<title>str</title>
-<polygon fill="#777777" stroke="#777777" points="144.5,-108 90.5,-108 90.5,-84 144.5,-84 144.5,-108"/>
-<text text-anchor="middle" x="117.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">str</text>
-</g>
-<!-- proc~errored~2&#45;&gt;str -->
-<g id="proc~~errored~2~~CallsGraph_edge1" class="edge">
-<title>proc~errored~2&#45;&gt;str</title>
-<path fill="none" stroke="#000000" d="M54.07,-81.19C62.37,-83.16 71.7,-85.37 80.57,-87.47"/>
-<polygon fill="#000000" stroke="#000000" points="79.77,-90.88 90.31,-89.78 81.38,-84.07 79.77,-90.88"/>
+<polygon fill="none" stroke="black" points="54,-66 0,-66 0,-42 54,-42 54,-66"/>
+<text text-anchor="middle" x="27" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50">errored</text>
 </g>
 <!-- interface~colorize -->
-<g id="proc~~errored~2~~CallsGraph_node3" class="node">
+<g id="proc~~errored~2~~CallsGraph_node2" class="node">
 <title>interface~colorize</title>
-<g id="a_proc~~errored~2~~CallsGraph_node3"><a xlink:href=".././interface/colorize.html" xlink:title="colorize">
+<g id="a_proc~~errored~2~~CallsGraph_node2"><a xlink:href=".././interface/colorize.html" xlink:title="colorize">
 <polygon fill="#a7506f" stroke="#a7506f" points="145,-66 90,-66 90,-42 145,-42 145,-66"/>
 <text text-anchor="middle" x="117.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">colorize</text>
 </a>
 </g>
 </g>
 <!-- proc~errored~2&#45;&gt;interface~colorize -->
-<g id="proc~~errored~2~~CallsGraph_edge2" class="edge">
+<g id="proc~~errored~2~~CallsGraph_edge1" class="edge">
 <title>proc~errored~2&#45;&gt;interface~colorize</title>
-<path fill="none" stroke="#000000" d="M54.07,-68.81C62.21,-66.88 71.34,-64.72 80.05,-62.65"/>
-<polygon fill="#000000" stroke="#000000" points="81.08,-66 90,-60.29 79.46,-59.19 81.08,-66"/>
+<path fill="none" stroke="#000000" d="M54.07,-54C62.12,-54 71.14,-54 79.76,-54"/>
+<polygon fill="#000000" stroke="#000000" points="80,-57.5 90,-54 80,-50.5 80,-57.5"/>
 </g>
 <!-- proc~colorize_default -->
-<g id="proc~~errored~2~~CallsGraph_node4" class="node">
+<g id="proc~~errored~2~~CallsGraph_node3" class="node">
 <title>proc~colorize_default</title>
-<g id="a_proc~~errored~2~~CallsGraph_node4"><a xlink:href=".././proc/colorize_default.html" xlink:title="colorize_default">
+<g id="a_proc~~errored~2~~CallsGraph_node3"><a xlink:href=".././proc/colorize_default.html" xlink:title="colorize_default">
 <polygon fill="#d94e8f" stroke="#d94e8f" points="278,-66 181,-66 181,-42 278,-42 278,-66"/>
 <text text-anchor="middle" x="229.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">colorize_default</text>
 </a>
 </g>
 </g>
 <!-- interface~colorize&#45;&gt;proc~colorize_default -->
-<g id="proc~~errored~2~~CallsGraph_edge3" class="edge">
+<g id="proc~~errored~2~~CallsGraph_edge2" class="edge">
 <title>interface~colorize&#45;&gt;proc~colorize_default</title>
 <path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M145.13,-54C152.89,-54 161.69,-54 170.59,-54"/>
 <polygon fill="#000000" stroke="#000000" points="170.63,-57.5 180.63,-54 170.63,-50.5 170.63,-57.5"/>
 </g>
 <!-- proc~color_index -->
-<g id="proc~~errored~2~~CallsGraph_node5" class="node">
+<g id="proc~~errored~2~~CallsGraph_node4" class="node">
 <title>proc~color_index</title>
-<g id="a_proc~~errored~2~~CallsGraph_node5"><a xlink:href=".././proc/color_index.html" xlink:title="color_index">
+<g id="a_proc~~errored~2~~CallsGraph_node4"><a xlink:href=".././proc/color_index.html" xlink:title="color_index">
 <polygon fill="#d94e8f" stroke="#d94e8f" points="387,-108 314,-108 314,-84 387,-84 387,-108"/>
 <text text-anchor="middle" x="350.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">color_index</text>
 </a>
 </g>
 </g>
 <!-- proc~colorize_default&#45;&gt;proc~color_index -->
-<g id="proc~~errored~2~~CallsGraph_edge5" class="edge">
+<g id="proc~~errored~2~~CallsGraph_edge3" class="edge">
 <title>proc~colorize_default&#45;&gt;proc~color_index</title>
 <path fill="none" stroke="#000000" d="M264.6,-66.04C277.42,-70.56 292.18,-75.77 305.76,-80.56"/>
 <polygon fill="#000000" stroke="#000000" points="304.8,-83.93 315.39,-83.96 307.13,-77.33 304.8,-83.93"/>
 </g>
 <!-- proc~upper -->
-<g id="proc~~errored~2~~CallsGraph_node6" class="node">
+<g id="proc~~errored~2~~CallsGraph_node5" class="node">
 <title>proc~upper</title>
-<g id="a_proc~~errored~2~~CallsGraph_node6"><a xlink:href=".././proc/upper.html" xlink:title="upper">
+<g id="a_proc~~errored~2~~CallsGraph_node5"><a xlink:href=".././proc/upper.html" xlink:title="upper">
 <polygon fill="#d94e8f" stroke="#d94e8f" points="377.5,-66 323.5,-66 323.5,-42 377.5,-42 377.5,-66"/>
 <text text-anchor="middle" x="350.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">upper</text>
 </a>
 </g>
 </g>
 <!-- proc~colorize_default&#45;&gt;proc~upper -->
-<g id="proc~~errored~2~~CallsGraph_edge6" class="edge">
+<g id="proc~~errored~2~~CallsGraph_edge5" class="edge">
 <title>proc~colorize_default&#45;&gt;proc~upper</title>
 <path fill="none" stroke="#000000" d="M278.22,-54C289.88,-54 302.17,-54 313.2,-54"/>
 <polygon fill="#000000" stroke="#000000" points="313.33,-57.5 323.33,-54 313.33,-50.5 313.33,-57.5"/>
 </g>
 <!-- proc~style_index -->
-<g id="proc~~errored~2~~CallsGraph_node7" class="node">
+<g id="proc~~errored~2~~CallsGraph_node6" class="node">
 <title>proc~style_index</title>
-<g id="a_proc~~errored~2~~CallsGraph_node7"><a xlink:href=".././proc/style_index.html" xlink:title="style_index">
+<g id="a_proc~~errored~2~~CallsGraph_node6"><a xlink:href=".././proc/style_index.html" xlink:title="style_index">
 <polygon fill="#d94e8f" stroke="#d94e8f" points="386,-24 315,-24 315,0 386,0 386,-24"/>
 <text text-anchor="middle" x="350.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">style_index</text>
 </a>
@@ -287,11 +275,11 @@
 <!-- Generated by graphviz version 2.43.0 (0)
  -->
 <!-- Title: Graph Key Pages: 1 -->
-<svg width="594pt" height="32pt"
- viewBox="0.00 0.00 594.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="597pt" height="32pt"
+ viewBox="0.00 0.00 596.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
 <title>Graph Key</title>
-<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 590,-28 590,4 -4,4"/>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 592.5,-28 592.5,4 -4,4"/>
 <!-- Subroutine -->
 <g id="node1" class="node">
 <title>Subroutine</title>
@@ -313,20 +301,20 @@
 <!-- Unknown Procedure Type -->
 <g id="node4" class="node">
 <title>Unknown Procedure Type</title>
-<polygon fill="#777777" stroke="#777777" points="388,-24 244,-24 244,0 388,0 388,-24"/>
+<polygon fill="#777777" stroke="#777777" points="388.5,-24 243.5,-24 243.5,0 388.5,0 388.5,-24"/>
 <text text-anchor="middle" x="316" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
 </g>
 <!-- Program -->
 <g id="node5" class="node">
 <title>Program</title>
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="463.5,-24 406.5,-24 406.5,0 463.5,0 463.5,-24"/>
-<text text-anchor="middle" x="435" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="465,-24 407,-24 407,0 465,0 465,-24"/>
+<text text-anchor="middle" x="436" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
 </g>
 <!-- This Page&#39;s Entity -->
 <g id="node6" class="node">
 <title>This Page&#39;s Entity</title>
-<polygon fill="none" stroke="black" points="586,-24 482,-24 482,0 586,0 586,-24"/>
-<text text-anchor="middle" x="534" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+<polygon fill="none" stroke="black" points="588.5,-24 483.5,-24 483.5,0 588.5,0 588.5,-24"/>
+<text text-anchor="middle" x="536" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
 </g>
 </g>
 </svg>
@@ -366,38 +354,32 @@
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span></span><span class="w">  </span><span class="k">subroutine </span><span class="n">errored</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="p">,</span><span class="w"> </span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">a1</span><span class="p">,</span><span class="w"> </span><span class="n">a2</span><span class="p">)</span><span class="w"></span>
+    <div class="highlight"><pre><span></span><span class="w">  </span><span class="k">subroutine </span><span class="n">errored</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="p">,</span><span class="w"> </span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">group</span><span class="p">,</span><span class="w"> </span><span class="n">switch</span><span class="p">)</span><span class="w"></span>
 <span class="w">  </span><span class="c">!&lt; Trig error occurrence and print meaningful message.</span>
-<span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="n">command_line_arguments_group</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">self</span><span class="w">  </span><span class="c">!&lt; CLAsG data.</span>
-<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span><span class="w">                        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="c">!&lt; Error occurred.</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">              </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">pref</span><span class="w">  </span><span class="c">!&lt; Prefixing string.</span>
-<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">              </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">a1</span><span class="w">    </span><span class="c">!&lt; First index CLAs group inconsistent.</span>
-<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">              </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">a2</span><span class="w">    </span><span class="c">!&lt; Second index CLAs group inconsistent.</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w">                      </span><span class="kd">::</span><span class="w"> </span><span class="n">prefd</span><span class="w"> </span><span class="c">!&lt; Prefixing string.</span>
+<span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="n">command_line_interface</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">self</span><span class="w">   </span><span class="c">!&lt; Object data.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span><span class="w">                  </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">error</span><span class="w">  </span><span class="c">!&lt; Error occurred.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">pref</span><span class="w">   </span><span class="c">!&lt; Prefixing string.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">group</span><span class="w">  </span><span class="c">!&lt; Group name.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">switch</span><span class="w"> </span><span class="c">!&lt; CLA switch name.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w">                </span><span class="kd">::</span><span class="w"> </span><span class="n">prefd</span><span class="w">  </span><span class="c">!&lt; Prefixing string.</span>
 
 <span class="w">  </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">error</span><span class="w"></span>
 <span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
 <span class="k">    </span><span class="n">prefd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">pref</span><span class="p">))</span><span class="w"> </span><span class="n">prefd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pref</span><span class="w"></span>
 <span class="w">    </span><span class="n">prefd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="s1">&#39;: &#39;</span><span class="o">//</span><span class="n">colorize</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">color_fg</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error_color</span><span class="p">,</span><span class="w"> </span><span class="n">style</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error_style</span><span class="p">)</span><span class="w"></span>
 <span class="w">    </span><span class="k">select case</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_CONSISTENCY</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">group</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">        </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: group (command) name: &quot;&#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">group</span><span class="o">//</span><span class="s1">&#39;&quot; consistency error:&#39;</span><span class="w"></span>
-<span class="w">      </span><span class="k">else</span>
-<span class="k">        </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: consistency error:&#39;</span><span class="w"></span>
-<span class="w">      </span><span class="k">endif</span>
-<span class="k">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="o">//</span><span class="s1">&#39; &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="o">//</span><span class="w">             </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                           </span><span class="s1">&#39;-th&quot; option has the same switch or abbreviated switch of &quot;&#39;</span><span class="o">//</span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                           </span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">a2</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="o">//</span><span class="s1">&#39;-th&quot; option:&#39;</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39; CLA(&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="w"> </span><span class="o">//</span><span class="s1">&#39;) switches = &#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a1</span><span class="p">)%</span><span class="n">switch</span><span class="w"> </span><span class="o">//</span><span class="s1">&#39; &#39;</span><span class="o">//</span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                           </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a1</span><span class="p">)%</span><span class="n">switch_ab</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39; CLA(&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">a2</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="o">//</span><span class="s1">&#39;) switches = &#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a2</span><span class="p">)%</span><span class="n">switch</span><span class="o">//</span><span class="s1">&#39; &#39;</span><span class="o">//</span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                           </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a2</span><span class="p">)%</span><span class="n">switch_ab</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_M_EXCLUDE</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: the group &quot;&#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">group</span><span class="o">//</span><span class="s1">&#39;&quot; and &quot;&#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">m_exclude</span><span class="o">//</span><span class="s1">&#39;&quot; are mutually&#39;</span><span class="o">//</span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                           </span><span class="s1">&#39; exclusive, but both have been called!&#39;</span><span class="w"></span>
+<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_MISSING_CLA</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: there is no option &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">switch</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&quot;!&#39;</span><span class="w"></span>
+<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_MISSING_SELECTION_CLA</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: to get an option value one of switch &quot;name&quot; or &quot;position&quot; must be provided!&#39;</span><span class="w"></span>
+<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_MISSING_GROUP</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: ther is no group (command) named &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">group</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&quot;!&#39;</span><span class="w"></span>
+<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_TOO_FEW_CLAS</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="c">! self%error_message = prefd//&#39;: too few arguments (&#39;//trim(str(.true.,Na))//&#39;)&#39;//&amp;</span>
+<span class="w">                         </span><span class="c">! &#39; respect the required (&#39;//trim(str(.true.,self%Na_required))//&#39;)&#39;</span>
 <span class="w">    </span><span class="k">endselect</span>
-<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">print_error_message</span><span class="w"></span>
+<span class="k">    write</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error_lun</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">print_error_message</span><span class="w"></span>
 <span class="w">  </span><span class="k">endif</span>
 <span class="k">  endsubroutine </span><span class="n">errored</span><span class="w"></span>
 </pre></div>

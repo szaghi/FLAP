@@ -88,13 +88,13 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title=" 0.7% of total for procedures.">27 statements</a>
+    title=" 0.6% of total for procedures.">20 statements</a>
      </li> 
-    <li><i class="fa fa-code"></i><a href="../src/flap_command_line_interface_t.F90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/flap_command_line_arguments_group_t.f90"> Source File</a></li>
   </ul>
   <ol class="breadcrumb in-well text-right">
-     <li><a href='../sourcefile/flap_command_line_interface_t.f90.html'>flap_command_line_interface_t.F90</a></li>
-     <li><a href='../module/flap_command_line_interface_t.html'>flap_command_line_interface_t</a></li>
+     <li><a href='../sourcefile/flap_command_line_arguments_group_t.f90.html'>flap_command_line_arguments_group_t.f90</a></li>
+     <li><a href='../module/flap_command_line_arguments_group_t.html'>flap_command_line_arguments_group_t</a></li>
      <li class="active">signature</li>
   </ol>
 </div>
@@ -125,26 +125,32 @@
     </div>
     
     <div class="col-md-9" id='text'>
-    <h2>private function signature(self, bash_completion)</h2>
+    <h2>private function signature(self, bash_completion, plain)</h2>
     
 
-    <p>Get signature.</p>
+    <p>Get CLAsG signature.</p>
 
     <h3>Arguments</h3>
       <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
 <tr>
-  <td><span class="anchor" id="variable-self~11"></span>class(<a href='../type/command_line_interface.html'>command_line_interface</a>),</td>
+  <td><span class="anchor" id="variable-self~8"></span>class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),</td>
 <td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>CLI data.</p></td>
+  <td><strong>self</strong></td><td><p>CLAsG data.</p></td>
 </tr>
 <tr>
   <td><span class="anchor" id="variable-bash_completion"></span>logical,</td>
 <td>intent(in),</td>
   <td>optional</td>  <td></td><td>::</td>
   <td><strong>bash_completion</strong></td><td><p>Return the signature for bash completion.</p></td>
+</tr>
+<tr>
+  <td><span class="anchor" id="variable-plain"></span>logical,</td>
+<td>intent(in),</td>
+  <td>optional</td>  <td></td><td>::</td>
+  <td><strong>plain</strong></td><td><p>Return the signature as plain switches list.</p></td>
 </tr>
 </tbody>
 </table>
@@ -177,36 +183,83 @@
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span></span><span class="w">  </span><span class="k">function </span><span class="n">signature</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">bash_completion</span><span class="p">)</span><span class="w"></span>
-<span class="w">  </span><span class="c">!&lt; Get signature.</span>
-<span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="n">command_line_interface</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">self</span><span class="w">             </span><span class="c">!&lt; CLI data.</span>
-<span class="w">  </span><span class="kt">logical</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">             </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bash_completion</span><span class="w">  </span><span class="c">!&lt; Return the signature for bash completion.</span>
-<span class="w">  </span><span class="kt">logical</span><span class="w">                                   </span><span class="kd">::</span><span class="w"> </span><span class="n">bash_completion_</span><span class="w"> </span><span class="c">!&lt; Return the signature for bash completion, local variable.</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w">             </span><span class="kd">::</span><span class="w"> </span><span class="n">signature</span><span class="w">        </span><span class="c">!&lt; Signature.</span>
-<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                              </span><span class="kd">::</span><span class="w"> </span><span class="n">g</span><span class="w">                </span><span class="c">!&lt; Counter.</span>
+    <div class="highlight"><pre><span></span><span class="w">  </span><span class="k">function </span><span class="n">signature</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">bash_completion</span><span class="p">,</span><span class="w"> </span><span class="n">plain</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="c">!&lt; Get CLAsG signature.</span>
+<span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="n">command_line_arguments_group</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">self</span><span class="w">             </span><span class="c">!&lt; CLAsG data.</span>
+<span class="w">  </span><span class="kt">logical</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">                   </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bash_completion</span><span class="w">  </span><span class="c">!&lt; Return the signature for bash completion.</span>
+<span class="w">  </span><span class="kt">logical</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">                   </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">plain</span><span class="w">            </span><span class="c">!&lt; Return the signature as plain switches list.</span>
+<span class="w">  </span><span class="c">! logical                                         :: plain_           !&lt; Return the signature as plain switches list, local var.</span>
+<span class="w">  </span><span class="kt">logical</span><span class="w">                                         </span><span class="kd">::</span><span class="w"> </span><span class="n">bash_completion_</span><span class="w"> </span><span class="c">!&lt; Return the signature for bash completion, local variable.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w">                   </span><span class="kd">::</span><span class="w"> </span><span class="n">signature</span><span class="w">        </span><span class="c">!&lt; Signature.</span>
+<span class="w">  </span><span class="c">! logical                                         :: clas_choices     !&lt; Flag to check if there are CLAs with choices.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                                    </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="c">!, aa            !&lt; Counter.</span>
 
+<span class="w">  </span><span class="n">signature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"></span>
 <span class="w">  </span><span class="n">bash_completion_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">bash_completion</span><span class="p">))</span><span class="w"> </span><span class="n">bash_completion_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bash_completion</span><span class="w"></span>
-
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">bash_completion_</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">    </span><span class="n">signature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">signature</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;    COMPREPLY=( )&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="n">signature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">signature</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;    COMPREPLY+=( $( compgen -W &quot;&#39;</span><span class="o">//</span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                </span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="mi">0</span><span class="p">)%</span><span class="n">signature</span><span class="p">(</span><span class="n">bash_completion</span><span class="o">=</span><span class="n">bash_completion</span><span class="p">,</span><span class="w"> </span><span class="n">plain</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.)</span><span class="o">//</span><span class="s1">&#39;&quot; -- $cur ) )&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">      do </span><span class="n">g</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="w"></span>
-<span class="w">        </span><span class="n">signature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">signature</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;    COMPREPLY+=( $( compgen -W &quot;&#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">group</span><span class="o">//</span><span class="s1">&#39;&quot; -- $cur ) )&#39;</span><span class="w"></span>
+<span class="w">  </span><span class="c">! plain_ = .false. ; if (present(plain)) plain_ = plain</span>
+<span class="w">  </span><span class="c">! if (bash_completion_) then</span>
+<span class="w">  </span><span class="c">!   ! if (plain_) then</span>
+<span class="w">  </span><span class="c">!   !   do a=1, self%Na</span>
+<span class="w">  </span><span class="c">!   !     signature = signature//self%cla(a)%signature(bash_completion=bash_completion, plain=plain)</span>
+<span class="w">  </span><span class="c">!   !   enddo</span>
+<span class="w">  </span><span class="c">!   ! else</span>
+<span class="w">  </span><span class="c">!     clas_choices = .false.</span>
+<span class="w">  </span><span class="c">!     do a=1, self%Na</span>
+<span class="w">  </span><span class="c">!       if (self%cla(a)%has_choices()) then</span>
+<span class="w">  </span><span class="c">!         aa = a</span>
+<span class="w">  </span><span class="c">!         clas_choices = .true.</span>
+<span class="w">  </span><span class="c">!         exit</span>
+<span class="w">  </span><span class="c">!       endif</span>
+<span class="w">  </span><span class="c">!     enddo</span>
+<span class="w">  </span><span class="c">!     if (clas_choices) then</span>
+<span class="w">  </span><span class="c">!       signature = signature//new_line(&#39;a&#39;)//&amp;</span>
+<span class="w">  </span><span class="c">!                   &#39;    if [ &quot;$prev&quot; == &quot;&#39;//self%cla(aa)%switch//&#39;&quot; ] || [ &quot;$prev&quot; == &quot;&#39;//self%cla(aa)%switch_ab//&#39;&quot; ] ; then&#39;</span>
+<span class="w">  </span><span class="c">!       signature = signature//new_line(&#39;a&#39;)//&#39;       COMPREPLY=( $( compgen -W &quot;&#39;//choices(self%cla(aa)%choices)//&#39;&quot; -- $cur ) )&#39;</span>
+<span class="w">  </span><span class="c">!       do a=aa+1, self%Na</span>
+<span class="w">  </span><span class="c">!         if (self%cla(a)%has_choices()) then</span>
+<span class="w">  </span><span class="c">!           signature = signature//new_line(&#39;a&#39;)//&amp;</span>
+<span class="w">  </span><span class="c">!                       &#39;    elif [ &quot;$prev&quot; == &quot;&#39;//self%cla(a)%switch//&#39;&quot; ] || [ &quot;$prev&quot; == &quot;&#39;//self%cla(a)%switch_ab//&#39;&quot; ] ; then&#39;</span>
+<span class="w">  </span><span class="c">!           signature = signature//new_line(&#39;a&#39;)//&#39;       COMPREPLY=( $( compgen -W &quot;&#39;//choices(self%cla(a)%choices)//&amp;</span>
+<span class="w">  </span><span class="c">!                       &#39;&quot; -- $cur ) )&#39;</span>
+<span class="w">  </span><span class="c">!         endif</span>
+<span class="w">  </span><span class="c">!       enddo</span>
+<span class="w">  </span><span class="c">!       signature = signature//new_line(&#39;a&#39;)//&#39;    else&#39;//new_line(&#39;a&#39;)//&#39;      COMPREPLY=( $( compgen -W &quot;&#39;</span>
+<span class="w">  </span><span class="c">!       do a=1, self%Na</span>
+<span class="w">  </span><span class="c">!         signature = signature//self%cla(a)%signature(bash_completion=bash_completion)</span>
+<span class="w">  </span><span class="c">!       enddo</span>
+<span class="w">  </span><span class="c">!       signature = signature//&#39;&quot; -- $cur ) )&#39;//new_line(&#39;a&#39;)//&#39;    fi&#39;</span>
+<span class="w">  </span><span class="c">!     else</span>
+<span class="w">  </span><span class="c">!       signature = signature//new_line(&#39;a&#39;)//&#39;    COMPREPLY=( $( compgen -W &quot;&#39;</span>
+<span class="w">  </span><span class="c">!       do a=1, self%Na</span>
+<span class="w">  </span><span class="c">!         signature = signature//self%cla(a)%signature(bash_completion=bash_completion)</span>
+<span class="w">  </span><span class="c">!       enddo</span>
+<span class="w">  </span><span class="c">!       signature = signature//&#39;&quot; -- $cur ) )&#39;</span>
+<span class="w">  </span><span class="c">!     endif</span>
+<span class="w">  </span><span class="c">!   ! endif</span>
+<span class="w">  </span><span class="c">! else</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">bash_completion_</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">      do </span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">Na</span><span class="w"></span>
+<span class="w">        </span><span class="n">signature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">signature</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">signature</span><span class="p">(</span><span class="n">bash_completion</span><span class="o">=</span><span class="n">bash_completion</span><span class="p">,</span><span class="w"> </span><span class="n">plain</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.)</span><span class="w"></span>
 <span class="w">      </span><span class="k">enddo</span>
-<span class="k">    endif</span>
-<span class="k">  else</span>
-<span class="k">    </span><span class="n">signature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="mi">0</span><span class="p">)%</span><span class="n">signature</span><span class="p">()</span><span class="w"></span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">      </span><span class="n">signature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">signature</span><span class="o">//</span><span class="s1">&#39; {&#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">group</span><span class="w"></span>
-<span class="w">      </span><span class="k">do </span><span class="n">g</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="w"></span>
-<span class="w">        </span><span class="n">signature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">signature</span><span class="o">//</span><span class="s1">&#39;,&#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">group</span><span class="w"></span>
-<span class="w">      </span><span class="k">enddo</span>
-<span class="k">      </span><span class="n">signature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">signature</span><span class="o">//</span><span class="s1">&#39;} ...&#39;</span><span class="w"></span>
+<span class="k">      </span><span class="n">signature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;    COMPREPLY=( $( compgen -W &quot;&#39;</span><span class="o">//</span><span class="n">signature</span><span class="o">//</span><span class="s1">&#39;&quot; -- $cur ) )&#39;</span><span class="w"></span>
 <span class="w">    </span><span class="k">endif</span>
-<span class="k">  endif</span>
-<span class="k">  endfunction </span><span class="n">signature</span><span class="w"></span>
+<span class="k">    do </span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">Na</span><span class="w"></span>
+<span class="w">      </span><span class="n">signature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">signature</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">signature</span><span class="p">(</span><span class="n">bash_completion</span><span class="o">=</span><span class="n">bash_completion</span><span class="p">,</span><span class="w"> </span><span class="n">plain</span><span class="o">=</span><span class="n">plain</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">enddo</span><span class="w"></span>
+<span class="w">  </span><span class="c">! endif</span>
+<span class="w">  </span><span class="c">!contains</span>
+<span class="w">  </span><span class="c">!  pure function choices(choices_c)</span>
+<span class="w">  </span><span class="c">!  !&lt; Return space-separated choices list from a comma-separated one.</span>
+<span class="w">  </span><span class="c">!  character(len=*), intent(in)  :: choices_c !&lt; Comma-separated list of choices.</span>
+<span class="w">  </span><span class="c">!  character(len=len(choices_c)) :: choices   !&lt; Space-separated list of choices.</span>
+<span class="w">  </span><span class="c">!  integer(I4P)                  :: c         !&lt; Counter.</span>
+
+<span class="w">  </span><span class="c">!  choices = choices_c</span>
+<span class="w">  </span><span class="c">!  do c=1, len(choices)</span>
+<span class="w">  </span><span class="c">!    if (choices(c:c)==&#39;,&#39;) choices(c:c) = &#39; &#39;</span>
+<span class="w">  </span><span class="c">!  enddo</span>
+<span class="w">  </span><span class="c">!  endfunction choices</span>
+<span class="w">  </span><span class="k">endfunction </span><span class="n">signature</span><span class="w"></span>
 </pre></div>
 
     </section>
