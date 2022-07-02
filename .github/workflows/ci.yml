@@ -37,14 +37,6 @@ jobs:
         tag=`git tag | tail -n 1`
         echo "RELEASE=$tag" >> $GITHUB_ENV
 
-    - name: MAKE COVERAGE
-      run: |
-        FoBiS.py rule -ex makecoverage
-
-    - name: UPLOAD COVERAGE to CODECOV
-      if: ${{ !env.ACT }}
-      uses: codecov/codecov-action@v3
-
     - name: MAKE TAR
       run: |
         echo "release version:" ${{ env.RELEASE }}
@@ -62,6 +54,14 @@ jobs:
         files: |
           *.tar.gz
           ./scripts/install.sh
+
+    - name: MAKE COVERAGE
+      run: |
+        FoBiS.py rule -ex makecoverage
+
+    - name: UPLOAD COVERAGE to CODECOV
+      if: ${{ !env.ACT }}
+      uses: codecov/codecov-action@v3
 
     - name: MAKE DOC
       run: |
