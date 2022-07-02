@@ -16,6 +16,16 @@ jobs:
         gfortran --version
         gcov --version
         sudo apt install graphviz
+        pip install --upgrade markdown
+        pip install --upgrade markdown-include
+        pip install --upgrade python-markdown-math
+        pip install --upgrade toposort
+        pip install --upgrade jinja2
+        pip install --upgrade pygments
+        pip install --upgrade beautifulsoup4
+        pip install --upgrade graphviz
+        pip install --upgrade tqdm
+        pip install --upgrade importlib-metadata
         pip install --upgrade ford && ford --version
         pip install --upgrade FoBiS.py && FoBiS.py --version
     
