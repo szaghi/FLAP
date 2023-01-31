@@ -235,7 +235,6 @@ rule_2 = FoBiS.py build -mode tests-gnu -coverage
 rule_3 = ./scripts/run_tests.sh
 rule_4 = rm -f exe/obj/face* exe/obj/penf* exe/obj/tester* FLAP.1
 rule_5 = gcov -o exe/obj/ src/lib/flap*
-rule_6 = rm -f *.gcov
 
 [rule-makecoverage-analysis]
 help   = Perform coverage analysis and saving reports in markdown

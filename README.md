@@ -1,6 +1,6 @@
 <a name="top"></a>
 
-# FLAP [![GitHub tag](https://img.shields.io/github/tag/szaghi/FLAP.svg)]() [![Join the chat at https://gitter.im/szaghi/FLAP](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/szaghi/FLAP?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# FLAP [![GitHub tag](https://img.shields.io/github/tag/szaghi/FLAP.svg)](https://github.com/szaghi/FLAP/releases) [![Join the chat at https://gitter.im/szaghi/FLAP](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/szaghi/FLAP?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 [![License](https://img.shields.io/badge/license-GNU%20GeneraL%20Public%20License%20v3,%20GPLv3-blue.svg)]()
 [![License](https://img.shields.io/badge/license-BSD2-red.svg)]()
@@ -8,8 +8,8 @@
 [![License](https://img.shields.io/badge/license-MIT-red.svg)]()
 
 [![Status](https://img.shields.io/badge/status-stable-brightgreen.svg)]()
-[![Build Status](https://travis-ci.org/szaghi/FLAP.svg?branch=master)](https://travis-ci.org/szaghi/FLAP)
-[![Coverage Status](https://img.shields.io/codecov/c/github/szaghi/FLAP.svg)](http://codecov.io/github/szaghi/FLAP?branch=master)
+[![CI Status](https://github.com/szaghi/FLAP/actions/workflows/ci.yml/badge.svg)](https://github.com/szaghi/FLAP/actions)
+[![Coverage Status](https://img.shields.io/codecov/c/github/szaghi/FLAP.svg)](https://app.codecov.io/gh/szaghi/FLAP)
 
 ### FLAP, Fortran command Line Arguments Parser for poor people
 

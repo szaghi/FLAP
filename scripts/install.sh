@@ -51,7 +51,7 @@ function projectdownload () {
     git submodule update --init --recursive
     cd -
   elif [ "$DOWNLOAD" == "wget" ]; then
-    wget $(curl -s https://api.github.com/repos/$USERNAME/$PROJECT/releases/latest | grep 'browser_' | cut -d\" -f4)
+    wget $(curl -s https://api.github.com/repos/$USERNAME/$PROJECT/releases/latest | grep 'browser_' | cut -d\" -f4 | grep -i tar.gz)
     tar xf $PROJECT.tar.gz
     rm -f $PROJECT.tar.gz
   fi

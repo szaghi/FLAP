@@ -8,10 +8,9 @@ summary: Fortran command Line Arguments Parser for poor people
 author: Stefano Zaghi
 github: https://github.com/szaghi
 email: stefano.zaghi@gmail.com
-md_extensions: markdown.extensions.toc(anchorlink=True)
-               markdown.extensions.smarty(smart_quotes=False)
+md_extensions: markdown.extensions.toc
+               markdown.extensions.smarty
                markdown.extensions.extra
-               markdown_checklist.extension
 docmark: <
 display: public
          protected

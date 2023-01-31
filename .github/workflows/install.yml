@@ -1,0 +1,33 @@
+name: Test (alternative) Install Methods
+
+on: push
+
+jobs:
+  install:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - name: INSTALL SCRIPT + make
+      run: |
+        wget $(curl -s https://api.github.com/repos/$GITHUB_REPOSITORY/releases/latest | grep 'browser_' | cut -d\" -f4 | grep -i install.sh)
+        chmod +x install.sh
+        ./install.sh --download wget --build make
+        rm -rf *
+
+    - name: INSTALL SCRIPT + cmake
+      run: |
+        wget $(curl -s https://api.github.com/repos/$GITHUB_REPOSITORY/releases/latest | grep 'browser_' | cut -d\" -f4 | grep -i install.sh)
+        chmod +x install.sh
+        ./install.sh --download wget --build cmake
+        rm -rf *
+
+    - name: FPM
+      run: |
+        git clone https://github.com/$GITHUB_REPOSITORY ./
+        wget $(curl -s https://api.github.com/repos/fortran-lang/fpm/releases/latest | grep 'browser_' | cut -d\" -f4 | grep -i linux | grep -vi sha256) -O fpm
+        chmod +x fpm
+        ./fpm build --profile release
+    

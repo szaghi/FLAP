@@ -45,9 +45,12 @@
 ./exe/flap_test_basic -s 'Hello FLAP' -vlI1P 2 1 3 -vlI2P 12 -2 -vlI4P 1 -vlI8P 1 -vlR8P 121.31 -vlR4P 3423121.31 -vlChar foo bar -vlBool T F T F
 ./exe/flap_test_basic -s 'Hello FLAP' -- foo.bar bar/baz.f90
 ./exe/flap_test_choices_logical
+./exe/flap_test_duplicated_clas --i 1 -i 8
 ./exe/flap_test_group
+./exe/flap_test_ignore_unknown_clas --string hello -u
 ./exe/flap_test_hidden -s 'hello' -i 2
 ./exe/flap_test_minimal -s 'hello'
+./exe/flap_test_nargs_insufficient -i 1 2
 ./exe/flap_test_nested
 ./exe/flap_test_nested -h
 ./exe/flap_test_nested -a
@@ -55,4 +58,8 @@
 ./exe/flap_test_nested init commit -m 'hello'
 ./exe/flap_test_nested commit -m 'hello'
 ./exe/flap_test_nested tag -a 'hello'
+./exe/flap_test_save_bash_completion
+./exe/flap_test_save_man_page
+./exe/flap_test_save_usage_to_markdown
 ./exe/flap_test_string
+./exe/flap_test_value_missing -i
