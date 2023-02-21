@@ -25,19 +25,20 @@ type, extends(object) :: command_line_argument
   !<
   !< @note If not otherwise declared the action on CLA value is set to "store" a value.
   private
-  character(len=:), allocatable, public :: switch                !< Switch name.
-  character(len=:), allocatable, public :: switch_ab             !< Abbreviated switch name.
-  logical,                       public :: is_required=.false.   !< Flag for set required argument.
-  logical,                       public :: is_positional=.false. !< Flag for checking if CLA is a positional or a named CLA.
-  integer(I4P),                  public :: position= 0_I4P       !< Position of positional CLA.
-  logical,                       public :: is_passed=.false.     !< Flag for checking if CLA has been passed to CLI.
-  logical,                       public :: is_hidden=.false.     !< Flag for hiding CLA, thus it does not compare into help.
-  character(len=:), allocatable, public :: act                   !< CLA value action.
-  character(len=:), allocatable, public :: def                   !< Default value.
-  character(len=:), allocatable, public :: nargs                 !< Number of arguments consumed by CLA.
-  character(len=:), allocatable, public :: choices               !< List (comma separated) of allowable values for the argument.
-  character(len=:), allocatable, public :: val                   !< CLA value.
-  character(len=:), allocatable, public :: envvar                !< Environment variable from which take value.
+  character(len=:), allocatable, public :: switch                 !< Switch name.
+  character(len=:), allocatable, public :: switch_ab              !< Abbreviated switch name.
+  character(len=:), allocatable, public :: act                    !< CLA value action.
+  character(len=:), allocatable, public :: def                    !< Default value.
+  character(len=:), allocatable, public :: nargs                  !< Number of arguments consumed by CLA.
+  character(len=:), allocatable, public :: choices                !< List (comma separated) of allowable values for the argument.
+  character(len=:), allocatable, public :: val                    !< CLA value.
+  character(len=:), allocatable, public :: envvar                 !< Environment variable from which take value.
+  logical,                       public :: is_required=.false.    !< Flag for set required argument.
+  logical,                       public :: is_positional=.false.  !< Flag for checking if CLA is a positional or a named CLA.
+  integer(I4P),                  public :: position=0_I4P         !< Position of positional CLA.
+  logical,                       public :: is_passed=.false.      !< Flag for checking if CLA has been passed to CLI.
+  logical,                       public :: is_hidden=.false.      !< Flag for hiding CLA, thus it does not compare into help.
+  logical,                       public :: is_val_required=.true. !< Flag for set required value for not required (optional) CLA.
   contains
     ! public methods
     procedure, public :: free                           !< Free dynamic memory.
@@ -128,16 +129,17 @@ integer(I4P), parameter :: ERROR_STORE_STAR_NARGS       = 20 !< Action store* no
 integer(I4P), parameter :: ERROR_STORE_STAR_ENVVAR      = 21 !< Action store* not allowed for environment variable CLA.
 integer(I4P), parameter :: ERROR_ACTION_UNKNOWN         = 22 !< Unknown CLA (switch name).
 integer(I4P), parameter :: ERROR_DUPLICATED_CLAS        = 23 !< Duplicated CLAs passed, passed multiple instance of the same CLA.
+integer(I4P), parameter :: ERROR_MISSING_REQUIRED_VAL   = 24 !< Missing required value of CLA.
 
 contains
   ! public methods
   elemental subroutine free(self)
   !< Free dynamic memory.
-  class(command_line_argument), intent(inout) :: self !< CLA data.
+  class(command_line_argument), intent(inout) :: self  !< CLA data.
 
   ! object members
   call self%free_object
-  ! command_line_argument members
+  ! other members
   if (allocated(self%switch   )) deallocate(self%switch   )
   if (allocated(self%switch_ab)) deallocate(self%switch_ab)
   if (allocated(self%act      )) deallocate(self%act      )
@@ -146,11 +148,12 @@ contains
   if (allocated(self%choices  )) deallocate(self%choices  )
   if (allocated(self%val      )) deallocate(self%val      )
   if (allocated(self%envvar   )) deallocate(self%envvar   )
-  self%is_required   = .false.
-  self%is_positional = .false.
-  self%position      =  0_I4P
-  self%is_passed     = .false.
-  self%is_hidden     = .false.
+  self%is_required     = .false.
+  self%is_positional   = .false.
+  self%position        = 0_I4P
+  self%is_passed       = .false.
+  self%is_hidden       = .false.
+  self%is_val_required = .true.
   endsubroutine free
 
   subroutine check(self, pref)
@@ -178,6 +181,19 @@ contains
     is_ok = .false.
   endif
   endfunction is_required_passed
+
+  function is_required_val_passed(self, pref) result(is_ok)
+  !< Check if required value of CLA is passed.
+  class(command_line_argument), intent(inout) :: self  !< CLA data.
+  character(*), optional,       intent(in)    :: pref  !< Prefixing string.
+  logical                                     :: is_ok !< Check result.
+
+  is_ok = .true.
+  if (self%is_val_required.and.((.not.self%is_passed).or.(.not.allocated(self%val)))) then
+    call self%errored(pref=pref, error=ERROR_MISSING_REQUIRED_VAL)
+    is_ok = .false.
+  endif
+  endfunction is_required_val_passed
 
   subroutine raise_error_m_exclude(self, pref)
   !< Raise error mutually exclusive CLAs passed.
@@ -227,7 +243,7 @@ contains
   !< It is necessary to *sanitize* the default values of non-passed, optional CLA.
   class(command_line_argument), intent(inout) :: self !< CLAsG data.
 
-  if (.not.self%is_passed) then
+  ! if (.not.self%is_passed) then
     if (allocated(self%def)) then
       ! strip leading and trailing white spaces
       self%def = wstrip(self%def)
@@ -237,7 +253,7 @@ contains
         self%def = replace_all(string=self%def, substring=' ', restring=ARGS_SEP)
       endif
     endif
-  endif
+  ! endif
   endsubroutine sanitize_defaults
 
   function usage(self, pref, markdown)
@@ -411,23 +427,24 @@ contains
           if (allocated(self%nargs)) then
             select case(self%nargs)
             case('+')
-              signature = ' value#1 [value#2 value#3...]'
+              signature = 'value#1 [value#2 value#3...]'
             case('*')
-              signature = ' [value#1 value#2 value#3...]'
+              signature = '[value#1 value#2 value#3...]'
             case default
               nargs = cton(str=trim(adjustl(self%nargs)),knd=1_I4P)
               signature = ''
               do a=1, nargs
-                signature = signature//' value#'//trim(str(a, .true.))
+                signature = signature//'value#'//trim(str(a, .true.))//' '
               enddo
             endselect
           else
-            signature = ' value'
+            signature = 'value'
           endif
+          if (.not.self%is_val_required) signature = '['//signature//']'
           if (self%is_required) then
-            signature = ' '//trim(adjustl(self%switch))//signature
+            signature = ' '//trim(adjustl(self%switch))//' '//signature
           else
-            signature = ' ['//trim(adjustl(self%switch))//signature//']'
+            signature = ' ['//trim(adjustl(self%switch))//' '//signature//']'
           endif
         else
           if (self%is_required) then
@@ -580,6 +597,8 @@ contains
       self%error_message = prefd//': named option "'//trim(adjustl(self%switch))//'" has unknown "'//self%act//'" action!'
     case(ERROR_DUPLICATED_CLAS)
       self%error_message = prefd//': switch "'//trim(adjustl(switch))//'" has been passed more than once!'
+    case(ERROR_MISSING_REQUIRED_VAL)
+      self%error_message = prefd//': named option "'//trim(adjustl(self%switch))//'" requires a value that is not passed!'
     endselect
     call self%print_error_message
   endif
@@ -617,6 +636,10 @@ contains
   character(*), optional,       intent(in)    :: pref  !< Prefixing string.
 
   if (allocated(self%act)) then
+    if (self%act==ACTION_STORE_STAR.and.(.not.allocated(self%def))) then
+      call self%errored(pref=pref, error=ERROR_OPTIONAL_NO_DEF)
+      return
+    endif
     if (self%act==ACTION_STORE_STAR.and.self%is_positional) then
       call self%errored(pref=pref, error=ERROR_STORE_STAR_POSITIONAL)
       return
@@ -645,8 +668,12 @@ contains
   !< Check optional CLA consistency.
   class(command_line_argument), intent(inout) :: self  !< CLA data.
   character(*), optional,       intent(in)    :: pref  !< Prefixing string.
+  logical                                     :: is_inconsistent
 
-  if ((.not.self%is_required).and.(.not.allocated(self%def))) call self%errored(pref=pref, error=ERROR_OPTIONAL_NO_DEF)
+                             is_inconsistent = ((.not.allocated(self%def)).and.(.not.self%is_required))
+                             is_inconsistent = ((.not.allocated(self%def)).and.(.not.self%is_val_required)).or.is_inconsistent
+  if (allocated(self%nargs)) is_inconsistent = ((.not.allocated(self%def)).and.(self%nargs=='*')).or.is_inconsistent
+  if (is_inconsistent) call self%errored(pref=pref, error=ERROR_OPTIONAL_NO_DEF)
   endsubroutine check_optional_consistency
 
   subroutine check_m_exclude_consistency(self, pref)
@@ -1292,25 +1319,25 @@ contains
 
   if (.not.self%is_required_passed(pref=pref)) return
   if (.not.allocated(self%nargs)) then
-    call self%errored(pref=pref, error=ERROR_NO_LIST)
-    return
+     call self%errored(pref=pref, error=ERROR_NO_LIST)
+     return
   endif
   if (self%act==action_store) then
-    if (self%is_passed) then
-      call tokenize(strin=self%val, delimiter=ARGS_SEP, toks=valsV, Nt=Nv)
-      if (.not.self%check_list_size(Nv=Nv, val=valsV(1), pref=pref)) return
-      allocate(val(1:Nv))
-      do v=1, Nv
-        val(v) = trim(adjustl(valsV(v)))
-      enddo
-    else ! using default value
-      call tokenize(strin=self%def, delimiter=ARGS_SEP, toks=valsD, Nt=Nv)
-      if (.not.self%check_list_size(Nv=Nv, val=valsD(1), pref=pref)) return
-      allocate(val(1:Nv))
-      do v=1, Nv
-        val(v) = trim(adjustl(valsD(v)))
-      enddo
-    endif
+     if (self%is_passed) then
+        call tokenize(strin=self%val, delimiter=ARGS_SEP, toks=valsV, Nt=Nv)
+        if (.not.self%check_list_size(Nv=Nv, val=valsV(1), pref=pref)) return
+        allocate(val(1:Nv))
+        do v=1, Nv
+           val(v) = trim(adjustl(valsV(v)))
+        enddo
+     else ! using default value
+        call tokenize(strin=self%def, delimiter=ARGS_SEP, toks=valsD, Nt=Nv)
+        if (.not.self%check_list_size(Nv=Nv, val=valsD(1), pref=pref)) return
+        allocate(val(1:Nv))
+        do v=1, Nv
+          val(v) = trim(adjustl(valsD(v)))
+        enddo
+     endif
   endif
   endsubroutine get_cla_list_varying_char
 
@@ -1322,19 +1349,20 @@ contains
   ! object members
   call lhs%assign_object(rhs)
   ! command_line_argument members
-  if (allocated(rhs%switch   )) lhs%switch        = rhs%switch
-  if (allocated(rhs%switch_ab)) lhs%switch_ab     = rhs%switch_ab
-  if (allocated(rhs%act      )) lhs%act           = rhs%act
-  if (allocated(rhs%def      )) lhs%def           = rhs%def
-  if (allocated(rhs%nargs    )) lhs%nargs         = rhs%nargs
-  if (allocated(rhs%choices  )) lhs%choices       = rhs%choices
-  if (allocated(rhs%val      )) lhs%val           = rhs%val
-  if (allocated(rhs%envvar   )) lhs%envvar        = rhs%envvar
-                                lhs%is_required   = rhs%is_required
-                                lhs%is_positional = rhs%is_positional
-                                lhs%position      = rhs%position
-                                lhs%is_passed     = rhs%is_passed
-                                lhs%is_hidden     = rhs%is_hidden
+  if (allocated(rhs%switch   )) lhs%switch          = rhs%switch
+  if (allocated(rhs%switch_ab)) lhs%switch_ab       = rhs%switch_ab
+  if (allocated(rhs%act      )) lhs%act             = rhs%act
+  if (allocated(rhs%def      )) lhs%def             = rhs%def
+  if (allocated(rhs%nargs    )) lhs%nargs           = rhs%nargs
+  if (allocated(rhs%choices  )) lhs%choices         = rhs%choices
+  if (allocated(rhs%val      )) lhs%val             = rhs%val
+  if (allocated(rhs%envvar   )) lhs%envvar          = rhs%envvar
+                                lhs%is_required     = rhs%is_required
+                                lhs%is_positional   = rhs%is_positional
+                                lhs%position        = rhs%position
+                                lhs%is_passed       = rhs%is_passed
+                                lhs%is_hidden       = rhs%is_hidden
+                                lhs%is_val_required = rhs%is_val_required
   endsubroutine cla_assign_cla
 
   elemental subroutine finalize(self)
