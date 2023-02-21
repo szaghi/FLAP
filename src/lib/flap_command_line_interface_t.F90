@@ -228,7 +228,7 @@ contains
   endsubroutine set_mutually_exclusive_groups
 
   subroutine add(self, pref, group, group_index, switch, switch_ab, help, help_markdown, help_color, help_style, &
-                 required, positional, position, hidden, act, def, nargs, choices, exclude, envvar, error)
+                 required, val_required, positional, position, hidden, act, def, nargs, choices, exclude, envvar, error)
   !< Add CLA to CLI.
   !<
   !< @note If not otherwise declared the action on CLA value is set to "store" a value that must be passed after the switch name
@@ -248,6 +248,7 @@ contains
   character(*), optional,        intent(in)    :: help_style    !< ANSI style of help messages.
   character(*), optional,        intent(in)    :: help_markdown !< Longer help message, markdown formatted.
   logical,      optional,        intent(in)    :: required      !< Flag for set required argument.
+  logical,      optional,        intent(in)    :: val_required  !< Flag for set value required for optional argument.
   logical,      optional,        intent(in)    :: positional    !< Flag for checking if CLA is a positional or a named CLA.
   integer(I4P), optional,        intent(in)    :: position      !< Position of positional CLA.
   logical,      optional,        intent(in)    :: hidden        !< Flag for hiding CLA, thus it does not compare into help.
@@ -272,22 +273,23 @@ contains
       cla%switch_ab = switch_ab
     endif
   endif
-                                                if (present(switch_ab    )) cla%switch_ab     = switch_ab
-  cla%help          = 'Undocumented argument' ; if (present(help         )) cla%help          = help
-  cla%help_color    = ''                      ; if (present(help_color   )) cla%help_color    = help_color
-  cla%help_style    = ''                      ; if (present(help_style   )) cla%help_style    = help_style
-  cla%help_markdown = ''                      ; if (present(help_markdown)) cla%help_markdown = help_markdown
-  cla%is_required   = .false.                 ; if (present(required     )) cla%is_required   = required
-  cla%is_positional = .false.                 ; if (present(positional   )) cla%is_positional = positional
-  cla%position      = 0_I4P                   ; if (present(position     )) cla%position      = position
-  cla%is_hidden     = .false.                 ; if (present(hidden       )) cla%is_hidden     = hidden
-  cla%act           = action_store            ; if (present(act          )) cla%act           = trim(adjustl(Upper_Case(act)))
-                                                if (present(def          )) cla%def           = def
-                                                if (present(def          )) cla%val           = def
-                                                if (present(nargs        )) cla%nargs         = nargs
-                                                if (present(choices      )) cla%choices       = choices
-  cla%m_exclude     = ''                      ; if (present(exclude      )) cla%m_exclude     = exclude
-                                                if (present(envvar       )) cla%envvar        = envvar
+                                                  if (present(switch_ab    )) cla%switch_ab       = switch_ab
+  cla%help            = 'Undocumented argument' ; if (present(help         )) cla%help            = help
+  cla%help_color      = ''                      ; if (present(help_color   )) cla%help_color      = help_color
+  cla%help_style      = ''                      ; if (present(help_style   )) cla%help_style      = help_style
+  cla%help_markdown   = ''                      ; if (present(help_markdown)) cla%help_markdown   = help_markdown
+  cla%is_required     = .false.                 ; if (present(required     )) cla%is_required     = required
+  cla%is_val_required = .true.                  ; if (present(val_required )) cla%is_val_required = val_required
+  cla%is_positional   = .false.                 ; if (present(positional   )) cla%is_positional   = positional
+  cla%position        = 0_I4P                   ; if (present(position     )) cla%position        = position
+  cla%is_hidden       = .false.                 ; if (present(hidden       )) cla%is_hidden       = hidden
+  cla%act             = action_store            ; if (present(act          )) cla%act             = trim(adjustl(Upper_Case(act)))
+                                                  if (present(def          )) cla%def             = def
+                                                  if (present(def          )) cla%val             = def
+                                                  if (present(nargs        )) cla%nargs           = nargs
+                                                  if (present(choices      )) cla%choices         = choices
+  cla%m_exclude     = ''                        ; if (present(exclude      )) cla%m_exclude       = exclude
+                                                  if (present(envvar       )) cla%envvar          = envvar
   call cla%check(pref=pref) ; self%error = cla%error
   if (self%error/=0) then
     if (present(error)) error = self%error
@@ -1386,7 +1388,7 @@ contains
   grouped_examples = .false.
   if (g>0) then ! usage of a specific command
     usaged = self%clasg(g)%usage(pref=prefd,no_header=no_headerd,markdown=markdownd)
-    if(allocated(self%clasg(g)%examples).and.(.not.no_examplesd)) then 
+    if(allocated(self%clasg(g)%examples).and.(.not.no_examplesd)) then
       usaged = usaged//print_examples(prefd, self%clasg(g)%examples)
       grouped_examples = .true.
     endif
@@ -1422,7 +1424,7 @@ contains
       character(*),     intent(in)  :: examples(1:)   !< Examples to be printed.
       character(len=:), allocatable :: exampled       !< Examples string.
       integer(I4P)                  :: e              !< Counter.
-  
+
       exampled = new_line('a')//new_line('a')//prefd//'Examples:'
       do e=1, size(examples,dim=1)
         exampled = exampled//new_line('a')//prefd//'   '//trim(examples(e))

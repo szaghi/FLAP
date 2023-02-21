@@ -247,160 +247,204 @@ contains
 
   error_unknown_clas = 0
   if (self%is_called) then
-    arg = 0
-    do while (arg < size(args, dim=1)) ! loop over CLAs group arguments passed
-      arg = arg + 1
-      found = .false.
-      do a=1, self%Na ! loop over CLAs group clas named options
-        if (.not.self%cla(a)%is_positional) then
-          if (trim(adjustl(self%cla(a)%switch   ))==trim(adjustl(args(arg))).or.&
-              trim(adjustl(self%cla(a)%switch_ab))==trim(adjustl(args(arg)))) then
-            if (self%cla(a)%is_passed) then
-               ! current CLA has been already passed, raise an error
-               call self%cla(arg)%raise_error_duplicated_clas(pref=pref, switch=trim(adjustl(args(arg))))
-               self%error = self%cla(arg)%error
-            endif
-            found_val = .false.
-            if (self%cla(a)%act==action_store) then
-              if (allocated(self%cla(a)%envvar)) then
-                if (arg + 1 <= size(args,dim=1)) then ! verify if the value has been passed directly to cli
-                  ! there are still other arguments to check
-                  if (.not.self%is_defined(switch=trim(adjustl(args(arg+1))))) then
-                    ! argument seem good...
-                    arg = arg + 1
-                    self%cla(a)%val = trim(adjustl(args(arg)))
+     call self%sanitize_defaults
+     arg = 0
+     do while (arg < size(args, dim=1)) ! loop over CLAs group arguments passed
+        arg = arg + 1
+        found = .false.
+        do a=1, self%Na ! loop over CLAs group clas named options
+           if (.not.self%cla(a)%is_positional) then
+              if (trim(adjustl(self%cla(a)%switch   ))==trim(adjustl(args(arg))).or.&
+                  trim(adjustl(self%cla(a)%switch_ab))==trim(adjustl(args(arg)))) then
+                 if (self%cla(a)%is_passed) then
+                    ! current CLA has been already passed, raise an error
+                    call self%cla(arg)%raise_error_duplicated_clas(pref=pref, switch=trim(adjustl(args(arg))))
+                    self%error = self%cla(arg)%error
+                 else
+                    self%cla(a)%is_passed = .true.
                     found = .true.
-                    found_val = .true.
-                  endif
-                endif
-                if (.not.found) then
-                  ! not found, try to take val from environment
-                  call get_environment_variable(name=self%cla(a)%envvar, value=envvar, status=aa)
-                  if (aa==0) then
-                    self%cla(a)%val = trim(adjustl(envvar))
-                    found_val = .true.
-                  else
-                    ! flush default to val if environment is not set and default is set
-                    if (allocated(self%cla(a)%def)) then
-                      self%cla(a)%val = self%cla(a)%def
-                      found_val = .true.
-                    endif
-                  endif
-                endif
-              elseif (allocated(self%cla(a)%nargs)) then
-                self%cla(a)%val = ''
-                select case(self%cla(a)%nargs)
-                case('+')
-                  aaa = 0
-                  do aa=arg + 1, size(args,dim=1)
-                    if (.not.self%is_defined(switch=trim(adjustl(args(aa))))) then
-                      aaa = aa
+                 endif
+                 found_val = .false.
+
+                 ! check action
+                 if (self%cla(a)%act==action_store) then
+                    ! flush default (if any) to value as starting point
+                    if (allocated(self%cla(a)%def)) self%cla(a)%val = self%cla(a)%def
+
+                    ! search for actual passed value if passed/required
+
+                    ! check for envvar
+                    if (allocated(self%cla(a)%envvar)) then
+                       ! verify if the value has been passed directly to cli
+                       if (arg + 1 <= size(args,dim=1)) then
+                          ! there are still other arguments to check
+                          if (.not.self%is_defined(switch=trim(adjustl(args(arg+1))))) then
+                             ! argument seems good...
+                             arg = arg + 1
+                             self%cla(a)%val = trim(adjustl(args(arg)))
+                             found_val = .true.
+                          endif
+                       endif
+                       if (.not.found_val) then
+                          ! value not found, try to take val from environment
+                          call get_environment_variable(name=self%cla(a)%envvar, value=envvar, status=aa)
+                          if (aa==0) then
+                             self%cla(a)%val = trim(adjustl(envvar))
+                             found_val = .true.
+                          else
+                             ! no found, raise value missing error
+                             call self%cla(a)%raise_error_value_missing(pref=pref)
+                             self%error = self%cla(a)%error
+                             return
+                          endif
+                       endif
+
+                    ! check for multiple argument values
+                    elseif (allocated(self%cla(a)%nargs)) then
+                       select case(self%cla(a)%nargs)
+                       case('+')
+                          aaa = n_next_undef_args(args=args, arg=arg)
+                          if (aaa>=arg+1) then
+                             self%cla(a)%val = ''
+                             do aa=aaa, arg + 1, -1 ! decreasing loop due to gfortran bug
+                                self%cla(a)%val = trim(adjustl(args(aa)))//args_sep//trim(self%cla(a)%val)
+                                found_val = .true.
+                             enddo
+                             arg = aaa
+                          elseif (self%cla(a)%is_val_required) then
+                             call self%cla(a)%raise_error_nargs_insufficient(pref=pref)
+                             self%error = self%cla(a)%error
+                             return
+                          endif
+                       case('*')
+                          aaa = n_next_undef_args(args=args, arg=arg)
+                          if (aaa>=arg+1) then
+                             self%cla(a)%val = ''
+                             do aa=aaa, arg + 1, -1 ! decreasing loop due to gfortran bug
+                                self%cla(a)%val = trim(adjustl(args(aa)))//args_sep//trim(self%cla(a)%val)
+                                found_val = .true.
+                             enddo
+                             arg = aaa
+                          endif
+                       case default
+                          nargs = cton(str=trim(adjustl(self%cla(a)%nargs)), knd=1_I4P)
+                          if ((arg + nargs == n_next_undef_args(args=args, arg=arg))) then
+                             self%cla(a)%val = ''
+                             do aa=arg + nargs, arg + 1, -1 ! decreasing loop due to gfortran bug
+                                self%cla(a)%val = trim(adjustl(args(aa)))//args_sep//trim(self%cla(a)%val)
+                             enddo
+                             found_val = .true.
+                             arg = arg + nargs
+                          elseif (self%cla(a)%is_val_required) then
+                             call self%cla(a)%raise_error_nargs_insufficient(pref=pref)
+                             self%error = self%cla(a)%error
+                             return
+                          endif
+                       endselect
+
+                    ! check for single argument value
                     else
-                      exit
+                       if (self%cla(a)%is_val_required) then
+                          ! value is required
+                          if (arg+1>size(args)) then
+                             ! no more arguments remaining, raise value missing error
+                             call self%cla(a)%raise_error_value_missing(pref=pref)
+                             self%error = self%cla(a)%error
+                             return
+                          elseif (self%is_defined(switch=trim(adjustl(args(arg+1))))) then
+                             ! the next argument is a CLA switch, raise value missing error
+                             call self%cla(a)%raise_error_value_missing(pref=pref)
+                             self%error = self%cla(a)%error
+                             return
+                          else
+                             ! value found
+                             arg = arg + 1
+                             self%cla(a)%val = trim(adjustl(args(arg)))
+                             found_val = .true.
+                          endif
+                       else
+                          ! value is not required, check if it is passed
+                          if (arg + 1 <= size(args, dim=1)) then
+                             ! there are arguments to check
+                             if (.not.self%is_defined(switch=trim(adjustl(args(arg+1))))) then
+                                ! value found
+                                arg = arg + 1
+                                self%cla(a)%val = trim(adjustl(args(arg)))
+                                found_val = .true.
+                             endif
+                          endif
+                       endif
                     endif
-                  enddo
-                  if (aaa>=arg+1) then
-                    do aa=aaa, arg + 1, -1 ! decreasing loop due to gfortran bug
-                      self%cla(a)%val = trim(adjustl(args(aa)))//args_sep//trim(self%cla(a)%val)
-                      found_val = .true.
-                    enddo
-                    arg = aaa
-                  elseif (aaa==0) then
-                    call self%cla(a)%raise_error_nargs_insufficient(pref=pref)
-                    self%error = self%cla(a)%error
-                    return
-                  endif
-                case('*')
-                  aaa = 0
-                  do aa=arg + 1, size(args,dim=1)
-                    if (.not.self%is_defined(switch=trim(adjustl(args(aa))))) then
-                      aaa = aa
-                    else
-                      exit
+
+                 elseif (self%cla(a)%act==action_store_star) then
+                    if (arg + 1 <= size(args, dim=1)) then ! verify if the value has been passed directly to cli
+                       ! there are still other arguments to check
+                       if (.not.self%is_defined(switch=trim(adjustl(args(arg+1))))) then
+                          ! arguments seem good...
+                          arg = arg + 1
+                          self%cla(a)%val = trim(adjustl(args(arg)))
+                          found = .true.
+                          found_val = .true.
+                       endif
                     endif
-                  enddo
-                  if (aaa>=arg+1) then
-                    do aa=aaa, arg + 1, -1 ! decreasing loop due to gfortran bug
-                      self%cla(a)%val = trim(adjustl(args(aa)))//args_sep//trim(self%cla(a)%val)
-                      found_val = .true.
-                    enddo
-                    arg = aaa
-                  endif
-                case default
-                  nargs = cton(str=trim(adjustl(self%cla(a)%nargs)), knd=1_I4P)
-                  if (arg + nargs > size(args,dim=1)) then
-                    call self%cla(a)%raise_error_nargs_insufficient(pref=pref)
-                    self%error = self%cla(a)%error
-                    return
-                  endif
-                  do aa=arg + nargs, arg + 1, -1 ! decreasing loop due to gfortran bug
-                    self%cla(a)%val = trim(adjustl(args(aa)))//args_sep//trim(self%cla(a)%val)
-                  enddo
-                  found_val = .true.
-                  arg = arg + nargs
-                endselect
-              else
-                if (arg+1>size(args)) then
-                  call self%cla(a)%raise_error_value_missing(pref=pref)
-                  self%error = self%cla(a)%error
-                  return
-                endif
-                arg = arg + 1
-                self%cla(a)%val = trim(adjustl(args(arg)))
-                found_val = .true.
+                    if (.not.found) then
+                       ! flush default to val if default is set
+                       if (allocated(self%cla(a)%def)) self%cla(a)%val = self%cla(a)%def
+                    endif
+                 elseif (self%cla(a)%act==action_print_help) then
+                    self%error = STATUS_PRINT_H
+                 elseif (self%cla(a)%act==action_print_vers) then
+                    self%error = STATUS_PRINT_V
+                 endif
+
+                 self%cla(a)%is_passed = .true.
+                 found = .true.
+                 exit
               endif
-            elseif (self%cla(a)%act==action_store_star) then
-              if (arg + 1 <= size(args, dim=1)) then ! verify if the value has been passed directly to cli
-                ! there are still other arguments to check
-                if (.not.self%is_defined(switch=trim(adjustl(args(arg+1))))) then
-                  ! argument seem good...
-                  arg = arg + 1
-                  self%cla(a)%val = trim(adjustl(args(arg)))
-                  found = .true.
-                  found_val = .true.
-                endif
-              endif
-              if (.not.found) then
-                ! flush default to val if default is set
-                if (allocated(self%cla(a)%def)) self%cla(a)%val = self%cla(a)%def
-              endif
-            elseif (self%cla(a)%act==action_print_help) then
-              self%error = STATUS_PRINT_H
-            elseif (self%cla(a)%act==action_print_vers) then
-              self%error = STATUS_PRINT_V
-            endif
-            self%cla(a)%is_passed = .true.
-            found = .true.
-            exit
-          endif
+           endif
+        enddo
+        if (.not.found) then ! current argument (arg-th) does not correspond to a named option
+           if (arg>self%Na) then ! has been passed too much CLAs
+               ! place the error into a new positional dummy CLA
+               call cla%assign_object(self)
+               cla%is_passed = .true.
+               cla%m_exclude = ''
+               call self%add(pref=pref, cla=cla)
+               call self%cla(self%Na)%raise_error_switch_unknown(pref=pref, switch=trim(adjustl(args(arg))))
+               self%error = self%cla(self%Na)%error
+               return
+           endif
+           if (.not.self%cla(arg)%is_positional) then ! current argument (arg-th) is not positional... there is a problem!
+              call self%cla(arg)%raise_error_switch_unknown(pref=pref, switch=trim(adjustl(args(arg))))
+              self%error = self%cla(arg)%error
+              error_unknown_clas = self%error
+              if (.not.ignore_unknown_clas) return
+           else
+              ! positional CLA always stores a value
+              self%cla(arg)%val = trim(adjustl(args(arg)))
+              self%cla(arg)%is_passed = .true.
+           endif
         endif
-      enddo
-      if (.not.found) then ! current argument (arg-th) does not correspond to a named option
-        if (arg>self%Na) then ! has been passed too much CLAs
-           ! place the error into a new positional dummy CLA
-           call cla%assign_object(self)
-           cla%is_passed = .true.
-           cla%m_exclude = ''
-           call self%add(pref=pref, cla=cla)
-           call self%cla(self%Na)%raise_error_switch_unknown(pref=pref, switch=trim(adjustl(args(arg))))
-           self%error = self%cla(self%Na)%error
-           return
-        endif
-        if (.not.self%cla(arg)%is_positional) then ! current argument (arg-th) is not positional... there is a problem!
-          call self%cla(arg)%raise_error_switch_unknown(pref=pref, switch=trim(adjustl(args(arg))))
-          self%error = self%cla(arg)%error
-          error_unknown_clas = self%error
-          if (.not.ignore_unknown_clas) return
-        else
-          ! positional CLA always stores a value
-          self%cla(arg)%val = trim(adjustl(args(arg)))
-          self%cla(arg)%is_passed = .true.
-        endif
-      endif
-    enddo
-    call self%check_m_exclusive(pref=pref)
-    call self%sanitize_defaults
+     enddo
+     call self%check_m_exclusive(pref=pref)
   endif
+  contains
+     function n_next_undef_args(args, arg)
+     !< Return the number of the next undefined (not named switch) arguments.
+     character(*), intent(in) :: args(:)           !< Command line arguments.
+     integer(I4P), intent(in) :: arg               !< Current argument number.
+     integer(I4P)             :: n_next_undef_args !< Number of the next undefined (not named switch) arguments.
+     integer(I4P)             :: i                 !< Counter.
+
+     n_next_undef_args = 0
+     do i=arg + 1, size(args,dim=1)
+        if (.not.self%is_defined(switch=trim(adjustl(args(i))))) then
+           n_next_undef_args = i
+        else
+           exit
+        endif
+     enddo
+     endfunction n_next_undef_args
   endsubroutine parse
 
   function usage(self, pref, no_header, markdown)
