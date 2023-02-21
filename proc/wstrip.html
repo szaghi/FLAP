@@ -80,71 +80,118 @@
   <div class="row">
     <h1>wstrip
       <small>Function</small>
+      
     </h1>
-    <div class="row">
-  <div class="col-lg-12">
-<div class="well well-sm">
-  <ul class="list-inline" style="margin-bottom:0px;display:inline">
-     <li><i class="fa fa-list-ol"></i>
-       <a data-toggle="tooltip"
-    data-placement="bottom" data-html="true"
-    title=" 0.1% of total for procedures.">5 statements</a>
-     </li> 
-    <li><i class="fa fa-code"></i><a href="../src/flap_utils_m.f90"> Source File</a></li>
-  </ul>
-  <ol class="breadcrumb in-well text-right">
-     <li><a href='../sourcefile/flap_utils_m.f90.html'>flap_utils_m.f90</a></li>
-     <li><a href='../module/flap_utils_m.html'>flap_utils_m</a></li>
-     <li class="active">wstrip</li>
-  </ol>
-</div>
-</div>
-</div>
-<script>
-  $(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-  })
-</script>
+      <div class="row" id="info-bar">
+    <div class="col-lg-12">
+      <div class="well well-sm">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+          <li id="statements"><i class="fa fa-list-ol"></i>
+            <a data-toggle="tooltip"
+               data-placement="bottom" data-html="true"
+               title=" 0.1% of total for procedures.">5 statements</a>
+          </li>
+
+            <li id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/flap_utils_m.f90"> Source File</a>
+            </li>
+        </ul>
+        <ol class="breadcrumb in-well text-right">
+              <li><a href='../sourcefile/flap_utils_m.f90.html'>flap_utils_m.f90</a></li>
+              <li><a href='../module/flap_utils_m.html'>flap_utils_m</a></li>
+          <li class="active">wstrip</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <script>
+    $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+    })
+  </script>
 
   </div>
   
   <div class="row">
     <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
-    <div id="sidebar">
-  <h3>Contents</h3>
- 
-<div class="panel panel-primary">
-  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
-  <div class="list-group">
-    <a class="list-group-item" href="../proc/wstrip.html#src">wstrip</a>
-  </div>
-</div>
+      <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="panel panel-primary">
+      <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/wstrip.html#src">wstrip</a>
+      </div>
+    </div>
 
-</div>
+
+  </div>
 
     </div>
     
     <div class="col-md-9" id='text'>
-    <h2>public pure function wstrip(string) result(newstring)</h2>
+    <h2>public pure function wstrip(string) result(newstring)  
+</h2>
     
 
     <p>Strip out leading and trailing white spaces from a string.</p>
 
     <h3>Arguments</h3>
-      <table class="table table-striped varlist">
-<thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
-<tbody>
-<tr>
-  <td><span class="anchor" id="variable-string~10"></span>character(len=*),</td>
+        <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-string~10"></span>
+              character(len=*),
+            </td>
 <td>intent(in)</td>
-  <td></td>  <td></td><td>::</td>
-  <td><strong>string</strong></td><td><p>String to be modified.</p></td>
-</tr>
-</tbody>
-</table>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>string</strong></td>
+            <td>
+                <p>String to be modified.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
 
-   <h3>Return Value <small><span class="anchor" id="variable-newstring~3"></span>character(len=:),allocatable</small></h3>
-    <p>New modified string.</p>
+      <h3>Return Value
+        <small>
+          <span class="anchor" id="variable-newstring~3"></span>
+          character(len=:), allocatable
+        </small>
+      </h3>
+      <p>New modified string.</p>
     <br>
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -183,39 +230,39 @@
 <path fill="none" stroke="#000000" d="M207.12,-21.11C215.47,-22.85 224.44,-24.72 232.88,-26.47"/>
 <polygon fill="#000000" stroke="#000000" points="232.34,-29.94 242.84,-28.55 233.76,-23.08 232.34,-29.94"/>
 </g>
-<!-- proc~sanitize_defaults~2 -->
+<!-- proc~sanitize_defaults -->
 <g id="proc~~wstrip~~CalledByGraph_node3" class="node">
-<title>proc~sanitize_defaults~2</title>
-<g id="a_proc~~wstrip~~CalledByGraph_node3"><a xlink:href=".././proc/sanitize_defaults~2.html" xlink:title="sanitize_defaults">
+<title>proc~sanitize_defaults</title>
+<g id="a_proc~~wstrip~~CalledByGraph_node3"><a xlink:href=".././proc/sanitize_defaults.html" xlink:title="sanitize_defaults">
 <polygon fill="#d9534f" stroke="#d9534f" points="101,-66 0,-66 0,-42 101,-42 101,-66"/>
 <text text-anchor="middle" x="50.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">sanitize_defaults</text>
 </a>
 </g>
 </g>
-<!-- proc~sanitize_defaults~2&#45;&gt;proc~wstrip -->
+<!-- proc~sanitize_defaults&#45;&gt;proc~wstrip -->
 <g id="proc~~wstrip~~CalledByGraph_edge2" class="edge">
-<title>proc~sanitize_defaults~2&#45;&gt;proc~wstrip</title>
+<title>proc~sanitize_defaults&#45;&gt;proc~wstrip</title>
 <path fill="none" stroke="#000000" d="M101.13,-49.44C141.29,-45.74 196.92,-40.63 232.94,-37.32"/>
 <polygon fill="#000000" stroke="#000000" points="233.36,-40.79 242.99,-36.39 232.72,-33.82 233.36,-40.79"/>
 </g>
-<!-- proc~sanitize_defaults~2&#45;&gt;proc~replace_all -->
+<!-- proc~sanitize_defaults&#45;&gt;proc~replace_all -->
 <g id="proc~~wstrip~~CalledByGraph_edge4" class="edge">
-<title>proc~sanitize_defaults~2&#45;&gt;proc~replace_all</title>
+<title>proc~sanitize_defaults&#45;&gt;proc~replace_all</title>
 <path fill="none" stroke="#000000" d="M87.35,-42C99.84,-37.82 114,-33.08 127.07,-28.7"/>
 <polygon fill="#000000" stroke="#000000" points="128.44,-31.94 136.81,-25.44 126.22,-25.3 128.44,-31.94"/>
 </g>
-<!-- proc~usage~3 -->
+<!-- proc~usage -->
 <g id="proc~~wstrip~~CalledByGraph_node4" class="node">
-<title>proc~usage~3</title>
-<g id="a_proc~~wstrip~~CalledByGraph_node4"><a xlink:href=".././proc/usage~3.html" xlink:title="usage">
+<title>proc~usage</title>
+<g id="a_proc~~wstrip~~CalledByGraph_node4"><a xlink:href=".././proc/usage.html" xlink:title="usage">
 <polygon fill="#d94e8f" stroke="#d94e8f" points="77.5,-24 23.5,-24 23.5,0 77.5,0 77.5,-24"/>
 <text text-anchor="middle" x="50.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">usage</text>
 </a>
 </g>
 </g>
-<!-- proc~usage~3&#45;&gt;proc~replace_all -->
+<!-- proc~usage&#45;&gt;proc~replace_all -->
 <g id="proc~~wstrip~~CalledByGraph_edge3" class="edge">
-<title>proc~usage~3&#45;&gt;proc~replace_all</title>
+<title>proc~usage&#45;&gt;proc~replace_all</title>
 <path fill="none" stroke="#000000" d="M77.72,-12.44C91.93,-12.68 109.87,-12.98 126.21,-13.25"/>
 <polygon fill="#000000" stroke="#000000" points="126.61,-16.76 136.66,-13.43 126.72,-9.76 126.61,-16.76"/>
 </g>
@@ -285,14 +332,33 @@
     <br>
 
     <section class="visible-xs visible-sm hidden-md">
-      <h3>Contents</h3>
- 
-<div class="panel panel-primary">
-  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
-  <div class="list-group">
-    <a class="list-group-item" href="../proc/wstrip.html#src">wstrip</a>
-  </div>
-</div>
+        <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="panel panel-primary">
+      <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/wstrip.html#src">wstrip</a>
+      </div>
+    </div>
+
 
     </section>
     <br class="visible-xs visible-sm hidden-md">
@@ -328,7 +394,7 @@
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-6"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2022 
+        <div class="col-xs-6 col-md-6"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
 </p>
         </div>
         <div class="col-xs-6 col-md-6">

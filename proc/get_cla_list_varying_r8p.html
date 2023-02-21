@@ -80,124 +80,284 @@
   <div class="row">
     <h1>get_cla_list_varying_R8P
       <small>Subroutine</small>
+      
     </h1>
-    <div class="row">
-  <div class="col-lg-12">
-<div class="well well-sm">
-  <ul class="list-inline" style="margin-bottom:0px;display:inline">
-     <li><i class="fa fa-list-ol"></i>
-       <a data-toggle="tooltip"
-    data-placement="bottom" data-html="true"
-    title=" 1.3% of total for procedures.">48 statements</a>
-     </li> 
-    <li><i class="fa fa-code"></i><a href="../src/flap_command_line_interface_t.F90"> Source File</a></li>
-  </ul>
-  <ol class="breadcrumb in-well text-right">
-     <li><a href='../sourcefile/flap_command_line_interface_t.f90.html'>flap_command_line_interface_t.F90</a></li>
-     <li><a href='../module/flap_command_line_interface_t.html'>flap_command_line_interface_t</a></li>
-     <li class="active">get_cla_list_varying_R8P</li>
-  </ol>
-</div>
-</div>
-</div>
-<script>
-  $(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-  })
-</script>
+      <div class="row" id="info-bar">
+    <div class="col-lg-12">
+      <div class="well well-sm">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+          <li id="statements"><i class="fa fa-list-ol"></i>
+            <a data-toggle="tooltip"
+               data-placement="bottom" data-html="true"
+               title=" 0.9% of total for procedures.">33 statements</a>
+          </li>
+
+            <li id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/flap_command_line_argument_t.F90"> Source File</a>
+            </li>
+        </ul>
+        <ol class="breadcrumb in-well text-right">
+              <li><a href='../sourcefile/flap_command_line_argument_t.f90.html'>flap_command_line_argument_t.F90</a></li>
+              <li><a href='../module/flap_command_line_argument_t.html'>flap_command_line_argument_t</a></li>
+          <li class="active">get_cla_list_varying_R8P</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <script>
+    $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+    })
+  </script>
 
   </div>
   
   <div class="row">
     <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
-    <div id="sidebar">
-  <h3>Contents</h3>
- 
-<div class="panel panel-primary">
-  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
-  <div class="list-group">
-    <a class="list-group-item" href="../proc/get_cla_list_varying_r8p.html#src">get_cla_list_varying_R8P</a>
-  </div>
-</div>
+      <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="panel panel-primary">
+      <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/get_cla_list_varying_r8p.html#src">get_cla_list_varying_R8P</a>
+      </div>
+    </div>
 
-</div>
+
+  </div>
 
     </div>
     
     <div class="col-md-9" id='text'>
-    <h2>private subroutine get_cla_list_varying_R8P(self, val, pref, args, group, switch, position, error)</h2>
+    <h2>private  subroutine get_cla_list_varying_R8P(self, val, pref)  
+</h2>
     
 
-    <p>Get CLA multiple values from CLAs list parsed with varying size list, real(R8P).</p>
-<p></p><div class="alert alert-info" role="alert"><h4>Note</h4><p>The CLA list is returned deallocated if values are not correctly gotten.</p></div>
-<p></p><div class="alert alert-info" role="alert"><h4>Note</h4><p>For logical type CLA the value is directly read without any robust error trapping.</p></div>
+    <p>Get CLA (multiple) value with varying size, real(R8P).</p>
 
     <h3>Arguments</h3>
-      <table class="table table-striped varlist">
-<thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
-<tbody>
-<tr>
-  <td><span class="anchor" id="variable-self~40"></span>class(<a href='../type/command_line_interface.html'>command_line_interface</a>),</td>
+        <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-self~28"></span>
+              class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
+            </td>
 <td>intent(inout)</td>
-  <td></td>  <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>CLI data.</p></td>
-</tr>
-<tr>
-  <td><span class="anchor" id="variable-val~5"></span>real(kind=R8P),</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>self</strong></td>
+            <td>
+                <p>CLA data.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-val~8"></span>
+              real(kind=R8P),
+            </td>
 <td>intent(out),</td>
-  <td></td>  <td>allocatable</td><td>::</td>
-  <td><strong>val</strong>(:)</td><td><p>CLA values.</p></td>
-</tr>
-<tr>
-  <td><span class="anchor" id="variable-pref~18"></span>character,</td>
+              <td></td>            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>val</strong>(:)</td>
+            <td>
+                <p>CLA values.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-pref~24"></span>
+              character,
+            </td>
 <td>intent(in),</td>
-  <td>optional</td>  <td></td><td>::</td>
-  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
-</tr>
-<tr>
-  <td><span class="anchor" id="variable-args~9"></span>character,</td>
-<td>intent(in),</td>
-  <td>optional</td>  <td></td><td>::</td>
-  <td><strong>args</strong></td><td><p>String containing command line arguments.</p></td>
-</tr>
-<tr>
-  <td><span class="anchor" id="variable-group~11"></span>character,</td>
-<td>intent(in),</td>
-  <td>optional</td>  <td></td><td>::</td>
-  <td><strong>group</strong></td><td><p>Name of group (command) of CLA.</p></td>
-</tr>
-<tr>
-  <td><span class="anchor" id="variable-switch~10"></span>character,</td>
-<td>intent(in),</td>
-  <td>optional</td>  <td></td><td>::</td>
-  <td><strong>switch</strong></td><td><p>Switch name.</p></td>
-</tr>
-<tr>
-  <td><span class="anchor" id="variable-position~8"></span>integer(kind=I4P),</td>
-<td>intent(in),</td>
-  <td>optional</td>  <td></td><td>::</td>
-  <td><strong>position</strong></td><td><p>Position of positional CLA.</p></td>
-</tr>
-<tr>
-  <td><span class="anchor" id="variable-error~9"></span>integer(kind=I4P),</td>
-<td>intent(out),</td>
-  <td>optional</td>  <td></td><td>::</td>
-  <td><strong>error</strong></td><td><p>Error trapping flag.</p></td>
-</tr>
-</tbody>
-</table>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>pref</strong></td>
+            <td>
+                <p>Prefixing string.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
 
+    <br>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Calls</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: proc~~get_cla_list_varying_r8p~~CallsGraph Pages: 1 -->
+<svg id="procget_cla_list_varying_r8pCallsGraph" width="244pt" height="74pt"
+ viewBox="0.00 0.00 244.00 74.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~get_cla_list_varying_r8p~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 70)">
+<title>proc~~get_cla_list_varying_r8p~~CallsGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-70 240,-70 240,4 -4,4"/>
+<!-- proc~get_cla_list_varying_r8p -->
+<g id="proc~~get_cla_list_varying_r8p~~CallsGraph_node1" class="node">
+<title>proc~get_cla_list_varying_r8p</title>
+<polygon fill="none" stroke="black" points="142,-45 0,-45 0,-21 142,-21 142,-45"/>
+<text text-anchor="middle" x="71" y="-30.6" font-family="Helvetica,sans-Serif" font-size="10.50">get_cla_list_varying_R8P</text>
+</g>
+<!-- proc~tokenize -->
+<g id="proc~~get_cla_list_varying_r8p~~CallsGraph_node2" class="node">
+<title>proc~tokenize</title>
+<g id="a_proc~~get_cla_list_varying_r8p~~CallsGraph_node2"><a xlink:href=".././proc/tokenize.html" xlink:title="tokenize">
+<polygon fill="#d9534f" stroke="#d9534f" points="236,-66 178,-66 178,-42 236,-42 236,-66"/>
+<text text-anchor="middle" x="207" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">tokenize</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla_list_varying_r8p&#45;&gt;proc~tokenize -->
+<g id="proc~~get_cla_list_varying_r8p~~CallsGraph_edge1" class="edge">
+<title>proc~get_cla_list_varying_r8p&#45;&gt;proc~tokenize</title>
+<path fill="none" stroke="#000000" d="M142.14,-43.99C150.95,-45.37 159.68,-46.74 167.73,-48"/>
+<polygon fill="#000000" stroke="#000000" points="167.45,-51.5 177.87,-49.59 168.53,-44.59 167.45,-51.5"/>
+</g>
+<!-- cton -->
+<g id="proc~~get_cla_list_varying_r8p~~CallsGraph_node3" class="node">
+<title>cton</title>
+<polygon fill="#777777" stroke="#777777" points="234,-24 180,-24 180,0 234,0 234,-24"/>
+<text text-anchor="middle" x="207" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">cton</text>
+</g>
+<!-- proc~get_cla_list_varying_r8p&#45;&gt;cton -->
+<g id="proc~~get_cla_list_varying_r8p~~CallsGraph_edge2" class="edge">
+<title>proc~get_cla_list_varying_r8p&#45;&gt;cton</title>
+<path fill="none" stroke="#000000" d="M142.14,-22.01C151.68,-20.51 161.14,-19.03 169.74,-17.68"/>
+<polygon fill="#000000" stroke="#000000" points="170.41,-21.12 179.75,-16.11 169.32,-14.21 170.41,-21.12"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="597pt" height="32pt"
+ viewBox="0.00 0.00 596.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 592.5,-28 592.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="146,-24 88,-24 88,0 146,0 146,-24"/>
+<text text-anchor="middle" x="117" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="225.5,-24 164.5,-24 164.5,0 225.5,0 225.5,-24"/>
+<text text-anchor="middle" x="195" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="388.5,-24 243.5,-24 243.5,0 388.5,0 388.5,-24"/>
+<text text-anchor="middle" x="316" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="465,-24 407,-24 407,0 465,0 465,-24"/>
+<text text-anchor="middle" x="436" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="588.5,-24 483.5,-24 483.5,0 588.5,0 588.5,-24"/>
+<text text-anchor="middle" x="536" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
     <br>
 
     <section class="visible-xs visible-sm hidden-md">
-      <h3>Contents</h3>
- 
-<div class="panel panel-primary">
-  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
-  <div class="list-group">
-    <a class="list-group-item" href="../proc/get_cla_list_varying_r8p.html#src">get_cla_list_varying_R8P</a>
-  </div>
-</div>
+        <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="panel panel-primary">
+      <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/get_cla_list_varying_r8p.html#src">get_cla_list_varying_R8P</a>
+      </div>
+    </div>
+
 
     </section>
     <br class="visible-xs visible-sm hidden-md">
@@ -213,60 +373,41 @@
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span></span><span class="w">  </span><span class="k">subroutine </span><span class="n">get_cla_list_varying_R8P</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">val</span><span class="p">,</span><span class="w"> </span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="n">group</span><span class="p">,</span><span class="w"> </span><span class="n">switch</span><span class="p">,</span><span class="w"> </span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="p">)</span><span class="w"></span>
-<span class="w">  </span><span class="c">!&lt; Get CLA multiple values from CLAs list parsed with varying size list, real(R8P).</span>
-<span class="w">  </span><span class="c">!&lt;</span>
-<span class="w">  </span><span class="c">!&lt; @note The CLA list is returned deallocated if values are not correctly gotten.</span>
-<span class="w">  </span><span class="c">!&lt;</span>
-<span class="w">  </span><span class="c">!&lt; @note For logical type CLA the value is directly read without any robust error trapping.</span>
-<span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="n">command_line_interface</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">self</span><span class="w">     </span><span class="c">!&lt; CLI data.</span>
-<span class="w">  </span><span class="kt">real</span><span class="p">(</span><span class="n">R8P</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w">   </span><span class="kd">::</span><span class="w"> </span><span class="n">val</span><span class="p">(:)</span><span class="w">   </span><span class="c">!&lt; CLA values.</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">pref</span><span class="w">     </span><span class="c">!&lt; Prefixing string.</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">args</span><span class="w">     </span><span class="c">!&lt; String containing command line arguments.</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">group</span><span class="w">    </span><span class="c">!&lt; Name of group (command) of CLA.</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">switch</span><span class="w">   </span><span class="c">!&lt; Switch name.</span>
-<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">position</span><span class="w"> </span><span class="c">!&lt; Position of positional CLA.</span>
-<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w">   </span><span class="kd">::</span><span class="w"> </span><span class="n">error</span><span class="w">    </span><span class="c">!&lt; Error trapping flag.</span>
-<span class="w">  </span><span class="kt">logical</span><span class="w">                                      </span><span class="kd">::</span><span class="w"> </span><span class="n">found</span><span class="w">    </span><span class="c">!&lt; Flag for checking if CLA containing switch has been found.</span>
-<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                                 </span><span class="kd">::</span><span class="w"> </span><span class="n">g</span><span class="w">        </span><span class="c">!&lt; Group counter.</span>
-<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                                 </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="w">        </span><span class="c">!&lt; Argument counter.</span>
+    <div class="highlight"><pre><span></span><span class="w">  </span><span class="k">subroutine </span><span class="n">get_cla_list_varying_R8P</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">val</span><span class="p">,</span><span class="w"> </span><span class="n">pref</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="c">!&lt; Get CLA (multiple) value with varying size, real(R8P).</span>
+<span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="n">command_line_argument</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">self</span><span class="w">     </span><span class="c">!&lt; CLA data.</span>
+<span class="w">  </span><span class="kt">real</span><span class="p">(</span><span class="n">R8P</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="p">,</span><span class="w">       </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w">   </span><span class="kd">::</span><span class="w"> </span><span class="n">val</span><span class="p">(:)</span><span class="w">   </span><span class="c">!&lt; CLA values.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">       </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">pref</span><span class="w">     </span><span class="c">!&lt; Prefixing string.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                                </span><span class="kd">::</span><span class="w"> </span><span class="n">Nv</span><span class="w">       </span><span class="c">!&lt; Number of values.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">val</span><span class="p">)),</span><span class="w"> </span><span class="k">allocatable</span><span class="w">   </span><span class="kd">::</span><span class="w"> </span><span class="n">valsV</span><span class="p">(:)</span><span class="w"> </span><span class="c">!&lt; String array of values based on self%val.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">def</span><span class="p">)),</span><span class="w"> </span><span class="k">allocatable</span><span class="w">   </span><span class="kd">::</span><span class="w"> </span><span class="n">valsD</span><span class="p">(:)</span><span class="w"> </span><span class="c">!&lt; String array of values based on self%def.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                                </span><span class="kd">::</span><span class="w"> </span><span class="n">v</span><span class="w">        </span><span class="c">!&lt; Values counter.</span>
 
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">is_parsed_</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">parse</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">&gt;</span><span class="mf">0.</span><span class="nb">and</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">error_unknown_clas</span><span class="o">/=</span><span class="n">ERROR_UNKNOWN_CLAS_IGNORED</span><span class="p">)</span><span class="w"> </span><span class="k">return</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">is_required_passed</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">))</span><span class="w"> </span><span class="k">return</span>
+<span class="k">  if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">nargs</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">errored</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">ERROR_NO_LIST</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span>
 <span class="k">  endif</span>
-<span class="k">  if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">group</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">    if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">is_defined_group</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="n">group</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="o">=</span><span class="n">g</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">      call </span><span class="n">self</span><span class="p">%</span><span class="n">errored</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">ERROR_MISSING_GROUP</span><span class="p">,</span><span class="w"> </span><span class="n">group</span><span class="o">=</span><span class="n">group</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="k">endif</span>
-<span class="k">  else</span>
-<span class="k">    </span><span class="n">g</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
-<span class="w">  </span><span class="k">endif</span>
-<span class="k">  if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">switch</span><span class="p">))</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
-<span class="w">    </span><span class="c">! search for the CLA corresponding to switch</span>
-<span class="w">    </span><span class="n">found</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"></span>
-<span class="w">    </span><span class="k">do </span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">Na</span><span class="w"></span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">is_positional</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">        if</span><span class="w"> </span><span class="p">((</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">switch</span><span class="o">==</span><span class="n">switch</span><span class="p">).</span><span class="nb">or</span><span class="p">.(</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">switch_ab</span><span class="o">==</span><span class="n">switch</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">          </span><span class="n">found</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
-<span class="w">          </span><span class="k">exit</span>
-<span class="k">        endif</span>
-<span class="k">      endif</span>
-<span class="k">    enddo</span>
-<span class="k">    if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">found</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">      call </span><span class="n">self</span><span class="p">%</span><span class="n">errored</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">ERROR_MISSING_CLA</span><span class="p">,</span><span class="w"> </span><span class="n">switch</span><span class="o">=</span><span class="n">switch</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="k">else</span>
-<span class="k">      call </span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">get_varying</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">val</span><span class="o">=</span><span class="n">val</span><span class="p">)</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">error</span><span class="w"></span>
-<span class="w">    </span><span class="k">endif</span>
-<span class="k">  </span><span class="n">elseif</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">position</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">cla</span><span class="p">(</span><span class="n">position</span><span class="p">)%</span><span class="n">get_varying</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">val</span><span class="o">=</span><span class="n">val</span><span class="p">)</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">error</span><span class="w"></span>
-<span class="w">  </span><span class="k">else</span>
-<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">errored</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">ERROR_MISSING_SELECTION_CLA</span><span class="p">)</span><span class="w"></span>
-<span class="w">  </span><span class="k">endif</span><span class="w"></span>
-<span class="w">  </span><span class="c">! check if the only error found is for unknown passed CLAs and if it is ignored by the user</span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">==</span><span class="n">ERROR_UNKNOWN</span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">error_unknown_clas</span><span class="o">==</span><span class="n">ERROR_UNKNOWN_CLAS_IGNORED</span><span class="p">)</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ERROR_UNKNOWN_CLAS_IGNORED</span><span class="w"></span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">error</span><span class="p">))</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"></span>
-<span class="w">  </span><span class="k">endsubroutine </span><span class="n">get_cla_list_varying_R8P</span><span class="w"></span>
+<span class="k">  if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">act</span><span class="o">==</span><span class="n">action_store</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">is_passed</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">      call </span><span class="n">tokenize</span><span class="p">(</span><span class="n">strin</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">val</span><span class="p">,</span><span class="w"> </span><span class="n">delimiter</span><span class="o">=</span><span class="n">ARGS_SEP</span><span class="p">,</span><span class="w"> </span><span class="n">toks</span><span class="o">=</span><span class="n">valsV</span><span class="p">,</span><span class="w"> </span><span class="n">Nt</span><span class="o">=</span><span class="n">Nv</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">check_list_size</span><span class="p">(</span><span class="n">Nv</span><span class="o">=</span><span class="n">Nv</span><span class="p">,</span><span class="w"> </span><span class="n">val</span><span class="o">=</span><span class="n">valsV</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">))</span><span class="w"> </span><span class="k">return</span>
+<span class="k">      allocate</span><span class="p">(</span><span class="kt">real</span><span class="p">(</span><span class="n">R8P</span><span class="p">)</span><span class="kd">::</span><span class="w"> </span><span class="n">val</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Nv</span><span class="p">))</span><span class="w"></span>
+<span class="w">      </span><span class="k">do </span><span class="n">v</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">Nv</span><span class="w"></span>
+<span class="w">        </span><span class="n">val</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cton</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">,</span><span class="w"> </span><span class="n">str</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">valsV</span><span class="p">(</span><span class="n">v</span><span class="p">))),</span><span class="w"> </span><span class="n">knd</span><span class="o">=</span><span class="mf">1._R8P</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">exit</span>
+<span class="k">      enddo</span>
+<span class="k">    else</span><span class="w"> </span><span class="c">! using default value</span>
+<span class="w">      </span><span class="k">call </span><span class="n">tokenize</span><span class="p">(</span><span class="n">strin</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">def</span><span class="p">,</span><span class="w"> </span><span class="n">delimiter</span><span class="o">=</span><span class="n">ARGS_SEP</span><span class="p">,</span><span class="w"> </span><span class="n">toks</span><span class="o">=</span><span class="n">valsD</span><span class="p">,</span><span class="w"> </span><span class="n">Nt</span><span class="o">=</span><span class="n">Nv</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">check_list_size</span><span class="p">(</span><span class="n">Nv</span><span class="o">=</span><span class="n">Nv</span><span class="p">,</span><span class="w"> </span><span class="n">val</span><span class="o">=</span><span class="n">valsD</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">))</span><span class="w"> </span><span class="k">return</span>
+<span class="k">      allocate</span><span class="p">(</span><span class="kt">real</span><span class="p">(</span><span class="n">R8P</span><span class="p">)</span><span class="kd">::</span><span class="w"> </span><span class="n">val</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Nv</span><span class="p">))</span><span class="w"></span>
+<span class="w">      </span><span class="k">do </span><span class="n">v</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">Nv</span><span class="w"></span>
+<span class="w">        </span><span class="n">val</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cton</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">,</span><span class="w"> </span><span class="n">str</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">valsD</span><span class="p">(</span><span class="n">v</span><span class="p">))),</span><span class="w"> </span><span class="n">knd</span><span class="o">=</span><span class="mf">1._R8P</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">exit</span>
+<span class="k">      enddo</span>
+<span class="k">    endif</span>
+<span class="k">  endif</span>
+<span class="k">  endsubroutine </span><span class="n">get_cla_list_varying_R8P</span><span class="w"></span>
 </pre></div>
 
     </section>
@@ -280,7 +421,7 @@
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-6"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2022 
+        <div class="col-xs-6 col-md-6"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
 </p>
         </div>
         <div class="col-xs-6 col-md-6">

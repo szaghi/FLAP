@@ -80,92 +80,170 @@
   <div class="row">
     <h1>parse
       <small>Subroutine</small>
+      
     </h1>
-    <div class="row">
-  <div class="col-lg-12">
-<div class="well well-sm">
-  <ul class="list-inline" style="margin-bottom:0px;display:inline">
-     <li><i class="fa fa-list-ol"></i>
-       <a data-toggle="tooltip"
-    data-placement="bottom" data-html="true"
-    title=" 4.5% of total for procedures.">161 statements</a>
-     </li> 
-    <li><i class="fa fa-code"></i><a href="../src/flap_command_line_arguments_group_t.f90"> Source File</a></li>
-  </ul>
-  <ol class="breadcrumb in-well text-right">
-     <li><a href='../sourcefile/flap_command_line_arguments_group_t.f90.html'>flap_command_line_arguments_group_t.f90</a></li>
-     <li><a href='../module/flap_command_line_arguments_group_t.html'>flap_command_line_arguments_group_t</a></li>
-     <li class="active">parse</li>
-  </ol>
-</div>
-</div>
-</div>
-<script>
-  $(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-  })
-</script>
+      <div class="row" id="info-bar">
+    <div class="col-lg-12">
+      <div class="well well-sm">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+          <li id="statements"><i class="fa fa-list-ol"></i>
+            <a data-toggle="tooltip"
+               data-placement="bottom" data-html="true"
+               title=" 5.0% of total for procedures.">182 statements</a>
+          </li>
+
+            <li id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/flap_command_line_arguments_group_t.f90"> Source File</a>
+            </li>
+        </ul>
+        <ol class="breadcrumb in-well text-right">
+              <li><a href='../sourcefile/flap_command_line_arguments_group_t.f90.html'>flap_command_line_arguments_group_t.f90</a></li>
+              <li><a href='../module/flap_command_line_arguments_group_t.html'>flap_command_line_arguments_group_t</a></li>
+          <li class="active">parse</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <script>
+    $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+    })
+  </script>
 
   </div>
   
   <div class="row">
     <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
-    <div id="sidebar">
-  <h3>Contents</h3>
- 
-<div class="panel panel-primary">
-  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
-  <div class="list-group">
-    <a class="list-group-item" href="../proc/parse.html#src">parse</a>
-  </div>
-</div>
+      <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="panel panel-primary">
+      <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/parse.html#src">parse</a>
+      </div>
+    </div>
 
-</div>
+
+  </div>
 
     </div>
     
     <div class="col-md-9" id='text'>
-    <h2>private subroutine parse(self, args, ignore_unknown_clas, pref, error_unknown_clas)</h2>
+    <h2>private  subroutine parse(self, args, ignore_unknown_clas, pref, error_unknown_clas)  
+</h2>
     
 
     <p>Parse CLAsG arguments.</p>
 
     <h3>Arguments</h3>
-      <table class="table table-striped varlist">
-<thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
-<tbody>
-<tr>
-  <td><span class="anchor" id="variable-self~14"></span>class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),</td>
+        <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-self~50"></span>
+              class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
+            </td>
 <td>intent(inout)</td>
-  <td></td>  <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>CLAsG data.</p></td>
-</tr>
-<tr>
-  <td><span class="anchor" id="variable-args~3"></span>character,</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>self</strong></td>
+            <td>
+                <p>CLAsG data.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-args"></span>
+              character,
+            </td>
 <td>intent(in)</td>
-  <td></td>  <td></td><td>::</td>
-  <td><strong>args</strong>(:)</td><td><p>Command line arguments.</p></td>
-</tr>
-<tr>
-  <td><span class="anchor" id="variable-ignore_unknown_clas~2"></span>logical,</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>args</strong>(:)</td>
+            <td>
+                <p>Command line arguments.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ignore_unknown_clas"></span>
+              logical,
+            </td>
 <td>intent(in)</td>
-  <td></td>  <td></td><td>::</td>
-  <td><strong>ignore_unknown_clas</strong></td><td><p>Disable errors-raising for passed unknown CLAs.</p></td>
-</tr>
-<tr>
-  <td><span class="anchor" id="variable-pref~7"></span>character,</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ignore_unknown_clas</strong></td>
+            <td>
+                <p>Disable errors-raising for passed unknown CLAs.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-pref~38"></span>
+              character,
+            </td>
 <td>intent(in),</td>
-  <td>optional</td>  <td></td><td>::</td>
-  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
-</tr>
-<tr>
-  <td><span class="anchor" id="variable-error_unknown_clas~2"></span>integer(kind=I4P),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>pref</strong></td>
+            <td>
+                <p>Prefixing string.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-error_unknown_clas"></span>
+              integer(kind=I4P),
+            </td>
 <td>intent(out)</td>
-  <td></td>  <td></td><td>::</td>
-  <td><strong>error_unknown_clas</strong></td><td><p>Error flag for passed unknown CLAs.</p></td>
-</tr>
-</tbody>
-</table>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>error_unknown_clas</strong></td>
+            <td>
+                <p>Error flag for passed unknown CLAs.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
 
     <br>
     <div class="panel panel-default">
@@ -268,14 +346,33 @@
     <br>
 
     <section class="visible-xs visible-sm hidden-md">
-      <h3>Contents</h3>
- 
-<div class="panel panel-primary">
-  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
-  <div class="list-group">
-    <a class="list-group-item" href="../proc/parse.html#src">parse</a>
-  </div>
-</div>
+        <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="panel panel-primary">
+      <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/parse.html#src">parse</a>
+      </div>
+    </div>
+
 
     </section>
     <br class="visible-xs visible-sm hidden-md">
@@ -310,161 +407,205 @@
 
 <span class="w">  </span><span class="n">error_unknown_clas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
 <span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">is_called</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">    </span><span class="n">arg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
-<span class="w">    </span><span class="k">do while</span><span class="w"> </span><span class="p">(</span><span class="n">arg</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="c">! loop over CLAs group arguments passed</span>
-<span class="w">      </span><span class="n">arg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
-<span class="w">      </span><span class="n">found</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"></span>
-<span class="w">      </span><span class="k">do </span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">Na</span><span class="w"> </span><span class="c">! loop over CLAs group clas named options</span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">is_positional</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">          if</span><span class="w"> </span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">switch</span><span class="w">   </span><span class="p">))</span><span class="o">==</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">arg</span><span class="p">))).</span><span class="nb">or</span><span class="p">.&amp;</span><span class="w"></span>
-<span class="w">              </span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">switch_ab</span><span class="p">))</span><span class="o">==</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">arg</span><span class="p">))))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">            if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">is_passed</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
-<span class="w">               </span><span class="c">! current CLA has been already passed, raise an error</span>
-<span class="w">               </span><span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">arg</span><span class="p">)%</span><span class="n">raise_error_duplicated_clas</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">switch</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">arg</span><span class="p">))))</span><span class="w"></span>
-<span class="w">               </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">arg</span><span class="p">)%</span><span class="n">error</span><span class="w"></span>
-<span class="w">            </span><span class="k">endif</span>
-<span class="k">            </span><span class="n">found_val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"></span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">act</span><span class="o">==</span><span class="n">action_store</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">              if</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">envvar</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">                if</span><span class="w"> </span><span class="p">(</span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">args</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="c">! verify if the value has been passed directly to cli</span>
-<span class="w">                  </span><span class="c">! there are still other arguments to check</span>
-<span class="w">                  </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">is_defined</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">arg</span><span class="o">+</span><span class="mi">1</span><span class="p">)))))</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
-<span class="w">                    </span><span class="c">! argument seem good...</span>
-<span class="w">                    </span><span class="n">arg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
-<span class="w">                    </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">arg</span><span class="p">)))</span><span class="w"></span>
+<span class="k">     call </span><span class="n">self</span><span class="p">%</span><span class="n">sanitize_defaults</span><span class="w"></span>
+<span class="w">     </span><span class="n">arg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">     </span><span class="k">do while</span><span class="w"> </span><span class="p">(</span><span class="n">arg</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="c">! loop over CLAs group arguments passed</span>
+<span class="w">        </span><span class="n">arg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">        </span><span class="n">found</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"></span>
+<span class="w">        </span><span class="k">do </span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">Na</span><span class="w"> </span><span class="c">! loop over CLAs group clas named options</span>
+<span class="w">           </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">is_positional</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">              if</span><span class="w"> </span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">switch</span><span class="w">   </span><span class="p">))</span><span class="o">==</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">arg</span><span class="p">))).</span><span class="nb">or</span><span class="p">.&amp;</span><span class="w"></span>
+<span class="w">                  </span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">switch_ab</span><span class="p">))</span><span class="o">==</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">arg</span><span class="p">))))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                 if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">is_passed</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
+<span class="w">                    </span><span class="c">! current CLA has been already passed, raise an error</span>
+<span class="w">                    </span><span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">arg</span><span class="p">)%</span><span class="n">raise_error_duplicated_clas</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">switch</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">arg</span><span class="p">))))</span><span class="w"></span>
+<span class="w">                    </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">arg</span><span class="p">)%</span><span class="n">error</span><span class="w"></span>
+<span class="w">                 </span><span class="k">else</span>
+<span class="k">                    </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">is_passed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
 <span class="w">                    </span><span class="n">found</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
-<span class="w">                    </span><span class="n">found_val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
-<span class="w">                  </span><span class="k">endif</span>
-<span class="k">                endif</span>
-<span class="k">                if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">found</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
-<span class="w">                  </span><span class="c">! not found, try to take val from environment</span>
-<span class="w">                  </span><span class="k">call </span><span class="nb">get_environment_variable</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">envvar</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="o">=</span><span class="n">envvar</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="o">=</span><span class="n">aa</span><span class="p">)</span><span class="w"></span>
-<span class="w">                  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">aa</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">                    </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">envvar</span><span class="p">))</span><span class="w"></span>
-<span class="w">                    </span><span class="n">found_val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
-<span class="w">                  </span><span class="k">else</span><span class="w"></span>
-<span class="w">                    </span><span class="c">! flush default to val if environment is not set and default is set</span>
-<span class="w">                    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">def</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">                      </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">def</span><span class="w"></span>
-<span class="w">                      </span><span class="n">found_val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
+<span class="w">                 </span><span class="k">endif</span>
+<span class="k">                 </span><span class="n">found_val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"></span>
+
+<span class="w">                 </span><span class="c">! check action</span>
+<span class="w">                 </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">act</span><span class="o">==</span><span class="n">action_store</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
+<span class="w">                    </span><span class="c">! flush default (if any) to value as starting point</span>
+<span class="w">                    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">def</span><span class="p">))</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">def</span><span class="w"></span>
+
+<span class="w">                    </span><span class="c">! search for actual passed value if passed/required</span>
+
+<span class="w">                    </span><span class="c">! check for envvar</span>
+<span class="w">                    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">envvar</span><span class="p">))</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
+<span class="w">                       </span><span class="c">! verify if the value has been passed directly to cli</span>
+<span class="w">                       </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">args</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
+<span class="w">                          </span><span class="c">! there are still other arguments to check</span>
+<span class="w">                          </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">is_defined</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">arg</span><span class="o">+</span><span class="mi">1</span><span class="p">)))))</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
+<span class="w">                             </span><span class="c">! argument seems good...</span>
+<span class="w">                             </span><span class="n">arg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">                             </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">arg</span><span class="p">)))</span><span class="w"></span>
+<span class="w">                             </span><span class="n">found_val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
+<span class="w">                          </span><span class="k">endif</span>
+<span class="k">                       endif</span>
+<span class="k">                       if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">found_val</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
+<span class="w">                          </span><span class="c">! value not found, try to take val from environment</span>
+<span class="w">                          </span><span class="k">call </span><span class="nb">get_environment_variable</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">envvar</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="o">=</span><span class="n">envvar</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="o">=</span><span class="n">aa</span><span class="p">)</span><span class="w"></span>
+<span class="w">                          </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">aa</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                             </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">envvar</span><span class="p">))</span><span class="w"></span>
+<span class="w">                             </span><span class="n">found_val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
+<span class="w">                          </span><span class="k">else</span><span class="w"></span>
+<span class="w">                             </span><span class="c">! no found, raise value missing error</span>
+<span class="w">                             </span><span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">raise_error_value_missing</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">)</span><span class="w"></span>
+<span class="w">                             </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">error</span><span class="w"></span>
+<span class="w">                             </span><span class="k">return</span>
+<span class="k">                          endif</span>
+<span class="k">                       endif</span><span class="w"></span>
+
+<span class="w">                    </span><span class="c">! check for multiple argument values</span>
+<span class="w">                    </span><span class="n">elseif</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">nargs</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                       select case</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">nargs</span><span class="p">)</span><span class="w"></span>
+<span class="w">                       </span><span class="k">case</span><span class="p">(</span><span class="s1">&#39;+&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">                          </span><span class="n">aaa</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n_next_undef_args</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="o">=</span><span class="n">arg</span><span class="p">)</span><span class="w"></span>
+<span class="w">                          </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">aaa</span><span class="o">&gt;=</span><span class="n">arg</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                             </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"></span>
+<span class="w">                             </span><span class="k">do </span><span class="n">aa</span><span class="o">=</span><span class="n">aaa</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="c">! decreasing loop due to gfortran bug</span>
+<span class="w">                                </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">aa</span><span class="p">)))</span><span class="o">//</span><span class="n">args_sep</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="p">)</span><span class="w"></span>
+<span class="w">                                </span><span class="n">found_val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
+<span class="w">                             </span><span class="k">enddo</span>
+<span class="k">                             </span><span class="n">arg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aaa</span><span class="w"></span>
+<span class="w">                          </span><span class="n">elseif</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">is_val_required</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                             call </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">raise_error_nargs_insufficient</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">)</span><span class="w"></span>
+<span class="w">                             </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">error</span><span class="w"></span>
+<span class="w">                             </span><span class="k">return</span>
+<span class="k">                          endif</span>
+<span class="k">                       case</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">                          </span><span class="n">aaa</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n_next_undef_args</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="o">=</span><span class="n">arg</span><span class="p">)</span><span class="w"></span>
+<span class="w">                          </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">aaa</span><span class="o">&gt;=</span><span class="n">arg</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                             </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"></span>
+<span class="w">                             </span><span class="k">do </span><span class="n">aa</span><span class="o">=</span><span class="n">aaa</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="c">! decreasing loop due to gfortran bug</span>
+<span class="w">                                </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">aa</span><span class="p">)))</span><span class="o">//</span><span class="n">args_sep</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="p">)</span><span class="w"></span>
+<span class="w">                                </span><span class="n">found_val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
+<span class="w">                             </span><span class="k">enddo</span>
+<span class="k">                             </span><span class="n">arg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aaa</span><span class="w"></span>
+<span class="w">                          </span><span class="k">endif</span>
+<span class="k">                       case </span><span class="n">default</span><span class="w"></span>
+<span class="w">                          </span><span class="n">nargs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cton</span><span class="p">(</span><span class="n">str</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">nargs</span><span class="p">)),</span><span class="w"> </span><span class="n">knd</span><span class="o">=</span><span class="mi">1_I4P</span><span class="p">)</span><span class="w"></span>
+<span class="w">                          </span><span class="k">if</span><span class="w"> </span><span class="p">((</span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">nargs</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">n_next_undef_args</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="o">=</span><span class="n">arg</span><span class="p">)))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                             </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"></span>
+<span class="w">                             </span><span class="k">do </span><span class="n">aa</span><span class="o">=</span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">nargs</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="c">! decreasing loop due to gfortran bug</span>
+<span class="w">                                </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">aa</span><span class="p">)))</span><span class="o">//</span><span class="n">args_sep</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="p">)</span><span class="w"></span>
+<span class="w">                             </span><span class="k">enddo</span>
+<span class="k">                             </span><span class="n">found_val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
+<span class="w">                             </span><span class="n">arg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">nargs</span><span class="w"></span>
+<span class="w">                          </span><span class="n">elseif</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">is_val_required</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                             call </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">raise_error_nargs_insufficient</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">)</span><span class="w"></span>
+<span class="w">                             </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">error</span><span class="w"></span>
+<span class="w">                             </span><span class="k">return</span>
+<span class="k">                          endif</span>
+<span class="k">                       endselect</span><span class="w"></span>
+
+<span class="w">                    </span><span class="c">! check for single argument value</span>
+<span class="w">                    </span><span class="k">else</span>
+<span class="k">                       if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">is_val_required</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
+<span class="w">                          </span><span class="c">! value is required</span>
+<span class="w">                          </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">arg</span><span class="o">+</span><span class="mi">1</span><span class="o">&gt;</span><span class="n">size</span><span class="p">(</span><span class="n">args</span><span class="p">))</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
+<span class="w">                             </span><span class="c">! no more arguments remaining, raise value missing error</span>
+<span class="w">                             </span><span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">raise_error_value_missing</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">)</span><span class="w"></span>
+<span class="w">                             </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">error</span><span class="w"></span>
+<span class="w">                             </span><span class="k">return</span>
+<span class="k">                          </span><span class="n">elseif</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">is_defined</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">arg</span><span class="o">+</span><span class="mi">1</span><span class="p">)))))</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
+<span class="w">                             </span><span class="c">! the next argument is a CLA switch, raise value missing error</span>
+<span class="w">                             </span><span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">raise_error_value_missing</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">)</span><span class="w"></span>
+<span class="w">                             </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">error</span><span class="w"></span>
+<span class="w">                             </span><span class="k">return</span>
+<span class="k">                          else</span><span class="w"></span>
+<span class="w">                             </span><span class="c">! value found</span>
+<span class="w">                             </span><span class="n">arg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">                             </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">arg</span><span class="p">)))</span><span class="w"></span>
+<span class="w">                             </span><span class="n">found_val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
+<span class="w">                          </span><span class="k">endif</span>
+<span class="k">                       else</span><span class="w"></span>
+<span class="w">                          </span><span class="c">! value is not required, check if it is passed</span>
+<span class="w">                          </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
+<span class="w">                             </span><span class="c">! there are arguments to check</span>
+<span class="w">                             </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">is_defined</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">arg</span><span class="o">+</span><span class="mi">1</span><span class="p">)))))</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
+<span class="w">                                </span><span class="c">! value found</span>
+<span class="w">                                </span><span class="n">arg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">                                </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">arg</span><span class="p">)))</span><span class="w"></span>
+<span class="w">                                </span><span class="n">found_val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
+<span class="w">                             </span><span class="k">endif</span>
+<span class="k">                          endif</span>
+<span class="k">                       endif</span>
+<span class="k">                    endif</span>
+
+<span class="k">                 </span><span class="n">elseif</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">act</span><span class="o">==</span><span class="n">action_store_star</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                    if</span><span class="w"> </span><span class="p">(</span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="c">! verify if the value has been passed directly to cli</span>
+<span class="w">                       </span><span class="c">! there are still other arguments to check</span>
+<span class="w">                       </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">is_defined</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">arg</span><span class="o">+</span><span class="mi">1</span><span class="p">)))))</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
+<span class="w">                          </span><span class="c">! arguments seem good...</span>
+<span class="w">                          </span><span class="n">arg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">                          </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">arg</span><span class="p">)))</span><span class="w"></span>
+<span class="w">                          </span><span class="n">found</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
+<span class="w">                          </span><span class="n">found_val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
+<span class="w">                       </span><span class="k">endif</span>
+<span class="k">                    endif</span>
+<span class="k">                    if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">found</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
+<span class="w">                       </span><span class="c">! flush default to val if default is set</span>
+<span class="w">                       </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">def</span><span class="p">))</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">def</span><span class="w"></span>
 <span class="w">                    </span><span class="k">endif</span>
-<span class="k">                  endif</span>
-<span class="k">                endif</span>
-<span class="k">              </span><span class="n">elseif</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">nargs</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">                </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"></span>
-<span class="w">                </span><span class="k">select case</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">nargs</span><span class="p">)</span><span class="w"></span>
-<span class="w">                </span><span class="k">case</span><span class="p">(</span><span class="s1">&#39;+&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">                  </span><span class="n">aaa</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
-<span class="w">                  </span><span class="k">do </span><span class="n">aa</span><span class="o">=</span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">args</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
-<span class="w">                    </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">is_defined</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">aa</span><span class="p">)))))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">                      </span><span class="n">aaa</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aa</span><span class="w"></span>
-<span class="w">                    </span><span class="k">else</span>
-<span class="k">                      exit</span>
-<span class="k">                    endif</span>
-<span class="k">                  enddo</span>
-<span class="k">                  if</span><span class="w"> </span><span class="p">(</span><span class="n">aaa</span><span class="o">&gt;=</span><span class="n">arg</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">                    do </span><span class="n">aa</span><span class="o">=</span><span class="n">aaa</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="c">! decreasing loop due to gfortran bug</span>
-<span class="w">                      </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">aa</span><span class="p">)))</span><span class="o">//</span><span class="n">args_sep</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="p">)</span><span class="w"></span>
-<span class="w">                      </span><span class="n">found_val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
-<span class="w">                    </span><span class="k">enddo</span>
-<span class="k">                    </span><span class="n">arg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aaa</span><span class="w"></span>
-<span class="w">                  </span><span class="n">elseif</span><span class="w"> </span><span class="p">(</span><span class="n">aaa</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">                    call </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">raise_error_nargs_insufficient</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">)</span><span class="w"></span>
-<span class="w">                    </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">error</span><span class="w"></span>
-<span class="w">                    </span><span class="k">return</span>
-<span class="k">                  endif</span>
-<span class="k">                case</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">                  </span><span class="n">aaa</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
-<span class="w">                  </span><span class="k">do </span><span class="n">aa</span><span class="o">=</span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">args</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
-<span class="w">                    </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">is_defined</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">aa</span><span class="p">)))))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">                      </span><span class="n">aaa</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aa</span><span class="w"></span>
-<span class="w">                    </span><span class="k">else</span>
-<span class="k">                      exit</span>
-<span class="k">                    endif</span>
-<span class="k">                  enddo</span>
-<span class="k">                  if</span><span class="w"> </span><span class="p">(</span><span class="n">aaa</span><span class="o">&gt;=</span><span class="n">arg</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">                    do </span><span class="n">aa</span><span class="o">=</span><span class="n">aaa</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="c">! decreasing loop due to gfortran bug</span>
-<span class="w">                      </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">aa</span><span class="p">)))</span><span class="o">//</span><span class="n">args_sep</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="p">)</span><span class="w"></span>
-<span class="w">                      </span><span class="n">found_val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
-<span class="w">                    </span><span class="k">enddo</span>
-<span class="k">                    </span><span class="n">arg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aaa</span><span class="w"></span>
-<span class="w">                  </span><span class="k">endif</span>
-<span class="k">                case </span><span class="n">default</span><span class="w"></span>
-<span class="w">                  </span><span class="n">nargs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cton</span><span class="p">(</span><span class="n">str</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">nargs</span><span class="p">)),</span><span class="w"> </span><span class="n">knd</span><span class="o">=</span><span class="mi">1_I4P</span><span class="p">)</span><span class="w"></span>
-<span class="w">                  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">nargs</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">args</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">                    call </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">raise_error_nargs_insufficient</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">)</span><span class="w"></span>
-<span class="w">                    </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">error</span><span class="w"></span>
-<span class="w">                    </span><span class="k">return</span>
-<span class="k">                  endif</span>
-<span class="k">                  do </span><span class="n">aa</span><span class="o">=</span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">nargs</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="c">! decreasing loop due to gfortran bug</span>
-<span class="w">                    </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">aa</span><span class="p">)))</span><span class="o">//</span><span class="n">args_sep</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="p">)</span><span class="w"></span>
-<span class="w">                  </span><span class="k">enddo</span>
-<span class="k">                  </span><span class="n">found_val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
-<span class="w">                  </span><span class="n">arg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">nargs</span><span class="w"></span>
-<span class="w">                </span><span class="k">endselect</span>
-<span class="k">              else</span>
-<span class="k">                if</span><span class="w"> </span><span class="p">(</span><span class="n">arg</span><span class="o">+</span><span class="mi">1</span><span class="o">&gt;</span><span class="n">size</span><span class="p">(</span><span class="n">args</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">                  call </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">raise_error_value_missing</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">)</span><span class="w"></span>
-<span class="w">                  </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">error</span><span class="w"></span>
-<span class="w">                  </span><span class="k">return</span>
-<span class="k">                endif</span>
-<span class="k">                </span><span class="n">arg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
-<span class="w">                </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">arg</span><span class="p">)))</span><span class="w"></span>
-<span class="w">                </span><span class="n">found_val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
-<span class="w">              </span><span class="k">endif</span>
-<span class="k">            </span><span class="n">elseif</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">act</span><span class="o">==</span><span class="n">action_store_star</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">              if</span><span class="w"> </span><span class="p">(</span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="c">! verify if the value has been passed directly to cli</span>
-<span class="w">                </span><span class="c">! there are still other arguments to check</span>
-<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">is_defined</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">arg</span><span class="o">+</span><span class="mi">1</span><span class="p">)))))</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
-<span class="w">                  </span><span class="c">! argument seem good...</span>
-<span class="w">                  </span><span class="n">arg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
-<span class="w">                  </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">arg</span><span class="p">)))</span><span class="w"></span>
-<span class="w">                  </span><span class="n">found</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
-<span class="w">                  </span><span class="n">found_val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
-<span class="w">                </span><span class="k">endif</span>
+<span class="k">                 </span><span class="n">elseif</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">act</span><span class="o">==</span><span class="n">action_print_help</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                    </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">STATUS_PRINT_H</span><span class="w"></span>
+<span class="w">                 </span><span class="n">elseif</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">act</span><span class="o">==</span><span class="n">action_print_vers</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                    </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">STATUS_PRINT_V</span><span class="w"></span>
+<span class="w">                 </span><span class="k">endif</span>
+
+<span class="k">                 </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">is_passed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
+<span class="w">                 </span><span class="n">found</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
+<span class="w">                 </span><span class="k">exit</span>
 <span class="k">              endif</span>
-<span class="k">              if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">found</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
-<span class="w">                </span><span class="c">! flush default to val if default is set</span>
-<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">def</span><span class="p">))</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">def</span><span class="w"></span>
-<span class="w">              </span><span class="k">endif</span>
-<span class="k">            </span><span class="n">elseif</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">act</span><span class="o">==</span><span class="n">action_print_help</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">              </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">STATUS_PRINT_H</span><span class="w"></span>
-<span class="w">            </span><span class="n">elseif</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">act</span><span class="o">==</span><span class="n">action_print_vers</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">              </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">STATUS_PRINT_V</span><span class="w"></span>
-<span class="w">            </span><span class="k">endif</span>
-<span class="k">            </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">is_passed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
-<span class="w">            </span><span class="n">found</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
-<span class="w">            </span><span class="k">exit</span>
-<span class="k">          endif</span>
+<span class="k">           endif</span>
+<span class="k">        enddo</span>
+<span class="k">        if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">found</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="c">! current argument (arg-th) does not correspond to a named option</span>
+<span class="w">           </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">arg</span><span class="o">&gt;</span><span class="n">self</span><span class="p">%</span><span class="n">Na</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="c">! has been passed too much CLAs</span>
+<span class="w">               </span><span class="c">! place the error into a new positional dummy CLA</span>
+<span class="w">               </span><span class="k">call </span><span class="n">cla</span><span class="p">%</span><span class="n">assign_object</span><span class="p">(</span><span class="n">self</span><span class="p">)</span><span class="w"></span>
+<span class="w">               </span><span class="n">cla</span><span class="p">%</span><span class="n">is_passed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
+<span class="w">               </span><span class="n">cla</span><span class="p">%</span><span class="n">m_exclude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"></span>
+<span class="w">               </span><span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">cla</span><span class="o">=</span><span class="n">cla</span><span class="p">)</span><span class="w"></span>
+<span class="w">               </span><span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Na</span><span class="p">)%</span><span class="n">raise_error_switch_unknown</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">switch</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">arg</span><span class="p">))))</span><span class="w"></span>
+<span class="w">               </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Na</span><span class="p">)%</span><span class="n">error</span><span class="w"></span>
+<span class="w">               </span><span class="k">return</span>
+<span class="k">           endif</span>
+<span class="k">           if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">arg</span><span class="p">)%</span><span class="n">is_positional</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="c">! current argument (arg-th) is not positional... there is a problem!</span>
+<span class="w">              </span><span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">arg</span><span class="p">)%</span><span class="n">raise_error_switch_unknown</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">switch</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">arg</span><span class="p">))))</span><span class="w"></span>
+<span class="w">              </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">arg</span><span class="p">)%</span><span class="n">error</span><span class="w"></span>
+<span class="w">              </span><span class="n">error_unknown_clas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"></span>
+<span class="w">              </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">ignore_unknown_clas</span><span class="p">)</span><span class="w"> </span><span class="k">return</span>
+<span class="k">           else</span><span class="w"></span>
+<span class="w">              </span><span class="c">! positional CLA always stores a value</span>
+<span class="w">              </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">arg</span><span class="p">)%</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">arg</span><span class="p">)))</span><span class="w"></span>
+<span class="w">              </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">arg</span><span class="p">)%</span><span class="n">is_passed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
+<span class="w">           </span><span class="k">endif</span>
 <span class="k">        endif</span>
-<span class="k">      enddo</span>
-<span class="k">      if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">found</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="c">! current argument (arg-th) does not correspond to a named option</span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">arg</span><span class="o">&gt;</span><span class="n">self</span><span class="p">%</span><span class="n">Na</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="c">! has been passed too much CLAs</span>
-<span class="w">           </span><span class="c">! place the error into a new positional dummy CLA</span>
-<span class="w">           </span><span class="k">call </span><span class="n">cla</span><span class="p">%</span><span class="n">assign_object</span><span class="p">(</span><span class="n">self</span><span class="p">)</span><span class="w"></span>
-<span class="w">           </span><span class="n">cla</span><span class="p">%</span><span class="n">is_passed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
-<span class="w">           </span><span class="n">cla</span><span class="p">%</span><span class="n">m_exclude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"></span>
-<span class="w">           </span><span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">cla</span><span class="o">=</span><span class="n">cla</span><span class="p">)</span><span class="w"></span>
-<span class="w">           </span><span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Na</span><span class="p">)%</span><span class="n">raise_error_switch_unknown</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">switch</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">arg</span><span class="p">))))</span><span class="w"></span>
-<span class="w">           </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Na</span><span class="p">)%</span><span class="n">error</span><span class="w"></span>
-<span class="w">           </span><span class="k">return</span>
-<span class="k">        endif</span>
-<span class="k">        if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">arg</span><span class="p">)%</span><span class="n">is_positional</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="c">! current argument (arg-th) is not positional... there is a problem!</span>
-<span class="w">          </span><span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">arg</span><span class="p">)%</span><span class="n">raise_error_switch_unknown</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">switch</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">arg</span><span class="p">))))</span><span class="w"></span>
-<span class="w">          </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">arg</span><span class="p">)%</span><span class="n">error</span><span class="w"></span>
-<span class="w">          </span><span class="n">error_unknown_clas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"></span>
-<span class="w">          </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">ignore_unknown_clas</span><span class="p">)</span><span class="w"> </span><span class="k">return</span>
-<span class="k">        else</span><span class="w"></span>
-<span class="w">          </span><span class="c">! positional CLA always stores a value</span>
-<span class="w">          </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">arg</span><span class="p">)%</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">arg</span><span class="p">)))</span><span class="w"></span>
-<span class="w">          </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">arg</span><span class="p">)%</span><span class="n">is_passed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
-<span class="w">        </span><span class="k">endif</span>
-<span class="k">      endif</span>
-<span class="k">    enddo</span>
-<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">check_m_exclusive</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">sanitize_defaults</span><span class="w"></span>
+<span class="k">     enddo</span>
+<span class="k">     call </span><span class="n">self</span><span class="p">%</span><span class="n">check_m_exclusive</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">)</span><span class="w"></span>
 <span class="w">  </span><span class="k">endif</span>
-<span class="k">  endsubroutine </span><span class="n">parse</span><span class="w"></span>
+<span class="k">  contains</span>
+<span class="k">     function </span><span class="n">n_next_undef_args</span><span class="p">(</span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="p">)</span><span class="w"></span>
+<span class="w">     </span><span class="c">!&lt; Return the number of the next undefined (not named switch) arguments.</span>
+<span class="w">     </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">args</span><span class="p">(:)</span><span class="w">           </span><span class="c">!&lt; Command line arguments.</span>
+<span class="w">     </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">arg</span><span class="w">               </span><span class="c">!&lt; Current argument number.</span>
+<span class="w">     </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">             </span><span class="kd">::</span><span class="w"> </span><span class="n">n_next_undef_args</span><span class="w"> </span><span class="c">!&lt; Number of the next undefined (not named switch) arguments.</span>
+<span class="w">     </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">             </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="w">                 </span><span class="c">!&lt; Counter.</span>
+
+<span class="w">     </span><span class="n">n_next_undef_args</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">     </span><span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="n">arg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">args</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">is_defined</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">args</span><span class="p">(</span><span class="n">i</span><span class="p">)))))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">           </span><span class="n">n_next_undef_args</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"></span>
+<span class="w">        </span><span class="k">else</span>
+<span class="k">           exit</span>
+<span class="k">        endif</span>
+<span class="k">     enddo</span>
+<span class="k">     endfunction </span><span class="n">n_next_undef_args</span><span class="w"></span>
+<span class="w">  </span><span class="k">endsubroutine </span><span class="n">parse</span><span class="w"></span>
 </pre></div>
 
     </section>
@@ -478,7 +619,7 @@
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-6"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2022 
+        <div class="col-xs-6 col-md-6"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
 </p>
         </div>
         <div class="col-xs-6 col-md-6">

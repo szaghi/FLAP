@@ -80,324 +80,238 @@
   <div class="row">
     <h1>usage
       <small>Function</small>
+      
     </h1>
-    <div class="row">
-  <div class="col-lg-12">
-<div class="well well-sm">
-  <ul class="list-inline" style="margin-bottom:0px;display:inline">
-     <li><i class="fa fa-list-ol"></i>
-       <a data-toggle="tooltip"
-    data-placement="bottom" data-html="true"
-    title=" 3.2% of total for procedures.">116 statements</a>
-     </li> 
-    <li><i class="fa fa-code"></i><a href="../src/flap_command_line_argument_t.F90"> Source File</a></li>
-  </ul>
-  <ol class="breadcrumb in-well text-right">
-     <li><a href='../sourcefile/flap_command_line_argument_t.f90.html'>flap_command_line_argument_t.F90</a></li>
-     <li><a href='../module/flap_command_line_argument_t.html'>flap_command_line_argument_t</a></li>
-     <li class="active">usage</li>
-  </ol>
-</div>
-</div>
-</div>
-<script>
-  $(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-  })
-</script>
+      <div class="row" id="info-bar">
+    <div class="col-lg-12">
+      <div class="well well-sm">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+          <li id="statements"><i class="fa fa-list-ol"></i>
+            <a data-toggle="tooltip"
+               data-placement="bottom" data-html="true"
+               title=" 1.9% of total for procedures.">69 statements</a>
+          </li>
+
+            <li id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/flap_command_line_interface_t.F90"> Source File</a>
+            </li>
+        </ul>
+        <ol class="breadcrumb in-well text-right">
+              <li><a href='../sourcefile/flap_command_line_interface_t.f90.html'>flap_command_line_interface_t.F90</a></li>
+              <li><a href='../module/flap_command_line_interface_t.html'>flap_command_line_interface_t</a></li>
+          <li class="active">usage</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <script>
+    $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+    })
+  </script>
 
   </div>
   
   <div class="row">
     <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
-    <div id="sidebar">
-  <h3>Contents</h3>
- 
-<div class="panel panel-primary">
-  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
-  <div class="list-group">
-    <a class="list-group-item" href="../proc/usage~3.html#src">usage</a>
-  </div>
-</div>
+      <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="panel panel-primary">
+      <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/usage~3.html#src">usage</a>
+      </div>
+    </div>
 
-</div>
+
+  </div>
 
     </div>
     
     <div class="col-md-9" id='text'>
-    <h2>private function usage(self, pref, markdown)</h2>
+    <h2>private  function usage(self, g, pref, no_header, no_examples, no_epilog, markdown) result(usaged)  
+</h2>
     
 
-    <p>Get correct usage.</p>
+    <p>Print correct usage of CLI.</p>
 
     <h3>Arguments</h3>
-      <table class="table table-striped varlist">
-<thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
-<tbody>
-<tr>
-  <td><span class="anchor" id="variable-self~55"></span>class(<a href='../type/command_line_argument.html'>command_line_argument</a>),</td>
+        <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-self~60"></span>
+              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+            </td>
 <td>intent(in)</td>
-  <td></td>  <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>CLAs group data.</p></td>
-</tr>
-<tr>
-  <td><span class="anchor" id="variable-pref~29"></span>character,</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>self</strong></td>
+            <td>
+                <p>CLI data.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-g~5"></span>
+              integer(kind=I4P),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>g</strong></td>
+            <td>
+                <p>Group index.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-pref~41"></span>
+              character,
+            </td>
 <td>intent(in),</td>
-  <td>optional</td>  <td></td><td>::</td>
-  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
-</tr>
-<tr>
-  <td><span class="anchor" id="variable-markdown~3"></span>logical,</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>pref</strong></td>
+            <td>
+                <p>Prefixing string.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-no_header~2"></span>
+              logical,
+            </td>
 <td>intent(in),</td>
-  <td>optional</td>  <td></td><td>::</td>
-  <td><strong>markdown</strong></td><td><p>Format for markdown</p></td>
-</tr>
-</tbody>
-</table>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>no_header</strong></td>
+            <td>
+                <p>Avoid insert header to usage.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-no_examples"></span>
+              logical,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>no_examples</strong></td>
+            <td>
+                <p>Avoid insert examples to usage.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-no_epilog"></span>
+              logical,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>no_epilog</strong></td>
+            <td>
+                <p>Avoid insert epilogue to usage.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-markdown~3"></span>
+              logical,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>markdown</strong></td>
+            <td>
+                <p>Format things with markdown</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
 
-   <h3>Return Value <small><span class="anchor" id="variable-usage~5"></span>character(len=:),allocatable</small></h3>
-    <p>Usage string.</p>
-    <br>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-  <h3 class="panel-title">Calls</h3>
-      </div>
-      <div class="panel-body">
-  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
- "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.43.0 (0)
- -->
-<!-- Title: proc~~usage~3~~CallsGraph Pages: 1 -->
-<svg id="procusage3CallsGraph" width="410pt" height="221pt"
- viewBox="0.00 0.00 410.00 221.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="proc~~usage~3~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 217)">
-<title>proc~~usage~3~~CallsGraph</title>
-<polygon fill="white" stroke="transparent" points="-4,4 -4,-217 406,-217 406,4 -4,4"/>
-<!-- proc~usage~3 -->
-<g id="proc~~usage~3~~CallsGraph_node1" class="node">
-<title>proc~usage~3</title>
-<polygon fill="none" stroke="black" points="54,-108 0,-108 0,-84 54,-84 54,-108"/>
-<text text-anchor="middle" x="27" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50">usage</text>
-</g>
-<!-- interface~colorize -->
-<g id="proc~~usage~3~~CallsGraph_node2" class="node">
-<title>interface~colorize</title>
-<g id="a_proc~~usage~3~~CallsGraph_node2"><a xlink:href=".././interface/colorize.html" xlink:title="colorize">
-<polygon fill="#a7506f" stroke="#a7506f" points="152.5,-171 97.5,-171 97.5,-147 152.5,-147 152.5,-171"/>
-<text text-anchor="middle" x="125" y="-156.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">colorize</text>
-</a>
-</g>
-</g>
-<!-- proc~usage~3&#45;&gt;interface~colorize -->
-<g id="proc~~usage~3~~CallsGraph_edge1" class="edge">
-<title>proc~usage~3&#45;&gt;interface~colorize</title>
-<path fill="none" stroke="#000000" d="M45.51,-108.15C57.85,-116.64 74.83,-128.18 90,-138 91.7,-139.1 93.46,-140.23 95.24,-141.35"/>
-<polygon fill="#000000" stroke="#000000" points="93.8,-144.58 104.14,-146.92 97.52,-138.65 93.8,-144.58"/>
-</g>
-<!-- cton -->
-<g id="proc~~usage~3~~CallsGraph_node3" class="node">
-<title>cton</title>
-<polygon fill="#777777" stroke="#777777" points="152,-129 98,-129 98,-105 152,-105 152,-129"/>
-<text text-anchor="middle" x="125" y="-114.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">cton</text>
-</g>
-<!-- proc~usage~3&#45;&gt;cton -->
-<g id="proc~~usage~3~~CallsGraph_edge3" class="edge">
-<title>proc~usage~3&#45;&gt;cton</title>
-<path fill="none" stroke="#000000" d="M54.23,-101.74C64.6,-104.01 76.69,-106.65 87.87,-109.1"/>
-<polygon fill="#000000" stroke="#000000" points="87.28,-112.55 97.8,-111.27 88.78,-105.71 87.28,-112.55"/>
-</g>
-<!-- str -->
-<g id="proc~~usage~3~~CallsGraph_node4" class="node">
-<title>str</title>
-<polygon fill="#777777" stroke="#777777" points="152,-87 98,-87 98,-63 152,-63 152,-87"/>
-<text text-anchor="middle" x="125" y="-72.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">str</text>
-</g>
-<!-- proc~usage~3&#45;&gt;str -->
-<g id="proc~~usage~3~~CallsGraph_edge2" class="edge">
-<title>proc~usage~3&#45;&gt;str</title>
-<path fill="none" stroke="#000000" d="M54.23,-90.26C64.6,-87.99 76.69,-85.35 87.87,-82.9"/>
-<polygon fill="#000000" stroke="#000000" points="88.78,-86.29 97.8,-80.73 87.28,-79.45 88.78,-86.29"/>
-</g>
-<!-- proc~replace_all -->
-<g id="proc~~usage~3~~CallsGraph_node5" class="node">
-<title>proc~replace_all</title>
-<g id="a_proc~~usage~3~~CallsGraph_node5"><a xlink:href=".././proc/replace_all.html" xlink:title="replace_all">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="160,-45 90,-45 90,-21 160,-21 160,-45"/>
-<text text-anchor="middle" x="125" y="-30.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">replace_all</text>
-</a>
-</g>
-</g>
-<!-- proc~usage~3&#45;&gt;proc~replace_all -->
-<g id="proc~~usage~3~~CallsGraph_edge4" class="edge">
-<title>proc~usage~3&#45;&gt;proc~replace_all</title>
-<path fill="none" stroke="#000000" d="M45.51,-83.85C57.85,-75.36 74.83,-63.82 90,-54 91.7,-52.9 93.46,-51.77 95.24,-50.65"/>
-<polygon fill="#000000" stroke="#000000" points="97.52,-53.35 104.14,-45.08 93.8,-47.42 97.52,-53.35"/>
-</g>
-<!-- proc~colorize_default -->
-<g id="proc~~usage~3~~CallsGraph_node6" class="node">
-<title>proc~colorize_default</title>
-<g id="a_proc~~usage~3~~CallsGraph_node6"><a xlink:href=".././proc/colorize_default.html" xlink:title="colorize_default">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="293,-171 196,-171 196,-147 293,-147 293,-171"/>
-<text text-anchor="middle" x="244.5" y="-156.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">colorize_default</text>
-</a>
-</g>
-</g>
-<!-- interface~colorize&#45;&gt;proc~colorize_default -->
-<g id="proc~~usage~3~~CallsGraph_edge5" class="edge">
-<title>interface~colorize&#45;&gt;proc~colorize_default</title>
-<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M152.66,-159C162.51,-159 174.09,-159 185.62,-159"/>
-<polygon fill="#000000" stroke="#000000" points="185.7,-162.5 195.7,-159 185.7,-155.5 185.7,-162.5"/>
-</g>
-<!-- proc~wstrip -->
-<g id="proc~~usage~3~~CallsGraph_node7" class="node">
-<title>proc~wstrip</title>
-<g id="a_proc~~usage~3~~CallsGraph_node7"><a xlink:href=".././proc/wstrip.html" xlink:title="wstrip">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="271.5,-66 217.5,-66 217.5,-42 271.5,-42 271.5,-66"/>
-<text text-anchor="middle" x="244.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">wstrip</text>
-</a>
-</g>
-</g>
-<!-- proc~replace_all&#45;&gt;proc~wstrip -->
-<g id="proc~~usage~3~~CallsGraph_edge6" class="edge">
-<title>proc~replace_all&#45;&gt;proc~wstrip</title>
-<path fill="none" stroke="#000000" d="M160.3,-39.13C175.05,-41.77 192.3,-44.85 207.26,-47.52"/>
-<polygon fill="#000000" stroke="#000000" points="206.73,-50.98 217.19,-49.3 207.96,-44.09 206.73,-50.98"/>
-</g>
-<!-- proc~replace -->
-<g id="proc~~usage~3~~CallsGraph_node8" class="node">
-<title>proc~replace</title>
-<g id="a_proc~~usage~3~~CallsGraph_node8"><a xlink:href=".././proc/replace.html" xlink:title="replace">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="271.5,-24 217.5,-24 217.5,0 271.5,0 271.5,-24"/>
-<text text-anchor="middle" x="244.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">replace</text>
-</a>
-</g>
-</g>
-<!-- proc~replace_all&#45;&gt;proc~replace -->
-<g id="proc~~usage~3~~CallsGraph_edge7" class="edge">
-<title>proc~replace_all&#45;&gt;proc~replace</title>
-<path fill="none" stroke="#000000" d="M160.3,-26.87C175.05,-24.23 192.3,-21.15 207.26,-18.48"/>
-<polygon fill="#000000" stroke="#000000" points="207.96,-21.91 217.19,-16.7 206.73,-15.02 207.96,-21.91"/>
-</g>
-<!-- proc~color_index -->
-<g id="proc~~usage~3~~CallsGraph_node9" class="node">
-<title>proc~color_index</title>
-<g id="a_proc~~usage~3~~CallsGraph_node9"><a xlink:href=".././proc/color_index.html" xlink:title="color_index">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="402,-213 329,-213 329,-189 402,-189 402,-213"/>
-<text text-anchor="middle" x="365.5" y="-198.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">color_index</text>
-</a>
-</g>
-</g>
-<!-- proc~colorize_default&#45;&gt;proc~color_index -->
-<g id="proc~~usage~3~~CallsGraph_edge8" class="edge">
-<title>proc~colorize_default&#45;&gt;proc~color_index</title>
-<path fill="none" stroke="#000000" d="M279.6,-171.04C292.42,-175.56 307.18,-180.77 320.76,-185.56"/>
-<polygon fill="#000000" stroke="#000000" points="319.8,-188.93 330.39,-188.96 322.13,-182.33 319.8,-188.93"/>
-</g>
-<!-- proc~upper -->
-<g id="proc~~usage~3~~CallsGraph_node10" class="node">
-<title>proc~upper</title>
-<g id="a_proc~~usage~3~~CallsGraph_node10"><a xlink:href=".././proc/upper.html" xlink:title="upper">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="392.5,-171 338.5,-171 338.5,-147 392.5,-147 392.5,-171"/>
-<text text-anchor="middle" x="365.5" y="-156.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">upper</text>
-</a>
-</g>
-</g>
-<!-- proc~colorize_default&#45;&gt;proc~upper -->
-<g id="proc~~usage~3~~CallsGraph_edge9" class="edge">
-<title>proc~colorize_default&#45;&gt;proc~upper</title>
-<path fill="none" stroke="#000000" d="M293.22,-159C304.88,-159 317.17,-159 328.2,-159"/>
-<polygon fill="#000000" stroke="#000000" points="328.33,-162.5 338.33,-159 328.33,-155.5 328.33,-162.5"/>
-</g>
-<!-- proc~style_index -->
-<g id="proc~~usage~3~~CallsGraph_node11" class="node">
-<title>proc~style_index</title>
-<g id="a_proc~~usage~3~~CallsGraph_node11"><a xlink:href=".././proc/style_index.html" xlink:title="style_index">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="401,-129 330,-129 330,-105 401,-105 401,-129"/>
-<text text-anchor="middle" x="365.5" y="-114.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">style_index</text>
-</a>
-</g>
-</g>
-<!-- proc~colorize_default&#45;&gt;proc~style_index -->
-<g id="proc~~usage~3~~CallsGraph_edge10" class="edge">
-<title>proc~colorize_default&#45;&gt;proc~style_index</title>
-<path fill="none" stroke="#000000" d="M279.6,-146.96C292.42,-142.44 307.18,-137.23 320.76,-132.44"/>
-<polygon fill="#000000" stroke="#000000" points="322.13,-135.67 330.39,-129.04 319.8,-129.07 322.13,-135.67"/>
-</g>
-</g>
-</svg>
-</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
-    <p>Nodes of different colours represent the following: </p>
-    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
- "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.43.0 (0)
- -->
-<!-- Title: Graph Key Pages: 1 -->
-<svg width="597pt" height="32pt"
- viewBox="0.00 0.00 596.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
-<title>Graph Key</title>
-<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 592.5,-28 592.5,4 -4,4"/>
-<!-- Subroutine -->
-<g id="node1" class="node">
-<title>Subroutine</title>
-<polygon fill="#d9534f" stroke="#d9534f" points="70,-24 0,-24 0,0 70,0 70,-24"/>
-<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
-</g>
-<!-- Function -->
-<g id="node2" class="node">
-<title>Function</title>
-<polygon fill="#d94e8f" stroke="#d94e8f" points="146,-24 88,-24 88,0 146,0 146,-24"/>
-<text text-anchor="middle" x="117" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
-</g>
-<!-- Interface -->
-<g id="node3" class="node">
-<title>Interface</title>
-<polygon fill="#a7506f" stroke="#a7506f" points="225.5,-24 164.5,-24 164.5,0 225.5,0 225.5,-24"/>
-<text text-anchor="middle" x="195" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
-</g>
-<!-- Unknown Procedure Type -->
-<g id="node4" class="node">
-<title>Unknown Procedure Type</title>
-<polygon fill="#777777" stroke="#777777" points="388.5,-24 243.5,-24 243.5,0 388.5,0 388.5,-24"/>
-<text text-anchor="middle" x="316" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
-</g>
-<!-- Program -->
-<g id="node5" class="node">
-<title>Program</title>
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="465,-24 407,-24 407,0 465,0 465,-24"/>
-<text text-anchor="middle" x="436" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
-</g>
-<!-- This Page&#39;s Entity -->
-<g id="node6" class="node">
-<title>This Page&#39;s Entity</title>
-<polygon fill="none" stroke="black" points="588.5,-24 483.5,-24 483.5,0 588.5,0 588.5,-24"/>
-<text text-anchor="middle" x="536" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
-</g>
-</g>
-</svg>
-
-    
-    <p>Solid arrows point from a procedure to one which it calls. Dashed 
-    arrows point from an interface to procedures which implement that interface.
-    This could include the module procedures in a generic interface or the
-    implementation in a submodule of an interface in a parent module.
-    </p>
-    </div></div></div></div>
-      </div>
-    </div>
+      <h3>Return Value
+        <small>
+          <span class="anchor" id="variable-usaged"></span>
+          character(len=:), allocatable
+        </small>
+      </h3>
+      <p>Usage string.</p>
     <br>
 
     <section class="visible-xs visible-sm hidden-md">
-      <h3>Contents</h3>
- 
-<div class="panel panel-primary">
-  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
-  <div class="list-group">
-    <a class="list-group-item" href="../proc/usage~3.html#src">usage</a>
-  </div>
-</div>
+        <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="panel panel-primary">
+      <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/usage~3.html#src">usage</a>
+      </div>
+    </div>
+
 
     </section>
     <br class="visible-xs visible-sm hidden-md">
@@ -413,124 +327,75 @@
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span></span><span class="w">  </span><span class="k">function </span><span class="n">usage</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">markdown</span><span class="p">)</span><span class="w"></span>
-<span class="w">  </span><span class="c">!&lt; Get correct usage.</span>
-<span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="n">command_line_argument</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">self</span><span class="w">       </span><span class="c">!&lt; CLAs group data.</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">       </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">pref</span><span class="w">       </span><span class="c">!&lt; Prefixing string.</span>
-<span class="w">  </span><span class="kt">logical</span><span class="p">,</span><span class="w">      </span><span class="k">optional</span><span class="p">,</span><span class="w">       </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">markdown</span><span class="w">   </span><span class="c">!&lt; Format for markdown</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w">            </span><span class="kd">::</span><span class="w"> </span><span class="n">usage</span><span class="w">      </span><span class="c">!&lt; Usage string.</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w">            </span><span class="kd">::</span><span class="w"> </span><span class="n">prefd</span><span class="w">      </span><span class="c">!&lt; Prefixing string.</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w">            </span><span class="kd">::</span><span class="w"> </span><span class="n">switch_</span><span class="w">    </span><span class="c">!&lt; Switch name, local variable.</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w">            </span><span class="kd">::</span><span class="w"> </span><span class="n">switch_ab_</span><span class="w"> </span><span class="c">!&lt; Abbreviated switch name, local variable.</span>
-<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                             </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="w">          </span><span class="c">!&lt; Counter.</span>
-<span class="w">  </span><span class="kt">logical</span><span class="w">                                  </span><span class="kd">::</span><span class="w"> </span><span class="n">markdownd</span><span class="w">  </span><span class="c">!&lt; Format for markdown</span>
-<span class="w">  </span><span class="kt">integer</span><span class="w">                                  </span><span class="kd">::</span><span class="w"> </span><span class="n">indent</span><span class="w">     </span><span class="c">!&lt; how many spaces to indent</span>
+    <div class="highlight"><pre><span></span><span class="w">  </span><span class="k">function </span><span class="n">usage</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">no_header</span><span class="p">,</span><span class="w"> </span><span class="n">no_examples</span><span class="p">,</span><span class="w"> </span><span class="n">no_epilog</span><span class="p">,</span><span class="w"> </span><span class="n">markdown</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">usaged</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="c">!&lt; Print correct usage of CLI.</span>
+<span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="n">command_line_interface</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">self</span><span class="w">             </span><span class="c">!&lt; CLI data.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span><span class="w">                  </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">g</span><span class="w">                </span><span class="c">!&lt; Group index.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">pref</span><span class="w">             </span><span class="c">!&lt; Prefixing string.</span>
+<span class="w">  </span><span class="kt">logical</span><span class="p">,</span><span class="w">      </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">no_header</span><span class="w">        </span><span class="c">!&lt; Avoid insert header to usage.</span>
+<span class="w">  </span><span class="kt">logical</span><span class="p">,</span><span class="w">      </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">no_examples</span><span class="w">      </span><span class="c">!&lt; Avoid insert examples to usage.</span>
+<span class="w">  </span><span class="kt">logical</span><span class="p">,</span><span class="w">      </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">no_epilog</span><span class="w">        </span><span class="c">!&lt; Avoid insert epilogue to usage.</span>
+<span class="w">  </span><span class="kt">logical</span><span class="p">,</span><span class="w">      </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">markdown</span><span class="w">         </span><span class="c">!&lt; Format things with markdown</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w">             </span><span class="kd">::</span><span class="w"> </span><span class="n">prefd</span><span class="w">            </span><span class="c">!&lt; Prefixing string.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w">             </span><span class="kd">::</span><span class="w"> </span><span class="n">usaged</span><span class="w">           </span><span class="c">!&lt; Usage string.</span>
+<span class="w">  </span><span class="kt">logical</span><span class="w">                                   </span><span class="kd">::</span><span class="w"> </span><span class="n">no_headerd</span><span class="w">       </span><span class="c">!&lt; Avoid insert header to usage.</span>
+<span class="w">  </span><span class="kt">logical</span><span class="w">                                   </span><span class="kd">::</span><span class="w"> </span><span class="n">no_examplesd</span><span class="w">     </span><span class="c">!&lt; Avoid insert examples to usage.</span>
+<span class="w">  </span><span class="kt">logical</span><span class="w">                                   </span><span class="kd">::</span><span class="w"> </span><span class="n">no_epilogd</span><span class="w">       </span><span class="c">!&lt; Avoid insert epilogue to usage.</span>
+<span class="w">  </span><span class="kt">logical</span><span class="w">                                   </span><span class="kd">::</span><span class="w"> </span><span class="n">markdownd</span><span class="w">        </span><span class="c">!&lt; Format for markdown.</span>
+<span class="w">  </span><span class="kt">logical</span><span class="w">                                   </span><span class="kd">::</span><span class="w"> </span><span class="n">grouped_examples</span><span class="w"> </span><span class="c">!&lt; Will show examples of group usage.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                              </span><span class="kd">::</span><span class="w"> </span><span class="n">gi</span><span class="w">               </span><span class="c">!&lt; Counter.</span>
 
+<span class="w">  </span><span class="n">no_headerd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">no_header</span><span class="p">))</span><span class="w"> </span><span class="n">no_headerd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">no_header</span><span class="w"></span>
+<span class="w">  </span><span class="n">no_examplesd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">no_examples</span><span class="p">))</span><span class="w"> </span><span class="n">no_examplesd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">no_examples</span><span class="w"></span>
+<span class="w">  </span><span class="n">no_epilogd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">no_epilog</span><span class="p">))</span><span class="w"> </span><span class="n">no_epilogd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">no_epilog</span><span class="w"></span>
 <span class="w">  </span><span class="n">markdownd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">markdown</span><span class="p">))</span><span class="w"> </span><span class="n">markdownd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">markdown</span><span class="w"></span>
-<span class="w">  </span><span class="n">indent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="w"></span>
-<span class="w">  </span><span class="n">switch_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">colorize</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="p">)),</span><span class="w"> </span><span class="n">color_fg</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">help_color</span><span class="p">,</span><span class="w"> </span><span class="n">style</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">help_style</span><span class="p">)</span><span class="w"></span>
-<span class="w">  </span><span class="n">switch_ab_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">colorize</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch_ab</span><span class="p">)),</span><span class="w"> </span><span class="n">color_fg</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">help_color</span><span class="p">,</span><span class="w"> </span><span class="n">style</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">help_style</span><span class="p">)</span><span class="w"></span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">is_hidden</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">act</span><span class="o">==</span><span class="n">action_store</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">      if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">is_positional</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">        if</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">nargs</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">          </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"></span>
-<span class="w">          </span><span class="k">select case</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">nargs</span><span class="p">)</span><span class="w"></span>
-<span class="w">          </span><span class="k">case</span><span class="p">(</span><span class="s1">&#39;+&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">            </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usage</span><span class="o">//</span><span class="s1">&#39; value#1 [value#2...]&#39;</span><span class="w"></span>
-<span class="w">          </span><span class="k">case</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">            </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usage</span><span class="o">//</span><span class="s1">&#39; [value#1 value#2...]&#39;</span><span class="w"></span>
-<span class="w">          </span><span class="k">case </span><span class="n">default</span><span class="w"></span>
-<span class="w">            </span><span class="k">do </span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">cton</span><span class="p">(</span><span class="n">str</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">nargs</span><span class="p">)),</span><span class="n">knd</span><span class="o">=</span><span class="mi">1_I4P</span><span class="p">)</span><span class="w"></span>
-<span class="w">              </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usage</span><span class="o">//</span><span class="s1">&#39; value#&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="w"></span>
-<span class="w">            </span><span class="k">enddo</span>
-<span class="k">          endselect</span>
-<span class="k">          if</span><span class="w"> </span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="p">))</span><span class="o">/=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch_ab</span><span class="p">)))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">            if</span><span class="w"> </span><span class="p">(</span><span class="n">markdownd</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">              </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;* `&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="p">))</span><span class="o">//</span><span class="n">usage</span><span class="o">//</span><span class="s1">&#39;`, `&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch_ab</span><span class="p">))</span><span class="o">//</span><span class="n">usage</span><span class="o">//</span><span class="s1">&#39;`&#39;</span><span class="w"></span>
-<span class="w">            </span><span class="k">else</span>
-<span class="k">              </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;   &#39;</span><span class="o">//</span><span class="n">switch_</span><span class="o">//</span><span class="n">usage</span><span class="o">//</span><span class="s1">&#39;, &#39;</span><span class="o">//</span><span class="n">switch_ab_</span><span class="o">//</span><span class="n">usage</span><span class="w"></span>
-<span class="w">            </span><span class="k">endif</span>
-<span class="k">          else</span>
-<span class="k">            if</span><span class="w"> </span><span class="p">(</span><span class="n">markdownd</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">              </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;* `&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="p">))</span><span class="o">//</span><span class="n">usage</span><span class="o">//</span><span class="s1">&#39;`&#39;</span><span class="w"></span>
-<span class="w">            </span><span class="k">else</span>
-<span class="k">              </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;   &#39;</span><span class="o">//</span><span class="n">switch_</span><span class="o">//</span><span class="n">usage</span><span class="w"></span>
-<span class="w">            </span><span class="k">endif</span>
-<span class="k">          endif</span>
-<span class="k">        else</span>
-<span class="k">          if</span><span class="w"> </span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="p">))</span><span class="o">/=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch_ab</span><span class="p">)))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">            if</span><span class="w"> </span><span class="p">(</span><span class="n">markdownd</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">              </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;* `&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; value`, `&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch_ab</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; value&#39;</span><span class="o">//</span><span class="s1">&#39;`&#39;</span><span class="w"></span>
-<span class="w">            </span><span class="k">else</span>
-<span class="k">              </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;   &#39;</span><span class="o">//</span><span class="n">switch_</span><span class="o">//</span><span class="s1">&#39; value, &#39;</span><span class="o">//</span><span class="n">switch_ab_</span><span class="o">//</span><span class="s1">&#39; value&#39;</span><span class="w"></span>
-<span class="w">            </span><span class="k">endif</span>
-<span class="k">          else</span>
-<span class="k">            if</span><span class="w"> </span><span class="p">(</span><span class="n">markdownd</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">              </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;* `&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; value`&#39;</span><span class="w"></span>
-<span class="w">            </span><span class="k">else</span>
-<span class="k">              </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;   &#39;</span><span class="o">//</span><span class="n">switch_</span><span class="o">//</span><span class="s1">&#39; value&#39;</span><span class="w"></span>
-<span class="w">            </span><span class="k">endif</span>
-<span class="k">          endif</span>
-<span class="k">        endif</span>
-<span class="k">      else</span>
-<span class="k">        </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;  value&#39;</span><span class="w"></span>
-<span class="w">      </span><span class="k">endif</span>
-<span class="k">      if</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">choices</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">        </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usage</span><span class="o">//</span><span class="s1">&#39;, value in: `&#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">choices</span><span class="o">//</span><span class="s1">&#39;`&#39;</span><span class="w"></span>
-<span class="w">      </span><span class="k">endif</span>
-<span class="k">    </span><span class="n">elseif</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">act</span><span class="o">==</span><span class="n">action_store_star</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">      </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;  [value]&#39;</span><span class="w"></span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">choices</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">        </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usage</span><span class="o">//</span><span class="s1">&#39;, value in: (&#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">choices</span><span class="o">//</span><span class="s1">&#39;)&#39;</span><span class="w"></span>
-<span class="w">      </span><span class="k">endif</span>
-<span class="k">    else</span>
-<span class="k">      if</span><span class="w"> </span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="p">))</span><span class="o">/=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch_ab</span><span class="p">)))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">        if</span><span class="w"> </span><span class="p">(</span><span class="n">markdownd</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">          </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;* `&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;`, `&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch_ab</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;`&#39;</span><span class="w"></span>
-<span class="w">        </span><span class="k">else</span>
-<span class="k">          </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;   &#39;</span><span class="o">//</span><span class="n">switch_</span><span class="o">//</span><span class="s1">&#39;, &#39;</span><span class="o">//</span><span class="n">switch_ab_</span><span class="w"></span>
-<span class="w">        </span><span class="k">endif</span>
-<span class="k">      else</span>
-<span class="k">        if</span><span class="w"> </span><span class="p">(</span><span class="n">markdownd</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">          </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;* `&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;`&#39;</span><span class="w"></span>
-<span class="w">        </span><span class="k">else</span>
-<span class="k">          </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;   &#39;</span><span class="o">//</span><span class="n">switch_</span><span class="w"></span>
-<span class="w">        </span><span class="k">endif</span>
-<span class="k">      endif</span>
-<span class="k">    endif</span>
-<span class="k">    </span><span class="n">prefd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">pref</span><span class="p">))</span><span class="w"> </span><span class="n">prefd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pref</span><span class="w"></span>
-<span class="w">    </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="n">usage</span><span class="w"></span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">is_positional</span><span class="p">)</span><span class="w"> </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usage</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="nb">repeat</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="n">indent</span><span class="p">)</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="o">//</span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">      </span><span class="s1">&#39;-th argument&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">envvar</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">      if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">envvar</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">        </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usage</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="nb">repeat</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;environment variable name &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">envvar</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&quot;&#39;</span><span class="w"></span>
-<span class="w">      </span><span class="k">endif</span>
-<span class="k">    endif</span>
-<span class="k">    if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">is_required</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">      if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">def</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">        if</span><span class="w"> </span><span class="p">(</span><span class="n">markdownd</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
-<span class="w">          </span><span class="c">! two spaces make a line break in markdown.</span>
-<span class="w">          </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usage</span><span class="o">//</span><span class="s1">&#39;  &#39;</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="nb">repeat</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;default value &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">replace_all</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">def</span><span class="p">,</span><span class="n">ARGS_SEP</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="p">))</span><span class="w"></span>
-<span class="w">        </span><span class="k">else</span>
-<span class="k">          </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usage</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="nb">repeat</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="w"> </span><span class="n">indent</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;default value &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">replace_all</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">def</span><span class="p">,</span><span class="n">ARGS_SEP</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="p">))</span><span class="w"></span>
-<span class="w">        </span><span class="k">endif</span>
-<span class="k">      endif</span>
-<span class="k">    endif</span>
-<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">m_exclude</span><span class="o">/=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"> </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usage</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="nb">repeat</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="w"> </span><span class="n">indent</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;mutually exclude &quot;&#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">m_exclude</span><span class="o">//</span><span class="s1">&#39;&quot;&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">markdownd</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">      </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usage</span><span class="o">//</span><span class="s1">&#39;  &#39;</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="nb">repeat</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">help</span><span class="p">))</span><span class="w"></span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">help_markdown</span><span class="o">/=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">        </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usage</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">help_markdown</span><span class="p">))</span><span class="w"></span>
-<span class="w">      </span><span class="k">endif</span>
-<span class="k">    else</span>
-<span class="k">      </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usage</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="nb">repeat</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="w"> </span><span class="n">indent</span><span class="p">)</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">help</span><span class="p">))</span><span class="w"></span>
+<span class="w">  </span><span class="n">prefd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">pref</span><span class="p">))</span><span class="w"> </span><span class="n">prefd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pref</span><span class="w"></span>
+<span class="w">  </span><span class="n">grouped_examples</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">g</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="c">! usage of a specific command</span>
+<span class="w">    </span><span class="n">usaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">usage</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">prefd</span><span class="p">,</span><span class="n">no_header</span><span class="o">=</span><span class="n">no_headerd</span><span class="p">,</span><span class="n">markdown</span><span class="o">=</span><span class="n">markdownd</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">examples</span><span class="p">).</span><span class="nb">and</span><span class="p">.(.</span><span class="nb">not</span><span class="p">.</span><span class="n">no_examplesd</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">      </span><span class="n">usaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usaged</span><span class="o">//</span><span class="n">print_examples</span><span class="p">(</span><span class="n">prefd</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">examples</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="n">grouped_examples</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
 <span class="w">    </span><span class="k">endif</span>
-<span class="k">  else</span>
-<span class="k">    </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"></span>
+<span class="k">  else</span><span class="w"> </span><span class="c">! usage of whole CLI</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">no_headerd</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">      </span><span class="n">usaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"></span>
+<span class="w">    </span><span class="k">else</span>
+<span class="k">      </span><span class="n">usaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">help</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="s1">&#39; &#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">signature</span><span class="p">()</span><span class="w"></span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">description</span><span class="o">/=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"> </span><span class="n">usaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usaged</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">description</span><span class="w"></span>
+<span class="w">    </span><span class="k">endif</span>
+<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="mi">0</span><span class="p">)%</span><span class="n">Na</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">usaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usaged</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="mi">0</span><span class="p">)%</span><span class="n">usage</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">prefd</span><span class="p">,</span><span class="n">no_header</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="n">markdown</span><span class="o">=</span><span class="n">markdownd</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">      </span><span class="n">usaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usaged</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;Commands:&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="k">do </span><span class="n">gi</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="w"></span>
+<span class="w">        </span><span class="n">usaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usaged</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;  &#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">gi</span><span class="p">)%</span><span class="n">group</span><span class="w"></span>
+<span class="w">        </span><span class="n">usaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usaged</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="nb">repeat</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">gi</span><span class="p">)%</span><span class="n">description</span><span class="w"></span>
+<span class="w">      </span><span class="k">enddo</span>
+<span class="k">      </span><span class="n">usaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usaged</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;For more detailed commands help try:&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="k">do </span><span class="n">gi</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="w"></span>
+<span class="w">        </span><span class="n">usaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usaged</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;  &#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="s1">&#39; &#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">gi</span><span class="p">)%</span><span class="n">group</span><span class="o">//</span><span class="s1">&#39; -h,--help&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="k">enddo</span>
+<span class="k">    endif</span>
+<span class="k">  endif</span>
+<span class="k">  if</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">examples</span><span class="p">).</span><span class="nb">and</span><span class="p">.(.</span><span class="nb">not</span><span class="p">.</span><span class="n">no_examplesd</span><span class="p">).</span><span class="nb">and</span><span class="p">.(.</span><span class="nb">not</span><span class="p">.</span><span class="n">grouped_examples</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">    </span><span class="n">usaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usaged</span><span class="o">//</span><span class="n">print_examples</span><span class="p">(</span><span class="n">prefd</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">examples</span><span class="p">)</span><span class="w"></span>
 <span class="w">  </span><span class="k">endif</span>
-<span class="k">  endfunction </span><span class="n">usage</span><span class="w"></span>
+<span class="k">  if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">epilog</span><span class="o">/=</span><span class="s1">&#39;&#39;</span><span class="p">.</span><span class="nb">and</span><span class="p">.(.</span><span class="nb">not</span><span class="p">.</span><span class="n">no_epilogd</span><span class="p">))</span><span class="w"> </span><span class="n">usaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usaged</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">epilog</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">contains</span>
+<span class="k">    function </span><span class="n">print_examples</span><span class="p">(</span><span class="n">prefd</span><span class="p">,</span><span class="w"> </span><span class="n">examples</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">exampled</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="c">!&lt; Print examples of the correct usage.</span>
+<span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w">     </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">  </span><span class="kd">::</span><span class="w"> </span><span class="n">prefd</span><span class="w">          </span><span class="c">!&lt; Prefixing string.</span>
+<span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w">     </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">  </span><span class="kd">::</span><span class="w"> </span><span class="n">examples</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span><span class="w">   </span><span class="c">!&lt; Examples to be printed.</span>
+<span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">exampled</span><span class="w">       </span><span class="c">!&lt; Examples string.</span>
+<span class="w">      </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                  </span><span class="kd">::</span><span class="w"> </span><span class="n">e</span><span class="w">              </span><span class="c">!&lt; Counter.</span>
+
+<span class="w">      </span><span class="n">exampled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;Examples:&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="k">do </span><span class="n">e</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">examples</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">exampled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">exampled</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;   &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">examples</span><span class="p">(</span><span class="n">e</span><span class="p">))</span><span class="w"></span>
+<span class="w">      </span><span class="k">enddo</span>
+<span class="k">    endfunction </span><span class="n">print_examples</span><span class="w"></span>
+<span class="w">  </span><span class="k">endfunction </span><span class="n">usage</span><span class="w"></span>
 </pre></div>
 
     </section>
@@ -544,7 +409,7 @@
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-6"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2022 
+        <div class="col-xs-6 col-md-6"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
 </p>
         </div>
         <div class="col-xs-6 col-md-6">
