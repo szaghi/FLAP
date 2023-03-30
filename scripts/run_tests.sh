@@ -63,3 +63,4 @@
 ./exe/flap_test_save_usage_to_markdown
 ./exe/flap_test_string
 ./exe/flap_test_value_missing -i
+./exe/flap_test_action_store --read foo --input bar --write fee --output fie --multiple_rrs --multiple_ros --multiple_rrp baz --multiple_rop --multiple_rr3 1 2 3 --multiple_ro3 --multiple_oop foo --multiple_oo3 a b c
