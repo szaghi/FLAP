@@ -269,6 +269,8 @@ To download and build the project two main ways are available:
 
 ---
 
+Go to [Top](#top)
+
 ### install script
 
 FLAP ships a bash script (downloadable from [here](https://github.com/szaghi/FLAP/releases/latest)) that is able to automatize the download and build steps. The script `install.sh` has the following usage:
@@ -327,6 +329,8 @@ install.sh --dowload git --build fobis
 ```
 
 ---
+
+Go to [Top](#top)
 
 ### manually download and build
 
@@ -519,5 +523,27 @@ FLAP = { git="https://github.com/szaghi/FLAP.git", rev = "11cb276228d678c1d9ce75
 ```
 
 Note that, when compiling with FPM, the git submodules in the `src/third_party` directory are not used, but FPM will download these separately, based on the versions specified in the `fpm.toml` file.
+
+Go to [Top](#top)
+
+### NVFortran Compiling Issue
+
+Thanks to Carl Ponder (@cponder), we know that Nvidia NVFortran compiler misunderstand a quoted string containing a backslash into source files. To overcome this issue we suggest to use the `-Mbackslash` switch of NVFortran compiler.
+
+For example, to compile by means of CMake use:
+
+```shell
+git clone https://github.com/szaghi/FLAP $YOUR_FLAP_PATH
+mkdir build
+cd build
+cmake -D CMAKE_Fortran_FLAGS="-Mbackslash" $YOUR_FLAP_PATH
+cmake --build .
+```
+
+Similarly, into the fobos config file there is a specific template for NVFortran where this switch has been used to compile FLAP by means of Nvidia compiler. To test it use:
+
+```bash
+FoBiS.py build -mode static-nvf
+```
 
 Go to [Top](#top)

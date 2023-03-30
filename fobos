@@ -3,6 +3,7 @@ modes = shared-gnu static-gnu shared-gnu-debug static-gnu-debug
         shared-intel static-intel shared-intel-debug static-intel-debug
         tests-gnu tests-gnu-debug
         tests-intel tests-intel-debug
+        static-nvf
 
 [common-variables]
 $CSHARED_GNU = -cpp -c -fPIC -frealloc-lhs
@@ -10,6 +11,7 @@ $CSHARED_INT = -cpp -c -fpic -assume realloc_lhs
 $LSHARED     = -shared
 $CSTATIC_GNU = -cpp -c -frealloc-lhs
 $CSTATIC_INT = -cpp -c -assume realloc_lhs
+$CSTATIC_NVF = -cpp -c -Mbackslash
 $DEBUG_GNU   = -O0 -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -fcheck=all -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan -std=f2008 -fall-intrinsics
 $DEBUG_INT   = -O0 -debug all -check all -warn all -extend-source 132 -traceback -gen-interfaces#-fpe-all=0 -fp-stack-check -fstack-protector-all -ftrapuv -no-ftz -std08
 $OPTIMIZE    = -O2
@@ -89,6 +91,14 @@ build_dir = ./exe/
 [tests-intel-debug]
 template  = template-static-intel-debug
 build_dir = ./exe/
+
+# NVF
+[static-nvf]
+template  = template-static-nvf
+target    = flap.f90
+build_dir = ./static/
+output    = libflap.a
+mklib     = static
 
 #templates
 [template-shared-gnu]
@@ -192,6 +202,19 @@ jobs         = 2
 compiler     = intel
 cflags       = $CSTATIC_INT $DEBUG_INT
 lflags       = $DEBUG_INT
+preproc      = -D_R16P_SUPPORTED
+exclude_dirs = $EXDIRS
+mod_dir      = ./mod/
+obj_dir      = ./obj/
+src          = ./src/
+colors       = True
+quiet        = False
+log          = True
+jobs         = 2
+
+[template-static-nvf]
+compiler     = nvfortran
+cflags       = $CSTATIC_NVF $OPTIMIZE
 preproc      = -D_R16P_SUPPORTED
 exclude_dirs = $EXDIRS
 mod_dir      = ./mod/
