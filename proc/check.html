@@ -100,17 +100,17 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title=" 0.7% of total for procedures.">27 statements</a>
+               title=" 0.5% of total for procedures.">18 statements</a>
           </li>
 
             <li id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/flap_command_line_arguments_group_t.f90"> Source File</a>
+              <a href="../src/flap_command_line_interface_t.F90"> Source File</a>
             </li>
         </ul>
         <ol class="breadcrumb in-well text-right">
-              <li><a href='../sourcefile/flap_command_line_arguments_group_t.f90.html'>flap_command_line_arguments_group_t.f90</a></li>
-              <li><a href='../module/flap_command_line_arguments_group_t.html'>flap_command_line_arguments_group_t</a></li>
+              <li><a href='../sourcefile/flap_command_line_interface_t.f90.html'>flap_command_line_interface_t.F90</a></li>
+              <li><a href='../module/flap_command_line_interface_t.html'>flap_command_line_interface_t</a></li>
           <li class="active">check</li>
         </ol>
       </div>
@@ -160,7 +160,7 @@
     </div>
     
     <div class="col-md-9" id='text'>
-    <h2>private  subroutine check(self, pref)  
+    <h2>private  subroutine check(self, pref, error)  
 </h2>
     
 
@@ -179,8 +179,8 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~6"></span>
-              class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
+              <span class="anchor" id="variable-self~13"></span>
+              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -189,12 +189,12 @@
             <td>::</td>
             <td><strong>self</strong></td>
             <td>
-                <p>CLAsG data.</p>
+                <p>CLI data.</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~2"></span>
+              <span class="anchor" id="variable-pref~3"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -205,6 +205,21 @@
             <td><strong>pref</strong></td>
             <td>
                 <p>Prefixing string.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-error~2"></span>
+              integer(kind=I4P),
+            </td>
+<td>intent(out),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>error</strong></td>
+            <td>
+                <p>Error trapping flag.</p>
             </td>
         </tr>
     </tbody>
@@ -255,38 +270,28 @@
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span></span><span class="w">  </span><span class="k">subroutine </span><span class="n">check</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">pref</span><span class="p">)</span><span class="w"></span>
+    <div class="highlight"><pre><span></span><span class="w">  </span><span class="k">subroutine </span><span class="n">check</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="p">)</span><span class="w"></span>
 <span class="w">  </span><span class="c">!&lt; Check data consistency.</span>
-<span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="n">command_line_arguments_group</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">self</span><span class="w">  </span><span class="c">!&lt; CLAsG data.</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">              </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">pref</span><span class="w">  </span><span class="c">!&lt; Prefixing string.</span>
-<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                                       </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="w">     </span><span class="c">!&lt; Counter.</span>
-<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                                       </span><span class="kd">::</span><span class="w"> </span><span class="n">aa</span><span class="w">    </span><span class="c">!&lt; Counter.</span>
+<span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="n">command_line_interface</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">self</span><span class="w">  </span><span class="c">!&lt; CLI data.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">pref</span><span class="w">  </span><span class="c">!&lt; Prefixing string.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span><span class="w">   </span><span class="kd">::</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="c">!&lt; Error trapping flag.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                                 </span><span class="kd">::</span><span class="w"> </span><span class="n">g</span><span class="w">     </span><span class="c">!&lt; Counter.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                                 </span><span class="kd">::</span><span class="w"> </span><span class="n">gg</span><span class="w">    </span><span class="c">!&lt; Counter.</span>
 
-<span class="w">  </span><span class="c">! verify if CLAs switches are unique</span>
-<span class="w">  </span><span class="n">CLA_unique</span><span class="p">:</span><span class="w"> </span><span class="k">do </span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">Na</span><span class="w"></span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">is_positional</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">      do </span><span class="n">aa</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">Na</span><span class="w"></span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">((</span><span class="n">a</span><span class="o">/=</span><span class="n">aa</span><span class="p">).</span><span class="nb">and</span><span class="p">.(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">aa</span><span class="p">)%</span><span class="n">is_positional</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">          if</span><span class="w"> </span><span class="p">((</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">switch</span><span class="o">==</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">aa</span><span class="p">)%</span><span class="n">switch</span><span class="w">   </span><span class="p">).</span><span class="nb">or</span><span class="p">.(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">switch_ab</span><span class="o">==</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">aa</span><span class="p">)%</span><span class="n">switch</span><span class="w">   </span><span class="p">).</span><span class="nb">or</span><span class="p">.&amp;</span><span class="w"></span>
-<span class="w">              </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">switch</span><span class="o">==</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">aa</span><span class="p">)%</span><span class="n">switch_ab</span><span class="p">).</span><span class="nb">or</span><span class="p">.(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">switch_ab</span><span class="o">==</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">aa</span><span class="p">)%</span><span class="n">switch_ab</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">            call </span><span class="n">self</span><span class="p">%</span><span class="n">errored</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">ERROR_CONSISTENCY</span><span class="p">,</span><span class="w"> </span><span class="n">a1</span><span class="o">=</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">a2</span><span class="o">=</span><span class="n">aa</span><span class="p">)</span><span class="w"></span>
-<span class="w">            </span><span class="k">exit </span><span class="n">CLA_unique</span><span class="w"></span>
-<span class="w">          </span><span class="k">endif</span>
-<span class="k">        endif</span>
-<span class="k">      enddo</span>
+<span class="w">  </span><span class="k">do </span><span class="n">g</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="w"></span>
+<span class="w">    </span><span class="c">! check group consistency</span>
+<span class="w">    </span><span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">check</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">error</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">error</span><span class="p">))</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">exit</span><span class="w"></span>
+<span class="w">    </span><span class="c">! check mutually exclusive interaction</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">g</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">      if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">m_exclude</span><span class="o">/=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">        if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">is_defined_group</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">m_exclude</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="o">=</span><span class="n">gg</span><span class="p">))</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">gg</span><span class="p">)%</span><span class="n">m_exclude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">group</span><span class="w"></span>
+<span class="w">      </span><span class="k">endif</span>
 <span class="k">    endif</span>
-<span class="k">  enddo </span><span class="n">CLA_unique</span><span class="w"></span>
-<span class="w">  </span><span class="c">! update mutually exclusive relations</span>
-<span class="w">  </span><span class="n">CLA_exclude</span><span class="p">:</span><span class="w"> </span><span class="k">do </span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">Na</span><span class="w"></span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">is_positional</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">      if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">m_exclude</span><span class="o">/=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">        if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">is_defined</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">m_exclude</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="o">=</span><span class="n">aa</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">          </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">aa</span><span class="p">)%</span><span class="n">m_exclude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">switch</span><span class="w"></span>
-<span class="w">        </span><span class="k">endif</span>
-<span class="k">      endif</span>
-<span class="k">    endif</span>
-<span class="k">  enddo </span><span class="n">CLA_exclude</span><span class="w"></span>
-<span class="w">  </span><span class="k">endsubroutine </span><span class="n">check</span><span class="w"></span>
+<span class="k">  enddo</span>
+<span class="k">  endsubroutine </span><span class="n">check</span><span class="w"></span>
 </pre></div>
 
     </section>

@@ -105,12 +105,12 @@
 
             <li id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/flap_command_line_arguments_group_t.f90"> Source File</a>
+              <a href="../src/flap_command_line_argument_t.F90"> Source File</a>
             </li>
         </ul>
         <ol class="breadcrumb in-well text-right">
-              <li><a href='../sourcefile/flap_command_line_arguments_group_t.f90.html'>flap_command_line_arguments_group_t.f90</a></li>
-              <li><a href='../module/flap_command_line_arguments_group_t.html'>flap_command_line_arguments_group_t</a></li>
+              <li><a href='../sourcefile/flap_command_line_argument_t.f90.html'>flap_command_line_argument_t.F90</a></li>
+              <li><a href='../module/flap_command_line_argument_t.html'>flap_command_line_argument_t</a></li>
           <li class="active">raise_error_m_exclude</li>
         </ol>
       </div>
@@ -179,8 +179,8 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~8"></span>
-              class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
+              <span class="anchor" id="variable-self~48"></span>
+              class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -194,7 +194,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~4"></span>
+              <span class="anchor" id="variable-pref~25"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -257,8 +257,8 @@
     <h2><span class="anchor" id="src"></span>Source Code</h2>
     <div class="highlight"><pre><span></span><span class="w">  </span><span class="k">subroutine </span><span class="n">raise_error_m_exclude</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">pref</span><span class="p">)</span><span class="w"></span>
 <span class="w">  </span><span class="c">!&lt; Raise error mutually exclusive CLAs passed.</span>
-<span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="n">command_line_arguments_group</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">self</span><span class="w"> </span><span class="c">!&lt; CLA data.</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">              </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">pref</span><span class="w"> </span><span class="c">!&lt; Prefixing string.</span>
+<span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="n">command_line_argument</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">self</span><span class="w"> </span><span class="c">!&lt; CLA data.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">       </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">pref</span><span class="w"> </span><span class="c">!&lt; Prefixing string.</span>
 
 <span class="w">  </span><span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">errored</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">ERROR_M_EXCLUDE</span><span class="p">)</span><span class="w"></span>
 <span class="w">  </span><span class="k">endsubroutine </span><span class="n">raise_error_m_exclude</span><span class="w"></span>

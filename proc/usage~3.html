@@ -100,17 +100,17 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title=" 1.9% of total for procedures.">69 statements</a>
+               title=" 0.9% of total for procedures.">33 statements</a>
           </li>
 
             <li id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/flap_command_line_interface_t.F90"> Source File</a>
+              <a href="../src/flap_command_line_arguments_group_t.f90"> Source File</a>
             </li>
         </ul>
         <ol class="breadcrumb in-well text-right">
-              <li><a href='../sourcefile/flap_command_line_interface_t.f90.html'>flap_command_line_interface_t.F90</a></li>
-              <li><a href='../module/flap_command_line_interface_t.html'>flap_command_line_interface_t</a></li>
+              <li><a href='../sourcefile/flap_command_line_arguments_group_t.f90.html'>flap_command_line_arguments_group_t.f90</a></li>
+              <li><a href='../module/flap_command_line_arguments_group_t.html'>flap_command_line_arguments_group_t</a></li>
           <li class="active">usage</li>
         </ol>
       </div>
@@ -160,11 +160,11 @@
     </div>
     
     <div class="col-md-9" id='text'>
-    <h2>private  function usage(self, g, pref, no_header, no_examples, no_epilog, markdown) result(usaged)  
+    <h2>private  function usage(self, pref, no_header, markdown)  
 </h2>
     
 
-    <p>Print correct usage of CLI.</p>
+    <p>Get correct CLAsG usage.</p>
 
     <h3>Arguments</h3>
         <table class="table table-striped varlist">
@@ -179,8 +179,8 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~60"></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              <span class="anchor" id="variable-self~78"></span>
+              class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -189,27 +189,12 @@
             <td>::</td>
             <td><strong>self</strong></td>
             <td>
-                <p>CLI data.</p>
+                <p>CLAsG data.</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-g~5"></span>
-              integer(kind=I4P),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>g</strong></td>
-            <td>
-                <p>Group index.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-pref~41"></span>
+              <span class="anchor" id="variable-pref~51"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -239,36 +224,6 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-no_examples"></span>
-              logical,
-            </td>
-<td>intent(in),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>no_examples</strong></td>
-            <td>
-                <p>Avoid insert examples to usage.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-no_epilog"></span>
-              logical,
-            </td>
-<td>intent(in),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>no_epilog</strong></td>
-            <td>
-                <p>Avoid insert epilogue to usage.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
               <span class="anchor" id="variable-markdown~3"></span>
               logical,
             </td>
@@ -279,7 +234,7 @@
             <td>::</td>
             <td><strong>markdown</strong></td>
             <td>
-                <p>Format things with markdown</p>
+                <p>Format things form markdown.</p>
             </td>
         </tr>
     </tbody>
@@ -287,7 +242,7 @@
 
       <h3>Return Value
         <small>
-          <span class="anchor" id="variable-usaged"></span>
+          <span class="anchor" id="variable-usage~4"></span>
           character(len=:), allocatable
         </small>
       </h3>
@@ -337,75 +292,40 @@
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span></span><span class="w">  </span><span class="k">function </span><span class="n">usage</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">no_header</span><span class="p">,</span><span class="w"> </span><span class="n">no_examples</span><span class="p">,</span><span class="w"> </span><span class="n">no_epilog</span><span class="p">,</span><span class="w"> </span><span class="n">markdown</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">usaged</span><span class="p">)</span><span class="w"></span>
-<span class="w">  </span><span class="c">!&lt; Print correct usage of CLI.</span>
-<span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="n">command_line_interface</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">self</span><span class="w">             </span><span class="c">!&lt; CLI data.</span>
-<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span><span class="w">                  </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">g</span><span class="w">                </span><span class="c">!&lt; Group index.</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">pref</span><span class="w">             </span><span class="c">!&lt; Prefixing string.</span>
-<span class="w">  </span><span class="kt">logical</span><span class="p">,</span><span class="w">      </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">no_header</span><span class="w">        </span><span class="c">!&lt; Avoid insert header to usage.</span>
-<span class="w">  </span><span class="kt">logical</span><span class="p">,</span><span class="w">      </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">no_examples</span><span class="w">      </span><span class="c">!&lt; Avoid insert examples to usage.</span>
-<span class="w">  </span><span class="kt">logical</span><span class="p">,</span><span class="w">      </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">no_epilog</span><span class="w">        </span><span class="c">!&lt; Avoid insert epilogue to usage.</span>
-<span class="w">  </span><span class="kt">logical</span><span class="p">,</span><span class="w">      </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">markdown</span><span class="w">         </span><span class="c">!&lt; Format things with markdown</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w">             </span><span class="kd">::</span><span class="w"> </span><span class="n">prefd</span><span class="w">            </span><span class="c">!&lt; Prefixing string.</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w">             </span><span class="kd">::</span><span class="w"> </span><span class="n">usaged</span><span class="w">           </span><span class="c">!&lt; Usage string.</span>
-<span class="w">  </span><span class="kt">logical</span><span class="w">                                   </span><span class="kd">::</span><span class="w"> </span><span class="n">no_headerd</span><span class="w">       </span><span class="c">!&lt; Avoid insert header to usage.</span>
-<span class="w">  </span><span class="kt">logical</span><span class="w">                                   </span><span class="kd">::</span><span class="w"> </span><span class="n">no_examplesd</span><span class="w">     </span><span class="c">!&lt; Avoid insert examples to usage.</span>
-<span class="w">  </span><span class="kt">logical</span><span class="w">                                   </span><span class="kd">::</span><span class="w"> </span><span class="n">no_epilogd</span><span class="w">       </span><span class="c">!&lt; Avoid insert epilogue to usage.</span>
-<span class="w">  </span><span class="kt">logical</span><span class="w">                                   </span><span class="kd">::</span><span class="w"> </span><span class="n">markdownd</span><span class="w">        </span><span class="c">!&lt; Format for markdown.</span>
-<span class="w">  </span><span class="kt">logical</span><span class="w">                                   </span><span class="kd">::</span><span class="w"> </span><span class="n">grouped_examples</span><span class="w"> </span><span class="c">!&lt; Will show examples of group usage.</span>
-<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                              </span><span class="kd">::</span><span class="w"> </span><span class="n">gi</span><span class="w">               </span><span class="c">!&lt; Counter.</span>
+    <div class="highlight"><pre><span></span><span class="w">  </span><span class="k">function </span><span class="n">usage</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">no_header</span><span class="p">,</span><span class="w"> </span><span class="n">markdown</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="c">!&lt; Get correct CLAsG usage.</span>
+<span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="n">command_line_arguments_group</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">self</span><span class="w">      </span><span class="c">!&lt; CLAsG data.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">              </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">pref</span><span class="w">      </span><span class="c">!&lt; Prefixing string.</span>
+<span class="w">  </span><span class="kt">logical</span><span class="p">,</span><span class="w">      </span><span class="k">optional</span><span class="p">,</span><span class="w">              </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">no_header</span><span class="w"> </span><span class="c">!&lt; Avoid insert header to usage.</span>
+<span class="w">  </span><span class="kt">logical</span><span class="p">,</span><span class="w">      </span><span class="k">optional</span><span class="p">,</span><span class="w">              </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">markdown</span><span class="w">  </span><span class="c">!&lt; Format things form markdown.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w">                   </span><span class="kd">::</span><span class="w"> </span><span class="n">usage</span><span class="w">     </span><span class="c">!&lt; Usage string.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                                    </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="w">         </span><span class="c">!&lt; Counters.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w">                   </span><span class="kd">::</span><span class="w"> </span><span class="n">prefd</span><span class="w">     </span><span class="c">!&lt; Prefixing string.</span>
+<span class="w">  </span><span class="kt">logical</span><span class="w">                                         </span><span class="kd">::</span><span class="w"> </span><span class="n">markdownd</span><span class="w"> </span><span class="c">!&lt; Markdonw format, local variable.</span>
 
-<span class="w">  </span><span class="n">no_headerd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">no_header</span><span class="p">))</span><span class="w"> </span><span class="n">no_headerd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">no_header</span><span class="w"></span>
-<span class="w">  </span><span class="n">no_examplesd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">no_examples</span><span class="p">))</span><span class="w"> </span><span class="n">no_examplesd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">no_examples</span><span class="w"></span>
-<span class="w">  </span><span class="n">no_epilogd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">no_epilog</span><span class="p">))</span><span class="w"> </span><span class="n">no_epilogd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">no_epilog</span><span class="w"></span>
 <span class="w">  </span><span class="n">markdownd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">markdown</span><span class="p">))</span><span class="w"> </span><span class="n">markdownd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">markdown</span><span class="w"></span>
 <span class="w">  </span><span class="n">prefd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">pref</span><span class="p">))</span><span class="w"> </span><span class="n">prefd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pref</span><span class="w"></span>
-<span class="w">  </span><span class="n">grouped_examples</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"></span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">g</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="c">! usage of a specific command</span>
-<span class="w">    </span><span class="n">usaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">usage</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">prefd</span><span class="p">,</span><span class="n">no_header</span><span class="o">=</span><span class="n">no_headerd</span><span class="p">,</span><span class="n">markdown</span><span class="o">=</span><span class="n">markdownd</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">examples</span><span class="p">).</span><span class="nb">and</span><span class="p">.(.</span><span class="nb">not</span><span class="p">.</span><span class="n">no_examplesd</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">      </span><span class="n">usaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usaged</span><span class="o">//</span><span class="n">print_examples</span><span class="p">(</span><span class="n">prefd</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">examples</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="n">grouped_examples</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
-<span class="w">    </span><span class="k">endif</span>
-<span class="k">  else</span><span class="w"> </span><span class="c">! usage of whole CLI</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">no_headerd</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">      </span><span class="n">usaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="k">else</span>
-<span class="k">      </span><span class="n">usaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">help</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="s1">&#39; &#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">signature</span><span class="p">()</span><span class="w"></span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">description</span><span class="o">/=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"> </span><span class="n">usaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usaged</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">description</span><span class="w"></span>
-<span class="w">    </span><span class="k">endif</span>
-<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="mi">0</span><span class="p">)%</span><span class="n">Na</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">usaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usaged</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="mi">0</span><span class="p">)%</span><span class="n">usage</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">prefd</span><span class="p">,</span><span class="n">no_header</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="n">markdown</span><span class="o">=</span><span class="n">markdownd</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">      </span><span class="n">usaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usaged</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;Commands:&#39;</span><span class="w"></span>
-<span class="w">      </span><span class="k">do </span><span class="n">gi</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="w"></span>
-<span class="w">        </span><span class="n">usaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usaged</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;  &#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">gi</span><span class="p">)%</span><span class="n">group</span><span class="w"></span>
-<span class="w">        </span><span class="n">usaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usaged</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="nb">repeat</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">gi</span><span class="p">)%</span><span class="n">description</span><span class="w"></span>
-<span class="w">      </span><span class="k">enddo</span>
-<span class="k">      </span><span class="n">usaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usaged</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;For more detailed commands help try:&#39;</span><span class="w"></span>
-<span class="w">      </span><span class="k">do </span><span class="n">gi</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="w"></span>
-<span class="w">        </span><span class="n">usaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usaged</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;  &#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="s1">&#39; &#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">gi</span><span class="p">)%</span><span class="n">group</span><span class="o">//</span><span class="s1">&#39; -h,--help&#39;</span><span class="w"></span>
-<span class="w">      </span><span class="k">enddo</span>
-<span class="k">    endif</span>
-<span class="k">  endif</span>
-<span class="k">  if</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">examples</span><span class="p">).</span><span class="nb">and</span><span class="p">.(.</span><span class="nb">not</span><span class="p">.</span><span class="n">no_examplesd</span><span class="p">).</span><span class="nb">and</span><span class="p">.(.</span><span class="nb">not</span><span class="p">.</span><span class="n">grouped_examples</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">    </span><span class="n">usaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usaged</span><span class="o">//</span><span class="n">print_examples</span><span class="p">(</span><span class="n">prefd</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">examples</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">progname</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">group</span><span class="o">/=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"> </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="s1">&#39; &#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">group</span><span class="w"></span>
+<span class="w">  </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">help</span><span class="o">//</span><span class="s1">&#39; &#39;</span><span class="o">//</span><span class="n">usage</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">signature</span><span class="p">()</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">description</span><span class="o">/=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"> </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usage</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">description</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">no_header</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">no_header</span><span class="p">)</span><span class="w"> </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"></span>
 <span class="w">  </span><span class="k">endif</span>
-<span class="k">  if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">epilog</span><span class="o">/=</span><span class="s1">&#39;&#39;</span><span class="p">.</span><span class="nb">and</span><span class="p">.(.</span><span class="nb">not</span><span class="p">.</span><span class="n">no_epilogd</span><span class="p">))</span><span class="w"> </span><span class="n">usaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usaged</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">epilog</span><span class="w"></span>
-
-<span class="w">  </span><span class="k">contains</span>
-<span class="k">    function </span><span class="n">print_examples</span><span class="p">(</span><span class="n">prefd</span><span class="p">,</span><span class="w"> </span><span class="n">examples</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">exampled</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="c">!&lt; Print examples of the correct usage.</span>
-<span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w">     </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">  </span><span class="kd">::</span><span class="w"> </span><span class="n">prefd</span><span class="w">          </span><span class="c">!&lt; Prefixing string.</span>
-<span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w">     </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">  </span><span class="kd">::</span><span class="w"> </span><span class="n">examples</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span><span class="w">   </span><span class="c">!&lt; Examples to be printed.</span>
-<span class="w">      </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">exampled</span><span class="w">       </span><span class="c">!&lt; Examples string.</span>
-<span class="w">      </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                  </span><span class="kd">::</span><span class="w"> </span><span class="n">e</span><span class="w">              </span><span class="c">!&lt; Counter.</span>
-
-<span class="w">      </span><span class="n">exampled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;Examples:&#39;</span><span class="w"></span>
-<span class="w">      </span><span class="k">do </span><span class="n">e</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">examples</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="n">exampled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">exampled</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;   &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">examples</span><span class="p">(</span><span class="n">e</span><span class="p">))</span><span class="w"></span>
-<span class="w">      </span><span class="k">enddo</span>
-<span class="k">    endfunction </span><span class="n">print_examples</span><span class="w"></span>
-<span class="w">  </span><span class="k">endfunction </span><span class="n">usage</span><span class="w"></span>
+<span class="k">  if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Na_required</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">    </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usage</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;Required switches:&#39;</span><span class="w"></span>
+<span class="w">    </span><span class="k">do </span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">Na</span><span class="w"></span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">is_required</span><span class="p">.</span><span class="nb">and</span><span class="p">.(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">is_hidden</span><span class="p">))</span><span class="w"> </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usage</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">        </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">usage</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">prefd</span><span class="p">,</span><span class="n">markdown</span><span class="o">=</span><span class="n">markdownd</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">enddo</span>
+<span class="k">  endif</span>
+<span class="k">  if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Na_optional</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">    </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usage</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;Optional switches:&#39;</span><span class="w"></span>
+<span class="w">    </span><span class="k">do </span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">Na</span><span class="w"></span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">is_required</span><span class="p">.</span><span class="nb">and</span><span class="p">.(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">is_hidden</span><span class="p">))</span><span class="w"> </span><span class="n">usage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usage</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">        </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">usage</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">prefd</span><span class="p">,</span><span class="n">markdown</span><span class="o">=</span><span class="n">markdownd</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">enddo</span>
+<span class="k">  endif</span>
+<span class="k">  endfunction </span><span class="n">usage</span><span class="w"></span>
 </pre></div>
 
     </section>
