@@ -290,13 +290,13 @@ contains
           endselect
           if (trim(adjustl(self%switch))/=trim(adjustl(self%switch_ab))) then
             if (markdownd) then
-              usage = new_line('a')//'* `'//trim(adjustl(self%switch))//usage//'`, `'//trim(adjustl(self%switch_ab))//usage//'`'
+              usage = new_line('a')//'* `'//trim(adjustl(self%switch))//usage//'`, `'//trim(adjustl(self%switch_ab))//usage//'`  '
             else
               usage = '   '//switch_//usage//', '//switch_ab_//usage
             endif
           else
             if (markdownd) then
-              usage = new_line('a')//'* `'//trim(adjustl(self%switch))//usage//'`'
+              usage = new_line('a')//'* `'//trim(adjustl(self%switch))//usage//'`  '
             else
               usage = '   '//switch_//usage
             endif
@@ -304,13 +304,13 @@ contains
         else
           if (trim(adjustl(self%switch))/=trim(adjustl(self%switch_ab))) then
             if (markdownd) then
-              usage = new_line('a')//'* `'//trim(adjustl(self%switch))//' value`, `'//trim(adjustl(self%switch_ab))//' value'//'`'
+              usage = new_line('a')//'* `'//trim(adjustl(self%switch))//' value`, `'//trim(adjustl(self%switch_ab))//' value'//'`  '
             else
               usage = '   '//switch_//' value, '//switch_ab_//' value'
             endif
           else
             if (markdownd) then
-              usage = new_line('a')//'* `'//trim(adjustl(self%switch))//' value`'
+              usage = new_line('a')//'* `'//trim(adjustl(self%switch))//' value`  '
             else
               usage = '   '//switch_//' value'
             endif
@@ -330,13 +330,13 @@ contains
     else
       if (trim(adjustl(self%switch))/=trim(adjustl(self%switch_ab))) then
         if (markdownd) then
-          usage = new_line('a')//'* `'//trim(adjustl(self%switch))//'`, `'//trim(adjustl(self%switch_ab))//'`'
+          usage = new_line('a')//'* `'//trim(adjustl(self%switch))//'`, `'//trim(adjustl(self%switch_ab))//'`  '
         else
           usage = '   '//switch_//', '//switch_ab_
         endif
       else
         if (markdownd) then
-          usage = new_line('a')//'* `'//trim(adjustl(self%switch))//'`'
+          usage = new_line('a')//'* `'//trim(adjustl(self%switch))//'`  '
         else
           usage = '   '//switch_
         endif
@@ -344,8 +344,14 @@ contains
     endif
     prefd = '' ; if (present(pref)) prefd = pref
     usage = prefd//usage
-    if (self%is_positional) usage = usage//new_line('a')//prefd//repeat(' ',indent)//trim(str(self%position, .true.))//&
-      '-th argument'
+    if (self%is_positional)then
+      ! two spaces make a line break in markdown.
+      if (markdownd) then
+        usage = usage//'  '
+      endif
+      usage = usage//new_line('a')//prefd//repeat(' ',4)//trim(str(self%position, .true.))//&
+       '-th argument'
+    endif
     if (allocated(self%envvar)) then
       if (self%envvar /= '') then
         usage = usage//new_line('a')//prefd//repeat(' ',10)//'environment variable name "'//trim(adjustl(self%envvar))//'"'
@@ -363,9 +369,9 @@ contains
     endif
     if (self%m_exclude/='') usage = usage//new_line('a')//prefd//repeat(' ', indent)//'mutually exclude "'//self%m_exclude//'"'
     if (markdownd) then
-      usage = usage//'  '//new_line('a')//prefd//repeat(' ',4)//trim(adjustl(self%help))
+      usage = usage//'  '//new_line('a')//prefd//repeat(' ',4)//trim(adjustl(self%help))//'  '
       if (self%help_markdown/='') then
-        usage = usage//trim(adjustl(self%help_markdown))
+        usage = usage//trim(adjustl(self%help_markdown))//'  '
       endif
     else
       usage = usage//new_line('a')//prefd//repeat(' ', indent)//trim(adjustl(self%help))
