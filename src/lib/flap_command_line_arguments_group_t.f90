@@ -473,6 +473,7 @@ contains
   endif
   if (self%Na_required>0) then
     usage = usage//new_line('a')//new_line('a')//prefd//'Required switches:'
+    if(markdownd)usage = usage//'  '
     do a=1, self%Na
       if (self%cla(a)%is_required.and.(.not.self%cla(a)%is_hidden)) usage = usage//new_line('a')//&
         self%cla(a)%usage(pref=prefd,markdown=markdownd)
@@ -480,6 +481,7 @@ contains
   endif
   if (self%Na_optional>0) then
     usage = usage//new_line('a')//new_line('a')//prefd//'Optional switches:'
+    if(markdownd)usage = usage//'  '
     do a=1, self%Na
       if (.not.self%cla(a)%is_required.and.(.not.self%cla(a)%is_hidden)) usage = usage//new_line('a')//&
         self%cla(a)%usage(pref=prefd,markdown=markdownd)
