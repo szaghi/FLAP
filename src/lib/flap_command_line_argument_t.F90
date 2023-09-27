@@ -319,7 +319,11 @@ contains
           endif
         endif
       else
-        usage = '  value'
+        if (markdownd) then
+          usage = new_line('a')//'* value'
+        else
+          usage = '  value'
+        endif
       endif
       if (allocated(self%choices)) then
         usage = usage//', value in: `'//self%choices//'`'
