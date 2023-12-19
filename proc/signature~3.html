@@ -10,81 +10,55 @@
 
     <title>signature &ndash; FLAP</title>
 
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="../css/pygments.css" rel="stylesheet">
     <link href="../css/font-awesome.min.css" rel="stylesheet">
     <link href="../css/local.css" rel="stylesheet">
       <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <![endif]-->
-
-         <script src="../js/jquery-2.1.3.min.js"></script>
-         <script src="../js/svg-pan-zoom.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
   </head>
 
   <body>
 
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
           <a class="navbar-brand" href="../index.html">FLAP </a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
-              <a href="#" class="dropdown-toggle"
-                 data-toggle="dropdown" role="button"
-                 aria-haspopup="true"
-                 aria-expanded="false">
-                 Contents <span class="caret"></span>
-              </a>
-              <ul class="dropdown-menu">
-                    <li><a href="../lists/files.html">Source Files</a></li>
-                  <li><a href="../lists/modules.html">Modules</a></li>
-                  <li><a href="../lists/procedures.html">Procedures</a></li>
-                  <li><a href="../lists/types.html">Derived Types</a></li>
-                  <li><a href="../lists/programs.html">Programs</a></li>
-              </ul>
-            </li>
-                <li class="visible-xs hidden-sm visible-lg">
-                  <a href="../lists/files.html">Source Files</a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
                 </li>
-              <li class="visible-xs hidden-sm visible-lg">
-                <a href="../lists/modules.html">Modules</a>
-              </li>
-              <li class="visible-xs hidden-sm visible-lg">
-                <a href="../lists/procedures.html">Procedures</a>
-              </li>
-              <li class="visible-xs hidden-sm visible-lg">
-                <a href="../lists/types.html">Derived Types</a>
-              </li>
-              <li class="visible-xs hidden-sm visible-lg">
-                <a href="../lists/programs.html">Programs</a>
-              </li>
-          </ul>
-            <form action="../search.html" class="navbar-form navbar-right" role="search">
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
               </div>
-              <!--
-                  <button type="submit" class="btn btn-default">Submit</button>
-                  -->
-            </form>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
 
     <div class="container">
   <div class="row">
@@ -92,33 +66,37 @@
       <small>Function</small>
       
     </h1>
-      <div class="row" id="info-bar">
-    <div class="col-lg-12">
-      <div class="well well-sm">
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
         <ul class="list-inline" style="margin-bottom:0px;display:inline">
 
-          <li id="statements"><i class="fa fa-list-ol"></i>
-            <a data-toggle="tooltip"
-               data-placement="bottom" data-html="true"
-               title=" 0.5% of total for procedures.">20 statements</a>
-          </li>
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip"
+                 data-bs-placement="bottom" data-html="true"
+                 title=" 0.8% of total for procedures.">28 statements</a>
+            </li>
 
-            <li id="source-file">
+            <li class="list-inline-item" id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/flap_command_line_arguments_group_t.f90"> Source File</a>
+              <a href="../src/flap_command_line_interface_t.F90"> Source File</a>
             </li>
         </ul>
-        <ol class="breadcrumb in-well text-right">
-              <li><a href='../sourcefile/flap_command_line_arguments_group_t.f90.html'>flap_command_line_arguments_group_t.f90</a></li>
-              <li><a href='../module/flap_command_line_arguments_group_t.html'>flap_command_line_arguments_group_t</a></li>
-          <li class="active">signature</li>
-        </ol>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/flap_command_line_interface_t.f90.html'>flap_command_line_interface_t.F90</a></li>
+                <li class="breadcrumb-item"><a href='../module/flap_command_line_interface_t.html'>flap_command_line_interface_t</a></li>
+            <li class="breadcrumb-item active" aria-current="page">signature</li>
+          </ol>
+        </nav>
       </div>
     </div>
   </div>
   <script>
     $(function () {
-    $('[data-toggle="tooltip"]').tooltip()
+    $('[data-bs-toggle="tooltip"]').tooltip()
     })
   </script>
 
@@ -147,8 +125,9 @@
   
   
   
-    <div class="panel panel-primary">
-      <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
       <div class="list-group">
         <a class="list-group-item" href="../proc/signature~3.html#src">signature</a>
       </div>
@@ -160,27 +139,30 @@
     </div>
     
     <div class="col-md-9" id='text'>
-    <h2>private  function signature(self, bash_completion, plain)  
+    <h2>private  function signature(self, bash_completion)  
 </h2>
     
 
-    <p>Get CLAsG signature.</p>
+    <p>Get signature.</p>
+
+    <h3>Type Bound</h3>
+    <p><a href='../type/command_line_interface.html'>command_line_interface</a></p>
 
     <h3>Arguments</h3>
         <table class="table table-striped varlist">
     <thead>
       <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
     </thead>
     <tbody>
         <tr>
             <td>
               <span class="anchor" id="variable-self~79"></span>
-              class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
+              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -189,7 +171,7 @@
             <td>::</td>
             <td><strong>self</strong></td>
             <td>
-                <p>CLAsG data.</p>
+                <p>CLI data.</p>
             </td>
         </tr>
         <tr>
@@ -207,64 +189,182 @@
                 <p>Return the signature for bash completion.</p>
             </td>
         </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-plain~2"></span>
-              logical,
-            </td>
-<td>intent(in),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>plain</strong></td>
-            <td>
-                <p>Return the signature as plain switches list.</p>
-            </td>
-        </tr>
     </tbody>
   </table>
 
       <h3>Return Value
         <small>
-          <span class="anchor" id="variable-signature~5"></span>
+          <span class="anchor" id="variable-signature~6"></span>
           character(len=:), allocatable
         </small>
       </h3>
       <p>Signature.</p>
     <br>
+    <div class="card">
+      <div class="card-header">
+  <h3 class="card-title">Calls</h3>
+      </div>
+      <div class="card-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: proc~~signature~3~~CallsGraph Pages: 1 -->
+<svg id="procsignature3CallsGraph" width="641pt" height="27pt"
+ viewBox="0.00 0.00 641.00 27.07" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~signature~3~~CallsGraph" class="graph" transform="scale(2.73 2.73) rotate(0) translate(4 70)">
+<title>proc~~signature~3~~CallsGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-70 1748,-70 1748,4 -4,4"/>
+<!-- proc~signature~3 -->
+<g id="proc~~signature~3~~CallsGraph_node1" class="node">
+<title>proc~signature~3</title>
+<polygon fill="none" stroke="black" points="378,-45 0,-45 0,-21 378,-21 378,-45"/>
+<text text-anchor="middle" x="189" y="-30.6" font-family="Helvetica,sans-Serif" font-size="10.50">flap_command_line_interface_t::command_line_interface%signature</text>
+</g>
+<!-- proc~signature~2 -->
+<g id="proc~~signature~3~~CallsGraph_node2" class="node">
+<title>proc~signature~2</title>
+<g id="a_proc~~signature~3~~CallsGraph_node2"><a xlink:href=".././proc/signature~2.html" xlink:title="flap_command_line_arguments_group_t::command_line_arguments_group%signature">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="883,-45 414,-45 414,-21 883,-21 883,-45"/>
+<text text-anchor="middle" x="648.5" y="-30.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_arguments_group_t::command_line_arguments_group%signature</text>
+</a>
+</g>
+</g>
+<!-- proc~signature~3&#45;&gt;proc~signature~2 -->
+<g id="proc~~signature~3~~CallsGraph_edge1" class="edge">
+<title>proc~signature~3&#45;&gt;proc~signature~2</title>
+<path fill="none" stroke="#000000" d="M378.06,-33C386.57,-33 395.15,-33 403.75,-33"/>
+<polygon fill="#000000" stroke="#000000" points="403.87,-36.5 413.87,-33 403.87,-29.5 403.87,-36.5"/>
+</g>
+<!-- proc~signature -->
+<g id="proc~~signature~3~~CallsGraph_node3" class="node">
+<title>proc~signature</title>
+<g id="a_proc~~signature~3~~CallsGraph_node3"><a xlink:href=".././proc/signature.html" xlink:title="flap_command_line_argument_t::command_line_argument%signature">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="1306,-45 919,-45 919,-21 1306,-21 1306,-45"/>
+<text text-anchor="middle" x="1112.5" y="-30.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%signature</text>
+</a>
+</g>
+</g>
+<!-- proc~signature~2&#45;&gt;proc~signature -->
+<g id="proc~~signature~3~~CallsGraph_edge2" class="edge">
+<title>proc~signature~2&#45;&gt;proc~signature</title>
+<path fill="none" stroke="#000000" d="M883.21,-33C891.81,-33 900.41,-33 908.96,-33"/>
+<polygon fill="#000000" stroke="#000000" points="908.97,-36.5 918.97,-33 908.97,-29.5 908.97,-36.5"/>
+</g>
+<!-- cton -->
+<g id="proc~~signature~3~~CallsGraph_node4" class="node">
+<title>cton</title>
+<polygon fill="#777777" stroke="#777777" points="1570,-66 1516,-66 1516,-42 1570,-42 1570,-66"/>
+<text text-anchor="middle" x="1543" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">cton</text>
+</g>
+<!-- proc~signature&#45;&gt;cton -->
+<g id="proc~~signature~3~~CallsGraph_edge3" class="edge">
+<title>proc~signature&#45;&gt;cton</title>
+<path fill="none" stroke="#000000" d="M1306.13,-42.44C1381.87,-46.15 1461.25,-50.04 1505.89,-52.23"/>
+<polygon fill="#000000" stroke="#000000" points="1505.78,-55.73 1515.94,-52.72 1506.12,-48.74 1505.78,-55.73"/>
+</g>
+<!-- proc~has_choices -->
+<g id="proc~~signature~3~~CallsGraph_node5" class="node">
+<title>proc~has_choices</title>
+<g id="a_proc~~signature~3~~CallsGraph_node5"><a xlink:href=".././proc/has_choices.html" xlink:title="flap_command_line_argument_t::command_line_argument%has_choices">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="1744,-24 1342,-24 1342,0 1744,0 1744,-24"/>
+<text text-anchor="middle" x="1543" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%has_choices</text>
+</a>
+</g>
+</g>
+<!-- proc~signature&#45;&gt;proc~has_choices -->
+<g id="proc~~signature~3~~CallsGraph_edge4" class="edge">
+<title>proc~signature&#45;&gt;proc~has_choices</title>
+<path fill="none" stroke="#000000" d="M1306.13,-23.56C1314.68,-23.14 1323.27,-22.72 1331.86,-22.3"/>
+<polygon fill="#000000" stroke="#000000" points="1332.11,-25.79 1341.93,-21.81 1331.77,-18.8 1332.11,-25.79"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var panprocsignature3CallsGraph = svgPanZoom('#procsignature3CallsGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>        <div><a type="button" class="graph-help" data-toggle="modal" href="#CallsGraph-help-text">Help</a></div>
+          <div class="modal fade" id="CallsGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                </div>
+              <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 27.51" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1.16 1.16) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 741.5,-28 741.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="146,-24 88,-24 88,0 146,0 146,-24"/>
+<text text-anchor="middle" x="117" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="225.5,-24 164.5,-24 164.5,0 225.5,0 225.5,-24"/>
+<text text-anchor="middle" x="195" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Type Bound Procedure -->
+<g id="node4" class="node">
+<title>Type Bound Procedure</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="374,-24 244,-24 244,0 374,0 374,-24"/>
+<text text-anchor="middle" x="309" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type Bound Procedure</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node5" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="537.5,-24 392.5,-24 392.5,0 537.5,0 537.5,-24"/>
+<text text-anchor="middle" x="465" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node6" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="614,-24 556,-24 556,0 614,0 614,-24"/>
+<text text-anchor="middle" x="585" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node7" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="737.5,-24 632.5,-24 632.5,0 737.5,0 737.5,-24"/>
+<text text-anchor="middle" x="685" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
 
-    <section class="visible-xs visible-sm hidden-md">
-        <h3>Contents</h3>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-    <div class="panel panel-primary">
-      <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
-      <div class="list-group">
-        <a class="list-group-item" href="../proc/signature~3.html#src">signature</a>
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.
+</p>
+ </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-
-
-    </section>
-    <br class="visible-xs visible-sm hidden-md">
+    <br>
 
 
     
@@ -272,88 +372,42 @@
 
     
     
+
 
 
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span></span><span class="w">  </span><span class="k">function </span><span class="n">signature</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">bash_completion</span><span class="p">,</span><span class="w"> </span><span class="n">plain</span><span class="p">)</span><span class="w"></span>
-<span class="w">  </span><span class="c">!&lt; Get CLAsG signature.</span>
-<span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="n">command_line_arguments_group</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">self</span><span class="w">             </span><span class="c">!&lt; CLAsG data.</span>
-<span class="w">  </span><span class="kt">logical</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">                   </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bash_completion</span><span class="w">  </span><span class="c">!&lt; Return the signature for bash completion.</span>
-<span class="w">  </span><span class="kt">logical</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">                   </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">plain</span><span class="w">            </span><span class="c">!&lt; Return the signature as plain switches list.</span>
-<span class="w">  </span><span class="c">! logical                                         :: plain_           !&lt; Return the signature as plain switches list, local var.</span>
-<span class="w">  </span><span class="kt">logical</span><span class="w">                                         </span><span class="kd">::</span><span class="w"> </span><span class="n">bash_completion_</span><span class="w"> </span><span class="c">!&lt; Return the signature for bash completion, local variable.</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w">                   </span><span class="kd">::</span><span class="w"> </span><span class="n">signature</span><span class="w">        </span><span class="c">!&lt; Signature.</span>
-<span class="w">  </span><span class="c">! logical                                         :: clas_choices     !&lt; Flag to check if there are CLAs with choices.</span>
-<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                                    </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="c">!, aa            !&lt; Counter.</span>
+    <div class="hl codehilite"><pre><span></span><span class="w">  </span><span class="k">function </span><span class="n">signature</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">bash_completion</span><span class="p">)</span>
+<span class="w">  </span><span class="c">!&lt; Get signature.</span>
+<span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="n">command_line_interface</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">self</span><span class="w">             </span><span class="c">!&lt; CLI data.</span>
+<span class="w">  </span><span class="kt">logical</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">             </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bash_completion</span><span class="w">  </span><span class="c">!&lt; Return the signature for bash completion.</span>
+<span class="w">  </span><span class="kt">logical</span><span class="w">                                   </span><span class="kd">::</span><span class="w"> </span><span class="n">bash_completion_</span><span class="w"> </span><span class="c">!&lt; Return the signature for bash completion, local variable.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w">             </span><span class="kd">::</span><span class="w"> </span><span class="n">signature</span><span class="w">        </span><span class="c">!&lt; Signature.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                              </span><span class="kd">::</span><span class="w"> </span><span class="n">g</span><span class="w">                </span><span class="c">!&lt; Counter.</span>
 
-<span class="w">  </span><span class="n">signature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"></span>
-<span class="w">  </span><span class="n">bash_completion_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">bash_completion</span><span class="p">))</span><span class="w"> </span><span class="n">bash_completion_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bash_completion</span><span class="w"></span>
-<span class="w">  </span><span class="c">! plain_ = .false. ; if (present(plain)) plain_ = plain</span>
-<span class="w">  </span><span class="c">! if (bash_completion_) then</span>
-<span class="w">  </span><span class="c">!   ! if (plain_) then</span>
-<span class="w">  </span><span class="c">!   !   do a=1, self%Na</span>
-<span class="w">  </span><span class="c">!   !     signature = signature//self%cla(a)%signature(bash_completion=bash_completion, plain=plain)</span>
-<span class="w">  </span><span class="c">!   !   enddo</span>
-<span class="w">  </span><span class="c">!   ! else</span>
-<span class="w">  </span><span class="c">!     clas_choices = .false.</span>
-<span class="w">  </span><span class="c">!     do a=1, self%Na</span>
-<span class="w">  </span><span class="c">!       if (self%cla(a)%has_choices()) then</span>
-<span class="w">  </span><span class="c">!         aa = a</span>
-<span class="w">  </span><span class="c">!         clas_choices = .true.</span>
-<span class="w">  </span><span class="c">!         exit</span>
-<span class="w">  </span><span class="c">!       endif</span>
-<span class="w">  </span><span class="c">!     enddo</span>
-<span class="w">  </span><span class="c">!     if (clas_choices) then</span>
-<span class="w">  </span><span class="c">!       signature = signature//new_line(&#39;a&#39;)//&amp;</span>
-<span class="w">  </span><span class="c">!                   &#39;    if [ &quot;$prev&quot; == &quot;&#39;//self%cla(aa)%switch//&#39;&quot; ] || [ &quot;$prev&quot; == &quot;&#39;//self%cla(aa)%switch_ab//&#39;&quot; ] ; then&#39;</span>
-<span class="w">  </span><span class="c">!       signature = signature//new_line(&#39;a&#39;)//&#39;       COMPREPLY=( $( compgen -W &quot;&#39;//choices(self%cla(aa)%choices)//&#39;&quot; -- $cur ) )&#39;</span>
-<span class="w">  </span><span class="c">!       do a=aa+1, self%Na</span>
-<span class="w">  </span><span class="c">!         if (self%cla(a)%has_choices()) then</span>
-<span class="w">  </span><span class="c">!           signature = signature//new_line(&#39;a&#39;)//&amp;</span>
-<span class="w">  </span><span class="c">!                       &#39;    elif [ &quot;$prev&quot; == &quot;&#39;//self%cla(a)%switch//&#39;&quot; ] || [ &quot;$prev&quot; == &quot;&#39;//self%cla(a)%switch_ab//&#39;&quot; ] ; then&#39;</span>
-<span class="w">  </span><span class="c">!           signature = signature//new_line(&#39;a&#39;)//&#39;       COMPREPLY=( $( compgen -W &quot;&#39;//choices(self%cla(a)%choices)//&amp;</span>
-<span class="w">  </span><span class="c">!                       &#39;&quot; -- $cur ) )&#39;</span>
-<span class="w">  </span><span class="c">!         endif</span>
-<span class="w">  </span><span class="c">!       enddo</span>
-<span class="w">  </span><span class="c">!       signature = signature//new_line(&#39;a&#39;)//&#39;    else&#39;//new_line(&#39;a&#39;)//&#39;      COMPREPLY=( $( compgen -W &quot;&#39;</span>
-<span class="w">  </span><span class="c">!       do a=1, self%Na</span>
-<span class="w">  </span><span class="c">!         signature = signature//self%cla(a)%signature(bash_completion=bash_completion)</span>
-<span class="w">  </span><span class="c">!       enddo</span>
-<span class="w">  </span><span class="c">!       signature = signature//&#39;&quot; -- $cur ) )&#39;//new_line(&#39;a&#39;)//&#39;    fi&#39;</span>
-<span class="w">  </span><span class="c">!     else</span>
-<span class="w">  </span><span class="c">!       signature = signature//new_line(&#39;a&#39;)//&#39;    COMPREPLY=( $( compgen -W &quot;&#39;</span>
-<span class="w">  </span><span class="c">!       do a=1, self%Na</span>
-<span class="w">  </span><span class="c">!         signature = signature//self%cla(a)%signature(bash_completion=bash_completion)</span>
-<span class="w">  </span><span class="c">!       enddo</span>
-<span class="w">  </span><span class="c">!       signature = signature//&#39;&quot; -- $cur ) )&#39;</span>
-<span class="w">  </span><span class="c">!     endif</span>
-<span class="w">  </span><span class="c">!   ! endif</span>
-<span class="w">  </span><span class="c">! else</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">bash_completion_</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">      do </span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">Na</span><span class="w"></span>
-<span class="w">        </span><span class="n">signature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">signature</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">signature</span><span class="p">(</span><span class="n">bash_completion</span><span class="o">=</span><span class="n">bash_completion</span><span class="p">,</span><span class="w"> </span><span class="n">plain</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.)</span><span class="w"></span>
+<span class="w">  </span><span class="n">bash_completion_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">bash_completion</span><span class="p">))</span><span class="w"> </span><span class="n">bash_completion_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bash_completion</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">bash_completion_</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">    </span><span class="n">signature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">signature</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;    COMPREPLY=( )&#39;</span>
+<span class="w">    </span><span class="n">signature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">signature</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;    COMPREPLY+=( $( compgen -W &quot;&#39;</span><span class="o">//</span><span class="p">&amp;</span>
+<span class="w">                </span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="mi">0</span><span class="p">)%</span><span class="n">signature</span><span class="p">(</span><span class="n">bash_completion</span><span class="o">=</span><span class="n">bash_completion</span><span class="p">,</span><span class="w"> </span><span class="n">plain</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.)</span><span class="o">//</span><span class="s1">&#39;&quot; -- $cur ) )&#39;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">      do </span><span class="n">g</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+<span class="w">        </span><span class="n">signature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">signature</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;    COMPREPLY+=( $( compgen -W &quot;&#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">group</span><span class="o">//</span><span class="s1">&#39;&quot; -- $cur ) )&#39;</span>
 <span class="w">      </span><span class="k">enddo</span>
-<span class="k">      </span><span class="n">signature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;    COMPREPLY=( $( compgen -W &quot;&#39;</span><span class="o">//</span><span class="n">signature</span><span class="o">//</span><span class="s1">&#39;&quot; -- $cur ) )&#39;</span><span class="w"></span>
+<span class="k">    endif</span>
+<span class="k">  else</span>
+<span class="k">    </span><span class="n">signature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="mi">0</span><span class="p">)%</span><span class="n">signature</span><span class="p">()</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">      </span><span class="n">signature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">signature</span><span class="o">//</span><span class="s1">&#39; {&#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">group</span>
+<span class="w">      </span><span class="k">do </span><span class="n">g</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+<span class="w">        </span><span class="n">signature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">signature</span><span class="o">//</span><span class="s1">&#39;,&#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">group</span>
+<span class="w">      </span><span class="k">enddo</span>
+<span class="k">      </span><span class="n">signature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">signature</span><span class="o">//</span><span class="s1">&#39;} ...&#39;</span>
 <span class="w">    </span><span class="k">endif</span>
-<span class="k">    do </span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">Na</span><span class="w"></span>
-<span class="w">      </span><span class="n">signature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">signature</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">signature</span><span class="p">(</span><span class="n">bash_completion</span><span class="o">=</span><span class="n">bash_completion</span><span class="p">,</span><span class="w"> </span><span class="n">plain</span><span class="o">=</span><span class="n">plain</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="k">enddo</span><span class="w"></span>
-<span class="w">  </span><span class="c">! endif</span>
-<span class="w">  </span><span class="c">!contains</span>
-<span class="w">  </span><span class="c">!  pure function choices(choices_c)</span>
-<span class="w">  </span><span class="c">!  !&lt; Return space-separated choices list from a comma-separated one.</span>
-<span class="w">  </span><span class="c">!  character(len=*), intent(in)  :: choices_c !&lt; Comma-separated list of choices.</span>
-<span class="w">  </span><span class="c">!  character(len=len(choices_c)) :: choices   !&lt; Space-separated list of choices.</span>
-<span class="w">  </span><span class="c">!  integer(I4P)                  :: c         !&lt; Counter.</span>
-
-<span class="w">  </span><span class="c">!  choices = choices_c</span>
-<span class="w">  </span><span class="c">!  do c=1, len(choices)</span>
-<span class="w">  </span><span class="c">!    if (choices(c:c)==&#39;,&#39;) choices(c:c) = &#39; &#39;</span>
-<span class="w">  </span><span class="c">!  enddo</span>
-<span class="w">  </span><span class="c">!  endfunction choices</span>
-<span class="w">  </span><span class="k">endfunction </span><span class="n">signature</span><span class="w"></span>
+<span class="k">  endif</span>
+<span class="k">  endfunction </span><span class="n">signature</span>
 </pre></div>
 
     </section>
@@ -366,12 +420,12 @@
     </div> <!-- /container -->
     <footer>
       <div class="container">
-        <div class="row">
-          <div class="col-xs-6 col-md-6"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
+        <div class="row justify-content-between">
+          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
 </p>
           </div>
-          <div class="col-xs-6 col-md-6">
-            <p class="text-right">
+          <div class="col">
+            <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
             </p>
@@ -381,17 +435,12 @@
       </div> <!-- /container -->
     </footer>
 
-    <!-- Bootstrap core JavaScript
-         ================================================== -->
-         <!-- Placed at the end of the document so the pages load faster -->
-    <!--
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        -->
-        <script src="../js/bootstrap.min.js"></script>
-        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-        <script src="../js/ie10-viewport-bug-workaround.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
 
-        <!-- MathJax JavaScript
+    <!-- MathJax JavaScript
              ================================================== -->
              <!-- Placed at the end of the document so the pages load faster -->
         <script type="text/x-mathjax-config">

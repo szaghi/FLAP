@@ -10,81 +10,55 @@
 
     <title>get_cla &ndash; FLAP</title>
 
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="../css/pygments.css" rel="stylesheet">
     <link href="../css/font-awesome.min.css" rel="stylesheet">
     <link href="../css/local.css" rel="stylesheet">
       <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <![endif]-->
-
-         <script src="../js/jquery-2.1.3.min.js"></script>
-         <script src="../js/svg-pan-zoom.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
   </head>
 
   <body>
 
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
           <a class="navbar-brand" href="../index.html">FLAP </a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
-              <a href="#" class="dropdown-toggle"
-                 data-toggle="dropdown" role="button"
-                 aria-haspopup="true"
-                 aria-expanded="false">
-                 Contents <span class="caret"></span>
-              </a>
-              <ul class="dropdown-menu">
-                    <li><a href="../lists/files.html">Source Files</a></li>
-                  <li><a href="../lists/modules.html">Modules</a></li>
-                  <li><a href="../lists/procedures.html">Procedures</a></li>
-                  <li><a href="../lists/types.html">Derived Types</a></li>
-                  <li><a href="../lists/programs.html">Programs</a></li>
-              </ul>
-            </li>
-                <li class="visible-xs hidden-sm visible-lg">
-                  <a href="../lists/files.html">Source Files</a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
                 </li>
-              <li class="visible-xs hidden-sm visible-lg">
-                <a href="../lists/modules.html">Modules</a>
-              </li>
-              <li class="visible-xs hidden-sm visible-lg">
-                <a href="../lists/procedures.html">Procedures</a>
-              </li>
-              <li class="visible-xs hidden-sm visible-lg">
-                <a href="../lists/types.html">Derived Types</a>
-              </li>
-              <li class="visible-xs hidden-sm visible-lg">
-                <a href="../lists/programs.html">Programs</a>
-              </li>
-          </ul>
-            <form action="../search.html" class="navbar-form navbar-right" role="search">
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
               </div>
-              <!--
-                  <button type="submit" class="btn btn-default">Submit</button>
-                  -->
-            </form>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
 
     <div class="container">
   <div class="row">
@@ -92,33 +66,37 @@
       <small>Subroutine</small>
       
     </h1>
-      <div class="row" id="info-bar">
-    <div class="col-lg-12">
-      <div class="well well-sm">
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
         <ul class="list-inline" style="margin-bottom:0px;display:inline">
 
-          <li id="statements"><i class="fa fa-list-ol"></i>
-            <a data-toggle="tooltip"
-               data-placement="bottom" data-html="true"
-               title=" 1.4% of total for procedures.">52 statements</a>
-          </li>
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip"
+                 data-bs-placement="bottom" data-html="true"
+                 title=" 1.1% of total for procedures.">41 statements</a>
+            </li>
 
-            <li id="source-file">
+            <li class="list-inline-item" id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/flap_command_line_interface_t.F90"> Source File</a>
+              <a href="../src/flap_command_line_argument_t.F90"> Source File</a>
             </li>
         </ul>
-        <ol class="breadcrumb in-well text-right">
-              <li><a href='../sourcefile/flap_command_line_interface_t.f90.html'>flap_command_line_interface_t.F90</a></li>
-              <li><a href='../module/flap_command_line_interface_t.html'>flap_command_line_interface_t</a></li>
-          <li class="active">get_cla</li>
-        </ol>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/flap_command_line_argument_t.f90.html'>flap_command_line_argument_t.F90</a></li>
+                <li class="breadcrumb-item"><a href='../module/flap_command_line_argument_t.html'>flap_command_line_argument_t</a></li>
+            <li class="breadcrumb-item active" aria-current="page">get_cla</li>
+          </ol>
+        </nav>
       </div>
     </div>
   </div>
   <script>
     $(function () {
-    $('[data-toggle="tooltip"]').tooltip()
+    $('[data-bs-toggle="tooltip"]').tooltip()
     })
   </script>
 
@@ -147,8 +125,9 @@
   
   
   
-    <div class="panel panel-primary">
-      <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
       <div class="list-group">
         <a class="list-group-item" href="../proc/get_cla.html#src">get_cla</a>
       </div>
@@ -160,28 +139,30 @@
     </div>
     
     <div class="col-md-9" id='text'>
-    <h2>private  subroutine get_cla(self, val, pref, args, group, switch, position, error)  
+    <h2>private  subroutine get_cla(self, val, pref)  
 </h2>
     
 
-    <p>Get CLA (single) value from CLAs list parsed.</p>
-<p></p><div class="alert alert-info" role="alert"><h4>Note</h4><p>For logical type CLA the value is directly read without any robust error trapping.</p></div>
+    <p>Get CLA (single) value.</p>
+
+    <h3>Type Bound</h3>
+    <p><a href='../type/command_line_argument.html'>command_line_argument</a></p>
 
     <h3>Arguments</h3>
         <table class="table table-striped varlist">
     <thead>
       <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
     </thead>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~19"></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              <span class="anchor" id="variable-self~23"></span>
+              class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -190,12 +171,12 @@
             <td>::</td>
             <td><strong>self</strong></td>
             <td>
-                <p>CLI data.</p>
+                <p>CLA data.</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-val"></span>
+              <span class="anchor" id="variable-val~4"></span>
               class(*),
             </td>
 <td>intent(inout)</td>
@@ -210,7 +191,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~6"></span>
+              <span class="anchor" id="variable-pref~19"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -223,117 +204,684 @@
                 <p>Prefixing string.</p>
             </td>
         </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-args~3"></span>
-              character(len=*),
-            </td>
-<td>intent(in),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>args</strong></td>
-            <td>
-                <p>String containing command line arguments.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-group~7"></span>
-              character(len=*),
-            </td>
-<td>intent(in),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>group</strong></td>
-            <td>
-                <p>Name of group (command) of CLA.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-switch~5"></span>
-              character(len=*),
-            </td>
-<td>intent(in),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>switch</strong></td>
-            <td>
-                <p>Switch name.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-position~3"></span>
-              integer(kind=I4P),
-            </td>
-<td>intent(in),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>position</strong></td>
-            <td>
-                <p>Position of positional CLA.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-error~4"></span>
-              integer(kind=I4P),
-            </td>
-<td>intent(out),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>error</strong></td>
-            <td>
-                <p>Error trapping flag.</p>
-            </td>
-        </tr>
     </tbody>
   </table>
 
     <br>
+    <div class="card">
+      <div class="card-header">
+  <h3 class="card-title">Calls</h3>
+      </div>
+      <div class="card-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: proc~~get_cla~~CallsGraph Pages: 1 -->
+<svg id="procget_claCallsGraph" width="641pt" height="74pt"
+ viewBox="0.00 0.00 641.00 73.52" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~get_cla~~CallsGraph" class="graph" transform="scale(2.42 2.42) rotate(0) translate(4 173.89)">
+<title>proc~~get_cla~~CallsGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-173.89 1547,-173.89 1547,4 -4,4"/>
+<!-- proc~get_cla -->
+<g id="proc~~get_cla~~CallsGraph_node1" class="node">
+<title>proc~get_cla</title>
+<polygon fill="none" stroke="black" points="376,-129 0,-129 0,-105 376,-105 376,-129"/>
+<text text-anchor="middle" x="188" y="-114.6" font-family="Helvetica,sans-Serif" font-size="10.50">flap_command_line_argument_t::command_line_argument%get_cla</text>
+</g>
+<!-- proc~check_choices -->
+<g id="proc~~get_cla~~CallsGraph_node2" class="node">
+<title>proc~check_choices</title>
+<g id="a_proc~~get_cla~~CallsGraph_node2"><a xlink:href=".././proc/check_choices.html" xlink:title="flap_command_line_argument_t::command_line_argument%check_choices">
+<polygon fill="#d9534f" stroke="#d9534f" points="841,-66 426,-66 426,-42 841,-42 841,-66"/>
+<text text-anchor="middle" x="633.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%check_choices</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla&#45;&gt;proc~check_choices -->
+<g id="proc~~get_cla~~CallsGraph_edge1" class="edge">
+<title>proc~get_cla&#45;&gt;proc~check_choices</title>
+<path fill="none" stroke="#000000" d="M245.13,-104.96C290.08,-95.67 354.85,-83.09 412,-75 432.71,-72.07 454.57,-69.44 476.16,-67.11"/>
+<polygon fill="#000000" stroke="#000000" points="476.82,-70.56 486.39,-66.02 476.08,-63.6 476.82,-70.56"/>
+</g>
+<!-- proc~errored -->
+<g id="proc~~get_cla~~CallsGraph_node3" class="node">
+<title>proc~errored</title>
+<g id="a_proc~~get_cla~~CallsGraph_node3"><a xlink:href=".././proc/errored.html" xlink:title="flap_command_line_argument_t::command_line_argument%errored">
+<polygon fill="#d9534f" stroke="#d9534f" points="1267,-150 891,-150 891,-126 1267,-126 1267,-150"/>
+<text text-anchor="middle" x="1079" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%errored</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla&#45;&gt;proc~errored -->
+<g id="proc~~get_cla~~CallsGraph_edge2" class="edge">
+<title>proc~get_cla&#45;&gt;proc~errored</title>
+<path fill="none" stroke="#000000" d="M238.23,-129C283.16,-139.31 351.59,-153.36 412,-159 608.04,-177.3 658.33,-168.24 855,-159 889.82,-157.36 927.61,-154.3 962,-151.01"/>
+<polygon fill="#000000" stroke="#000000" points="962.47,-154.48 972.08,-150.02 961.79,-147.51 962.47,-154.48"/>
+</g>
+<!-- proc~get_cla_from_buffer -->
+<g id="proc~~get_cla~~CallsGraph_node4" class="node">
+<title>proc~get_cla_from_buffer</title>
+<g id="a_proc~~get_cla~~CallsGraph_node4"><a xlink:href=".././proc/get_cla_from_buffer.html" xlink:title="flap_command_line_argument_t::command_line_argument%get_cla_from_buffer">
+<polygon fill="#d9534f" stroke="#d9534f" points="855,-108 412,-108 412,-84 855,-84 855,-108"/>
+<text text-anchor="middle" x="633.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%get_cla_from_buffer</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla&#45;&gt;proc~get_cla_from_buffer -->
+<g id="proc~~get_cla~~CallsGraph_edge3" class="edge">
+<title>proc~get_cla&#45;&gt;proc~get_cla_from_buffer</title>
+<path fill="none" stroke="#000000" d="M376.12,-108.14C384.62,-107.74 393.19,-107.33 401.78,-106.92"/>
+<polygon fill="#000000" stroke="#000000" points="402.05,-110.42 411.87,-106.45 401.72,-103.42 402.05,-110.42"/>
+</g>
+<!-- proc~is_required_passed -->
+<g id="proc~~get_cla~~CallsGraph_node5" class="node">
+<title>proc~is_required_passed</title>
+<g id="a_proc~~get_cla~~CallsGraph_node5"><a xlink:href=".././proc/is_required_passed.html" xlink:title="flap_command_line_argument_t::command_line_argument%is_required_passed">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="852.5,-150 414.5,-150 414.5,-126 852.5,-126 852.5,-150"/>
+<text text-anchor="middle" x="633.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%is_required_passed</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla&#45;&gt;proc~is_required_passed -->
+<g id="proc~~get_cla~~CallsGraph_edge4" class="edge">
+<title>proc~get_cla&#45;&gt;proc~is_required_passed</title>
+<path fill="none" stroke="#000000" d="M376.12,-125.86C385.41,-126.3 394.79,-126.74 404.19,-127.19"/>
+<polygon fill="#000000" stroke="#000000" points="404.23,-130.69 414.38,-127.67 404.56,-123.7 404.23,-130.69"/>
+</g>
+<!-- proc~check_choices&#45;&gt;proc~errored -->
+<g id="proc~~get_cla~~CallsGraph_edge6" class="edge">
+<title>proc~check_choices&#45;&gt;proc~errored</title>
+<path fill="none" stroke="#000000" d="M834.86,-66.02C841.78,-68.65 848.51,-71.64 855,-75 876.82,-86.32 869.27,-105.49 891,-117 894.37,-118.79 897.83,-120.45 901.35,-122.01"/>
+<polygon fill="#000000" stroke="#000000" points="900.24,-125.34 910.83,-125.87 902.89,-118.85 900.24,-125.34"/>
+</g>
+<!-- cton -->
+<g id="proc~~get_cla~~CallsGraph_node6" class="node">
+<title>cton</title>
+<polygon fill="#777777" stroke="#777777" points="1106,-108 1052,-108 1052,-84 1106,-84 1106,-108"/>
+<text text-anchor="middle" x="1079" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">cton</text>
+</g>
+<!-- proc~check_choices&#45;&gt;cton -->
+<g id="proc~~get_cla~~CallsGraph_edge5" class="edge">
+<title>proc~check_choices&#45;&gt;cton</title>
+<path fill="none" stroke="#000000" d="M761.29,-66.01C856.68,-75.04 980.98,-86.81 1041.58,-92.55"/>
+<polygon fill="#000000" stroke="#000000" points="1041.5,-96.06 1051.78,-93.52 1042.16,-89.09 1041.5,-96.06"/>
+</g>
+<!-- proc~tokenize -->
+<g id="proc~~get_cla~~CallsGraph_node8" class="node">
+<title>proc~tokenize</title>
+<g id="a_proc~~get_cla~~CallsGraph_node8"><a xlink:href=".././proc/tokenize.html" xlink:title="flap_utils_m::tokenize">
+<polygon fill="#d9534f" stroke="#d9534f" points="1143,-66 1015,-66 1015,-42 1143,-42 1143,-66"/>
+<text text-anchor="middle" x="1079" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_utils_m::tokenize</text>
+</a>
+</g>
+</g>
+<!-- proc~check_choices&#45;&gt;proc~tokenize -->
+<g id="proc~~get_cla~~CallsGraph_edge7" class="edge">
+<title>proc~check_choices&#45;&gt;proc~tokenize</title>
+<path fill="none" stroke="#000000" d="M841.32,-54C899.77,-54 959.61,-54 1004.5,-54"/>
+<polygon fill="#000000" stroke="#000000" points="1004.71,-57.5 1014.71,-54 1004.71,-50.5 1004.71,-57.5"/>
+</g>
+<!-- str -->
+<g id="proc~~get_cla~~CallsGraph_node9" class="node">
+<title>str</title>
+<polygon fill="#777777" stroke="#777777" points="1106,-24 1052,-24 1052,0 1106,0 1106,-24"/>
+<text text-anchor="middle" x="1079" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">str</text>
+</g>
+<!-- proc~check_choices&#45;&gt;str -->
+<g id="proc~~get_cla~~CallsGraph_edge8" class="edge">
+<title>proc~check_choices&#45;&gt;str</title>
+<path fill="none" stroke="#000000" d="M761.29,-41.99C856.68,-32.96 980.98,-21.19 1041.58,-15.45"/>
+<polygon fill="#000000" stroke="#000000" points="1042.16,-18.91 1051.78,-14.48 1041.5,-11.94 1042.16,-18.91"/>
+</g>
+<!-- proc~print_error_message -->
+<g id="proc~~get_cla~~CallsGraph_node7" class="node">
+<title>proc~print_error_message</title>
+<g id="a_proc~~get_cla~~CallsGraph_node7"><a xlink:href=".././proc/print_error_message.html" xlink:title="flap_object_t::object%print_error_message">
+<polygon fill="#d9534f" stroke="#d9534f" points="1543,-150 1303,-150 1303,-126 1543,-126 1543,-150"/>
+<text text-anchor="middle" x="1423" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_object_t::object%print_error_message</text>
+</a>
+</g>
+</g>
+<!-- proc~errored&#45;&gt;proc~print_error_message -->
+<g id="proc~~get_cla~~CallsGraph_edge9" class="edge">
+<title>proc~errored&#45;&gt;proc~print_error_message</title>
+<path fill="none" stroke="#000000" d="M1267.01,-138C1275.66,-138 1284.25,-138 1292.7,-138"/>
+<polygon fill="#000000" stroke="#000000" points="1292.93,-141.5 1302.93,-138 1292.93,-134.5 1292.93,-141.5"/>
+</g>
+<!-- proc~get_cla_from_buffer&#45;&gt;proc~errored -->
+<g id="proc~~get_cla~~CallsGraph_edge11" class="edge">
+<title>proc~get_cla_from_buffer&#45;&gt;proc~errored</title>
+<path fill="none" stroke="#000000" d="M761.29,-108.01C817.44,-113.32 883.6,-119.59 940.89,-125.02"/>
+<polygon fill="#000000" stroke="#000000" points="940.83,-128.53 951.11,-125.98 941.49,-121.56 940.83,-128.53"/>
+</g>
+<!-- proc~get_cla_from_buffer&#45;&gt;cton -->
+<g id="proc~~get_cla~~CallsGraph_edge10" class="edge">
+<title>proc~get_cla_from_buffer&#45;&gt;cton</title>
+<path fill="none" stroke="#000000" d="M855.28,-96C927.4,-96 999.66,-96 1041.54,-96"/>
+<polygon fill="#000000" stroke="#000000" points="1041.77,-99.5 1051.77,-96 1041.77,-92.5 1041.77,-99.5"/>
+</g>
+<!-- proc~is_required_passed&#45;&gt;proc~errored -->
+<g id="proc~~get_cla~~CallsGraph_edge12" class="edge">
+<title>proc~is_required_passed&#45;&gt;proc~errored</title>
+<path fill="none" stroke="#000000" d="M852.68,-138C862.08,-138 871.49,-138 880.84,-138"/>
+<polygon fill="#000000" stroke="#000000" points="880.96,-141.5 890.96,-138 880.96,-134.5 880.96,-141.5"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var panprocget_claCallsGraph = svgPanZoom('#procget_claCallsGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>        <div><a type="button" class="graph-help" data-toggle="modal" href="#CallsGraph-help-text">Help</a></div>
+          <div class="modal fade" id="CallsGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                </div>
+              <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 27.51" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1.16 1.16) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 741.5,-28 741.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="146,-24 88,-24 88,0 146,0 146,-24"/>
+<text text-anchor="middle" x="117" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="225.5,-24 164.5,-24 164.5,0 225.5,0 225.5,-24"/>
+<text text-anchor="middle" x="195" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Type Bound Procedure -->
+<g id="node4" class="node">
+<title>Type Bound Procedure</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="374,-24 244,-24 244,0 374,0 374,-24"/>
+<text text-anchor="middle" x="309" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type Bound Procedure</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node5" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="537.5,-24 392.5,-24 392.5,0 537.5,0 537.5,-24"/>
+<text text-anchor="middle" x="465" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node6" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="614,-24 556,-24 556,0 614,0 614,-24"/>
+<text text-anchor="middle" x="585" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node7" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="737.5,-24 632.5,-24 632.5,0 737.5,0 737.5,-24"/>
+<text text-anchor="middle" x="685" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
 
-    <section class="visible-xs visible-sm hidden-md">
-        <h3>Contents</h3>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-    <div class="panel panel-primary">
-      <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
-      <div class="list-group">
-        <a class="list-group-item" href="../proc/get_cla.html#src">get_cla</a>
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.
+</p>
+ </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+    <div class="card">
+      <div class="card-header">
+  <h3 class="card-title">Called by</h3>
+      </div>
+      <div class="card-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: proc~~get_cla~~CalledByGraph Pages: 1 -->
+<svg id="procget_claCalledByGraph" width="641pt" height="221pt"
+ viewBox="0.00 0.00 641.00 220.55" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~get_cla~~CalledByGraph" class="graph" transform="scale(3 3) rotate(0) translate(4 658)">
+<title>proc~~get_cla~~CalledByGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-658 1920,-658 1920,4 -4,4"/>
+<!-- proc~get_cla -->
+<g id="proc~~get_cla~~CalledByGraph_node1" class="node">
+<title>proc~get_cla</title>
+<polygon fill="none" stroke="black" points="1916,-339 1540,-339 1540,-315 1916,-315 1916,-339"/>
+<text text-anchor="middle" x="1728" y="-324.6" font-family="Helvetica,sans-Serif" font-size="10.50">flap_command_line_argument_t::command_line_argument%get_cla</text>
+</g>
+<!-- none~get -->
+<g id="proc~~get_cla~~CalledByGraph_node2" class="node">
+<title>none~get</title>
+<g id="a_proc~~get_cla~~CalledByGraph_node2"><a xlink:href=".././type/command_line_argument.html#boundprocedure-get" xlink:title="flap_command_line_argument_t::command_line_argument%get">
+<polygon fill="#a7506f" stroke="#a7506f" points="1504,-339 1149,-339 1149,-315 1504,-315 1504,-339"/>
+<text text-anchor="middle" x="1326.5" y="-324.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%get</text>
+</a>
+</g>
+</g>
+<!-- none~get&#45;&gt;proc~get_cla -->
+<g id="proc~~get_cla~~CalledByGraph_edge1" class="edge">
+<title>none~get&#45;&gt;proc~get_cla</title>
+<path fill="none" stroke="#000000" d="M1504.18,-327C1512.66,-327 1521.2,-327 1529.73,-327"/>
+<polygon fill="#000000" stroke="#000000" points="1529.74,-330.5 1539.74,-327 1529.74,-323.5 1529.74,-330.5"/>
+</g>
+<!-- proc~get_cla_list~2 -->
+<g id="proc~~get_cla~~CalledByGraph_node3" class="node">
+<title>proc~get_cla_list~2</title>
+<g id="a_proc~~get_cla~~CalledByGraph_node3"><a xlink:href=".././proc/get_cla_list~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list">
+<polygon fill="#d9534f" stroke="#d9534f" points="1113,-360 726,-360 726,-336 1113,-336 1113,-360"/>
+<text text-anchor="middle" x="919.5" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_cla_list</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla_list~2&#45;&gt;none~get -->
+<g id="proc~~get_cla~~CalledByGraph_edge2" class="edge">
+<title>proc~get_cla_list~2&#45;&gt;none~get</title>
+<path fill="none" stroke="#000000" d="M1113.21,-338.01C1121.79,-337.56 1130.39,-337.12 1138.95,-336.67"/>
+<polygon fill="#000000" stroke="#000000" points="1139.17,-340.17 1148.97,-336.15 1138.8,-333.18 1139.17,-340.17"/>
+</g>
+<!-- proc~get_cla~2 -->
+<g id="proc~~get_cla~~CalledByGraph_node4" class="node">
+<title>proc~get_cla~2</title>
+<g id="a_proc~~get_cla~~CalledByGraph_node4"><a xlink:href=".././proc/get_cla~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla">
+<polygon fill="#d9534f" stroke="#d9534f" points="1103,-318 736,-318 736,-294 1103,-294 1103,-318"/>
+<text text-anchor="middle" x="919.5" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_cla</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla~2&#45;&gt;none~get -->
+<g id="proc~~get_cla~~CalledByGraph_edge3" class="edge">
+<title>proc~get_cla~2&#45;&gt;none~get</title>
+<path fill="none" stroke="#000000" d="M1103.15,-315.47C1114.92,-316.08 1126.77,-316.7 1138.56,-317.31"/>
+<polygon fill="#000000" stroke="#000000" points="1138.72,-320.82 1148.89,-317.84 1139.08,-313.83 1138.72,-320.82"/>
+</g>
+<!-- none~get~2 -->
+<g id="proc~~get_cla~~CalledByGraph_node5" class="node">
+<title>none~get~2</title>
+<g id="a_proc~~get_cla~~CalledByGraph_node5"><a xlink:href=".././type/command_line_interface.html#boundprocedure-get~2" xlink:title="flap_command_line_interface_t::command_line_interface%get">
+<polygon fill="#a7506f" stroke="#a7506f" points="690,-339 344,-339 344,-315 690,-315 690,-339"/>
+<text text-anchor="middle" x="517" y="-324.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get</text>
+</a>
+</g>
+</g>
+<!-- none~get~2&#45;&gt;proc~get_cla_list~2 -->
+<g id="proc~~get_cla~~CalledByGraph_edge4" class="edge">
+<title>none~get~2&#45;&gt;proc~get_cla_list~2</title>
+<path fill="none" stroke="#000000" d="M690.17,-336.03C698.63,-336.47 707.15,-336.92 715.69,-337.37"/>
+<polygon fill="#000000" stroke="#000000" points="715.53,-340.86 725.7,-337.89 715.9,-333.87 715.53,-340.86"/>
+</g>
+<!-- none~get~2&#45;&gt;proc~get_cla~2 -->
+<g id="proc~~get_cla~~CalledByGraph_edge5" class="edge">
+<title>none~get~2&#45;&gt;proc~get_cla~2</title>
+<path fill="none" stroke="#000000" d="M690.17,-317.97C702.02,-317.35 713.99,-316.72 725.93,-316.1"/>
+<polygon fill="#000000" stroke="#000000" points="726.15,-319.59 735.95,-315.57 725.78,-312.6 726.15,-319.59"/>
+</g>
+<!-- proc~fake_call -->
+<g id="proc~~get_cla~~CalledByGraph_node6" class="node">
+<title>proc~fake_call</title>
+<g id="a_proc~~get_cla~~CalledByGraph_node6"><a xlink:href=".././proc/fake_call.html" xlink:title="flap_test_group::fake_call">
+<polygon fill="#d9534f" stroke="#d9534f" points="293,-654 145,-654 145,-630 293,-630 293,-654"/>
+<text text-anchor="middle" x="219" y="-639.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_group::fake_call</text>
+</a>
+</g>
+</g>
+<!-- proc~fake_call&#45;&gt;none~get~2 -->
+<g id="proc~~get_cla~~CalledByGraph_edge6" class="edge">
+<title>proc~fake_call&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M291.11,-629.9C297.07,-627.45 302.8,-624.52 308,-621 414.31,-549.1 483.87,-403.48 507.26,-348.59"/>
+<polygon fill="#000000" stroke="#000000" points="510.58,-349.73 511.2,-339.15 504.12,-347.03 510.58,-349.73"/>
+</g>
+<!-- program~flap_save_man_page -->
+<g id="proc~~get_cla~~CalledByGraph_node7" class="node">
+<title>program~flap_save_man_page</title>
+<g id="a_proc~~get_cla~~CalledByGraph_node7"><a xlink:href=".././program/flap_save_man_page.html" xlink:title="flap_save_man_page">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="281,-612 157,-612 157,-588 281,-588 281,-612"/>
+<text text-anchor="middle" x="219" y="-597.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_save_man_page</text>
+</a>
+</g>
+</g>
+<!-- program~flap_save_man_page&#45;&gt;none~get~2 -->
+<g id="proc~~get_cla~~CalledByGraph_edge7" class="edge">
+<title>program~flap_save_man_page&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M281.24,-590.83C290.62,-587.91 299.87,-584.07 308,-579 405.05,-518.49 478.24,-396.99 504.97,-348.1"/>
+<polygon fill="#000000" stroke="#000000" points="508.17,-349.53 509.82,-339.07 502,-346.22 508.17,-349.53"/>
+</g>
+<!-- program~flap_save_usage_to_markdown -->
+<g id="proc~~get_cla~~CalledByGraph_node8" class="node">
+<title>program~flap_save_usage_to_markdown</title>
+<g id="a_proc~~get_cla~~CalledByGraph_node8"><a xlink:href=".././program/flap_save_usage_to_markdown.html" xlink:title="flap_save_usage_to_markdown">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="308,-570 130,-570 130,-546 308,-546 308,-570"/>
+<text text-anchor="middle" x="219" y="-555.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_save_usage_to_markdown</text>
+</a>
+</g>
+</g>
+<!-- program~flap_save_usage_to_markdown&#45;&gt;none~get~2 -->
+<g id="proc~~get_cla~~CalledByGraph_edge8" class="edge">
+<title>program~flap_save_usage_to_markdown&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M287.78,-545.94C294.83,-543.49 301.7,-540.54 308,-537 396.14,-487.44 471.82,-389.76 502.01,-347.4"/>
+<polygon fill="#000000" stroke="#000000" points="505.02,-349.2 507.91,-339.01 499.29,-345.18 505.02,-349.2"/>
+</g>
+<!-- program~flap_test_action_store -->
+<g id="proc~~get_cla~~CalledByGraph_node9" class="node">
+<title>program~flap_test_action_store</title>
+<g id="a_proc~~get_cla~~CalledByGraph_node9"><a xlink:href=".././program/flap_test_action_store.html" xlink:title="flap_test_action_store">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="282.5,-528 155.5,-528 155.5,-504 282.5,-504 282.5,-528"/>
+<text text-anchor="middle" x="219" y="-513.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_action_store</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_action_store&#45;&gt;none~get~2 -->
+<g id="proc~~get_cla~~CalledByGraph_edge9" class="edge">
+<title>program~flap_test_action_store&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M282.76,-504.68C291.45,-502.07 300.11,-498.88 308,-495 387.4,-455.98 463.86,-381.94 497.75,-346.66"/>
+<polygon fill="#000000" stroke="#000000" points="500.34,-349.01 504.69,-339.35 495.27,-344.19 500.34,-349.01"/>
+</g>
+<!-- program~flap_test_ansi_color_style -->
+<g id="proc~~get_cla~~CalledByGraph_node10" class="node">
+<title>program~flap_test_ansi_color_style</title>
+<g id="a_proc~~get_cla~~CalledByGraph_node10"><a xlink:href=".././program/flap_test_ansi_color_style.html" xlink:title="flap_test_ansi_color_style">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="292.5,-486 145.5,-486 145.5,-462 292.5,-462 292.5,-486"/>
+<text text-anchor="middle" x="219" y="-471.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_ansi_color_style</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_ansi_color_style&#45;&gt;none~get~2 -->
+<g id="proc~~get_cla~~CalledByGraph_edge10" class="edge">
+<title>program~flap_test_ansi_color_style&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M281.37,-461.95C290.45,-459.43 299.57,-456.46 308,-453 379.05,-423.84 454.16,-372.5 491.68,-345.22"/>
+<polygon fill="#000000" stroke="#000000" points="493.96,-347.89 499.95,-339.15 489.82,-342.24 493.96,-347.89"/>
+</g>
+<!-- program~flap_test_basic -->
+<g id="proc~~get_cla~~CalledByGraph_node11" class="node">
+<title>program~flap_test_basic</title>
+<g id="a_proc~~get_cla~~CalledByGraph_node11"><a xlink:href=".././program/flap_test_basic.html" xlink:title="flap_test_basic">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="264.5,-444 173.5,-444 173.5,-420 264.5,-420 264.5,-444"/>
+<text text-anchor="middle" x="219" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_basic</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_basic&#45;&gt;none~get~2 -->
+<g id="proc~~get_cla~~CalledByGraph_edge11" class="edge">
+<title>program~flap_test_basic&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M264.67,-422.7C278.67,-419.43 294.08,-415.44 308,-411 369.99,-391.21 439.68,-361.46 480.6,-343.19"/>
+<polygon fill="#000000" stroke="#000000" points="482.18,-346.32 489.87,-339.03 479.31,-339.93 482.18,-346.32"/>
+</g>
+<!-- program~flap_test_choices_logical -->
+<g id="proc~~get_cla~~CalledByGraph_node12" class="node">
+<title>program~flap_test_choices_logical</title>
+<g id="a_proc~~get_cla~~CalledByGraph_node12"><a xlink:href=".././program/flap_test_choices_logical.html" xlink:title="flap_test_choices_logical">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="291,-402 147,-402 147,-378 291,-378 291,-402"/>
+<text text-anchor="middle" x="219" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_choices_logical</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_choices_logical&#45;&gt;none~get~2 -->
+<g id="proc~~get_cla~~CalledByGraph_edge12" class="edge">
+<title>program~flap_test_choices_logical&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M276.72,-377.93C326.08,-367.42 397.67,-352.19 449.67,-341.12"/>
+<polygon fill="#000000" stroke="#000000" points="450.42,-344.54 459.47,-339.03 448.96,-337.69 450.42,-344.54"/>
+</g>
+<!-- program~flap_test_duplicated_clas -->
+<g id="proc~~get_cla~~CalledByGraph_node13" class="node">
+<title>program~flap_test_duplicated_clas</title>
+<g id="a_proc~~get_cla~~CalledByGraph_node13"><a xlink:href=".././program/flap_test_duplicated_clas.html" xlink:title="flap_test_duplicated_clas">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="291.5,-360 146.5,-360 146.5,-336 291.5,-336 291.5,-360"/>
+<text text-anchor="middle" x="219" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_duplicated_clas</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_duplicated_clas&#45;&gt;none~get~2 -->
+<g id="proc~~get_cla~~CalledByGraph_edge13" class="edge">
+<title>program~flap_test_duplicated_clas&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M291.65,-342.92C305.55,-341.93 320.68,-340.86 336.31,-339.75"/>
+<polygon fill="#000000" stroke="#000000" points="336.91,-343.21 346.64,-339.02 336.41,-336.23 336.91,-343.21"/>
+</g>
+<!-- program~flap_test_group_examples -->
+<g id="proc~~get_cla~~CalledByGraph_node14" class="node">
+<title>program~flap_test_group_examples</title>
+<g id="a_proc~~get_cla~~CalledByGraph_node14"><a xlink:href=".././program/flap_test_group_examples.html" xlink:title="flap_test_group_examples">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="294,-318 144,-318 144,-294 294,-294 294,-318"/>
+<text text-anchor="middle" x="219" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_group_examples</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_group_examples&#45;&gt;none~get~2 -->
+<g id="proc~~get_cla~~CalledByGraph_edge14" class="edge">
+<title>program~flap_test_group_examples&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M294.31,-311.27C307.53,-312.21 321.8,-313.22 336.51,-314.27"/>
+<polygon fill="#000000" stroke="#000000" points="336.53,-317.78 346.75,-314.99 337.02,-310.79 336.53,-317.78"/>
+</g>
+<!-- program~flap_test_hidden -->
+<g id="proc~~get_cla~~CalledByGraph_node15" class="node">
+<title>program~flap_test_hidden</title>
+<g id="a_proc~~get_cla~~CalledByGraph_node15"><a xlink:href=".././program/flap_test_hidden.html" xlink:title="flap_test_hidden">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="269,-276 169,-276 169,-252 269,-252 269,-276"/>
+<text text-anchor="middle" x="219" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_hidden</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_hidden&#45;&gt;none~get~2 -->
+<g id="proc~~get_cla~~CalledByGraph_edge15" class="edge">
+<title>program~flap_test_hidden&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M269.21,-274.47C318.58,-284.98 394.94,-301.23 449.64,-312.88"/>
+<polygon fill="#000000" stroke="#000000" points="449.08,-316.34 459.59,-314.99 450.54,-309.49 449.08,-316.34"/>
+</g>
+<!-- program~flap_test_ignore_unknown_clas -->
+<g id="proc~~get_cla~~CalledByGraph_node16" class="node">
+<title>program~flap_test_ignore_unknown_clas</title>
+<g id="a_proc~~get_cla~~CalledByGraph_node16"><a xlink:href=".././program/flap_test_ignore_unknown_clas.html" xlink:title="flap_test_ignore_unknown_clas">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="307,-234 131,-234 131,-210 307,-210 307,-234"/>
+<text text-anchor="middle" x="219" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_ignore_unknown_clas</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_ignore_unknown_clas&#45;&gt;none~get~2 -->
+<g id="proc~~get_cla~~CalledByGraph_edge16" class="edge">
+<title>program~flap_test_ignore_unknown_clas&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M276.21,-234.09C286.85,-236.75 297.83,-239.75 308,-243 369.99,-262.79 439.68,-292.54 480.6,-310.81"/>
+<polygon fill="#000000" stroke="#000000" points="479.31,-314.07 489.87,-314.97 482.18,-307.68 479.31,-314.07"/>
+</g>
+<!-- program~flap_test_minimal -->
+<g id="proc~~get_cla~~CalledByGraph_node17" class="node">
+<title>program~flap_test_minimal</title>
+<g id="a_proc~~get_cla~~CalledByGraph_node17"><a xlink:href=".././program/flap_test_minimal.html" xlink:title="flap_test_minimal">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="272,-192 166,-192 166,-168 272,-168 272,-192"/>
+<text text-anchor="middle" x="219" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_minimal</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_minimal&#45;&gt;none~get~2 -->
+<g id="proc~~get_cla~~CalledByGraph_edge17" class="edge">
+<title>program~flap_test_minimal&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M272.03,-189.59C284.07,-192.58 296.67,-196.35 308,-201 379.05,-230.16 454.16,-281.5 491.68,-308.78"/>
+<polygon fill="#000000" stroke="#000000" points="489.82,-311.76 499.95,-314.85 493.96,-306.11 489.82,-311.76"/>
+</g>
+<!-- program~flap_test_nargs_insufficient -->
+<g id="proc~~get_cla~~CalledByGraph_node18" class="node">
+<title>program~flap_test_nargs_insufficient</title>
+<g id="a_proc~~get_cla~~CalledByGraph_node18"><a xlink:href=".././program/flap_test_nargs_insufficient.html" xlink:title="flap_test_nargs_insufficient">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="297.5,-150 140.5,-150 140.5,-126 297.5,-126 297.5,-150"/>
+<text text-anchor="middle" x="219" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_nargs_insufficient</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_nargs_insufficient&#45;&gt;none~get~2 -->
+<g id="proc~~get_cla~~CalledByGraph_edge18" class="edge">
+<title>program~flap_test_nargs_insufficient&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M285.08,-150.03C292.99,-152.51 300.81,-155.47 308,-159 387.4,-198.02 463.86,-272.06 497.75,-307.34"/>
+<polygon fill="#000000" stroke="#000000" points="495.27,-309.81 504.69,-314.65 500.34,-304.99 495.27,-309.81"/>
+</g>
+<!-- program~flap_test_nargs_insufficient~2 -->
+<g id="proc~~get_cla~~CalledByGraph_node19" class="node">
+<title>program~flap_test_nargs_insufficient~2</title>
+<g id="a_proc~~get_cla~~CalledByGraph_node19"><a xlink:href=".././program/flap_test_nargs_insufficient~2.html" xlink:title="flap_test_nargs_insufficient">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="297.5,-108 140.5,-108 140.5,-84 297.5,-84 297.5,-108"/>
+<text text-anchor="middle" x="219" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_nargs_insufficient</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_nargs_insufficient~2&#45;&gt;none~get~2 -->
+<g id="proc~~get_cla~~CalledByGraph_edge19" class="edge">
+<title>program~flap_test_nargs_insufficient~2&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M287.78,-108.06C294.83,-110.51 301.7,-113.46 308,-117 396.14,-166.56 471.82,-264.24 502.01,-306.6"/>
+<polygon fill="#000000" stroke="#000000" points="499.29,-308.82 507.91,-314.99 505.02,-304.8 499.29,-308.82"/>
+</g>
+<!-- program~flap_test_nested -->
+<g id="proc~~get_cla~~CalledByGraph_node20" class="node">
+<title>program~flap_test_nested</title>
+<g id="a_proc~~get_cla~~CalledByGraph_node20"><a xlink:href=".././program/flap_test_nested.html" xlink:title="flap_test_nested">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="268.5,-66 169.5,-66 169.5,-42 268.5,-42 268.5,-66"/>
+<text text-anchor="middle" x="219" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_nested</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_nested&#45;&gt;none~get~2 -->
+<g id="proc~~get_cla~~CalledByGraph_edge20" class="edge">
+<title>program~flap_test_nested&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M268.8,-59.81C282.21,-62.92 296.27,-67.69 308,-75 405.05,-135.51 478.24,-257.01 504.97,-305.9"/>
+<polygon fill="#000000" stroke="#000000" points="502,-307.78 509.82,-314.93 508.17,-304.47 502,-307.78"/>
+</g>
+<!-- program~flap_test_string -->
+<g id="proc~~get_cla~~CalledByGraph_node21" class="node">
+<title>program~flap_test_string</title>
+<g id="a_proc~~get_cla~~CalledByGraph_node21"><a xlink:href=".././program/flap_test_string.html" xlink:title="flap_test_string">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="265.5,-24 172.5,-24 172.5,0 265.5,0 265.5,-24"/>
+<text text-anchor="middle" x="219" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_string</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_string&#45;&gt;none~get~2 -->
+<g id="proc~~get_cla~~CalledByGraph_edge21" class="edge">
+<title>program~flap_test_string&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M265.52,-16.46C280.01,-19.49 295.51,-24.55 308,-33 414.31,-104.9 483.87,-250.52 507.26,-305.41"/>
+<polygon fill="#000000" stroke="#000000" points="504.12,-306.97 511.2,-314.85 510.58,-304.27 504.12,-306.97"/>
+</g>
+<!-- program~flap_test_group -->
+<g id="proc~~get_cla~~CalledByGraph_node22" class="node">
+<title>program~flap_test_group</title>
+<g id="a_proc~~get_cla~~CalledByGraph_node22"><a xlink:href=".././program/flap_test_group.html" xlink:title="flap_test_group">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="94,-654 0,-654 0,-630 94,-630 94,-654"/>
+<text text-anchor="middle" x="47" y="-639.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_group</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_group&#45;&gt;proc~fake_call -->
+<g id="proc~~get_cla~~CalledByGraph_edge22" class="edge">
+<title>program~flap_test_group&#45;&gt;proc~fake_call</title>
+<path fill="none" stroke="#000000" d="M94,-642C106.59,-642 120.62,-642 134.6,-642"/>
+<polygon fill="#000000" stroke="#000000" points="134.75,-645.5 144.75,-642 134.75,-638.5 134.75,-645.5"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var panprocget_claCalledByGraph = svgPanZoom('#procget_claCalledByGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>        <div><a type="button" class="graph-help" data-toggle="modal" href="#CalledByGraph-help-text">Help</a></div>
+          <div class="modal fade" id="CalledByGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                </div>
+              <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 27.51" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1.16 1.16) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 741.5,-28 741.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="146,-24 88,-24 88,0 146,0 146,-24"/>
+<text text-anchor="middle" x="117" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="225.5,-24 164.5,-24 164.5,0 225.5,0 225.5,-24"/>
+<text text-anchor="middle" x="195" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Type Bound Procedure -->
+<g id="node4" class="node">
+<title>Type Bound Procedure</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="374,-24 244,-24 244,0 374,0 374,-24"/>
+<text text-anchor="middle" x="309" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type Bound Procedure</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node5" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="537.5,-24 392.5,-24 392.5,0 537.5,0 537.5,-24"/>
+<text text-anchor="middle" x="465" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node6" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="614,-24 556,-24 556,0 614,0 614,-24"/>
+<text text-anchor="middle" x="585" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node7" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="737.5,-24 632.5,-24 632.5,0 737.5,0 737.5,-24"/>
+<text text-anchor="middle" x="685" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
 
-
-    </section>
-    <br class="visible-xs visible-sm hidden-md">
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.
+</p>
+ </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
 
 
     
@@ -341,68 +889,55 @@
 
     
     
+
 
 
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span></span><span class="w">  </span><span class="k">subroutine </span><span class="n">get_cla</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">val</span><span class="p">,</span><span class="w"> </span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="n">group</span><span class="p">,</span><span class="w"> </span><span class="n">switch</span><span class="p">,</span><span class="w"> </span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="p">)</span><span class="w"></span>
-<span class="w">  </span><span class="c">!&lt; Get CLA (single) value from CLAs list parsed.</span>
-<span class="w">  </span><span class="c">!&lt;</span>
-<span class="w">  </span><span class="c">!&lt; @note For logical type CLA the value is directly read without any robust error trapping.</span>
-<span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="n">command_line_interface</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">self</span><span class="w">     </span><span class="c">!&lt; CLI data.</span>
-<span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w">                      </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">val</span><span class="w">      </span><span class="c">!&lt; CLA value.</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">pref</span><span class="w">     </span><span class="c">!&lt; Prefixing string.</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">args</span><span class="w">     </span><span class="c">!&lt; String containing command line arguments.</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">group</span><span class="w">    </span><span class="c">!&lt; Name of group (command) of CLA.</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">switch</span><span class="w">   </span><span class="c">!&lt; Switch name.</span>
-<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">position</span><span class="w"> </span><span class="c">!&lt; Position of positional CLA.</span>
-<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w">   </span><span class="kd">::</span><span class="w"> </span><span class="n">error</span><span class="w">    </span><span class="c">!&lt; Error trapping flag.</span>
-<span class="w">  </span><span class="kt">logical</span><span class="w">                                      </span><span class="kd">::</span><span class="w"> </span><span class="n">found</span><span class="w">    </span><span class="c">!&lt; Flag for checking if CLA containing switch has been found.</span>
-<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                                 </span><span class="kd">::</span><span class="w"> </span><span class="n">g</span><span class="w">        </span><span class="c">!&lt; Group counter.</span>
-<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                                 </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="w">        </span><span class="c">!&lt; Argument counter.</span>
+    <div class="hl codehilite"><pre><span></span><span class="w">  </span><span class="k">subroutine </span><span class="n">get_cla</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">val</span><span class="p">,</span><span class="w"> </span><span class="n">pref</span><span class="p">)</span>
+<span class="w">  </span><span class="c">!&lt; Get CLA (single) value.</span>
+<span class="w">  </span><span class="k">implicit none</span>
+<span class="k">  class</span><span class="p">(</span><span class="n">command_line_argument</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">self</span><span class="w">  </span><span class="c">!&lt; CLA data.</span>
+<span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w">                     </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">val</span><span class="w">   </span><span class="c">!&lt; CLA value.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">       </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">pref</span><span class="w">  </span><span class="c">!&lt; Prefixing string.</span>
 
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">is_parsed_</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">parse</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">&gt;</span><span class="mf">0.</span><span class="nb">and</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">error_unknown_clas</span><span class="o">/=</span><span class="n">ERROR_UNKNOWN_CLAS_IGNORED</span><span class="p">)</span><span class="w"> </span><span class="k">return</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">is_required_passed</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">))</span><span class="w"> </span><span class="k">return</span>
+<span class="k">  if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">act</span><span class="o">==</span><span class="n">action_store</span><span class="p">.</span><span class="nb">or</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">act</span><span class="o">==</span><span class="n">action_store_star</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">is_passed</span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">val</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">      call </span><span class="n">self</span><span class="p">%</span><span class="n">get_cla_from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">val</span><span class="p">,</span><span class="w"> </span><span class="n">val</span><span class="o">=</span><span class="n">val</span><span class="p">,</span><span class="w"> </span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">)</span>
+<span class="w">    </span><span class="k">elseif</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">def</span><span class="p">))</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="c">! using default value</span>
+<span class="w">      </span><span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">get_cla_from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">def</span><span class="p">,</span><span class="w"> </span><span class="n">val</span><span class="o">=</span><span class="n">val</span><span class="p">,</span><span class="w"> </span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">)</span>
+<span class="w">    </span><span class="k">endif</span>
+<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">choices</span><span class="p">).</span><span class="nb">and</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">check_choices</span><span class="p">(</span><span class="n">val</span><span class="o">=</span><span class="n">val</span><span class="p">,</span><span class="w"> </span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">)</span>
+<span class="w">  </span><span class="k">elseif</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">act</span><span class="o">==</span><span class="n">action_store_true</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">is_passed</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">      select type</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+<span class="w">      </span><span class="k">type is</span><span class="p">(</span><span class="kt">logical</span><span class="p">)</span>
+<span class="w">        </span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
+<span class="w">      </span><span class="k">endselect</span>
+<span class="k">    elseif</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">def</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">      select type</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+<span class="w">      </span><span class="k">type is</span><span class="p">(</span><span class="kt">logical</span><span class="p">)</span>
+<span class="w">        </span><span class="k">read</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">def</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">iostat</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span><span class="n">val</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">errored</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">ERROR_CASTING_LOGICAL</span><span class="p">,</span><span class="w"> </span><span class="n">log_value</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">def</span><span class="p">)</span>
+<span class="w">      </span><span class="k">endselect</span>
+<span class="k">    endif</span>
+<span class="k">  elseif</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">act</span><span class="o">==</span><span class="n">action_store_false</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">is_passed</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">      select type</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+<span class="w">      </span><span class="k">type is</span><span class="p">(</span><span class="kt">logical</span><span class="p">)</span>
+<span class="w">        </span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<span class="w">      </span><span class="k">endselect</span>
+<span class="k">    elseif</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">def</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">      select type</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+<span class="w">      </span><span class="k">type is</span><span class="p">(</span><span class="kt">logical</span><span class="p">)</span>
+<span class="w">        </span><span class="k">read</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">def</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">iostat</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span><span class="n">val</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">errored</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">ERROR_CASTING_LOGICAL</span><span class="p">,</span><span class="w"> </span><span class="n">log_value</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">def</span><span class="p">)</span>
+<span class="w">      </span><span class="k">endselect</span>
+<span class="k">    endif</span>
 <span class="k">  endif</span>
-<span class="k">  if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">group</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">    if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">is_defined_group</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="n">group</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="o">=</span><span class="n">g</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">      call </span><span class="n">self</span><span class="p">%</span><span class="n">errored</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">ERROR_MISSING_GROUP</span><span class="p">,</span><span class="w"> </span><span class="n">group</span><span class="o">=</span><span class="n">group</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="k">endif</span>
-<span class="k">  else</span>
-<span class="k">    </span><span class="n">g</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
-<span class="w">  </span><span class="k">endif</span>
-<span class="k">  if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">==</span><span class="mf">0.</span><span class="nb">or</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">error_unknown_clas</span><span class="o">==</span><span class="n">ERROR_UNKNOWN_CLAS_IGNORED</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">switch</span><span class="p">))</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
-<span class="w">      </span><span class="c">! search for the CLA corresponding to switch</span>
-<span class="w">      </span><span class="n">found</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"></span>
-<span class="w">      </span><span class="k">do </span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">Na</span><span class="w"></span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">is_positional</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">          if</span><span class="w"> </span><span class="p">((</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">switch</span><span class="o">==</span><span class="n">switch</span><span class="p">).</span><span class="nb">or</span><span class="p">.(</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">switch_ab</span><span class="o">==</span><span class="n">switch</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">            </span><span class="n">found</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
-<span class="w">            </span><span class="k">exit</span>
-<span class="k">          endif</span>
-<span class="k">        endif</span>
-<span class="k">      enddo</span>
-<span class="k">      if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">found</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">        call </span><span class="n">self</span><span class="p">%</span><span class="n">errored</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">ERROR_MISSING_CLA</span><span class="p">,</span><span class="w"> </span><span class="n">switch</span><span class="o">=</span><span class="n">switch</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="k">else</span>
-<span class="k">        call </span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">get</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">val</span><span class="o">=</span><span class="n">val</span><span class="p">)</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">cla</span><span class="p">(</span><span class="n">a</span><span class="p">)%</span><span class="n">error</span><span class="w"></span>
-<span class="w">      </span><span class="k">endif</span>
-<span class="k">    </span><span class="n">elseif</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">position</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">      call </span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">cla</span><span class="p">(</span><span class="n">position</span><span class="p">)%</span><span class="n">get</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">val</span><span class="o">=</span><span class="n">val</span><span class="p">)</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">cla</span><span class="p">(</span><span class="n">position</span><span class="p">)%</span><span class="n">error</span><span class="w"></span>
-<span class="w">    </span><span class="k">else</span>
-<span class="k">      call </span><span class="n">self</span><span class="p">%</span><span class="n">errored</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">ERROR_MISSING_SELECTION_CLA</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="k">endif</span>
-<span class="k">  endif</span><span class="w"></span>
-<span class="w">  </span><span class="c">! check if the only error found is for unknown passed CLAs and if it is ignored by the user</span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">==</span><span class="n">ERROR_UNKNOWN</span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">error_unknown_clas</span><span class="o">==</span><span class="n">ERROR_UNKNOWN_CLAS_IGNORED</span><span class="p">)</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ERROR_UNKNOWN_CLAS_IGNORED</span><span class="w"></span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">==</span><span class="mf">0.</span><span class="nb">and</span><span class="p">.(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="n">g</span><span class="p">)%</span><span class="n">is_called</span><span class="p">))</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
-<span class="w">    </span><span class="c">! TODO warn (if liked) for non invoked group querying</span>
-<span class="w">  </span><span class="k">endif</span>
-<span class="k">  if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">error</span><span class="p">))</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"></span>
-<span class="w">  </span><span class="k">endsubroutine </span><span class="n">get_cla</span><span class="w"></span>
+<span class="k">  endsubroutine </span><span class="n">get_cla</span>
 </pre></div>
 
     </section>
@@ -415,12 +950,12 @@
     </div> <!-- /container -->
     <footer>
       <div class="container">
-        <div class="row">
-          <div class="col-xs-6 col-md-6"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
+        <div class="row justify-content-between">
+          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
 </p>
           </div>
-          <div class="col-xs-6 col-md-6">
-            <p class="text-right">
+          <div class="col">
+            <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
             </p>
@@ -430,17 +965,12 @@
       </div> <!-- /container -->
     </footer>
 
-    <!-- Bootstrap core JavaScript
-         ================================================== -->
-         <!-- Placed at the end of the document so the pages load faster -->
-    <!--
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        -->
-        <script src="../js/bootstrap.min.js"></script>
-        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-        <script src="../js/ie10-viewport-bug-workaround.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
 
-        <!-- MathJax JavaScript
+    <!-- MathJax JavaScript
              ================================================== -->
              <!-- Placed at the end of the document so the pages load faster -->
         <script type="text/x-mathjax-config">

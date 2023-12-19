@@ -10,81 +10,55 @@
 
     <title>flap &ndash; FLAP</title>
 
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="../css/pygments.css" rel="stylesheet">
     <link href="../css/font-awesome.min.css" rel="stylesheet">
     <link href="../css/local.css" rel="stylesheet">
       <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <![endif]-->
-
-         <script src="../js/jquery-2.1.3.min.js"></script>
-         <script src="../js/svg-pan-zoom.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
   </head>
 
   <body>
 
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
           <a class="navbar-brand" href="../index.html">FLAP </a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
-              <a href="#" class="dropdown-toggle"
-                 data-toggle="dropdown" role="button"
-                 aria-haspopup="true"
-                 aria-expanded="false">
-                 Contents <span class="caret"></span>
-              </a>
-              <ul class="dropdown-menu">
-                    <li><a href="../lists/files.html">Source Files</a></li>
-                  <li><a href="../lists/modules.html">Modules</a></li>
-                  <li><a href="../lists/procedures.html">Procedures</a></li>
-                  <li><a href="../lists/types.html">Derived Types</a></li>
-                  <li><a href="../lists/programs.html">Programs</a></li>
-              </ul>
-            </li>
-                <li class="visible-xs hidden-sm visible-lg">
-                  <a href="../lists/files.html">Source Files</a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
                 </li>
-              <li class="visible-xs hidden-sm visible-lg">
-                <a href="../lists/modules.html">Modules</a>
-              </li>
-              <li class="visible-xs hidden-sm visible-lg">
-                <a href="../lists/procedures.html">Procedures</a>
-              </li>
-              <li class="visible-xs hidden-sm visible-lg">
-                <a href="../lists/types.html">Derived Types</a>
-              </li>
-              <li class="visible-xs hidden-sm visible-lg">
-                <a href="../lists/programs.html">Programs</a>
-              </li>
-          </ul>
-            <form action="../search.html" class="navbar-form navbar-right" role="search">
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
               </div>
-              <!--
-                  <button type="submit" class="btn btn-default">Submit</button>
-                  -->
-            </form>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
 
     <div class="container">
   <div class="row">
@@ -92,41 +66,46 @@
       <small>Module</small>
       
     </h1>
-      <div class="row" id="info-bar">
-    <div class="col-lg-12">
-      <div class="well well-sm">
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
         <ul class="list-inline" style="margin-bottom:0px;display:inline">
 
-          <li id="statements"><i class="fa fa-list-ol"></i>
-            <a data-toggle="tooltip"
-               data-placement="bottom" data-html="true"
-               title=" 0.3% of total for modules and submodules.">11 statements</a>
-          </li>
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip"
+                 data-bs-placement="bottom" data-html="true"
+                 title=" 0.3% of total for modules and submodules.">11 statements</a>
+            </li>
 
-            <li id="source-file">
+            <li class="list-inline-item" id="source-file">
               <i class="fa fa-code"></i>
               <a href="../src/flap.f90"> Source File</a>
             </li>
         </ul>
-        <ol class="breadcrumb in-well text-right">
-              <li><a href='../sourcefile/flap.f90.html'>flap.f90</a></li>
-          <li class="active">flap</li>
-        </ol>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/flap.f90.html'>flap.f90</a></li>
+            <li class="breadcrumb-item active" aria-current="page">flap</li>
+          </ol>
+        </nav>
       </div>
     </div>
   </div>
   <script>
     $(function () {
-    $('[data-toggle="tooltip"]').tooltip()
+    $('[data-bs-toggle="tooltip"]').tooltip()
     })
   </script>
 
   </div>
 
   <div class="row">
-    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    <div class="col-md-3">
         <div id="sidebar">
       <h3>Contents</h3>
+  
   
   
   
@@ -238,135 +217,135 @@
 <p>Besides this README file the FLAP documentation is contained into its own <a href="https://github.com/szaghi/FLAP/wiki">wiki</a>. Detailed documentation of the API is contained into the <a href="http://szaghi.github.io/FLAP/index.html">GitHub Pages</a> that can also be created locally by means of <a href="https://github.com/cmacmackin/ford">ford tool</a>.</p>
 <h3 id="a-taste-of-flap">A Taste of FLAP</h3>
 <p>A minimal <em>plate</em>:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">program </span><span class="n">minimal</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code><span class="k">program </span><span class="n">minimal</span>
 <span class="k">type</span><span class="p">(</span><span class="n">command_line_interface</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">cli</span><span class="w">    </span><span class="c">! Command Line Interface (CLI).</span>
 <span class="kt">character</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span><span class="w">                </span><span class="kd">::</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="c">! String value.</span>
 <span class="kt">integer</span><span class="w">                      </span><span class="kd">::</span><span class="w"> </span><span class="n">error</span><span class="w">  </span><span class="c">! Error trapping flag.</span>
 
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;minimal FLAP example&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--string&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">             </span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span><span class="w">    </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">             </span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;a string&#39;</span><span class="p">,</span><span class="w">   </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">             </span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="w">   </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">             </span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="w">       </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">             </span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;minimal FLAP example&#39;</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--string&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">             </span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span><span class="w">    </span><span class="p">&amp;</span>
+<span class="w">             </span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;a string&#39;</span><span class="p">,</span><span class="w">   </span><span class="p">&amp;</span>
+<span class="w">             </span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="w">   </span><span class="p">&amp;</span>
+<span class="w">             </span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="w">       </span><span class="p">&amp;</span>
+<span class="w">             </span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 <span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">stop</span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">val</span><span class="o">=</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">val</span><span class="o">=</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 <span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">stop</span>
-<span class="k">print</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">cli</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="s1">&#39; has been called with the following argument:&#39;</span><span class="w"></span>
-<span class="k">print</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;String = &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">string</span><span class="p">))</span><span class="w"></span>
-<span class="k">endprogram </span><span class="n">minimal</span><span class="w"></span>
+<span class="k">print</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">cli</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="s1">&#39; has been called with the following argument:&#39;</span>
+<span class="k">print</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;String = &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">string</span><span class="p">))</span>
+<span class="k">endprogram </span><span class="n">minimal</span>
 </code></pre></div>
 
 <p>That <em>built and run</em> provides:</p>
-<div class="codehilite"><pre><span></span><code>→ ./minimal
-./minimal: error: named option <span class="s2">&quot;--string&quot;</span> is required!
+<div class="codehilite"><pre><span></span><code>→<span class="w"> </span>./minimal
+./minimal:<span class="w"> </span>error:<span class="w"> </span>named<span class="w"> </span>option<span class="w"> </span><span class="s2">&quot;--string&quot;</span><span class="w"> </span>is<span class="w"> </span>required!
 
-usage:  ./exe/test_minimal --string value <span class="o">[</span>--help<span class="o">]</span> <span class="o">[</span>--version<span class="o">]</span>
+usage:<span class="w">  </span>./exe/test_minimal<span class="w"> </span>--string<span class="w"> </span>value<span class="w"> </span><span class="o">[</span>--help<span class="o">]</span><span class="w"> </span><span class="o">[</span>--version<span class="o">]</span>
 
-minimal FLAP example
+minimal<span class="w"> </span>FLAP<span class="w"> </span>example
 
-Required switches:
-   --string value, -s value
-    a string
+Required<span class="w"> </span>switches:
+<span class="w">   </span>--string<span class="w"> </span>value,<span class="w"> </span>-s<span class="w"> </span>value
+<span class="w">    </span>a<span class="w"> </span>string
 
-Optional switches:
-   --help, -h
-    Print this <span class="nb">help</span> message
-   --version, -v
-    Print version
+Optional<span class="w"> </span>switches:
+<span class="w">   </span>--help,<span class="w"> </span>-h
+<span class="w">    </span>Print<span class="w"> </span>this<span class="w"> </span><span class="nb">help</span><span class="w"> </span>message
+<span class="w">   </span>--version,<span class="w"> </span>-v
+<span class="w">    </span>Print<span class="w"> </span>version
 </code></pre></div>
 
 <p>A nice automatic help-message, right? Executed correctly gives.</p>
-<div class="codehilite"><pre><span></span><code>→ ./minimal --string <span class="s1">&#39;hello world&#39;</span>
-./exe/minimal has been called with the following argument:
-<span class="nv">String</span> <span class="o">=</span> hello world
+<div class="codehilite"><pre><span></span><code>→<span class="w"> </span>./minimal<span class="w"> </span>--string<span class="w"> </span><span class="s1">&#39;hello world&#39;</span>
+./exe/minimal<span class="w"> </span>has<span class="w"> </span>been<span class="w"> </span>called<span class="w"> </span>with<span class="w"> </span>the<span class="w"> </span>following<span class="w"> </span>argument:
+<span class="nv">String</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>hello<span class="w"> </span>world
 </code></pre></div>
 
 <p>For more details, see the provided <a href="https://github.com/szaghi/FLAP/blob/master/src/tests">tests</a>.</p>
 <h4 id="nested-subcommands">Nested (sub)commands</h4>
 <p>FLAP fully supports nested (sub)commands or groups of command line arguments. For example a fake <code>git</code> toy remake can be coded as</p>
 <div class="codehilite"><pre><span></span><code><span class="c">! initializing Command Line Interface</span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;test_nested&#39;</span><span class="p">,</span><span class="w">                                      </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">              </span><span class="n">version</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;v2.1.5&#39;</span><span class="p">,</span><span class="w">                                           </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">              </span><span class="n">authors</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Stefano Zaghi&#39;</span><span class="p">,</span><span class="w">                                    </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">              </span><span class="n">license</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;MIT&#39;</span><span class="p">,</span><span class="w">                                              </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">              </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Toy program for testing FLAP with nested commands&#39;</span><span class="p">,&amp;</span><span class="w"></span>
-<span class="w">              </span><span class="n">examples</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;test_nested                      &#39;</span><span class="p">,&amp;</span><span class="w"></span>
-<span class="w">                             </span><span class="s1">&#39;test_nested -h                   &#39;</span><span class="p">,&amp;</span><span class="w"></span>
-<span class="w">                             </span><span class="s1">&#39;test_nested init                 &#39;</span><span class="p">,&amp;</span><span class="w"></span>
-<span class="w">                             </span><span class="s1">&#39;test_nested commit -m &quot;fix bug-1&quot;&#39;</span><span class="p">,&amp;</span><span class="w"></span>
-<span class="w">                             </span><span class="s1">&#39;test_nested tag -a &quot;v2.1.5&quot;      &#39;</span><span class="p">])</span><span class="w"></span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;test_nested&#39;</span><span class="p">,</span><span class="w">                                      </span><span class="p">&amp;</span>
+<span class="w">              </span><span class="n">version</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;v2.1.5&#39;</span><span class="p">,</span><span class="w">                                           </span><span class="p">&amp;</span>
+<span class="w">              </span><span class="n">authors</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Stefano Zaghi&#39;</span><span class="p">,</span><span class="w">                                    </span><span class="p">&amp;</span>
+<span class="w">              </span><span class="n">license</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;MIT&#39;</span><span class="p">,</span><span class="w">                                              </span><span class="p">&amp;</span>
+<span class="w">              </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Toy program for testing FLAP with nested commands&#39;</span><span class="p">,&amp;</span>
+<span class="w">              </span><span class="n">examples</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;test_nested                      &#39;</span><span class="p">,&amp;</span>
+<span class="w">                             </span><span class="s1">&#39;test_nested -h                   &#39;</span><span class="p">,&amp;</span>
+<span class="w">                             </span><span class="s1">&#39;test_nested init                 &#39;</span><span class="p">,&amp;</span>
+<span class="w">                             </span><span class="s1">&#39;test_nested commit -m &quot;fix bug-1&quot;&#39;</span><span class="p">,&amp;</span>
+<span class="w">                             </span><span class="s1">&#39;test_nested tag -a &quot;v2.1.5&quot;      &#39;</span><span class="p">])</span>
 <span class="c">! set a Command Line Argument without a group to trigger authors names printing</span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--authors&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-a&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Print authors names&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--authors&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-a&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Print authors names&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">)</span>
 <span class="c">! set Command Line Arguments Groups, i.e. commands</span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add_group</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;init&#39;</span><span class="p">,</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;fake init versioning&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add_group</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;commit&#39;</span><span class="p">,</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;fake commit changes to current branch&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add_group</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;tag&#39;</span><span class="p">,</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;fake tag current commit&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add_group</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;init&#39;</span><span class="p">,</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;fake init versioning&#39;</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add_group</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;commit&#39;</span><span class="p">,</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;fake commit changes to current branch&#39;</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add_group</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;tag&#39;</span><span class="p">,</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;fake tag current commit&#39;</span><span class="p">)</span>
 <span class="c">! set Command Line Arguments of commit command</span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;commit&#39;</span><span class="p">,</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--message&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-m&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Commit message&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;commit&#39;</span><span class="p">,</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--message&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-m&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Commit message&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="c">! set Command Line Arguments of commit command</span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;tag&#39;</span><span class="p">,</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--annotate&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-a&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Tag annotation&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;tag&#39;</span><span class="p">,</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--annotate&#39;</span><span class="p">,</span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-a&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Tag annotation&#39;</span><span class="p">,</span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="c">! parsing Command Line Interface</span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">parse</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">parse</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 <span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">  print</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Error code: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">error</span><span class="p">))</span><span class="w"></span>
+<span class="k">  print</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Error code: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">error</span><span class="p">))</span>
 <span class="w">  </span><span class="k">stop</span>
-<span class="k">endif</span><span class="w"></span>
+<span class="k">endif</span>
 <span class="c">! using Command Line Interface data to trigger program behaviour</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-a&#39;</span><span class="p">,</span><span class="n">val</span><span class="o">=</span><span class="n">authors_print</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">stop</span>
 <span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">authors_print</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">  print</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="s1">&#39;Authors: &#39;</span><span class="o">//</span><span class="n">cli</span><span class="p">%</span><span class="n">authors</span><span class="w"></span>
-<span class="n">elseif</span><span class="w"> </span><span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">run_command</span><span class="p">(</span><span class="s1">&#39;init&#39;</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">  print</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="s1">&#39;init (fake) versioning&#39;</span><span class="w"></span>
-<span class="n">elseif</span><span class="w"> </span><span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">run_command</span><span class="p">(</span><span class="s1">&#39;commit&#39;</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">  print</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="s1">&#39;Authors: &#39;</span><span class="o">//</span><span class="n">cli</span><span class="p">%</span><span class="n">authors</span>
+<span class="k">elseif</span><span class="w"> </span><span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">run_command</span><span class="p">(</span><span class="s1">&#39;init&#39;</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">  print</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="s1">&#39;init (fake) versioning&#39;</span>
+<span class="k">elseif</span><span class="w"> </span><span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">run_command</span><span class="p">(</span><span class="s1">&#39;commit&#39;</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
 <span class="k">  call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;commit&#39;</span><span class="p">,</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-m&#39;</span><span class="p">,</span><span class="n">val</span><span class="o">=</span><span class="n">message</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">stop</span>
-<span class="k">  print</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="s1">&#39;commit changes to current branch with message &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;&quot;&#39;</span><span class="w"></span>
-<span class="n">elseif</span><span class="w"> </span><span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">run_command</span><span class="p">(</span><span class="s1">&#39;tag&#39;</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">  print</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="s1">&#39;commit changes to current branch with message &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;&quot;&#39;</span>
+<span class="k">elseif</span><span class="w"> </span><span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">run_command</span><span class="p">(</span><span class="s1">&#39;tag&#39;</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
 <span class="k">  call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;tag&#39;</span><span class="p">,</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-a&#39;</span><span class="p">,</span><span class="n">val</span><span class="o">=</span><span class="n">message</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">stop</span>
-<span class="k">  print</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="s1">&#39;tag current branch with message &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;&quot;&#39;</span><span class="w"></span>
+<span class="k">  print</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="s1">&#39;tag current branch with message &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;&quot;&#39;</span>
 <span class="k">else</span>
-<span class="k">  print</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="s1">&#39;cowardly you are doing nothing... try at least &quot;-h&quot; option!&#39;</span><span class="w"></span>
-<span class="k">endif</span><span class="w"></span>
+<span class="k">  print</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="s1">&#39;cowardly you are doing nothing... try at least &quot;-h&quot; option!&#39;</span>
+<span class="k">endif</span>
 </code></pre></div>
 
 <p>that when invoked without arguments prompts:</p>
-<div class="codehilite"><pre><span></span><code>cowardly you are doing nothing... try at least <span class="s2">&quot;-h&quot;</span> option!
+<div class="codehilite"><pre><span></span><code>cowardly<span class="w"> </span>you<span class="w"> </span>are<span class="w"> </span>doing<span class="w"> </span>nothing...<span class="w"> </span>try<span class="w"> </span>at<span class="w"> </span>least<span class="w"> </span><span class="s2">&quot;-h&quot;</span><span class="w"> </span>option!
 </code></pre></div>
 
 <p>and invoked with <code>-h</code> option gives:</p>
-<div class="codehilite"><pre><span></span><code>usage: test_nested  <span class="o">[</span>--authors<span class="o">]</span> <span class="o">[</span>--help<span class="o">]</span> <span class="o">[</span>--version<span class="o">]</span> <span class="o">{</span>init,commit,tag<span class="o">}</span> ...
+<div class="codehilite"><pre><span></span><code>usage:<span class="w"> </span>test_nested<span class="w">  </span><span class="o">[</span>--authors<span class="o">]</span><span class="w"> </span><span class="o">[</span>--help<span class="o">]</span><span class="w"> </span><span class="o">[</span>--version<span class="o">]</span><span class="w"> </span><span class="o">{</span>init,commit,tag<span class="o">}</span><span class="w"> </span>...
 
-Toy program <span class="k">for</span> testing FLAP with nested commands
+Toy<span class="w"> </span>program<span class="w"> </span><span class="k">for</span><span class="w"> </span>testing<span class="w"> </span>FLAP<span class="w"> </span>with<span class="w"> </span>nested<span class="w"> </span>commands
 
-Optional switches:
-   --authors, -a
-          default value .false.
-          Print authors names
-   --help, -h
-          Print this <span class="nb">help</span> message
-   --version, -v
-          Print version
+Optional<span class="w"> </span>switches:
+<span class="w">   </span>--authors,<span class="w"> </span>-a
+<span class="w">          </span>default<span class="w"> </span>value<span class="w"> </span>.false.
+<span class="w">          </span>Print<span class="w"> </span>authors<span class="w"> </span>names
+<span class="w">   </span>--help,<span class="w"> </span>-h
+<span class="w">          </span>Print<span class="w"> </span>this<span class="w"> </span><span class="nb">help</span><span class="w"> </span>message
+<span class="w">   </span>--version,<span class="w"> </span>-v
+<span class="w">          </span>Print<span class="w"> </span>version
 
 Commands:
-  init
-          fake init versioning
-  commit
-          fake commit changes to current branch
-  tag
-          fake tag current commit
+<span class="w">  </span>init
+<span class="w">          </span>fake<span class="w"> </span>init<span class="w"> </span>versioning
+<span class="w">  </span>commit
+<span class="w">          </span>fake<span class="w"> </span>commit<span class="w"> </span>changes<span class="w"> </span>to<span class="w"> </span>current<span class="w"> </span>branch
+<span class="w">  </span>tag
+<span class="w">          </span>fake<span class="w"> </span>tag<span class="w"> </span>current<span class="w"> </span>commit
 
-For more detailed commands <span class="nb">help</span> try:
-  test_nested init -h,--help
-  test_nested commit -h,--help
-  test_nested tag -h,--help
+For<span class="w"> </span>more<span class="w"> </span>detailed<span class="w"> </span>commands<span class="w"> </span><span class="nb">help</span><span class="w"> </span>try:
+<span class="w">  </span>test_nested<span class="w"> </span>init<span class="w"> </span>-h,--help
+<span class="w">  </span>test_nested<span class="w"> </span>commit<span class="w"> </span>-h,--help
+<span class="w">  </span>test_nested<span class="w"> </span>tag<span class="w"> </span>-h,--help
 
 Examples:
-   test_nested
-   test_nested -h
-   test_nested init
-   test_nested commit -m <span class="s2">&quot;fix bug-1&quot;</span>
-   test_nested tag -a <span class="s2">&quot;v2.1.5&quot;</span>
+<span class="w">   </span>test_nested
+<span class="w">   </span>test_nested<span class="w"> </span>-h
+<span class="w">   </span>test_nested<span class="w"> </span>init
+<span class="w">   </span>test_nested<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;fix bug-1&quot;</span>
+<span class="w">   </span>test_nested<span class="w"> </span>tag<span class="w"> </span>-a<span class="w"> </span><span class="s2">&quot;v2.1.5&quot;</span>
 </code></pre></div>
 
 <p>For more details, see the provided <a href="https://github.com/szaghi/FLAP/blob/master/src/tests/test_nested.f90">example</a>.</p>
@@ -388,30 +367,30 @@ Examples:
 <p>Go to <a href="#top">Top</a></p>
 <h3 id="install-script">install script</h3>
 <p>FLAP ships a bash script (downloadable from <a href="https://github.com/szaghi/FLAP/releases/latest">here</a>) that is able to automatize the download and build steps. The script <code>install.sh</code> has the following usage:</p>
-<div class="codehilite"><pre><span></span><code>→ ./install.sh
-Install script of FLAP
+<div class="codehilite"><pre><span></span><code>→<span class="w"> </span>./install.sh
+Install<span class="w"> </span>script<span class="w"> </span>of<span class="w"> </span>FLAP
 Usage:
 
-install.sh --help<span class="p">|</span>-?
-    Print this usage output and <span class="nb">exit</span>
+install.sh<span class="w"> </span>--help<span class="p">|</span>-?
+<span class="w">    </span>Print<span class="w"> </span>this<span class="w"> </span>usage<span class="w"> </span>output<span class="w"> </span>and<span class="w"> </span><span class="nb">exit</span>
 
-install.sh --download<span class="p">|</span>-d &lt;arg&gt; <span class="o">[</span>--verbose<span class="p">|</span>-v<span class="o">]</span>
-    Download the project
+install.sh<span class="w"> </span>--download<span class="p">|</span>-d<span class="w"> </span>&lt;arg&gt;<span class="w"> </span><span class="o">[</span>--verbose<span class="p">|</span>-v<span class="o">]</span>
+<span class="w">    </span>Download<span class="w"> </span>the<span class="w"> </span>project
 
-    --download<span class="p">|</span>-d <span class="o">[</span>arg<span class="o">]</span>  Download the project, <span class="nv">arg</span><span class="o">=</span>git<span class="p">|</span>wget to download with git or wget respectively
-    --verbose<span class="p">|</span>-v         Output verbose mode activation
+<span class="w">    </span>--download<span class="p">|</span>-d<span class="w"> </span><span class="o">[</span>arg<span class="o">]</span><span class="w">  </span>Download<span class="w"> </span>the<span class="w"> </span>project,<span class="w"> </span><span class="nv">arg</span><span class="o">=</span>git<span class="p">|</span>wget<span class="w"> </span>to<span class="w"> </span>download<span class="w"> </span>with<span class="w"> </span>git<span class="w"> </span>or<span class="w"> </span>wget<span class="w"> </span>respectively
+<span class="w">    </span>--verbose<span class="p">|</span>-v<span class="w">         </span>Output<span class="w"> </span>verbose<span class="w"> </span>mode<span class="w"> </span>activation
 
-install.sh --build<span class="p">|</span>-b &lt;arg&gt; <span class="o">[</span>--verbose<span class="p">|</span>-v<span class="o">]</span>
-    Build the project
+install.sh<span class="w"> </span>--build<span class="p">|</span>-b<span class="w"> </span>&lt;arg&gt;<span class="w"> </span><span class="o">[</span>--verbose<span class="p">|</span>-v<span class="o">]</span>
+<span class="w">    </span>Build<span class="w"> </span>the<span class="w"> </span>project
 
-    --build<span class="p">|</span>-b <span class="o">[</span>arg<span class="o">]</span>  Build the project, <span class="nv">arg</span><span class="o">=</span>fobis<span class="p">|</span>make<span class="p">|</span>cmake to build with FoBiS.py, GNU Make or CMake respectively
-    --verbose<span class="p">|</span>-v      Output verbose mode activation
+<span class="w">    </span>--build<span class="p">|</span>-b<span class="w"> </span><span class="o">[</span>arg<span class="o">]</span><span class="w">  </span>Build<span class="w"> </span>the<span class="w"> </span>project,<span class="w"> </span><span class="nv">arg</span><span class="o">=</span>fobis<span class="p">|</span>make<span class="p">|</span>cmake<span class="w"> </span>to<span class="w"> </span>build<span class="w"> </span>with<span class="w"> </span>FoBiS.py,<span class="w"> </span>GNU<span class="w"> </span>Make<span class="w"> </span>or<span class="w"> </span>CMake<span class="w"> </span>respectively
+<span class="w">    </span>--verbose<span class="p">|</span>-v<span class="w">      </span>Output<span class="w"> </span>verbose<span class="w"> </span>mode<span class="w"> </span>activation
 
 Examples:
 
-install.sh --download git
-install.sh --build make
-install.sh --download wget --build cmake
+install.sh<span class="w"> </span>--download<span class="w"> </span>git
+install.sh<span class="w"> </span>--build<span class="w"> </span>make
+install.sh<span class="w"> </span>--download<span class="w"> </span>wget<span class="w"> </span>--build<span class="w"> </span>cmake
 </code></pre></div>
 
 <blockquote>
@@ -433,11 +412,11 @@ install.sh --download wget --build cmake
 </blockquote>
 <p>Typical usages are:</p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># download and prepare the project by means of git and build with GNU Make</span>
-install.sh --dowload git --build make
+install.sh<span class="w"> </span>--dowload<span class="w"> </span>git<span class="w"> </span>--build<span class="w"> </span>make
 <span class="c1"># download and prepare the project by means of wget (curl) and build with CMake</span>
-install.sh --dowload wget --build cmake
+install.sh<span class="w"> </span>--dowload<span class="w"> </span>wget<span class="w"> </span>--build<span class="w"> </span>cmake
 <span class="c1"># download and prepare the project by means of git and build with FoBiS.py</span>
-install.sh --dowload git --build fobis
+install.sh<span class="w"> </span>--dowload<span class="w"> </span>git<span class="w"> </span>--build<span class="w"> </span>fobis
 </code></pre></div>
 
 <hr>
@@ -445,9 +424,9 @@ install.sh --dowload git --build fobis
 <h3 id="manually-download-and-build">manually download and build</h3>
 <h4 id="download">download</h4>
 <p>To download all the available releases and utilities (fobos, license, readme, etc&hellip;), it can be convenient to <em>clone</em> whole the project:</p>
-<div class="codehilite"><pre><span></span><code>git clone https://github.com/szaghi/FLAP
-<span class="nb">cd</span> FLAP
-git submodule update --init
+<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/szaghi/FLAP
+<span class="nb">cd</span><span class="w"> </span>FLAP
+git<span class="w"> </span>submodule<span class="w"> </span>update<span class="w"> </span>--init
 </code></pre></div>
 
 <p>Alternatively, you can directly download a release from GitHub server, see the <a href="https://github.com/szaghi/FLAP/wiki/ChangeLog">ChangeLog</a>.</p>
@@ -460,86 +439,86 @@ git submodule update --init
 <p>FoBiS.py is a KISS tool for automatic building of modern Fortran projects. Providing very few options, FoBiS.py is able to build almost automatically complex Fortran projects with cumbersome inter-modules dependency. This removes the necessity to write complex makefile. Moreover, providing a very simple options file (in the FoBiS.py nomenclature indicated as <code>fobos</code> file) FoBiS.py can substitute the (ab)use of makefile for other project stuffs (build documentations, make project archive, etc&hellip;). FLAP is shipped with a fobos file that can build the library in both <em>static</em> and <em>shared</em> forms and also build the <code>Test_Driver</code> program. The provided fobos file has several building modes.</p>
 <h5 id="listing-fobos-building-modes">listing fobos building modes</h5>
 <p>Typing:</p>
-<div class="codehilite"><pre><span></span><code>FoBiS.py build -lmodes
+<div class="codehilite"><pre><span></span><code>FoBiS.py<span class="w"> </span>build<span class="w"> </span>-lmodes
 </code></pre></div>
 
 <p>the following message should be printed:</p>
-<div class="codehilite"><pre><span></span><code>The fobos file defines the following modes:
- - <span class="s2">&quot;shared-gnu&quot;</span>
-  - <span class="s2">&quot;static-gnu&quot;</span>
-  - <span class="s2">&quot;test-driver-gnu&quot;</span>
-  - <span class="s2">&quot;shared-gnu-debug&quot;</span>
-  - <span class="s2">&quot;static-gnu-debug&quot;</span>
-  - <span class="s2">&quot;test-driver-gnu-debug&quot;</span>
-  - <span class="s2">&quot;shared-intel&quot;</span>
-  - <span class="s2">&quot;static-intel&quot;</span>
-  - <span class="s2">&quot;test-driver-intel&quot;</span>
-  - <span class="s2">&quot;shared-intel-debug&quot;</span>
-  - <span class="s2">&quot;static-intel-debug&quot;</span>
-  - <span class="s2">&quot;test-driver-intel-debug&quot;</span>
+<div class="codehilite"><pre><span></span><code>The<span class="w"> </span>fobos<span class="w"> </span>file<span class="w"> </span>defines<span class="w"> </span>the<span class="w"> </span>following<span class="w"> </span>modes:
+<span class="w"> </span>-<span class="w"> </span><span class="s2">&quot;shared-gnu&quot;</span>
+<span class="w">  </span>-<span class="w"> </span><span class="s2">&quot;static-gnu&quot;</span>
+<span class="w">  </span>-<span class="w"> </span><span class="s2">&quot;test-driver-gnu&quot;</span>
+<span class="w">  </span>-<span class="w"> </span><span class="s2">&quot;shared-gnu-debug&quot;</span>
+<span class="w">  </span>-<span class="w"> </span><span class="s2">&quot;static-gnu-debug&quot;</span>
+<span class="w">  </span>-<span class="w"> </span><span class="s2">&quot;test-driver-gnu-debug&quot;</span>
+<span class="w">  </span>-<span class="w"> </span><span class="s2">&quot;shared-intel&quot;</span>
+<span class="w">  </span>-<span class="w"> </span><span class="s2">&quot;static-intel&quot;</span>
+<span class="w">  </span>-<span class="w"> </span><span class="s2">&quot;test-driver-intel&quot;</span>
+<span class="w">  </span>-<span class="w"> </span><span class="s2">&quot;shared-intel-debug&quot;</span>
+<span class="w">  </span>-<span class="w"> </span><span class="s2">&quot;static-intel-debug&quot;</span>
+<span class="w">  </span>-<span class="w"> </span><span class="s2">&quot;test-driver-intel-debug&quot;</span>
 </code></pre></div>
 
 <p>The modes should be self-explicative: <code>shared</code>, <code>static</code> and <code>test-driver</code> are the modes for building (in release, optimized form) the shared and static versions of the library and the Test Driver program, respectively. The other 3 modes are the same, but in debug form instead of release one. <code>-gnu</code> use the <code>GNU gfortran</code> compiler while <code>-intel</code> the Intel one.</p>
 <h5 id="building-the-library">building the library</h5>
 <p>The <code>shared</code> or <code>static</code> directories are created accordingly to the form of the library built. The compiled objects and mod files are placed inside this directory, as well as the linked library.</p>
 <h6 id="release-shared-library">release shared library</h6>
-<div class="codehilite"><pre><span></span><code>FoBiS.py build -mode shared-gnu
+<div class="codehilite"><pre><span></span><code>FoBiS.py<span class="w"> </span>build<span class="w"> </span>-mode<span class="w"> </span>shared-gnu
 </code></pre></div>
 
 <h6 id="release-static-library">release static library</h6>
-<div class="codehilite"><pre><span></span><code>FoBiS.py build -mode static-gnu
+<div class="codehilite"><pre><span></span><code>FoBiS.py<span class="w"> </span>build<span class="w"> </span>-mode<span class="w"> </span>static-gnu
 </code></pre></div>
 
 <h6 id="debug-shared-library">debug shared library</h6>
-<div class="codehilite"><pre><span></span><code>FoBiS.py build -mode shared-gnu-debug
+<div class="codehilite"><pre><span></span><code>FoBiS.py<span class="w"> </span>build<span class="w"> </span>-mode<span class="w"> </span>shared-gnu-debug
 </code></pre></div>
 
 <h6 id="debug-static-library">debug static library</h6>
-<div class="codehilite"><pre><span></span><code>FoBiS.py build -mode static-gnu-debug
+<div class="codehilite"><pre><span></span><code>FoBiS.py<span class="w"> </span>build<span class="w"> </span>-mode<span class="w"> </span>static-gnu-debug
 </code></pre></div>
 
 <h5 id="building-the-test-driver-program">building the Test Driver program</h5>
 <p>The <code>Test_Driver</code> directory is created. The compiled objects and mod files are placed inside this directory, as well as the linked program.</p>
 <h6 id="release-test-driver-program">release test driver program</h6>
-<div class="codehilite"><pre><span></span><code>FoBiS.py build -mode test-driver-gnu
+<div class="codehilite"><pre><span></span><code>FoBiS.py<span class="w"> </span>build<span class="w"> </span>-mode<span class="w"> </span>test-driver-gnu
 </code></pre></div>
 
 <h6 id="debug-test-driver-program">debug test driver program</h6>
-<div class="codehilite"><pre><span></span><code>FoBiS.py build -mode test-driver-gnu-debug
+<div class="codehilite"><pre><span></span><code>FoBiS.py<span class="w"> </span>build<span class="w"> </span>-mode<span class="w"> </span>test-driver-gnu-debug
 </code></pre></div>
 
 <h5 id="listing-fobos-rules">listing fobos rules</h5>
 <p>Typing:</p>
-<div class="codehilite"><pre><span></span><code>FoBiS.py rule -ls
+<div class="codehilite"><pre><span></span><code>FoBiS.py<span class="w"> </span>rule<span class="w"> </span>-ls
 </code></pre></div>
 
 <p>the following message should be printed:</p>
-<div class="codehilite"><pre><span></span><code>The fobos file defines the following rules:
-  - <span class="s2">&quot;makedoc&quot;</span> Rule <span class="k">for</span> building documentation from <span class="nb">source</span> files
-       <span class="nv">Command</span> <span class="o">=</span>&gt; rm -rf doc/html/*
-       <span class="nv">Command</span> <span class="o">=</span>&gt; ford doc/main_page.md
-       <span class="nv">Command</span> <span class="o">=</span>&gt; cp -r doc/html/publish/* doc/html/
-  - <span class="s2">&quot;deldoc&quot;</span> Rule <span class="k">for</span> deleting documentation
-       <span class="nv">Command</span> <span class="o">=</span>&gt; rm -rf doc/html/*
-  - <span class="s2">&quot;maketar&quot;</span> Rule <span class="k">for</span> making tar archive of the project
-       <span class="nv">Command</span> <span class="o">=</span>&gt; tar -czf FLAP.tar.gz *
-  - <span class="s2">&quot;makecoverage&quot;</span> Rule <span class="k">for</span> performing coverage analysis
-       <span class="nv">Command</span> <span class="o">=</span>&gt; FoBiS.py clean -mode test-driver-gnu
-       <span class="nv">Command</span> <span class="o">=</span>&gt; FoBiS.py build -mode test-driver-gnu -coverage
-       <span class="nv">Command</span> <span class="o">=</span>&gt; ./Test_Driver/Test_Driver
-       <span class="nv">Command</span> <span class="o">=</span>&gt; ./Test_Driver/Test_Driver -v
-       <span class="nv">Command</span> <span class="o">=</span>&gt; ./Test_Driver/Test_Driver -s <span class="s1">&#39;Hello FLAP&#39;</span> -i <span class="m">2</span>
-       <span class="nv">Command</span> <span class="o">=</span>&gt; ./Test_Driver/Test_Driver <span class="m">33</span>.0 -s <span class="s1">&#39;Hello FLAP&#39;</span> --integer_list <span class="m">10</span> -3 <span class="m">87</span> -i <span class="m">3</span> -r <span class="m">64</span>.123d0  --boolean --boolean_val .false.
-  - <span class="s2">&quot;coverage-analysis&quot;</span> Rule <span class="k">for</span> performing coverage analysis and saving reports <span class="k">in</span> markdown
-       <span class="nv">Command</span> <span class="o">=</span>&gt; FoBiS.py clean -mode test-driver-gnu
-       <span class="nv">Command</span> <span class="o">=</span>&gt; FoBiS.py build -mode test-driver-gnu -coverage
-       <span class="nv">Command</span> <span class="o">=</span>&gt; ./Test_Driver/Test_Driver
-       <span class="nv">Command</span> <span class="o">=</span>&gt; ./Test_Driver/Test_Driver -v
-       <span class="nv">Command</span> <span class="o">=</span>&gt; ./Test_Driver/Test_Driver -s <span class="s1">&#39;Hello FLAP&#39;</span> -i <span class="m">2</span>
-       <span class="nv">Command</span> <span class="o">=</span>&gt; ./Test_Driver/Test_Driver <span class="m">33</span>.0 -s <span class="s1">&#39;Hello FLAP&#39;</span> --integer_list <span class="m">10</span> -3 <span class="m">87</span> -i <span class="m">3</span> -r <span class="m">64</span>.123d0  --boolean --boolean_val .false.
-       <span class="nv">Command</span> <span class="o">=</span>&gt; gcov -o Test_Driver/obj/ src/*
-       <span class="nv">Command</span> <span class="o">=</span>&gt; FoBiS.py rule -gcov_analyzer wiki/ Coverage-Analysis
-       <span class="nv">Command</span> <span class="o">=</span>&gt; rm -f *.gcov
+<div class="codehilite"><pre><span></span><code>The<span class="w"> </span>fobos<span class="w"> </span>file<span class="w"> </span>defines<span class="w"> </span>the<span class="w"> </span>following<span class="w"> </span>rules:
+<span class="w">  </span>-<span class="w"> </span><span class="s2">&quot;makedoc&quot;</span><span class="w"> </span>Rule<span class="w"> </span><span class="k">for</span><span class="w"> </span>building<span class="w"> </span>documentation<span class="w"> </span>from<span class="w"> </span><span class="nb">source</span><span class="w"> </span>files
+<span class="w">       </span><span class="nv">Command</span><span class="w"> </span><span class="o">=</span>&gt;<span class="w"> </span>rm<span class="w"> </span>-rf<span class="w"> </span>doc/html/*
+<span class="w">       </span><span class="nv">Command</span><span class="w"> </span><span class="o">=</span>&gt;<span class="w"> </span>ford<span class="w"> </span>doc/main_page.md
+<span class="w">       </span><span class="nv">Command</span><span class="w"> </span><span class="o">=</span>&gt;<span class="w"> </span>cp<span class="w"> </span>-r<span class="w"> </span>doc/html/publish/*<span class="w"> </span>doc/html/
+<span class="w">  </span>-<span class="w"> </span><span class="s2">&quot;deldoc&quot;</span><span class="w"> </span>Rule<span class="w"> </span><span class="k">for</span><span class="w"> </span>deleting<span class="w"> </span>documentation
+<span class="w">       </span><span class="nv">Command</span><span class="w"> </span><span class="o">=</span>&gt;<span class="w"> </span>rm<span class="w"> </span>-rf<span class="w"> </span>doc/html/*
+<span class="w">  </span>-<span class="w"> </span><span class="s2">&quot;maketar&quot;</span><span class="w"> </span>Rule<span class="w"> </span><span class="k">for</span><span class="w"> </span>making<span class="w"> </span>tar<span class="w"> </span>archive<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>project
+<span class="w">       </span><span class="nv">Command</span><span class="w"> </span><span class="o">=</span>&gt;<span class="w"> </span>tar<span class="w"> </span>-czf<span class="w"> </span>FLAP.tar.gz<span class="w"> </span>*
+<span class="w">  </span>-<span class="w"> </span><span class="s2">&quot;makecoverage&quot;</span><span class="w"> </span>Rule<span class="w"> </span><span class="k">for</span><span class="w"> </span>performing<span class="w"> </span>coverage<span class="w"> </span>analysis
+<span class="w">       </span><span class="nv">Command</span><span class="w"> </span><span class="o">=</span>&gt;<span class="w"> </span>FoBiS.py<span class="w"> </span>clean<span class="w"> </span>-mode<span class="w"> </span>test-driver-gnu
+<span class="w">       </span><span class="nv">Command</span><span class="w"> </span><span class="o">=</span>&gt;<span class="w"> </span>FoBiS.py<span class="w"> </span>build<span class="w"> </span>-mode<span class="w"> </span>test-driver-gnu<span class="w"> </span>-coverage
+<span class="w">       </span><span class="nv">Command</span><span class="w"> </span><span class="o">=</span>&gt;<span class="w"> </span>./Test_Driver/Test_Driver
+<span class="w">       </span><span class="nv">Command</span><span class="w"> </span><span class="o">=</span>&gt;<span class="w"> </span>./Test_Driver/Test_Driver<span class="w"> </span>-v
+<span class="w">       </span><span class="nv">Command</span><span class="w"> </span><span class="o">=</span>&gt;<span class="w"> </span>./Test_Driver/Test_Driver<span class="w"> </span>-s<span class="w"> </span><span class="s1">&#39;Hello FLAP&#39;</span><span class="w"> </span>-i<span class="w"> </span><span class="m">2</span>
+<span class="w">       </span><span class="nv">Command</span><span class="w"> </span><span class="o">=</span>&gt;<span class="w"> </span>./Test_Driver/Test_Driver<span class="w"> </span><span class="m">33</span>.0<span class="w"> </span>-s<span class="w"> </span><span class="s1">&#39;Hello FLAP&#39;</span><span class="w"> </span>--integer_list<span class="w"> </span><span class="m">10</span><span class="w"> </span>-3<span class="w"> </span><span class="m">87</span><span class="w"> </span>-i<span class="w"> </span><span class="m">3</span><span class="w"> </span>-r<span class="w"> </span><span class="m">64</span>.123d0<span class="w">  </span>--boolean<span class="w"> </span>--boolean_val<span class="w"> </span>.false.
+<span class="w">  </span>-<span class="w"> </span><span class="s2">&quot;coverage-analysis&quot;</span><span class="w"> </span>Rule<span class="w"> </span><span class="k">for</span><span class="w"> </span>performing<span class="w"> </span>coverage<span class="w"> </span>analysis<span class="w"> </span>and<span class="w"> </span>saving<span class="w"> </span>reports<span class="w"> </span><span class="k">in</span><span class="w"> </span>markdown
+<span class="w">       </span><span class="nv">Command</span><span class="w"> </span><span class="o">=</span>&gt;<span class="w"> </span>FoBiS.py<span class="w"> </span>clean<span class="w"> </span>-mode<span class="w"> </span>test-driver-gnu
+<span class="w">       </span><span class="nv">Command</span><span class="w"> </span><span class="o">=</span>&gt;<span class="w"> </span>FoBiS.py<span class="w"> </span>build<span class="w"> </span>-mode<span class="w"> </span>test-driver-gnu<span class="w"> </span>-coverage
+<span class="w">       </span><span class="nv">Command</span><span class="w"> </span><span class="o">=</span>&gt;<span class="w"> </span>./Test_Driver/Test_Driver
+<span class="w">       </span><span class="nv">Command</span><span class="w"> </span><span class="o">=</span>&gt;<span class="w"> </span>./Test_Driver/Test_Driver<span class="w"> </span>-v
+<span class="w">       </span><span class="nv">Command</span><span class="w"> </span><span class="o">=</span>&gt;<span class="w"> </span>./Test_Driver/Test_Driver<span class="w"> </span>-s<span class="w"> </span><span class="s1">&#39;Hello FLAP&#39;</span><span class="w"> </span>-i<span class="w"> </span><span class="m">2</span>
+<span class="w">       </span><span class="nv">Command</span><span class="w"> </span><span class="o">=</span>&gt;<span class="w"> </span>./Test_Driver/Test_Driver<span class="w"> </span><span class="m">33</span>.0<span class="w"> </span>-s<span class="w"> </span><span class="s1">&#39;Hello FLAP&#39;</span><span class="w"> </span>--integer_list<span class="w"> </span><span class="m">10</span><span class="w"> </span>-3<span class="w"> </span><span class="m">87</span><span class="w"> </span>-i<span class="w"> </span><span class="m">3</span><span class="w"> </span>-r<span class="w"> </span><span class="m">64</span>.123d0<span class="w">  </span>--boolean<span class="w"> </span>--boolean_val<span class="w"> </span>.false.
+<span class="w">       </span><span class="nv">Command</span><span class="w"> </span><span class="o">=</span>&gt;<span class="w"> </span>gcov<span class="w"> </span>-o<span class="w"> </span>Test_Driver/obj/<span class="w"> </span>src/*
+<span class="w">       </span><span class="nv">Command</span><span class="w"> </span><span class="o">=</span>&gt;<span class="w"> </span>FoBiS.py<span class="w"> </span>rule<span class="w"> </span>-gcov_analyzer<span class="w"> </span>wiki/<span class="w"> </span>Coverage-Analysis
+<span class="w">       </span><span class="nv">Command</span><span class="w"> </span><span class="o">=</span>&gt;<span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span>*.gcov
 </code></pre></div>
 
 <p>The rules should be self-explicative.</p>
@@ -548,34 +527,34 @@ git submodule update --init
 <p>Bad choice :-)</p>
 <p>However, a makefile (generated by FoBiS.py&hellip;) to be used with a compatible GNU Make tool is <a href="https://github.com/szaghi/FLAP/blob/master/makefile">provided</a>.</p>
 <p>It is convenient to clone the whole FLAP repository and run a <em>standard</em> make:</p>
-<div class="codehilite"><pre><span></span><code>git clone https://github.com/szaghi/FLAP
-<span class="nb">cd</span> FLAP
-make -j <span class="m">1</span>
+<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/szaghi/FLAP
+<span class="nb">cd</span><span class="w"> </span>FLAP
+make<span class="w"> </span>-j<span class="w"> </span><span class="m">1</span>
 </code></pre></div>
 
 <p>This commands build all tests (executables are in <code>exe/</code> directory). To build only the library (statically linked) type:</p>
-<div class="codehilite"><pre><span></span><code>git clone https://github.com/szaghi/FLAP
-<span class="nb">cd</span> FLAP
-make -j <span class="m">1</span> <span class="nv">STATIC</span><span class="o">=</span>yes
+<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/szaghi/FLAP
+<span class="nb">cd</span><span class="w"> </span>FLAP
+make<span class="w"> </span>-j<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="nv">STATIC</span><span class="o">=</span>yes
 </code></pre></div>
 
 <h4 id="build-by-means-of-cmake">Build by means of CMake</h4>
 <p>Bad choice :-)</p>
 <p>However, a CMake setup (kindly developed by <a href="https://github.com/victorsndvg">victorsndvg</a>) is provided.</p>
 <p>It is convenient to clone the whole FLAP repository and run a <em>standard</em> CMake configure/build commands:</p>
-<div class="codehilite"><pre><span></span><code>git clone https://github.com/szaghi/FLAP <span class="nv">$YOUR_FLAP_PATH</span>
-mkdir build
-<span class="nb">cd</span> build
-cmake <span class="nv">$YOUR_FLAP_PATH</span>
-cmake --build .
+<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/szaghi/FLAP<span class="w"> </span><span class="nv">$YOUR_FLAP_PATH</span>
+mkdir<span class="w"> </span>build
+<span class="nb">cd</span><span class="w"> </span>build
+cmake<span class="w"> </span><span class="nv">$YOUR_FLAP_PATH</span>
+cmake<span class="w"> </span>--build<span class="w"> </span>.
 </code></pre></div>
 
 <p>If you want to run the tests suite type:</p>
-<div class="codehilite"><pre><span></span><code>git clone https://github.com/szaghi/FLAP <span class="nv">$YOUR_FLAP_PATH</span>
-mkdir build
-<span class="nb">cd</span> build
-cmake -DFLAP_ENABLE_TESTS<span class="o">=</span>ON <span class="nv">$YOUR_FLAP_PATH</span>
-cmake --build .
+<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/szaghi/FLAP<span class="w"> </span><span class="nv">$YOUR_FLAP_PATH</span>
+mkdir<span class="w"> </span>build
+<span class="nb">cd</span><span class="w"> </span>build
+cmake<span class="w"> </span>-DFLAP_ENABLE_TESTS<span class="o">=</span>ON<span class="w"> </span><span class="nv">$YOUR_FLAP_PATH</span>
+cmake<span class="w"> </span>--build<span class="w"> </span>.
 ctest
 </code></pre></div>
 
@@ -586,13 +565,13 @@ fpm test --profile release
 </code></pre></div>
 
 <p>To use <code>FLAP</code> within your fpm project, add the following to your <code>fpm.toml</code> file:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">[dependencies]</span><span class="w"></span>
-<span class="n">FLAP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">git</span><span class="o">=</span><span class="s">&quot;https://github.com/szaghi/FLAP.git&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code><span class="k">[dependencies]</span>
+<span class="n">FLAP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">git</span><span class="p">=</span><span class="s2">&quot;https://github.com/szaghi/FLAP.git&quot;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 
 <p>Or, to use a specific revision:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">[dependencies]</span><span class="w"></span>
-<span class="n">FLAP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">git</span><span class="o">=</span><span class="s">&quot;https://github.com/szaghi/FLAP.git&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">rev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;11cb276228d678c1d9ce755badf0ce82094b0852&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code><span class="k">[dependencies]</span>
+<span class="n">FLAP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">git</span><span class="p">=</span><span class="s2">&quot;https://github.com/szaghi/FLAP.git&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">rev</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;11cb276228d678c1d9ce755badf0ce82094b0852&quot;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 
 <p>Note that, when compiling with FPM, the git submodules in the <code>src/third_party</code> directory are not used, but FPM will download these separately, based on the versions specified in the <code>fpm.toml</code> file.</p>
@@ -600,32 +579,31 @@ fpm test --profile release
 <h3 id="nvfortran-compiling-issue">NVFortran Compiling Issue</h3>
 <p>Thanks to Carl Ponder (@cponder), we know that Nvidia NVFortran compiler misunderstand a quoted string containing a backslash into source files. To overcome this issue we suggest to use the <code>-Mbackslash</code> switch of NVFortran compiler.</p>
 <p>For example, to compile by means of CMake use:</p>
-<div class="codehilite"><pre><span></span><code>git clone https://github.com/szaghi/FLAP <span class="nv">$YOUR_FLAP_PATH</span>
-mkdir build
-<span class="nb">cd</span> build
-cmake -D <span class="nv">CMAKE_Fortran_FLAGS</span><span class="o">=</span><span class="s2">&quot;-Mbackslash&quot;</span> <span class="nv">$YOUR_FLAP_PATH</span>
-cmake --build .
+<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/szaghi/FLAP<span class="w"> </span><span class="nv">$YOUR_FLAP_PATH</span>
+mkdir<span class="w"> </span>build
+<span class="nb">cd</span><span class="w"> </span>build
+cmake<span class="w"> </span>-D<span class="w"> </span><span class="nv">CMAKE_Fortran_FLAGS</span><span class="o">=</span><span class="s2">&quot;-Mbackslash&quot;</span><span class="w"> </span><span class="nv">$YOUR_FLAP_PATH</span>
+cmake<span class="w"> </span>--build<span class="w"> </span>.
 </code></pre></div>
 
 <p>Similarly, into the fobos config file there is a specific template for NVFortran where this switch has been used to compile FLAP by means of Nvidia compiler. To test it use:</p>
-<div class="codehilite"><pre><span></span><code>FoBiS.py build -mode static-nvf
+<div class="codehilite"><pre><span></span><code>FoBiS.py<span class="w"> </span>build<span class="w"> </span>-mode<span class="w"> </span>static-nvf
 </code></pre></div>
 
 <p>Go to <a href="#top">Top</a></p>
-<br>          <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Uses</h3>
-      </div>
-      <ul class="list-group">
-          <li class="list-group-item">
-            <ul class="list-inline">
-                <li><a href='../module/flap_command_line_interface_t.html'>flap_command_line_interface_t</a></li>
-                <li><a href='../module/flap_command_line_arguments_group_t.html'>flap_command_line_arguments_group_t</a></li>
-                <li><a href='../module/flap_command_line_argument_t.html'>flap_command_line_argument_t</a></li>
-            </ul>
-          </li>
-          <li class="list-group-item">
-            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<br>          <div class="card mb-4">
+      <h3 class="card-header card-title bg-light">Uses</h3>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <ul class="list-inline">
+                  <li class="list-inline-item"><a href='../module/flap_command_line_interface_t.html'>flap_command_line_interface_t</a></li>
+                  <li class="list-inline-item"><a href='../module/flap_command_line_arguments_group_t.html'>flap_command_line_arguments_group_t</a></li>
+                  <li class="list-inline-item"><a href='../module/flap_command_line_argument_t.html'>flap_command_line_argument_t</a></li>
+              </ul>
+            </li>
+            <li class="list-group-item">
+              <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.43.0 (0)
@@ -843,8 +821,8 @@ cmake --build .
                   var panmoduleflapUsesGraph = svgPanZoom('#moduleflapUsesGraph',
                     {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
                   );
-                </script>        <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
-          <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                </script>        <div><a type="button" class="graph-help" data-toggle="modal" href="#UsesGraph-help-text">Help</a></div>
+          <div class="modal fade" id="UsesGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -913,17 +891,17 @@ modules which it uses.
             </div>
           </div>
         </div>
-          </li>
-      </ul>
+            </li>
+        </ul>
+      </div>
     </div>
 
-          <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Used by</h3>
-      </div>
-      <ul class="list-group">
-          <li class="list-group-item">
-            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+          <div class="card">
+      <h3 class="card-header card-title bg-light">Used by</h3>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.43.0 (0)
@@ -1197,8 +1175,8 @@ modules which it uses.
 </g>
 </g>
 </svg>
-</div>        <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
-          <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+</div>        <div><a type="button" class="graph-help" data-toggle="modal" href="#UsedByGraph-help-text">Help</a></div>
+          <div class="modal fade" id="UsedByGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -1267,38 +1245,12 @@ modules which it uses.
             </div>
           </div>
         </div>
-          </li>
-      </ul>
+            </li>
+        </ul>
+      </div>
     </div>
 
       <br>
-
-      <section class="visible-xs visible-sm hidden-md">
-          <h3>Contents</h3>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-    <em>None</em>
-
-      </section>
-      <br class="visible-xs visible-sm hidden-md">
 
 
 
@@ -1317,12 +1269,12 @@ modules which it uses.
     </div> <!-- /container -->
     <footer>
       <div class="container">
-        <div class="row">
-          <div class="col-xs-6 col-md-6"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
+        <div class="row justify-content-between">
+          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
 </p>
           </div>
-          <div class="col-xs-6 col-md-6">
-            <p class="text-right">
+          <div class="col">
+            <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
             </p>
@@ -1332,17 +1284,12 @@ modules which it uses.
       </div> <!-- /container -->
     </footer>
 
-    <!-- Bootstrap core JavaScript
-         ================================================== -->
-         <!-- Placed at the end of the document so the pages load faster -->
-    <!--
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        -->
-        <script src="../js/bootstrap.min.js"></script>
-        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-        <script src="../js/ie10-viewport-bug-workaround.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
 
-        <!-- MathJax JavaScript
+    <!-- MathJax JavaScript
              ================================================== -->
              <!-- Placed at the end of the document so the pages load faster -->
         <script type="text/x-mathjax-config">

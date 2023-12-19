@@ -10,81 +10,55 @@
 
     <title>errored &ndash; FLAP</title>
 
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="../css/pygments.css" rel="stylesheet">
     <link href="../css/font-awesome.min.css" rel="stylesheet">
     <link href="../css/local.css" rel="stylesheet">
       <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <![endif]-->
-
-         <script src="../js/jquery-2.1.3.min.js"></script>
-         <script src="../js/svg-pan-zoom.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
   </head>
 
   <body>
 
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
           <a class="navbar-brand" href="../index.html">FLAP </a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
-              <a href="#" class="dropdown-toggle"
-                 data-toggle="dropdown" role="button"
-                 aria-haspopup="true"
-                 aria-expanded="false">
-                 Contents <span class="caret"></span>
-              </a>
-              <ul class="dropdown-menu">
-                    <li><a href="../lists/files.html">Source Files</a></li>
-                  <li><a href="../lists/modules.html">Modules</a></li>
-                  <li><a href="../lists/procedures.html">Procedures</a></li>
-                  <li><a href="../lists/types.html">Derived Types</a></li>
-                  <li><a href="../lists/programs.html">Programs</a></li>
-              </ul>
-            </li>
-                <li class="visible-xs hidden-sm visible-lg">
-                  <a href="../lists/files.html">Source Files</a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
                 </li>
-              <li class="visible-xs hidden-sm visible-lg">
-                <a href="../lists/modules.html">Modules</a>
-              </li>
-              <li class="visible-xs hidden-sm visible-lg">
-                <a href="../lists/procedures.html">Procedures</a>
-              </li>
-              <li class="visible-xs hidden-sm visible-lg">
-                <a href="../lists/types.html">Derived Types</a>
-              </li>
-              <li class="visible-xs hidden-sm visible-lg">
-                <a href="../lists/programs.html">Programs</a>
-              </li>
-          </ul>
-            <form action="../search.html" class="navbar-form navbar-right" role="search">
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
               </div>
-              <!--
-                  <button type="submit" class="btn btn-default">Submit</button>
-                  -->
-            </form>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
 
     <div class="container">
   <div class="row">
@@ -92,33 +66,37 @@
       <small>Subroutine</small>
       
     </h1>
-      <div class="row" id="info-bar">
-    <div class="col-lg-12">
-      <div class="well well-sm">
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
         <ul class="list-inline" style="margin-bottom:0px;display:inline">
 
-          <li id="statements"><i class="fa fa-list-ol"></i>
-            <a data-toggle="tooltip"
-               data-placement="bottom" data-html="true"
-               title=" 2.6% of total for procedures.">96 statements</a>
-          </li>
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip"
+                 data-bs-placement="bottom" data-html="true"
+                 title=" 0.8% of total for procedures.">28 statements</a>
+            </li>
 
-            <li id="source-file">
+            <li class="list-inline-item" id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/flap_command_line_argument_t.F90"> Source File</a>
+              <a href="../src/flap_command_line_arguments_group_t.f90"> Source File</a>
             </li>
         </ul>
-        <ol class="breadcrumb in-well text-right">
-              <li><a href='../sourcefile/flap_command_line_argument_t.f90.html'>flap_command_line_argument_t.F90</a></li>
-              <li><a href='../module/flap_command_line_argument_t.html'>flap_command_line_argument_t</a></li>
-          <li class="active">errored</li>
-        </ol>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/flap_command_line_arguments_group_t.f90.html'>flap_command_line_arguments_group_t.f90</a></li>
+                <li class="breadcrumb-item"><a href='../module/flap_command_line_arguments_group_t.html'>flap_command_line_arguments_group_t</a></li>
+            <li class="breadcrumb-item active" aria-current="page">errored</li>
+          </ol>
+        </nav>
       </div>
     </div>
   </div>
   <script>
     $(function () {
-    $('[data-toggle="tooltip"]').tooltip()
+    $('[data-bs-toggle="tooltip"]').tooltip()
     })
   </script>
 
@@ -147,8 +125,9 @@
   
   
   
-    <div class="panel panel-primary">
-      <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
       <div class="list-group">
         <a class="list-group-item" href="../proc/errored~2.html#src">errored</a>
       </div>
@@ -160,27 +139,30 @@
     </div>
     
     <div class="col-md-9" id='text'>
-    <h2>private  subroutine errored(self, error, pref, switch, val_str, log_value)  
+    <h2>private  subroutine errored(self, error, pref, a1, a2)  
 </h2>
     
 
-    <p>Trig error occurence and print meaningful message.</p>
+    <p>Trig error occurrence and print meaningful message.</p>
+
+    <h3>Type Bound</h3>
+    <p><a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a></p>
 
     <h3>Arguments</h3>
         <table class="table table-striped varlist">
     <thead>
       <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
     </thead>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~54"></span>
-              class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
+              <span class="anchor" id="variable-self~47"></span>
+              class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -189,12 +171,12 @@
             <td>::</td>
             <td><strong>self</strong></td>
             <td>
-                <p>CLA data.</p>
+                <p>CLAsG data.</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-error~20"></span>
+              <span class="anchor" id="variable-error~14"></span>
               integer(kind=I4P),
             </td>
 <td>intent(in)</td>
@@ -209,7 +191,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~30"></span>
+              <span class="anchor" id="variable-pref~38"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -224,166 +206,170 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-switch~19"></span>
-              character(len=*),
+              <span class="anchor" id="variable-a1"></span>
+              integer(kind=I4P),
             </td>
 <td>intent(in),</td>
               <td>optional</td>            <td>
               
             </td>
             <td>::</td>
-            <td><strong>switch</strong></td>
+            <td><strong>a1</strong></td>
             <td>
-                <p>CLA switch name.</p>
+                <p>First index CLAs group inconsistent.</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-val_str"></span>
-              character(len=*),
+              <span class="anchor" id="variable-a2"></span>
+              integer(kind=I4P),
             </td>
 <td>intent(in),</td>
               <td>optional</td>            <td>
               
             </td>
             <td>::</td>
-            <td><strong>val_str</strong></td>
+            <td><strong>a2</strong></td>
             <td>
-                <p>Value string.</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-log_value"></span>
-              character(len=*),
-            </td>
-<td>intent(in),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>log_value</strong></td>
-            <td>
-                <p>Logical value to be casted.</p>
+                <p>Second index CLAs group inconsistent.</p>
             </td>
         </tr>
     </tbody>
   </table>
 
     <br>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-  <h3 class="panel-title">Calls</h3>
+    <div class="card">
+      <div class="card-header">
+  <h3 class="card-title">Calls</h3>
       </div>
-      <div class="panel-body">
+      <div class="card-body">
   <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.43.0 (0)
  -->
 <!-- Title: proc~~errored~2~~CallsGraph Pages: 1 -->
-<svg id="procerrored2CallsGraph" width="395pt" height="116pt"
- viewBox="0.00 0.00 395.00 116.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="proc~~errored~2~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 112)">
+<svg id="procerrored2CallsGraph" width="641pt" height="97pt"
+ viewBox="0.00 0.00 641.00 96.73" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~errored~2~~CallsGraph" class="graph" transform="scale(1.63 1.63) rotate(0) translate(4 154)">
 <title>proc~~errored~2~~CallsGraph</title>
-<polygon fill="white" stroke="transparent" points="-4,4 -4,-112 391,-112 391,4 -4,4"/>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-154 1043,-154 1043,4 -4,4"/>
 <!-- proc~errored~2 -->
 <g id="proc~~errored~2~~CallsGraph_node1" class="node">
 <title>proc~errored~2</title>
-<polygon fill="none" stroke="black" points="54,-45 0,-45 0,-21 54,-21 54,-45"/>
-<text text-anchor="middle" x="27" y="-30.6" font-family="Helvetica,sans-Serif" font-size="10.50">errored</text>
+<polygon fill="none" stroke="black" points="459,-66 0,-66 0,-42 459,-42 459,-66"/>
+<text text-anchor="middle" x="229.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50">flap_command_line_arguments_group_t::command_line_arguments_group%errored</text>
 </g>
 <!-- interface~colorize -->
 <g id="proc~~errored~2~~CallsGraph_node2" class="node">
 <title>interface~colorize</title>
-<g id="a_proc~~errored~2~~CallsGraph_node2"><a xlink:href=".././interface/colorize.html" xlink:title="colorize">
-<polygon fill="#a7506f" stroke="#a7506f" points="145,-66 90,-66 90,-42 145,-42 145,-66"/>
-<text text-anchor="middle" x="117.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">colorize</text>
+<g id="a_proc~~errored~2~~CallsGraph_node2"><a xlink:href=".././interface/colorize.html" xlink:title="face::colorize">
+<polygon fill="#a7506f" stroke="#a7506f" points="657.5,-108 572.5,-108 572.5,-84 657.5,-84 657.5,-108"/>
+<text text-anchor="middle" x="615" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face::colorize</text>
 </a>
 </g>
 </g>
 <!-- proc~errored~2&#45;&gt;interface~colorize -->
 <g id="proc~~errored~2~~CallsGraph_edge1" class="edge">
 <title>proc~errored~2&#45;&gt;interface~colorize</title>
-<path fill="none" stroke="#000000" d="M54.07,-39.19C62.21,-41.12 71.34,-43.28 80.05,-45.35"/>
-<polygon fill="#000000" stroke="#000000" points="79.46,-48.81 90,-47.71 81.08,-42 79.46,-48.81"/>
+<path fill="none" stroke="#000000" d="M340.14,-66.01C413.08,-74 505.56,-84.12 562.22,-90.33"/>
+<polygon fill="#000000" stroke="#000000" points="562.05,-93.83 572.37,-91.44 562.81,-86.87 562.05,-93.83"/>
+</g>
+<!-- proc~print_error_message -->
+<g id="proc~~errored~2~~CallsGraph_node3" class="node">
+<title>proc~print_error_message</title>
+<g id="a_proc~~errored~2~~CallsGraph_node3"><a xlink:href=".././proc/print_error_message.html" xlink:title="flap_object_t::object%print_error_message">
+<polygon fill="#d9534f" stroke="#d9534f" points="735,-66 495,-66 495,-42 735,-42 735,-66"/>
+<text text-anchor="middle" x="615" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_object_t::object%print_error_message</text>
+</a>
+</g>
+</g>
+<!-- proc~errored~2&#45;&gt;proc~print_error_message -->
+<g id="proc~~errored~2~~CallsGraph_edge2" class="edge">
+<title>proc~errored~2&#45;&gt;proc~print_error_message</title>
+<path fill="none" stroke="#000000" d="M459.12,-54C467.79,-54 476.35,-54 484.73,-54"/>
+<polygon fill="#000000" stroke="#000000" points="484.87,-57.5 494.87,-54 484.87,-50.5 484.87,-57.5"/>
 </g>
 <!-- str -->
-<g id="proc~~errored~2~~CallsGraph_node3" class="node">
+<g id="proc~~errored~2~~CallsGraph_node4" class="node">
 <title>str</title>
-<polygon fill="#777777" stroke="#777777" points="144.5,-24 90.5,-24 90.5,0 144.5,0 144.5,-24"/>
-<text text-anchor="middle" x="117.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">str</text>
+<polygon fill="#777777" stroke="#777777" points="642,-24 588,-24 588,0 642,0 642,-24"/>
+<text text-anchor="middle" x="615" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">str</text>
 </g>
 <!-- proc~errored~2&#45;&gt;str -->
-<g id="proc~~errored~2~~CallsGraph_edge2" class="edge">
+<g id="proc~~errored~2~~CallsGraph_edge3" class="edge">
 <title>proc~errored~2&#45;&gt;str</title>
-<path fill="none" stroke="#000000" d="M54.07,-26.81C62.37,-24.84 71.7,-22.63 80.57,-20.53"/>
-<polygon fill="#000000" stroke="#000000" points="81.38,-23.93 90.31,-18.22 79.77,-17.12 81.38,-23.93"/>
+<path fill="none" stroke="#000000" d="M340.14,-41.99C420.24,-33.22 523.92,-21.87 577.83,-15.96"/>
+<polygon fill="#000000" stroke="#000000" points="578.37,-19.42 587.93,-14.86 577.61,-12.46 578.37,-19.42"/>
 </g>
 <!-- proc~colorize_default -->
-<g id="proc~~errored~2~~CallsGraph_node4" class="node">
+<g id="proc~~errored~2~~CallsGraph_node5" class="node">
 <title>proc~colorize_default</title>
-<g id="a_proc~~errored~2~~CallsGraph_node4"><a xlink:href=".././proc/colorize_default.html" xlink:title="colorize_default">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="278,-66 181,-66 181,-42 278,-42 278,-66"/>
-<text text-anchor="middle" x="229.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">colorize_default</text>
+<g id="a_proc~~errored~2~~CallsGraph_node5"><a xlink:href=".././proc/colorize_default.html" xlink:title="face::colorize_default">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="899,-108 771,-108 771,-84 899,-84 899,-108"/>
+<text text-anchor="middle" x="835" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face::colorize_default</text>
 </a>
 </g>
 </g>
 <!-- interface~colorize&#45;&gt;proc~colorize_default -->
-<g id="proc~~errored~2~~CallsGraph_edge3" class="edge">
+<g id="proc~~errored~2~~CallsGraph_edge4" class="edge">
 <title>interface~colorize&#45;&gt;proc~colorize_default</title>
-<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M145.13,-54C152.89,-54 161.69,-54 170.59,-54"/>
-<polygon fill="#000000" stroke="#000000" points="170.63,-57.5 180.63,-54 170.63,-50.5 170.63,-57.5"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M657.52,-96C686.64,-96 726.35,-96 760.74,-96"/>
+<polygon fill="#000000" stroke="#000000" points="760.75,-99.5 770.75,-96 760.75,-92.5 760.75,-99.5"/>
 </g>
 <!-- proc~color_index -->
-<g id="proc~~errored~2~~CallsGraph_node5" class="node">
+<g id="proc~~errored~2~~CallsGraph_node6" class="node">
 <title>proc~color_index</title>
-<g id="a_proc~~errored~2~~CallsGraph_node5"><a xlink:href=".././proc/color_index.html" xlink:title="color_index">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="387,-108 314,-108 314,-84 387,-84 387,-108"/>
-<text text-anchor="middle" x="350.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">color_index</text>
+<g id="a_proc~~errored~2~~CallsGraph_node6"><a xlink:href=".././proc/color_index.html" xlink:title="face::color_index">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="1039,-150 935,-150 935,-126 1039,-126 1039,-150"/>
+<text text-anchor="middle" x="987" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face::color_index</text>
 </a>
 </g>
 </g>
 <!-- proc~colorize_default&#45;&gt;proc~color_index -->
-<g id="proc~~errored~2~~CallsGraph_edge4" class="edge">
+<g id="proc~~errored~2~~CallsGraph_edge5" class="edge">
 <title>proc~colorize_default&#45;&gt;proc~color_index</title>
-<path fill="none" stroke="#000000" d="M264.6,-66.04C277.42,-70.56 292.18,-75.77 305.76,-80.56"/>
-<polygon fill="#000000" stroke="#000000" points="304.8,-83.93 315.39,-83.96 307.13,-77.33 304.8,-83.93"/>
+<path fill="none" stroke="#000000" d="M878.98,-108.04C895.93,-112.78 915.56,-118.28 933.35,-123.26"/>
+<polygon fill="#000000" stroke="#000000" points="932.44,-126.64 943.01,-125.96 934.32,-119.9 932.44,-126.64"/>
 </g>
 <!-- proc~style_index -->
-<g id="proc~~errored~2~~CallsGraph_node6" class="node">
+<g id="proc~~errored~2~~CallsGraph_node7" class="node">
 <title>proc~style_index</title>
-<g id="a_proc~~errored~2~~CallsGraph_node6"><a xlink:href=".././proc/style_index.html" xlink:title="style_index">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="386,-66 315,-66 315,-42 386,-42 386,-66"/>
-<text text-anchor="middle" x="350.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">style_index</text>
+<g id="a_proc~~errored~2~~CallsGraph_node7"><a xlink:href=".././proc/style_index.html" xlink:title="face::style_index">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="1038,-108 936,-108 936,-84 1038,-84 1038,-108"/>
+<text text-anchor="middle" x="987" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face::style_index</text>
 </a>
 </g>
 </g>
 <!-- proc~colorize_default&#45;&gt;proc~style_index -->
-<g id="proc~~errored~2~~CallsGraph_edge5" class="edge">
+<g id="proc~~errored~2~~CallsGraph_edge6" class="edge">
 <title>proc~colorize_default&#45;&gt;proc~style_index</title>
-<path fill="none" stroke="#000000" d="M278.22,-54C286.95,-54 296.04,-54 304.68,-54"/>
-<polygon fill="#000000" stroke="#000000" points="304.96,-57.5 314.96,-54 304.96,-50.5 304.96,-57.5"/>
+<path fill="none" stroke="#000000" d="M899.18,-96C907.93,-96 916.89,-96 925.59,-96"/>
+<polygon fill="#000000" stroke="#000000" points="925.64,-99.5 935.64,-96 925.64,-92.5 925.64,-99.5"/>
 </g>
 <!-- proc~upper -->
-<g id="proc~~errored~2~~CallsGraph_node7" class="node">
+<g id="proc~~errored~2~~CallsGraph_node8" class="node">
 <title>proc~upper</title>
-<g id="a_proc~~errored~2~~CallsGraph_node7"><a xlink:href=".././proc/upper.html" xlink:title="upper">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="377.5,-24 323.5,-24 323.5,0 377.5,0 377.5,-24"/>
-<text text-anchor="middle" x="350.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">upper</text>
+<g id="a_proc~~errored~2~~CallsGraph_node8"><a xlink:href=".././proc/upper.html" xlink:title="face::upper">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="1024.5,-66 949.5,-66 949.5,-42 1024.5,-42 1024.5,-66"/>
+<text text-anchor="middle" x="987" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face::upper</text>
 </a>
 </g>
 </g>
 <!-- proc~colorize_default&#45;&gt;proc~upper -->
-<g id="proc~~errored~2~~CallsGraph_edge6" class="edge">
+<g id="proc~~errored~2~~CallsGraph_edge7" class="edge">
 <title>proc~colorize_default&#45;&gt;proc~upper</title>
-<path fill="none" stroke="#000000" d="M264.6,-41.96C279.92,-36.56 298.02,-30.17 313.55,-24.69"/>
-<polygon fill="#000000" stroke="#000000" points="315.07,-27.86 323.34,-21.23 312.74,-21.26 315.07,-27.86"/>
+<path fill="none" stroke="#000000" d="M878.98,-83.96C897.86,-78.68 920.06,-72.46 939.33,-67.07"/>
+<polygon fill="#000000" stroke="#000000" points="940.43,-70.39 949.11,-64.33 938.54,-63.65 940.43,-70.39"/>
 </g>
 </g>
 </svg>
-</div>        <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
-          <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+</div>                <script>
+                  var panprocerrored2CallsGraph = svgPanZoom('#procerrored2CallsGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>        <div><a type="button" class="graph-help" data-toggle="modal" href="#CallsGraph-help-text">Help</a></div>
+          <div class="modal fade" id="CallsGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -400,11 +386,11 @@
 <!-- Generated by graphviz version 2.43.0 (0)
  -->
 <!-- Title: Graph Key Pages: 1 -->
-<svg width="597pt" height="32pt"
- viewBox="0.00 0.00 596.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 27.51" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1.16 1.16) rotate(0) translate(4 28)">
 <title>Graph Key</title>
-<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 592.5,-28 592.5,4 -4,4"/>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 741.5,-28 741.5,4 -4,4"/>
 <!-- Subroutine -->
 <g id="node1" class="node">
 <title>Subroutine</title>
@@ -423,23 +409,931 @@
 <polygon fill="#a7506f" stroke="#a7506f" points="225.5,-24 164.5,-24 164.5,0 225.5,0 225.5,-24"/>
 <text text-anchor="middle" x="195" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
 </g>
-<!-- Unknown Procedure Type -->
+<!-- Type Bound Procedure -->
 <g id="node4" class="node">
+<title>Type Bound Procedure</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="374,-24 244,-24 244,0 374,0 374,-24"/>
+<text text-anchor="middle" x="309" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type Bound Procedure</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node5" class="node">
 <title>Unknown Procedure Type</title>
-<polygon fill="#777777" stroke="#777777" points="388.5,-24 243.5,-24 243.5,0 388.5,0 388.5,-24"/>
-<text text-anchor="middle" x="316" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+<polygon fill="#777777" stroke="#777777" points="537.5,-24 392.5,-24 392.5,0 537.5,0 537.5,-24"/>
+<text text-anchor="middle" x="465" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
 </g>
 <!-- Program -->
-<g id="node5" class="node">
+<g id="node6" class="node">
 <title>Program</title>
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="465,-24 407,-24 407,0 465,0 465,-24"/>
-<text text-anchor="middle" x="436" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="614,-24 556,-24 556,0 614,0 614,-24"/>
+<text text-anchor="middle" x="585" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
 </g>
 <!-- This Page&#39;s Entity -->
-<g id="node6" class="node">
+<g id="node7" class="node">
 <title>This Page&#39;s Entity</title>
-<polygon fill="none" stroke="black" points="588.5,-24 483.5,-24 483.5,0 588.5,0 588.5,-24"/>
-<text text-anchor="middle" x="536" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+<polygon fill="none" stroke="black" points="737.5,-24 632.5,-24 632.5,0 737.5,0 737.5,-24"/>
+<text text-anchor="middle" x="685" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.
+</p>
+ </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+  <h3 class="card-title">Called by</h3>
+      </div>
+      <div class="card-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: proc~~errored~2~~CalledByGraph Pages: 1 -->
+<svg id="procerrored2CalledByGraph" width="641pt" height="245pt"
+ viewBox="0.00 0.00 641.00 244.57" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~errored~2~~CalledByGraph" class="graph" transform="scale(5.74 5.74) rotate(0) translate(4 1399.34)">
+<title>proc~~errored~2~~CalledByGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-1399.34 3674,-1399.34 3674,4 -4,4"/>
+<!-- proc~errored~2 -->
+<g id="proc~~errored~2~~CalledByGraph_node1" class="node">
+<title>proc~errored~2</title>
+<polygon fill="none" stroke="black" points="3670,-933.07 3211,-933.07 3211,-909.07 3670,-909.07 3670,-933.07"/>
+<text text-anchor="middle" x="3440.5" y="-918.67" font-family="Helvetica,sans-Serif" font-size="10.50">flap_command_line_arguments_group_t::command_line_arguments_group%errored</text>
+</g>
+<!-- proc~check~2 -->
+<g id="proc~~errored~2~~CalledByGraph_node2" class="node">
+<title>proc~check~2</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node2"><a xlink:href=".././proc/check~2.html" xlink:title="flap_command_line_arguments_group_t::command_line_arguments_group%check">
+<polygon fill="#d9534f" stroke="#d9534f" points="3130.5,-912.07 2679.5,-912.07 2679.5,-888.07 3130.5,-888.07 3130.5,-912.07"/>
+<text text-anchor="middle" x="2905" y="-897.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_arguments_group_t::command_line_arguments_group%check</text>
+</a>
+</g>
+</g>
+<!-- proc~check~2&#45;&gt;proc~errored~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge1" class="edge">
+<title>proc~check~2&#45;&gt;proc~errored~2</title>
+<path fill="none" stroke="#000000" d="M3130.71,-908.91C3153.78,-909.82 3177.28,-910.75 3200.49,-911.66"/>
+<polygon fill="#000000" stroke="#000000" points="3200.65,-915.17 3210.78,-912.06 3200.92,-908.17 3200.65,-915.17"/>
+</g>
+<!-- proc~raise_error_m_exclude~2 -->
+<g id="proc~~errored~2~~CalledByGraph_node3" class="node">
+<title>proc~raise_error_m_exclude~2</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node3"><a xlink:href=".././proc/raise_error_m_exclude~2.html" xlink:title="flap_command_line_arguments_group_t::command_line_arguments_group%raise_error_m_exclude">
+<polygon fill="#d9534f" stroke="#d9534f" points="3175,-954.07 2635,-954.07 2635,-930.07 3175,-930.07 3175,-954.07"/>
+<text text-anchor="middle" x="2905" y="-939.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_arguments_group_t::command_line_arguments_group%raise_error_m_exclude</text>
+</a>
+</g>
+</g>
+<!-- proc~raise_error_m_exclude~2&#45;&gt;proc~errored~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge2" class="edge">
+<title>proc~raise_error_m_exclude~2&#45;&gt;proc~errored~2</title>
+<path fill="none" stroke="#000000" d="M3175.09,-931.48C3183.56,-931.14 3192.03,-930.81 3200.46,-930.48"/>
+<polygon fill="#000000" stroke="#000000" points="3200.86,-933.96 3210.72,-930.07 3200.59,-926.97 3200.86,-933.96"/>
+</g>
+<!-- proc~add -->
+<g id="proc~~errored~2~~CalledByGraph_node4" class="node">
+<title>proc~add</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node4"><a xlink:href=".././proc/add.html" xlink:title="flap_command_line_arguments_group_t::command_line_arguments_group%add">
+<polygon fill="#d9534f" stroke="#d9534f" points="2599,-872.07 2159,-872.07 2159,-848.07 2599,-848.07 2599,-872.07"/>
+<text text-anchor="middle" x="2379" y="-857.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_arguments_group_t::command_line_arguments_group%add</text>
+</a>
+</g>
+</g>
+<!-- proc~add&#45;&gt;proc~check~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge3" class="edge">
+<title>proc~add&#45;&gt;proc~check~2</title>
+<path fill="none" stroke="#000000" d="M2537.22,-872.07C2600.03,-876.86 2672.46,-882.39 2736.28,-887.26"/>
+<polygon fill="#000000" stroke="#000000" points="2736.2,-890.77 2746.44,-888.04 2736.74,-883.79 2736.2,-890.77"/>
+</g>
+<!-- proc~check_m_exclusive~2 -->
+<g id="proc~~errored~2~~CalledByGraph_node5" class="node">
+<title>proc~check_m_exclusive~2</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node5"><a xlink:href=".././proc/check_m_exclusive~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%check_m_exclusive">
+<polygon fill="#d9534f" stroke="#d9534f" points="2113,-954.07 1683,-954.07 1683,-930.07 2113,-930.07 2113,-954.07"/>
+<text text-anchor="middle" x="1898" y="-939.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%check_m_exclusive</text>
+</a>
+</g>
+</g>
+<!-- proc~check_m_exclusive~2&#45;&gt;proc~raise_error_m_exclude~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge5" class="edge">
+<title>proc~check_m_exclusive~2&#45;&gt;proc~raise_error_m_exclude~2</title>
+<path fill="none" stroke="#000000" d="M2113.06,-942.07C2262.25,-942.07 2462.73,-942.07 2624.52,-942.07"/>
+<polygon fill="#000000" stroke="#000000" points="2624.63,-945.57 2634.63,-942.07 2624.63,-938.57 2624.63,-945.57"/>
+</g>
+<!-- proc~check~3 -->
+<g id="proc~~errored~2~~CalledByGraph_node6" class="node">
+<title>proc~check~3</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node6"><a xlink:href=".././proc/check~3.html" xlink:title="flap_command_line_interface_t::command_line_interface%check">
+<polygon fill="#d9534f" stroke="#d9534f" points="2559,-914.07 2199,-914.07 2199,-890.07 2559,-890.07 2559,-914.07"/>
+<text text-anchor="middle" x="2379" y="-899.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%check</text>
+</a>
+</g>
+</g>
+<!-- proc~check~3&#45;&gt;proc~check~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge4" class="edge">
+<title>proc~check~3&#45;&gt;proc~check~2</title>
+<path fill="none" stroke="#000000" d="M2559.23,-901.38C2594.58,-901.25 2632.18,-901.11 2669.05,-900.96"/>
+<polygon fill="#000000" stroke="#000000" points="2669.44,-904.46 2679.43,-900.93 2669.41,-897.46 2669.44,-904.46"/>
+</g>
+<!-- proc~add~2 -->
+<g id="proc~~errored~2~~CalledByGraph_node7" class="node">
+<title>proc~add~2</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node7"><a xlink:href=".././proc/add~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%add">
+<polygon fill="#d9534f" stroke="#d9534f" points="2072.5,-460.07 1723.5,-460.07 1723.5,-436.07 2072.5,-436.07 2072.5,-460.07"/>
+<text text-anchor="middle" x="1898" y="-445.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%add</text>
+</a>
+</g>
+</g>
+<!-- proc~add~2&#45;&gt;proc~add -->
+<g id="proc~~errored~2~~CalledByGraph_edge6" class="edge">
+<title>proc~add~2&#45;&gt;proc~add</title>
+<path fill="none" stroke="#000000" d="M1913.08,-460.18C1980.75,-518.39 2272.83,-769.61 2355.89,-841.05"/>
+<polygon fill="#000000" stroke="#000000" points="2353.83,-843.89 2363.69,-847.76 2358.39,-838.59 2353.83,-843.89"/>
+</g>
+<!-- proc~parse -->
+<g id="proc~~errored~2~~CalledByGraph_node8" class="node">
+<title>proc~parse</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node8"><a xlink:href=".././proc/parse.html" xlink:title="flap_command_line_arguments_group_t::command_line_arguments_group%parse">
+<polygon fill="#d9534f" stroke="#d9534f" points="2123,-873.07 1673,-873.07 1673,-849.07 2123,-849.07 2123,-873.07"/>
+<text text-anchor="middle" x="1898" y="-858.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_arguments_group_t::command_line_arguments_group%parse</text>
+</a>
+</g>
+</g>
+<!-- proc~parse&#45;&gt;proc~add -->
+<g id="proc~~errored~2~~CalledByGraph_edge7" class="edge">
+<title>proc~parse&#45;&gt;proc~add</title>
+<path fill="none" stroke="#000000" d="M2123.07,-860.6C2131.65,-860.58 2140.25,-860.56 2148.83,-860.55"/>
+<polygon fill="#000000" stroke="#000000" points="2148.91,-864.05 2158.9,-860.53 2148.89,-857.05 2148.91,-864.05"/>
+</g>
+<!-- proc~parse~2 -->
+<g id="proc~~errored~2~~CalledByGraph_node9" class="node">
+<title>proc~parse~2</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node9"><a xlink:href=".././proc/parse~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%parse">
+<polygon fill="#d9534f" stroke="#d9534f" points="1637,-934.07 1279,-934.07 1279,-910.07 1637,-910.07 1637,-934.07"/>
+<text text-anchor="middle" x="1458" y="-919.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%parse</text>
+</a>
+</g>
+</g>
+<!-- proc~parse~2&#45;&gt;proc~check_m_exclusive~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge8" class="edge">
+<title>proc~parse~2&#45;&gt;proc~check_m_exclusive~2</title>
+<path fill="none" stroke="#000000" d="M1637.15,-930.2C1648.9,-930.74 1660.81,-931.28 1672.75,-931.83"/>
+<polygon fill="#000000" stroke="#000000" points="1672.62,-935.33 1682.77,-932.29 1672.94,-928.33 1672.62,-935.33"/>
+</g>
+<!-- proc~parse~2&#45;&gt;proc~check~3 -->
+<g id="proc~~errored~2~~CalledByGraph_edge9" class="edge">
+<title>proc~parse~2&#45;&gt;proc~check~3</title>
+<path fill="none" stroke="#000000" d="M1637.01,-918.19C1795.6,-914.74 2026.97,-909.71 2188.86,-906.18"/>
+<polygon fill="#000000" stroke="#000000" points="2189.01,-909.68 2198.93,-905.97 2188.86,-902.68 2189.01,-909.68"/>
+</g>
+<!-- proc~parse~2&#45;&gt;proc~add~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge11" class="edge">
+<title>proc~parse~2&#45;&gt;proc~add~2</title>
+<path fill="none" stroke="#000000" d="M1470.27,-909.87C1529.56,-845.71 1805.46,-547.13 1878.97,-467.58"/>
+<polygon fill="#000000" stroke="#000000" points="1881.59,-469.9 1885.81,-460.18 1876.45,-465.15 1881.59,-469.9"/>
+</g>
+<!-- proc~parse~2&#45;&gt;proc~parse -->
+<g id="proc~~errored~2~~CalledByGraph_edge28" class="edge">
+<title>proc~parse~2&#45;&gt;proc~parse</title>
+<path fill="none" stroke="#000000" d="M1530.23,-910.06C1571.81,-903.23 1625.31,-894.73 1673,-888.07 1707.78,-883.21 1745.67,-878.44 1780.23,-874.3"/>
+<polygon fill="#000000" stroke="#000000" points="1780.84,-877.75 1790.36,-873.09 1780.01,-870.8 1780.84,-877.75"/>
+</g>
+<!-- proc~fake_call -->
+<g id="proc~~errored~2~~CalledByGraph_node10" class="node">
+<title>proc~fake_call</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node10"><a xlink:href=".././proc/fake_call.html" xlink:title="flap_test_group::fake_call">
+<polygon fill="#d9534f" stroke="#d9534f" points="293,-1344.07 145,-1344.07 145,-1320.07 293,-1320.07 293,-1344.07"/>
+<text text-anchor="middle" x="219" y="-1329.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_group::fake_call</text>
+</a>
+</g>
+</g>
+<!-- proc~fake_call&#45;&gt;proc~add~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge10" class="edge">
+<title>proc~fake_call&#45;&gt;proc~add~2</title>
+<path fill="none" stroke="#000000" d="M270.36,-1344.08C292.76,-1348.84 319.55,-1353.72 344,-1356.07 741.98,-1394.23 858.25,-1432.75 1243,-1324.07 1433.76,-1270.18 1523.99,-1277.92 1637,-1115.07 1707.27,-1013.8 1633.68,-956.89 1673,-840.07 1724.87,-685.96 1839.77,-524.2 1881.48,-468.39"/>
+<polygon fill="#000000" stroke="#000000" points="1884.53,-470.17 1887.75,-460.07 1878.93,-465.95 1884.53,-470.17"/>
+</g>
+<!-- proc~fake_call&#45;&gt;proc~parse~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge29" class="edge">
+<title>proc~fake_call&#45;&gt;proc~parse~2</title>
+<path fill="none" stroke="#000000" d="M293.18,-1336.6C499.85,-1348.09 1083.25,-1370.98 1243,-1275.07 1372.23,-1197.47 1433.57,-1009.09 1451.34,-944.35"/>
+<polygon fill="#000000" stroke="#000000" points="1454.8,-944.97 1453.99,-934.4 1448.03,-943.17 1454.8,-944.97"/>
+</g>
+<!-- none~get~2 -->
+<g id="proc~~errored~2~~CalledByGraph_node39" class="node">
+<title>none~get~2</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node39"><a xlink:href=".././type/command_line_interface.html#boundprocedure-get~2" xlink:title="flap_command_line_interface_t::command_line_interface%get">
+<polygon fill="#a7506f" stroke="#a7506f" points="712.5,-462.07 366.5,-462.07 366.5,-438.07 712.5,-438.07 712.5,-462.07"/>
+<text text-anchor="middle" x="539.5" y="-447.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get</text>
+</a>
+</g>
+</g>
+<!-- proc~fake_call&#45;&gt;none~get~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge59" class="edge">
+<title>proc~fake_call&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M225.93,-1320.06C241,-1289.22 281.48,-1204.52 308,-1131.07 327.64,-1076.69 326.45,-1061.15 344,-1006.07 410.88,-796.18 502.92,-545.85 530.42,-471.74"/>
+<polygon fill="#000000" stroke="#000000" points="533.8,-472.71 534,-462.11 527.24,-470.27 533.8,-472.71"/>
+</g>
+<!-- proc~get_cla_list_varying_char~2 -->
+<g id="proc~~errored~2~~CalledByGraph_node11" class="node">
+<title>proc~get_cla_list_varying_char~2</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node11"><a xlink:href=".././proc/get_cla_list_varying_char~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_char">
+<polygon fill="#d9534f" stroke="#d9534f" points="1237.5,-1018.07 776.5,-1018.07 776.5,-994.07 1237.5,-994.07 1237.5,-1018.07"/>
+<text text-anchor="middle" x="1007" y="-1003.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_cla_list_varying_char</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla_list_varying_char~2&#45;&gt;proc~parse~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge30" class="edge">
+<title>proc~get_cla_list_varying_char~2&#45;&gt;proc~parse~2</title>
+<path fill="none" stroke="#000000" d="M1184.96,-994.04C1204.62,-991.58 1224.29,-988.62 1243,-985.07 1303.54,-973.57 1371.49,-952.03 1414.25,-937.37"/>
+<polygon fill="#000000" stroke="#000000" points="1415.47,-940.65 1423.77,-934.08 1413.18,-934.04 1415.47,-940.65"/>
+</g>
+<!-- proc~get_cla_list_varying_i1p~2 -->
+<g id="proc~~errored~2~~CalledByGraph_node12" class="node">
+<title>proc~get_cla_list_varying_i1p~2</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node12"><a xlink:href=".././proc/get_cla_list_varying_i1p~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_I1P">
+<polygon fill="#d9534f" stroke="#d9534f" points="1233.5,-976.07 780.5,-976.07 780.5,-952.07 1233.5,-952.07 1233.5,-976.07"/>
+<text text-anchor="middle" x="1007" y="-961.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_cla_list_varying_I1P</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla_list_varying_i1p~2&#45;&gt;proc~parse~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge31" class="edge">
+<title>proc~get_cla_list_varying_i1p~2&#45;&gt;proc~parse~2</title>
+<path fill="none" stroke="#000000" d="M1144.71,-952.05C1176.95,-949.16 1211.19,-946.05 1243,-943.07 1269.98,-940.54 1298.86,-937.76 1326.4,-935.07"/>
+<polygon fill="#000000" stroke="#000000" points="1326.87,-938.54 1336.48,-934.08 1326.19,-931.57 1326.87,-938.54"/>
+</g>
+<!-- proc~get_cla_list_varying_i2p~2 -->
+<g id="proc~~errored~2~~CalledByGraph_node13" class="node">
+<title>proc~get_cla_list_varying_i2p~2</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node13"><a xlink:href=".././proc/get_cla_list_varying_i2p~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_I2P">
+<polygon fill="#d9534f" stroke="#d9534f" points="1233.5,-934.07 780.5,-934.07 780.5,-910.07 1233.5,-910.07 1233.5,-934.07"/>
+<text text-anchor="middle" x="1007" y="-919.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_cla_list_varying_I2P</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla_list_varying_i2p~2&#45;&gt;proc~parse~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge32" class="edge">
+<title>proc~get_cla_list_varying_i2p~2&#45;&gt;proc~parse~2</title>
+<path fill="none" stroke="#000000" d="M1233.82,-922.07C1245.47,-922.07 1257.12,-922.07 1268.64,-922.07"/>
+<polygon fill="#000000" stroke="#000000" points="1268.72,-925.57 1278.72,-922.07 1268.72,-918.57 1268.72,-925.57"/>
+</g>
+<!-- proc~get_cla_list_varying_i4p~2 -->
+<g id="proc~~errored~2~~CalledByGraph_node14" class="node">
+<title>proc~get_cla_list_varying_i4p~2</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node14"><a xlink:href=".././proc/get_cla_list_varying_i4p~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_I4P">
+<polygon fill="#d9534f" stroke="#d9534f" points="1233.5,-892.07 780.5,-892.07 780.5,-868.07 1233.5,-868.07 1233.5,-892.07"/>
+<text text-anchor="middle" x="1007" y="-877.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_cla_list_varying_I4P</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla_list_varying_i4p~2&#45;&gt;proc~parse~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge33" class="edge">
+<title>proc~get_cla_list_varying_i4p~2&#45;&gt;proc~parse~2</title>
+<path fill="none" stroke="#000000" d="M1144.71,-892.08C1176.95,-894.97 1211.19,-898.09 1243,-901.07 1269.98,-903.6 1298.86,-906.38 1326.4,-909.07"/>
+<polygon fill="#000000" stroke="#000000" points="1326.19,-912.57 1336.48,-910.06 1326.87,-905.6 1326.19,-912.57"/>
+</g>
+<!-- proc~get_cla_list_varying_i8p~2 -->
+<g id="proc~~errored~2~~CalledByGraph_node15" class="node">
+<title>proc~get_cla_list_varying_i8p~2</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node15"><a xlink:href=".././proc/get_cla_list_varying_i8p~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_I8P">
+<polygon fill="#d9534f" stroke="#d9534f" points="1233.5,-1186.07 780.5,-1186.07 780.5,-1162.07 1233.5,-1162.07 1233.5,-1186.07"/>
+<text text-anchor="middle" x="1007" y="-1171.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_cla_list_varying_I8P</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla_list_varying_i8p~2&#45;&gt;proc~parse~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge34" class="edge">
+<title>proc~get_cla_list_varying_i8p~2&#45;&gt;proc~parse~2</title>
+<path fill="none" stroke="#000000" d="M1221.93,-1162C1229.15,-1159.37 1236.2,-1156.41 1243,-1153.07 1341.48,-1104.72 1417.06,-990.23 1445.13,-943"/>
+<polygon fill="#000000" stroke="#000000" points="1448.23,-944.64 1450.25,-934.24 1442.18,-941.11 1448.23,-944.64"/>
+</g>
+<!-- proc~get_cla_list_varying_logical~2 -->
+<g id="proc~~errored~2~~CalledByGraph_node16" class="node">
+<title>proc~get_cla_list_varying_logical~2</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node16"><a xlink:href=".././proc/get_cla_list_varying_logical~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_logical">
+<polygon fill="#d9534f" stroke="#d9534f" points="1243,-1144.07 771,-1144.07 771,-1120.07 1243,-1120.07 1243,-1144.07"/>
+<text text-anchor="middle" x="1007" y="-1129.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_cla_list_varying_logical</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla_list_varying_logical~2&#45;&gt;proc~parse~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge35" class="edge">
+<title>proc~get_cla_list_varying_logical~2&#45;&gt;proc~parse~2</title>
+<path fill="none" stroke="#000000" d="M1218.54,-1120.06C1226.91,-1117.45 1235.1,-1114.47 1243,-1111.07 1332.08,-1072.74 1409.99,-982.61 1441.78,-942.24"/>
+<polygon fill="#000000" stroke="#000000" points="1444.65,-944.24 1448.02,-934.2 1439.12,-939.95 1444.65,-944.24"/>
+</g>
+<!-- proc~get_cla_list_varying_r16p~2 -->
+<g id="proc~~errored~2~~CalledByGraph_node17" class="node">
+<title>proc~get_cla_list_varying_r16p~2</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node17"><a xlink:href=".././proc/get_cla_list_varying_r16p~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_R16P">
+<polygon fill="#d9534f" stroke="#d9534f" points="1239,-1266.07 775,-1266.07 775,-1242.07 1239,-1242.07 1239,-1266.07"/>
+<text text-anchor="middle" x="1007" y="-1251.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_cla_list_varying_R16P</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla_list_varying_r16p~2&#45;&gt;proc~parse~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge36" class="edge">
+<title>proc~get_cla_list_varying_r16p~2&#45;&gt;proc~parse~2</title>
+<path fill="none" stroke="#000000" d="M1213.99,-1242C1224.08,-1238.12 1233.82,-1233.51 1243,-1228.07 1358.48,-1159.57 1427.17,-1001.62 1449.2,-943.79"/>
+<polygon fill="#000000" stroke="#000000" points="1452.56,-944.8 1452.77,-934.2 1446,-942.35 1452.56,-944.8"/>
+</g>
+<!-- proc~get_cla_list_varying_r4p~2 -->
+<g id="proc~~errored~2~~CalledByGraph_node18" class="node">
+<title>proc~get_cla_list_varying_r4p~2</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node18"><a xlink:href=".././proc/get_cla_list_varying_r4p~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_R4P">
+<polygon fill="#d9534f" stroke="#d9534f" points="1235.5,-1102.07 778.5,-1102.07 778.5,-1078.07 1235.5,-1078.07 1235.5,-1102.07"/>
+<text text-anchor="middle" x="1007" y="-1087.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_cla_list_varying_R4P</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla_list_varying_r4p~2&#45;&gt;proc~parse~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge37" class="edge">
+<title>proc~get_cla_list_varying_r4p~2&#45;&gt;proc~parse~2</title>
+<path fill="none" stroke="#000000" d="M1213.48,-1078.02C1223.57,-1075.47 1233.46,-1072.5 1243,-1069.07 1323.04,-1040.26 1401.37,-974.03 1437.01,-941.22"/>
+<polygon fill="#000000" stroke="#000000" points="1439.42,-943.76 1444.35,-934.38 1434.65,-938.64 1439.42,-943.76"/>
+</g>
+<!-- proc~get_cla_list_varying_r8p~2 -->
+<g id="proc~~errored~2~~CalledByGraph_node19" class="node">
+<title>proc~get_cla_list_varying_r8p~2</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node19"><a xlink:href=".././proc/get_cla_list_varying_r8p~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_R8P">
+<polygon fill="#d9534f" stroke="#d9534f" points="1235.5,-1060.07 778.5,-1060.07 778.5,-1036.07 1235.5,-1036.07 1235.5,-1060.07"/>
+<text text-anchor="middle" x="1007" y="-1045.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_cla_list_varying_R8P</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla_list_varying_r8p~2&#45;&gt;proc~parse~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge38" class="edge">
+<title>proc~get_cla_list_varying_r8p~2&#45;&gt;proc~parse~2</title>
+<path fill="none" stroke="#000000" d="M1204.22,-1036.02C1217.44,-1033.53 1230.48,-1030.57 1243,-1027.07 1314.21,-1007.16 1390.27,-963.89 1429.71,-939.57"/>
+<polygon fill="#000000" stroke="#000000" points="1431.84,-942.37 1438.47,-934.11 1428.14,-936.43 1431.84,-942.37"/>
+</g>
+<!-- proc~get_cla_list~2 -->
+<g id="proc~~errored~2~~CalledByGraph_node20" class="node">
+<title>proc~get_cla_list~2</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node20"><a xlink:href=".././proc/get_cla_list~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list">
+<polygon fill="#d9534f" stroke="#d9534f" points="1200.5,-694.07 813.5,-694.07 813.5,-670.07 1200.5,-670.07 1200.5,-694.07"/>
+<text text-anchor="middle" x="1007" y="-679.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_cla_list</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla_list~2&#45;&gt;proc~parse~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge39" class="edge">
+<title>proc~get_cla_list~2&#45;&gt;proc~parse~2</title>
+<path fill="none" stroke="#000000" d="M1200.54,-687.85C1215.26,-691.72 1229.59,-696.7 1243,-703.07 1338.73,-748.49 1415.12,-855.94 1444.25,-901.3"/>
+<polygon fill="#000000" stroke="#000000" points="1441.44,-903.4 1449.74,-909.99 1447.36,-899.66 1441.44,-903.4"/>
+</g>
+<!-- proc~get_cla~2 -->
+<g id="proc~~errored~2~~CalledByGraph_node21" class="node">
+<title>proc~get_cla~2</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node21"><a xlink:href=".././proc/get_cla~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla">
+<polygon fill="#d9534f" stroke="#d9534f" points="1190.5,-736.07 823.5,-736.07 823.5,-712.07 1190.5,-712.07 1190.5,-736.07"/>
+<text text-anchor="middle" x="1007" y="-721.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_cla</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla~2&#45;&gt;proc~parse~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge40" class="edge">
+<title>proc~get_cla~2&#45;&gt;proc~parse~2</title>
+<path fill="none" stroke="#000000" d="M1190.55,-733.85C1208.64,-737.89 1226.41,-743.18 1243,-750.07 1327.72,-785.25 1406,-864.74 1439.64,-902.03"/>
+<polygon fill="#000000" stroke="#000000" points="1437.23,-904.59 1446.5,-909.74 1442.46,-899.94 1437.23,-904.59"/>
+</g>
+<!-- program~flap_save_bash_completion -->
+<g id="proc~~errored~2~~CalledByGraph_node22" class="node">
+<title>program~flap_save_bash_completion</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node22"><a xlink:href=".././program/flap_save_bash_completion.html" xlink:title="flap_save_bash_completion">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1086.5,-652.07 927.5,-652.07 927.5,-628.07 1086.5,-628.07 1086.5,-652.07"/>
+<text text-anchor="middle" x="1007" y="-637.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_save_bash_completion</text>
+</a>
+</g>
+</g>
+<!-- program~flap_save_bash_completion&#45;&gt;proc~add~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge12" class="edge">
+<title>program~flap_save_bash_completion&#45;&gt;proc~add~2</title>
+<path fill="none" stroke="#000000" d="M1086.72,-649.67C1208.08,-661.65 1446.73,-673.92 1637,-614.07 1736.38,-582.81 1834.86,-503.2 1876.42,-466.78"/>
+<polygon fill="#000000" stroke="#000000" points="1878.79,-469.35 1883.95,-460.09 1874.15,-464.11 1878.79,-469.35"/>
+</g>
+<!-- program~flap_save_bash_completion&#45;&gt;proc~parse~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge41" class="edge">
+<title>program~flap_save_bash_completion&#45;&gt;proc~parse~2</title>
+<path fill="none" stroke="#000000" d="M1086.63,-632.27C1134.45,-631.01 1195.3,-635.83 1243,-661.07 1348.37,-716.81 1421.41,-848.78 1446.97,-900.63"/>
+<polygon fill="#000000" stroke="#000000" points="1443.94,-902.4 1451.44,-909.88 1450.24,-899.35 1443.94,-902.4"/>
+</g>
+<!-- program~flap_save_man_page -->
+<g id="proc~~errored~2~~CalledByGraph_node23" class="node">
+<title>program~flap_save_man_page</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node23"><a xlink:href=".././program/flap_save_man_page.html" xlink:title="flap_save_man_page">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="281,-330.07 157,-330.07 157,-306.07 281,-306.07 281,-330.07"/>
+<text text-anchor="middle" x="219" y="-315.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_save_man_page</text>
+</a>
+</g>
+</g>
+<!-- program~flap_save_man_page&#45;&gt;proc~add~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge13" class="edge">
+<title>program~flap_save_man_page&#45;&gt;proc~add~2</title>
+<path fill="none" stroke="#000000" d="M281.27,-315.59C479.05,-308.68 1117.82,-294.68 1637,-377.07 1714.12,-389.31 1801.17,-415.76 1852.44,-432.69"/>
+<polygon fill="#000000" stroke="#000000" points="1851.61,-436.11 1862.21,-435.95 1853.83,-429.46 1851.61,-436.11"/>
+</g>
+<!-- program~flap_save_man_page&#45;&gt;none~get~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge60" class="edge">
+<title>program~flap_save_man_page&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M278.27,-330.11C288.29,-332.71 298.53,-335.7 308,-339.07 382.67,-365.61 465.21,-409.07 508.39,-432.97"/>
+<polygon fill="#000000" stroke="#000000" points="506.8,-436.09 517.24,-437.9 510.21,-429.98 506.8,-436.09"/>
+</g>
+<!-- program~flap_save_usage_to_markdown -->
+<g id="proc~~errored~2~~CalledByGraph_node24" class="node">
+<title>program~flap_save_usage_to_markdown</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node24"><a xlink:href=".././program/flap_save_usage_to_markdown.html" xlink:title="flap_save_usage_to_markdown">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="308,-288.07 130,-288.07 130,-264.07 308,-264.07 308,-288.07"/>
+<text text-anchor="middle" x="219" y="-273.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_save_usage_to_markdown</text>
+</a>
+</g>
+</g>
+<!-- program~flap_save_usage_to_markdown&#45;&gt;proc~add~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge14" class="edge">
+<title>program~flap_save_usage_to_markdown&#45;&gt;proc~add~2</title>
+<path fill="none" stroke="#000000" d="M308.35,-267.64C533.76,-248.69 1147.03,-213.22 1637,-333.07 1725.14,-354.63 1820.77,-404.53 1867.68,-430.94"/>
+<polygon fill="#000000" stroke="#000000" points="1866.24,-434.15 1876.66,-436.05 1869.7,-428.07 1866.24,-434.15"/>
+</g>
+<!-- program~flap_save_usage_to_markdown&#45;&gt;none~get~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge61" class="edge">
+<title>program~flap_save_usage_to_markdown&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M282.44,-288.07C291.19,-290.58 299.93,-293.56 308,-297.07 390.92,-333.12 476.54,-398.89 516.04,-431.17"/>
+<polygon fill="#000000" stroke="#000000" points="514.25,-434.23 524.19,-437.9 518.71,-428.83 514.25,-434.23"/>
+</g>
+<!-- program~flap_test_action_store -->
+<g id="proc~~errored~2~~CalledByGraph_node25" class="node">
+<title>program~flap_test_action_store</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node25"><a xlink:href=".././program/flap_test_action_store.html" xlink:title="flap_test_action_store">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="282.5,-768.07 155.5,-768.07 155.5,-744.07 282.5,-744.07 282.5,-768.07"/>
+<text text-anchor="middle" x="219" y="-753.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_action_store</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_action_store&#45;&gt;proc~add~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge15" class="edge">
+<title>program~flap_test_action_store&#45;&gt;proc~add~2</title>
+<path fill="none" stroke="#000000" d="M282.8,-746.49C381.18,-730.4 576.77,-694 735,-637.07 751.83,-631.01 753.74,-623.78 771,-619.07 973.85,-563.64 1033.27,-601.38 1243,-586.07 1418.15,-573.28 1466.2,-596.93 1637,-556.07 1723.46,-535.38 1818.3,-489.58 1865.97,-464.79"/>
+<polygon fill="#000000" stroke="#000000" points="1867.63,-467.87 1874.86,-460.12 1864.38,-461.67 1867.63,-467.87"/>
+</g>
+<!-- none~get_varying~2 -->
+<g id="proc~~errored~2~~CalledByGraph_node38" class="node">
+<title>none~get_varying~2</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node38"><a xlink:href=".././type/command_line_interface.html#boundprocedure-get_varying~2" xlink:title="flap_command_line_interface_t::command_line_interface%get_varying">
+<polygon fill="#a7506f" stroke="#a7506f" points="735,-1039.07 344,-1039.07 344,-1015.07 735,-1015.07 735,-1039.07"/>
+<text text-anchor="middle" x="539.5" y="-1024.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_varying</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_action_store&#45;&gt;none~get_varying~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge57" class="edge">
+<title>program~flap_test_action_store&#45;&gt;none~get_varying~2</title>
+<path fill="none" stroke="#000000" d="M234.51,-768.42C285.3,-811.63 455.29,-956.27 516.39,-1008.26"/>
+<polygon fill="#000000" stroke="#000000" points="514.38,-1011.14 524.27,-1014.96 518.92,-1005.81 514.38,-1011.14"/>
+</g>
+<!-- program~flap_test_action_store&#45;&gt;none~get~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge62" class="edge">
+<title>program~flap_test_action_store&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M242.82,-744.06C261.28,-733.83 287.49,-718.11 308,-701.07 398.87,-625.57 488.22,-515.13 523.14,-470.2"/>
+<polygon fill="#000000" stroke="#000000" points="526.04,-472.17 529.38,-462.12 520.5,-467.89 526.04,-472.17"/>
+</g>
+<!-- program~flap_test_ansi_color_style -->
+<g id="proc~~errored~2~~CalledByGraph_node26" class="node">
+<title>program~flap_test_ansi_color_style</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node26"><a xlink:href=".././program/flap_test_ansi_color_style.html" xlink:title="flap_test_ansi_color_style">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="292.5,-246.07 145.5,-246.07 145.5,-222.07 292.5,-222.07 292.5,-246.07"/>
+<text text-anchor="middle" x="219" y="-231.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_ansi_color_style</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_ansi_color_style&#45;&gt;proc~add~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge16" class="edge">
+<title>program~flap_test_ansi_color_style&#45;&gt;proc~add~2</title>
+<path fill="none" stroke="#000000" d="M292.81,-230.22C545.85,-217.73 1385.25,-183.97 1637,-271.07 1737.63,-305.88 1835.81,-390.36 1876.89,-428.64"/>
+<polygon fill="#000000" stroke="#000000" points="1874.65,-431.34 1884.33,-435.65 1879.45,-426.24 1874.65,-431.34"/>
+</g>
+<!-- program~flap_test_ansi_color_style&#45;&gt;none~get~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge63" class="edge">
+<title>program~flap_test_ansi_color_style&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M285.63,-246.09C293.36,-248.56 300.99,-251.52 308,-255.07 399.27,-301.22 485.31,-390.3 521.08,-430.06"/>
+<polygon fill="#000000" stroke="#000000" points="518.67,-432.62 527.93,-437.76 523.9,-427.96 518.67,-432.62"/>
+</g>
+<!-- program~flap_test_basic -->
+<g id="proc~~errored~2~~CalledByGraph_node27" class="node">
+<title>program~flap_test_basic</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node27"><a xlink:href=".././program/flap_test_basic.html" xlink:title="flap_test_basic">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="264.5,-1122.07 173.5,-1122.07 173.5,-1098.07 264.5,-1098.07 264.5,-1122.07"/>
+<text text-anchor="middle" x="219" y="-1107.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_basic</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_basic&#45;&gt;proc~add~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge17" class="edge">
+<title>program~flap_test_basic&#45;&gt;proc~add~2</title>
+<path fill="none" stroke="#000000" d="M236.79,-1122.12C259.86,-1138.13 303.16,-1166.21 344,-1182.07 718.47,-1327.42 865.68,-1412.84 1243,-1275.07 1458.1,-1196.53 1507.06,-1131.62 1637,-943.07 1664.52,-903.14 1652.89,-884.19 1673,-840.07 1740.6,-691.77 1846.16,-525.78 1883.42,-468.66"/>
+<polygon fill="#000000" stroke="#000000" points="1886.44,-470.44 1888.99,-460.15 1880.58,-466.6 1886.44,-470.44"/>
+</g>
+<!-- program~flap_test_basic&#45;&gt;proc~parse~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge42" class="edge">
+<title>program~flap_test_basic&#45;&gt;proc~parse~2</title>
+<path fill="none" stroke="#000000" d="M264.54,-1119.73C437.91,-1156.42 1066.73,-1280.86 1243,-1195.07 1354.15,-1140.97 1424.64,-998.1 1448.21,-943.61"/>
+<polygon fill="#000000" stroke="#000000" points="1451.51,-944.79 1452.19,-934.22 1445.07,-942.06 1451.51,-944.79"/>
+</g>
+<!-- program~flap_test_basic&#45;&gt;none~get_varying~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge58" class="edge">
+<title>program~flap_test_basic&#45;&gt;none~get_varying~2</title>
+<path fill="none" stroke="#000000" d="M264.62,-1098.44C321.63,-1083.58 420.32,-1057.87 482.37,-1041.7"/>
+<polygon fill="#000000" stroke="#000000" points="483.58,-1045 492.37,-1039.09 481.81,-1038.22 483.58,-1045"/>
+</g>
+<!-- program~flap_test_basic&#45;&gt;none~get~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge64" class="edge">
+<title>program~flap_test_basic&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M225.8,-1098.05C263.9,-1019.09 478.39,-574.63 528.18,-471.46"/>
+<polygon fill="#000000" stroke="#000000" points="531.4,-472.84 532.59,-462.31 525.09,-469.8 531.4,-472.84"/>
+</g>
+<!-- program~flap_test_choices_logical -->
+<g id="proc~~errored~2~~CalledByGraph_node28" class="node">
+<title>program~flap_test_choices_logical</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node28"><a xlink:href=".././program/flap_test_choices_logical.html" xlink:title="flap_test_choices_logical">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="291,-616.07 147,-616.07 147,-592.07 291,-592.07 291,-616.07"/>
+<text text-anchor="middle" x="219" y="-601.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_choices_logical</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_choices_logical&#45;&gt;proc~add~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge18" class="edge">
+<title>program~flap_test_choices_logical&#45;&gt;proc~add~2</title>
+<path fill="none" stroke="#000000" d="M291.24,-595.93C396.17,-584.15 598.5,-562.21 771,-548.07 1155.35,-516.57 1254.08,-539.73 1637,-494.07 1703.07,-486.19 1777.8,-472.46 1830.13,-462.04"/>
+<polygon fill="#000000" stroke="#000000" points="1830.84,-465.47 1839.96,-460.07 1829.47,-458.61 1830.84,-465.47"/>
+</g>
+<!-- program~flap_test_choices_logical&#45;&gt;proc~parse~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge43" class="edge">
+<title>program~flap_test_choices_logical&#45;&gt;proc~parse~2</title>
+<path fill="none" stroke="#000000" d="M291.06,-612.16C415.17,-627.46 664.89,-663.74 735,-715.07 761.02,-734.12 743.78,-760.77 771,-778.07 859.82,-834.5 1141.59,-787.99 1243,-816.07 1314.58,-835.89 1390.77,-879.87 1430.07,-904.5"/>
+<polygon fill="#000000" stroke="#000000" points="1428.47,-907.63 1438.79,-910.03 1432.22,-901.72 1428.47,-907.63"/>
+</g>
+<!-- program~flap_test_choices_logical&#45;&gt;none~get~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge65" class="edge">
+<title>program~flap_test_choices_logical&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M244.99,-591.98C301.62,-564.6 439.8,-497.79 504.3,-466.61"/>
+<polygon fill="#000000" stroke="#000000" points="506.14,-469.6 513.62,-462.1 503.1,-463.3 506.14,-469.6"/>
+</g>
+<!-- program~flap_test_duplicated_clas -->
+<g id="proc~~errored~2~~CalledByGraph_node29" class="node">
+<title>program~flap_test_duplicated_clas</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node29"><a xlink:href=".././program/flap_test_duplicated_clas.html" xlink:title="flap_test_duplicated_clas">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="291.5,-204.07 146.5,-204.07 146.5,-180.07 291.5,-180.07 291.5,-204.07"/>
+<text text-anchor="middle" x="219" y="-189.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_duplicated_clas</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_duplicated_clas&#45;&gt;proc~add~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge19" class="edge">
+<title>program~flap_test_duplicated_clas&#45;&gt;proc~add~2</title>
+<path fill="none" stroke="#000000" d="M291.76,-186.9C544.06,-169.74 1388.47,-121.02 1637,-218.07 1750.39,-262.34 1846.7,-379.93 1882.3,-427.58"/>
+<polygon fill="#000000" stroke="#000000" points="1879.67,-429.91 1888.42,-435.89 1885.31,-425.76 1879.67,-429.91"/>
+</g>
+<!-- program~flap_test_duplicated_clas&#45;&gt;none~get~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge66" class="edge">
+<title>program~flap_test_duplicated_clas&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M287.82,-204.07C294.85,-206.53 301.72,-209.5 308,-213.07 408.11,-269.96 492.88,-383.24 524.86,-429.58"/>
+<polygon fill="#000000" stroke="#000000" points="522.02,-431.63 530.55,-437.92 527.81,-427.69 522.02,-431.63"/>
+</g>
+<!-- program~flap_test_group_examples -->
+<g id="proc~~errored~2~~CalledByGraph_node30" class="node">
+<title>program~flap_test_group_examples</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node30"><a xlink:href=".././program/flap_test_group_examples.html" xlink:title="flap_test_group_examples">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="294,-162.07 144,-162.07 144,-138.07 294,-138.07 294,-162.07"/>
+<text text-anchor="middle" x="219" y="-147.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_group_examples</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_group_examples&#45;&gt;proc~add~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge20" class="edge">
+<title>program~flap_test_group_examples&#45;&gt;proc~add~2</title>
+<path fill="none" stroke="#000000" d="M294.42,-147.23C568.81,-137.22 1514.38,-107.08 1637,-162.07 1763.78,-218.93 1855.57,-370.92 1886.03,-426.95"/>
+<polygon fill="#000000" stroke="#000000" points="1883.05,-428.79 1890.85,-435.96 1889.22,-425.49 1883.05,-428.79"/>
+</g>
+<!-- program~flap_test_group_examples&#45;&gt;none~get~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge67" class="edge">
+<title>program~flap_test_group_examples&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M289.48,-162.07C295.98,-164.53 302.27,-167.5 308,-171.07 416.96,-238.97 498.83,-376.22 527.44,-428.86"/>
+<polygon fill="#000000" stroke="#000000" points="524.49,-430.77 532.3,-437.94 530.66,-427.47 524.49,-430.77"/>
+</g>
+<!-- program~flap_test_hidden -->
+<g id="proc~~errored~2~~CalledByGraph_node31" class="node">
+<title>program~flap_test_hidden</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node31"><a xlink:href=".././program/flap_test_hidden.html" xlink:title="flap_test_hidden">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="269,-119.07 169,-119.07 169,-95.07 269,-95.07 269,-119.07"/>
+<text text-anchor="middle" x="219" y="-104.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_hidden</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_hidden&#45;&gt;proc~add~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge21" class="edge">
+<title>program~flap_test_hidden&#45;&gt;proc~add~2</title>
+<path fill="none" stroke="#000000" d="M264.17,-94.99C445.62,-47.88 1147.23,109.51 1637,-128.07 1771.85,-193.48 1860.05,-365.97 1887.69,-426.61"/>
+<polygon fill="#000000" stroke="#000000" points="1884.6,-428.27 1891.88,-435.97 1890.99,-425.41 1884.6,-428.27"/>
+</g>
+<!-- program~flap_test_hidden&#45;&gt;none~get~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge68" class="edge">
+<title>program~flap_test_hidden&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M269.14,-113C282.55,-116.25 296.54,-121.28 308,-129.07 425.8,-209.06 504.09,-370.32 529.51,-428.51"/>
+<polygon fill="#000000" stroke="#000000" points="526.35,-430.03 533.52,-437.84 532.79,-427.27 526.35,-430.03"/>
+</g>
+<!-- program~flap_test_ignore_unknown_clas -->
+<g id="proc~~errored~2~~CalledByGraph_node32" class="node">
+<title>program~flap_test_ignore_unknown_clas</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node32"><a xlink:href=".././program/flap_test_ignore_unknown_clas.html" xlink:title="flap_test_ignore_unknown_clas">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="307,-498.07 131,-498.07 131,-474.07 307,-474.07 307,-498.07"/>
+<text text-anchor="middle" x="219" y="-483.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_ignore_unknown_clas</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_ignore_unknown_clas&#45;&gt;proc~add~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge22" class="edge">
+<title>program~flap_test_ignore_unknown_clas&#45;&gt;proc~add~2</title>
+<path fill="none" stroke="#000000" d="M307.32,-483.74C415.96,-480.87 607.17,-475.9 771,-472.07 1103.09,-464.31 1490.31,-456.28 1713.23,-451.75"/>
+<polygon fill="#000000" stroke="#000000" points="1713.46,-455.25 1723.39,-451.55 1713.32,-448.25 1713.46,-455.25"/>
+</g>
+<!-- program~flap_test_ignore_unknown_clas&#45;&gt;none~get~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge69" class="edge">
+<title>program~flap_test_ignore_unknown_clas&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M307.03,-476.23C342.54,-472.22 384.12,-467.52 422.17,-463.22"/>
+<polygon fill="#000000" stroke="#000000" points="422.73,-466.68 432.28,-462.07 421.95,-459.72 422.73,-466.68"/>
+</g>
+<!-- program~flap_test_minimal -->
+<g id="proc~~errored~2~~CalledByGraph_node33" class="node">
+<title>program~flap_test_minimal</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node33"><a xlink:href=".././program/flap_test_minimal.html" xlink:title="flap_test_minimal">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="272,-456.07 166,-456.07 166,-432.07 272,-432.07 272,-456.07"/>
+<text text-anchor="middle" x="219" y="-441.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_minimal</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_minimal&#45;&gt;proc~add~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge23" class="edge">
+<title>program~flap_test_minimal&#45;&gt;proc~add~2</title>
+<path fill="none" stroke="#000000" d="M272.06,-436.36C294.19,-433.45 320.3,-430.5 344,-429.07 517.46,-418.61 561.22,-428.59 735,-429.07 1135.89,-430.18 1236.28,-422.18 1637,-434.07 1661.63,-434.8 1687.56,-435.85 1713.12,-437.06"/>
+<polygon fill="#000000" stroke="#000000" points="1713.12,-440.56 1723.28,-437.55 1713.46,-433.57 1713.12,-440.56"/>
+</g>
+<!-- program~flap_test_minimal&#45;&gt;none~get~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge70" class="edge">
+<title>program~flap_test_minimal&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M272.24,-445.05C295.96,-445.5 325.59,-446.06 356.38,-446.64"/>
+<polygon fill="#000000" stroke="#000000" points="356.35,-450.14 366.41,-446.83 356.48,-443.14 356.35,-450.14"/>
+</g>
+<!-- program~flap_test_nargs_insufficient -->
+<g id="proc~~errored~2~~CalledByGraph_node34" class="node">
+<title>program~flap_test_nargs_insufficient</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node34"><a xlink:href=".././program/flap_test_nargs_insufficient.html" xlink:title="flap_test_nargs_insufficient">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="297.5,-414.07 140.5,-414.07 140.5,-390.07 297.5,-390.07 297.5,-414.07"/>
+<text text-anchor="middle" x="219" y="-399.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_nargs_insufficient</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_nargs_insufficient&#45;&gt;proc~add~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge24" class="edge">
+<title>program~flap_test_nargs_insufficient&#45;&gt;proc~add~2</title>
+<path fill="none" stroke="#000000" d="M297.64,-401.19C511.41,-399.22 1126.6,-396.59 1637,-424.07 1682.77,-426.53 1732.95,-430.79 1776.92,-435.05"/>
+<polygon fill="#000000" stroke="#000000" points="1776.78,-438.55 1787.07,-436.04 1777.46,-431.59 1776.78,-438.55"/>
+</g>
+<!-- program~flap_test_nargs_insufficient&#45;&gt;none~get~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge71" class="edge">
+<title>program~flap_test_nargs_insufficient&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M297.51,-413.75C343.15,-420.63 401.08,-429.36 448.7,-436.54"/>
+<polygon fill="#000000" stroke="#000000" points="448.29,-440.01 458.7,-438.04 449.34,-433.09 448.29,-440.01"/>
+</g>
+<!-- program~flap_test_nargs_insufficient~2 -->
+<g id="proc~~errored~2~~CalledByGraph_node35" class="node">
+<title>program~flap_test_nargs_insufficient~2</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node35"><a xlink:href=".././program/flap_test_nargs_insufficient~2.html" xlink:title="flap_test_nargs_insufficient">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="297.5,-372.07 140.5,-372.07 140.5,-348.07 297.5,-348.07 297.5,-372.07"/>
+<text text-anchor="middle" x="219" y="-357.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_nargs_insufficient</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_nargs_insufficient~2&#45;&gt;proc~add~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge25" class="edge">
+<title>program~flap_test_nargs_insufficient~2&#45;&gt;proc~add~2</title>
+<path fill="none" stroke="#000000" d="M297.79,-359.11C511.94,-357.24 1128.02,-356.9 1637,-406.07 1701.53,-412.3 1774.35,-424.52 1826.47,-434.17"/>
+<polygon fill="#000000" stroke="#000000" points="1826.13,-437.67 1836.61,-436.07 1827.42,-430.79 1826.13,-437.67"/>
+</g>
+<!-- program~flap_test_nargs_insufficient~2&#45;&gt;none~get~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge72" class="edge">
+<title>program~flap_test_nargs_insufficient~2&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M272.71,-372.13C284.36,-374.94 296.62,-378.01 308,-381.07 371.7,-398.19 444.52,-420.44 490.97,-434.98"/>
+<polygon fill="#000000" stroke="#000000" points="490.17,-438.4 500.76,-438.05 492.26,-431.72 490.17,-438.4"/>
+</g>
+<!-- program~flap_test_nested -->
+<g id="proc~~errored~2~~CalledByGraph_node36" class="node">
+<title>program~flap_test_nested</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node36"><a xlink:href=".././program/flap_test_nested.html" xlink:title="flap_test_nested">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="268.5,-540.07 169.5,-540.07 169.5,-516.07 268.5,-516.07 268.5,-540.07"/>
+<text text-anchor="middle" x="219" y="-525.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_nested</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_nested&#45;&gt;proc~add~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge26" class="edge">
+<title>program~flap_test_nested&#45;&gt;proc~add~2</title>
+<path fill="none" stroke="#000000" d="M268.71,-526.42C485.27,-519.06 1362.12,-488.74 1637,-471.07 1678.67,-468.39 1724.03,-464.66 1765.03,-460.98"/>
+<polygon fill="#000000" stroke="#000000" points="1765.43,-464.46 1775.07,-460.07 1764.8,-457.49 1765.43,-464.46"/>
+</g>
+<!-- program~flap_test_nested&#45;&gt;proc~parse~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge44" class="edge">
+<title>program~flap_test_nested&#45;&gt;proc~parse~2</title>
+<path fill="none" stroke="#000000" d="M268.62,-533.4C390.25,-547.14 700.44,-584.89 735,-616.07 779.2,-655.94 724.87,-707.44 771,-745.07 852.48,-811.53 1143.56,-743.89 1243,-778.07 1322.59,-805.42 1400.65,-870.22 1436.54,-902.74"/>
+<polygon fill="#000000" stroke="#000000" points="1434.6,-905.72 1444.34,-909.91 1439.34,-900.56 1434.6,-905.72"/>
+</g>
+<!-- program~flap_test_nested&#45;&gt;none~get~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge73" class="edge">
+<title>program~flap_test_nested&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M268.89,-516.48C281.63,-513.44 295.33,-510.15 308,-507.07 366.78,-492.79 433.9,-476.15 480.49,-464.55"/>
+<polygon fill="#000000" stroke="#000000" points="481.55,-467.9 490.41,-462.08 479.86,-461.1 481.55,-467.9"/>
+</g>
+<!-- program~flap_test_string -->
+<g id="proc~~errored~2~~CalledByGraph_node37" class="node">
+<title>program~flap_test_string</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node37"><a xlink:href=".././program/flap_test_string.html" xlink:title="flap_test_string">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="265.5,-692.07 172.5,-692.07 172.5,-668.07 265.5,-668.07 265.5,-692.07"/>
+<text text-anchor="middle" x="219" y="-677.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_string</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_string&#45;&gt;proc~add~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge27" class="edge">
+<title>program~flap_test_string&#45;&gt;proc~add~2</title>
+<path fill="none" stroke="#000000" d="M265.86,-670.7C360.07,-651.8 582.42,-608.96 771,-586.07 1154.09,-539.57 1257.1,-590.91 1637,-523.07 1714.83,-509.17 1802.68,-481.13 1853.75,-463.56"/>
+<polygon fill="#000000" stroke="#000000" points="1855.16,-466.77 1863.46,-460.19 1852.87,-460.16 1855.16,-466.77"/>
+</g>
+<!-- program~flap_test_string&#45;&gt;proc~parse~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge45" class="edge">
+<title>program~flap_test_string&#45;&gt;proc~parse~2</title>
+<path fill="none" stroke="#000000" d="M260,-692.16C350.24,-718.94 576.9,-783.47 771,-816.07 978.74,-850.96 1036.09,-819.58 1243,-859.07 1303.35,-870.59 1371.09,-892.02 1413.87,-906.66"/>
+<polygon fill="#000000" stroke="#000000" points="1412.81,-910 1423.4,-909.95 1415.09,-903.38 1412.81,-910"/>
+</g>
+<!-- program~flap_test_string&#45;&gt;none~get~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge74" class="edge">
+<title>program~flap_test_string&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M240.61,-667.91C258.66,-657.09 285.46,-640.62 308,-625.07 386.18,-571.12 474.6,-501.41 515.49,-468.64"/>
+<polygon fill="#000000" stroke="#000000" points="517.87,-471.22 523.48,-462.23 513.49,-465.76 517.87,-471.22"/>
+</g>
+<!-- none~get_varying~2&#45;&gt;proc~get_cla_list_varying_char~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge47" class="edge">
+<title>none~get_varying~2&#45;&gt;proc~get_cla_list_varying_char~2</title>
+<path fill="none" stroke="#000000" d="M735.22,-1018.28C745.4,-1017.82 755.68,-1017.36 765.99,-1016.9"/>
+<polygon fill="#000000" stroke="#000000" points="766.46,-1020.38 776.29,-1016.43 766.14,-1013.39 766.46,-1020.38"/>
+</g>
+<!-- none~get_varying~2&#45;&gt;proc~get_cla_list_varying_i1p~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge48" class="edge">
+<title>none~get_varying~2&#45;&gt;proc~get_cla_list_varying_i1p~2</title>
+<path fill="none" stroke="#000000" d="M598.53,-1014.98C645,-1005.67 711.95,-993.07 771,-985.07 792.92,-982.1 816.05,-979.45 838.91,-977.11"/>
+<polygon fill="#000000" stroke="#000000" points="839.43,-980.58 849.03,-976.09 838.73,-973.61 839.43,-980.58"/>
+</g>
+<!-- none~get_varying~2&#45;&gt;proc~get_cla_list_varying_i2p~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge49" class="edge">
+<title>none~get_varying~2&#45;&gt;proc~get_cla_list_varying_i2p~2</title>
+<path fill="none" stroke="#000000" d="M566.79,-1014.92C608.9,-996.05 694.51,-960.12 771,-943.07 783.74,-940.23 796.96,-937.77 810.33,-935.64"/>
+<polygon fill="#000000" stroke="#000000" points="811.22,-939.05 820.57,-934.08 810.16,-932.13 811.22,-939.05"/>
+</g>
+<!-- none~get_varying~2&#45;&gt;proc~get_cla_list_varying_i4p~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge50" class="edge">
+<title>none~get_varying~2&#45;&gt;proc~get_cla_list_varying_i4p~2</title>
+<path fill="none" stroke="#000000" d="M556.78,-1015.03C593.04,-988.94 684.16,-927.43 771,-901.07 779.33,-898.54 787.9,-896.29 796.6,-894.28"/>
+<polygon fill="#000000" stroke="#000000" points="797.46,-897.67 806.49,-892.12 795.97,-890.84 797.46,-897.67"/>
+</g>
+<!-- none~get_varying~2&#45;&gt;proc~get_cla_list_varying_i8p~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge51" class="edge">
+<title>none~get_varying~2&#45;&gt;proc~get_cla_list_varying_i8p~2</title>
+<path fill="none" stroke="#000000" d="M556.78,-1039.11C593.04,-1065.19 684.16,-1126.71 771,-1153.07 779.33,-1155.6 787.9,-1157.85 796.6,-1159.86"/>
+<polygon fill="#000000" stroke="#000000" points="795.97,-1163.3 806.49,-1162.02 797.46,-1156.46 795.97,-1163.3"/>
+</g>
+<!-- none~get_varying~2&#45;&gt;proc~get_cla_list_varying_logical~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge52" class="edge">
+<title>none~get_varying~2&#45;&gt;proc~get_cla_list_varying_logical~2</title>
+<path fill="none" stroke="#000000" d="M566.79,-1039.22C608.9,-1058.08 694.51,-1094.02 771,-1111.07 783.74,-1113.91 796.96,-1116.37 810.33,-1118.49"/>
+<polygon fill="#000000" stroke="#000000" points="810.16,-1122.01 820.57,-1120.06 811.22,-1115.09 810.16,-1122.01"/>
+</g>
+<!-- none~get_varying~2&#45;&gt;proc~get_cla_list_varying_r4p~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge53" class="edge">
+<title>none~get_varying~2&#45;&gt;proc~get_cla_list_varying_r4p~2</title>
+<path fill="none" stroke="#000000" d="M598.53,-1039.16C645,-1048.47 711.95,-1061.07 771,-1069.07 792.92,-1072.04 816.05,-1074.69 838.91,-1077.03"/>
+<polygon fill="#000000" stroke="#000000" points="838.73,-1080.53 849.03,-1078.04 839.43,-1073.56 838.73,-1080.53"/>
+</g>
+<!-- none~get_varying~2&#45;&gt;proc~get_cla_list_varying_r8p~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge54" class="edge">
+<title>none~get_varying~2&#45;&gt;proc~get_cla_list_varying_r8p~2</title>
+<path fill="none" stroke="#000000" d="M735.22,-1035.85C746.09,-1036.34 757.08,-1036.84 768.08,-1037.33"/>
+<polygon fill="#000000" stroke="#000000" points="768.04,-1040.84 778.18,-1037.79 768.35,-1033.84 768.04,-1040.84"/>
+</g>
+<!-- none~get~2&#45;&gt;proc~get_cla_list~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge55" class="edge">
+<title>none~get~2&#45;&gt;proc~get_cla_list~2</title>
+<path fill="none" stroke="#000000" d="M583.75,-462.17C627.77,-476.63 695.05,-504.96 735,-552.07 768,-590.98 731.03,-629.37 771,-661.07 815.51,-696.37 880.77,-699.58 931.23,-695.12"/>
+<polygon fill="#000000" stroke="#000000" points="931.84,-698.57 941.44,-694.09 931.14,-691.61 931.84,-698.57"/>
+</g>
+<!-- none~get~2&#45;&gt;proc~get_cla~2 -->
+<g id="proc~~errored~2~~CalledByGraph_edge56" class="edge">
+<title>none~get~2&#45;&gt;proc~get_cla~2</title>
+<path fill="none" stroke="#000000" d="M586.66,-462.16C631.35,-476.28 697.67,-504.06 735,-552.07 777.35,-606.53 718.81,-657.94 771,-703.07 816.32,-742.25 886.55,-743.52 938.44,-737.4"/>
+<polygon fill="#000000" stroke="#000000" points="939.1,-740.85 948.57,-736.09 938.2,-733.91 939.1,-740.85"/>
+</g>
+<!-- program~flap_test_group -->
+<g id="proc~~errored~2~~CalledByGraph_node40" class="node">
+<title>program~flap_test_group</title>
+<g id="a_proc~~errored~2~~CalledByGraph_node40"><a xlink:href=".././program/flap_test_group.html" xlink:title="flap_test_group">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="94,-1344.07 0,-1344.07 0,-1320.07 94,-1320.07 94,-1344.07"/>
+<text text-anchor="middle" x="47" y="-1329.67" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_group</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_group&#45;&gt;proc~fake_call -->
+<g id="proc~~errored~2~~CalledByGraph_edge46" class="edge">
+<title>program~flap_test_group&#45;&gt;proc~fake_call</title>
+<path fill="none" stroke="#000000" d="M94,-1332.07C106.59,-1332.07 120.62,-1332.07 134.6,-1332.07"/>
+<polygon fill="#000000" stroke="#000000" points="134.75,-1335.57 144.75,-1332.07 134.75,-1328.57 134.75,-1335.57"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var panprocerrored2CalledByGraph = svgPanZoom('#procerrored2CalledByGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>        <div><a type="button" class="graph-help" data-toggle="modal" href="#CalledByGraph-help-text">Help</a></div>
+          <div class="modal fade" id="CalledByGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                </div>
+              <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 27.51" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1.16 1.16) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 741.5,-28 741.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="146,-24 88,-24 88,0 146,0 146,-24"/>
+<text text-anchor="middle" x="117" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="225.5,-24 164.5,-24 164.5,0 225.5,0 225.5,-24"/>
+<text text-anchor="middle" x="195" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Type Bound Procedure -->
+<g id="node4" class="node">
+<title>Type Bound Procedure</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="374,-24 244,-24 244,0 374,0 374,-24"/>
+<text text-anchor="middle" x="309" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type Bound Procedure</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node5" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="537.5,-24 392.5,-24 392.5,0 537.5,0 537.5,-24"/>
+<text text-anchor="middle" x="465" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node6" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="614,-24 556,-24 556,0 614,0 614,-24"/>
+<text text-anchor="middle" x="585" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node7" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="737.5,-24 632.5,-24 632.5,0 737.5,0 737.5,-24"/>
+<text text-anchor="middle" x="685" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
 </g>
 </g>
 </svg>
@@ -457,163 +1351,52 @@ implementation in a submodule of an interface in a parent module.
     </div>
     <br>
 
-    <section class="visible-xs visible-sm hidden-md">
-        <h3>Contents</h3>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-    <div class="panel panel-primary">
-      <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
-      <div class="list-group">
-        <a class="list-group-item" href="../proc/errored~2.html#src">errored</a>
-      </div>
-    </div>
-
-
-    </section>
-    <br class="visible-xs visible-sm hidden-md">
-
 
     
     
 
     
     
+
 
 
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span></span><span class="w">  </span><span class="k">subroutine </span><span class="n">errored</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="p">,</span><span class="w"> </span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">switch</span><span class="p">,</span><span class="w"> </span><span class="n">val_str</span><span class="p">,</span><span class="w"> </span><span class="n">log_value</span><span class="p">)</span><span class="w"></span>
-<span class="w">  </span><span class="c">!&lt; Trig error occurence and print meaningful message.</span>
-<span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="n">command_line_argument</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">self</span><span class="w">      </span><span class="c">!&lt; CLA data.</span>
-<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span><span class="w">                 </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">error</span><span class="w">     </span><span class="c">!&lt; Error occurred.</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">       </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">pref</span><span class="w">      </span><span class="c">!&lt; Prefixing string.</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">       </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">switch</span><span class="w">    </span><span class="c">!&lt; CLA switch name.</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">       </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">val_str</span><span class="w">   </span><span class="c">!&lt; Value string.</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">       </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">log_value</span><span class="w"> </span><span class="c">!&lt; Logical value to be casted.</span>
-<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w">               </span><span class="kd">::</span><span class="w"> </span><span class="n">prefd</span><span class="w">     </span><span class="c">!&lt; Prefixing string.</span>
+    <div class="hl codehilite"><pre><span></span><span class="w">  </span><span class="k">subroutine </span><span class="n">errored</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="p">,</span><span class="w"> </span><span class="n">pref</span><span class="p">,</span><span class="w"> </span><span class="n">a1</span><span class="p">,</span><span class="w"> </span><span class="n">a2</span><span class="p">)</span>
+<span class="w">  </span><span class="c">!&lt; Trig error occurrence and print meaningful message.</span>
+<span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="n">command_line_arguments_group</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">self</span><span class="w">  </span><span class="c">!&lt; CLAsG data.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span><span class="w">                        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="c">!&lt; Error occurred.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">              </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">pref</span><span class="w">  </span><span class="c">!&lt; Prefixing string.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">              </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">a1</span><span class="w">    </span><span class="c">!&lt; First index CLAs group inconsistent.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">              </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">a2</span><span class="w">    </span><span class="c">!&lt; Second index CLAs group inconsistent.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w">                      </span><span class="kd">::</span><span class="w"> </span><span class="n">prefd</span><span class="w"> </span><span class="c">!&lt; Prefixing string.</span>
 
-<span class="w">  </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">error</span><span class="w"></span>
+<span class="w">  </span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">error</span>
 <span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">    </span><span class="n">prefd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">pref</span><span class="p">))</span><span class="w"> </span><span class="n">prefd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pref</span><span class="w"></span>
-<span class="w">    </span><span class="n">prefd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="s1">&#39;: &#39;</span><span class="o">//</span><span class="n">colorize</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">color_fg</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error_color</span><span class="p">,</span><span class="w"> </span><span class="n">style</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error_style</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="k">select case</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_OPTIONAL_NO_DEF</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">is_positional</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">        </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">position</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;-th&quot; positional option has not a default value!&#39;</span><span class="w"></span>
+<span class="k">    </span><span class="n">prefd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">pref</span><span class="p">))</span><span class="w"> </span><span class="n">prefd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pref</span>
+<span class="w">    </span><span class="n">prefd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="s1">&#39;: &#39;</span><span class="o">//</span><span class="n">colorize</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">color_fg</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error_color</span><span class="p">,</span><span class="w"> </span><span class="n">style</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error_style</span><span class="p">)</span>
+<span class="w">    </span><span class="k">select case</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span>
+<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_CONSISTENCY</span><span class="p">)</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">group</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">        </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: group (command) name: &quot;&#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">group</span><span class="o">//</span><span class="s1">&#39;&quot; consistency error:&#39;</span>
 <span class="w">      </span><span class="k">else</span>
-<span class="k">        </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: named option &quot;&#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="o">//</span><span class="s1">&#39;&quot; has not a default value!&#39;</span><span class="w"></span>
+<span class="k">        </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: consistency error:&#39;</span>
 <span class="w">      </span><span class="k">endif</span>
-<span class="k">    case</span><span class="p">(</span><span class="n">ERROR_REQUIRED_M_EXCLUDE</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: named option &quot;&#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="o">//</span><span class="s1">&#39;&quot; cannot exclude others&#39;</span><span class="o">//</span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                           </span><span class="s1">&#39;, it being required, only optional ones can!&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_POSITIONAL_M_EXCLUDE</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">position</span><span class="p">))</span><span class="o">//</span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                           </span><span class="s1">&#39;-th&quot; positional option cannot exclude others, only optional named options can!&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_NAMED_NO_NAME</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: a non positional optiona must have a switch name!&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_POSITIONAL_NO_POSITION</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: a positional option must have a position number different from 0!&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_POSITIONAL_NO_STORE</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: a positional option must have action set to &quot;&#39;</span><span class="o">//</span><span class="n">action_store</span><span class="o">//</span><span class="s1">&#39;&quot;!&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_M_EXCLUDE</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: the options &quot;&#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="o">//</span><span class="s1">&#39;&quot; and &quot;&#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">m_exclude</span><span class="o">//</span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                           </span><span class="s1">&#39;&quot; are mutually exclusive, but both have been passed!&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_NOT_IN_CHOICES</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">is_positional</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">        </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: value of &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">position</span><span class="p">))</span><span class="o">//</span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                             </span><span class="s1">&#39;-th&quot; positional option must be chosen in:&#39;</span><span class="w"></span>
-<span class="w">      </span><span class="k">else</span>
-<span class="k">        </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: value of named option &quot;&#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="o">//</span><span class="s1">&#39;&quot; must be chosen in: &#39;</span><span class="w"></span>
-<span class="w">      </span><span class="k">endif</span>
-<span class="k">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="o">//</span><span class="s1">&#39;(&#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">choices</span><span class="o">//</span><span class="s1">&#39;)&#39;</span><span class="w"></span>
-<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="o">//</span><span class="s1">&#39; but &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">val_str</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;&quot; has been passed!&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_MISSING_REQUIRED</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">is_positional</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">        </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: named option &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&quot; is required!&#39;</span><span class="w"></span>
-<span class="w">      </span><span class="k">else</span>
-<span class="k">        </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="o">//</span><span class="s1">&#39;-th&quot; positional option is required!&#39;</span><span class="w"></span>
-<span class="w">      </span><span class="k">endif</span>
-<span class="k">    case</span><span class="p">(</span><span class="n">ERROR_CASTING_LOGICAL</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: cannot convert &quot;&#39;</span><span class="o">//</span><span class="n">log_value</span><span class="o">//</span><span class="s1">&#39;&quot; of option &quot;&#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="o">//</span><span class="s1">&#39;&quot; to logical type!&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_CHOICES_LOGICAL</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: cannot use &quot;choices&quot; value check for option &quot;&#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="o">//</span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                           </span><span class="s1">&#39;&quot; it being of logical type! The choices are limited to &quot;.true.&quot; or &quot;.false.&quot; by definition!&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_NO_LIST</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">is_positional</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">        </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: named option &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="p">))</span><span class="o">//</span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                             </span><span class="s1">&#39;&quot; has not &quot;nargs&quot; value but an array has been passed to &quot;get&quot; method!&#39;</span><span class="w"></span>
-<span class="w">      </span><span class="k">else</span>
-<span class="k">        </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="o">//</span><span class="s1">&#39;-th&quot; positional option &#39;</span><span class="o">//</span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                             </span><span class="s1">&#39;has not &quot;nargs&quot; value but an array has been passed to &quot;get&quot; method!&#39;</span><span class="w"></span>
-<span class="w">      </span><span class="k">endif</span>
-<span class="k">    case</span><span class="p">(</span><span class="n">ERROR_NARGS_INSUFFICIENT</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">is_positional</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">        if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">nargs</span><span class="o">==</span><span class="s1">&#39;+&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">          </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: named option &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="p">))</span><span class="o">//</span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                               </span><span class="s1">&#39;&quot; requires at least 1 argument but no one remains!&#39;</span><span class="w"></span>
-<span class="w">        </span><span class="k">else</span>
-<span class="k">          </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: named option &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&quot; requires &#39;</span><span class="o">//</span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                               </span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">nargs</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; arguments but no enough ones remain!&#39;</span><span class="w"></span>
-<span class="w">        </span><span class="k">endif</span>
-<span class="k">      else</span>
-<span class="k">        if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">nargs</span><span class="o">==</span><span class="s1">&#39;+&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">          </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="o">//</span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                               </span><span class="s1">&#39;-th&quot; positional option requires at least 1 argument but no one remains&#39;</span><span class="w"></span>
-<span class="w">        </span><span class="k">else</span>
-<span class="k">          </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="o">//</span><span class="s1">&#39;-th&quot; positional option requires &#39;</span><span class="o">//</span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                               </span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">nargs</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; arguments but no enough ones remain!&#39;</span><span class="w"></span>
-<span class="w">        </span><span class="k">endif</span>
-<span class="k">      endif</span>
-<span class="k">    case</span><span class="p">(</span><span class="n">ERROR_VALUE_MISSING</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: named option &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&quot; needs a value that is not passed!&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_UNKNOWN</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: switch &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">switch</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&quot; is unknown!&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_ENVVAR_POSITIONAL</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="o">//</span><span class="s1">&#39;-th&quot; positional option &#39;</span><span class="o">//</span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                           </span><span class="s1">&#39;has &quot;envvar&quot; value that is not allowed for positional option!&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_ENVVAR_NOT_STORE</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: named option &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="p">))</span><span class="o">//</span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                           </span><span class="s1">&#39;&quot; is an envvar with action different from &quot;&#39;</span><span class="o">//</span><span class="n">action_store</span><span class="o">//</span><span class="s1">&#39;&quot; that is not allowed!&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_ENVVAR_NARGS</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: named option &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="p">))</span><span class="o">//</span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                           </span><span class="s1">&#39;&quot; is an envvar that is not allowed for list valued option!&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_STORE_STAR_POSITIONAL</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="o">//</span><span class="s1">&#39;-th&quot; positional option &#39;</span><span class="o">//</span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                           </span><span class="s1">&#39;has &quot;&#39;</span><span class="o">//</span><span class="n">action_store_star</span><span class="o">//</span><span class="s1">&#39;&quot; action that is not allowed for positional option!&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_STORE_STAR_NARGS</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: named option &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="p">))</span><span class="o">//</span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                           </span><span class="s1">&#39;&quot; has &quot;&#39;</span><span class="o">//</span><span class="n">action_store_star</span><span class="o">//</span><span class="s1">&#39;&quot; action that is not allowed for list valued option!&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_STORE_STAR_ENVVAR</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: named option &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="p">))</span><span class="o">//</span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                           </span><span class="s1">&#39;&quot; has &quot;&#39;</span><span class="o">//</span><span class="n">action_store_star</span><span class="o">//</span><span class="s1">&#39;&quot; action that is not allowed for environment variable option!&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_ACTION_UNKNOWN</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: named option &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&quot; has unknown &quot;&#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">act</span><span class="o">//</span><span class="s1">&#39;&quot; action!&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_DUPLICATED_CLAS</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: switch &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">switch</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&quot; has been passed more than once!&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_MISSING_REQUIRED_VAL</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: named option &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">switch</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&quot; requires a value that is not passed!&#39;</span><span class="w"></span>
+<span class="k">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="o">//</span><span class="s1">&#39; &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="o">//</span><span class="w">             </span><span class="p">&amp;</span>
+<span class="w">                           </span><span class="s1">&#39;-th&quot; option has the same switch or abbreviated switch of &quot;&#39;</span><span class="o">//</span><span class="p">&amp;</span>
+<span class="w">                           </span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">a2</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="o">//</span><span class="s1">&#39;-th&quot; option:&#39;</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39; CLA(&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="w"> </span><span class="o">//</span><span class="s1">&#39;) switches = &#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a1</span><span class="p">)%</span><span class="n">switch</span><span class="w"> </span><span class="o">//</span><span class="s1">&#39; &#39;</span><span class="o">//</span><span class="p">&amp;</span>
+<span class="w">                           </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a1</span><span class="p">)%</span><span class="n">switch_ab</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="o">//</span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39; CLA(&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">a2</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="o">//</span><span class="s1">&#39;) switches = &#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a2</span><span class="p">)%</span><span class="n">switch</span><span class="o">//</span><span class="s1">&#39; &#39;</span><span class="o">//</span><span class="p">&amp;</span>
+<span class="w">                           </span><span class="n">self</span><span class="p">%</span><span class="n">cla</span><span class="p">(</span><span class="n">a2</span><span class="p">)%</span><span class="n">switch_ab</span>
+<span class="w">    </span><span class="k">case</span><span class="p">(</span><span class="n">ERROR_M_EXCLUDE</span><span class="p">)</span>
+<span class="w">      </span><span class="n">self</span><span class="p">%</span><span class="n">error_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prefd</span><span class="o">//</span><span class="s1">&#39;: the group &quot;&#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">group</span><span class="o">//</span><span class="s1">&#39;&quot; and &quot;&#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">m_exclude</span><span class="o">//</span><span class="s1">&#39;&quot; are mutually&#39;</span><span class="o">//</span><span class="p">&amp;</span>
+<span class="w">                           </span><span class="s1">&#39; exclusive, but both have been called!&#39;</span>
 <span class="w">    </span><span class="k">endselect</span>
-<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">print_error_message</span><span class="w"></span>
+<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">print_error_message</span>
 <span class="w">  </span><span class="k">endif</span>
-<span class="k">  endsubroutine </span><span class="n">errored</span><span class="w"></span>
+<span class="k">  endsubroutine </span><span class="n">errored</span>
 </pre></div>
 
     </section>
@@ -626,12 +1409,12 @@ implementation in a submodule of an interface in a parent module.
     </div> <!-- /container -->
     <footer>
       <div class="container">
-        <div class="row">
-          <div class="col-xs-6 col-md-6"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
+        <div class="row justify-content-between">
+          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
 </p>
           </div>
-          <div class="col-xs-6 col-md-6">
-            <p class="text-right">
+          <div class="col">
+            <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
             </p>
@@ -641,17 +1424,12 @@ implementation in a submodule of an interface in a parent module.
       </div> <!-- /container -->
     </footer>
 
-    <!-- Bootstrap core JavaScript
-         ================================================== -->
-         <!-- Placed at the end of the document so the pages load faster -->
-    <!--
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        -->
-        <script src="../js/bootstrap.min.js"></script>
-        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-        <script src="../js/ie10-viewport-bug-workaround.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
 
-        <!-- MathJax JavaScript
+    <!-- MathJax JavaScript
              ================================================== -->
              <!-- Placed at the end of the document so the pages load faster -->
         <script type="text/x-mathjax-config">

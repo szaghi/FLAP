@@ -10,113 +10,91 @@
 
     <title>flap_test_group_examples &ndash; FLAP</title>
 
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="../css/pygments.css" rel="stylesheet">
     <link href="../css/font-awesome.min.css" rel="stylesheet">
     <link href="../css/local.css" rel="stylesheet">
       <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <![endif]-->
-
-         <script src="../js/jquery-2.1.3.min.js"></script>
-         <script src="../js/svg-pan-zoom.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
   </head>
 
   <body>
 
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
           <a class="navbar-brand" href="../index.html">FLAP </a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
-              <a href="#" class="dropdown-toggle"
-                 data-toggle="dropdown" role="button"
-                 aria-haspopup="true"
-                 aria-expanded="false">
-                 Contents <span class="caret"></span>
-              </a>
-              <ul class="dropdown-menu">
-                    <li><a href="../lists/files.html">Source Files</a></li>
-                  <li><a href="../lists/modules.html">Modules</a></li>
-                  <li><a href="../lists/procedures.html">Procedures</a></li>
-                  <li><a href="../lists/types.html">Derived Types</a></li>
-                  <li><a href="../lists/programs.html">Programs</a></li>
-              </ul>
-            </li>
-                <li class="visible-xs hidden-sm visible-lg">
-                  <a href="../lists/files.html">Source Files</a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
                 </li>
-              <li class="visible-xs hidden-sm visible-lg">
-                <a href="../lists/modules.html">Modules</a>
-              </li>
-              <li class="visible-xs hidden-sm visible-lg">
-                <a href="../lists/procedures.html">Procedures</a>
-              </li>
-              <li class="visible-xs hidden-sm visible-lg">
-                <a href="../lists/types.html">Derived Types</a>
-              </li>
-              <li class="visible-xs hidden-sm visible-lg">
-                <a href="../lists/programs.html">Programs</a>
-              </li>
-          </ul>
-            <form action="../search.html" class="navbar-form navbar-right" role="search">
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
               </div>
-              <!--
-                  <button type="submit" class="btn btn-default">Submit</button>
-                  -->
-            </form>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
 
     <div class="container">
   <div class="row">
     <h1>flap_test_group_examples      <small>Program</small>
       
     </h1>
-      <div class="row" id="info-bar">
-    <div class="col-lg-12">
-      <div class="well well-sm">
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
         <ul class="list-inline" style="margin-bottom:0px;display:inline">
 
-          <li id="statements"><i class="fa fa-list-ol"></i>
-            <a data-toggle="tooltip"
-               data-placement="bottom" data-html="true"
-               title=" 3.2% of total for programs.">28 statements</a>
-          </li>
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip"
+                 data-bs-placement="bottom" data-html="true"
+                 title=" 3.2% of total for programs.">28 statements</a>
+            </li>
 
-            <li id="source-file">
+            <li class="list-inline-item" id="source-file">
               <i class="fa fa-code"></i>
               <a href="../src/flap_test_group_examples.f90"> Source File</a>
             </li>
         </ul>
-        <ol class="breadcrumb in-well text-right">
-              <li><a href='../sourcefile/flap_test_group_examples.f90.html'>flap_test_group_examples.f90</a></li>
-          <li class="active">flap_test_group_examples</li>
-        </ol>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/flap_test_group_examples.f90.html'>flap_test_group_examples.f90</a></li>
+            <li class="breadcrumb-item active" aria-current="page">flap_test_group_examples</li>
+          </ol>
+        </nav>
       </div>
     </div>
   </div>
   <script>
     $(function () {
-    $('[data-toggle="tooltip"]').tooltip()
+    $('[data-bs-toggle="tooltip"]').tooltip()
     })
   </script>
 
@@ -127,19 +105,18 @@
       <div id="sidebar">
       <h3>Contents</h3>
   
-      <div class="panel panel-primary">
-      <div class="panel-heading text-left">
-        <h3 class="panel-title">
-          <a data-toggle="collapse" href="#vars-0">Variables</a>
-        </h3>
-      </div>
-      <div id="vars-0" class="panel-collapse collapse">
-        <div class="list-group">
-            <a class="list-group-item" href="../program/flap_test_group_examples.html#variable-cli~7">cli</a>
-            <a class="list-group-item" href="../program/flap_test_group_examples.html#variable-a_string">a_string</a>
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#vars-0"
+         aria-expanded="false" aria-controls="vars-0">
+         <h4 class="card-header bg-primary text-white">Variables</h4>
+      </a>
+      <div id="vars-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../program/flap_test_group_examples.html#variable-cli~5">cli</a>
+            <a class="list-group-item" href="../program/flap_test_group_examples.html#variable-a_string~2">a_string</a>
             <a class="list-group-item" href="../program/flap_test_group_examples.html#variable-int_value">int_value</a>
             <a class="list-group-item" href="../program/flap_test_group_examples.html#variable-f_value">f_value</a>
-            <a class="list-group-item" href="../program/flap_test_group_examples.html#variable-error~28">error</a>
+            <a class="list-group-item" href="../program/flap_test_group_examples.html#variable-error~5">error</a>
         </div>
       </div>
     </div>
@@ -161,8 +138,9 @@
   
   
   
-    <div class="panel panel-primary">
-      <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
       <div class="list-group">
         <a class="list-group-item" href="../program/flap_test_group_examples.html#src">flap_test_group_examples</a>
       </div>
@@ -174,19 +152,18 @@
     </div>
     
     <div class="col-md-9" id='text'>
-        <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Uses</h3>
-      </div>
-      <ul class="list-group">
-          <li class="list-group-item">
-            <ul class="list-inline">
-                <li>penf</li>
-                <li><a href='../module/flap.html'>flap</a></li>
-            </ul>
-          </li>
-          <li class="list-group-item">
-            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+        <div class="card mb-4">
+      <h3 class="card-header card-title bg-light">Uses</h3>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <ul class="list-inline">
+                  <li class="list-inline-item">penf</li>
+                  <li class="list-inline-item"><a href='../module/flap.html'>flap</a></li>
+              </ul>
+            </li>
+            <li class="list-group-item">
+              <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.43.0 (0)
@@ -425,8 +402,8 @@
                   var panprogramflap_test_group_examplesUsesGraph = svgPanZoom('#programflap_test_group_examplesUsesGraph',
                     {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
                   );
-                </script>        <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
-          <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                </script>        <div><a type="button" class="graph-help" data-toggle="modal" href="#UsesGraph-help-text">Help</a></div>
+          <div class="modal fade" id="UsesGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -495,8 +472,9 @@ modules which it uses.
             </div>
           </div>
         </div>
-          </li>
-      </ul>
+            </li>
+        </ul>
+      </div>
     </div>
 
     <p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p>
@@ -504,71 +482,1538 @@ modules which it uses.
 <p>See <a href="https://github.com/szaghi/FLAP/wiki/Download-compile">compile instructions</a>.</p>
 <h3 id="usage-compile">Usage Compile</h3>
 <p>See <a href="https://github.com/szaghi/FLAP/wiki/Testing-Programs">usage instructions</a>.</p>
-<br>
-     <section class="visible-xs visible-sm hidden-md">
-         <h3>Contents</h3>
-  
-      <div class="panel panel-primary">
-      <div class="panel-heading text-left">
-        <h3 class="panel-title">
-          <a data-toggle="collapse" href="#vars-1">Variables</a>
-        </h3>
+    <br>
+    <div class="card">
+      <div class="card-header">
+  <h3 class="card-title">Calls</h3>
       </div>
-      <div id="vars-1" class="panel-collapse collapse">
-        <div class="list-group">
-            <a class="list-group-item" href="../program/flap_test_group_examples.html#variable-cli~7">cli</a>
-            <a class="list-group-item" href="../program/flap_test_group_examples.html#variable-a_string">a_string</a>
-            <a class="list-group-item" href="../program/flap_test_group_examples.html#variable-int_value">int_value</a>
-            <a class="list-group-item" href="../program/flap_test_group_examples.html#variable-f_value">f_value</a>
-            <a class="list-group-item" href="../program/flap_test_group_examples.html#variable-error~28">error</a>
+      <div class="card-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: program~~flap_test_group_examples~~CallsGraph Pages: 1 -->
+<svg id="programflap_test_group_examplesCallsGraph" width="641pt" height="247pt"
+ viewBox="0.00 0.00 641.00 247.39" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="program~~flap_test_group_examples~~CallsGraph" class="graph" transform="scale(6.82 6.82) rotate(0) translate(4 1682.98)">
+<title>program~~flap_test_group_examples~~CallsGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-1682.98 4367,-1682.98 4367,4 -4,4"/>
+<!-- program~flap_test_group_examples -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node1" class="node">
+<title>program~flap_test_group_examples</title>
+<polygon fill="none" stroke="black" points="150,-1502 0,-1502 0,-1478 150,-1478 150,-1502"/>
+<text text-anchor="middle" x="75" y="-1487.6" font-family="Helvetica,sans-Serif" font-size="10.50">flap_test_group_examples</text>
+</g>
+<!-- none~get~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node2" class="node">
+<title>none~get~2</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node2"><a xlink:href=".././type/command_line_interface.html#boundprocedure-get~2" xlink:title="flap_command_line_interface_t::command_line_interface%get">
+<polygon fill="#a7506f" stroke="#a7506f" points="564,-1126 218,-1126 218,-1102 564,-1102 564,-1126"/>
+<text text-anchor="middle" x="391" y="-1111.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_group_examples&#45;&gt;none~get~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge1" class="edge">
+<title>program~flap_test_group_examples&#45;&gt;none~get~2</title>
+<path fill="none" stroke="#000000" d="M86.09,-1477.92C131.39,-1423.67 316.23,-1202.34 373.2,-1134.12"/>
+<polygon fill="#000000" stroke="#000000" points="376.06,-1136.15 379.79,-1126.23 370.69,-1131.66 376.06,-1136.15"/>
+</g>
+<!-- proc~add_group -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node3" class="node">
+<title>proc~add_group</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node3"><a xlink:href=".././proc/add_group.html" xlink:title="flap_command_line_interface_t::command_line_interface%add_group">
+<polygon fill="#d9534f" stroke="#d9534f" points="2467,-1616 2082,-1616 2082,-1592 2467,-1592 2467,-1616"/>
+<text text-anchor="middle" x="2274.5" y="-1601.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%add_group</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_group_examples&#45;&gt;proc~add_group -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge2" class="edge">
+<title>program~flap_test_group_examples&#45;&gt;proc~add_group</title>
+<path fill="none" stroke="#000000" d="M112.5,-1502.01C133.71,-1508.47 161.09,-1515.93 186,-1520 466.53,-1565.87 540.25,-1557 824.5,-1557 824.5,-1557 824.5,-1557 1239.5,-1557 1542.35,-1557 1894.57,-1577.37 2099.92,-1591.29"/>
+<polygon fill="#000000" stroke="#000000" points="2099.97,-1594.8 2110.19,-1591.99 2100.45,-1587.82 2099.97,-1594.8"/>
+</g>
+<!-- proc~add~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node4" class="node">
+<title>proc~add~2</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node4"><a xlink:href=".././proc/add~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%add">
+<polygon fill="#d9534f" stroke="#d9534f" points="1892.5,-1476 1543.5,-1476 1543.5,-1452 1892.5,-1452 1892.5,-1476"/>
+<text text-anchor="middle" x="1718" y="-1461.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%add</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_group_examples&#45;&gt;proc~add~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge3" class="edge">
+<title>program~flap_test_group_examples&#45;&gt;proc~add~2</title>
+<path fill="none" stroke="#000000" d="M150.24,-1488.82C393.88,-1484.96 1174.04,-1472.6 1533.04,-1466.91"/>
+<polygon fill="#000000" stroke="#000000" points="1533.33,-1470.41 1543.27,-1466.75 1533.22,-1463.41 1533.33,-1470.41"/>
+</g>
+<!-- proc~init~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node5" class="node">
+<title>proc~init~2</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node5"><a xlink:href=".././proc/init~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%init">
+<polygon fill="#d9534f" stroke="#d9534f" points="2447,-1574 2102,-1574 2102,-1550 2447,-1550 2447,-1574"/>
+<text text-anchor="middle" x="2274.5" y="-1559.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%init</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_group_examples&#45;&gt;proc~init~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge4" class="edge">
+<title>program~flap_test_group_examples&#45;&gt;proc~init~2</title>
+<path fill="none" stroke="#000000" d="M150.22,-1496.66C162.18,-1497.57 174.42,-1498.39 186,-1499 469.46,-1513.91 540.64,-1514 824.5,-1514 824.5,-1514 824.5,-1514 1239.5,-1514 1544.13,-1514 1898.7,-1535.05 2103.5,-1549.27"/>
+<polygon fill="#000000" stroke="#000000" points="2103.52,-1552.78 2113.74,-1549.98 2104.01,-1545.79 2103.52,-1552.78"/>
+</g>
+<!-- proc~is_called_group -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node6" class="node">
+<title>proc~is_called_group</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node6"><a xlink:href=".././proc/is_called_group.html" xlink:title="flap_command_line_interface_t::command_line_interface%is_called_group">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="596,-1650 186,-1650 186,-1626 596,-1626 596,-1650"/>
+<text text-anchor="middle" x="391" y="-1635.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%is_called_group</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_group_examples&#45;&gt;proc~is_called_group -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge5" class="edge">
+<title>program~flap_test_group_examples&#45;&gt;proc~is_called_group</title>
+<path fill="none" stroke="#000000" d="M89.3,-1502.01C109.09,-1519.34 148.06,-1551.44 186,-1571 231.55,-1594.48 287.01,-1612.07 328.6,-1623.32"/>
+<polygon fill="#000000" stroke="#000000" points="327.76,-1626.71 338.32,-1625.9 329.56,-1619.95 327.76,-1626.71"/>
+</g>
+<!-- str -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node7" class="node">
+<title>str</title>
+<polygon fill="#777777" stroke="#777777" points="3885,-916 3831,-916 3831,-892 3885,-892 3885,-916"/>
+<text text-anchor="middle" x="3858" y="-901.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">str</text>
+</g>
+<!-- program~flap_test_group_examples&#45;&gt;str -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge6" class="edge">
+<title>program~flap_test_group_examples&#45;&gt;str</title>
+<path fill="none" stroke="#000000" d="M126.48,-1477.96C246.64,-1450.38 559.44,-1385 824.5,-1385 824.5,-1385 824.5,-1385 1239.5,-1385 1372.07,-1385 3505.64,-1298.34 3621,-1233 3749.07,-1160.46 3825.52,-986.49 3849.11,-925.54"/>
+<polygon fill="#000000" stroke="#000000" points="3852.41,-926.73 3852.68,-916.13 3845.86,-924.24 3852.41,-926.73"/>
+</g>
+<!-- proc~get_cla_list~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node11" class="node">
+<title>proc~get_cla_list~2</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node11"><a xlink:href=".././proc/get_cla_list~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list">
+<polygon fill="#d9534f" stroke="#d9534f" points="1019,-1084 632,-1084 632,-1060 1019,-1060 1019,-1084"/>
+<text text-anchor="middle" x="825.5" y="-1069.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_cla_list</text>
+</a>
+</g>
+</g>
+<!-- none~get~2&#45;&gt;proc~get_cla_list~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge7" class="edge">
+<title>none~get~2&#45;&gt;proc~get_cla_list~2</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M515.65,-1101.99C570.4,-1096.68 634.92,-1090.41 690.79,-1084.98"/>
+<polygon fill="#000000" stroke="#000000" points="691.15,-1088.47 700.76,-1084.02 690.47,-1081.5 691.15,-1088.47"/>
+</g>
+<!-- proc~get_cla~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node12" class="node">
+<title>proc~get_cla~2</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node12"><a xlink:href=".././proc/get_cla~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla">
+<polygon fill="#d9534f" stroke="#d9534f" points="1009,-1126 642,-1126 642,-1102 1009,-1102 1009,-1126"/>
+<text text-anchor="middle" x="825.5" y="-1111.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_cla</text>
+</a>
+</g>
+</g>
+<!-- none~get~2&#45;&gt;proc~get_cla~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge8" class="edge">
+<title>none~get~2&#45;&gt;proc~get_cla~2</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M564.18,-1114C586.34,-1114 609.15,-1114 631.62,-1114"/>
+<polygon fill="#000000" stroke="#000000" points="631.92,-1117.5 641.92,-1114 631.92,-1110.5 631.92,-1117.5"/>
+</g>
+<!-- proc~assign_object -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node9" class="node">
+<title>proc~assign_object</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node9"><a xlink:href=".././proc/assign_object.html" xlink:title="flap_object_t::object%assign_object">
+<polygon fill="#d9534f" stroke="#d9534f" points="2942,-1536 2740,-1536 2740,-1512 2942,-1512 2942,-1536"/>
+<text text-anchor="middle" x="2841" y="-1521.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_object_t::object%assign_object</text>
+</a>
+</g>
+</g>
+<!-- proc~add_group&#45;&gt;proc~assign_object -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge9" class="edge">
+<title>proc~add_group&#45;&gt;proc~assign_object</title>
+<path fill="none" stroke="#000000" d="M2467.19,-1604.52C2490.73,-1599.98 2513.9,-1593.1 2535,-1583 2555.98,-1572.95 2550,-1555.02 2571,-1545 2619.65,-1521.79 2678.92,-1515.2 2729.42,-1514.98"/>
+<polygon fill="#000000" stroke="#000000" points="2729.72,-1518.48 2739.73,-1515.02 2729.75,-1511.48 2729.72,-1518.48"/>
+</g>
+<!-- proc~is_defined_group -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node13" class="node">
+<title>proc~is_defined_group</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node13"><a xlink:href=".././proc/is_defined_group.html" xlink:title="flap_command_line_interface_t::command_line_interface%is_defined_group">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="3593,-1423 3175,-1423 3175,-1399 3593,-1399 3593,-1423"/>
+<text text-anchor="middle" x="3384" y="-1408.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%is_defined_group</text>
+</a>
+</g>
+</g>
+<!-- proc~add_group&#45;&gt;proc~is_defined_group -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge10" class="edge">
+<title>proc~add_group&#45;&gt;proc~is_defined_group</title>
+<path fill="none" stroke="#000000" d="M2467.17,-1612.16C2675.87,-1618.92 2995.35,-1622.44 3111,-1587 3216.59,-1554.65 3320.21,-1468.39 3362.78,-1429.95"/>
+<polygon fill="#000000" stroke="#000000" points="3365.21,-1432.47 3370.23,-1423.14 3360.48,-1427.3 3365.21,-1432.47"/>
+</g>
+<!-- proc~set_examples -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node14" class="node">
+<title>proc~set_examples</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node14"><a xlink:href=".././proc/set_examples.html" xlink:title="flap_object_t::object%set_examples">
+<polygon fill="#d9534f" stroke="#d9534f" points="2942,-1578 2740,-1578 2740,-1554 2942,-1554 2942,-1578"/>
+<text text-anchor="middle" x="2841" y="-1563.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_object_t::object%set_examples</text>
+</a>
+</g>
+</g>
+<!-- proc~add_group&#45;&gt;proc~set_examples -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge11" class="edge">
+<title>proc~add_group&#45;&gt;proc~set_examples</title>
+<path fill="none" stroke="#000000" d="M2454.11,-1591.98C2544.38,-1585.9 2651.07,-1578.72 2729.36,-1573.45"/>
+<polygon fill="#000000" stroke="#000000" points="2729.99,-1576.91 2739.73,-1572.75 2729.52,-1569.93 2729.99,-1576.91"/>
+</g>
+<!-- proc~add~2&#45;&gt;proc~add_group -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge13" class="edge">
+<title>proc~add~2&#45;&gt;proc~add_group</title>
+<path fill="none" stroke="#000000" d="M1795.28,-1476.01C1849.46,-1487.12 1922.19,-1507.46 1978,-1543 1998.17,-1555.85 1992.56,-1572.4 2014,-1583 2032.1,-1591.96 2051.8,-1598.42 2071.97,-1603"/>
+<polygon fill="#000000" stroke="#000000" points="2071.4,-1606.46 2081.9,-1605.1 2072.84,-1599.61 2071.4,-1606.46"/>
+</g>
+<!-- proc~add -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node8" class="node">
+<title>proc~add</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node8"><a xlink:href=".././proc/add.html" xlink:title="flap_command_line_arguments_group_t::command_line_arguments_group%add">
+<polygon fill="#d9534f" stroke="#d9534f" points="2494.5,-1056 2054.5,-1056 2054.5,-1032 2494.5,-1032 2494.5,-1056"/>
+<text text-anchor="middle" x="2274.5" y="-1041.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_arguments_group_t::command_line_arguments_group%add</text>
+</a>
+</g>
+</g>
+<!-- proc~add~2&#45;&gt;proc~add -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge12" class="edge">
+<title>proc~add~2&#45;&gt;proc~add</title>
+<path fill="none" stroke="#000000" d="M1734.28,-1451.92C1777.93,-1416.7 1904.74,-1309.37 1978,-1195 2001.68,-1158.03 1980.72,-1131.64 2014,-1103 2038.51,-1081.9 2069.03,-1067.93 2100.43,-1058.76"/>
+<polygon fill="#000000" stroke="#000000" points="2101.48,-1062.1 2110.19,-1056.07 2099.62,-1055.35 2101.48,-1062.1"/>
+</g>
+<!-- proc~add~2&#45;&gt;proc~assign_object -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge14" class="edge">
+<title>proc~add~2&#45;&gt;proc~assign_object</title>
+<path fill="none" stroke="#000000" d="M1806.6,-1476.03C1865.19,-1483.6 1944.07,-1492.88 2014,-1498 2269.7,-1516.73 2570.91,-1521.98 2729.49,-1523.44"/>
+<polygon fill="#000000" stroke="#000000" points="2729.7,-1526.94 2739.73,-1523.53 2729.76,-1519.94 2729.7,-1526.94"/>
+</g>
+<!-- proc~check -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node10" class="node">
+<title>proc~check</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node10"><a xlink:href=".././proc/check.html" xlink:title="flap_command_line_argument_t::command_line_argument%check">
+<polygon fill="#d9534f" stroke="#d9534f" points="2459,-955 2090,-955 2090,-931 2459,-931 2459,-955"/>
+<text text-anchor="middle" x="2274.5" y="-940.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%check</text>
+</a>
+</g>
+</g>
+<!-- proc~add~2&#45;&gt;proc~check -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge15" class="edge">
+<title>proc~add~2&#45;&gt;proc~check</title>
+<path fill="none" stroke="#000000" d="M1735.92,-1452C1782.75,-1417.78 1914.82,-1314.49 1978,-1195 2014.51,-1125.96 1961.39,-1080.73 2014,-1023 2045.51,-988.43 2091.57,-968.64 2136.18,-957.36"/>
+<polygon fill="#000000" stroke="#000000" points="2137.06,-960.75 2145.97,-955.02 2135.43,-953.94 2137.06,-960.75"/>
+</g>
+<!-- proc~add~2&#45;&gt;proc~is_defined_group -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge16" class="edge">
+<title>proc~add~2&#45;&gt;proc~is_defined_group</title>
+<path fill="none" stroke="#000000" d="M1892.54,-1464.69C1932.44,-1464.82 1974.69,-1464.93 2014,-1465 2501.56,-1465.83 2625.57,-1505.5 3111,-1460 3183.86,-1453.17 3266.44,-1437.09 3321.3,-1425.2"/>
+<polygon fill="#000000" stroke="#000000" points="3322.2,-1428.59 3331.22,-1423.03 3320.7,-1421.75 3322.2,-1428.59"/>
+</g>
+<!-- proc~upper_case -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node15" class="node">
+<title>proc~upper_case</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node15"><a xlink:href=".././proc/upper_case.html" xlink:title="flap_utils_m::upper_case">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="2347,-1456 2202,-1456 2202,-1432 2347,-1432 2347,-1456"/>
+<text text-anchor="middle" x="2274.5" y="-1441.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_utils_m::upper_case</text>
+</a>
+</g>
+</g>
+<!-- proc~add~2&#45;&gt;proc~upper_case -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge17" class="edge">
+<title>proc~add~2&#45;&gt;proc~upper_case</title>
+<path fill="none" stroke="#000000" d="M1892.55,-1457.74C1992.42,-1454.14 2113.28,-1449.78 2191.69,-1446.95"/>
+<polygon fill="#000000" stroke="#000000" points="2192.12,-1450.44 2201.99,-1446.58 2191.87,-1443.44 2192.12,-1450.44"/>
+</g>
+<!-- proc~init~2&#45;&gt;proc~assign_object -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge18" class="edge">
+<title>proc~init~2&#45;&gt;proc~assign_object</title>
+<path fill="none" stroke="#000000" d="M2447.17,-1550.44C2538.93,-1544.27 2649.22,-1536.84 2729.55,-1531.44"/>
+<polygon fill="#000000" stroke="#000000" points="2729.94,-1534.92 2739.69,-1530.75 2729.47,-1527.93 2729.94,-1534.92"/>
+</g>
+<!-- proc~init~2&#45;&gt;proc~set_examples -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge19" class="edge">
+<title>proc~init~2&#45;&gt;proc~set_examples</title>
+<path fill="none" stroke="#000000" d="M2447.17,-1563.22C2538.93,-1563.87 2649.22,-1564.65 2729.55,-1565.22"/>
+<polygon fill="#000000" stroke="#000000" points="2729.66,-1568.72 2739.69,-1565.29 2729.71,-1561.72 2729.66,-1568.72"/>
+</g>
+<!-- proc~is_called_group&#45;&gt;proc~is_defined_group -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge20" class="edge">
+<title>proc~is_called_group&#45;&gt;proc~is_defined_group</title>
+<path fill="none" stroke="#000000" d="M596.16,-1640.26C767.4,-1641.96 1018.41,-1644 1237.5,-1644 1237.5,-1644 1237.5,-1644 2275.5,-1644 2647.06,-1644 2760.6,-1738.59 3111,-1615 3222.13,-1575.8 3325.35,-1473.68 3365.41,-1430.61"/>
+<polygon fill="#000000" stroke="#000000" points="3368.17,-1432.79 3372.35,-1423.05 3363.01,-1428.05 3368.17,-1432.79"/>
+</g>
+<!-- proc~check~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node23" class="node">
+<title>proc~check~2</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node23"><a xlink:href=".././proc/check~2.html" xlink:title="flap_command_line_arguments_group_t::command_line_arguments_group%check">
+<polygon fill="#d9534f" stroke="#d9534f" points="3066.5,-1140 2615.5,-1140 2615.5,-1116 3066.5,-1116 3066.5,-1140"/>
+<text text-anchor="middle" x="2841" y="-1125.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_arguments_group_t::command_line_arguments_group%check</text>
+</a>
+</g>
+</g>
+<!-- proc~add&#45;&gt;proc~check~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge21" class="edge">
+<title>proc~add&#45;&gt;proc~check~2</title>
+<path fill="none" stroke="#000000" d="M2494.54,-1054.62C2508.54,-1058.74 2522.15,-1063.8 2535,-1070 2555.66,-1079.97 2550.23,-1097.26 2571,-1107 2582.13,-1112.22 2593.8,-1116.59 2605.79,-1120.23"/>
+<polygon fill="#000000" stroke="#000000" points="2604.89,-1123.61 2615.46,-1122.99 2606.81,-1116.88 2604.89,-1123.61"/>
+</g>
+<!-- proc~check_action_consistency -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node17" class="node">
+<title>proc~check_action_consistency</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node17"><a xlink:href=".././proc/check_action_consistency.html" xlink:title="flap_command_line_argument_t::command_line_argument%check_action_consistency">
+<polygon fill="#d9534f" stroke="#d9534f" points="3078.5,-892 2603.5,-892 2603.5,-868 3078.5,-868 3078.5,-892"/>
+<text text-anchor="middle" x="2841" y="-877.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%check_action_consistency</text>
+</a>
+</g>
+</g>
+<!-- proc~check&#45;&gt;proc~check_action_consistency -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge22" class="edge">
+<title>proc~check&#45;&gt;proc~check_action_consistency</title>
+<path fill="none" stroke="#000000" d="M2459.31,-938.42C2485.08,-934.81 2510.96,-929.55 2535,-922 2552.67,-916.45 2553.32,-906.53 2571,-901 2578.79,-898.57 2586.76,-896.37 2594.86,-894.38"/>
+<polygon fill="#000000" stroke="#000000" points="2595.85,-897.74 2604.79,-892.06 2594.26,-890.92 2595.85,-897.74"/>
+</g>
+<!-- proc~check_envvar_consistency -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node18" class="node">
+<title>proc~check_envvar_consistency</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node18"><a xlink:href=".././proc/check_envvar_consistency.html" xlink:title="flap_command_line_argument_t::command_line_argument%check_envvar_consistency">
+<polygon fill="#d9534f" stroke="#d9534f" points="3080,-850 2602,-850 2602,-826 3080,-826 3080,-850"/>
+<text text-anchor="middle" x="2841" y="-835.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%check_envvar_consistency</text>
+</a>
+</g>
+</g>
+<!-- proc~check&#45;&gt;proc~check_envvar_consistency -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge23" class="edge">
+<title>proc~check&#45;&gt;proc~check_envvar_consistency</title>
+<path fill="none" stroke="#000000" d="M2355.93,-955.01C2410.55,-958.97 2482.17,-955.58 2535,-922 2562.22,-904.7 2543.76,-876.26 2571,-859 2625.41,-824.53 2698.97,-821.03 2755.41,-825.17"/>
+<polygon fill="#000000" stroke="#000000" points="2755.13,-828.66 2765.39,-826 2755.71,-821.69 2755.13,-828.66"/>
+</g>
+<!-- proc~check_m_exclude_consistency -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node19" class="node">
+<title>proc~check_m_exclude_consistency</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node19"><a xlink:href=".././proc/check_m_exclude_consistency.html" xlink:title="flap_command_line_argument_t::command_line_argument%check_m_exclude_consistency">
+<polygon fill="#d9534f" stroke="#d9534f" points="3090.5,-808 2591.5,-808 2591.5,-784 3090.5,-784 3090.5,-808"/>
+<text text-anchor="middle" x="2841" y="-793.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%check_m_exclude_consistency</text>
+</a>
+</g>
+</g>
+<!-- proc~check&#45;&gt;proc~check_m_exclude_consistency -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge24" class="edge">
+<title>proc~check&#45;&gt;proc~check_m_exclude_consistency</title>
+<path fill="none" stroke="#000000" d="M2333.25,-955.04C2390.53,-963.48 2477.81,-966.44 2535,-922 2573.95,-891.73 2532,-847.22 2571,-817 2628.49,-772.45 2715.2,-774.22 2774.53,-782.5"/>
+<polygon fill="#000000" stroke="#000000" points="2774.14,-785.98 2784.55,-784 2775.17,-779.06 2774.14,-785.98"/>
+</g>
+<!-- proc~check_named_consistency -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node20" class="node">
+<title>proc~check_named_consistency</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node20"><a xlink:href=".././proc/check_named_consistency.html" xlink:title="flap_command_line_argument_t::command_line_argument%check_named_consistency">
+<polygon fill="#d9534f" stroke="#d9534f" points="3080.5,-1018 2601.5,-1018 2601.5,-994 3080.5,-994 3080.5,-1018"/>
+<text text-anchor="middle" x="2841" y="-1003.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%check_named_consistency</text>
+</a>
+</g>
+</g>
+<!-- proc~check&#45;&gt;proc~check_named_consistency -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge25" class="edge">
+<title>proc~check&#45;&gt;proc~check_named_consistency</title>
+<path fill="none" stroke="#000000" d="M2350.64,-955.02C2410.26,-964.23 2495.8,-976.73 2571,-985 2598.28,-988 2627.17,-990.73 2655.49,-993.15"/>
+<polygon fill="#000000" stroke="#000000" points="2655.22,-996.64 2665.48,-993.99 2655.81,-989.66 2655.22,-996.64"/>
+</g>
+<!-- proc~check_optional_consistency -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node21" class="node">
+<title>proc~check_optional_consistency</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node21"><a xlink:href=".././proc/check_optional_consistency.html" xlink:title="flap_command_line_argument_t::command_line_argument%check_optional_consistency">
+<polygon fill="#d9534f" stroke="#d9534f" points="3083.5,-976 2598.5,-976 2598.5,-952 3083.5,-952 3083.5,-976"/>
+<text text-anchor="middle" x="2841" y="-961.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%check_optional_consistency</text>
+</a>
+</g>
+</g>
+<!-- proc~check&#45;&gt;proc~check_optional_consistency -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge26" class="edge">
+<title>proc~check&#45;&gt;proc~check_optional_consistency</title>
+<path fill="none" stroke="#000000" d="M2459.17,-949.83C2500.37,-951.37 2544.78,-953.02 2588.22,-954.63"/>
+<polygon fill="#000000" stroke="#000000" points="2588.22,-958.14 2598.35,-955.01 2588.48,-951.14 2588.22,-958.14"/>
+</g>
+<!-- proc~check_positional_consistency -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node22" class="node">
+<title>proc~check_positional_consistency</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node22"><a xlink:href=".././proc/check_positional_consistency.html" xlink:title="flap_command_line_argument_t::command_line_argument%check_positional_consistency">
+<polygon fill="#d9534f" stroke="#d9534f" points="3087.5,-934 2594.5,-934 2594.5,-910 3087.5,-910 3087.5,-934"/>
+<text text-anchor="middle" x="2841" y="-919.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%check_positional_consistency</text>
+</a>
+</g>
+</g>
+<!-- proc~check&#45;&gt;proc~check_positional_consistency -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge27" class="edge">
+<title>proc~check&#45;&gt;proc~check_positional_consistency</title>
+<path fill="none" stroke="#000000" d="M2459.17,-936.17C2499.09,-934.68 2542.03,-933.08 2584.17,-931.52"/>
+<polygon fill="#000000" stroke="#000000" points="2584.43,-935.01 2594.29,-931.14 2584.17,-928.01 2584.43,-935.01"/>
+</g>
+<!-- proc~get_cla_list~2&#45;&gt;proc~is_defined_group -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge30" class="edge">
+<title>proc~get_cla_list~2&#45;&gt;proc~is_defined_group</title>
+<path fill="none" stroke="#000000" d="M999.06,-1084.09C1005.93,-1086.67 1012.61,-1089.63 1019,-1093 1040.75,-1104.47 1034.49,-1121.45 1055,-1135 1211.7,-1238.5 1274.21,-1223.44 1458,-1262 2067,-1389.76 2805,-1410.58 3164.69,-1412.37"/>
+<polygon fill="#000000" stroke="#000000" points="3164.67,-1415.87 3174.69,-1412.42 3164.71,-1408.87 3164.67,-1415.87"/>
+</g>
+<!-- none~get -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node16" class="node">
+<title>none~get</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node16"><a xlink:href=".././type/command_line_argument.html#boundprocedure-get" xlink:title="flap_command_line_argument_t::command_line_argument%get">
+<polygon fill="#a7506f" stroke="#a7506f" points="1416,-1084 1061,-1084 1061,-1060 1416,-1060 1416,-1084"/>
+<text text-anchor="middle" x="1238.5" y="-1069.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%get</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla_list~2&#45;&gt;none~get -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge28" class="edge">
+<title>proc~get_cla_list~2&#45;&gt;none~get</title>
+<path fill="none" stroke="#000000" d="M1019.06,-1072C1029.58,-1072 1040.15,-1072 1050.65,-1072"/>
+<polygon fill="#000000" stroke="#000000" points="1050.69,-1075.5 1060.69,-1072 1050.69,-1068.5 1050.69,-1075.5"/>
+</g>
+<!-- proc~errored~3 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node24" class="node">
+<title>proc~errored~3</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node24"><a xlink:href=".././proc/errored~3.html" xlink:title="flap_command_line_interface_t::command_line_interface%errored">
+<polygon fill="#d9534f" stroke="#d9534f" points="1422,-1042 1055,-1042 1055,-1018 1422,-1018 1422,-1042"/>
+<text text-anchor="middle" x="1238.5" y="-1027.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%errored</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla_list~2&#45;&gt;proc~errored~3 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge29" class="edge">
+<title>proc~get_cla_list~2&#45;&gt;proc~errored~3</title>
+<path fill="none" stroke="#000000" d="M944,-1059.99C995.82,-1054.7 1056.84,-1048.46 1109.78,-1043.05"/>
+<polygon fill="#000000" stroke="#000000" points="1110.32,-1046.51 1119.91,-1042.02 1109.61,-1039.55 1110.32,-1046.51"/>
+</g>
+<!-- proc~parse~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node25" class="node">
+<title>proc~parse~2</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node25"><a xlink:href=".././proc/parse~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%parse">
+<polygon fill="#d9534f" stroke="#d9534f" points="1417.5,-1126 1059.5,-1126 1059.5,-1102 1417.5,-1102 1417.5,-1126"/>
+<text text-anchor="middle" x="1238.5" y="-1111.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%parse</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla_list~2&#45;&gt;proc~parse~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge31" class="edge">
+<title>proc~get_cla_list~2&#45;&gt;proc~parse~2</title>
+<path fill="none" stroke="#000000" d="M944,-1084.01C995.82,-1089.3 1056.84,-1095.54 1109.78,-1100.95"/>
+<polygon fill="#000000" stroke="#000000" points="1109.61,-1104.45 1119.91,-1101.98 1110.32,-1097.49 1109.61,-1104.45"/>
+</g>
+<!-- proc~get_cla~2&#45;&gt;proc~is_defined_group -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge34" class="edge">
+<title>proc~get_cla~2&#45;&gt;proc~is_defined_group</title>
+<path fill="none" stroke="#000000" d="M836.26,-1126.25C865.16,-1161.5 954.61,-1263.24 1055,-1304 1368.09,-1431.11 2233.35,-1408.88 2571,-1422 2810.82,-1431.32 2871.05,-1426.85 3111,-1422 3128.44,-1421.65 3146.51,-1421.17 3164.66,-1420.61"/>
+<polygon fill="#000000" stroke="#000000" points="3164.86,-1424.1 3174.75,-1420.28 3164.64,-1417.1 3164.86,-1424.1"/>
+</g>
+<!-- proc~get_cla~2&#45;&gt;none~get -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge32" class="edge">
+<title>proc~get_cla~2&#45;&gt;none~get</title>
+<path fill="none" stroke="#000000" d="M944,-1101.99C995.82,-1096.7 1056.84,-1090.46 1109.78,-1085.05"/>
+<polygon fill="#000000" stroke="#000000" points="1110.32,-1088.51 1119.91,-1084.02 1109.61,-1081.55 1110.32,-1088.51"/>
+</g>
+<!-- proc~get_cla~2&#45;&gt;proc~errored~3 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge33" class="edge">
+<title>proc~get_cla~2&#45;&gt;proc~errored~3</title>
+<path fill="none" stroke="#000000" d="M999.06,-1101.91C1005.93,-1099.33 1012.61,-1096.37 1019,-1093 1040.75,-1081.53 1033.29,-1062.54 1055,-1051 1058.37,-1049.21 1061.82,-1047.54 1065.34,-1045.99"/>
+<polygon fill="#000000" stroke="#000000" points="1066.86,-1049.15 1074.8,-1042.14 1064.22,-1042.67 1066.86,-1049.15"/>
+</g>
+<!-- proc~get_cla~2&#45;&gt;proc~parse~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge35" class="edge">
+<title>proc~get_cla~2&#45;&gt;proc~parse~2</title>
+<path fill="none" stroke="#000000" d="M1009.16,-1114C1022.49,-1114 1035.95,-1114 1049.3,-1114"/>
+<polygon fill="#000000" stroke="#000000" points="1049.49,-1117.5 1059.49,-1114 1049.49,-1110.5 1049.49,-1117.5"/>
+</g>
+<!-- proc~get_cla -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node31" class="node">
+<title>proc~get_cla</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node31"><a xlink:href=".././proc/get_cla.html" xlink:title="flap_command_line_argument_t::command_line_argument%get_cla">
+<polygon fill="#d9534f" stroke="#d9534f" points="2462.5,-336 2086.5,-336 2086.5,-312 2462.5,-312 2462.5,-336"/>
+<text text-anchor="middle" x="2274.5" y="-321.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%get_cla</text>
+</a>
+</g>
+</g>
+<!-- none~get&#45;&gt;proc~get_cla -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge36" class="edge">
+<title>none~get&#45;&gt;proc~get_cla</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1412.23,-1059.91C1415.68,-1057.22 1418.94,-1054.26 1422,-1051 1475.89,-993.56 1401.54,-397.93 1458,-343 1501.29,-300.88 1849,-306.46 2076.2,-314.87"/>
+<polygon fill="#000000" stroke="#000000" points="2076.13,-318.37 2086.25,-315.25 2076.39,-311.37 2076.13,-318.37"/>
+</g>
+<!-- proc~get_cla_list -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node32" class="node">
+<title>proc~get_cla_list</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node32"><a xlink:href=".././proc/get_cla_list.html" xlink:title="flap_command_line_argument_t::command_line_argument%get_cla_list">
+<polygon fill="#d9534f" stroke="#d9534f" points="1916,-460 1520,-460 1520,-436 1916,-436 1916,-460"/>
+<text text-anchor="middle" x="1718" y="-445.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%get_cla_list</text>
+</a>
+</g>
+</g>
+<!-- none~get&#45;&gt;proc~get_cla_list -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge37" class="edge">
+<title>none~get&#45;&gt;proc~get_cla_list</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1411.57,-1059.92C1415.24,-1057.23 1418.73,-1054.27 1422,-1051 1470.77,-1002.32 1430,-805.97 1458,-743 1513.22,-618.83 1639.55,-509.12 1692.71,-466.68"/>
+<polygon fill="#000000" stroke="#000000" points="1695.21,-469.17 1700.89,-460.22 1690.87,-463.67 1695.21,-469.17"/>
+</g>
+<!-- proc~errored -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node29" class="node">
+<title>proc~errored</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node29"><a xlink:href=".././proc/errored.html" xlink:title="flap_command_line_argument_t::command_line_argument%errored">
+<polygon fill="#d9534f" stroke="#d9534f" points="3572,-692 3196,-692 3196,-668 3572,-668 3572,-692"/>
+<text text-anchor="middle" x="3384" y="-677.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%errored</text>
+</a>
+</g>
+</g>
+<!-- proc~check_action_consistency&#45;&gt;proc~errored -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge38" class="edge">
+<title>proc~check_action_consistency&#45;&gt;proc~errored</title>
+<path fill="none" stroke="#000000" d="M3078.85,-868.32C3089.82,-865.66 3100.59,-862.57 3111,-859 3216.01,-823.04 3319.94,-736.94 3362.68,-698.77"/>
+<polygon fill="#000000" stroke="#000000" points="3365.09,-701.31 3370.16,-692.01 3360.4,-696.12 3365.09,-701.31"/>
+</g>
+<!-- proc~check_envvar_consistency&#45;&gt;proc~errored -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge39" class="edge">
+<title>proc~check_envvar_consistency&#45;&gt;proc~errored</title>
+<path fill="none" stroke="#000000" d="M3072.7,-825.95C3085.75,-823.43 3098.59,-820.46 3111,-817 3207.2,-790.14 3309.54,-728.32 3356.57,-697.76"/>
+<polygon fill="#000000" stroke="#000000" points="3358.78,-700.5 3365.22,-692.09 3354.94,-694.65 3358.78,-700.5"/>
+</g>
+<!-- proc~check_m_exclude_consistency&#45;&gt;proc~errored -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge40" class="edge">
+<title>proc~check_m_exclude_consistency&#45;&gt;proc~errored</title>
+<path fill="none" stroke="#000000" d="M3024.07,-783.97C3053.31,-780.44 3083.11,-775.88 3111,-770 3196.27,-752.01 3292.23,-716.49 3344.31,-695.86"/>
+<polygon fill="#000000" stroke="#000000" points="3345.82,-699.02 3353.81,-692.06 3343.23,-692.52 3345.82,-699.02"/>
+</g>
+<!-- proc~check_named_consistency&#45;&gt;proc~errored -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge41" class="edge">
+<title>proc~check_named_consistency&#45;&gt;proc~errored</title>
+<path fill="none" stroke="#000000" d="M2898.19,-1018.02C2957.37,-1027.27 3050.25,-1031.64 3111,-985 3149.13,-955.73 3119.86,-922.68 3147,-883 3204.44,-799.01 3305.05,-728.76 3354.25,-697.47"/>
+<polygon fill="#000000" stroke="#000000" points="3356.22,-700.37 3362.82,-692.08 3352.49,-694.44 3356.22,-700.37"/>
+</g>
+<!-- proc~check_optional_consistency&#45;&gt;proc~errored -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge42" class="edge">
+<title>proc~check_optional_consistency&#45;&gt;proc~errored</title>
+<path fill="none" stroke="#000000" d="M2920.57,-976.01C2977.59,-980.64 3054.34,-978.06 3111,-943 3137.44,-926.64 3126.96,-906.78 3147,-883 3213.1,-804.59 3310.89,-730.88 3357.06,-697.99"/>
+<polygon fill="#000000" stroke="#000000" points="3359.18,-700.78 3365.32,-692.15 3355.13,-695.06 3359.18,-700.78"/>
+</g>
+<!-- proc~check_positional_consistency&#45;&gt;proc~errored -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge43" class="edge">
+<title>proc~check_positional_consistency&#45;&gt;proc~errored</title>
+<path fill="none" stroke="#000000" d="M3085.18,-909.92C3093.99,-907.31 3102.63,-904.35 3111,-901 3169.31,-877.7 3310.41,-748.31 3362.89,-699.05"/>
+<polygon fill="#000000" stroke="#000000" points="3365.37,-701.52 3370.25,-692.12 3360.57,-696.43 3365.37,-701.52"/>
+</g>
+<!-- proc~errored~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node30" class="node">
+<title>proc~errored~2</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node30"><a xlink:href=".././proc/errored~2.html" xlink:title="flap_command_line_arguments_group_t::command_line_arguments_group%errored">
+<polygon fill="#d9534f" stroke="#d9534f" points="3613.5,-916 3154.5,-916 3154.5,-892 3613.5,-892 3613.5,-916"/>
+<text text-anchor="middle" x="3384" y="-901.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_arguments_group_t::command_line_arguments_group%errored</text>
+</a>
+</g>
+</g>
+<!-- proc~check~2&#45;&gt;proc~errored~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge44" class="edge">
+<title>proc~check~2&#45;&gt;proc~errored~2</title>
+<path fill="none" stroke="#000000" d="M3066.51,-1120.18C3081.78,-1116.69 3096.75,-1112.36 3111,-1107 3220.85,-1065.71 3324.41,-965.8 3364.98,-923.47"/>
+<polygon fill="#000000" stroke="#000000" points="3367.68,-925.7 3372.02,-916.03 3362.6,-920.89 3367.68,-925.7"/>
+</g>
+<!-- proc~is_defined -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node33" class="node">
+<title>proc~is_defined</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node33"><a xlink:href=".././proc/is_defined.html" xlink:title="flap_command_line_arguments_group_t::command_line_arguments_group%is_defined">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="3621,-1140 3147,-1140 3147,-1116 3621,-1116 3621,-1140"/>
+<text text-anchor="middle" x="3384" y="-1125.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_arguments_group_t::command_line_arguments_group%is_defined</text>
+</a>
+</g>
+</g>
+<!-- proc~check~2&#45;&gt;proc~is_defined -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge45" class="edge">
+<title>proc~check~2&#45;&gt;proc~is_defined</title>
+<path fill="none" stroke="#000000" d="M3066.73,-1128C3089.75,-1128 3113.21,-1128 3136.44,-1128"/>
+<polygon fill="#000000" stroke="#000000" points="3136.74,-1131.5 3146.74,-1128 3136.74,-1124.5 3136.74,-1131.5"/>
+</g>
+<!-- proc~print_error_message -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node37" class="node">
+<title>proc~print_error_message</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node37"><a xlink:href=".././proc/print_error_message.html" xlink:title="flap_object_t::object%print_error_message">
+<polygon fill="#d9534f" stroke="#d9534f" points="3978,-692 3738,-692 3738,-668 3978,-668 3978,-692"/>
+<text text-anchor="middle" x="3858" y="-677.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_object_t::object%print_error_message</text>
+</a>
+</g>
+</g>
+<!-- proc~errored~3&#45;&gt;proc~print_error_message -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge46" class="edge">
+<title>proc~errored~3&#45;&gt;proc~print_error_message</title>
+<path fill="none" stroke="#000000" d="M1239.36,-1017.9C1239.12,-941.86 1247.73,-525.92 1458,-305 1638.85,-114.99 1755.52,-151.65 2014,-107 2511.32,-21.09 2644.92,-131.72 3147,-183 3199.56,-188.37 3582.01,-185.34 3621,-221 3691.19,-285.21 3617.88,-345.28 3657,-432 3701.34,-530.28 3794.12,-622.69 3835.86,-661.18"/>
+<polygon fill="#000000" stroke="#000000" points="3833.52,-663.78 3843.27,-667.93 3838.24,-658.61 3833.52,-663.78"/>
+</g>
+<!-- proc~parse~2&#45;&gt;proc~add~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge48" class="edge">
+<title>proc~parse~2&#45;&gt;proc~add~2</title>
+<path fill="none" stroke="#000000" d="M1255.94,-1126.05C1326.89,-1178.05 1607.14,-1383.48 1692.32,-1445.91"/>
+<polygon fill="#000000" stroke="#000000" points="1690.25,-1448.73 1700.39,-1451.82 1694.39,-1443.09 1690.25,-1448.73"/>
+</g>
+<!-- none~get_args -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node26" class="node">
+<title>none~get_args</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node26"><a xlink:href=".././type/command_line_interface.html#boundprocedure-get_args" xlink:title="flap_command_line_interface_t::command_line_interface%get_args">
+<polygon fill="#a7506f" stroke="#a7506f" points="1905,-1106 1531,-1106 1531,-1082 1905,-1082 1905,-1106"/>
+<text text-anchor="middle" x="1718" y="-1091.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_args</text>
+</a>
+</g>
+</g>
+<!-- proc~parse~2&#45;&gt;none~get_args -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge47" class="edge">
+<title>proc~parse~2&#45;&gt;none~get_args</title>
+<path fill="none" stroke="#000000" d="M1417.64,-1106.54C1451.29,-1105.13 1486.66,-1103.65 1520.83,-1102.22"/>
+<polygon fill="#000000" stroke="#000000" points="1521.06,-1105.71 1530.91,-1101.79 1520.77,-1098.72 1521.06,-1105.71"/>
+</g>
+<!-- proc~check_m_exclusive~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node27" class="node">
+<title>proc~check_m_exclusive~2</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node27"><a xlink:href=".././proc/check_m_exclusive~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%check_m_exclusive">
+<polygon fill="#d9534f" stroke="#d9534f" points="2489.5,-1220 2059.5,-1220 2059.5,-1196 2489.5,-1196 2489.5,-1220"/>
+<text text-anchor="middle" x="2274.5" y="-1205.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%check_m_exclusive</text>
+</a>
+</g>
+</g>
+<!-- proc~parse~2&#45;&gt;proc~check_m_exclusive~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge49" class="edge">
+<title>proc~parse~2&#45;&gt;proc~check_m_exclusive~2</title>
+<path fill="none" stroke="#000000" d="M1417.89,-1117C1620,-1121.41 1927.95,-1131.56 1978,-1153 1998.23,-1161.67 1993.89,-1178.05 2014,-1187 2025.32,-1192.04 2037.2,-1196.24 2049.37,-1199.73"/>
+<polygon fill="#000000" stroke="#000000" points="2048.64,-1203.15 2059.2,-1202.37 2050.45,-1196.39 2048.64,-1203.15"/>
+</g>
+<!-- proc~check~3 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node28" class="node">
+<title>proc~check~3</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node28"><a xlink:href=".././proc/check~3.html" xlink:title="flap_command_line_interface_t::command_line_interface%check">
+<polygon fill="#d9534f" stroke="#d9534f" points="2454.5,-1262 2094.5,-1262 2094.5,-1238 2454.5,-1238 2454.5,-1262"/>
+<text text-anchor="middle" x="2274.5" y="-1247.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%check</text>
+</a>
+</g>
+</g>
+<!-- proc~parse~2&#45;&gt;proc~check~3 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge50" class="edge">
+<title>proc~parse~2&#45;&gt;proc~check~3</title>
+<path fill="none" stroke="#000000" d="M1256.86,-1126.1C1292.54,-1150.17 1377.53,-1203.53 1458,-1224 1694.49,-1284.17 1981.98,-1275.13 2144.74,-1262.78"/>
+<polygon fill="#000000" stroke="#000000" points="2145.1,-1266.27 2154.8,-1262.01 2144.56,-1259.29 2145.1,-1266.27"/>
+</g>
+<!-- proc~is_defined~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node34" class="node">
+<title>proc~is_defined~2</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node34"><a xlink:href=".././proc/is_defined~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%is_defined">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="3032,-1182 2650,-1182 2650,-1158 3032,-1158 3032,-1182"/>
+<text text-anchor="middle" x="2841" y="-1167.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%is_defined</text>
+</a>
+</g>
+</g>
+<!-- proc~parse~2&#45;&gt;proc~is_defined~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge51" class="edge">
+<title>proc~parse~2&#45;&gt;proc~is_defined~2</title>
+<path fill="none" stroke="#000000" d="M1387.97,-1101.91C1399.6,-1099.45 1411.07,-1096.51 1422,-1093 1439.43,-1087.4 1440.28,-1077.59 1458,-1073 1515.94,-1057.99 2481.92,-1075.34 2535,-1103 2558.02,-1114.99 2548.12,-1136.73 2571,-1149 2592.22,-1160.38 2615.77,-1168.04 2639.86,-1173.01"/>
+<polygon fill="#000000" stroke="#000000" points="2639.36,-1176.48 2649.84,-1174.92 2640.67,-1169.61 2639.36,-1176.48"/>
+</g>
+<!-- proc~is_required_passed~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node35" class="node">
+<title>proc~is_required_passed~2</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node35"><a xlink:href=".././proc/is_required_passed~2.html" xlink:title="flap_command_line_arguments_group_t::command_line_arguments_group%is_required_passed">
+<polygon fill="#d9534f" stroke="#d9534f" points="1978,-418 1458,-418 1458,-394 1978,-394 1978,-418"/>
+<text text-anchor="middle" x="1718" y="-403.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_arguments_group_t::command_line_arguments_group%is_required_passed</text>
+</a>
+</g>
+</g>
+<!-- proc~parse~2&#45;&gt;proc~is_required_passed~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge52" class="edge">
+<title>proc~parse~2&#45;&gt;proc~is_required_passed~2</title>
+<path fill="none" stroke="#000000" d="M1412.22,-1101.9C1415.67,-1099.21 1418.94,-1096.25 1422,-1093 1523.58,-985.07 1354.61,-533.2 1458,-427 1459.34,-425.62 1460.88,-424.31 1462.61,-423.07"/>
+<polygon fill="#000000" stroke="#000000" points="1464.41,-426.07 1471.3,-418.02 1460.89,-420.02 1464.41,-426.07"/>
+</g>
+<!-- proc~parse -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node36" class="node">
+<title>proc~parse</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node36"><a xlink:href=".././proc/parse.html" xlink:title="flap_command_line_arguments_group_t::command_line_arguments_group%parse">
+<polygon fill="#d9534f" stroke="#d9534f" points="1943,-776 1493,-776 1493,-752 1943,-752 1943,-776"/>
+<text text-anchor="middle" x="1718" y="-761.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_arguments_group_t::command_line_arguments_group%parse</text>
+</a>
+</g>
+</g>
+<!-- proc~parse~2&#45;&gt;proc~parse -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge53" class="edge">
+<title>proc~parse~2&#45;&gt;proc~parse</title>
+<path fill="none" stroke="#000000" d="M1404.48,-1101.98C1410.54,-1099.36 1416.41,-1096.39 1422,-1093 1446.36,-1078.25 1440.2,-1062.23 1458,-1040 1540.14,-937.41 1652.01,-826.67 1697.03,-783.12"/>
+<polygon fill="#000000" stroke="#000000" points="1699.62,-785.48 1704.39,-776.02 1694.76,-780.44 1699.62,-785.48"/>
+</g>
+<!-- proc~print_version -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node38" class="node">
+<title>proc~print_version</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node38"><a xlink:href=".././proc/print_version.html" xlink:title="flap_object_t::object%print_version">
+<polygon fill="#d9534f" stroke="#d9534f" points="1817.5,-1186 1618.5,-1186 1618.5,-1162 1817.5,-1162 1817.5,-1186"/>
+<text text-anchor="middle" x="1718" y="-1171.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_object_t::object%print_version</text>
+</a>
+</g>
+</g>
+<!-- proc~parse~2&#45;&gt;proc~print_version -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge54" class="edge">
+<title>proc~parse~2&#45;&gt;proc~print_version</title>
+<path fill="none" stroke="#000000" d="M1310.21,-1126C1352.92,-1133 1408.5,-1141.67 1458,-1148 1507.28,-1154.3 1562,-1159.99 1608.39,-1164.42"/>
+<polygon fill="#000000" stroke="#000000" points="1608.18,-1167.92 1618.47,-1165.38 1608.84,-1160.95 1608.18,-1167.92"/>
+</g>
+<!-- proc~sanitize_defaults~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node39" class="node">
+<title>proc~sanitize_defaults~2</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node39"><a xlink:href=".././proc/sanitize_defaults~2.html" xlink:title="flap_command_line_arguments_group_t::command_line_arguments_group%sanitize_defaults">
+<polygon fill="#d9534f" stroke="#d9534f" points="2528.5,-1136 2020.5,-1136 2020.5,-1112 2528.5,-1112 2528.5,-1136"/>
+<text text-anchor="middle" x="2274.5" y="-1121.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_arguments_group_t::command_line_arguments_group%sanitize_defaults</text>
+</a>
+</g>
+</g>
+<!-- proc~parse~2&#45;&gt;proc~sanitize_defaults~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge55" class="edge">
+<title>proc~parse~2&#45;&gt;proc~sanitize_defaults~2</title>
+<path fill="none" stroke="#000000" d="M1263.28,-1126.03C1302.59,-1145.17 1384.13,-1181.75 1458,-1195 1571.74,-1215.4 1875.15,-1247.68 1978,-1195 2002.37,-1182.52 1990.15,-1158.46 2014,-1145 2016.9,-1143.36 2019.85,-1141.8 2022.85,-1140.31"/>
+<polygon fill="#000000" stroke="#000000" points="2024.37,-1143.47 2031.95,-1136.07 2021.41,-1137.12 2024.37,-1143.47"/>
+</g>
+<!-- proc~usage~3 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node40" class="node">
+<title>proc~usage~3</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node40"><a xlink:href=".././proc/usage~3.html" xlink:title="flap_command_line_interface_t::command_line_interface%usage">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="1898.5,-376 1537.5,-376 1537.5,-352 1898.5,-352 1898.5,-376"/>
+<text text-anchor="middle" x="1718" y="-361.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%usage</text>
+</a>
+</g>
+</g>
+<!-- proc~parse~2&#45;&gt;proc~usage~3 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge56" class="edge">
+<title>proc~parse~2&#45;&gt;proc~usage~3</title>
+<path fill="none" stroke="#000000" d="M1412.23,-1101.91C1415.68,-1099.22 1418.94,-1096.26 1422,-1093 1475.89,-1035.56 1403.15,-441.53 1458,-385 1509.97,-331.44 1602.93,-338.33 1662.2,-349.91"/>
+<polygon fill="#000000" stroke="#000000" points="1661.63,-353.37 1672.13,-351.96 1663.04,-346.51 1661.63,-353.37"/>
+</g>
+<!-- proc~get_args_from_invocation -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node45" class="node">
+<title>proc~get_args_from_invocation</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node45"><a xlink:href=".././proc/get_args_from_invocation.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_args_from_invocation">
+<polygon fill="#d9534f" stroke="#d9534f" points="2507,-1178 2042,-1178 2042,-1154 2507,-1154 2507,-1178"/>
+<text text-anchor="middle" x="2274.5" y="-1163.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_args_from_invocation</text>
+</a>
+</g>
+</g>
+<!-- none~get_args&#45;&gt;proc~get_args_from_invocation -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge57" class="edge">
+<title>none~get_args&#45;&gt;proc~get_args_from_invocation</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1905.18,-1101.18C1930.12,-1105.45 1955,-1111.51 1978,-1120 1996.28,-1126.74 1995.66,-1138.43 2014,-1145 2020.36,-1147.28 2026.86,-1149.36 2033.47,-1151.27"/>
+<polygon fill="#000000" stroke="#000000" points="2032.65,-1154.67 2043.22,-1153.93 2034.5,-1147.92 2032.65,-1154.67"/>
+</g>
+<!-- proc~get_args_from_string -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node46" class="node">
+<title>proc~get_args_from_string</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node46"><a xlink:href=".././proc/get_args_from_string.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_args_from_string">
+<polygon fill="#d9534f" stroke="#d9534f" points="2494,-913 2055,-913 2055,-889 2494,-889 2494,-913"/>
+<text text-anchor="middle" x="2274.5" y="-898.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_args_from_string</text>
+</a>
+</g>
+</g>
+<!-- none~get_args&#45;&gt;proc~get_args_from_string -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge58" class="edge">
+<title>none~get_args&#45;&gt;proc~get_args_from_string</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1734.12,-1081.79C1775.72,-1048.97 1896.64,-958.86 2014,-922 2023.97,-918.87 2034.25,-916.13 2044.71,-913.75"/>
+<polygon fill="#000000" stroke="#000000" points="2045.76,-917.1 2054.79,-911.56 2044.27,-910.26 2045.76,-917.1"/>
+</g>
+<!-- proc~check_m_exclusive~2&#45;&gt;proc~is_defined_group -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge59" class="edge">
+<title>proc~check_m_exclusive~2&#45;&gt;proc~is_defined_group</title>
+<path fill="none" stroke="#000000" d="M2489.63,-1210.88C2505.46,-1215.41 2520.77,-1221.34 2535,-1229 2557.86,-1241.3 2548.45,-1262.13 2571,-1275 2781.22,-1395.01 2892.38,-1242.07 3111,-1346 3130.88,-1355.45 3127.12,-1370.55 3147,-1380 3160.93,-1386.62 3175.82,-1391.97 3191.08,-1396.28"/>
+<polygon fill="#000000" stroke="#000000" points="3190.6,-1399.77 3201.16,-1398.96 3192.4,-1393.01 3190.6,-1399.77"/>
+</g>
+<!-- proc~raise_error_m_exclude~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node51" class="node">
+<title>proc~raise_error_m_exclude~2</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node51"><a xlink:href=".././proc/raise_error_m_exclude~2.html" xlink:title="flap_command_line_arguments_group_t::command_line_arguments_group%raise_error_m_exclude">
+<polygon fill="#d9534f" stroke="#d9534f" points="3111,-1098 2571,-1098 2571,-1074 3111,-1074 3111,-1098"/>
+<text text-anchor="middle" x="2841" y="-1083.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_arguments_group_t::command_line_arguments_group%raise_error_m_exclude</text>
+</a>
+</g>
+</g>
+<!-- proc~check_m_exclusive~2&#45;&gt;proc~raise_error_m_exclude~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge60" class="edge">
+<title>proc~check_m_exclusive~2&#45;&gt;proc~raise_error_m_exclude~2</title>
+<path fill="none" stroke="#000000" d="M2341.39,-1220.03C2397.9,-1226.58 2478.86,-1226.6 2535,-1187 2566.86,-1164.53 2539.11,-1129.43 2571,-1107 2627.66,-1067.15 2708.61,-1066.33 2766.89,-1072.75"/>
+<polygon fill="#000000" stroke="#000000" points="2766.79,-1076.26 2777.14,-1073.97 2767.62,-1069.31 2766.79,-1076.26"/>
+</g>
+<!-- proc~check~3&#45;&gt;proc~is_defined_group -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge62" class="edge">
+<title>proc~check~3&#45;&gt;proc~is_defined_group</title>
+<path fill="none" stroke="#000000" d="M2454.71,-1244.54C2483.29,-1250.06 2511.24,-1259.82 2535,-1276 2563.92,-1295.69 2541.89,-1326.6 2571,-1346 2583.9,-1354.6 2960.12,-1381.91 3195.87,-1398.27"/>
+<polygon fill="#000000" stroke="#000000" points="3195.72,-1401.77 3205.94,-1398.97 3196.21,-1394.79 3195.72,-1401.77"/>
+</g>
+<!-- proc~check~3&#45;&gt;proc~check~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge61" class="edge">
+<title>proc~check~3&#45;&gt;proc~check~2</title>
+<path fill="none" stroke="#000000" d="M2341.39,-1262.03C2397.9,-1268.58 2478.86,-1268.6 2535,-1229 2566.86,-1206.53 2539.11,-1171.43 2571,-1149 2627.66,-1109.15 2708.61,-1108.33 2766.89,-1114.75"/>
+<polygon fill="#000000" stroke="#000000" points="2766.79,-1118.26 2777.14,-1115.97 2767.62,-1111.31 2766.79,-1118.26"/>
+</g>
+<!-- proc~errored&#45;&gt;proc~print_error_message -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge63" class="edge">
+<title>proc~errored&#45;&gt;proc~print_error_message</title>
+<path fill="none" stroke="#000000" d="M3572.22,-680C3624.37,-680 3679.83,-680 3727.83,-680"/>
+<polygon fill="#000000" stroke="#000000" points="3727.95,-683.5 3737.95,-680 3727.95,-676.5 3727.95,-683.5"/>
+</g>
+<!-- proc~errored~2&#45;&gt;str -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge66" class="edge">
+<title>proc~errored~2&#45;&gt;str</title>
+<path fill="none" stroke="#000000" d="M3613.74,-904C3694.05,-904 3775.49,-904 3820.79,-904"/>
+<polygon fill="#000000" stroke="#000000" points="3820.97,-907.5 3830.97,-904 3820.97,-900.5 3820.97,-907.5"/>
+</g>
+<!-- proc~errored~2&#45;&gt;proc~print_error_message -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge65" class="edge">
+<title>proc~errored~2&#45;&gt;proc~print_error_message</title>
+<path fill="none" stroke="#000000" d="M3410.38,-891.96C3489.45,-854.43 3731.51,-739.56 3822.2,-696.51"/>
+<polygon fill="#000000" stroke="#000000" points="3823.96,-699.55 3831.5,-692.1 3820.96,-693.23 3823.96,-699.55"/>
+</g>
+<!-- interface~colorize -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node42" class="node">
+<title>interface~colorize</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node42"><a xlink:href=".././interface/colorize.html" xlink:title="face::colorize">
+<polygon fill="#a7506f" stroke="#a7506f" points="3900.5,-423 3815.5,-423 3815.5,-399 3900.5,-399 3900.5,-423"/>
+<text text-anchor="middle" x="3858" y="-408.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face::colorize</text>
+</a>
+</g>
+</g>
+<!-- proc~errored~2&#45;&gt;interface~colorize -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge64" class="edge">
+<title>proc~errored~2&#45;&gt;interface~colorize</title>
+<path fill="none" stroke="#000000" d="M3401.03,-891.83C3440.41,-861.6 3544.3,-779.82 3621,-701 3645.05,-676.28 3791.79,-492.77 3840.96,-431.13"/>
+<polygon fill="#000000" stroke="#000000" points="3843.73,-433.27 3847.23,-423.27 3838.26,-428.91 3843.73,-433.27"/>
+</g>
+<!-- proc~get_cla&#45;&gt;proc~errored -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge68" class="edge">
+<title>proc~get_cla&#45;&gt;proc~errored</title>
+<path fill="none" stroke="#000000" d="M2331.61,-336C2390.85,-348.27 2487.1,-367.02 2571,-378 2690.36,-393.62 3014.61,-348.89 3111,-421 3146.82,-447.8 3119.46,-479.75 3147,-515 3202.2,-585.65 3295.88,-638.29 3347.03,-663.48"/>
+<polygon fill="#000000" stroke="#000000" points="3345.55,-666.65 3356.07,-667.86 3348.6,-660.35 3345.55,-666.65"/>
+</g>
+<!-- proc~check_choices -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node43" class="node">
+<title>proc~check_choices</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node43"><a xlink:href=".././proc/check_choices.html" xlink:title="flap_command_line_argument_t::command_line_argument%check_choices">
+<polygon fill="#d9534f" stroke="#d9534f" points="3048.5,-294 2633.5,-294 2633.5,-270 3048.5,-270 3048.5,-294"/>
+<text text-anchor="middle" x="2841" y="-279.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%check_choices</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla&#45;&gt;proc~check_choices -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge67" class="edge">
+<title>proc~get_cla&#45;&gt;proc~check_choices</title>
+<path fill="none" stroke="#000000" d="M2436.89,-311.99C2509.24,-306.61 2594.66,-300.25 2668.2,-294.78"/>
+<polygon fill="#000000" stroke="#000000" points="2668.78,-298.25 2678.5,-294.02 2668.26,-291.27 2668.78,-298.25"/>
+</g>
+<!-- proc~get_cla_from_buffer -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node47" class="node">
+<title>proc~get_cla_from_buffer</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node47"><a xlink:href=".././proc/get_cla_from_buffer.html" xlink:title="flap_command_line_argument_t::command_line_argument%get_cla_from_buffer">
+<polygon fill="#d9534f" stroke="#d9534f" points="3062.5,-336 2619.5,-336 2619.5,-312 3062.5,-312 3062.5,-336"/>
+<text text-anchor="middle" x="2841" y="-321.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%get_cla_from_buffer</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla&#45;&gt;proc~get_cla_from_buffer -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge69" class="edge">
+<title>proc~get_cla&#45;&gt;proc~get_cla_from_buffer</title>
+<path fill="none" stroke="#000000" d="M2462.69,-324C2509.53,-324 2560.32,-324 2609.01,-324"/>
+<polygon fill="#000000" stroke="#000000" points="2609.04,-327.5 2619.04,-324 2609.04,-320.5 2609.04,-327.5"/>
+</g>
+<!-- proc~is_required_passed -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node49" class="node">
+<title>proc~is_required_passed</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node49"><a xlink:href=".././proc/is_required_passed.html" xlink:title="flap_command_line_argument_t::command_line_argument%is_required_passed">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="3060,-454 2622,-454 2622,-430 3060,-430 3060,-454"/>
+<text text-anchor="middle" x="2841" y="-439.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%is_required_passed</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla&#45;&gt;proc~is_required_passed -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge70" class="edge">
+<title>proc~get_cla&#45;&gt;proc~is_required_passed</title>
+<path fill="none" stroke="#000000" d="M2346.76,-336.05C2400.14,-346.63 2474.14,-364.67 2535,-392 2552.54,-399.88 2552.89,-409.55 2571,-416 2584.2,-420.7 2597.98,-424.66 2612.02,-427.98"/>
+<polygon fill="#000000" stroke="#000000" points="2611.26,-431.4 2621.78,-430.18 2612.8,-424.57 2611.26,-431.4"/>
+</g>
+<!-- proc~get_cla_list&#45;&gt;proc~errored -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge71" class="edge">
+<title>proc~get_cla_list&#45;&gt;proc~errored</title>
+<path fill="none" stroke="#000000" d="M1916.16,-456.21C1948.84,-457.52 1982.37,-458.82 2014,-460 2135.87,-464.53 2994.97,-459.45 3111,-497 3217.83,-531.57 3321.54,-621.54 3363.5,-660.99"/>
+<polygon fill="#000000" stroke="#000000" points="3361.17,-663.61 3370.82,-667.96 3365.99,-658.53 3361.17,-663.61"/>
+</g>
+<!-- proc~get_cla_list_from_buffer -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node48" class="node">
+<title>proc~get_cla_list_from_buffer</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node48"><a xlink:href=".././proc/get_cla_list_from_buffer.html" xlink:title="flap_command_line_argument_t::command_line_argument%get_cla_list_from_buffer">
+<polygon fill="#d9534f" stroke="#d9534f" points="2506,-294 2043,-294 2043,-270 2506,-270 2506,-294"/>
+<text text-anchor="middle" x="2274.5" y="-279.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%get_cla_list_from_buffer</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla_list&#45;&gt;proc~get_cla_list_from_buffer -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge72" class="edge">
+<title>proc~get_cla_list&#45;&gt;proc~get_cla_list_from_buffer</title>
+<path fill="none" stroke="#000000" d="M1773.63,-460.02C1831.06,-469.27 1920.86,-473.64 1978,-427 2022.46,-390.71 1969.54,-339.28 2014,-303 2068.09,-258.85 2151.39,-260.34 2208.95,-268.46"/>
+<polygon fill="#000000" stroke="#000000" points="2208.62,-271.95 2219.03,-269.98 2209.67,-265.03 2208.62,-271.95"/>
+</g>
+<!-- proc~get_cla_list&#45;&gt;proc~is_required_passed -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge73" class="edge">
+<title>proc~get_cla_list&#45;&gt;proc~is_required_passed</title>
+<path fill="none" stroke="#000000" d="M1916.19,-446.94C2110.49,-445.9 2407.14,-444.32 2611.59,-443.22"/>
+<polygon fill="#000000" stroke="#000000" points="2611.88,-446.72 2621.87,-443.17 2611.85,-439.72 2611.88,-446.72"/>
+</g>
+<!-- proc~tokenize -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node56" class="node">
+<title>proc~tokenize</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node56"><a xlink:href=".././proc/tokenize.html" xlink:title="flap_utils_m::tokenize">
+<polygon fill="#d9534f" stroke="#d9534f" points="3448,-254 3320,-254 3320,-230 3448,-230 3448,-254"/>
+<text text-anchor="middle" x="3384" y="-239.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_utils_m::tokenize</text>
+</a>
+</g>
+</g>
+<!-- proc~get_cla_list&#45;&gt;proc~tokenize -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge74" class="edge">
+<title>proc~get_cla_list&#45;&gt;proc~tokenize</title>
+<path fill="none" stroke="#000000" d="M1769.82,-460C1827.53,-470.38 1921.06,-476.85 1978,-427 2034.8,-377.27 1956.05,-309.38 2014,-261 2113.64,-177.81 3040,-222.76 3309.68,-237.73"/>
+<polygon fill="#000000" stroke="#000000" points="3309.57,-241.23 3319.75,-238.3 3309.96,-234.25 3309.57,-241.23"/>
+</g>
+<!-- proc~is_defined~2&#45;&gt;proc~is_defined_group -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge76" class="edge">
+<title>proc~is_defined~2&#45;&gt;proc~is_defined_group</title>
+<path fill="none" stroke="#000000" d="M2891.78,-1157.95C2951.37,-1146.73 3050.66,-1138.68 3111,-1191 3166.4,-1239.04 3095.81,-1299.51 3147,-1352 3167.31,-1372.83 3193.78,-1386.71 3221.62,-1395.89"/>
+<polygon fill="#000000" stroke="#000000" points="3220.92,-1399.34 3231.51,-1398.95 3222.99,-1392.65 3220.92,-1399.34"/>
+</g>
+<!-- proc~is_defined~2&#45;&gt;proc~is_defined -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge75" class="edge">
+<title>proc~is_defined~2&#45;&gt;proc~is_defined</title>
+<path fill="none" stroke="#000000" d="M2996.67,-1157.99C3065.87,-1152.62 3147.54,-1146.28 3217.92,-1140.82"/>
+<polygon fill="#000000" stroke="#000000" points="3218.52,-1144.28 3228.22,-1140.02 3217.98,-1137.3 3218.52,-1144.28"/>
+</g>
+<!-- proc~is_required_passed~2&#45;&gt;proc~is_required_passed -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge77" class="edge">
+<title>proc~is_required_passed~2&#45;&gt;proc~is_required_passed</title>
+<path fill="none" stroke="#000000" d="M1978.29,-414.33C2169.75,-420.48 2427.9,-428.77 2611.61,-434.67"/>
+<polygon fill="#000000" stroke="#000000" points="2611.57,-438.17 2621.67,-434.99 2611.79,-431.17 2611.57,-438.17"/>
+</g>
+<!-- proc~usage~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node57" class="node">
+<title>proc~usage~2</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node57"><a xlink:href=".././proc/usage~2.html" xlink:title="flap_command_line_arguments_group_t::command_line_arguments_group%usage">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="2500.5,-140 2048.5,-140 2048.5,-116 2500.5,-116 2500.5,-140"/>
+<text text-anchor="middle" x="2274.5" y="-125.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_arguments_group_t::command_line_arguments_group%usage</text>
+</a>
+</g>
+</g>
+<!-- proc~is_required_passed~2&#45;&gt;proc~usage~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge78" class="edge">
+<title>proc~is_required_passed~2&#45;&gt;proc~usage~2</title>
+<path fill="none" stroke="#000000" d="M1767.26,-418.01C1825.19,-429.26 1921.56,-437.42 1978,-385 2054.13,-314.28 1938.54,-225.43 2014,-154 2065.13,-105.59 2149.89,-106.4 2208.56,-114.5"/>
+<polygon fill="#000000" stroke="#000000" points="2208.07,-117.96 2218.47,-115.97 2209.1,-111.04 2208.07,-117.96"/>
+</g>
+<!-- proc~parse&#45;&gt;proc~add -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge80" class="edge">
+<title>proc~parse&#45;&gt;proc~add</title>
+<path fill="none" stroke="#000000" d="M1728.3,-776.15C1761.52,-818.53 1879.54,-960.3 2014,-1018 2023.96,-1022.27 2034.32,-1025.97 2044.92,-1029.17"/>
+<polygon fill="#000000" stroke="#000000" points="2044.15,-1032.59 2054.72,-1031.97 2046.07,-1025.86 2044.15,-1032.59"/>
+</g>
+<!-- proc~parse&#45;&gt;proc~assign_object -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge81" class="edge">
+<title>proc~parse&#45;&gt;proc~assign_object</title>
+<path fill="none" stroke="#000000" d="M1733.42,-776.07C1778.07,-814.33 1914.81,-938.34 1978,-1073 2015.99,-1153.97 1954.13,-1204.55 2014,-1271 2175.46,-1450.2 2304.69,-1351.3 2535,-1423 2627.89,-1451.92 2735.78,-1488.31 2795.11,-1508.57"/>
+<polygon fill="#000000" stroke="#000000" points="2794.31,-1512 2804.91,-1511.92 2796.58,-1505.38 2794.31,-1512"/>
+</g>
+<!-- proc~parse&#45;&gt;proc~is_defined -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge83" class="edge">
+<title>proc~parse&#45;&gt;proc~is_defined</title>
+<path fill="none" stroke="#000000" d="M1731.79,-776.17C1770.55,-812.21 1891.55,-918.72 2014,-964 2015.83,-964.68 2569.06,-1026.82 2571,-1027 2810.59,-1048.97 2873.07,-1029.3 3111,-1065 3188.39,-1076.61 3276.35,-1098.64 3330.77,-1113.32"/>
+<polygon fill="#000000" stroke="#000000" points="3329.96,-1116.73 3340.53,-1115.97 3331.8,-1109.97 3329.96,-1116.73"/>
+</g>
+<!-- proc~parse&#45;&gt;proc~sanitize_defaults~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge88" class="edge">
+<title>proc~parse&#45;&gt;proc~sanitize_defaults~2</title>
+<path fill="none" stroke="#000000" d="M1726.94,-776.15C1757.67,-822.13 1874.11,-986.84 2014,-1065 2054.4,-1087.57 2102.92,-1101.52 2147.02,-1110.12"/>
+<polygon fill="#000000" stroke="#000000" points="2146.47,-1113.58 2156.94,-1111.99 2147.76,-1106.7 2146.47,-1113.58"/>
+</g>
+<!-- cton -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node41" class="node">
+<title>cton</title>
+<polygon fill="#777777" stroke="#777777" points="3885,-154 3831,-154 3831,-130 3885,-130 3885,-154"/>
+<text text-anchor="middle" x="3858" y="-139.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">cton</text>
+</g>
+<!-- proc~parse&#45;&gt;cton -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge79" class="edge">
+<title>proc~parse&#45;&gt;cton</title>
+<path fill="none" stroke="#000000" d="M1734.45,-751.89C1780.25,-715.02 1915.98,-598.74 1978,-469 2018.46,-384.36 1948.97,-328.62 2014,-261 2019.48,-255.3 2563.14,-142.91 2571,-142 3034.58,-88.14 3154.45,-118.15 3621,-130 3691.77,-131.8 3774.36,-136.62 3820.68,-139.58"/>
+<polygon fill="#000000" stroke="#000000" points="3820.62,-143.08 3830.82,-140.23 3821.07,-136.1 3820.62,-143.08"/>
+</g>
+<!-- proc~check_m_exclusive -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node44" class="node">
+<title>proc~check_m_exclusive</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node44"><a xlink:href=".././proc/check_m_exclusive.html" xlink:title="flap_command_line_arguments_group_t::command_line_arguments_group%check_m_exclusive">
+<polygon fill="#d9534f" stroke="#d9534f" points="2535,-614 2014,-614 2014,-590 2535,-590 2535,-614"/>
+<text text-anchor="middle" x="2274.5" y="-599.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_arguments_group_t::command_line_arguments_group%check_m_exclusive</text>
+</a>
+</g>
+</g>
+<!-- proc~parse&#45;&gt;proc~check_m_exclusive -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge82" class="edge">
+<title>proc~parse&#45;&gt;proc~check_m_exclusive</title>
+<path fill="none" stroke="#000000" d="M1749.17,-751.84C1802.11,-730.82 1915.49,-687.23 2014,-659 2075.24,-641.45 2145.92,-626.25 2198.04,-615.97"/>
+<polygon fill="#000000" stroke="#000000" points="2198.74,-619.4 2207.88,-614.04 2197.39,-612.53 2198.74,-619.4"/>
+</g>
+<!-- proc~raise_error_duplicated_clas -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node50" class="node">
+<title>proc~raise_error_duplicated_clas</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node50"><a xlink:href=".././proc/raise_error_duplicated_clas.html" xlink:title="flap_command_line_argument_t::command_line_argument%raise_error_duplicated_clas">
+<polygon fill="#d9534f" stroke="#d9534f" points="2516,-776 2033,-776 2033,-752 2516,-752 2516,-776"/>
+<text text-anchor="middle" x="2274.5" y="-761.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%raise_error_duplicated_clas</text>
+</a>
+</g>
+</g>
+<!-- proc~parse&#45;&gt;proc~raise_error_duplicated_clas -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge84" class="edge">
+<title>proc~parse&#45;&gt;proc~raise_error_duplicated_clas</title>
+<path fill="none" stroke="#000000" d="M1943.34,-764C1969.44,-764 1996.19,-764 2022.63,-764"/>
+<polygon fill="#000000" stroke="#000000" points="2022.74,-767.5 2032.74,-764 2022.74,-760.5 2022.74,-767.5"/>
+</g>
+<!-- proc~raise_error_nargs_insufficient -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node52" class="node">
+<title>proc~raise_error_nargs_insufficient</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node52"><a xlink:href=".././proc/raise_error_nargs_insufficient.html" xlink:title="flap_command_line_argument_t::command_line_argument%raise_error_nargs_insufficient">
+<polygon fill="#d9534f" stroke="#d9534f" points="2521.5,-734 2027.5,-734 2027.5,-710 2521.5,-710 2521.5,-734"/>
+<text text-anchor="middle" x="2274.5" y="-719.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%raise_error_nargs_insufficient</text>
+</a>
+</g>
+</g>
+<!-- proc~parse&#45;&gt;proc~raise_error_nargs_insufficient -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge85" class="edge">
+<title>proc~parse&#45;&gt;proc~raise_error_nargs_insufficient</title>
+<path fill="none" stroke="#000000" d="M1877.53,-751.99C1948.6,-746.61 2032.5,-740.25 2104.74,-734.78"/>
+<polygon fill="#000000" stroke="#000000" points="2105.15,-738.26 2114.86,-734.02 2104.62,-731.28 2105.15,-738.26"/>
+</g>
+<!-- proc~raise_error_switch_unknown -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node53" class="node">
+<title>proc~raise_error_switch_unknown</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node53"><a xlink:href=".././proc/raise_error_switch_unknown.html" xlink:title="flap_command_line_argument_t::command_line_argument%raise_error_switch_unknown">
+<polygon fill="#d9534f" stroke="#d9534f" points="2518,-692 2031,-692 2031,-668 2518,-668 2518,-692"/>
+<text text-anchor="middle" x="2274.5" y="-677.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%raise_error_switch_unknown</text>
+</a>
+</g>
+</g>
+<!-- proc~parse&#45;&gt;proc~raise_error_switch_unknown -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge86" class="edge">
+<title>proc~parse&#45;&gt;proc~raise_error_switch_unknown</title>
+<path fill="none" stroke="#000000" d="M1766.17,-751.95C1824.13,-737.6 1925.65,-713.95 2014,-701 2034.85,-697.94 2056.7,-695.3 2078.51,-693.03"/>
+<polygon fill="#000000" stroke="#000000" points="2078.93,-696.51 2088.53,-692.01 2078.22,-689.54 2078.93,-696.51"/>
+</g>
+<!-- proc~raise_error_value_missing -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node54" class="node">
+<title>proc~raise_error_value_missing</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node54"><a xlink:href=".././proc/raise_error_value_missing.html" xlink:title="flap_command_line_argument_t::command_line_argument%raise_error_value_missing">
+<polygon fill="#d9534f" stroke="#d9534f" points="2512,-553 2037,-553 2037,-529 2512,-529 2512,-553"/>
+<text text-anchor="middle" x="2274.5" y="-538.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%raise_error_value_missing</text>
+</a>
+</g>
+</g>
+<!-- proc~parse&#45;&gt;proc~raise_error_value_missing -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge87" class="edge">
+<title>proc~parse&#45;&gt;proc~raise_error_value_missing</title>
+<path fill="none" stroke="#000000" d="M1733.53,-751.94C1774.58,-718.56 1896.13,-624.57 2014,-581 2046.49,-568.99 2082.56,-560.58 2117.23,-554.7"/>
+<polygon fill="#000000" stroke="#000000" points="2118.14,-558.1 2127.44,-553.03 2117.01,-551.19 2118.14,-558.1"/>
+</g>
+<!-- proc~sanitize_defaults -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node55" class="node">
+<title>proc~sanitize_defaults</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node55"><a xlink:href=".././proc/sanitize_defaults.html" xlink:title="flap_command_line_argument_t::command_line_argument%sanitize_defaults">
+<polygon fill="#d9534f" stroke="#d9534f" points="3054,-1224 2628,-1224 2628,-1200 3054,-1200 3054,-1224"/>
+<text text-anchor="middle" x="2841" y="-1209.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%sanitize_defaults</text>
+</a>
+</g>
+</g>
+<!-- proc~sanitize_defaults~2&#45;&gt;proc~sanitize_defaults -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge89" class="edge">
+<title>proc~sanitize_defaults~2&#45;&gt;proc~sanitize_defaults</title>
+<path fill="none" stroke="#000000" d="M2516.24,-1136.12C2522.66,-1138.78 2528.93,-1141.73 2535,-1145 2557.86,-1157.3 2548.12,-1178.73 2571,-1191 2585.75,-1198.91 2601.63,-1205.03 2618.02,-1209.69"/>
+<polygon fill="#000000" stroke="#000000" points="2617.17,-1213.08 2627.74,-1212.27 2618.97,-1206.32 2617.17,-1213.08"/>
+</g>
+<!-- proc~usage~3&#45;&gt;proc~usage~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge90" class="edge">
+<title>proc~usage~3&#45;&gt;proc~usage~2</title>
+<path fill="none" stroke="#000000" d="M1730.83,-351.94C1768.23,-314.66 1888.94,-200.97 2014,-154 2025.99,-149.5 2038.5,-145.67 2051.27,-142.43"/>
+<polygon fill="#000000" stroke="#000000" points="2052.18,-145.81 2061.08,-140.06 2050.53,-139.01 2052.18,-145.81"/>
+</g>
+<!-- proc~colorize_default -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node58" class="node">
+<title>proc~colorize_default</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node58"><a xlink:href=".././proc/colorize_default.html" xlink:title="face::colorize_default">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="4223,-423 4095,-423 4095,-399 4223,-399 4223,-423"/>
+<text text-anchor="middle" x="4159" y="-408.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face::colorize_default</text>
+</a>
+</g>
+</g>
+<!-- interface~colorize&#45;&gt;proc~colorize_default -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge91" class="edge">
+<title>interface~colorize&#45;&gt;proc~colorize_default</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M3900.57,-411C3948.11,-411 4026.8,-411 4084.7,-411"/>
+<polygon fill="#000000" stroke="#000000" points="4084.89,-414.5 4094.89,-411 4084.89,-407.5 4084.89,-414.5"/>
+</g>
+<!-- proc~check_choices&#45;&gt;str -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge95" class="edge">
+<title>proc~check_choices&#45;&gt;str</title>
+<path fill="none" stroke="#000000" d="M3048.54,-286.81C3069.97,-290.64 3091.15,-295.9 3111,-303 3371.26,-396.14 3416.08,-473.47 3621,-659 3639.23,-675.5 3640.36,-682.9 3657,-701 3720.81,-770.42 3800.46,-848.99 3837,-884.61"/>
+<polygon fill="#000000" stroke="#000000" points="3834.91,-887.47 3844.52,-891.93 3839.8,-882.45 3834.91,-887.47"/>
+</g>
+<!-- proc~check_choices&#45;&gt;proc~errored -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge93" class="edge">
+<title>proc~check_choices&#45;&gt;proc~errored</title>
+<path fill="none" stroke="#000000" d="M2889.63,-269.95C2949.36,-257.97 3051.17,-248.34 3111,-303 3181.56,-367.46 3095.88,-434.25 3147,-515 3194.3,-589.71 3288.9,-639.95 3342.86,-663.87"/>
+<polygon fill="#000000" stroke="#000000" points="3341.56,-667.12 3352.12,-667.89 3344.34,-660.7 3341.56,-667.12"/>
+</g>
+<!-- proc~check_choices&#45;&gt;cton -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge92" class="edge">
+<title>proc~check_choices&#45;&gt;cton</title>
+<path fill="none" stroke="#000000" d="M3048.79,-287.32C3242.37,-290.42 3516.93,-289.47 3621,-263 3703.52,-242.01 3789.97,-188.2 3831.61,-159.95"/>
+<polygon fill="#000000" stroke="#000000" points="3833.77,-162.71 3840.04,-154.16 3829.81,-156.94 3833.77,-162.71"/>
+</g>
+<!-- proc~check_choices&#45;&gt;proc~tokenize -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge94" class="edge">
+<title>proc~check_choices&#45;&gt;proc~tokenize</title>
+<path fill="none" stroke="#000000" d="M3004.32,-270C3105.74,-262.5 3231.46,-253.2 3309.46,-247.44"/>
+<polygon fill="#000000" stroke="#000000" points="3309.96,-250.91 3319.67,-246.68 3309.44,-243.93 3309.96,-250.91"/>
+</g>
+<!-- proc~is_passed -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node60" class="node">
+<title>proc~is_passed</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node60"><a xlink:href=".././proc/is_passed.html" xlink:title="flap_command_line_arguments_group_t::command_line_arguments_group%is_passed">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="3076.5,-614 2605.5,-614 2605.5,-590 3076.5,-590 3076.5,-614"/>
+<text text-anchor="middle" x="2841" y="-599.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_arguments_group_t::command_line_arguments_group%is_passed</text>
+</a>
+</g>
+</g>
+<!-- proc~check_m_exclusive&#45;&gt;proc~is_passed -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge96" class="edge">
+<title>proc~check_m_exclusive&#45;&gt;proc~is_passed</title>
+<path fill="none" stroke="#000000" d="M2535.03,-602C2555.1,-602 2575.32,-602 2595.29,-602"/>
+<polygon fill="#000000" stroke="#000000" points="2595.38,-605.5 2605.38,-602 2595.38,-598.5 2595.38,-605.5"/>
+</g>
+<!-- proc~raise_error_m_exclude -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node61" class="node">
+<title>proc~raise_error_m_exclude</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node61"><a xlink:href=".././proc/raise_error_m_exclude.html" xlink:title="flap_command_line_argument_t::command_line_argument%raise_error_m_exclude">
+<polygon fill="#d9534f" stroke="#d9534f" points="3069.5,-572 2612.5,-572 2612.5,-548 3069.5,-548 3069.5,-572"/>
+<text text-anchor="middle" x="2841" y="-557.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%raise_error_m_exclude</text>
+</a>
+</g>
+</g>
+<!-- proc~check_m_exclusive&#45;&gt;proc~raise_error_m_exclude -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge97" class="edge">
+<title>proc~check_m_exclusive&#45;&gt;proc~raise_error_m_exclude</title>
+<path fill="none" stroke="#000000" d="M2436.89,-589.99C2509.24,-584.61 2594.66,-578.25 2668.2,-572.78"/>
+<polygon fill="#000000" stroke="#000000" points="2668.78,-576.25 2678.5,-572.02 2668.26,-569.27 2668.78,-576.25"/>
+</g>
+<!-- proc~get_clasg_indexes -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node59" class="node">
+<title>proc~get_clasg_indexes</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node59"><a xlink:href=".././proc/get_clasg_indexes.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_clasg_indexes">
+<polygon fill="#d9534f" stroke="#d9534f" points="3053,-1266 2629,-1266 2629,-1242 3053,-1242 3053,-1266"/>
+<text text-anchor="middle" x="2841" y="-1251.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_clasg_indexes</text>
+</a>
+</g>
+</g>
+<!-- proc~get_args_from_invocation&#45;&gt;proc~get_clasg_indexes -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge98" class="edge">
+<title>proc~get_args_from_invocation&#45;&gt;proc~get_clasg_indexes</title>
+<path fill="none" stroke="#000000" d="M2507.31,-1174.63C2516.87,-1178.14 2526.14,-1182.23 2535,-1187 2557.86,-1199.3 2548.12,-1220.73 2571,-1233 2586.01,-1241.05 2602.18,-1247.24 2618.89,-1251.93"/>
+<polygon fill="#000000" stroke="#000000" points="2618.22,-1255.37 2628.78,-1254.52 2619.99,-1248.6 2618.22,-1255.37"/>
+</g>
+<!-- proc~get_args_from_string&#45;&gt;proc~tokenize -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge100" class="edge">
+<title>proc~get_args_from_string&#45;&gt;proc~tokenize</title>
+<path fill="none" stroke="#000000" d="M2300.75,-888.92C2351.27,-865.05 2468.69,-811.04 2571,-775 2806.16,-692.15 2907.01,-766.36 3111,-623 3251.75,-524.08 3345.7,-328.26 3374.02,-263.41"/>
+<polygon fill="#000000" stroke="#000000" points="3377.26,-264.74 3378,-254.17 3370.83,-261.97 3377.26,-264.74"/>
+</g>
+<!-- proc~get_args_from_string&#45;&gt;proc~get_clasg_indexes -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge99" class="edge">
+<title>proc~get_args_from_string&#45;&gt;proc~get_clasg_indexes</title>
+<path fill="none" stroke="#000000" d="M2322.42,-888.95C2380.6,-877.13 2478.93,-867.83 2535,-922 2635.07,-1018.68 2470.79,-1136.46 2571,-1233 2627,-1286.95 2723.49,-1279.76 2784.41,-1268.04"/>
+<polygon fill="#000000" stroke="#000000" points="2785.13,-1271.46 2794.24,-1266.05 2783.74,-1264.6 2785.13,-1271.46"/>
+</g>
+<!-- proc~get_cla_from_buffer&#45;&gt;proc~errored -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge102" class="edge">
+<title>proc~get_cla_from_buffer&#45;&gt;proc~errored</title>
+<path fill="none" stroke="#000000" d="M2898.14,-311.99C2958.39,-302.64 3053.2,-298.67 3111,-350 3167.12,-399.84 3105.38,-452.54 3147,-515 3196.19,-588.83 3290.58,-639.59 3343.88,-663.78"/>
+<polygon fill="#000000" stroke="#000000" points="3342.77,-667.12 3353.33,-667.99 3345.62,-660.73 3342.77,-667.12"/>
+</g>
+<!-- proc~get_cla_from_buffer&#45;&gt;cton -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge101" class="edge">
+<title>proc~get_cla_from_buffer&#45;&gt;cton</title>
+<path fill="none" stroke="#000000" d="M2946.33,-336C3098.54,-349.86 3388.67,-362.34 3621,-290 3708.94,-262.62 3796.65,-194.06 3835.8,-160.75"/>
+<polygon fill="#000000" stroke="#000000" points="3838.11,-163.39 3843.4,-154.21 3833.54,-158.08 3838.11,-163.39"/>
+</g>
+<!-- proc~get_cla_list_from_buffer&#45;&gt;proc~errored -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge105" class="edge">
+<title>proc~get_cla_list_from_buffer&#45;&gt;proc~errored</title>
+<path fill="none" stroke="#000000" d="M2506.08,-290.79C2516.05,-294.24 2525.74,-298.28 2535,-303 2556.9,-314.17 2548.99,-334.05 2571,-345 2678.64,-398.55 3018.08,-301.71 3111,-378 3159.66,-417.95 3111,-463.36 3147,-515 3197.87,-587.97 3292.03,-639.21 3344.73,-663.68"/>
+<polygon fill="#000000" stroke="#000000" points="3343.52,-666.97 3354.07,-667.94 3346.42,-660.61 3343.52,-666.97"/>
+</g>
+<!-- proc~get_cla_list_from_buffer&#45;&gt;cton -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge103" class="edge">
+<title>proc~get_cla_list_from_buffer&#45;&gt;cton</title>
+<path fill="none" stroke="#000000" d="M2330.44,-269.96C2467.43,-240.62 2835.53,-166.03 3147,-141 3356.99,-124.12 3410.33,-140.55 3621,-141 3691.7,-141.15 3774.32,-141.55 3820.66,-141.8"/>
+<polygon fill="#000000" stroke="#000000" points="3820.79,-145.3 3830.81,-141.85 3820.83,-138.3 3820.79,-145.3"/>
+</g>
+<!-- proc~get_cla_list_from_buffer&#45;&gt;proc~check_choices -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge104" class="edge">
+<title>proc~get_cla_list_from_buffer&#45;&gt;proc~check_choices</title>
+<path fill="none" stroke="#000000" d="M2506.33,-282C2544.92,-282 2584.84,-282 2623.08,-282"/>
+<polygon fill="#000000" stroke="#000000" points="2623.28,-285.5 2633.28,-282 2623.28,-278.5 2623.28,-285.5"/>
+</g>
+<!-- proc~get_cla_list_from_buffer&#45;&gt;proc~tokenize -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge106" class="edge">
+<title>proc~get_cla_list_from_buffer&#45;&gt;proc~tokenize</title>
+<path fill="none" stroke="#000000" d="M2424.99,-269.99C2471.72,-266.61 2523.48,-263.24 2571,-261 2843.08,-248.16 3166.88,-243.88 3309.43,-242.55"/>
+<polygon fill="#000000" stroke="#000000" points="3309.82,-246.05 3319.79,-242.46 3309.76,-239.05 3309.82,-246.05"/>
+</g>
+<!-- proc~is_required_passed&#45;&gt;proc~errored -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge107" class="edge">
+<title>proc~is_required_passed&#45;&gt;proc~errored</title>
+<path fill="none" stroke="#000000" d="M3060.03,-447.33C3077.86,-452.43 3095.1,-459.18 3111,-468 3134.01,-480.77 3127.99,-496.8 3147,-515 3213.01,-578.2 3305.1,-635.28 3352.35,-662.75"/>
+<polygon fill="#000000" stroke="#000000" points="3350.77,-665.88 3361.18,-667.84 3354.27,-659.82 3350.77,-665.88"/>
+</g>
+<!-- proc~raise_error_duplicated_clas&#45;&gt;proc~errored -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge108" class="edge">
+<title>proc~raise_error_duplicated_clas&#45;&gt;proc~errored</title>
+<path fill="none" stroke="#000000" d="M2516.31,-756.09C2683.44,-749.29 2911.1,-737.43 3111,-718 3174.2,-711.86 3245.25,-701.82 3298.88,-693.61"/>
+<polygon fill="#000000" stroke="#000000" points="3299.68,-697.03 3309.03,-692.04 3298.61,-690.11 3299.68,-697.03"/>
+</g>
+<!-- proc~raise_error_m_exclude~2&#45;&gt;proc~errored~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge109" class="edge">
+<title>proc~raise_error_m_exclude~2&#45;&gt;proc~errored~2</title>
+<path fill="none" stroke="#000000" d="M2916.47,-1073.99C2971.11,-1064.14 3046.67,-1048.34 3111,-1027 3201.34,-997.03 3302.06,-946.75 3351.76,-920.73"/>
+<polygon fill="#000000" stroke="#000000" points="3353.5,-923.77 3360.72,-916.02 3350.24,-917.58 3353.5,-923.77"/>
+</g>
+<!-- proc~raise_error_nargs_insufficient&#45;&gt;proc~errored -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge110" class="edge">
+<title>proc~raise_error_nargs_insufficient&#45;&gt;proc~errored</title>
+<path fill="none" stroke="#000000" d="M2521.86,-714.9C2688.27,-709.83 2912.89,-702.42 3111,-694 3135.19,-692.97 3160.58,-691.8 3185.73,-690.57"/>
+<polygon fill="#000000" stroke="#000000" points="3185.92,-694.07 3195.73,-690.08 3185.57,-687.07 3185.92,-694.07"/>
+</g>
+<!-- proc~raise_error_switch_unknown&#45;&gt;proc~errored -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge111" class="edge">
+<title>proc~raise_error_switch_unknown&#45;&gt;proc~errored</title>
+<path fill="none" stroke="#000000" d="M2518.2,-680C2718.41,-680 2998.92,-680 3185.56,-680"/>
+<polygon fill="#000000" stroke="#000000" points="3185.76,-683.5 3195.76,-680 3185.76,-676.5 3185.76,-683.5"/>
+</g>
+<!-- proc~raise_error_value_missing&#45;&gt;proc~errored -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge112" class="edge">
+<title>proc~raise_error_value_missing&#45;&gt;proc~errored</title>
+<path fill="none" stroke="#000000" d="M2350.67,-528.98C2498.76,-507.86 2837.61,-472.35 3111,-539 3209.59,-563.03 3312.3,-629.55 3358.23,-661.89"/>
+<polygon fill="#000000" stroke="#000000" points="3356.47,-664.93 3366.64,-667.88 3360.53,-659.23 3356.47,-664.93"/>
+</g>
+<!-- proc~replace_all -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node62" class="node">
+<title>proc~replace_all</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node62"><a xlink:href=".././proc/replace_all.html" xlink:title="flap_utils_m::replace_all">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="3454.5,-1343 3313.5,-1343 3313.5,-1319 3454.5,-1319 3454.5,-1343"/>
+<text text-anchor="middle" x="3384" y="-1328.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_utils_m::replace_all</text>
+</a>
+</g>
+</g>
+<!-- proc~sanitize_defaults&#45;&gt;proc~replace_all -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge113" class="edge">
+<title>proc~sanitize_defaults&#45;&gt;proc~replace_all</title>
+<path fill="none" stroke="#000000" d="M3054.23,-1223.21C3073.52,-1225.84 3092.68,-1229.06 3111,-1233 3198.82,-1251.89 3296.79,-1292.26 3347.79,-1314.85"/>
+<polygon fill="#000000" stroke="#000000" points="3346.49,-1318.1 3357.05,-1318.99 3349.35,-1311.71 3346.49,-1318.1"/>
+</g>
+<!-- proc~unique -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node64" class="node">
+<title>proc~unique</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node64"><a xlink:href=".././proc/unique.html" xlink:title="flap_utils_m::unique">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="3444,-1224 3324,-1224 3324,-1200 3444,-1200 3444,-1224"/>
+<text text-anchor="middle" x="3384" y="-1209.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_utils_m::unique</text>
+</a>
+</g>
+</g>
+<!-- proc~sanitize_defaults&#45;&gt;proc~unique -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge114" class="edge">
+<title>proc~sanitize_defaults&#45;&gt;proc~unique</title>
+<path fill="none" stroke="#000000" d="M3054.26,-1212C3146.43,-1212 3248.06,-1212 3313.57,-1212"/>
+<polygon fill="#000000" stroke="#000000" points="3313.77,-1215.5 3323.77,-1212 3313.77,-1208.5 3313.77,-1215.5"/>
+</g>
+<!-- proc~wstrip -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node66" class="node">
+<title>proc~wstrip</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node66"><a xlink:href=".././proc/wstrip.html" xlink:title="flap_utils_m::wstrip">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="3915.5,-1383 3800.5,-1383 3800.5,-1359 3915.5,-1359 3915.5,-1383"/>
+<text text-anchor="middle" x="3858" y="-1368.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_utils_m::wstrip</text>
+</a>
+</g>
+</g>
+<!-- proc~sanitize_defaults&#45;&gt;proc~wstrip -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge115" class="edge">
+<title>proc~sanitize_defaults&#45;&gt;proc~wstrip</title>
+<path fill="none" stroke="#000000" d="M2895.36,-1199.98C2954.72,-1189.93 3050.23,-1184.11 3111,-1233 3154.05,-1267.64 3103.07,-1318.48 3147,-1352 3197.29,-1390.38 3623.15,-1379.44 3790.17,-1373.59"/>
+<polygon fill="#000000" stroke="#000000" points="3790.45,-1377.08 3800.32,-1373.23 3790.2,-1370.08 3790.45,-1377.08"/>
+</g>
+<!-- proc~signature~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node63" class="node">
+<title>proc~signature~2</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node63"><a xlink:href=".././proc/signature~2.html" xlink:title="flap_command_line_arguments_group_t::command_line_arguments_group%signature">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="3075.5,-24 2606.5,-24 2606.5,0 3075.5,0 3075.5,-24"/>
+<text text-anchor="middle" x="2841" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_arguments_group_t::command_line_arguments_group%signature</text>
+</a>
+</g>
+</g>
+<!-- proc~usage~2&#45;&gt;proc~signature~2 -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge116" class="edge">
+<title>proc~usage~2&#45;&gt;proc~signature~2</title>
+<path fill="none" stroke="#000000" d="M2307.75,-115.85C2361.5,-96.13 2473.16,-57.43 2571,-38 2597.33,-32.77 2625.34,-28.58 2652.94,-25.23"/>
+<polygon fill="#000000" stroke="#000000" points="2653.57,-28.68 2663.09,-24.03 2652.75,-21.72 2653.57,-28.68"/>
+</g>
+<!-- proc~usage -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node65" class="node">
+<title>proc~usage</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node65"><a xlink:href=".././proc/usage.html" xlink:title="flap_command_line_argument_t::command_line_argument%usage">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="3569,-174 3199,-174 3199,-150 3569,-150 3569,-174"/>
+<text text-anchor="middle" x="3384" y="-159.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%usage</text>
+</a>
+</g>
+</g>
+<!-- proc~usage~2&#45;&gt;proc~usage -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge117" class="edge">
+<title>proc~usage~2&#45;&gt;proc~usage</title>
+<path fill="none" stroke="#000000" d="M2500.69,-133.98C2668.86,-138.56 2904.33,-145.23 3111,-152 3136.02,-152.82 3162.33,-153.73 3188.32,-154.65"/>
+<polygon fill="#000000" stroke="#000000" points="3188.53,-158.16 3198.65,-155.02 3188.78,-151.17 3188.53,-158.16"/>
+</g>
+<!-- proc~color_index -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node67" class="node">
+<title>proc~color_index</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node67"><a xlink:href=".././proc/color_index.html" xlink:title="face::color_index">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="4363,-465 4259,-465 4259,-441 4363,-441 4363,-465"/>
+<text text-anchor="middle" x="4311" y="-450.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face::color_index</text>
+</a>
+</g>
+</g>
+<!-- proc~colorize_default&#45;&gt;proc~color_index -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge118" class="edge">
+<title>proc~colorize_default&#45;&gt;proc~color_index</title>
+<path fill="none" stroke="#000000" d="M4202.98,-423.04C4219.93,-427.78 4239.56,-433.28 4257.35,-438.26"/>
+<polygon fill="#000000" stroke="#000000" points="4256.44,-441.64 4267.01,-440.96 4258.32,-434.9 4256.44,-441.64"/>
+</g>
+<!-- proc~style_index -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node70" class="node">
+<title>proc~style_index</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node70"><a xlink:href=".././proc/style_index.html" xlink:title="face::style_index">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="4362,-423 4260,-423 4260,-399 4362,-399 4362,-423"/>
+<text text-anchor="middle" x="4311" y="-408.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face::style_index</text>
+</a>
+</g>
+</g>
+<!-- proc~colorize_default&#45;&gt;proc~style_index -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge119" class="edge">
+<title>proc~colorize_default&#45;&gt;proc~style_index</title>
+<path fill="none" stroke="#000000" d="M4223.18,-411C4231.93,-411 4240.89,-411 4249.59,-411"/>
+<polygon fill="#000000" stroke="#000000" points="4249.64,-414.5 4259.64,-411 4249.64,-407.5 4249.64,-414.5"/>
+</g>
+<!-- proc~upper -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node71" class="node">
+<title>proc~upper</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node71"><a xlink:href=".././proc/upper.html" xlink:title="face::upper">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="4348.5,-381 4273.5,-381 4273.5,-357 4348.5,-357 4348.5,-381"/>
+<text text-anchor="middle" x="4311" y="-366.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face::upper</text>
+</a>
+</g>
+</g>
+<!-- proc~colorize_default&#45;&gt;proc~upper -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge120" class="edge">
+<title>proc~colorize_default&#45;&gt;proc~upper</title>
+<path fill="none" stroke="#000000" d="M4202.98,-398.96C4221.86,-393.68 4244.06,-387.46 4263.33,-382.07"/>
+<polygon fill="#000000" stroke="#000000" points="4264.43,-385.39 4273.11,-379.33 4262.54,-378.65 4264.43,-385.39"/>
+</g>
+<!-- proc~get_clasg_indexes&#45;&gt;proc~is_defined_group -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge121" class="edge">
+<title>proc~get_clasg_indexes&#45;&gt;proc~is_defined_group</title>
+<path fill="none" stroke="#000000" d="M2988.99,-1266.07C3031.65,-1275.32 3076.09,-1291.15 3111,-1318 3137.79,-1338.61 3118.98,-1366.09 3147,-1385 3152.85,-1388.95 3158.98,-1392.49 3165.32,-1395.65"/>
+<polygon fill="#000000" stroke="#000000" points="3164.2,-1398.99 3174.75,-1400.02 3167.15,-1392.64 3164.2,-1398.99"/>
+</g>
+<!-- proc~raise_error_m_exclude&#45;&gt;proc~errored -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge122" class="edge">
+<title>proc~raise_error_m_exclude&#45;&gt;proc~errored</title>
+<path fill="none" stroke="#000000" d="M3060.38,-572.01C3077.59,-574.49 3094.63,-577.45 3111,-581 3198.89,-600.05 3296.83,-640.85 3347.81,-663.68"/>
+<polygon fill="#000000" stroke="#000000" points="3346.51,-666.93 3357.07,-667.86 3349.39,-660.55 3346.51,-666.93"/>
+</g>
+<!-- proc~replace_all&#45;&gt;proc~wstrip -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge124" class="edge">
+<title>proc~replace_all&#45;&gt;proc~wstrip</title>
+<path fill="none" stroke="#000000" d="M3454.65,-1336.9C3544.93,-1344.55 3701.29,-1357.8 3790.17,-1365.34"/>
+<polygon fill="#000000" stroke="#000000" points="3790.14,-1368.85 3800.4,-1366.2 3790.73,-1361.87 3790.14,-1368.85"/>
+</g>
+<!-- proc~replace -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node68" class="node">
+<title>proc~replace</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node68"><a xlink:href=".././proc/replace.html" xlink:title="flap_utils_m::replace">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="3919.5,-1341 3796.5,-1341 3796.5,-1317 3919.5,-1317 3919.5,-1341"/>
+<text text-anchor="middle" x="3858" y="-1326.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_utils_m::replace</text>
+</a>
+</g>
+</g>
+<!-- proc~replace_all&#45;&gt;proc~replace -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge123" class="edge">
+<title>proc~replace_all&#45;&gt;proc~replace</title>
+<path fill="none" stroke="#000000" d="M3454.65,-1330.7C3543.66,-1330.33 3696.92,-1329.68 3786.39,-1329.3"/>
+<polygon fill="#000000" stroke="#000000" points="3786.46,-1332.8 3796.44,-1329.26 3786.43,-1325.8 3786.46,-1332.8"/>
+</g>
+<!-- proc~signature -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node69" class="node">
+<title>proc~signature</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node69"><a xlink:href=".././proc/signature.html" xlink:title="flap_command_line_argument_t::command_line_argument%signature">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="3577.5,-24 3190.5,-24 3190.5,0 3577.5,0 3577.5,-24"/>
+<text text-anchor="middle" x="3384" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%signature</text>
+</a>
+</g>
+</g>
+<!-- proc~signature~2&#45;&gt;proc~signature -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge125" class="edge">
+<title>proc~signature~2&#45;&gt;proc~signature</title>
+<path fill="none" stroke="#000000" d="M3075.75,-12C3110.6,-12 3146.29,-12 3180.43,-12"/>
+<polygon fill="#000000" stroke="#000000" points="3180.49,-15.5 3190.49,-12 3180.49,-8.5 3180.49,-15.5"/>
+</g>
+<!-- proc~usage&#45;&gt;cton -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge126" class="edge">
+<title>proc~usage&#45;&gt;cton</title>
+<path fill="none" stroke="#000000" d="M3569.18,-154.2C3662.31,-150.25 3766.77,-145.82 3820.59,-143.54"/>
+<polygon fill="#000000" stroke="#000000" points="3820.81,-147.04 3830.65,-143.12 3820.52,-140.04 3820.81,-147.04"/>
+</g>
+<!-- proc~usage&#45;&gt;interface~colorize -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge127" class="edge">
+<title>proc~usage&#45;&gt;interface~colorize</title>
+<path fill="none" stroke="#000000" d="M3569.24,-170.44C3587.17,-174.75 3604.73,-180.47 3621,-188 3723.4,-235.38 3809.94,-344.99 3842.83,-390.56"/>
+<polygon fill="#000000" stroke="#000000" points="3840.03,-392.66 3848.68,-398.78 3845.73,-388.6 3840.03,-392.66"/>
+</g>
+<!-- proc~signature&#45;&gt;cton -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge128" class="edge">
+<title>proc~signature&#45;&gt;cton</title>
+<path fill="none" stroke="#000000" d="M3552.51,-24.04C3575.72,-27.57 3599.1,-32.12 3621,-38 3698.35,-58.78 3782.83,-101.29 3826.71,-125.03"/>
+<polygon fill="#000000" stroke="#000000" points="3825.24,-128.21 3835.69,-129.93 3828.59,-122.07 3825.24,-128.21"/>
+</g>
+<!-- proc~has_choices -->
+<g id="program~~flap_test_group_examples~~CallsGraph_node72" class="node">
+<title>proc~has_choices</title>
+<g id="a_program~~flap_test_group_examples~~CallsGraph_node72"><a xlink:href=".././proc/has_choices.html" xlink:title="flap_command_line_argument_t::command_line_argument%has_choices">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="4059,-24 3657,-24 3657,0 4059,0 4059,-24"/>
+<text text-anchor="middle" x="3858" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%has_choices</text>
+</a>
+</g>
+</g>
+<!-- proc~signature&#45;&gt;proc~has_choices -->
+<g id="program~~flap_test_group_examples~~CallsGraph_edge129" class="edge">
+<title>proc~signature&#45;&gt;proc~has_choices</title>
+<path fill="none" stroke="#000000" d="M3577.66,-12C3600.42,-12 3623.74,-12 3646.73,-12"/>
+<polygon fill="#000000" stroke="#000000" points="3646.91,-15.5 3656.91,-12 3646.91,-8.5 3646.91,-15.5"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var panprogramflap_test_group_examplesCallsGraph = svgPanZoom('#programflap_test_group_examplesCallsGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>        <div><a type="button" class="graph-help" data-toggle="modal" href="#CallsGraph-help-text">Help</a></div>
+          <div class="modal fade" id="CallsGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                </div>
+              <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 27.51" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1.16 1.16) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 741.5,-28 741.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="146,-24 88,-24 88,0 146,0 146,-24"/>
+<text text-anchor="middle" x="117" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="225.5,-24 164.5,-24 164.5,0 225.5,0 225.5,-24"/>
+<text text-anchor="middle" x="195" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Type Bound Procedure -->
+<g id="node4" class="node">
+<title>Type Bound Procedure</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="374,-24 244,-24 244,0 374,0 374,-24"/>
+<text text-anchor="middle" x="309" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type Bound Procedure</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node5" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="537.5,-24 392.5,-24 392.5,0 537.5,0 537.5,-24"/>
+<text text-anchor="middle" x="465" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node6" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="614,-24 556,-24 556,0 614,0 614,-24"/>
+<text text-anchor="middle" x="585" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node7" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="737.5,-24 632.5,-24 632.5,0 737.5,0 737.5,-24"/>
+<text text-anchor="middle" x="685" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.
+</p>
+ </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-    <div class="panel panel-primary">
-      <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
-      <div class="list-group">
-        <a class="list-group-item" href="../program/flap_test_group_examples.html#src">flap_test_group_examples</a>
-      </div>
-    </div>
-
-
-     </section>
-     <br class="visible-xs visible-sm hidden-md">
-
+<br>
 
     <section>
     <h2>Variables</h2>
       <table class="table table-striped varlist">
     <thead>
       <tr>
-        <th>Type</th>
-        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-<th></th><th>Initial</th>        <th></th>
+        <th scope="col">Type</th>
+        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
     </thead>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-cli~7"></span>
+              <span class="anchor" id="variable-cli~5"></span>
               type(<a href='../type/command_line_interface.html'>command_line_interface</a>)
             </td>
             <td>
@@ -584,7 +2029,7 @@ modules which it uses.
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-a_string"></span>
+              <span class="anchor" id="variable-a_string~2"></span>
               character(len=99)
             </td>
             <td>
@@ -632,7 +2077,7 @@ modules which it uses.
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-error~28"></span>
+              <span class="anchor" id="variable-error~5"></span>
               integer(kind=I4P)
             </td>
             <td>
@@ -659,9 +2104,10 @@ modules which it uses.
 
 
     
+
     <section>
     <h2 id="src">Source Code</h2>
-    <div class="highlight"><pre><span></span><span class="k">program </span><span class="n">flap_test_group_examples</span><span class="w"></span>
+    <div class="hl codehilite"><pre><span></span><span class="k">program </span><span class="n">flap_test_group_examples</span>
 <span class="w">  </span><span class="c">!&lt; A testing program for FLAP, Fortran command Line Arguments Parser for poor people</span>
 <span class="w">  </span><span class="c">!&lt;</span>
 <span class="w">  </span><span class="c">!&lt;### Compile</span>
@@ -670,8 +2116,8 @@ modules which it uses.
 <span class="w">  </span><span class="c">!&lt;###Usage Compile</span>
 <span class="w">  </span><span class="c">!&lt; See [usage instructions](https://github.com/szaghi/FLAP/wiki/Testing-Programs).</span>
 <span class="w">  </span>
-<span class="w">  </span><span class="k">use </span><span class="n">flap</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">command_line_interface</span><span class="w"></span>
-<span class="w">  </span><span class="k">use </span><span class="n">penf</span><span class="w"></span>
+<span class="w">  </span><span class="k">use </span><span class="n">flap</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">command_line_interface</span>
+<span class="w">  </span><span class="k">use </span><span class="n">penf</span>
 <span class="w">  </span>
 <span class="w">  </span><span class="k">implicit none</span>
 <span class="k">  type</span><span class="p">(</span><span class="n">command_line_interface</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">cli</span><span class="w">       </span><span class="c">!&lt; Command Line Interface (CLI).</span>
@@ -680,35 +2126,35 @@ modules which it uses.
 <span class="w">  </span><span class="kt">real</span><span class="p">(</span><span class="n">R4P</span><span class="p">)</span><span class="w">                    </span><span class="kd">::</span><span class="w"> </span><span class="n">f_value</span><span class="w">   </span><span class="c">!&lt; Float value.</span>
 <span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                 </span><span class="kd">::</span><span class="w"> </span><span class="n">error</span><span class="w">     </span><span class="c">!&lt; Error trapping flag.</span>
 <span class="w">  </span>
-<span class="w">  </span><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;group examples usage FLAP example&#39;</span><span class="p">,</span><span class="w">                      </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                </span><span class="n">examples</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;flap_test_group_examples -s &#39;test string&#39;      &quot;</span><span class="p">,</span><span class="w">          </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                            </span><span class="s2">&quot;flap_test_group_examples --string &#39;test string&#39;&quot;</span><span class="p">])</span><span class="w"></span>
+<span class="w">  </span><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;group examples usage FLAP example&#39;</span><span class="p">,</span><span class="w">                      </span><span class="p">&amp;</span>
+<span class="w">                </span><span class="n">examples</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;flap_test_group_examples -s &#39;test string&#39;      &quot;</span><span class="p">,</span><span class="w">          </span><span class="p">&amp;</span>
+<span class="w">                            </span><span class="s2">&quot;flap_test_group_examples --string &#39;test string&#39;&quot;</span><span class="p">])</span>
 
-<span class="w">  </span><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--string&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span><span class="w">  </span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;String input&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="w"> </span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="w">  </span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--string&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span><span class="w">  </span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;String input&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="w"> </span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="w">  </span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 
-<span class="w">  </span><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add_group</span><span class="p">(</span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;gwe&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Group with examples&#39;</span><span class="p">,</span><span class="w">                </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                     </span><span class="n">examples</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;flap_test_group_examples gwe --integer 32&quot;</span><span class="p">,</span><span class="w">           </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">                                 </span><span class="s2">&quot;flap_test_group_examples gwe -i 12       &quot;</span><span class="p">])</span><span class="w"></span>
-<span class="w">  </span><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;gwe&quot;</span><span class="p">,</span><span class="w">                                                           </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">               </span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--integer&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-i&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Integer input&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="w"> </span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;-1&#39;</span><span class="p">,</span><span class="w">   </span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add_group</span><span class="p">(</span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;gwe&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Group with examples&#39;</span><span class="p">,</span><span class="w">                </span><span class="p">&amp;</span>
+<span class="w">                     </span><span class="n">examples</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;flap_test_group_examples gwe --integer 32&quot;</span><span class="p">,</span><span class="w">           </span><span class="p">&amp;</span>
+<span class="w">                                 </span><span class="s2">&quot;flap_test_group_examples gwe -i 12       &quot;</span><span class="p">])</span>
+<span class="w">  </span><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;gwe&quot;</span><span class="p">,</span><span class="w">                                                           </span><span class="p">&amp;</span>
+<span class="w">               </span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--integer&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-i&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Integer input&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="w"> </span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;-1&#39;</span><span class="p">,</span><span class="w">   </span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 
-<span class="w">  </span><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add_group</span><span class="p">(</span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;gne&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Group without examples&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">  </span><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;gne&#39;</span><span class="p">,</span><span class="w">                                                           </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">               </span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--float&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-f&#39;</span><span class="p">,</span><span class="w">   </span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Float input&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="w"> </span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="w">   </span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;-1.0&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add_group</span><span class="p">(</span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;gne&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Group without examples&#39;</span><span class="p">)</span>
+<span class="w">  </span><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;gne&#39;</span><span class="p">,</span><span class="w">                                                           </span><span class="p">&amp;</span>
+<span class="w">               </span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--float&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-f&#39;</span><span class="p">,</span><span class="w">   </span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Float input&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="w"> </span><span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="w">   </span><span class="n">def</span><span class="o">=</span><span class="s1">&#39;-1.0&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 
-<span class="w">  </span><span class="k">print</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">cli</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="s1">&#39; has been called with the following arguments:&#39;</span><span class="w"></span>
-<span class="w">  </span><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">val</span><span class="o">=</span><span class="n">a_string</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span><span class="w"></span>
-<span class="w">  </span><span class="k">print</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;String       = &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">a_string</span><span class="p">))</span><span class="w"></span>
+<span class="w">  </span><span class="k">print</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">cli</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="s1">&#39; has been called with the following arguments:&#39;</span>
+<span class="w">  </span><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">val</span><span class="o">=</span><span class="n">a_string</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="w">  </span><span class="k">print</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;String       = &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">a_string</span><span class="p">))</span>
 <span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">run_command</span><span class="p">(</span><span class="s1">&#39;gwe&#39;</span><span class="p">))</span><span class="w"> </span><span class="k">then </span>
-<span class="k">    call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;gwe&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">switch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;-i&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">val</span><span class="o">=</span><span class="n">int_value</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="k">print</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Integer      = &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">int_value</span><span class="p">))</span><span class="w"></span>
+<span class="k">    call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;gwe&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">switch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;-i&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">val</span><span class="o">=</span><span class="n">int_value</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="w">    </span><span class="k">print</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Integer      = &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">int_value</span><span class="p">))</span>
 <span class="w">  </span><span class="k">endif</span>
 <span class="k">  if</span><span class="p">(</span><span class="n">cli</span><span class="p">%</span><span class="n">run_command</span><span class="p">(</span><span class="s1">&#39;gne&#39;</span><span class="p">))</span><span class="w"> </span><span class="k">then </span>
-<span class="k">    call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;gne&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">switch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;-f&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">val</span><span class="o">=</span><span class="n">f_value</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="k">print</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Float        = &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">f_value</span><span class="p">))</span><span class="w"></span>
+<span class="k">    call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;gne&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">switch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;-f&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">val</span><span class="o">=</span><span class="n">f_value</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="w">    </span><span class="k">print</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Float        = &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">f_value</span><span class="p">))</span>
 <span class="w">  </span><span class="k">endif</span>
-<span class="k">  print</span><span class="w"> </span><span class="s1">&#39;(A,I0)&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Error code   = &#39;</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="w"></span>
-<span class="k">endprogram </span><span class="n">flap_test_group_examples</span><span class="w"></span>
+<span class="k">  print</span><span class="w"> </span><span class="s1">&#39;(A,I0)&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Error code   = &#39;</span><span class="p">,</span><span class="w"> </span><span class="n">error</span>
+<span class="k">endprogram </span><span class="n">flap_test_group_examples</span>
 </pre></div>
 
     </section>
@@ -720,12 +2166,12 @@ modules which it uses.
     </div> <!-- /container -->
     <footer>
       <div class="container">
-        <div class="row">
-          <div class="col-xs-6 col-md-6"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
+        <div class="row justify-content-between">
+          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
 </p>
           </div>
-          <div class="col-xs-6 col-md-6">
-            <p class="text-right">
+          <div class="col">
+            <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
             </p>
@@ -735,17 +2181,12 @@ modules which it uses.
       </div> <!-- /container -->
     </footer>
 
-    <!-- Bootstrap core JavaScript
-         ================================================== -->
-         <!-- Placed at the end of the document so the pages load faster -->
-    <!--
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        -->
-        <script src="../js/bootstrap.min.js"></script>
-        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-        <script src="../js/ie10-viewport-bug-workaround.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
 
-        <!-- MathJax JavaScript
+    <!-- MathJax JavaScript
              ================================================== -->
              <!-- Placed at the end of the document so the pages load faster -->
         <script type="text/x-mathjax-config">
