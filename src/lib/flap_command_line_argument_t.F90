@@ -16,6 +16,7 @@ public :: ACTION_STORE_STAR
 public :: ACTION_STORE_TRUE
 public :: ACTION_STORE_FALSE
 public :: ACTION_PRINT_HELP
+public :: ACTION_PRINT_MARK
 public :: ACTION_PRINT_VERS
 public :: ARGS_SEP
 public :: ERROR_UNKNOWN
@@ -102,6 +103,7 @@ character(len=*), parameter :: ACTION_STORE_STAR  = 'STORE*'        !< Store val
 character(len=*), parameter :: ACTION_STORE_TRUE  = 'STORE_TRUE'    !< Store .true. without the necessity of a value.
 character(len=*), parameter :: ACTION_STORE_FALSE = 'STORE_FALSE'   !< Store .false. without the necessity of a value.
 character(len=*), parameter :: ACTION_PRINT_HELP  = 'PRINT_HELP'    !< Print help message.
+character(len=*), parameter :: ACTION_PRINT_MARK  = 'PRINT_MARKDOWN'!< Print help to Markdown file.
 character(len=*), parameter :: ACTION_PRINT_VERS  = 'PRINT_VERSION' !< Print version.
 character(len=*), parameter :: ARGS_SEP           = '||!||'         !< Arguments separator for multiple valued (list) CLA.
 
@@ -667,6 +669,7 @@ contains
         self%act/=ACTION_STORE_TRUE.and. &
         self%act/=ACTION_STORE_FALSE.and.&
         self%act/=ACTION_PRINT_HELP.and. &
+        self%act/=ACTION_PRINT_MARK.and. &
         self%act/=ACTION_PRINT_VERS) then
       call self%errored(pref=pref, error=ERROR_ACTION_UNKNOWN)
       return
