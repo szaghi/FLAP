@@ -1,3 +1,5 @@
+<!-- -*- mode: jinja2 -*- -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -18,7 +20,8 @@
     <link href="../css/local.css" rel="stylesheet">
       <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
   <body>
@@ -68,36 +71,156 @@
 			 <table class="table table-striped nostretch">
 			 <thead><tr><th>Program</th><th>Source File</th><th>Description</th></tr></thead>
 			 <tbody>
-			   <tr><td><a href='../program/face_test_basic.html'>face_test_basic</a></td><td><a href='../sourcefile/face_test_basic.f90.html'>face_test_basic.f90</a></td><td><p>FACE test.</p></td></tr>
-			   <tr><td><a href='../program/face_test_colors.html'>face_test_colors</a></td><td><a href='../sourcefile/face_test_colors.f90.html'>face_test_colors.f90</a></td><td><p>FACE test.</p></td></tr>
-			   <tr><td><a href='../program/face_test_styles.html'>face_test_styles</a></td><td><a href='../sourcefile/face_test_styles.f90.html'>face_test_styles.f90</a></td><td><p>FACE test.</p></td></tr>
-			   <tr><td><a href='../program/face_test_ucs4.html'>face_test_ucs4</a></td><td><a href='../sourcefile/face_test_ucs4.f90.html'>face_test_ucs4.F90</a></td><td><p>FACE test.</p></td></tr>
-			   <tr><td><a href='../program/flap_save_bash_completion.html'>flap_save_bash_completion</a></td><td><a href='../sourcefile/flap_test_save_bash_completion.f90.html'>flap_test_save_bash_completion.f90</a></td><td><p>Test <code>save_bash_completion</code> method.</p></td></tr>
-			   <tr><td><a href='../program/flap_save_man_page.html'>flap_save_man_page</a></td><td><a href='../sourcefile/flap_test_save_man_page.f90.html'>flap_test_save_man_page.f90</a></td><td><p>Test <code>save_man_page</code> method.</p></td></tr>
-			   <tr><td><a href='../program/flap_save_usage_to_markdown.html'>flap_save_usage_to_markdown</a></td><td><a href='../sourcefile/flap_test_save_usage_to_markdown.f90.html'>flap_test_save_usage_to_markdown.f90</a></td><td><p>Test <code>save_usage_to_markdown</code> method.</p></td></tr>
-			   <tr><td><a href='../program/flap_test_action_store.html'>flap_test_action_store</a></td><td><a href='../sourcefile/flap_test_action_store.f90.html'>flap_test_action_store.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_action_store.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../program/flap_test_ansi_color_style.html'>flap_test_ansi_color_style</a></td><td><a href='../sourcefile/flap_test_ansi_color_style.f90.html'>flap_test_ansi_color_style.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p></td></tr>
-			   <tr><td><a href='../program/flap_test_basic.html'>flap_test_basic</a></td><td><a href='../sourcefile/flap_test_basic.f90.html'>flap_test_basic.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_basic.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../program/flap_test_choices_logical.html'>flap_test_choices_logical</a></td><td><a href='../sourcefile/flap_test_choices_logical.f90.html'>flap_test_choices_logical.f90</a></td><td><p>Test FLAP for bad usage of choices option with logical</p></td></tr>
-			   <tr><td><a href='../program/flap_test_duplicated_clas.html'>flap_test_duplicated_clas</a></td><td><a href='../sourcefile/flap_test_duplicated_clas.f90.html'>flap_test_duplicated_clas.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_duplicated_clas.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../program/flap_test_group.html'>flap_test_group</a></td><td><a href='../sourcefile/flap_test_group.f90.html'>flap_test_group.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_group.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../program/flap_test_group_examples.html'>flap_test_group_examples</a></td><td><a href='../sourcefile/flap_test_group_examples.f90.html'>flap_test_group_examples.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_group_examples.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../program/flap_test_hidden.html'>flap_test_hidden</a></td><td><a href='../sourcefile/flap_test_hidden.f90.html'>flap_test_hidden.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_hidden.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../program/flap_test_ignore_unknown_clas.html'>flap_test_ignore_unknown_clas</a></td><td><a href='../sourcefile/flap_test_ignore_unknown_clas.f90.html'>flap_test_ignore_unknown_clas.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_ignore_unknown_clas.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../program/flap_test_minimal.html'>flap_test_minimal</a></td><td><a href='../sourcefile/flap_test_minimal.f90.html'>flap_test_minimal.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_minimal.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../program/flap_test_nargs_insufficient.html'>flap_test_nargs_insufficient</a></td><td><a href='../sourcefile/flap_test_nargs_insufficient.f90.html'>flap_test_nargs_insufficient.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_nargs_insufficient.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../program/flap_test_nargs_insufficient~2.html'>flap_test_nargs_insufficient</a></td><td><a href='../sourcefile/flap_test_value_missing.f90.html'>flap_test_value_missing.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_nargs_insufficient~2.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../program/flap_test_nested.html'>flap_test_nested</a></td><td><a href='../sourcefile/flap_test_nested.f90.html'>flap_test_nested.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_nested.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../program/flap_test_string.html'>flap_test_string</a></td><td><a href='../sourcefile/flap_test_string.f90.html'>flap_test_string.f90</a></td><td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_string.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../program/test_tester_05.html'>test_tester_05</a></td><td><a href='../sourcefile/test_tester_05.f90.html'>test_tester_05.f90</a></td><td></td></tr>
-			   <tr><td><a href='../program/test_tester_1.html'>test_tester_1</a></td><td><a href='../sourcefile/test_tester_03.f90.html'>test_tester_03.f90</a></td><td></td></tr>
-			   <tr><td><a href='../program/test_tester_1~2.html'>test_tester_1</a></td><td><a href='../sourcefile/test_tester_01.f90.html'>test_tester_01.f90</a></td><td></td></tr>
-			   <tr><td><a href='../program/test_tester_2.html'>test_tester_2</a></td><td><a href='../sourcefile/test_fail_01.f90.html'>test_fail_01.f90</a></td><td></td></tr>
-			   <tr><td><a href='../program/test_tester_3.html'>test_tester_3</a></td><td><a href='../sourcefile/test_tester_02.f90.html'>test_tester_02.f90</a></td><td></td></tr>
-			   <tr><td><a href='../program/test_tester_4.html'>test_tester_4</a></td><td><a href='../sourcefile/test_fail_02.f90.html'>test_fail_02.f90</a></td><td></td></tr>
-			   <tr><td><a href='../program/test_tester_6.html'>test_tester_6</a></td><td><a href='../sourcefile/test_tester_04.f90.html'>test_tester_04.f90</a></td><td></td></tr>
-			   <tr><td><a href='../program/test_tester_7.html'>test_tester_7</a></td><td><a href='../sourcefile/test_fail_03.f90.html'>test_fail_03.f90</a></td><td></td></tr>
-			   <tr><td><a href='../program/test_tester_8.html'>test_tester_8</a></td><td><a href='../sourcefile/test_fail_04.f90.html'>test_fail_04.f90</a></td><td></td></tr>
+			   <tr>
+                 <td><a href='../program/face_test_basic.html'>face_test_basic</a></td>
+                 <td><a href='../sourcefile/face_test_basic.f90.html'>face_test_basic.f90</a></td>
+                 <td><p>FACE test.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/face_test_colors.html'>face_test_colors</a></td>
+                 <td><a href='../sourcefile/face_test_colors.f90.html'>face_test_colors.f90</a></td>
+                 <td><p>FACE test.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/face_test_styles.html'>face_test_styles</a></td>
+                 <td><a href='../sourcefile/face_test_styles.f90.html'>face_test_styles.f90</a></td>
+                 <td><p>FACE test.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/face_test_ucs4.html'>face_test_ucs4</a></td>
+                 <td><a href='../sourcefile/face_test_ucs4.f90.html'>face_test_ucs4.F90</a></td>
+                 <td><p>FACE test.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/flap_save_bash_completion.html'>flap_save_bash_completion</a></td>
+                 <td><a href='../sourcefile/flap_test_save_bash_completion.f90.html'>flap_test_save_bash_completion.f90</a></td>
+                 <td><p>Test <code>save_bash_completion</code> method.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/flap_save_man_page.html'>flap_save_man_page</a></td>
+                 <td><a href='../sourcefile/flap_test_save_man_page.f90.html'>flap_test_save_man_page.f90</a></td>
+                 <td><p>Test <code>save_man_page</code> method.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/flap_save_usage_to_markdown.html'>flap_save_usage_to_markdown</a></td>
+                 <td><a href='../sourcefile/flap_test_save_usage_to_markdown.f90.html'>flap_test_save_usage_to_markdown.f90</a></td>
+                 <td><p>Test <code>save_usage_to_markdown</code> method.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/flap_test_action_store.html'>flap_test_action_store</a></td>
+                 <td><a href='../sourcefile/flap_test_action_store.f90.html'>flap_test_action_store.f90</a></td>
+                 <td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_action_store.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/flap_test_ansi_color_style.html'>flap_test_ansi_color_style</a></td>
+                 <td><a href='../sourcefile/flap_test_ansi_color_style.f90.html'>flap_test_ansi_color_style.f90</a></td>
+                 <td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/flap_test_basic.html'>flap_test_basic</a></td>
+                 <td><a href='../sourcefile/flap_test_basic.f90.html'>flap_test_basic.f90</a></td>
+                 <td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_basic.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/flap_test_choices_logical.html'>flap_test_choices_logical</a></td>
+                 <td><a href='../sourcefile/flap_test_choices_logical.f90.html'>flap_test_choices_logical.f90</a></td>
+                 <td><p>Test FLAP for bad usage of choices option with logical</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/flap_test_duplicated_clas.html'>flap_test_duplicated_clas</a></td>
+                 <td><a href='../sourcefile/flap_test_duplicated_clas.f90.html'>flap_test_duplicated_clas.f90</a></td>
+                 <td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_duplicated_clas.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/flap_test_group.html'>flap_test_group</a></td>
+                 <td><a href='../sourcefile/flap_test_group.f90.html'>flap_test_group.f90</a></td>
+                 <td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_group.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/flap_test_group_examples.html'>flap_test_group_examples</a></td>
+                 <td><a href='../sourcefile/flap_test_group_examples.f90.html'>flap_test_group_examples.f90</a></td>
+                 <td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_group_examples.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/flap_test_hidden.html'>flap_test_hidden</a></td>
+                 <td><a href='../sourcefile/flap_test_hidden.f90.html'>flap_test_hidden.f90</a></td>
+                 <td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_hidden.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/flap_test_ignore_unknown_clas.html'>flap_test_ignore_unknown_clas</a></td>
+                 <td><a href='../sourcefile/flap_test_ignore_unknown_clas.f90.html'>flap_test_ignore_unknown_clas.f90</a></td>
+                 <td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_ignore_unknown_clas.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/flap_test_minimal.html'>flap_test_minimal</a></td>
+                 <td><a href='../sourcefile/flap_test_minimal.f90.html'>flap_test_minimal.f90</a></td>
+                 <td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_minimal.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/flap_test_nargs_insufficient.html'>flap_test_nargs_insufficient</a></td>
+                 <td><a href='../sourcefile/flap_test_value_missing.f90.html'>flap_test_value_missing.f90</a></td>
+                 <td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_nargs_insufficient.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/flap_test_nargs_insufficient~2.html'>flap_test_nargs_insufficient</a></td>
+                 <td><a href='../sourcefile/flap_test_nargs_insufficient.f90.html'>flap_test_nargs_insufficient.f90</a></td>
+                 <td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_nargs_insufficient~2.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/flap_test_nested.html'>flap_test_nested</a></td>
+                 <td><a href='../sourcefile/flap_test_nested.f90.html'>flap_test_nested.f90</a></td>
+                 <td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_nested.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/flap_test_string.html'>flap_test_string</a></td>
+                 <td><a href='../sourcefile/flap_test_string.f90.html'>flap_test_string.f90</a></td>
+                 <td><p>A testing program for FLAP, Fortran command Line Arguments Parser for poor people</p><a href="../program/flap_test_string.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/test_tester_05.html'>test_tester_05</a></td>
+                 <td><a href='../sourcefile/test_tester_05.f90.html'>test_tester_05.f90</a></td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/test_tester_1.html'>test_tester_1</a></td>
+                 <td><a href='../sourcefile/test_tester_01.f90.html'>test_tester_01.f90</a></td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/test_tester_1~2.html'>test_tester_1</a></td>
+                 <td><a href='../sourcefile/test_tester_03.f90.html'>test_tester_03.f90</a></td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/test_tester_2.html'>test_tester_2</a></td>
+                 <td><a href='../sourcefile/test_fail_01.f90.html'>test_fail_01.f90</a></td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/test_tester_3.html'>test_tester_3</a></td>
+                 <td><a href='../sourcefile/test_tester_02.f90.html'>test_tester_02.f90</a></td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/test_tester_4.html'>test_tester_4</a></td>
+                 <td><a href='../sourcefile/test_fail_02.f90.html'>test_fail_02.f90</a></td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/test_tester_6.html'>test_tester_6</a></td>
+                 <td><a href='../sourcefile/test_tester_04.f90.html'>test_tester_04.f90</a></td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/test_tester_7.html'>test_tester_7</a></td>
+                 <td><a href='../sourcefile/test_fail_03.f90.html'>test_fail_03.f90</a></td>
+                 <td></td>
+               </tr>
+			   <tr>
+                 <td><a href='../program/test_tester_8.html'>test_tester_8</a></td>
+                 <td><a href='../sourcefile/test_fail_04.f90.html'>test_fail_04.f90</a></td>
+                 <td></td>
+               </tr>
 			 </tbody></table>
         </div>
       </div>
@@ -106,7 +229,7 @@
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
+          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2024 
 </p>
           </div>
           <div class="col">

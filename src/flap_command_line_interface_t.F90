@@ -4,7 +4,7 @@ module flap_command_line_interface_t
 
 use face, only : colorize
 use flap_command_line_argument_t, only : command_line_argument, ACTION_STORE, ERROR_UNKNOWN
-use flap_command_line_arguments_group_t, only : command_line_arguments_group, STATUS_PRINT_H, STATUS_PRINT_V
+use flap_command_line_arguments_group_t, only : command_line_arguments_group, STATUS_PRINT_H, STATUS_PRINT_M, STATUS_PRINT_V
 use flap_object_t, only : object
 use flap_utils_m
 use penf
@@ -453,7 +453,7 @@ contains
   if (present(error)) error = 0
   if (self%is_parsed_) return
 
-  ! add help and version switches if not done by user
+  ! add help, markdown and version switches if not done by user
   if (.not.self%disable_hv) then
     do g=0,size(self%clasg,dim=1)-1
       if (.not.(self%is_defined(group=self%clasg(g)%group, switch='--help').and.&
@@ -466,6 +466,16 @@ contains
                       required    = .false.,                   &
                       def         = '',                        &
                       act         = 'print_help')
+      if (.not.(self%is_defined(group=self%clasg(g)%group, switch='--markdown').and.&
+                self%is_defined(group=self%clasg(g)%group, switch='-md'))) &
+        call self%add(pref        = pref,                      &
+                      group_index = g,                         &
+                      switch      = '--markdown',              &
+                      switch_ab   = '-md',                     &
+                      help        = 'Save this help message in a Markdown file', &
+                      required    = .false.,                   &
+                      def         = '',                        &
+                      act         = 'print_markdown')
       if (.not.(self%is_defined(group=self%clasg(g)%group, switch='--version').and. &
                 self%is_defined(group=self%clasg(g)%group, switch='-v'))) &
         call self%add(pref        = pref,            &
@@ -549,6 +559,9 @@ contains
         stop
       endif
     enddo
+  elseif (self%error == STATUS_PRINT_M) then
+    call self%save_usage_to_markdown(trim(self%progname)//'.md')
+    stop
   endif
 
   ! check if all required CLAs have been passed

@@ -1,3 +1,5 @@
+<!-- -*- mode: jinja2 -*- -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -17,7 +19,8 @@
     <link href="../css/local.css" rel="stylesheet">
       <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
   <body>
@@ -167,7 +170,7 @@
 <!-- module~face -->
 <g id="program~~face_test_styles~~UsesGraph_node2" class="node">
 <title>module~face</title>
-<g id="a_program~~face_test_styles~~UsesGraph_node2"><a xlink:href=".././module/face.html" xlink:title="face">
+<g id="a_program~~face_test_styles~~UsesGraph_node2"><a xlink:href="../module/face.html" xlink:title="face">
 <polygon fill="#337ab7" stroke="#337ab7" points="184,-24 130,-24 130,0 184,0 184,-24"/>
 <text text-anchor="middle" x="157" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face</text>
 </a>
@@ -193,17 +196,17 @@
 </g>
 </g>
 </svg>
-</div>        <div><a type="button" class="graph-help" data-toggle="modal" href="#UsesGraph-help-text">Help</a></div>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#UsesGraph-help-text">Help</a>
+          </div>
           <div class="modal fade" id="UsesGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                   <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-              <div class="modal-body">
+                <div class="modal-body">
 <p>Nodes of different colours represent the following: </p>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -295,7 +298,7 @@ modules which it uses.
 <!-- interface~colorize -->
 <g id="program~~face_test_styles~~CallsGraph_node2" class="node">
 <title>interface~colorize</title>
-<g id="a_program~~face_test_styles~~CallsGraph_node2"><a xlink:href=".././interface/colorize.html" xlink:title="face::colorize">
+<g id="a_program~~face_test_styles~~CallsGraph_node2"><a xlink:href="../interface/colorize.html" xlink:title="face::colorize">
 <polygon fill="#a7506f" stroke="#a7506f" points="217,-66 132,-66 132,-42 217,-42 217,-66"/>
 <text text-anchor="middle" x="174.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face::colorize</text>
 </a>
@@ -310,7 +313,7 @@ modules which it uses.
 <!-- proc~colorize_default -->
 <g id="program~~face_test_styles~~CallsGraph_node3" class="node">
 <title>proc~colorize_default</title>
-<g id="a_program~~face_test_styles~~CallsGraph_node3"><a xlink:href=".././proc/colorize_default.html" xlink:title="face::colorize_default">
+<g id="a_program~~face_test_styles~~CallsGraph_node3"><a xlink:href="../proc/colorize_default.html" xlink:title="face::colorize_default">
 <polygon fill="#d94e8f" stroke="#d94e8f" points="381,-66 253,-66 253,-42 381,-42 381,-66"/>
 <text text-anchor="middle" x="317" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face::colorize_default</text>
 </a>
@@ -325,7 +328,7 @@ modules which it uses.
 <!-- proc~color_index -->
 <g id="program~~face_test_styles~~CallsGraph_node4" class="node">
 <title>proc~color_index</title>
-<g id="a_program~~face_test_styles~~CallsGraph_node4"><a xlink:href=".././proc/color_index.html" xlink:title="face::color_index">
+<g id="a_program~~face_test_styles~~CallsGraph_node4"><a xlink:href="../proc/color_index.html" xlink:title="face::color_index">
 <polygon fill="#d94e8f" stroke="#d94e8f" points="521,-108 417,-108 417,-84 521,-84 521,-108"/>
 <text text-anchor="middle" x="469" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face::color_index</text>
 </a>
@@ -340,7 +343,7 @@ modules which it uses.
 <!-- proc~style_index -->
 <g id="program~~face_test_styles~~CallsGraph_node5" class="node">
 <title>proc~style_index</title>
-<g id="a_program~~face_test_styles~~CallsGraph_node5"><a xlink:href=".././proc/style_index.html" xlink:title="face::style_index">
+<g id="a_program~~face_test_styles~~CallsGraph_node5"><a xlink:href="../proc/style_index.html" xlink:title="face::style_index">
 <polygon fill="#d94e8f" stroke="#d94e8f" points="520,-66 418,-66 418,-42 520,-42 520,-66"/>
 <text text-anchor="middle" x="469" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face::style_index</text>
 </a>
@@ -355,7 +358,7 @@ modules which it uses.
 <!-- proc~upper -->
 <g id="program~~face_test_styles~~CallsGraph_node6" class="node">
 <title>proc~upper</title>
-<g id="a_program~~face_test_styles~~CallsGraph_node6"><a xlink:href=".././proc/upper.html" xlink:title="face::upper">
+<g id="a_program~~face_test_styles~~CallsGraph_node6"><a xlink:href="../proc/upper.html" xlink:title="face::upper">
 <polygon fill="#d94e8f" stroke="#d94e8f" points="506.5,-24 431.5,-24 431.5,0 506.5,0 506.5,-24"/>
 <text text-anchor="middle" x="469" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face::upper</text>
 </a>
@@ -369,17 +372,17 @@ modules which it uses.
 </g>
 </g>
 </svg>
-</div>        <div><a type="button" class="graph-help" data-toggle="modal" href="#CallsGraph-help-text">Help</a></div>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#CallsGraph-help-text">Help</a>
+          </div>
           <div class="modal fade" id="CallsGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                   <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-              <div class="modal-body">
+                <div class="modal-body">
 <p>Nodes of different colours represent the following: </p>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -488,7 +491,7 @@ implementation in a submodule of an interface in a parent module.
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
+          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2024 
 </p>
           </div>
           <div class="col">

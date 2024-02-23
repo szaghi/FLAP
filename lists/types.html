@@ -1,3 +1,5 @@
+<!-- -*- mode: jinja2 -*- -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -18,7 +20,8 @@
     <link href="../css/local.css" rel="stylesheet">
       <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
   <body>
@@ -69,11 +72,36 @@
 			 <thead>
 			 <tr><th>Type</th><th>Location</th><th>Extends</th><th>Description</th></tr>
 			 </thead><tbody>
-			   <tr><td><a href='../type/command_line_argument.html'>command_line_argument</a></td><td><a href='../module/flap_command_line_argument_t.html'>flap_command_line_argument_t</a></td><td><a href='../type/object.html'>object</a></td><td><p>Command Line Argument (CLA) class.</p><a href="../type/command_line_argument.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a></td><td><a href='../module/flap_command_line_arguments_group_t.html'>flap_command_line_arguments_group_t</a></td><td><a href='../type/object.html'>object</a></td><td><p>Command Line Arguments Group (CLAsG) class.</p><a href="../type/command_line_arguments_group.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			   <tr><td><a href='../type/command_line_interface.html'>command_line_interface</a></td><td><a href='../module/flap_command_line_interface_t.html'>flap_command_line_interface_t</a></td><td><a href='../type/object.html'>object</a></td><td><p>Command Line Interface (CLI) class.</p></td></tr>
-			   <tr><td><a href='../type/object.html'>object</a></td><td><a href='../module/flap_object_t.html'>flap_object_t</a></td><td>None</td><td><p>Base (abstract) class upon which FLAP&rsquo;s concrete classes are built.</p></td></tr>
-			   <tr><td><a href='../type/tester_t.html'>tester_t</a></td><td><a href='../module/tester.html'>tester</a></td><td>None</td><td><p>The main <strong>tester</strong> class.</p></td></tr>
+			   <tr>
+                 <td><a href='../type/command_line_argument.html'>command_line_argument</a></td>
+                 <td><a href='../module/flap_command_line_argument_t.html'>flap_command_line_argument_t</a></td>
+                 <td><a href='../type/object.html'>object</a></td>
+                 <td><p>Command Line Argument (CLA) class.</p><a href="../type/command_line_argument.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a></td>
+                 <td><a href='../module/flap_command_line_arguments_group_t.html'>flap_command_line_arguments_group_t</a></td>
+                 <td><a href='../type/object.html'>object</a></td>
+                 <td><p>Command Line Arguments Group (CLAsG) class.</p><a href="../type/command_line_arguments_group.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../type/command_line_interface.html'>command_line_interface</a></td>
+                 <td><a href='../module/flap_command_line_interface_t.html'>flap_command_line_interface_t</a></td>
+                 <td><a href='../type/object.html'>object</a></td>
+                 <td><p>Command Line Interface (CLI) class.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../type/object.html'>object</a></td>
+                 <td><a href='../module/flap_object_t.html'>flap_object_t</a></td>
+                 <td>None</td>
+                 <td><p>Base (abstract) class upon which FLAP&rsquo;s concrete classes are built.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../type/tester_t.html'>tester_t</a></td>
+                 <td><a href='../module/tester.html'>tester</a></td>
+                 <td>None</td>
+                 <td><p>The main <strong>tester</strong> class.</p></td>
+               </tr>
 			 </tbody></table>
              <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -89,7 +117,7 @@
 <!-- type~command_line_argument -->
 <g id="type~~graph~~TypeGraph_node1" class="node">
 <title>type~command_line_argument</title>
-<g id="a_type~~graph~~TypeGraph_node1"><a xlink:href=".././type/command_line_argument.html" xlink:title="command_line_argument">
+<g id="a_type~~graph~~TypeGraph_node1"><a xlink:href="../type/command_line_argument.html" xlink:title="command_line_argument">
 <polygon fill="#5cb85c" stroke="#5cb85c" points="240,-96.6 91,-96.6 91,-72.6 240,-72.6 240,-96.6"/>
 <text text-anchor="middle" x="165.5" y="-82.2" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">command_line_argument</text>
 </a>
@@ -98,7 +126,7 @@
 <!-- type~object -->
 <g id="type~~graph~~TypeGraph_node4" class="node">
 <title>type~object</title>
-<g id="a_type~~graph~~TypeGraph_node4"><a xlink:href=".././type/object.html" xlink:title="object">
+<g id="a_type~~graph~~TypeGraph_node4"><a xlink:href="../type/object.html" xlink:title="object">
 <polygon fill="#5cb85c" stroke="#5cb85c" points="54,-56.6 0,-56.6 0,-32.6 54,-32.6 54,-56.6"/>
 <text text-anchor="middle" x="27" y="-42.2" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">object</text>
 </a>
@@ -112,7 +140,7 @@
 <!-- type~command_line_arguments_group -->
 <g id="type~~graph~~TypeGraph_node2" class="node">
 <title>type~command_line_arguments_group</title>
-<g id="a_type~~graph~~TypeGraph_node2"><a xlink:href=".././type/command_line_arguments_group.html" xlink:title="command_line_arguments_group">
+<g id="a_type~~graph~~TypeGraph_node2"><a xlink:href="../type/command_line_arguments_group.html" xlink:title="command_line_arguments_group">
 <polygon fill="#5cb85c" stroke="#5cb85c" points="481,-56.6 291,-56.6 291,-32.6 481,-32.6 481,-56.6"/>
 <text text-anchor="middle" x="386" y="-42.2" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">command_line_arguments_group</text>
 </a>
@@ -133,7 +161,7 @@
 <!-- type~command_line_interface -->
 <g id="type~~graph~~TypeGraph_node3" class="node">
 <title>type~command_line_interface</title>
-<g id="a_type~~graph~~TypeGraph_node3"><a xlink:href=".././type/command_line_interface.html" xlink:title="command_line_interface">
+<g id="a_type~~graph~~TypeGraph_node3"><a xlink:href="../type/command_line_interface.html" xlink:title="command_line_interface">
 <polygon fill="#5cb85c" stroke="#5cb85c" points="688,-32.6 543,-32.6 543,-8.6 688,-8.6 688,-32.6"/>
 <text text-anchor="middle" x="615.5" y="-18.2" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">command_line_interface</text>
 </a>
@@ -157,7 +185,7 @@
 <!-- type~tester_t -->
 <g id="type~~graph~~TypeGraph_node5" class="node">
 <title>type~tester_t</title>
-<g id="a_type~~graph~~TypeGraph_node5"><a xlink:href=".././type/tester_t.html" xlink:title="tester_t">
+<g id="a_type~~graph~~TypeGraph_node5"><a xlink:href="../type/tester_t.html" xlink:title="tester_t">
 <polygon fill="#5cb85c" stroke="#5cb85c" points="642.5,-74.6 588.5,-74.6 588.5,-50.6 642.5,-50.6 642.5,-74.6"/>
 <text text-anchor="middle" x="615.5" y="-60.2" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">tester_t</text>
 </a>
@@ -165,17 +193,17 @@
 </g>
 </g>
 </svg>
-</div>        <div><a type="button" class="graph-help" data-toggle="modal" href="#TypeGraph-help-text">Help</a></div>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#TypeGraph-help-text">Help</a>
+          </div>
           <div class="modal fade" id="TypeGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                   <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-              <div class="modal-body">
+                <div class="modal-body">
 <p>Nodes of different colours represent the following: </p>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -219,7 +247,7 @@ said component(s).
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
+          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2024 
 </p>
           </div>
           <div class="col">

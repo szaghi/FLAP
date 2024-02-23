@@ -1,3 +1,5 @@
+<!-- -*- mode: jinja2 -*- -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -17,7 +19,8 @@
     <link href="../css/local.css" rel="stylesheet">
       <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
   <body>
@@ -212,17 +215,17 @@
 </g>
 </g>
 </svg>
-</div>        <div><a type="button" class="graph-help" data-toggle="modal" href="#UsesGraph-help-text">Help</a></div>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#UsesGraph-help-text">Help</a>
+          </div>
           <div class="modal fade" id="UsesGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                   <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-              <div class="modal-body">
+                <div class="modal-body">
 <p>Nodes of different colours represent the following: </p>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -312,7 +315,7 @@ modules which it uses.
 <!-- module~flap_command_line_argument_t -->
 <g id="module~~flap_utils_m~~UsedByGraph_node2" class="node">
 <title>module~flap_command_line_argument_t</title>
-<g id="a_module~~flap_utils_m~~UsedByGraph_node2"><a xlink:href=".././module/flap_command_line_argument_t.html" xlink:title="flap_command_line_argument_t">
+<g id="a_module~~flap_utils_m~~UsedByGraph_node2"><a xlink:href="../module/flap_command_line_argument_t.html" xlink:title="flap_command_line_argument_t">
 <polygon fill="#337ab7" stroke="#337ab7" points="296,-340 112,-340 112,-316 296,-316 296,-340"/>
 <text text-anchor="middle" x="204" y="-325.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t</text>
 </a>
@@ -327,7 +330,7 @@ modules which it uses.
 <!-- module~flap_command_line_interface_t -->
 <g id="module~~flap_utils_m~~UsedByGraph_node3" class="node">
 <title>module~flap_command_line_interface_t</title>
-<g id="a_module~~flap_utils_m~~UsedByGraph_node3"><a xlink:href=".././module/flap_command_line_interface_t.html" xlink:title="flap_command_line_interface_t">
+<g id="a_module~~flap_utils_m~~UsedByGraph_node3"><a xlink:href="../module/flap_command_line_interface_t.html" xlink:title="flap_command_line_interface_t">
 <polygon fill="#337ab7" stroke="#337ab7" points="772,-340 593,-340 593,-316 772,-316 772,-340"/>
 <text text-anchor="middle" x="682.5" y="-325.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t</text>
 </a>
@@ -349,7 +352,7 @@ modules which it uses.
 <!-- module~flap_command_line_arguments_group_t -->
 <g id="module~~flap_utils_m~~UsedByGraph_node5" class="node">
 <title>module~flap_command_line_arguments_group_t</title>
-<g id="a_module~~flap_utils_m~~UsedByGraph_node5"><a xlink:href=".././module/flap_command_line_arguments_group_t.html" xlink:title="flap_command_line_arguments_group_t">
+<g id="a_module~~flap_utils_m~~UsedByGraph_node5"><a xlink:href="../module/flap_command_line_arguments_group_t.html" xlink:title="flap_command_line_arguments_group_t">
 <polygon fill="#337ab7" stroke="#337ab7" points="557,-340 332,-340 332,-316 557,-316 557,-340"/>
 <text text-anchor="middle" x="444.5" y="-325.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_arguments_group_t</text>
 </a>
@@ -364,7 +367,7 @@ modules which it uses.
 <!-- module~flap -->
 <g id="module~~flap_utils_m~~UsedByGraph_node4" class="node">
 <title>module~flap</title>
-<g id="a_module~~flap_utils_m~~UsedByGraph_node4"><a xlink:href=".././module/flap.html" xlink:title="flap">
+<g id="a_module~~flap_utils_m~~UsedByGraph_node4"><a xlink:href="../module/flap.html" xlink:title="flap">
 <polygon fill="#337ab7" stroke="#337ab7" points="862,-360 808,-360 808,-336 862,-336 862,-360"/>
 <text text-anchor="middle" x="835" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap</text>
 </a>
@@ -398,7 +401,7 @@ modules which it uses.
 <!-- program~flap_save_bash_completion -->
 <g id="module~~flap_utils_m~~UsedByGraph_node6" class="node">
 <title>program~flap_save_bash_completion</title>
-<g id="a_module~~flap_utils_m~~UsedByGraph_node6"><a xlink:href=".././program/flap_save_bash_completion.html" xlink:title="flap_save_bash_completion">
+<g id="a_module~~flap_utils_m~~UsedByGraph_node6"><a xlink:href="../program/flap_save_bash_completion.html" xlink:title="flap_save_bash_completion">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="1066.5,-696 907.5,-696 907.5,-672 1066.5,-672 1066.5,-696"/>
 <text text-anchor="middle" x="987" y="-681.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_save_bash_completion</text>
 </a>
@@ -413,7 +416,7 @@ modules which it uses.
 <!-- program~flap_save_man_page -->
 <g id="module~~flap_utils_m~~UsedByGraph_node7" class="node">
 <title>program~flap_save_man_page</title>
-<g id="a_module~~flap_utils_m~~UsedByGraph_node7"><a xlink:href=".././program/flap_save_man_page.html" xlink:title="flap_save_man_page">
+<g id="a_module~~flap_utils_m~~UsedByGraph_node7"><a xlink:href="../program/flap_save_man_page.html" xlink:title="flap_save_man_page">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="1049,-654 925,-654 925,-630 1049,-630 1049,-654"/>
 <text text-anchor="middle" x="987" y="-639.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_save_man_page</text>
 </a>
@@ -428,7 +431,7 @@ modules which it uses.
 <!-- program~flap_save_usage_to_markdown -->
 <g id="module~~flap_utils_m~~UsedByGraph_node8" class="node">
 <title>program~flap_save_usage_to_markdown</title>
-<g id="a_module~~flap_utils_m~~UsedByGraph_node8"><a xlink:href=".././program/flap_save_usage_to_markdown.html" xlink:title="flap_save_usage_to_markdown">
+<g id="a_module~~flap_utils_m~~UsedByGraph_node8"><a xlink:href="../program/flap_save_usage_to_markdown.html" xlink:title="flap_save_usage_to_markdown">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="1076,-612 898,-612 898,-588 1076,-588 1076,-612"/>
 <text text-anchor="middle" x="987" y="-597.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_save_usage_to_markdown</text>
 </a>
@@ -443,7 +446,7 @@ modules which it uses.
 <!-- program~flap_test_action_store -->
 <g id="module~~flap_utils_m~~UsedByGraph_node9" class="node">
 <title>program~flap_test_action_store</title>
-<g id="a_module~~flap_utils_m~~UsedByGraph_node9"><a xlink:href=".././program/flap_test_action_store.html" xlink:title="flap_test_action_store">
+<g id="a_module~~flap_utils_m~~UsedByGraph_node9"><a xlink:href="../program/flap_test_action_store.html" xlink:title="flap_test_action_store">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="1050.5,-570 923.5,-570 923.5,-546 1050.5,-546 1050.5,-570"/>
 <text text-anchor="middle" x="987" y="-555.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_action_store</text>
 </a>
@@ -458,7 +461,7 @@ modules which it uses.
 <!-- program~flap_test_ansi_color_style -->
 <g id="module~~flap_utils_m~~UsedByGraph_node10" class="node">
 <title>program~flap_test_ansi_color_style</title>
-<g id="a_module~~flap_utils_m~~UsedByGraph_node10"><a xlink:href=".././program/flap_test_ansi_color_style.html" xlink:title="flap_test_ansi_color_style">
+<g id="a_module~~flap_utils_m~~UsedByGraph_node10"><a xlink:href="../program/flap_test_ansi_color_style.html" xlink:title="flap_test_ansi_color_style">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="1060.5,-528 913.5,-528 913.5,-504 1060.5,-504 1060.5,-528"/>
 <text text-anchor="middle" x="987" y="-513.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_ansi_color_style</text>
 </a>
@@ -473,7 +476,7 @@ modules which it uses.
 <!-- program~flap_test_basic -->
 <g id="module~~flap_utils_m~~UsedByGraph_node11" class="node">
 <title>program~flap_test_basic</title>
-<g id="a_module~~flap_utils_m~~UsedByGraph_node11"><a xlink:href=".././program/flap_test_basic.html" xlink:title="flap_test_basic">
+<g id="a_module~~flap_utils_m~~UsedByGraph_node11"><a xlink:href="../program/flap_test_basic.html" xlink:title="flap_test_basic">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="1032.5,-486 941.5,-486 941.5,-462 1032.5,-462 1032.5,-486"/>
 <text text-anchor="middle" x="987" y="-471.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_basic</text>
 </a>
@@ -488,7 +491,7 @@ modules which it uses.
 <!-- program~flap_test_choices_logical -->
 <g id="module~~flap_utils_m~~UsedByGraph_node12" class="node">
 <title>program~flap_test_choices_logical</title>
-<g id="a_module~~flap_utils_m~~UsedByGraph_node12"><a xlink:href=".././program/flap_test_choices_logical.html" xlink:title="flap_test_choices_logical">
+<g id="a_module~~flap_utils_m~~UsedByGraph_node12"><a xlink:href="../program/flap_test_choices_logical.html" xlink:title="flap_test_choices_logical">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="1059,-444 915,-444 915,-420 1059,-420 1059,-444"/>
 <text text-anchor="middle" x="987" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_choices_logical</text>
 </a>
@@ -503,7 +506,7 @@ modules which it uses.
 <!-- program~flap_test_duplicated_clas -->
 <g id="module~~flap_utils_m~~UsedByGraph_node13" class="node">
 <title>program~flap_test_duplicated_clas</title>
-<g id="a_module~~flap_utils_m~~UsedByGraph_node13"><a xlink:href=".././program/flap_test_duplicated_clas.html" xlink:title="flap_test_duplicated_clas">
+<g id="a_module~~flap_utils_m~~UsedByGraph_node13"><a xlink:href="../program/flap_test_duplicated_clas.html" xlink:title="flap_test_duplicated_clas">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="1059.5,-402 914.5,-402 914.5,-378 1059.5,-378 1059.5,-402"/>
 <text text-anchor="middle" x="987" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_duplicated_clas</text>
 </a>
@@ -518,7 +521,7 @@ modules which it uses.
 <!-- program~flap_test_group -->
 <g id="module~~flap_utils_m~~UsedByGraph_node14" class="node">
 <title>program~flap_test_group</title>
-<g id="a_module~~flap_utils_m~~UsedByGraph_node14"><a xlink:href=".././program/flap_test_group.html" xlink:title="flap_test_group">
+<g id="a_module~~flap_utils_m~~UsedByGraph_node14"><a xlink:href="../program/flap_test_group.html" xlink:title="flap_test_group">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="1034,-360 940,-360 940,-336 1034,-336 1034,-360"/>
 <text text-anchor="middle" x="987" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_group</text>
 </a>
@@ -533,7 +536,7 @@ modules which it uses.
 <!-- program~flap_test_group_examples -->
 <g id="module~~flap_utils_m~~UsedByGraph_node15" class="node">
 <title>program~flap_test_group_examples</title>
-<g id="a_module~~flap_utils_m~~UsedByGraph_node15"><a xlink:href=".././program/flap_test_group_examples.html" xlink:title="flap_test_group_examples">
+<g id="a_module~~flap_utils_m~~UsedByGraph_node15"><a xlink:href="../program/flap_test_group_examples.html" xlink:title="flap_test_group_examples">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="1062,-318 912,-318 912,-294 1062,-294 1062,-318"/>
 <text text-anchor="middle" x="987" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_group_examples</text>
 </a>
@@ -548,7 +551,7 @@ modules which it uses.
 <!-- program~flap_test_hidden -->
 <g id="module~~flap_utils_m~~UsedByGraph_node16" class="node">
 <title>program~flap_test_hidden</title>
-<g id="a_module~~flap_utils_m~~UsedByGraph_node16"><a xlink:href=".././program/flap_test_hidden.html" xlink:title="flap_test_hidden">
+<g id="a_module~~flap_utils_m~~UsedByGraph_node16"><a xlink:href="../program/flap_test_hidden.html" xlink:title="flap_test_hidden">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="1037,-276 937,-276 937,-252 1037,-252 1037,-276"/>
 <text text-anchor="middle" x="987" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_hidden</text>
 </a>
@@ -563,7 +566,7 @@ modules which it uses.
 <!-- program~flap_test_ignore_unknown_clas -->
 <g id="module~~flap_utils_m~~UsedByGraph_node17" class="node">
 <title>program~flap_test_ignore_unknown_clas</title>
-<g id="a_module~~flap_utils_m~~UsedByGraph_node17"><a xlink:href=".././program/flap_test_ignore_unknown_clas.html" xlink:title="flap_test_ignore_unknown_clas">
+<g id="a_module~~flap_utils_m~~UsedByGraph_node17"><a xlink:href="../program/flap_test_ignore_unknown_clas.html" xlink:title="flap_test_ignore_unknown_clas">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="1075,-234 899,-234 899,-210 1075,-210 1075,-234"/>
 <text text-anchor="middle" x="987" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_ignore_unknown_clas</text>
 </a>
@@ -578,7 +581,7 @@ modules which it uses.
 <!-- program~flap_test_minimal -->
 <g id="module~~flap_utils_m~~UsedByGraph_node18" class="node">
 <title>program~flap_test_minimal</title>
-<g id="a_module~~flap_utils_m~~UsedByGraph_node18"><a xlink:href=".././program/flap_test_minimal.html" xlink:title="flap_test_minimal">
+<g id="a_module~~flap_utils_m~~UsedByGraph_node18"><a xlink:href="../program/flap_test_minimal.html" xlink:title="flap_test_minimal">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="1040,-192 934,-192 934,-168 1040,-168 1040,-192"/>
 <text text-anchor="middle" x="987" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_minimal</text>
 </a>
@@ -593,7 +596,7 @@ modules which it uses.
 <!-- program~flap_test_nargs_insufficient -->
 <g id="module~~flap_utils_m~~UsedByGraph_node19" class="node">
 <title>program~flap_test_nargs_insufficient</title>
-<g id="a_module~~flap_utils_m~~UsedByGraph_node19"><a xlink:href=".././program/flap_test_nargs_insufficient.html" xlink:title="flap_test_nargs_insufficient">
+<g id="a_module~~flap_utils_m~~UsedByGraph_node19"><a xlink:href="../program/flap_test_nargs_insufficient.html" xlink:title="flap_test_nargs_insufficient">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="1065.5,-150 908.5,-150 908.5,-126 1065.5,-126 1065.5,-150"/>
 <text text-anchor="middle" x="987" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_nargs_insufficient</text>
 </a>
@@ -608,7 +611,7 @@ modules which it uses.
 <!-- program~flap_test_nargs_insufficient~2 -->
 <g id="module~~flap_utils_m~~UsedByGraph_node20" class="node">
 <title>program~flap_test_nargs_insufficient~2</title>
-<g id="a_module~~flap_utils_m~~UsedByGraph_node20"><a xlink:href=".././program/flap_test_nargs_insufficient~2.html" xlink:title="flap_test_nargs_insufficient">
+<g id="a_module~~flap_utils_m~~UsedByGraph_node20"><a xlink:href="../program/flap_test_nargs_insufficient~2.html" xlink:title="flap_test_nargs_insufficient">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="1065.5,-108 908.5,-108 908.5,-84 1065.5,-84 1065.5,-108"/>
 <text text-anchor="middle" x="987" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_nargs_insufficient</text>
 </a>
@@ -623,7 +626,7 @@ modules which it uses.
 <!-- program~flap_test_nested -->
 <g id="module~~flap_utils_m~~UsedByGraph_node21" class="node">
 <title>program~flap_test_nested</title>
-<g id="a_module~~flap_utils_m~~UsedByGraph_node21"><a xlink:href=".././program/flap_test_nested.html" xlink:title="flap_test_nested">
+<g id="a_module~~flap_utils_m~~UsedByGraph_node21"><a xlink:href="../program/flap_test_nested.html" xlink:title="flap_test_nested">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="1036.5,-66 937.5,-66 937.5,-42 1036.5,-42 1036.5,-66"/>
 <text text-anchor="middle" x="987" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_nested</text>
 </a>
@@ -638,7 +641,7 @@ modules which it uses.
 <!-- program~flap_test_string -->
 <g id="module~~flap_utils_m~~UsedByGraph_node22" class="node">
 <title>program~flap_test_string</title>
-<g id="a_module~~flap_utils_m~~UsedByGraph_node22"><a xlink:href=".././program/flap_test_string.html" xlink:title="flap_test_string">
+<g id="a_module~~flap_utils_m~~UsedByGraph_node22"><a xlink:href="../program/flap_test_string.html" xlink:title="flap_test_string">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="1033.5,-24 940.5,-24 940.5,0 1033.5,0 1033.5,-24"/>
 <text text-anchor="middle" x="987" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_string</text>
 </a>
@@ -656,17 +659,17 @@ modules which it uses.
                   var panmoduleflap_utils_mUsedByGraph = svgPanZoom('#moduleflap_utils_mUsedByGraph',
                     {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
                   );
-                </script>        <div><a type="button" class="graph-help" data-toggle="modal" href="#UsedByGraph-help-text">Help</a></div>
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#UsedByGraph-help-text">Help</a>
+          </div>
           <div class="modal fade" id="UsedByGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                   <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-              <div class="modal-body">
+                <div class="modal-body">
 <p>Nodes of different colours represent the following: </p>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -769,7 +772,7 @@ modules which it uses.
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-string~3"></span>
+              <span class="anchor" id="variable-string"></span>
               character(len=*),
             </td>
 <td>intent(in)</td>
@@ -818,7 +821,7 @@ modules which it uses.
         <section>
           <h2>Functions</h2>
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-count_substring"></span><h3>private elemental function <a href='../proc/count_substring.html'>count_substring</a>(string, substring) result(No)  
+    <div class="card-header codesum"><span class="anchor" id="proc-count_substring"></span> <h3>private elemental function <a href='../proc/count_substring.html'>count_substring</a>(string, substring) result(No)  
 </h3></div>
     <div class="card-body">
           
@@ -837,7 +840,7 @@ modules which it uses.
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-string~3"></span>
+              <span class="anchor" id="variable-string"></span>
               character(len=*),
             </td>
 <td>intent(in)</td>
@@ -878,7 +881,7 @@ modules which it uses.
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-replace"></span><h3>public pure function <a href='../proc/replace.html'>replace</a>(string, substring, restring) result(newstring)  
+    <div class="card-header codesum"><span class="anchor" id="proc-replace"></span> <h3>public pure function <a href='../proc/replace.html'>replace</a>(string, substring, restring) result(newstring)  
 </h3></div>
     <div class="card-body">
           
@@ -897,7 +900,7 @@ modules which it uses.
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-string~4"></span>
+              <span class="anchor" id="variable-string~2"></span>
               character(len=*),
             </td>
 <td>intent(in)</td>
@@ -953,7 +956,7 @@ modules which it uses.
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-replace_all"></span><h3>public pure function <a href='../proc/replace_all.html'>replace_all</a>(string, substring, restring) result(newstring)  
+    <div class="card-header codesum"><span class="anchor" id="proc-replace_all"></span> <h3>public pure function <a href='../proc/replace_all.html'>replace_all</a>(string, substring, restring) result(newstring)  
 </h3></div>
     <div class="card-body">
           
@@ -972,7 +975,7 @@ modules which it uses.
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-string~5"></span>
+              <span class="anchor" id="variable-string~3"></span>
               character(len=*),
             </td>
 <td>intent(in)</td>
@@ -1028,7 +1031,7 @@ modules which it uses.
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-unique"></span><h3>public elemental function <a href='../proc/unique.html'>unique</a>(string, substring) result(uniq)  
+    <div class="card-header codesum"><span class="anchor" id="proc-unique"></span> <h3>public elemental function <a href='../proc/unique.html'>unique</a>(string, substring) result(uniq)  
 </h3></div>
     <div class="card-body">
           
@@ -1047,7 +1050,7 @@ modules which it uses.
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-string~6"></span>
+              <span class="anchor" id="variable-string~4"></span>
               character(len=*),
             </td>
 <td>intent(in)</td>
@@ -1088,7 +1091,7 @@ modules which it uses.
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-upper_case"></span><h3>public elemental function <a href='../proc/upper_case.html'>upper_case</a>(string)  
+    <div class="card-header codesum"><span class="anchor" id="proc-upper_case"></span> <h3>public elemental function <a href='../proc/upper_case.html'>upper_case</a>(string)  
 </h3></div>
     <div class="card-body">
           
@@ -1107,7 +1110,7 @@ modules which it uses.
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-string~7"></span>
+              <span class="anchor" id="variable-string~5"></span>
               character(len=*),
             </td>
 <td>intent(in)</td>
@@ -1133,7 +1136,7 @@ modules which it uses.
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-wstrip"></span><h3>public pure function <a href='../proc/wstrip.html'>wstrip</a>(string) result(newstring)  
+    <div class="card-header codesum"><span class="anchor" id="proc-wstrip"></span> <h3>public pure function <a href='../proc/wstrip.html'>wstrip</a>(string) result(newstring)  
 </h3></div>
     <div class="card-body">
           
@@ -1152,7 +1155,7 @@ modules which it uses.
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-string~8"></span>
+              <span class="anchor" id="variable-string~6"></span>
               character(len=*),
             </td>
 <td>intent(in)</td>
@@ -1183,7 +1186,7 @@ modules which it uses.
         <section>
           <h2>Subroutines</h2>
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-tokenize"></span><h3>public pure subroutine <a href='../proc/tokenize.html'>tokenize</a>(strin, delimiter, toks, Nt)  
+    <div class="card-header codesum"><span class="anchor" id="proc-tokenize"></span> <h3>public pure subroutine <a href='../proc/tokenize.html'>tokenize</a>(strin, delimiter, toks, Nt)  
 </h3></div>
     <div class="card-body">
           
@@ -1232,7 +1235,7 @@ modules which it uses.
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-toks~2"></span>
+              <span class="anchor" id="variable-toks"></span>
               character(len=len),
             </td>
 <td>intent(out),</td>
@@ -1280,7 +1283,7 @@ modules which it uses.
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
+          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2024 
 </p>
           </div>
           <div class="col">

@@ -1,3 +1,5 @@
+<!-- -*- mode: jinja2 -*- -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -17,7 +19,8 @@
     <link href="../css/local.css" rel="stylesheet">
       <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
   <body>
@@ -171,7 +174,7 @@
 <!-- proc~count_substring -->
 <g id="interface~~count~~CallsGraph_node2" class="node">
 <title>proc~count_substring</title>
-<g id="a_interface~~count~~CallsGraph_node2"><a xlink:href=".././proc/count_substring.html" xlink:title="flap_utils_m::count_substring">
+<g id="a_interface~~count~~CallsGraph_node2"><a xlink:href="../proc/count_substring.html" xlink:title="flap_utils_m::count_substring">
 <polygon fill="#d94e8f" stroke="#d94e8f" points="316,-24 149,-24 149,0 316,0 316,-24"/>
 <text text-anchor="middle" x="232.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_utils_m::count_substring</text>
 </a>
@@ -185,17 +188,17 @@
 </g>
 </g>
 </svg>
-</div>        <div><a type="button" class="graph-help" data-toggle="modal" href="#CallsGraph-help-text">Help</a></div>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#CallsGraph-help-text">Help</a>
+          </div>
           <div class="modal fade" id="CallsGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                   <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-              <div class="modal-body">
+                <div class="modal-body">
 <p>Nodes of different colours represent the following: </p>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -269,7 +272,7 @@ implementation in a submodule of an interface in a parent module.
 
         <h2>Module Procedures</h2>
             <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-count_substring"></span><h3>private elemental function <a href='../proc/count_substring.html'>count_substring</a>(string, substring) result(No)  
+    <div class="card-header codesum"><span class="anchor" id="proc-count_substring"></span> <h3>private elemental function <a href='../proc/count_substring.html'>count_substring</a>(string, substring) result(No)  
 </h3></div>
     <div class="card-body">
           
@@ -288,7 +291,7 @@ implementation in a submodule of an interface in a parent module.
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-string~3"></span>
+              <span class="anchor" id="variable-string"></span>
               character(len=*),
             </td>
 <td>intent(in)</td>
@@ -335,7 +338,7 @@ implementation in a submodule of an interface in a parent module.
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
+          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2024 
 </p>
           </div>
           <div class="col">

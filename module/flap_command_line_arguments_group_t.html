@@ -1,3 +1,5 @@
+<!-- -*- mode: jinja2 -*- -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -17,7 +19,8 @@
     <link href="../css/local.css" rel="stylesheet">
       <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
   <body>
@@ -74,7 +77,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title="12.2% of total for modules and submodules.">491 statements</a>
+                 title="12.4% of total for modules and submodules.">495 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -115,8 +118,9 @@
         <div class="list-group list-group-flush">
             <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#variable-status_print_v">STATUS_PRINT_V</a>
             <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#variable-status_print_h">STATUS_PRINT_H</a>
+            <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#variable-status_print_m">STATUS_PRINT_M</a>
             <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#variable-error_consistency">ERROR_CONSISTENCY</a>
-            <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#variable-error_m_exclude~2">ERROR_M_EXCLUDE</a>
+            <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#variable-error_m_exclude">ERROR_M_EXCLUDE</a>
         </div>
       </div>
     </div>
@@ -150,8 +154,8 @@
         <div class="list-group list-group-flush">
             <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#proc-is_passed">is_passed</a>
             <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#proc-is_defined">is_defined</a>
-            <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#proc-usage~2">usage</a>
-            <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#proc-signature~2">signature</a>
+            <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#proc-usage">usage</a>
+            <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#proc-signature">signature</a>
         </div>
       </div>
     </div>
@@ -163,17 +167,17 @@
       </a>
       <div id="subs-0" class="collapse">
         <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#proc-free~2">free</a>
-            <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#proc-check~2">check</a>
-            <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#proc-is_required_passed~2">is_required_passed</a>
-            <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#proc-raise_error_m_exclude~2">raise_error_m_exclude</a>
+            <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#proc-free">free</a>
+            <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#proc-check">check</a>
+            <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#proc-is_required_passed">is_required_passed</a>
+            <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#proc-raise_error_m_exclude">raise_error_m_exclude</a>
             <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#proc-add">add</a>
             <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#proc-parse">parse</a>
-            <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#proc-errored~2">errored</a>
+            <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#proc-errored">errored</a>
             <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#proc-check_m_exclusive">check_m_exclusive</a>
-            <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#proc-sanitize_defaults~2">sanitize_defaults</a>
+            <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#proc-sanitize_defaults">sanitize_defaults</a>
             <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#proc-clasg_assign_clasg">clasg_assign_clasg</a>
-            <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#proc-finalize~2">finalize</a>
+            <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html#proc-finalize">finalize</a>
         </div>
       </div>
     </div>
@@ -199,10 +203,10 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
+                  <li class="list-inline-item"><a href='flap_command_line_argument_t.html'>flap_command_line_argument_t</a></li>
+                  <li class="list-inline-item"><a href='flap_object_t.html'>flap_object_t</a></li>
+                  <li class="list-inline-item"><a href='face.html'>face</a></li>
                   <li class="list-inline-item">penf</li>
-                  <li class="list-inline-item"><a href='../module/face.html'>face</a></li>
-                  <li class="list-inline-item"><a href='../module/flap_command_line_argument_t.html'>flap_command_line_argument_t</a></li>
-                  <li class="list-inline-item"><a href='../module/flap_object_t.html'>flap_object_t</a></li>
               </ul>
             </li>
             <li class="list-group-item">
@@ -226,7 +230,7 @@
 <!-- module~face -->
 <g id="module~~flap_command_line_arguments_group_t~~UsesGraph_node2" class="node">
 <title>module~face</title>
-<g id="a_module~~flap_command_line_arguments_group_t~~UsesGraph_node2"><a xlink:href=".././module/face.html" xlink:title="face">
+<g id="a_module~~flap_command_line_arguments_group_t~~UsesGraph_node2"><a xlink:href="../module/face.html" xlink:title="face">
 <polygon fill="#337ab7" stroke="#337ab7" points="197,-169.69 143,-169.69 143,-145.69 197,-145.69 197,-169.69"/>
 <text text-anchor="middle" x="170" y="-155.29" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face</text>
 </a>
@@ -241,7 +245,7 @@
 <!-- module~flap_command_line_argument_t -->
 <g id="module~~flap_command_line_arguments_group_t~~UsesGraph_node3" class="node">
 <title>module~flap_command_line_argument_t</title>
-<g id="a_module~~flap_command_line_arguments_group_t~~UsesGraph_node3"><a xlink:href=".././module/flap_command_line_argument_t.html" xlink:title="flap_command_line_argument_t">
+<g id="a_module~~flap_command_line_arguments_group_t~~UsesGraph_node3"><a xlink:href="../module/flap_command_line_argument_t.html" xlink:title="flap_command_line_argument_t">
 <polygon fill="#337ab7" stroke="#337ab7" points="430,-87.69 246,-87.69 246,-63.69 430,-63.69 430,-87.69"/>
 <text text-anchor="middle" x="338" y="-73.29" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t</text>
 </a>
@@ -256,7 +260,7 @@
 <!-- module~flap_object_t -->
 <g id="module~~flap_command_line_arguments_group_t~~UsesGraph_node4" class="node">
 <title>module~flap_object_t</title>
-<g id="a_module~~flap_command_line_arguments_group_t~~UsesGraph_node4"><a xlink:href=".././module/flap_object_t.html" xlink:title="flap_object_t">
+<g id="a_module~~flap_command_line_arguments_group_t~~UsesGraph_node4"><a xlink:href="../module/flap_object_t.html" xlink:title="flap_object_t">
 <polygon fill="#337ab7" stroke="#337ab7" points="210,-127.69 130,-127.69 130,-103.69 210,-103.69 210,-127.69"/>
 <text text-anchor="middle" x="170" y="-113.29" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_object_t</text>
 </a>
@@ -314,7 +318,7 @@
 <!-- module~flap_utils_m -->
 <g id="module~~flap_command_line_arguments_group_t~~UsesGraph_node7" class="node">
 <title>module~flap_utils_m</title>
-<g id="a_module~~flap_command_line_arguments_group_t~~UsesGraph_node7"><a xlink:href=".././module/flap_utils_m.html" xlink:title="flap_utils_m">
+<g id="a_module~~flap_command_line_arguments_group_t~~UsesGraph_node7"><a xlink:href="../module/flap_utils_m.html" xlink:title="flap_utils_m">
 <polygon fill="#337ab7" stroke="#337ab7" points="208,-47.69 132,-47.69 132,-23.69 208,-23.69 208,-47.69"/>
 <text text-anchor="middle" x="170" y="-33.29" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_utils_m</text>
 </a>
@@ -350,17 +354,17 @@
                   var panmoduleflap_command_line_arguments_group_tUsesGraph = svgPanZoom('#moduleflap_command_line_arguments_group_tUsesGraph',
                     {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
                   );
-                </script>        <div><a type="button" class="graph-help" data-toggle="modal" href="#UsesGraph-help-text">Help</a></div>
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#UsesGraph-help-text">Help</a>
+          </div>
           <div class="modal fade" id="UsesGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                   <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-              <div class="modal-body">
+                <div class="modal-body">
 <p>Nodes of different colours represent the following: </p>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -450,7 +454,7 @@ modules which it uses.
 <!-- module~flap -->
 <g id="module~~flap_command_line_arguments_group_t~~UsedByGraph_node2" class="node">
 <title>module~flap</title>
-<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node2"><a xlink:href=".././module/flap.html" xlink:title="flap">
+<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node2"><a xlink:href="../module/flap.html" xlink:title="flap">
 <polygon fill="#337ab7" stroke="#337ab7" points="530,-360 476,-360 476,-336 530,-336 530,-360"/>
 <text text-anchor="middle" x="503" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap</text>
 </a>
@@ -465,7 +469,7 @@ modules which it uses.
 <!-- module~flap_command_line_interface_t -->
 <g id="module~~flap_command_line_arguments_group_t~~UsedByGraph_node3" class="node">
 <title>module~flap_command_line_interface_t</title>
-<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node3"><a xlink:href=".././module/flap_command_line_interface_t.html" xlink:title="flap_command_line_interface_t">
+<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node3"><a xlink:href="../module/flap_command_line_interface_t.html" xlink:title="flap_command_line_interface_t">
 <polygon fill="#337ab7" stroke="#337ab7" points="440,-340 261,-340 261,-316 440,-316 440,-340"/>
 <text text-anchor="middle" x="350.5" y="-325.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t</text>
 </a>
@@ -486,7 +490,7 @@ modules which it uses.
 <!-- program~flap_save_bash_completion -->
 <g id="module~~flap_command_line_arguments_group_t~~UsedByGraph_node4" class="node">
 <title>program~flap_save_bash_completion</title>
-<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node4"><a xlink:href=".././program/flap_save_bash_completion.html" xlink:title="flap_save_bash_completion">
+<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node4"><a xlink:href="../program/flap_save_bash_completion.html" xlink:title="flap_save_bash_completion">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="734.5,-696 575.5,-696 575.5,-672 734.5,-672 734.5,-696"/>
 <text text-anchor="middle" x="655" y="-681.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_save_bash_completion</text>
 </a>
@@ -501,7 +505,7 @@ modules which it uses.
 <!-- program~flap_save_man_page -->
 <g id="module~~flap_command_line_arguments_group_t~~UsedByGraph_node5" class="node">
 <title>program~flap_save_man_page</title>
-<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node5"><a xlink:href=".././program/flap_save_man_page.html" xlink:title="flap_save_man_page">
+<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node5"><a xlink:href="../program/flap_save_man_page.html" xlink:title="flap_save_man_page">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="717,-654 593,-654 593,-630 717,-630 717,-654"/>
 <text text-anchor="middle" x="655" y="-639.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_save_man_page</text>
 </a>
@@ -516,7 +520,7 @@ modules which it uses.
 <!-- program~flap_save_usage_to_markdown -->
 <g id="module~~flap_command_line_arguments_group_t~~UsedByGraph_node6" class="node">
 <title>program~flap_save_usage_to_markdown</title>
-<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node6"><a xlink:href=".././program/flap_save_usage_to_markdown.html" xlink:title="flap_save_usage_to_markdown">
+<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node6"><a xlink:href="../program/flap_save_usage_to_markdown.html" xlink:title="flap_save_usage_to_markdown">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="744,-612 566,-612 566,-588 744,-588 744,-612"/>
 <text text-anchor="middle" x="655" y="-597.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_save_usage_to_markdown</text>
 </a>
@@ -531,7 +535,7 @@ modules which it uses.
 <!-- program~flap_test_action_store -->
 <g id="module~~flap_command_line_arguments_group_t~~UsedByGraph_node7" class="node">
 <title>program~flap_test_action_store</title>
-<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node7"><a xlink:href=".././program/flap_test_action_store.html" xlink:title="flap_test_action_store">
+<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node7"><a xlink:href="../program/flap_test_action_store.html" xlink:title="flap_test_action_store">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="718.5,-570 591.5,-570 591.5,-546 718.5,-546 718.5,-570"/>
 <text text-anchor="middle" x="655" y="-555.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_action_store</text>
 </a>
@@ -546,7 +550,7 @@ modules which it uses.
 <!-- program~flap_test_ansi_color_style -->
 <g id="module~~flap_command_line_arguments_group_t~~UsedByGraph_node8" class="node">
 <title>program~flap_test_ansi_color_style</title>
-<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node8"><a xlink:href=".././program/flap_test_ansi_color_style.html" xlink:title="flap_test_ansi_color_style">
+<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node8"><a xlink:href="../program/flap_test_ansi_color_style.html" xlink:title="flap_test_ansi_color_style">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="728.5,-528 581.5,-528 581.5,-504 728.5,-504 728.5,-528"/>
 <text text-anchor="middle" x="655" y="-513.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_ansi_color_style</text>
 </a>
@@ -561,7 +565,7 @@ modules which it uses.
 <!-- program~flap_test_basic -->
 <g id="module~~flap_command_line_arguments_group_t~~UsedByGraph_node9" class="node">
 <title>program~flap_test_basic</title>
-<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node9"><a xlink:href=".././program/flap_test_basic.html" xlink:title="flap_test_basic">
+<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node9"><a xlink:href="../program/flap_test_basic.html" xlink:title="flap_test_basic">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="700.5,-486 609.5,-486 609.5,-462 700.5,-462 700.5,-486"/>
 <text text-anchor="middle" x="655" y="-471.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_basic</text>
 </a>
@@ -576,7 +580,7 @@ modules which it uses.
 <!-- program~flap_test_choices_logical -->
 <g id="module~~flap_command_line_arguments_group_t~~UsedByGraph_node10" class="node">
 <title>program~flap_test_choices_logical</title>
-<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node10"><a xlink:href=".././program/flap_test_choices_logical.html" xlink:title="flap_test_choices_logical">
+<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node10"><a xlink:href="../program/flap_test_choices_logical.html" xlink:title="flap_test_choices_logical">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="727,-444 583,-444 583,-420 727,-420 727,-444"/>
 <text text-anchor="middle" x="655" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_choices_logical</text>
 </a>
@@ -591,7 +595,7 @@ modules which it uses.
 <!-- program~flap_test_duplicated_clas -->
 <g id="module~~flap_command_line_arguments_group_t~~UsedByGraph_node11" class="node">
 <title>program~flap_test_duplicated_clas</title>
-<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node11"><a xlink:href=".././program/flap_test_duplicated_clas.html" xlink:title="flap_test_duplicated_clas">
+<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node11"><a xlink:href="../program/flap_test_duplicated_clas.html" xlink:title="flap_test_duplicated_clas">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="727.5,-402 582.5,-402 582.5,-378 727.5,-378 727.5,-402"/>
 <text text-anchor="middle" x="655" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_duplicated_clas</text>
 </a>
@@ -606,7 +610,7 @@ modules which it uses.
 <!-- program~flap_test_group -->
 <g id="module~~flap_command_line_arguments_group_t~~UsedByGraph_node12" class="node">
 <title>program~flap_test_group</title>
-<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node12"><a xlink:href=".././program/flap_test_group.html" xlink:title="flap_test_group">
+<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node12"><a xlink:href="../program/flap_test_group.html" xlink:title="flap_test_group">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="702,-360 608,-360 608,-336 702,-336 702,-360"/>
 <text text-anchor="middle" x="655" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_group</text>
 </a>
@@ -621,7 +625,7 @@ modules which it uses.
 <!-- program~flap_test_group_examples -->
 <g id="module~~flap_command_line_arguments_group_t~~UsedByGraph_node13" class="node">
 <title>program~flap_test_group_examples</title>
-<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node13"><a xlink:href=".././program/flap_test_group_examples.html" xlink:title="flap_test_group_examples">
+<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node13"><a xlink:href="../program/flap_test_group_examples.html" xlink:title="flap_test_group_examples">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="730,-318 580,-318 580,-294 730,-294 730,-318"/>
 <text text-anchor="middle" x="655" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_group_examples</text>
 </a>
@@ -636,7 +640,7 @@ modules which it uses.
 <!-- program~flap_test_hidden -->
 <g id="module~~flap_command_line_arguments_group_t~~UsedByGraph_node14" class="node">
 <title>program~flap_test_hidden</title>
-<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node14"><a xlink:href=".././program/flap_test_hidden.html" xlink:title="flap_test_hidden">
+<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node14"><a xlink:href="../program/flap_test_hidden.html" xlink:title="flap_test_hidden">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="705,-276 605,-276 605,-252 705,-252 705,-276"/>
 <text text-anchor="middle" x="655" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_hidden</text>
 </a>
@@ -651,7 +655,7 @@ modules which it uses.
 <!-- program~flap_test_ignore_unknown_clas -->
 <g id="module~~flap_command_line_arguments_group_t~~UsedByGraph_node15" class="node">
 <title>program~flap_test_ignore_unknown_clas</title>
-<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node15"><a xlink:href=".././program/flap_test_ignore_unknown_clas.html" xlink:title="flap_test_ignore_unknown_clas">
+<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node15"><a xlink:href="../program/flap_test_ignore_unknown_clas.html" xlink:title="flap_test_ignore_unknown_clas">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="743,-234 567,-234 567,-210 743,-210 743,-234"/>
 <text text-anchor="middle" x="655" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_ignore_unknown_clas</text>
 </a>
@@ -666,7 +670,7 @@ modules which it uses.
 <!-- program~flap_test_minimal -->
 <g id="module~~flap_command_line_arguments_group_t~~UsedByGraph_node16" class="node">
 <title>program~flap_test_minimal</title>
-<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node16"><a xlink:href=".././program/flap_test_minimal.html" xlink:title="flap_test_minimal">
+<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node16"><a xlink:href="../program/flap_test_minimal.html" xlink:title="flap_test_minimal">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="708,-192 602,-192 602,-168 708,-168 708,-192"/>
 <text text-anchor="middle" x="655" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_minimal</text>
 </a>
@@ -681,7 +685,7 @@ modules which it uses.
 <!-- program~flap_test_nargs_insufficient -->
 <g id="module~~flap_command_line_arguments_group_t~~UsedByGraph_node17" class="node">
 <title>program~flap_test_nargs_insufficient</title>
-<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node17"><a xlink:href=".././program/flap_test_nargs_insufficient.html" xlink:title="flap_test_nargs_insufficient">
+<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node17"><a xlink:href="../program/flap_test_nargs_insufficient.html" xlink:title="flap_test_nargs_insufficient">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="733.5,-150 576.5,-150 576.5,-126 733.5,-126 733.5,-150"/>
 <text text-anchor="middle" x="655" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_nargs_insufficient</text>
 </a>
@@ -696,7 +700,7 @@ modules which it uses.
 <!-- program~flap_test_nargs_insufficient~2 -->
 <g id="module~~flap_command_line_arguments_group_t~~UsedByGraph_node18" class="node">
 <title>program~flap_test_nargs_insufficient~2</title>
-<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node18"><a xlink:href=".././program/flap_test_nargs_insufficient~2.html" xlink:title="flap_test_nargs_insufficient">
+<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node18"><a xlink:href="../program/flap_test_nargs_insufficient~2.html" xlink:title="flap_test_nargs_insufficient">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="733.5,-108 576.5,-108 576.5,-84 733.5,-84 733.5,-108"/>
 <text text-anchor="middle" x="655" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_nargs_insufficient</text>
 </a>
@@ -711,7 +715,7 @@ modules which it uses.
 <!-- program~flap_test_nested -->
 <g id="module~~flap_command_line_arguments_group_t~~UsedByGraph_node19" class="node">
 <title>program~flap_test_nested</title>
-<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node19"><a xlink:href=".././program/flap_test_nested.html" xlink:title="flap_test_nested">
+<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node19"><a xlink:href="../program/flap_test_nested.html" xlink:title="flap_test_nested">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="704.5,-66 605.5,-66 605.5,-42 704.5,-42 704.5,-66"/>
 <text text-anchor="middle" x="655" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_nested</text>
 </a>
@@ -726,7 +730,7 @@ modules which it uses.
 <!-- program~flap_test_string -->
 <g id="module~~flap_command_line_arguments_group_t~~UsedByGraph_node20" class="node">
 <title>program~flap_test_string</title>
-<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node20"><a xlink:href=".././program/flap_test_string.html" xlink:title="flap_test_string">
+<g id="a_module~~flap_command_line_arguments_group_t~~UsedByGraph_node20"><a xlink:href="../program/flap_test_string.html" xlink:title="flap_test_string">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="701.5,-24 608.5,-24 608.5,0 701.5,0 701.5,-24"/>
 <text text-anchor="middle" x="655" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_string</text>
 </a>
@@ -744,17 +748,17 @@ modules which it uses.
                   var panmoduleflap_command_line_arguments_group_tUsedByGraph = svgPanZoom('#moduleflap_command_line_arguments_group_tUsedByGraph',
                     {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
                   );
-                </script>        <div><a type="button" class="graph-help" data-toggle="modal" href="#UsedByGraph-help-text">Help</a></div>
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#UsedByGraph-help-text">Help</a>
+          </div>
           <div class="modal fade" id="UsedByGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                   <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-              <div class="modal-body">
+                <div class="modal-body">
 <p>Nodes of different colours represent the following: </p>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -870,6 +874,23 @@ parameter
         </tr>
         <tr>
             <td>
+              <span class="anchor" id="variable-status_print_m"></span>
+              integer(kind=I4P),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>STATUS_PRINT_M</strong></td>
+<td> =</td>
+                <td>-3</td>
+            <td>
+                <p>Print help status to Markdown file.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
               <span class="anchor" id="variable-error_consistency"></span>
               integer(kind=I4P),
             </td>
@@ -887,7 +908,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-error_m_exclude~2"></span>
+              <span class="anchor" id="variable-error_m_exclude"></span>
               integer(kind=I4P),
             </td>
               <td>private,</td>
@@ -938,7 +959,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-progname~3"></span>
+              <span class="anchor" id="variable-progname"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -955,7 +976,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-version~2"></span>
+              <span class="anchor" id="variable-version"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -972,7 +993,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-help~4"></span>
+              <span class="anchor" id="variable-help"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -989,7 +1010,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-help_color~2"></span>
+              <span class="anchor" id="variable-help_color"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -1006,7 +1027,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-help_style~2"></span>
+              <span class="anchor" id="variable-help_style"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -1023,7 +1044,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-help_markdown~2"></span>
+              <span class="anchor" id="variable-help_markdown"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -1040,7 +1061,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-description~3"></span>
+              <span class="anchor" id="variable-description"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -1057,7 +1078,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-license~2"></span>
+              <span class="anchor" id="variable-license"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -1074,7 +1095,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-authors~2"></span>
+              <span class="anchor" id="variable-authors"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -1091,7 +1112,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-epilog~2"></span>
+              <span class="anchor" id="variable-epilog"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -1142,7 +1163,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-error_color~2"></span>
+              <span class="anchor" id="variable-error_color"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -1159,7 +1180,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-error_style~2"></span>
+              <span class="anchor" id="variable-error_style"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -1176,7 +1197,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-examples~4"></span>
+              <span class="anchor" id="variable-examples"></span>
               character(len=512),
             </td>
               <td>public,</td>
@@ -1193,7 +1214,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-error~35"></span>
+              <span class="anchor" id="variable-error~4"></span>
               integer(kind=I4P),
             </td>
               <td>public</td>
@@ -1210,7 +1231,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-usage_lun~2"></span>
+              <span class="anchor" id="variable-usage_lun"></span>
               integer(kind=I4P),
             </td>
               <td>public</td>
@@ -1227,7 +1248,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-version_lun~2"></span>
+              <span class="anchor" id="variable-version_lun"></span>
               integer(kind=I4P),
             </td>
               <td>public</td>
@@ -1244,7 +1265,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-error_lun~2"></span>
+              <span class="anchor" id="variable-error_lun"></span>
               integer(kind=I4P),
             </td>
               <td>public</td>
@@ -1382,102 +1403,102 @@ parameter
               <tr>
                 <td>  procedure, public, pass(self) ::
   <strong><a href='../type/object.html#boundprocedure-free_object'>free_object</a></strong></td>
-                <td><p>Free dynamic memory.</p></td>
+                <td>../../../../<p>Free dynamic memory.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public, pass(self) ::
   <strong><a href='../type/object.html#boundprocedure-print_version'>print_version</a></strong></td>
-                <td><p>Print version.</p></td>
+                <td>../../../../<p>Print version.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public, pass(self) ::
   <strong><a href='../type/object.html#boundprocedure-print_error_message'>print_error_message</a></strong></td>
-                <td><p>Print meaningful error message.</p></td>
+                <td>../../../../<p>Print meaningful error message.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public, pass(self) ::
   <strong><a href='../type/object.html#boundprocedure-set_examples'>set_examples</a></strong></td>
-                <td><p>Set examples of correct usage.</p></td>
+                <td>../../../../<p>Set examples of correct usage.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public, pass(lhs ) ::
   <strong><a href='../type/object.html#boundprocedure-assign_object'>assign_object</a></strong></td>
-                <td><p>Assignment overloading.</p></td>
+                <td>../../../../<p>Assignment overloading.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='../type/command_line_arguments_group.html#boundprocedure-free~2'>free</a></strong></td>
-                <td><p>Free dynamic memory.</p></td>
+  <strong><a href='../type/command_line_arguments_group.html#boundprocedure-free'>free</a></strong></td>
+                <td>../../../../<p>Free dynamic memory.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='../type/command_line_arguments_group.html#boundprocedure-check~2'>check</a></strong></td>
-                <td><p>Check data consistency.</p></td>
+  <strong><a href='../type/command_line_arguments_group.html#boundprocedure-check'>check</a></strong></td>
+                <td>../../../../<p>Check data consistency.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='../type/command_line_arguments_group.html#boundprocedure-is_required_passed~2'>is_required_passed</a></strong></td>
-                <td><p>Check if required CLAs are passed.</p></td>
+  <strong><a href='../type/command_line_arguments_group.html#boundprocedure-is_required_passed'>is_required_passed</a></strong></td>
+                <td>../../../../<p>Check if required CLAs are passed.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='../type/command_line_arguments_group.html#boundprocedure-is_passed~2'>is_passed</a></strong></td>
-                <td><p>Check if a CLA has been passed.</p></td>
+  <strong><a href='../type/command_line_arguments_group.html#boundprocedure-is_passed'>is_passed</a></strong></td>
+                <td>../../../../<p>Check if a CLA has been passed.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='../type/command_line_arguments_group.html#boundprocedure-is_defined'>is_defined</a></strong></td>
-                <td><p>Check if a CLA has been defined.</p></td>
+                <td>../../../../<p>Check if a CLA has been defined.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='../type/command_line_arguments_group.html#boundprocedure-raise_error_m_exclude~2'>raise_error_m_exclude</a></strong></td>
-                <td><p>Raise error mutually exclusive CLAs passed.</p></td>
+  <strong><a href='../type/command_line_arguments_group.html#boundprocedure-raise_error_m_exclude'>raise_error_m_exclude</a></strong></td>
+                <td>../../../../<p>Raise error mutually exclusive CLAs passed.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='../type/command_line_arguments_group.html#boundprocedure-add'>add</a></strong></td>
-                <td><p>Add CLA to CLAsG.</p></td>
+                <td>../../../../<p>Add CLA to CLAsG.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='../type/command_line_arguments_group.html#boundprocedure-parse'>parse</a></strong></td>
-                <td><p>Parse CLAsG arguments.</p></td>
+                <td>../../../../<p>Parse CLAsG arguments.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='../type/command_line_arguments_group.html#boundprocedure-usage~3'>usage</a></strong></td>
-                <td><p>Get correct CLAsG usage.</p></td>
+  <strong><a href='../type/command_line_arguments_group.html#boundprocedure-usage'>usage</a></strong></td>
+                <td>../../../../<p>Get correct CLAsG usage.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='../type/command_line_arguments_group.html#boundprocedure-signature~3'>signature</a></strong></td>
-                <td><p>Get CLAsG signature.</p></td>
+  <strong><a href='../type/command_line_arguments_group.html#boundprocedure-signature'>signature</a></strong></td>
+                <td>../../../../<p>Get CLAsG signature.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='../type/command_line_arguments_group.html#boundprocedure-sanitize_defaults~2'>sanitize_defaults</a></strong></td>
-                <td><p>Sanitize default values.</p></td>
+  <strong><a href='../type/command_line_arguments_group.html#boundprocedure-sanitize_defaults'>sanitize_defaults</a></strong></td>
+                <td>../../../../<p>Sanitize default values.</p></td>
               </tr>
               <tr>
                 <td>  procedure, private ::
-  <strong><a href='../type/command_line_arguments_group.html#boundprocedure-errored~2'>errored</a></strong></td>
-                <td><p>Trig error occurrence and print meaningful message.</p></td>
+  <strong><a href='../type/command_line_arguments_group.html#boundprocedure-errored'>errored</a></strong></td>
+                <td>../../../../<p>Trig error occurrence and print meaningful message.</p></td>
               </tr>
               <tr>
                 <td>  procedure, private ::
   <strong><a href='../type/command_line_arguments_group.html#boundprocedure-check_m_exclusive'>check_m_exclusive</a></strong></td>
-                <td><p>Check if two mutually exclusive CLAs have been passed.</p></td>
+                <td>../../../../<p>Check if two mutually exclusive CLAs have been passed.</p></td>
               </tr>
               <tr>
                 <td>  procedure, private ::
   <strong><a href='../type/command_line_arguments_group.html#boundprocedure-clasg_assign_clasg'>clasg_assign_clasg</a></strong></td>
-                <td><p>Assignment operator.</p></td>
+                <td>../../../../<p>Assignment operator.</p></td>
               </tr>
               <tr>
                 <td>  generic, private ::
-  <strong><a href='../type/command_line_arguments_group.html#boundprocedure-assignment%28%3D%29~2'>assignment(=)</a></strong> => <a href='../type/command_line_arguments_group.html#boundprocedure-clasg_assign_clasg'>clasg_assign_clasg</a></td>
-                <td><p>Assignment operator overloading.</p></td>
+  <strong><a href='../type/command_line_arguments_group.html#boundprocedure-assignment%28%3D%29'>assignment(=)</a></strong> => <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/type/command_line_arguments_group.html#boundprocedure-clasg_assign_clasg'>clasg_assign_clasg</a></td>
+                <td>../../../../<p>Assignment operator overloading.</p></td>
               </tr>
           </tbody>
         </table>
@@ -1490,7 +1511,7 @@ parameter
         <section>
           <h2>Functions</h2>
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-is_passed"></span><h3>private pure function <a href='../proc/is_passed.html'>is_passed</a>(self, switch, position)  
+    <div class="card-header codesum"><span class="anchor" id="proc-is_passed"></span> <h3>private pure function <a href='../proc/is_passed.html'>is_passed</a>(self, switch, position)  
 </h3></div>
     <div class="card-body">
           
@@ -1509,7 +1530,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~40"></span>
+              <span class="anchor" id="variable-self~8"></span>
               class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(in)</td>
@@ -1524,7 +1545,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-switch~5"></span>
+              <span class="anchor" id="variable-switch"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -1539,7 +1560,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-position~2"></span>
+              <span class="anchor" id="variable-position"></span>
               integer(kind=I4P),
             </td>
 <td>intent(in),</td>
@@ -1565,7 +1586,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-is_defined"></span><h3>private  function <a href='../proc/is_defined.html'>is_defined</a>(self, switch, pos)  
+    <div class="card-header codesum"><span class="anchor" id="proc-is_defined"></span> <h3>private  function <a href='../proc/is_defined.html'>is_defined</a>(self, switch, pos)  
 </h3></div>
     <div class="card-body">
           
@@ -1584,7 +1605,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~41"></span>
+              <span class="anchor" id="variable-self~9"></span>
               class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(in)</td>
@@ -1599,7 +1620,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-switch~6"></span>
+              <span class="anchor" id="variable-switch~2"></span>
               character(len=*),
             </td>
 <td>intent(in)</td>
@@ -1640,7 +1661,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-usage~2"></span><h3>private  function <a href='../proc/usage~2.html'>usage</a>(self, pref, no_header, markdown)  
+    <div class="card-header codesum"><span class="anchor" id="proc-usage"></span> <h3>private  function <a href='../proc/usage.html'>usage</a>(self, pref, no_header, markdown)  
 </h3></div>
     <div class="card-body">
           
@@ -1659,7 +1680,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~45"></span>
+              <span class="anchor" id="variable-self~13"></span>
               class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(in)</td>
@@ -1674,7 +1695,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~37"></span>
+              <span class="anchor" id="variable-pref~7"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -1704,7 +1725,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-markdown~2"></span>
+              <span class="anchor" id="variable-markdown"></span>
               logical,
             </td>
 <td>intent(in),</td>
@@ -1730,7 +1751,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-signature~2"></span><h3>private  function <a href='../proc/signature~2.html'>signature</a>(self, bash_completion, plain)  
+    <div class="card-header codesum"><span class="anchor" id="proc-signature"></span> <h3>private  function <a href='../proc/signature.html'>signature</a>(self, bash_completion, plain)  
 </h3></div>
     <div class="card-body">
           
@@ -1749,7 +1770,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~46"></span>
+              <span class="anchor" id="variable-self~14"></span>
               class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(in)</td>
@@ -1764,7 +1785,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-bash_completion~2"></span>
+              <span class="anchor" id="variable-bash_completion"></span>
               logical,
             </td>
 <td>intent(in),</td>
@@ -1779,7 +1800,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-plain~2"></span>
+              <span class="anchor" id="variable-plain"></span>
               logical,
             </td>
 <td>intent(in),</td>
@@ -1810,7 +1831,7 @@ parameter
         <section>
           <h2>Subroutines</h2>
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-free~2"></span><h3>private elemental subroutine <a href='../proc/free~2.html'>free</a>(self)  
+    <div class="card-header codesum"><span class="anchor" id="proc-free"></span> <h3>private elemental subroutine <a href='../proc/free.html'>free</a>(self)  
 </h3></div>
     <div class="card-body">
           
@@ -1829,7 +1850,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~37"></span>
+              <span class="anchor" id="variable-self~5"></span>
               class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(inout)</td>
@@ -1850,7 +1871,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-check~2"></span><h3>private  subroutine <a href='../proc/check~2.html'>check</a>(self, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-check"></span> <h3>private  subroutine <a href='../proc/check.html'>check</a>(self, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -1869,7 +1890,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~38"></span>
+              <span class="anchor" id="variable-self~6"></span>
               class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(inout)</td>
@@ -1884,7 +1905,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~32"></span>
+              <span class="anchor" id="variable-pref~2"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -1905,7 +1926,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-is_required_passed~2"></span><h3>private  subroutine <a href='../proc/is_required_passed~2.html'>is_required_passed</a>(self, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-is_required_passed"></span> <h3>private  subroutine <a href='../proc/is_required_passed.html'>is_required_passed</a>(self, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -1924,7 +1945,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~39"></span>
+              <span class="anchor" id="variable-self~7"></span>
               class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(inout)</td>
@@ -1939,7 +1960,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~33"></span>
+              <span class="anchor" id="variable-pref~3"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -1960,7 +1981,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-raise_error_m_exclude~2"></span><h3>private  subroutine <a href='../proc/raise_error_m_exclude~2.html'>raise_error_m_exclude</a>(self, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-raise_error_m_exclude"></span> <h3>private  subroutine <a href='../proc/raise_error_m_exclude.html'>raise_error_m_exclude</a>(self, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -1979,7 +2000,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~42"></span>
+              <span class="anchor" id="variable-self~10"></span>
               class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(inout)</td>
@@ -1994,7 +2015,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~34"></span>
+              <span class="anchor" id="variable-pref~4"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -2015,7 +2036,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-add"></span><h3>private  subroutine <a href='../proc/add.html'>add</a>(self, pref, cla)  
+    <div class="card-header codesum"><span class="anchor" id="proc-add"></span> <h3>private  subroutine <a href='../proc/add.html'>add</a>(self, pref, cla)  
 </h3></div>
     <div class="card-body">
           
@@ -2034,7 +2055,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~43"></span>
+              <span class="anchor" id="variable-self~11"></span>
               class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(inout)</td>
@@ -2049,7 +2070,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~35"></span>
+              <span class="anchor" id="variable-pref~5"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -2085,7 +2106,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-parse"></span><h3>private  subroutine <a href='../proc/parse.html'>parse</a>(self, args, ignore_unknown_clas, pref, error_unknown_clas)  
+    <div class="card-header codesum"><span class="anchor" id="proc-parse"></span> <h3>private  subroutine <a href='../proc/parse.html'>parse</a>(self, args, ignore_unknown_clas, pref, error_unknown_clas)  
 </h3></div>
     <div class="card-body">
           
@@ -2104,7 +2125,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~44"></span>
+              <span class="anchor" id="variable-self~12"></span>
               class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(inout)</td>
@@ -2119,7 +2140,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-args~2"></span>
+              <span class="anchor" id="variable-args"></span>
               character(len=*),
             </td>
 <td>intent(in)</td>
@@ -2149,7 +2170,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~36"></span>
+              <span class="anchor" id="variable-pref~6"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -2185,7 +2206,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-errored~2"></span><h3>private  subroutine <a href='../proc/errored~2.html'>errored</a>(self, error, pref, a1, a2)  
+    <div class="card-header codesum"><span class="anchor" id="proc-errored"></span> <h3>private  subroutine <a href='../proc/errored.html'>errored</a>(self, error, pref, a1, a2)  
 </h3></div>
     <div class="card-body">
           
@@ -2204,7 +2225,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~47"></span>
+              <span class="anchor" id="variable-self~15"></span>
               class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(inout)</td>
@@ -2219,7 +2240,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-error~14"></span>
+              <span class="anchor" id="variable-error~5"></span>
               integer(kind=I4P),
             </td>
 <td>intent(in)</td>
@@ -2234,7 +2255,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~38"></span>
+              <span class="anchor" id="variable-pref~8"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -2285,7 +2306,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-check_m_exclusive"></span><h3>private  subroutine <a href='../proc/check_m_exclusive.html'>check_m_exclusive</a>(self, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-check_m_exclusive"></span> <h3>private  subroutine <a href='../proc/check_m_exclusive.html'>check_m_exclusive</a>(self, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -2304,7 +2325,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~48"></span>
+              <span class="anchor" id="variable-self~16"></span>
               class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(inout)</td>
@@ -2319,7 +2340,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~39"></span>
+              <span class="anchor" id="variable-pref~9"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -2340,11 +2361,11 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-sanitize_defaults~2"></span><h3>private  subroutine <a href='../proc/sanitize_defaults~2.html'>sanitize_defaults</a>(self)  
+    <div class="card-header codesum"><span class="anchor" id="proc-sanitize_defaults"></span> <h3>private  subroutine <a href='../proc/sanitize_defaults.html'>sanitize_defaults</a>(self)  
 </h3></div>
     <div class="card-body">
           
-  <p>Sanitize defaults values.</p><a href="../proc/sanitize_defaults~2.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+  <p>Sanitize defaults values.</p><a href="../proc/sanitize_defaults.html" class="pull-right"><emph>Read more&hellip;</emph></a>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -2359,7 +2380,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~49"></span>
+              <span class="anchor" id="variable-self~17"></span>
               class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(inout)</td>
@@ -2380,7 +2401,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-clasg_assign_clasg"></span><h3>private elemental subroutine <a href='../proc/clasg_assign_clasg.html'>clasg_assign_clasg</a>(lhs, rhs)  
+    <div class="card-header codesum"><span class="anchor" id="proc-clasg_assign_clasg"></span> <h3>private elemental subroutine <a href='../proc/clasg_assign_clasg.html'>clasg_assign_clasg</a>(lhs, rhs)  
 </h3></div>
     <div class="card-body">
           
@@ -2435,7 +2456,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-finalize~2"></span><h3>private elemental subroutine <a href='../proc/finalize~2.html'>finalize</a>(self)  
+    <div class="card-header codesum"><span class="anchor" id="proc-finalize"></span> <h3>private elemental subroutine <a href='../proc/finalize.html'>finalize</a>(self)  
 </h3></div>
     <div class="card-body">
           
@@ -2454,7 +2475,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~50"></span>
+              <span class="anchor" id="variable-self~18"></span>
               type(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(inout)</td>
@@ -2487,7 +2508,7 @@ parameter
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
+          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2024 
 </p>
           </div>
           <div class="col">

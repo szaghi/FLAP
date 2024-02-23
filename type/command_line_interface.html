@@ -1,3 +1,5 @@
+<!-- -*- mode: jinja2 -*- -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -17,7 +19,8 @@
     <link href="../css/local.css" rel="stylesheet">
       <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
   <body>
@@ -74,7 +77,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title="<p>23.8% of total for derived types.</p>Including implementation: 1458 statements, 38.6% of total for derived types.">50 statements</a>
+                 title="<p>23.8% of total for derived types.</p>Including implementation: 1460 statements, 38.8% of total for derived types.">50 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -114,25 +117,25 @@
       </a>
       <div id="vars-0" class="collapse">
         <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../type/command_line_interface.html#variable-progname~3">progname</a>
-            <a class="list-group-item" href="../type/command_line_interface.html#variable-version~2">version</a>
-            <a class="list-group-item" href="../type/command_line_interface.html#variable-help~4">help</a>
-            <a class="list-group-item" href="../type/command_line_interface.html#variable-help_color~2">help_color</a>
-            <a class="list-group-item" href="../type/command_line_interface.html#variable-help_style~2">help_style</a>
-            <a class="list-group-item" href="../type/command_line_interface.html#variable-help_markdown~2">help_markdown</a>
-            <a class="list-group-item" href="../type/command_line_interface.html#variable-description~3">description</a>
-            <a class="list-group-item" href="../type/command_line_interface.html#variable-license~2">license</a>
-            <a class="list-group-item" href="../type/command_line_interface.html#variable-authors~2">authors</a>
-            <a class="list-group-item" href="../type/command_line_interface.html#variable-epilog~2">epilog</a>
+            <a class="list-group-item" href="../type/command_line_interface.html#variable-progname">progname</a>
+            <a class="list-group-item" href="../type/command_line_interface.html#variable-version">version</a>
+            <a class="list-group-item" href="../type/command_line_interface.html#variable-help">help</a>
+            <a class="list-group-item" href="../type/command_line_interface.html#variable-help_color">help_color</a>
+            <a class="list-group-item" href="../type/command_line_interface.html#variable-help_style">help_style</a>
+            <a class="list-group-item" href="../type/command_line_interface.html#variable-help_markdown">help_markdown</a>
+            <a class="list-group-item" href="../type/command_line_interface.html#variable-description">description</a>
+            <a class="list-group-item" href="../type/command_line_interface.html#variable-license">license</a>
+            <a class="list-group-item" href="../type/command_line_interface.html#variable-authors">authors</a>
+            <a class="list-group-item" href="../type/command_line_interface.html#variable-epilog">epilog</a>
             <a class="list-group-item" href="../type/command_line_interface.html#variable-m_exclude">m_exclude</a>
             <a class="list-group-item" href="../type/command_line_interface.html#variable-error_message">error_message</a>
-            <a class="list-group-item" href="../type/command_line_interface.html#variable-error_color~2">error_color</a>
-            <a class="list-group-item" href="../type/command_line_interface.html#variable-error_style~2">error_style</a>
-            <a class="list-group-item" href="../type/command_line_interface.html#variable-examples~4">examples</a>
-            <a class="list-group-item" href="../type/command_line_interface.html#variable-error~35">error</a>
-            <a class="list-group-item" href="../type/command_line_interface.html#variable-usage_lun~2">usage_lun</a>
-            <a class="list-group-item" href="../type/command_line_interface.html#variable-version_lun~2">version_lun</a>
-            <a class="list-group-item" href="../type/command_line_interface.html#variable-error_lun~2">error_lun</a>
+            <a class="list-group-item" href="../type/command_line_interface.html#variable-error_color">error_color</a>
+            <a class="list-group-item" href="../type/command_line_interface.html#variable-error_style">error_style</a>
+            <a class="list-group-item" href="../type/command_line_interface.html#variable-examples">examples</a>
+            <a class="list-group-item" href="../type/command_line_interface.html#variable-error~4">error</a>
+            <a class="list-group-item" href="../type/command_line_interface.html#variable-usage_lun">usage_lun</a>
+            <a class="list-group-item" href="../type/command_line_interface.html#variable-version_lun">version_lun</a>
+            <a class="list-group-item" href="../type/command_line_interface.html#variable-error_lun">error_lun</a>
             <a class="list-group-item" href="../type/command_line_interface.html#variable-clasg">clasg</a>
             <a class="list-group-item" href="../type/command_line_interface.html#variable-args~4">args</a>
             <a class="list-group-item" href="../type/command_line_interface.html#variable-disable_hv">disable_hv</a>
@@ -182,7 +185,7 @@
             <a class="list-group-item" href="../type/command_line_interface.html#boundprocedure-set_examples">set_examples</a>
             <a class="list-group-item" href="../type/command_line_interface.html#boundprocedure-assign_object">assign_object</a>
             <a class="list-group-item" href="../type/command_line_interface.html#boundprocedure-free~3">free</a>
-            <a class="list-group-item" href="../type/command_line_interface.html#boundprocedure-init~2">init</a>
+            <a class="list-group-item" href="../type/command_line_interface.html#boundprocedure-init">init</a>
             <a class="list-group-item" href="../type/command_line_interface.html#boundprocedure-add_group">add_group</a>
             <a class="list-group-item" href="../type/command_line_interface.html#boundprocedure-add~2">add</a>
             <a class="list-group-item" href="../type/command_line_interface.html#boundprocedure-is_passed~4">is_passed</a>
@@ -239,14 +242,15 @@
     </div>
     
     <div class="col-md-9" id='text'>
-      <h2>type, public, extends(<a href='../type/object.html'>object</a>) :: command_line_interface</h2>
+      <h2>
+        type, public, extends(<a href='object.html'>object</a>) :: command_line_interface</h2>
     <p>Command Line Interface (CLI) class.</p>
-<br>    <div class="card">
-      <div class="card-header">
-  <h3 class="card-title">Inherits</h3>
-      </div>
-      <div class="card-body">
-    <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<br>      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Inherits</h3>
+        </div>
+        <div class="card-body">
+          <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.43.0 (0)
@@ -266,7 +270,7 @@
 <!-- type~command_line_arguments_group -->
 <g id="type~~command_line_interface~~InheritsGraph_node2" class="node">
 <title>type~command_line_arguments_group</title>
-<g id="a_type~~command_line_interface~~InheritsGraph_node2"><a xlink:href=".././type/command_line_arguments_group.html" xlink:title="command_line_arguments_group">
+<g id="a_type~~command_line_interface~~InheritsGraph_node2"><a xlink:href="../type/command_line_arguments_group.html" xlink:title="command_line_arguments_group">
 <polygon fill="#5cb85c" stroke="#5cb85c" points="481,-77.5 291,-77.5 291,-53.5 481,-53.5 481,-77.5"/>
 <text text-anchor="middle" x="386" y="-63.1" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">command_line_arguments_group</text>
 </a>
@@ -282,7 +286,7 @@
 <!-- type~object -->
 <g id="type~~command_line_interface~~InheritsGraph_node3" class="node">
 <title>type~object</title>
-<g id="a_type~~command_line_interface~~InheritsGraph_node3"><a xlink:href=".././type/object.html" xlink:title="object">
+<g id="a_type~~command_line_interface~~InheritsGraph_node3"><a xlink:href="../type/object.html" xlink:title="object">
 <polygon fill="#5cb85c" stroke="#5cb85c" points="54,-77.5 0,-77.5 0,-53.5 54,-53.5 54,-77.5"/>
 <text text-anchor="middle" x="27" y="-63.1" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">object</text>
 </a>
@@ -303,7 +307,7 @@
 <!-- type~command_line_argument -->
 <g id="type~~command_line_interface~~InheritsGraph_node4" class="node">
 <title>type~command_line_argument</title>
-<g id="a_type~~command_line_interface~~InheritsGraph_node4"><a xlink:href=".././type/command_line_argument.html" xlink:title="command_line_argument">
+<g id="a_type~~command_line_interface~~InheritsGraph_node4"><a xlink:href="../type/command_line_argument.html" xlink:title="command_line_argument">
 <polygon fill="#5cb85c" stroke="#5cb85c" points="240,-77.5 91,-77.5 91,-53.5 240,-53.5 240,-77.5"/>
 <text text-anchor="middle" x="165.5" y="-63.1" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">command_line_argument</text>
 </a>
@@ -327,17 +331,17 @@
                   var pantypecommand_line_interfaceInheritsGraph = svgPanZoom('#typecommand_line_interfaceInheritsGraph',
                     {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
                   );
-                </script>        <div><a type="button" class="graph-help" data-toggle="modal" href="#InheritsGraph-help-text">Help</a></div>
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#InheritsGraph-help-text">Help</a>
+          </div>
           <div class="modal fade" id="InheritsGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                   <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-              <div class="modal-body">
+                <div class="modal-body">
 <p>Nodes of different colours represent the following: </p>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -374,8 +378,8 @@ said component(s).
             </div>
           </div>
         </div>
+        </div>
       </div>
-    </div>
     <br>
 
     <section>
@@ -392,7 +396,7 @@ said component(s).
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-progname~3"></span>
+              <span class="anchor" id="variable-progname"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -409,7 +413,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-version~2"></span>
+              <span class="anchor" id="variable-version"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -426,7 +430,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-help~4"></span>
+              <span class="anchor" id="variable-help"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -443,7 +447,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-help_color~2"></span>
+              <span class="anchor" id="variable-help_color"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -460,7 +464,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-help_style~2"></span>
+              <span class="anchor" id="variable-help_style"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -477,7 +481,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-help_markdown~2"></span>
+              <span class="anchor" id="variable-help_markdown"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -494,7 +498,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-description~3"></span>
+              <span class="anchor" id="variable-description"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -511,7 +515,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-license~2"></span>
+              <span class="anchor" id="variable-license"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -528,7 +532,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-authors~2"></span>
+              <span class="anchor" id="variable-authors"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -545,7 +549,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-epilog~2"></span>
+              <span class="anchor" id="variable-epilog"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -596,7 +600,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-error_color~2"></span>
+              <span class="anchor" id="variable-error_color"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -613,7 +617,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-error_style~2"></span>
+              <span class="anchor" id="variable-error_style"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -630,7 +634,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-examples~4"></span>
+              <span class="anchor" id="variable-examples"></span>
               character(len=512),
             </td>
               <td>public,</td>
@@ -647,7 +651,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-error~35"></span>
+              <span class="anchor" id="variable-error~4"></span>
               integer(kind=I4P),
             </td>
               <td>public</td>
@@ -664,7 +668,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-usage_lun~2"></span>
+              <span class="anchor" id="variable-usage_lun"></span>
               integer(kind=I4P),
             </td>
               <td>public</td>
@@ -681,7 +685,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-version_lun~2"></span>
+              <span class="anchor" id="variable-version_lun"></span>
               integer(kind=I4P),
             </td>
               <td>public</td>
@@ -698,7 +702,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-error_lun~2"></span>
+              <span class="anchor" id="variable-error_lun"></span>
               integer(kind=I4P),
             </td>
               <td>public</td>
@@ -716,7 +720,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" id="variable-clasg"></span>
-              type(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
+              type(<a href='command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
               <td>private,</td>
             <td>
@@ -855,8 +859,8 @@ said component(s).
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~85"></span>
-              type(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              <span class="anchor" id="variable-self~89"></span>
+              type(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -918,7 +922,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/object.html'>object</a>),
+              class(<a href='object.html'>object</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -976,7 +980,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/object.html'>object</a>),
+              class(<a href='object.html'>object</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -1049,7 +1053,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/object.html'>object</a>),
+              class(<a href='object.html'>object</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -1107,7 +1111,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/object.html'>object</a>),
+              class(<a href='object.html'>object</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -1180,7 +1184,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/object.html'>object</a>),
+              class(<a href='object.html'>object</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -1195,7 +1199,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/object.html'>object</a>),
+              class(<a href='object.html'>object</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -1253,7 +1257,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -1277,7 +1281,7 @@ said component(s).
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-init~2"></span>
+      <span class="anchor" id="boundprocedure-init"></span>
       <h3>
           procedure, public ::
   <strong>init</strong>
@@ -1291,7 +1295,7 @@ said component(s).
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private  subroutine <a href='../proc/init~2.html'>init</a>(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas)  
+    private  subroutine <a href='../proc/init.html'>init</a>(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas)  
 </h3>
     
 
@@ -1311,7 +1315,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -1594,7 +1598,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -1727,7 +1731,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -2100,7 +2104,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -2208,7 +2212,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -2301,7 +2305,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -2394,7 +2398,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -2457,7 +2461,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -2514,7 +2518,7 @@ said component(s).
       <span class="anchor" id="boundprocedure-run_command"></span>
       <h3>
           procedure, public ::
-  <strong>run_command</strong> => <a href='../proc/is_called_group.html'>is_called_group</a>
+  <strong>run_command</strong> => <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/proc/is_called_group.html'>is_called_group</a>
         
       </h3>
     </div>
@@ -2545,7 +2549,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -2623,7 +2627,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -2695,7 +2699,7 @@ said component(s).
       <span class="anchor" id="boundprocedure-get~2"></span>
       <h3>
           generic, public ::
-  <strong>get</strong> => <a href='../type/command_line_interface.html#boundprocedure-get_cla~2'>get_cla</a>, <a href='../type/command_line_interface.html#boundprocedure-get_cla_list~2'>get_cla_list</a>
+  <strong>get</strong> => <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/type/command_line_interface.html#boundprocedure-get_cla~2'>get_cla</a>, <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/type/command_line_interface.html#boundprocedure-get_cla_list~2'>get_cla_list</a>
         
       </h3>
     </div>
@@ -2726,7 +2730,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -2870,7 +2874,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -3002,7 +3006,7 @@ said component(s).
       <span class="anchor" id="boundprocedure-get_varying~2"></span>
       <h3>
           generic, public ::
-  <strong>get_varying</strong> => <a href='../type/command_line_interface.html#boundprocedure-get_cla_list_varying_r8p~2'>get_cla_list_varying_R8P</a>, <a href='../type/command_line_interface.html#boundprocedure-get_cla_list_varying_r4p~2'>get_cla_list_varying_R4P</a>, <a href='../type/command_line_interface.html#boundprocedure-get_cla_list_varying_i8p~2'>get_cla_list_varying_I8P</a>, <a href='../type/command_line_interface.html#boundprocedure-get_cla_list_varying_i4p~2'>get_cla_list_varying_I4P</a>, <a href='../type/command_line_interface.html#boundprocedure-get_cla_list_varying_i2p~2'>get_cla_list_varying_I2P</a>, <a href='../type/command_line_interface.html#boundprocedure-get_cla_list_varying_i1p~2'>get_cla_list_varying_I1P</a>, <a href='../type/command_line_interface.html#boundprocedure-get_cla_list_varying_logical~2'>get_cla_list_varying_logical</a>, <a href='../type/command_line_interface.html#boundprocedure-get_cla_list_varying_char~2'>get_cla_list_varying_char</a>
+  <strong>get_varying</strong> => <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/type/command_line_interface.html#boundprocedure-get_cla_list_varying_r8p~2'>get_cla_list_varying_R8P</a>, <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/type/command_line_interface.html#boundprocedure-get_cla_list_varying_r4p~2'>get_cla_list_varying_R4P</a>, <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/type/command_line_interface.html#boundprocedure-get_cla_list_varying_i8p~2'>get_cla_list_varying_I8P</a>, <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/type/command_line_interface.html#boundprocedure-get_cla_list_varying_i4p~2'>get_cla_list_varying_I4P</a>, <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/type/command_line_interface.html#boundprocedure-get_cla_list_varying_i2p~2'>get_cla_list_varying_I2P</a>, <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/type/command_line_interface.html#boundprocedure-get_cla_list_varying_i1p~2'>get_cla_list_varying_I1P</a>, <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/type/command_line_interface.html#boundprocedure-get_cla_list_varying_logical~2'>get_cla_list_varying_logical</a>, <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/type/command_line_interface.html#boundprocedure-get_cla_list_varying_char~2'>get_cla_list_varying_char</a>
         
       </h3>
     </div>
@@ -3033,7 +3037,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -3177,7 +3181,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -3321,7 +3325,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -3465,7 +3469,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -3609,7 +3613,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -3753,7 +3757,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -3897,7 +3901,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -4041,7 +4045,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -4204,7 +4208,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -4357,7 +4361,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -4435,7 +4439,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -4508,7 +4512,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -4596,7 +4600,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -4684,7 +4688,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -4772,7 +4776,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -4890,7 +4894,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -4978,7 +4982,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -5051,7 +5055,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -5093,7 +5097,7 @@ said component(s).
       <span class="anchor" id="boundprocedure-get_args"></span>
       <h3>
           generic, private ::
-  <strong>get_args</strong> => <a href='../type/command_line_interface.html#boundprocedure-get_args_from_string'>get_args_from_string</a>, <a href='../type/command_line_interface.html#boundprocedure-get_args_from_invocation'>get_args_from_invocation</a>
+  <strong>get_args</strong> => <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/type/command_line_interface.html#boundprocedure-get_args_from_string'>get_args_from_string</a>, <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/type/command_line_interface.html#boundprocedure-get_args_from_invocation'>get_args_from_invocation</a>
         
       </h3>
     </div>
@@ -5124,7 +5128,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -5193,7 +5197,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -5266,7 +5270,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -5354,7 +5358,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -5427,7 +5431,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -5590,7 +5594,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -5753,7 +5757,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -5916,7 +5920,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -6079,7 +6083,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -6242,7 +6246,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -6405,7 +6409,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -6568,7 +6572,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -6731,7 +6735,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -6894,7 +6898,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -7057,7 +7061,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -7220,7 +7224,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -7235,7 +7239,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              type(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              type(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -7262,7 +7266,7 @@ said component(s).
       <span class="anchor" id="boundprocedure-assignment%28%3D%29~3"></span>
       <h3>
           generic, private ::
-  <strong>assignment(=)</strong> => <a href='../type/command_line_interface.html#boundprocedure-cli_assign_cli'>cli_assign_cli</a>
+  <strong>assignment(=)</strong> => <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/type/command_line_interface.html#boundprocedure-cli_assign_cli'>cli_assign_cli</a>
         
       </h3>
     </div>
@@ -7293,7 +7297,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              class(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -7308,7 +7312,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              type(<a href='../type/command_line_interface.html'>command_line_interface</a>),
+              type(<a href='command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -7417,7 +7421,7 @@ said component(s).
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
+          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2024 
 </p>
           </div>
           <div class="col">

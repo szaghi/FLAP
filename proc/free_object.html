@@ -1,3 +1,5 @@
+<!-- -*- mode: jinja2 -*- -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -17,7 +19,8 @@
     <link href="../css/local.css" rel="stylesheet">
       <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
   <body>
@@ -161,7 +164,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~86"></span>
+              <span class="anchor" id="variable-self"></span>
               class(<a href='../type/object.html'>object</a>),
             </td>
 <td>intent(inout)</td>
@@ -203,9 +206,9 @@
 <!-- proc~free -->
 <g id="proc~~free_object~~CalledByGraph_node2" class="node">
 <title>proc~free</title>
-<g id="a_proc~~free_object~~CalledByGraph_node2"><a xlink:href=".././proc/free.html" xlink:title="flap_command_line_argument_t::command_line_argument%free">
-<polygon fill="#d9534f" stroke="#d9534f" points="399.5,-108 41.5,-108 41.5,-84 399.5,-84 399.5,-108"/>
-<text text-anchor="middle" x="220.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%free</text>
+<g id="a_proc~~free_object~~CalledByGraph_node2"><a xlink:href="../proc/free.html" xlink:title="flap_command_line_arguments_group_t::command_line_arguments_group%free">
+<polygon fill="#d9534f" stroke="#d9534f" points="441,-108 0,-108 0,-84 441,-84 441,-108"/>
+<text text-anchor="middle" x="220.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_arguments_group_t::command_line_arguments_group%free</text>
 </a>
 </g>
 </g>
@@ -218,22 +221,22 @@
 <!-- proc~free~2 -->
 <g id="proc~~free_object~~CalledByGraph_node3" class="node">
 <title>proc~free~2</title>
-<g id="a_proc~~free_object~~CalledByGraph_node3"><a xlink:href=".././proc/free~2.html" xlink:title="flap_command_line_arguments_group_t::command_line_arguments_group%free">
-<polygon fill="#d9534f" stroke="#d9534f" points="441,-66 0,-66 0,-42 441,-42 441,-66"/>
-<text text-anchor="middle" x="220.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_arguments_group_t::command_line_arguments_group%free</text>
+<g id="a_proc~~free_object~~CalledByGraph_node3"><a xlink:href="../proc/free~2.html" xlink:title="flap_command_line_argument_t::command_line_argument%free">
+<polygon fill="#d9534f" stroke="#d9534f" points="399.5,-66 41.5,-66 41.5,-42 399.5,-42 399.5,-66"/>
+<text text-anchor="middle" x="220.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t::command_line_argument%free</text>
 </a>
 </g>
 </g>
 <!-- proc~free~2&#45;&gt;proc~free_object -->
 <g id="proc~~free_object~~CalledByGraph_edge2" class="edge">
 <title>proc~free~2&#45;&gt;proc~free_object</title>
-<path fill="none" stroke="#000000" d="M441.36,-54C449.91,-54 458.31,-54 466.47,-54"/>
-<polygon fill="#000000" stroke="#000000" points="466.66,-57.5 476.66,-54 466.66,-50.5 466.66,-57.5"/>
+<path fill="none" stroke="#000000" d="M399.58,-54C422.45,-54 445.25,-54 466.4,-54"/>
+<polygon fill="#000000" stroke="#000000" points="466.65,-57.5 476.65,-54 466.65,-50.5 466.65,-57.5"/>
 </g>
 <!-- proc~free~3 -->
 <g id="proc~~free_object~~CalledByGraph_node4" class="node">
 <title>proc~free~3</title>
-<g id="a_proc~~free_object~~CalledByGraph_node4"><a xlink:href=".././proc/free~3.html" xlink:title="flap_command_line_interface_t::command_line_interface%free">
+<g id="a_proc~~free_object~~CalledByGraph_node4"><a xlink:href="../proc/free~3.html" xlink:title="flap_command_line_interface_t::command_line_interface%free">
 <polygon fill="#d9534f" stroke="#d9534f" points="395,-24 46,-24 46,0 395,0 395,-24"/>
 <text text-anchor="middle" x="220.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%free</text>
 </a>
@@ -251,17 +254,17 @@
                   var panprocfree_objectCalledByGraph = svgPanZoom('#procfree_objectCalledByGraph',
                     {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
                   );
-                </script>        <div><a type="button" class="graph-help" data-toggle="modal" href="#CalledByGraph-help-text">Help</a></div>
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#CalledByGraph-help-text">Help</a>
+          </div>
           <div class="modal fade" id="CalledByGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                   <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-              <div class="modal-body">
+                <div class="modal-body">
 <p>Nodes of different colours represent the following: </p>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -380,7 +383,7 @@ implementation in a submodule of an interface in a parent module.
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
+          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2024 
 </p>
           </div>
           <div class="col">

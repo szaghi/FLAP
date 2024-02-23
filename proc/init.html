@@ -1,3 +1,5 @@
+<!-- -*- mode: jinja2 -*- -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -17,7 +19,8 @@
     <link href="../css/local.css" rel="stylesheet">
       <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
   <body>
@@ -74,20 +77,20 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title=" 0.5% of total for procedures.">17 statements</a>
+                 title=" 1.6% of total for procedures.">59 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/tester.f90"> Source File</a>
+              <a href="../src/flap_command_line_interface_t.F90"> Source File</a>
             </li>
         </ul>
       </div>
       <div class="col">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb justify-content-end mb-0">
-                <li class="breadcrumb-item"><a href='../sourcefile/tester.f90.html'>tester.f90</a></li>
-                <li class="breadcrumb-item"><a href='../module/tester.html'>tester</a></li>
+                <li class="breadcrumb-item"><a href='../sourcefile/flap_command_line_interface_t.f90.html'>flap_command_line_interface_t.F90</a></li>
+                <li class="breadcrumb-item"><a href='../module/flap_command_line_interface_t.html'>flap_command_line_interface_t</a></li>
             <li class="breadcrumb-item active" aria-current="page">init</li>
           </ol>
         </nav>
@@ -139,14 +142,14 @@
     </div>
     
     <div class="col-md-9" id='text'>
-    <h2>private  subroutine init(this, tolerance32, tolerance64)  
+    <h2>private  subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas)  
 </h2>
     
 
-    <p>Initialize the tester.</p>
+    <p>Initialize CLI.</p>
 
     <h3>Type Bound</h3>
-    <p><a href='../type/tester_t.html'>tester_t</a></p>
+    <p><a href='../type/command_line_interface.html'>command_line_interface</a></p>
 
     <h3>Arguments</h3>
         <table class="table table-striped varlist">
@@ -161,53 +164,381 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-this"></span>
-              class(<a href='../type/tester_t.html'>tester_t</a>),
+              <span class="anchor" id="variable-self~56"></span>
+              class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
             </td>
-<td>intent(out)</td>
+<td>intent(inout)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
-            <td><strong>this</strong></td>
+            <td><strong>self</strong></td>
             <td>
-                <p>The tester.</p>
+                <p>CLI data.</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-tolerance32~2"></span>
-              real(kind=real32),
+              <span class="anchor" id="variable-progname~2"></span>
+              character(len=*),
             </td>
 <td>intent(in),</td>
               <td>optional</td>            <td>
               
             </td>
             <td>::</td>
-            <td><strong>tolerance32</strong></td>
+            <td><strong>progname</strong></td>
             <td>
-                <p>Real tolerance, 32 bits.</p>
+                <p>Program name.</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-tolerance64~2"></span>
-              real(kind=real64),
+              <span class="anchor" id="variable-version~2"></span>
+              character(len=*),
             </td>
 <td>intent(in),</td>
               <td>optional</td>            <td>
               
             </td>
             <td>::</td>
-            <td><strong>tolerance64</strong></td>
+            <td><strong>version</strong></td>
             <td>
-                <p>Real tolerance, 64 bits.</p>
+                <p>Program version.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-help~2"></span>
+              character(len=*),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>help</strong></td>
+            <td>
+                <p>Help message introducing the CLI usage.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-description~2"></span>
+              character(len=*),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>description</strong></td>
+            <td>
+                <p>Detailed description message introducing the program.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-license~2"></span>
+              character(len=*),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>license</strong></td>
+            <td>
+                <p>License description.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-authors~2"></span>
+              character(len=*),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>authors</strong></td>
+            <td>
+                <p>Authors list.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-examples~3"></span>
+              character(len=*),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>examples</strong>(1:)</td>
+            <td>
+                <p>Examples of correct usage.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-epilog~2"></span>
+              character(len=*),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>epilog</strong></td>
+            <td>
+                <p>Epilog message.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-disable_hv~2"></span>
+              logical,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>disable_hv</strong></td>
+            <td>
+                <p>Disable automatic insert of &lsquo;help&rsquo; and &lsquo;version&rsquo; CLAs.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-usage_lun~2"></span>
+              integer(kind=I4P),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>usage_lun</strong></td>
+            <td>
+                <p>Unit number to print usage/help.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-error_lun~2"></span>
+              integer(kind=I4P),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>error_lun</strong></td>
+            <td>
+                <p>Unit number to print error info.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-version_lun~2"></span>
+              integer(kind=I4P),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>version_lun</strong></td>
+            <td>
+                <p>Unit number to print version/license info.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-error_color~2"></span>
+              character(len=*),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>error_color</strong></td>
+            <td>
+                <p>ANSI color of error messages.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-error_style~2"></span>
+              character(len=*),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>error_style</strong></td>
+            <td>
+                <p>ANSI style of error messages.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ignore_unknown_clas~3"></span>
+              logical,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ignore_unknown_clas</strong></td>
+            <td>
+                <p>Disable errors-raising for passed unknown CLAs.</p>
             </td>
         </tr>
     </tbody>
   </table>
 
     <br>
+    <div class="card">
+      <div class="card-header">
+  <h3 class="card-title">Calls</h3>
+      </div>
+      <div class="card-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: proc~~init~~CallsGraph Pages: 1 -->
+<svg id="procinitCallsGraph" width="591pt" height="74pt"
+ viewBox="0.00 0.00 591.00 74.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~init~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 70)">
+<title>proc~~init~~CallsGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-70 587,-70 587,4 -4,4"/>
+<!-- proc~init -->
+<g id="proc~~init~~CallsGraph_node1" class="node">
+<title>proc~init</title>
+<polygon fill="none" stroke="black" points="345,-45 0,-45 0,-21 345,-21 345,-45"/>
+<text text-anchor="middle" x="172.5" y="-30.6" font-family="Helvetica,sans-Serif" font-size="10.50">flap_command_line_interface_t::command_line_interface%init</text>
+</g>
+<!-- proc~assign_object -->
+<g id="proc~~init~~CallsGraph_node2" class="node">
+<title>proc~assign_object</title>
+<g id="a_proc~~init~~CallsGraph_node2"><a xlink:href="../proc/assign_object.html" xlink:title="flap_object_t::object%assign_object">
+<polygon fill="#d9534f" stroke="#d9534f" points="583,-66 381,-66 381,-42 583,-42 583,-66"/>
+<text text-anchor="middle" x="482" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_object_t::object%assign_object</text>
+</a>
+</g>
+</g>
+<!-- proc~init&#45;&gt;proc~assign_object -->
+<g id="proc~~init~~CallsGraph_edge1" class="edge">
+<title>proc~init&#45;&gt;proc~assign_object</title>
+<path fill="none" stroke="#000000" d="M345.23,-44.73C353.84,-45.32 362.37,-45.9 370.71,-46.47"/>
+<polygon fill="#000000" stroke="#000000" points="370.58,-49.97 380.79,-47.16 371.05,-42.98 370.58,-49.97"/>
+</g>
+<!-- proc~set_examples -->
+<g id="proc~~init~~CallsGraph_node3" class="node">
+<title>proc~set_examples</title>
+<g id="a_proc~~init~~CallsGraph_node3"><a xlink:href="../proc/set_examples.html" xlink:title="flap_object_t::object%set_examples">
+<polygon fill="#d9534f" stroke="#d9534f" points="583,-24 381,-24 381,0 583,0 583,-24"/>
+<text text-anchor="middle" x="482" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_object_t::object%set_examples</text>
+</a>
+</g>
+</g>
+<!-- proc~init&#45;&gt;proc~set_examples -->
+<g id="proc~~init~~CallsGraph_edge2" class="edge">
+<title>proc~init&#45;&gt;proc~set_examples</title>
+<path fill="none" stroke="#000000" d="M345.23,-21.27C353.84,-20.68 362.37,-20.1 370.71,-19.53"/>
+<polygon fill="#000000" stroke="#000000" points="371.05,-23.02 380.79,-18.84 370.58,-16.03 371.05,-23.02"/>
+</g>
+</g>
+</svg>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#CallsGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="CallsGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 27.51" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1.16 1.16) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 741.5,-28 741.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="146,-24 88,-24 88,0 146,0 146,-24"/>
+<text text-anchor="middle" x="117" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="225.5,-24 164.5,-24 164.5,0 225.5,0 225.5,-24"/>
+<text text-anchor="middle" x="195" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Type Bound Procedure -->
+<g id="node4" class="node">
+<title>Type Bound Procedure</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="374,-24 244,-24 244,0 374,0 374,-24"/>
+<text text-anchor="middle" x="309" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type Bound Procedure</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node5" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="537.5,-24 392.5,-24 392.5,0 537.5,0 537.5,-24"/>
+<text text-anchor="middle" x="465" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node6" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="614,-24 556,-24 556,0 614,0 614,-24"/>
+<text text-anchor="middle" x="585" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node7" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="737.5,-24 632.5,-24 632.5,0 737.5,0 737.5,-24"/>
+<text text-anchor="middle" x="685" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.
+</p>
+ </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="card">
       <div class="card-header">
   <h3 class="card-title">Called by</h3>
@@ -219,180 +550,304 @@
 <!-- Generated by graphviz version 2.43.0 (0)
  -->
 <!-- Title: proc~~init~~CalledByGraph Pages: 1 -->
-<svg id="procinitCalledByGraph" width="255pt" height="410pt"
- viewBox="0.00 0.00 255.00 410.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="proc~~init~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 406)">
+<svg id="procinitCalledByGraph" width="641pt" height="647pt"
+ viewBox="0.00 0.00 641.00 647.44" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~init~~CalledByGraph" class="graph" transform="scale(1.09 1.09) rotate(0) translate(4 700)">
 <title>proc~~init~~CalledByGraph</title>
-<polygon fill="white" stroke="transparent" points="-4,4 -4,-406 251,-406 251,4 -4,4"/>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-700 693,-700 693,4 -4,4"/>
 <!-- proc~init -->
 <g id="proc~~init~~CalledByGraph_node1" class="node">
 <title>proc~init</title>
-<polygon fill="none" stroke="black" points="247,-213 130,-213 130,-189 247,-189 247,-213"/>
-<text text-anchor="middle" x="188.5" y="-198.6" font-family="Helvetica,sans-Serif" font-size="10.50">tester::tester_t%init</text>
+<polygon fill="none" stroke="black" points="689,-360 344,-360 344,-336 689,-336 689,-360"/>
+<text text-anchor="middle" x="516.5" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50">flap_command_line_interface_t::command_line_interface%init</text>
+</g>
+<!-- proc~fake_call -->
+<g id="proc~~init~~CalledByGraph_node2" class="node">
+<title>proc~fake_call</title>
+<g id="a_proc~~init~~CalledByGraph_node2"><a xlink:href="../proc/fake_call.html" xlink:title="flap_test_group::fake_call">
+<polygon fill="#d9534f" stroke="#d9534f" points="293,-696 145,-696 145,-672 293,-672 293,-696"/>
+<text text-anchor="middle" x="219" y="-681.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_group::fake_call</text>
+</a>
+</g>
+</g>
+<!-- proc~fake_call&#45;&gt;proc~init -->
+<g id="proc~~init~~CalledByGraph_edge1" class="edge">
+<title>proc~fake_call&#45;&gt;proc~init</title>
+<path fill="none" stroke="#000000" d="M291.68,-671.89C297.45,-669.45 302.98,-666.52 308,-663 419.07,-585.16 486.24,-427.1 507.84,-369.56"/>
+<polygon fill="#000000" stroke="#000000" points="511.18,-370.62 511.34,-360.03 504.61,-368.21 511.18,-370.62"/>
+</g>
+<!-- program~flap_save_bash_completion -->
+<g id="proc~~init~~CalledByGraph_node3" class="node">
+<title>program~flap_save_bash_completion</title>
+<g id="a_proc~~init~~CalledByGraph_node3"><a xlink:href="../program/flap_save_bash_completion.html" xlink:title="flap_save_bash_completion">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="298.5,-654 139.5,-654 139.5,-630 298.5,-630 298.5,-654"/>
+<text text-anchor="middle" x="219" y="-639.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_save_bash_completion</text>
+</a>
+</g>
+</g>
+<!-- program~flap_save_bash_completion&#45;&gt;proc~init -->
+<g id="proc~~init~~CalledByGraph_edge2" class="edge">
+<title>program~flap_save_bash_completion&#45;&gt;proc~init</title>
+<path fill="none" stroke="#000000" d="M290.54,-629.88C296.68,-627.44 302.6,-624.52 308,-621 409.47,-554.87 480.71,-421.44 505.68,-369.44"/>
+<polygon fill="#000000" stroke="#000000" points="508.95,-370.7 510.06,-360.17 502.62,-367.72 508.95,-370.7"/>
+</g>
+<!-- program~flap_save_man_page -->
+<g id="proc~~init~~CalledByGraph_node4" class="node">
+<title>program~flap_save_man_page</title>
+<g id="a_proc~~init~~CalledByGraph_node4"><a xlink:href="../program/flap_save_man_page.html" xlink:title="flap_save_man_page">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="281,-612 157,-612 157,-588 281,-588 281,-612"/>
+<text text-anchor="middle" x="219" y="-597.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_save_man_page</text>
+</a>
+</g>
+</g>
+<!-- program~flap_save_man_page&#45;&gt;proc~init -->
+<g id="proc~~init~~CalledByGraph_edge3" class="edge">
+<title>program~flap_save_man_page&#45;&gt;proc~init</title>
+<path fill="none" stroke="#000000" d="M281.06,-590.53C290.46,-587.65 299.77,-583.9 308,-579 400.35,-524.07 474.68,-414.64 503.07,-368.88"/>
+<polygon fill="#000000" stroke="#000000" points="506.19,-370.48 508.42,-360.12 500.22,-366.83 506.19,-370.48"/>
+</g>
+<!-- program~flap_save_usage_to_markdown -->
+<g id="proc~~init~~CalledByGraph_node5" class="node">
+<title>program~flap_save_usage_to_markdown</title>
+<g id="a_proc~~init~~CalledByGraph_node5"><a xlink:href="../program/flap_save_usage_to_markdown.html" xlink:title="flap_save_usage_to_markdown">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="308,-570 130,-570 130,-546 308,-546 308,-570"/>
+<text text-anchor="middle" x="219" y="-555.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_save_usage_to_markdown</text>
+</a>
+</g>
+</g>
+<!-- program~flap_save_usage_to_markdown&#45;&gt;proc~init -->
+<g id="proc~~init~~CalledByGraph_edge4" class="edge">
+<title>program~flap_save_usage_to_markdown&#45;&gt;proc~init</title>
+<path fill="none" stroke="#000000" d="M286.68,-545.92C294.08,-543.47 301.34,-540.52 308,-537 391.29,-492.94 467.15,-407.6 499.28,-368.49"/>
+<polygon fill="#000000" stroke="#000000" points="502.22,-370.42 505.8,-360.44 496.78,-366.01 502.22,-370.42"/>
+</g>
+<!-- program~flap_test_action_store -->
+<g id="proc~~init~~CalledByGraph_node6" class="node">
+<title>program~flap_test_action_store</title>
+<g id="a_proc~~init~~CalledByGraph_node6"><a xlink:href="../program/flap_test_action_store.html" xlink:title="flap_test_action_store">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="282.5,-528 155.5,-528 155.5,-504 282.5,-504 282.5,-528"/>
+<text text-anchor="middle" x="219" y="-513.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_action_store</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_action_store&#45;&gt;proc~init -->
+<g id="proc~~init~~CalledByGraph_edge5" class="edge">
+<title>program~flap_test_action_store&#45;&gt;proc~init</title>
+<path fill="none" stroke="#000000" d="M282.54,-504.22C291.27,-501.68 299.99,-498.63 308,-495 382.83,-461.1 458.51,-398.82 494.27,-367.32"/>
+<polygon fill="#000000" stroke="#000000" points="496.93,-369.63 502.08,-360.37 492.28,-364.4 496.93,-369.63"/>
+</g>
+<!-- program~flap_test_ansi_color_style -->
+<g id="proc~~init~~CalledByGraph_node7" class="node">
+<title>program~flap_test_ansi_color_style</title>
+<g id="a_proc~~init~~CalledByGraph_node7"><a xlink:href="../program/flap_test_ansi_color_style.html" xlink:title="flap_test_ansi_color_style">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="292.5,-486 145.5,-486 145.5,-462 292.5,-462 292.5,-486"/>
+<text text-anchor="middle" x="219" y="-471.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_ansi_color_style</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_ansi_color_style&#45;&gt;proc~init -->
+<g id="proc~~init~~CalledByGraph_edge6" class="edge">
+<title>program~flap_test_ansi_color_style&#45;&gt;proc~init</title>
+<path fill="none" stroke="#000000" d="M278.79,-462C288.66,-459.41 298.71,-456.41 308,-453 374.68,-428.56 447.69,-388.13 486.85,-365.23"/>
+<polygon fill="#000000" stroke="#000000" points="488.76,-368.17 495.6,-360.07 485.21,-362.14 488.76,-368.17"/>
+</g>
+<!-- program~flap_test_basic -->
+<g id="proc~~init~~CalledByGraph_node8" class="node">
+<title>program~flap_test_basic</title>
+<g id="a_proc~~init~~CalledByGraph_node8"><a xlink:href="../program/flap_test_basic.html" xlink:title="flap_test_basic">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="264.5,-444 173.5,-444 173.5,-420 264.5,-420 264.5,-444"/>
+<text text-anchor="middle" x="219" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_basic</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_basic&#45;&gt;proc~init -->
+<g id="proc~~init~~CalledByGraph_edge7" class="edge">
+<title>program~flap_test_basic&#45;&gt;proc~init</title>
+<path fill="none" stroke="#000000" d="M264.9,-421.84C278.76,-418.55 294.05,-414.78 308,-411 363.51,-395.96 426.65,-376.44 468.56,-363.14"/>
+<polygon fill="#000000" stroke="#000000" points="469.74,-366.43 478.21,-360.07 467.62,-359.76 469.74,-366.43"/>
+</g>
+<!-- program~flap_test_choices_logical -->
+<g id="proc~~init~~CalledByGraph_node9" class="node">
+<title>program~flap_test_choices_logical</title>
+<g id="a_proc~~init~~CalledByGraph_node9"><a xlink:href="../program/flap_test_choices_logical.html" xlink:title="flap_test_choices_logical">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="291,-402 147,-402 147,-378 291,-378 291,-402"/>
+<text text-anchor="middle" x="219" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_choices_logical</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_choices_logical&#45;&gt;proc~init -->
+<g id="proc~~init~~CalledByGraph_edge8" class="edge">
+<title>program~flap_test_choices_logical&#45;&gt;proc~init</title>
+<path fill="none" stroke="#000000" d="M291.16,-379.89C330.13,-374.35 378.93,-367.41 421.05,-361.42"/>
+<polygon fill="#000000" stroke="#000000" points="421.64,-364.88 431.05,-360 420.65,-357.95 421.64,-364.88"/>
+</g>
+<!-- program~flap_test_duplicated_clas -->
+<g id="proc~~init~~CalledByGraph_node10" class="node">
+<title>program~flap_test_duplicated_clas</title>
+<g id="a_proc~~init~~CalledByGraph_node10"><a xlink:href="../program/flap_test_duplicated_clas.html" xlink:title="flap_test_duplicated_clas">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="291.5,-360 146.5,-360 146.5,-336 291.5,-336 291.5,-360"/>
+<text text-anchor="middle" x="219" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_duplicated_clas</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_duplicated_clas&#45;&gt;proc~init -->
+<g id="proc~~init~~CalledByGraph_edge9" class="edge">
+<title>program~flap_test_duplicated_clas&#45;&gt;proc~init</title>
+<path fill="none" stroke="#000000" d="M291.53,-348C304.65,-348 318.87,-348 333.56,-348"/>
+<polygon fill="#000000" stroke="#000000" points="333.8,-351.5 343.8,-348 333.8,-344.5 333.8,-351.5"/>
+</g>
+<!-- program~flap_test_group_examples -->
+<g id="proc~~init~~CalledByGraph_node11" class="node">
+<title>program~flap_test_group_examples</title>
+<g id="a_proc~~init~~CalledByGraph_node11"><a xlink:href="../program/flap_test_group_examples.html" xlink:title="flap_test_group_examples">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="294,-318 144,-318 144,-294 294,-294 294,-318"/>
+<text text-anchor="middle" x="219" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_group_examples</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_group_examples&#45;&gt;proc~init -->
+<g id="proc~~init~~CalledByGraph_edge10" class="edge">
+<title>program~flap_test_group_examples&#45;&gt;proc~init</title>
+<path fill="none" stroke="#000000" d="M294.19,-316.54C332.57,-322 379.84,-328.72 420.82,-334.54"/>
+<polygon fill="#000000" stroke="#000000" points="420.43,-338.02 430.82,-335.96 421.42,-331.09 420.43,-338.02"/>
+</g>
+<!-- program~flap_test_hidden -->
+<g id="proc~~init~~CalledByGraph_node12" class="node">
+<title>program~flap_test_hidden</title>
+<g id="a_proc~~init~~CalledByGraph_node12"><a xlink:href="../program/flap_test_hidden.html" xlink:title="flap_test_hidden">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="269,-276 169,-276 169,-252 269,-252 269,-276"/>
+<text text-anchor="middle" x="219" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_hidden</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_hidden&#45;&gt;proc~init -->
+<g id="proc~~init~~CalledByGraph_edge11" class="edge">
+<title>program~flap_test_hidden&#45;&gt;proc~init</title>
+<path fill="none" stroke="#000000" d="M269.01,-275.14C281.74,-278.19 295.42,-281.59 308,-285 363.51,-300.04 426.65,-319.56 468.56,-332.86"/>
+<polygon fill="#000000" stroke="#000000" points="467.62,-336.24 478.21,-335.93 469.74,-329.57 467.62,-336.24"/>
+</g>
+<!-- program~flap_test_ignore_unknown_clas -->
+<g id="proc~~init~~CalledByGraph_node13" class="node">
+<title>program~flap_test_ignore_unknown_clas</title>
+<g id="a_proc~~init~~CalledByGraph_node13"><a xlink:href="../program/flap_test_ignore_unknown_clas.html" xlink:title="flap_test_ignore_unknown_clas">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="307,-234 131,-234 131,-210 307,-210 307,-234"/>
+<text text-anchor="middle" x="219" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_ignore_unknown_clas</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_ignore_unknown_clas&#45;&gt;proc~init -->
+<g id="proc~~init~~CalledByGraph_edge12" class="edge">
+<title>program~flap_test_ignore_unknown_clas&#45;&gt;proc~init</title>
+<path fill="none" stroke="#000000" d="M278.79,-234C288.66,-236.59 298.71,-239.59 308,-243 374.68,-267.44 447.69,-307.87 486.85,-330.77"/>
+<polygon fill="#000000" stroke="#000000" points="485.21,-333.86 495.6,-335.93 488.76,-327.83 485.21,-333.86"/>
+</g>
+<!-- program~flap_test_minimal -->
+<g id="proc~~init~~CalledByGraph_node14" class="node">
+<title>program~flap_test_minimal</title>
+<g id="a_proc~~init~~CalledByGraph_node14"><a xlink:href="../program/flap_test_minimal.html" xlink:title="flap_test_minimal">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="272,-192 166,-192 166,-168 272,-168 272,-192"/>
+<text text-anchor="middle" x="219" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_minimal</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_minimal&#45;&gt;proc~init -->
+<g id="proc~~init~~CalledByGraph_edge13" class="edge">
+<title>program~flap_test_minimal&#45;&gt;proc~init</title>
+<path fill="none" stroke="#000000" d="M272.28,-189.01C284.31,-192.02 296.84,-195.95 308,-201 382.83,-234.9 458.51,-297.18 494.27,-328.68"/>
+<polygon fill="#000000" stroke="#000000" points="492.28,-331.6 502.08,-335.63 496.93,-326.37 492.28,-331.6"/>
+</g>
+<!-- program~flap_test_nargs_insufficient -->
+<g id="proc~~init~~CalledByGraph_node15" class="node">
+<title>program~flap_test_nargs_insufficient</title>
+<g id="a_proc~~init~~CalledByGraph_node15"><a xlink:href="../program/flap_test_nargs_insufficient.html" xlink:title="flap_test_nargs_insufficient">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="297.5,-150 140.5,-150 140.5,-126 297.5,-126 297.5,-150"/>
+<text text-anchor="middle" x="219" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_nargs_insufficient</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_nargs_insufficient&#45;&gt;proc~init -->
+<g id="proc~~init~~CalledByGraph_edge14" class="edge">
+<title>program~flap_test_nargs_insufficient&#45;&gt;proc~init</title>
+<path fill="none" stroke="#000000" d="M286.68,-150.08C294.08,-152.53 301.34,-155.48 308,-159 391.29,-203.06 467.15,-288.4 499.28,-327.51"/>
+<polygon fill="#000000" stroke="#000000" points="496.78,-329.99 505.8,-335.56 502.22,-325.58 496.78,-329.99"/>
+</g>
+<!-- program~flap_test_nargs_insufficient~2 -->
+<g id="proc~~init~~CalledByGraph_node16" class="node">
+<title>program~flap_test_nargs_insufficient~2</title>
+<g id="a_proc~~init~~CalledByGraph_node16"><a xlink:href="../program/flap_test_nargs_insufficient~2.html" xlink:title="flap_test_nargs_insufficient">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="297.5,-108 140.5,-108 140.5,-84 297.5,-84 297.5,-108"/>
+<text text-anchor="middle" x="219" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_nargs_insufficient</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_nargs_insufficient~2&#45;&gt;proc~init -->
+<g id="proc~~init~~CalledByGraph_edge15" class="edge">
+<title>program~flap_test_nargs_insufficient~2&#45;&gt;proc~init</title>
+<path fill="none" stroke="#000000" d="M288.87,-108.08C295.56,-110.53 302.06,-113.47 308,-117 400.35,-171.93 474.68,-281.36 503.07,-327.12"/>
+<polygon fill="#000000" stroke="#000000" points="500.22,-329.17 508.42,-335.88 506.19,-325.52 500.22,-329.17"/>
+</g>
+<!-- program~flap_test_nested -->
+<g id="proc~~init~~CalledByGraph_node17" class="node">
+<title>program~flap_test_nested</title>
+<g id="a_proc~~init~~CalledByGraph_node17"><a xlink:href="../program/flap_test_nested.html" xlink:title="flap_test_nested">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="268.5,-66 169.5,-66 169.5,-42 268.5,-42 268.5,-66"/>
+<text text-anchor="middle" x="219" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_nested</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_nested&#45;&gt;proc~init -->
+<g id="proc~~init~~CalledByGraph_edge16" class="edge">
+<title>program~flap_test_nested&#45;&gt;proc~init</title>
+<path fill="none" stroke="#000000" d="M268.54,-59.41C282.08,-62.5 296.29,-67.37 308,-75 409.47,-141.13 480.71,-274.56 505.68,-326.56"/>
+<polygon fill="#000000" stroke="#000000" points="502.62,-328.28 510.06,-335.83 508.95,-325.3 502.62,-328.28"/>
+</g>
+<!-- program~flap_test_string -->
+<g id="proc~~init~~CalledByGraph_node18" class="node">
+<title>program~flap_test_string</title>
+<g id="a_proc~~init~~CalledByGraph_node18"><a xlink:href="../program/flap_test_string.html" xlink:title="flap_test_string">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="265.5,-24 172.5,-24 172.5,0 265.5,0 265.5,-24"/>
+<text text-anchor="middle" x="219" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_string</text>
+</a>
+</g>
+</g>
+<!-- program~flap_test_string&#45;&gt;proc~init -->
+<g id="proc~~init~~CalledByGraph_edge17" class="edge">
+<title>program~flap_test_string&#45;&gt;proc~init</title>
+<path fill="none" stroke="#000000" d="M265.69,-16.21C280.19,-19.23 295.65,-24.35 308,-33 419.07,-110.84 486.24,-268.9 507.84,-326.44"/>
+<polygon fill="#000000" stroke="#000000" points="504.61,-327.79 511.34,-335.97 511.18,-325.38 504.61,-327.79"/>
 </g>
 <!-- program~flap_test_group -->
-<g id="proc~~init~~CalledByGraph_node2" class="node">
+<g id="proc~~init~~CalledByGraph_node19" class="node">
 <title>program~flap_test_group</title>
-<g id="a_proc~~init~~CalledByGraph_node2"><a xlink:href=".././program/flap_test_group.html" xlink:title="flap_test_group">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="94,-402 0,-402 0,-378 94,-378 94,-402"/>
-<text text-anchor="middle" x="47" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_group</text>
+<g id="a_proc~~init~~CalledByGraph_node19"><a xlink:href="../program/flap_test_group.html" xlink:title="flap_test_group">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="94,-696 0,-696 0,-672 94,-672 94,-696"/>
+<text text-anchor="middle" x="47" y="-681.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_group</text>
 </a>
 </g>
 </g>
-<!-- program~flap_test_group&#45;&gt;proc~init -->
-<g id="proc~~init~~CalledByGraph_edge1" class="edge">
-<title>program~flap_test_group&#45;&gt;proc~init</title>
-<path fill="none" stroke="#000000" d="M81.27,-377.94C85.85,-375.42 90.26,-372.45 94,-369 139.34,-327.13 167.96,-258.12 180.36,-223"/>
-<polygon fill="#000000" stroke="#000000" points="183.76,-223.86 183.69,-213.26 177.14,-221.59 183.76,-223.86"/>
-</g>
-<!-- program~test_tester_05 -->
-<g id="proc~~init~~CalledByGraph_node3" class="node">
-<title>program~test_tester_05</title>
-<g id="a_proc~~init~~CalledByGraph_node3"><a xlink:href=".././program/test_tester_05.html" xlink:title="test_tester_05">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="90.5,-360 3.5,-360 3.5,-336 90.5,-336 90.5,-360"/>
-<text text-anchor="middle" x="47" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_tester_05</text>
-</a>
-</g>
-</g>
-<!-- program~test_tester_05&#45;&gt;proc~init -->
-<g id="proc~~init~~CalledByGraph_edge2" class="edge">
-<title>program~test_tester_05&#45;&gt;proc~init</title>
-<path fill="none" stroke="#000000" d="M79.92,-336C84.89,-333.42 89.77,-330.42 94,-327 130.78,-297.24 160.69,-249.87 176.12,-222.48"/>
-<polygon fill="#000000" stroke="#000000" points="179.38,-223.81 181.14,-213.36 173.25,-220.43 179.38,-223.81"/>
-</g>
-<!-- program~test_tester_1 -->
-<g id="proc~~init~~CalledByGraph_node4" class="node">
-<title>program~test_tester_1</title>
-<g id="a_proc~~init~~CalledByGraph_node4"><a xlink:href=".././program/test_tester_1.html" xlink:title="test_tester_1">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="87,-318 7,-318 7,-294 87,-294 87,-318"/>
-<text text-anchor="middle" x="47" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_tester_1</text>
-</a>
-</g>
-</g>
-<!-- program~test_tester_1&#45;&gt;proc~init -->
-<g id="proc~~init~~CalledByGraph_edge3" class="edge">
-<title>program~test_tester_1&#45;&gt;proc~init</title>
-<path fill="none" stroke="#000000" d="M77.91,-293.95C83.42,-291.29 89.01,-288.27 94,-285 122.75,-266.16 151.51,-238.71 169.39,-220.37"/>
-<polygon fill="#000000" stroke="#000000" points="171.95,-222.76 176.36,-213.12 166.91,-217.91 171.95,-222.76"/>
-</g>
-<!-- program~test_tester_1~2 -->
-<g id="proc~~init~~CalledByGraph_node5" class="node">
-<title>program~test_tester_1~2</title>
-<g id="a_proc~~init~~CalledByGraph_node5"><a xlink:href=".././program/test_tester_1~2.html" xlink:title="test_tester_1">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="87,-276 7,-276 7,-252 87,-252 87,-276"/>
-<text text-anchor="middle" x="47" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_tester_1</text>
-</a>
-</g>
-</g>
-<!-- program~test_tester_1~2&#45;&gt;proc~init -->
-<g id="proc~~init~~CalledByGraph_edge4" class="edge">
-<title>program~test_tester_1~2&#45;&gt;proc~init</title>
-<path fill="none" stroke="#000000" d="M74.9,-251.85C96.7,-242 127.64,-228.04 151.56,-217.23"/>
-<polygon fill="#000000" stroke="#000000" points="153.01,-220.42 160.69,-213.11 150.13,-214.04 153.01,-220.42"/>
-</g>
-<!-- program~test_tester_2 -->
-<g id="proc~~init~~CalledByGraph_node6" class="node">
-<title>program~test_tester_2</title>
-<g id="a_proc~~init~~CalledByGraph_node6"><a xlink:href=".././program/test_tester_2.html" xlink:title="test_tester_2">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="87,-234 7,-234 7,-210 87,-210 87,-234"/>
-<text text-anchor="middle" x="47" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_tester_2</text>
-</a>
-</g>
-</g>
-<!-- program~test_tester_2&#45;&gt;proc~init -->
-<g id="proc~~init~~CalledByGraph_edge5" class="edge">
-<title>program~test_tester_2&#45;&gt;proc~init</title>
-<path fill="none" stroke="#000000" d="M87.23,-216.09C97.35,-214.57 108.53,-212.89 119.66,-211.21"/>
-<polygon fill="#000000" stroke="#000000" points="120.45,-214.63 129.82,-209.68 119.41,-207.71 120.45,-214.63"/>
-</g>
-<!-- program~test_tester_3 -->
-<g id="proc~~init~~CalledByGraph_node7" class="node">
-<title>program~test_tester_3</title>
-<g id="a_proc~~init~~CalledByGraph_node7"><a xlink:href=".././program/test_tester_3.html" xlink:title="test_tester_3">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="87,-192 7,-192 7,-168 87,-168 87,-192"/>
-<text text-anchor="middle" x="47" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_tester_3</text>
-</a>
-</g>
-</g>
-<!-- program~test_tester_3&#45;&gt;proc~init -->
-<g id="proc~~init~~CalledByGraph_edge6" class="edge">
-<title>program~test_tester_3&#45;&gt;proc~init</title>
-<path fill="none" stroke="#000000" d="M87.23,-185.91C97.35,-187.43 108.53,-189.11 119.66,-190.79"/>
-<polygon fill="#000000" stroke="#000000" points="119.41,-194.29 129.82,-192.32 120.45,-187.37 119.41,-194.29"/>
-</g>
-<!-- program~test_tester_4 -->
-<g id="proc~~init~~CalledByGraph_node8" class="node">
-<title>program~test_tester_4</title>
-<g id="a_proc~~init~~CalledByGraph_node8"><a xlink:href=".././program/test_tester_4.html" xlink:title="test_tester_4">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="87,-150 7,-150 7,-126 87,-126 87,-150"/>
-<text text-anchor="middle" x="47" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_tester_4</text>
-</a>
-</g>
-</g>
-<!-- program~test_tester_4&#45;&gt;proc~init -->
-<g id="proc~~init~~CalledByGraph_edge7" class="edge">
-<title>program~test_tester_4&#45;&gt;proc~init</title>
-<path fill="none" stroke="#000000" d="M74.9,-150.15C96.7,-160 127.64,-173.96 151.56,-184.77"/>
-<polygon fill="#000000" stroke="#000000" points="150.13,-187.96 160.69,-188.89 153.01,-181.58 150.13,-187.96"/>
-</g>
-<!-- program~test_tester_6 -->
-<g id="proc~~init~~CalledByGraph_node9" class="node">
-<title>program~test_tester_6</title>
-<g id="a_proc~~init~~CalledByGraph_node9"><a xlink:href=".././program/test_tester_6.html" xlink:title="test_tester_6">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="87,-108 7,-108 7,-84 87,-84 87,-108"/>
-<text text-anchor="middle" x="47" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_tester_6</text>
-</a>
-</g>
-</g>
-<!-- program~test_tester_6&#45;&gt;proc~init -->
-<g id="proc~~init~~CalledByGraph_edge8" class="edge">
-<title>program~test_tester_6&#45;&gt;proc~init</title>
-<path fill="none" stroke="#000000" d="M77.91,-108.05C83.42,-110.71 89.01,-113.73 94,-117 122.75,-135.84 151.51,-163.29 169.39,-181.63"/>
-<polygon fill="#000000" stroke="#000000" points="166.91,-184.09 176.36,-188.88 171.95,-179.24 166.91,-184.09"/>
-</g>
-<!-- program~test_tester_7 -->
-<g id="proc~~init~~CalledByGraph_node10" class="node">
-<title>program~test_tester_7</title>
-<g id="a_proc~~init~~CalledByGraph_node10"><a xlink:href=".././program/test_tester_7.html" xlink:title="test_tester_7">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="87,-66 7,-66 7,-42 87,-42 87,-66"/>
-<text text-anchor="middle" x="47" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_tester_7</text>
-</a>
-</g>
-</g>
-<!-- program~test_tester_7&#45;&gt;proc~init -->
-<g id="proc~~init~~CalledByGraph_edge9" class="edge">
-<title>program~test_tester_7&#45;&gt;proc~init</title>
-<path fill="none" stroke="#000000" d="M79.92,-66C84.89,-68.58 89.77,-71.58 94,-75 130.78,-104.76 160.69,-152.13 176.12,-179.52"/>
-<polygon fill="#000000" stroke="#000000" points="173.25,-181.57 181.14,-188.64 179.38,-178.19 173.25,-181.57"/>
-</g>
-<!-- program~test_tester_8 -->
-<g id="proc~~init~~CalledByGraph_node11" class="node">
-<title>program~test_tester_8</title>
-<g id="a_proc~~init~~CalledByGraph_node11"><a xlink:href=".././program/test_tester_8.html" xlink:title="test_tester_8">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="87,-24 7,-24 7,0 87,0 87,-24"/>
-<text text-anchor="middle" x="47" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_tester_8</text>
-</a>
-</g>
-</g>
-<!-- program~test_tester_8&#45;&gt;proc~init -->
-<g id="proc~~init~~CalledByGraph_edge10" class="edge">
-<title>program~test_tester_8&#45;&gt;proc~init</title>
-<path fill="none" stroke="#000000" d="M81.27,-24.06C85.85,-26.58 90.26,-29.55 94,-33 139.34,-74.87 167.96,-143.88 180.36,-179"/>
-<polygon fill="#000000" stroke="#000000" points="177.14,-180.41 183.69,-188.74 183.76,-178.14 177.14,-180.41"/>
+<!-- program~flap_test_group&#45;&gt;proc~fake_call -->
+<g id="proc~~init~~CalledByGraph_edge18" class="edge">
+<title>program~flap_test_group&#45;&gt;proc~fake_call</title>
+<path fill="none" stroke="#000000" d="M94,-684C106.59,-684 120.62,-684 134.6,-684"/>
+<polygon fill="#000000" stroke="#000000" points="134.75,-687.5 144.75,-684 134.75,-680.5 134.75,-687.5"/>
 </g>
 </g>
 </svg>
-</div>        <div><a type="button" class="graph-help" data-toggle="modal" href="#CalledByGraph-help-text">Help</a></div>
+</div>                <script>
+                  var panprocinitCalledByGraph = svgPanZoom('#procinitCalledByGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#CalledByGraph-help-text">Help</a>
+          </div>
           <div class="modal fade" id="CalledByGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                   <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-              <div class="modal-body">
+                <div class="modal-body">
 <p>Nodes of different colours represent the following: </p>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -475,27 +930,62 @@ implementation in a submodule of an interface in a parent module.
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="hl codehilite"><pre><span></span><span class="w">  </span><span class="k">subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">tolerance32</span><span class="p">,</span><span class="w"> </span><span class="n">tolerance64</span><span class="p">)</span>
-<span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">tester_t</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w">          </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span><span class="w">        </span><span class="c">!&lt; The tester.</span>
-<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real32</span><span class="p">),</span><span class="w">    </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">tolerance32</span><span class="w"> </span><span class="c">!&lt; Real tolerance, 32 bits.</span>
-<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w">    </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">tolerance64</span><span class="w"> </span><span class="c">!&lt; Real tolerance, 64 bits.</span>
+    <div class="hl codehilite"><pre><span></span><span class="w">  </span><span class="k">subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">progname</span><span class="p">,</span><span class="w"> </span><span class="n">version</span><span class="p">,</span><span class="w"> </span><span class="n">help</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="p">,</span><span class="w"> </span><span class="n">license</span><span class="p">,</span><span class="w"> </span><span class="n">authors</span><span class="p">,</span><span class="w"> </span><span class="n">examples</span><span class="p">,</span><span class="w"> </span><span class="n">epilog</span><span class="p">,</span><span class="w"> </span><span class="n">disable_hv</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">                  </span><span class="n">usage_lun</span><span class="p">,</span><span class="w"> </span><span class="n">error_lun</span><span class="p">,</span><span class="w"> </span><span class="n">version_lun</span><span class="p">,</span><span class="w"> </span><span class="n">error_color</span><span class="p">,</span><span class="w"> </span><span class="n">error_style</span><span class="p">,</span><span class="w"> </span><span class="n">ignore_unknown_clas</span><span class="p">)</span>
+<span class="w">  </span><span class="c">!&lt; Initialize CLI.</span>
+<span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="n">command_line_interface</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">self</span><span class="w">                </span><span class="c">!&lt; CLI data.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">progname</span><span class="w">            </span><span class="c">!&lt; Program name.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">version</span><span class="w">             </span><span class="c">!&lt; Program version.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">help</span><span class="w">                </span><span class="c">!&lt; Help message introducing the CLI usage.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">description</span><span class="w">         </span><span class="c">!&lt; Detailed description message introducing the program.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">license</span><span class="w">             </span><span class="c">!&lt; License description.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">authors</span><span class="w">             </span><span class="c">!&lt; Authors list.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">examples</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span><span class="w">        </span><span class="c">!&lt; Examples of correct usage.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">epilog</span><span class="w">              </span><span class="c">!&lt; Epilog message.</span>
+<span class="w">  </span><span class="kt">logical</span><span class="p">,</span><span class="w">      </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">disable_hv</span><span class="w">          </span><span class="c">!&lt; Disable automatic insert of &#39;help&#39; and &#39;version&#39; CLAs.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">usage_lun</span><span class="w">           </span><span class="c">!&lt; Unit number to print usage/help.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">version_lun</span><span class="w">         </span><span class="c">!&lt; Unit number to print version/license info.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">error_lun</span><span class="w">           </span><span class="c">!&lt; Unit number to print error info.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">error_color</span><span class="w">         </span><span class="c">!&lt; ANSI color of error messages.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">error_style</span><span class="w">         </span><span class="c">!&lt; ANSI style of error messages.</span>
+<span class="w">  </span><span class="kt">logical</span><span class="p">,</span><span class="w">      </span><span class="k">optional</span><span class="p">,</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">ignore_unknown_clas</span><span class="w"> </span><span class="c">!&lt; Disable errors-raising for passed unknown CLAs.</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="w"> </span><span class="k">allocatable</span><span class="w">                </span><span class="kd">::</span><span class="w"> </span><span class="n">prog_invocation</span><span class="w">     </span><span class="c">!&lt; Complete program invocation.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                                 </span><span class="kd">::</span><span class="w"> </span><span class="n">invocation_length</span><span class="w">   </span><span class="c">!&lt; Length of invocation.</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="w">                                 </span><span class="kd">::</span><span class="w"> </span><span class="n">retrieval_status</span><span class="w">    </span><span class="c">!&lt; Retrieval status.</span>
 
-<span class="w">    </span><span class="n">this</span><span class="p">%</span><span class="w"> </span><span class="n">n_errors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">this</span><span class="p">%</span><span class="w"> </span><span class="n">n_tests</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
-
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">tolerance64</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">       </span><span class="n">this</span><span class="p">%</span><span class="w"> </span><span class="n">tolerance64</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tolerance64</span>
+<span class="w">  </span><span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">free</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">progname</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">    </span><span class="n">self</span><span class="p">%</span><span class="n">progname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">progname</span>
+<span class="w">  </span><span class="k">else</span>
+<span class="w">    </span><span class="c">! try to set the default progname to the 0th command line entry a-la unix $0</span>
+<span class="w">    </span><span class="k">call </span><span class="nb">get_command_argument</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="o">=</span><span class="n">invocation_length</span><span class="p">)</span>
+<span class="w">    </span><span class="k">allocate</span><span class="p">(</span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="n">invocation_length</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">prog_invocation</span><span class="p">)</span>
+<span class="w">    </span><span class="k">call </span><span class="nb">get_command_argument</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="o">=</span><span class="n">prog_invocation</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="o">=</span><span class="n">retrieval_status</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">retrieval_status</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">      </span><span class="n">self</span><span class="p">%</span><span class="n">progname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prog_invocation</span>
 <span class="w">    </span><span class="k">else</span>
-<span class="k">       </span><span class="n">this</span><span class="p">%</span><span class="w"> </span><span class="n">tolerance64</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2._real64</span><span class="o">*</span><span class="nb">epsilon</span><span class="p">(</span><span class="mf">1._real64</span><span class="p">)</span>
-<span class="w">    </span><span class="k">end if</span>
-
-<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">tolerance32</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
-<span class="k">       </span><span class="n">this</span><span class="p">%</span><span class="w"> </span><span class="n">tolerance32</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tolerance32</span>
-<span class="w">    </span><span class="k">else</span>
-<span class="k">       </span><span class="n">this</span><span class="p">%</span><span class="w"> </span><span class="n">tolerance32</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2._real32</span><span class="o">*</span><span class="nb">epsilon</span><span class="p">(</span><span class="mf">1._real32</span><span class="p">)</span>
-<span class="w">    </span><span class="k">end if</span>
-
-<span class="k">  end subroutine </span><span class="n">init</span>
+<span class="k">      </span><span class="n">self</span><span class="p">%</span><span class="n">progname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;program&#39;</span>
+<span class="w">    </span><span class="k">endif</span>
+<span class="k">  endif</span>
+<span class="k">  </span><span class="n">self</span><span class="p">%</span><span class="n">version</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;unknown&#39;</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">version</span><span class="w">    </span><span class="p">))</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">version</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">version</span>
+<span class="w">  </span><span class="n">self</span><span class="p">%</span><span class="n">help</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;usage: &#39;</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">help</span><span class="w">       </span><span class="p">))</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">help</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="n">help</span>
+<span class="w">  </span><span class="n">self</span><span class="p">%</span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w">        </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">description</span><span class="p">))</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">description</span>
+<span class="w">  </span><span class="n">self</span><span class="p">%</span><span class="n">license</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w">        </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">license</span><span class="w">    </span><span class="p">))</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">license</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">license</span>
+<span class="w">  </span><span class="n">self</span><span class="p">%</span><span class="n">authors</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w">        </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">authors</span><span class="w">    </span><span class="p">))</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">authors</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">authors</span>
+<span class="w">  </span><span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">set_examples</span><span class="p">(</span><span class="n">examples</span><span class="p">)</span>
+<span class="w">  </span><span class="n">self</span><span class="p">%</span><span class="n">epilog</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">epilog</span><span class="w">     </span><span class="p">))</span><span class="w">         </span><span class="n">self</span><span class="p">%</span><span class="n">epilog</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="n">epilog</span>
+<span class="w">                          </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">disable_hv</span><span class="w"> </span><span class="p">))</span><span class="w">         </span><span class="n">self</span><span class="p">%</span><span class="n">disable_hv</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="n">disable_hv</span><span class="w">         </span><span class="c">! default set by self%free</span>
+<span class="w">                          </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">usage_lun</span><span class="w">  </span><span class="p">))</span><span class="w">         </span><span class="n">self</span><span class="p">%</span><span class="n">usage_lun</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="n">usage_lun</span><span class="w">          </span><span class="c">! default set by self%free</span>
+<span class="w">                          </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">version_lun</span><span class="p">))</span><span class="w">         </span><span class="n">self</span><span class="p">%</span><span class="n">version_lun</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="n">version_lun</span><span class="w">        </span><span class="c">! default set by self%free</span>
+<span class="w">                          </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">error_lun</span><span class="w">  </span><span class="p">))</span><span class="w">         </span><span class="n">self</span><span class="p">%</span><span class="n">error_lun</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="n">error_lun</span><span class="w">          </span><span class="c">! default set by self%free</span>
+<span class="w">  </span><span class="n">self</span><span class="p">%</span><span class="n">error_color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">error_color</span><span class="p">))</span><span class="w">         </span><span class="n">self</span><span class="p">%</span><span class="n">error_color</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="n">error_color</span>
+<span class="w">  </span><span class="n">self</span><span class="p">%</span><span class="n">error_style</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">error_style</span><span class="p">))</span><span class="w">         </span><span class="n">self</span><span class="p">%</span><span class="n">error_style</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="n">error_style</span>
+<span class="w">                          </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">ignore_unknown_clas</span><span class="p">))</span><span class="w"> </span><span class="n">self</span><span class="p">%</span><span class="n">ignore_unknown_clas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ignore_unknown_clas</span><span class="c">! default set by self%free</span>
+<span class="w">  </span><span class="c">! initialize only the first default group</span>
+<span class="w">  </span><span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="p">))</span>
+<span class="w">  </span><span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="mi">0</span><span class="p">)%</span><span class="n">assign_object</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+<span class="w">  </span><span class="n">self</span><span class="p">%</span><span class="n">clasg</span><span class="p">(</span><span class="mi">0</span><span class="p">)%</span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="w">  </span><span class="k">endsubroutine </span><span class="n">init</span>
 </pre></div>
 
     </section>
@@ -509,7 +999,7 @@ implementation in a submodule of an interface in a parent module.
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
+          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2024 
 </p>
           </div>
           <div class="col">

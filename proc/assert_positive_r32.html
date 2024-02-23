@@ -1,3 +1,5 @@
+<!-- -*- mode: jinja2 -*- -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -17,7 +19,8 @@
     <link href="../css/local.css" rel="stylesheet">
       <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
   <body>
@@ -176,7 +179,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-r"></span>
+              <span class="anchor" id="variable-r~3"></span>
               real(kind=real32),
             </td>
 <td>intent(in)</td>
@@ -218,7 +221,7 @@
 <!-- none~assert_positive -->
 <g id="proc~~assert_positive_r32~~CalledByGraph_node2" class="node">
 <title>none~assert_positive</title>
-<g id="a_proc~~assert_positive_r32~~CalledByGraph_node2"><a xlink:href=".././type/tester_t.html#boundprocedure-assert_positive" xlink:title="tester::tester_t%assert_positive">
+<g id="a_proc~~assert_positive_r32~~CalledByGraph_node2"><a xlink:href="../type/tester_t.html#boundprocedure-assert_positive" xlink:title="tester::tester_t%assert_positive">
 <polygon fill="#a7506f" stroke="#a7506f" points="302,-45 123,-45 123,-21 302,-21 302,-45"/>
 <text text-anchor="middle" x="212.5" y="-30.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">tester::tester_t%assert_positive</text>
 </a>
@@ -233,7 +236,7 @@
 <!-- program~test_tester_05 -->
 <g id="proc~~assert_positive_r32~~CalledByGraph_node3" class="node">
 <title>program~test_tester_05</title>
-<g id="a_proc~~assert_positive_r32~~CalledByGraph_node3"><a xlink:href=".././program/test_tester_05.html" xlink:title="test_tester_05">
+<g id="a_proc~~assert_positive_r32~~CalledByGraph_node3"><a xlink:href="../program/test_tester_05.html" xlink:title="test_tester_05">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="87,-66 0,-66 0,-42 87,-42 87,-66"/>
 <text text-anchor="middle" x="43.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_tester_05</text>
 </a>
@@ -245,34 +248,34 @@
 <path fill="none" stroke="#000000" d="M87.07,-48.65C95.08,-47.64 103.75,-46.55 112.66,-45.43"/>
 <polygon fill="#000000" stroke="#000000" points="113.32,-48.87 122.8,-44.15 112.44,-41.93 113.32,-48.87"/>
 </g>
-<!-- program~test_tester_1~2 -->
+<!-- program~test_tester_1 -->
 <g id="proc~~assert_positive_r32~~CalledByGraph_node4" class="node">
-<title>program~test_tester_1~2</title>
-<g id="a_proc~~assert_positive_r32~~CalledByGraph_node4"><a xlink:href=".././program/test_tester_1~2.html" xlink:title="test_tester_1">
+<title>program~test_tester_1</title>
+<g id="a_proc~~assert_positive_r32~~CalledByGraph_node4"><a xlink:href="../program/test_tester_1.html" xlink:title="test_tester_1">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="83.5,-24 3.5,-24 3.5,0 83.5,0 83.5,-24"/>
 <text text-anchor="middle" x="43.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_tester_1</text>
 </a>
 </g>
 </g>
-<!-- program~test_tester_1~2&#45;&gt;none~assert_positive -->
+<!-- program~test_tester_1&#45;&gt;none~assert_positive -->
 <g id="proc~~assert_positive_r32~~CalledByGraph_edge3" class="edge">
-<title>program~test_tester_1~2&#45;&gt;none~assert_positive</title>
+<title>program~test_tester_1&#45;&gt;none~assert_positive</title>
 <path fill="none" stroke="#000000" d="M83.65,-16.92C92.55,-18.04 102.39,-19.28 112.54,-20.56"/>
 <polygon fill="#000000" stroke="#000000" points="112.42,-24.07 122.78,-21.84 113.29,-17.12 112.42,-24.07"/>
 </g>
 </g>
 </svg>
-</div>        <div><a type="button" class="graph-help" data-toggle="modal" href="#CalledByGraph-help-text">Help</a></div>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#CalledByGraph-help-text">Help</a>
+          </div>
           <div class="modal fade" id="CalledByGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                   <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-              <div class="modal-body">
+                <div class="modal-body">
 <p>Nodes of different colours represent the following: </p>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -378,7 +381,7 @@ implementation in a submodule of an interface in a parent module.
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
+          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2024 
 </p>
           </div>
           <div class="col">

@@ -1,3 +1,5 @@
+<!-- -*- mode: jinja2 -*- -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -17,7 +19,8 @@
     <link href="../css/local.css" rel="stylesheet">
       <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
   <body>
@@ -159,7 +162,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-string~9"></span>
+              <span class="anchor" id="variable-string~7"></span>
               character(kind=ASCII, len=*),
             </td>
 <td>intent(in)</td>
@@ -253,7 +256,7 @@
 <!-- proc~color_index -->
 <g id="proc~~colorize_ascii~~CallsGraph_node2" class="node">
 <title>proc~color_index</title>
-<g id="a_proc~~colorize_ascii~~CallsGraph_node2"><a xlink:href=".././proc/color_index.html" xlink:title="face::color_index">
+<g id="a_proc~~colorize_ascii~~CallsGraph_node2"><a xlink:href="../proc/color_index.html" xlink:title="face::color_index">
 <polygon fill="#d94e8f" stroke="#d94e8f" points="255,-108 151,-108 151,-84 255,-84 255,-108"/>
 <text text-anchor="middle" x="203" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face::color_index</text>
 </a>
@@ -268,7 +271,7 @@
 <!-- proc~style_index -->
 <g id="proc~~colorize_ascii~~CallsGraph_node3" class="node">
 <title>proc~style_index</title>
-<g id="a_proc~~colorize_ascii~~CallsGraph_node3"><a xlink:href=".././proc/style_index.html" xlink:title="face::style_index">
+<g id="a_proc~~colorize_ascii~~CallsGraph_node3"><a xlink:href="../proc/style_index.html" xlink:title="face::style_index">
 <polygon fill="#d94e8f" stroke="#d94e8f" points="254,-66 152,-66 152,-42 254,-42 254,-66"/>
 <text text-anchor="middle" x="203" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face::style_index</text>
 </a>
@@ -283,7 +286,7 @@
 <!-- proc~upper -->
 <g id="proc~~colorize_ascii~~CallsGraph_node4" class="node">
 <title>proc~upper</title>
-<g id="a_proc~~colorize_ascii~~CallsGraph_node4"><a xlink:href=".././proc/upper.html" xlink:title="face::upper">
+<g id="a_proc~~colorize_ascii~~CallsGraph_node4"><a xlink:href="../proc/upper.html" xlink:title="face::upper">
 <polygon fill="#d94e8f" stroke="#d94e8f" points="240.5,-24 165.5,-24 165.5,0 240.5,0 240.5,-24"/>
 <text text-anchor="middle" x="203" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face::upper</text>
 </a>
@@ -297,17 +300,17 @@
 </g>
 </g>
 </svg>
-</div>        <div><a type="button" class="graph-help" data-toggle="modal" href="#CallsGraph-help-text">Help</a></div>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#CallsGraph-help-text">Help</a>
+          </div>
           <div class="modal fade" id="CallsGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                   <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-              <div class="modal-body">
+                <div class="modal-body">
 <p>Nodes of different colours represent the following: </p>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -442,7 +445,7 @@ implementation in a submodule of an interface in a parent module.
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
+          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2024 
 </p>
           </div>
           <div class="col">

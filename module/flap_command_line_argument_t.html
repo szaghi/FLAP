@@ -1,3 +1,5 @@
+<!-- -*- mode: jinja2 -*- -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -17,7 +19,8 @@
     <link href="../css/local.css" rel="stylesheet">
       <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
   <body>
@@ -74,7 +77,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title="29.9% of total for modules and submodules.">1200 statements</a>
+                 title="29.6% of total for modules and submodules.">1184 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -118,6 +121,7 @@
             <a class="list-group-item" href="../module/flap_command_line_argument_t.html#variable-action_store_true">ACTION_STORE_TRUE</a>
             <a class="list-group-item" href="../module/flap_command_line_argument_t.html#variable-action_store_false">ACTION_STORE_FALSE</a>
             <a class="list-group-item" href="../module/flap_command_line_argument_t.html#variable-action_print_help">ACTION_PRINT_HELP</a>
+            <a class="list-group-item" href="../module/flap_command_line_argument_t.html#variable-action_print_mark">ACTION_PRINT_MARK</a>
             <a class="list-group-item" href="../module/flap_command_line_argument_t.html#variable-action_print_vers">ACTION_PRINT_VERS</a>
             <a class="list-group-item" href="../module/flap_command_line_argument_t.html#variable-args_sep">ARGS_SEP</a>
             <a class="list-group-item" href="../module/flap_command_line_argument_t.html#variable-error_optional_no_def">ERROR_OPTIONAL_NO_DEF</a>
@@ -128,7 +132,7 @@
             <a class="list-group-item" href="../module/flap_command_line_argument_t.html#variable-error_positional_no_store">ERROR_POSITIONAL_NO_STORE</a>
             <a class="list-group-item" href="../module/flap_command_line_argument_t.html#variable-error_not_in_choices">ERROR_NOT_IN_CHOICES</a>
             <a class="list-group-item" href="../module/flap_command_line_argument_t.html#variable-error_missing_required">ERROR_MISSING_REQUIRED</a>
-            <a class="list-group-item" href="../module/flap_command_line_argument_t.html#variable-error_m_exclude">ERROR_M_EXCLUDE</a>
+            <a class="list-group-item" href="../module/flap_command_line_argument_t.html#variable-error_m_exclude~2">ERROR_M_EXCLUDE</a>
             <a class="list-group-item" href="../module/flap_command_line_argument_t.html#variable-error_casting_logical">ERROR_CASTING_LOGICAL</a>
             <a class="list-group-item" href="../module/flap_command_line_argument_t.html#variable-error_choices_logical">ERROR_CHOICES_LOGICAL</a>
             <a class="list-group-item" href="../module/flap_command_line_argument_t.html#variable-error_no_list">ERROR_NO_LIST</a>
@@ -175,10 +179,10 @@
       </a>
       <div id="funcs-0" class="collapse">
         <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-is_required_passed">is_required_passed</a>
+            <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-is_required_passed~2">is_required_passed</a>
             <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-is_required_val_passed">is_required_val_passed</a>
-            <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-usage">usage</a>
-            <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-signature">signature</a>
+            <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-usage~2">usage</a>
+            <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-signature~2">signature</a>
             <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-has_choices">has_choices</a>
             <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-check_list_size">check_list_size</a>
         </div>
@@ -192,15 +196,15 @@
       </a>
       <div id="subs-0" class="collapse">
         <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-free">free</a>
-            <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-check">check</a>
-            <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-raise_error_m_exclude">raise_error_m_exclude</a>
+            <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-free~2">free</a>
+            <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-check~2">check</a>
+            <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-raise_error_m_exclude~2">raise_error_m_exclude</a>
             <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-raise_error_nargs_insufficient">raise_error_nargs_insufficient</a>
             <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-raise_error_value_missing">raise_error_value_missing</a>
             <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-raise_error_switch_unknown">raise_error_switch_unknown</a>
             <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-raise_error_duplicated_clas">raise_error_duplicated_clas</a>
-            <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-sanitize_defaults">sanitize_defaults</a>
-            <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-errored">errored</a>
+            <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-sanitize_defaults~2">sanitize_defaults</a>
+            <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-errored~2">errored</a>
             <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-check_envvar_consistency">check_envvar_consistency</a>
             <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-check_action_consistency">check_action_consistency</a>
             <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-check_optional_consistency">check_optional_consistency</a>
@@ -222,7 +226,7 @@
             <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-get_cla_list_varying_logical">get_cla_list_varying_logical</a>
             <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-get_cla_list_varying_char">get_cla_list_varying_char</a>
             <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-cla_assign_cla">cla_assign_cla</a>
-            <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-finalize">finalize</a>
+            <a class="list-group-item" href="../module/flap_command_line_argument_t.html#proc-finalize~2">finalize</a>
         </div>
       </div>
     </div>
@@ -248,10 +252,10 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
+                  <li class="list-inline-item"><a href='flap_object_t.html'>flap_object_t</a></li>
+                  <li class="list-inline-item"><a href='face.html'>face</a></li>
+                  <li class="list-inline-item"><a href='flap_utils_m.html'>flap_utils_m</a></li>
                   <li class="list-inline-item">penf</li>
-                  <li class="list-inline-item"><a href='../module/face.html'>face</a></li>
-                  <li class="list-inline-item"><a href='../module/flap_object_t.html'>flap_object_t</a></li>
-                  <li class="list-inline-item"><a href='../module/flap_utils_m.html'>flap_utils_m</a></li>
               </ul>
             </li>
             <li class="list-group-item">
@@ -275,7 +279,7 @@
 <!-- module~face -->
 <g id="module~~flap_command_line_argument_t~~UsesGraph_node2" class="node">
 <title>module~face</title>
-<g id="a_module~~flap_command_line_argument_t~~UsesGraph_node2"><a xlink:href=".././module/face.html" xlink:title="face">
+<g id="a_module~~flap_command_line_argument_t~~UsesGraph_node2"><a xlink:href="../module/face.html" xlink:title="face">
 <polygon fill="#337ab7" stroke="#337ab7" points="197,-120.94 143,-120.94 143,-96.94 197,-96.94 197,-120.94"/>
 <text text-anchor="middle" x="170" y="-106.54" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face</text>
 </a>
@@ -290,7 +294,7 @@
 <!-- module~flap_object_t -->
 <g id="module~~flap_command_line_argument_t~~UsesGraph_node3" class="node">
 <title>module~flap_object_t</title>
-<g id="a_module~~flap_command_line_argument_t~~UsesGraph_node3"><a xlink:href=".././module/flap_object_t.html" xlink:title="flap_object_t">
+<g id="a_module~~flap_command_line_argument_t~~UsesGraph_node3"><a xlink:href="../module/flap_object_t.html" xlink:title="flap_object_t">
 <polygon fill="#337ab7" stroke="#337ab7" points="210,-78.94 130,-78.94 130,-54.94 210,-54.94 210,-78.94"/>
 <text text-anchor="middle" x="170" y="-64.54" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_object_t</text>
 </a>
@@ -305,7 +309,7 @@
 <!-- module~flap_utils_m -->
 <g id="module~~flap_command_line_argument_t~~UsesGraph_node4" class="node">
 <title>module~flap_utils_m</title>
-<g id="a_module~~flap_command_line_argument_t~~UsesGraph_node4"><a xlink:href=".././module/flap_utils_m.html" xlink:title="flap_utils_m">
+<g id="a_module~~flap_command_line_argument_t~~UsesGraph_node4"><a xlink:href="../module/flap_utils_m.html" xlink:title="flap_utils_m">
 <polygon fill="#337ab7" stroke="#337ab7" points="208,-36.94 132,-36.94 132,-12.94 208,-12.94 208,-36.94"/>
 <text text-anchor="middle" x="170" y="-22.54" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_utils_m</text>
 </a>
@@ -361,17 +365,17 @@
 </g>
 </g>
 </svg>
-</div>        <div><a type="button" class="graph-help" data-toggle="modal" href="#UsesGraph-help-text">Help</a></div>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#UsesGraph-help-text">Help</a>
+          </div>
           <div class="modal fade" id="UsesGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                   <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-              <div class="modal-body">
+                <div class="modal-body">
 <p>Nodes of different colours represent the following: </p>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -461,7 +465,7 @@ modules which it uses.
 <!-- module~flap -->
 <g id="module~~flap_command_line_argument_t~~UsedByGraph_node2" class="node">
 <title>module~flap</title>
-<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node2"><a xlink:href=".././module/flap.html" xlink:title="flap">
+<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node2"><a xlink:href="../module/flap.html" xlink:title="flap">
 <polygon fill="#337ab7" stroke="#337ab7" points="750,-360 696,-360 696,-336 750,-336 750,-360"/>
 <text text-anchor="middle" x="723" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap</text>
 </a>
@@ -476,7 +480,7 @@ modules which it uses.
 <!-- module~flap_command_line_arguments_group_t -->
 <g id="module~~flap_command_line_argument_t~~UsedByGraph_node3" class="node">
 <title>module~flap_command_line_arguments_group_t</title>
-<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node3"><a xlink:href=".././module/flap_command_line_arguments_group_t.html" xlink:title="flap_command_line_arguments_group_t">
+<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node3"><a xlink:href="../module/flap_command_line_arguments_group_t.html" xlink:title="flap_command_line_arguments_group_t">
 <polygon fill="#337ab7" stroke="#337ab7" points="445,-340 220,-340 220,-316 445,-316 445,-340"/>
 <text text-anchor="middle" x="332.5" y="-325.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_arguments_group_t</text>
 </a>
@@ -492,7 +496,7 @@ modules which it uses.
 <!-- module~flap_command_line_interface_t -->
 <g id="module~~flap_command_line_argument_t~~UsedByGraph_node4" class="node">
 <title>module~flap_command_line_interface_t</title>
-<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node4"><a xlink:href=".././module/flap_command_line_interface_t.html" xlink:title="flap_command_line_interface_t">
+<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node4"><a xlink:href="../module/flap_command_line_interface_t.html" xlink:title="flap_command_line_interface_t">
 <polygon fill="#337ab7" stroke="#337ab7" points="660,-340 481,-340 481,-316 660,-316 660,-340"/>
 <text text-anchor="middle" x="570.5" y="-325.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t</text>
 </a>
@@ -525,7 +529,7 @@ modules which it uses.
 <!-- program~flap_save_bash_completion -->
 <g id="module~~flap_command_line_argument_t~~UsedByGraph_node5" class="node">
 <title>program~flap_save_bash_completion</title>
-<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node5"><a xlink:href=".././program/flap_save_bash_completion.html" xlink:title="flap_save_bash_completion">
+<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node5"><a xlink:href="../program/flap_save_bash_completion.html" xlink:title="flap_save_bash_completion">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="954.5,-696 795.5,-696 795.5,-672 954.5,-672 954.5,-696"/>
 <text text-anchor="middle" x="875" y="-681.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_save_bash_completion</text>
 </a>
@@ -540,7 +544,7 @@ modules which it uses.
 <!-- program~flap_save_man_page -->
 <g id="module~~flap_command_line_argument_t~~UsedByGraph_node6" class="node">
 <title>program~flap_save_man_page</title>
-<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node6"><a xlink:href=".././program/flap_save_man_page.html" xlink:title="flap_save_man_page">
+<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node6"><a xlink:href="../program/flap_save_man_page.html" xlink:title="flap_save_man_page">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="937,-654 813,-654 813,-630 937,-630 937,-654"/>
 <text text-anchor="middle" x="875" y="-639.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_save_man_page</text>
 </a>
@@ -555,7 +559,7 @@ modules which it uses.
 <!-- program~flap_save_usage_to_markdown -->
 <g id="module~~flap_command_line_argument_t~~UsedByGraph_node7" class="node">
 <title>program~flap_save_usage_to_markdown</title>
-<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node7"><a xlink:href=".././program/flap_save_usage_to_markdown.html" xlink:title="flap_save_usage_to_markdown">
+<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node7"><a xlink:href="../program/flap_save_usage_to_markdown.html" xlink:title="flap_save_usage_to_markdown">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="964,-612 786,-612 786,-588 964,-588 964,-612"/>
 <text text-anchor="middle" x="875" y="-597.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_save_usage_to_markdown</text>
 </a>
@@ -570,7 +574,7 @@ modules which it uses.
 <!-- program~flap_test_action_store -->
 <g id="module~~flap_command_line_argument_t~~UsedByGraph_node8" class="node">
 <title>program~flap_test_action_store</title>
-<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node8"><a xlink:href=".././program/flap_test_action_store.html" xlink:title="flap_test_action_store">
+<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node8"><a xlink:href="../program/flap_test_action_store.html" xlink:title="flap_test_action_store">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="938.5,-570 811.5,-570 811.5,-546 938.5,-546 938.5,-570"/>
 <text text-anchor="middle" x="875" y="-555.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_action_store</text>
 </a>
@@ -585,7 +589,7 @@ modules which it uses.
 <!-- program~flap_test_ansi_color_style -->
 <g id="module~~flap_command_line_argument_t~~UsedByGraph_node9" class="node">
 <title>program~flap_test_ansi_color_style</title>
-<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node9"><a xlink:href=".././program/flap_test_ansi_color_style.html" xlink:title="flap_test_ansi_color_style">
+<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node9"><a xlink:href="../program/flap_test_ansi_color_style.html" xlink:title="flap_test_ansi_color_style">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="948.5,-528 801.5,-528 801.5,-504 948.5,-504 948.5,-528"/>
 <text text-anchor="middle" x="875" y="-513.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_ansi_color_style</text>
 </a>
@@ -600,7 +604,7 @@ modules which it uses.
 <!-- program~flap_test_basic -->
 <g id="module~~flap_command_line_argument_t~~UsedByGraph_node10" class="node">
 <title>program~flap_test_basic</title>
-<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node10"><a xlink:href=".././program/flap_test_basic.html" xlink:title="flap_test_basic">
+<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node10"><a xlink:href="../program/flap_test_basic.html" xlink:title="flap_test_basic">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="920.5,-486 829.5,-486 829.5,-462 920.5,-462 920.5,-486"/>
 <text text-anchor="middle" x="875" y="-471.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_basic</text>
 </a>
@@ -615,7 +619,7 @@ modules which it uses.
 <!-- program~flap_test_choices_logical -->
 <g id="module~~flap_command_line_argument_t~~UsedByGraph_node11" class="node">
 <title>program~flap_test_choices_logical</title>
-<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node11"><a xlink:href=".././program/flap_test_choices_logical.html" xlink:title="flap_test_choices_logical">
+<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node11"><a xlink:href="../program/flap_test_choices_logical.html" xlink:title="flap_test_choices_logical">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="947,-444 803,-444 803,-420 947,-420 947,-444"/>
 <text text-anchor="middle" x="875" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_choices_logical</text>
 </a>
@@ -630,7 +634,7 @@ modules which it uses.
 <!-- program~flap_test_duplicated_clas -->
 <g id="module~~flap_command_line_argument_t~~UsedByGraph_node12" class="node">
 <title>program~flap_test_duplicated_clas</title>
-<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node12"><a xlink:href=".././program/flap_test_duplicated_clas.html" xlink:title="flap_test_duplicated_clas">
+<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node12"><a xlink:href="../program/flap_test_duplicated_clas.html" xlink:title="flap_test_duplicated_clas">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="947.5,-402 802.5,-402 802.5,-378 947.5,-378 947.5,-402"/>
 <text text-anchor="middle" x="875" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_duplicated_clas</text>
 </a>
@@ -645,7 +649,7 @@ modules which it uses.
 <!-- program~flap_test_group -->
 <g id="module~~flap_command_line_argument_t~~UsedByGraph_node13" class="node">
 <title>program~flap_test_group</title>
-<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node13"><a xlink:href=".././program/flap_test_group.html" xlink:title="flap_test_group">
+<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node13"><a xlink:href="../program/flap_test_group.html" xlink:title="flap_test_group">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="922,-360 828,-360 828,-336 922,-336 922,-360"/>
 <text text-anchor="middle" x="875" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_group</text>
 </a>
@@ -660,7 +664,7 @@ modules which it uses.
 <!-- program~flap_test_group_examples -->
 <g id="module~~flap_command_line_argument_t~~UsedByGraph_node14" class="node">
 <title>program~flap_test_group_examples</title>
-<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node14"><a xlink:href=".././program/flap_test_group_examples.html" xlink:title="flap_test_group_examples">
+<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node14"><a xlink:href="../program/flap_test_group_examples.html" xlink:title="flap_test_group_examples">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="950,-318 800,-318 800,-294 950,-294 950,-318"/>
 <text text-anchor="middle" x="875" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_group_examples</text>
 </a>
@@ -675,7 +679,7 @@ modules which it uses.
 <!-- program~flap_test_hidden -->
 <g id="module~~flap_command_line_argument_t~~UsedByGraph_node15" class="node">
 <title>program~flap_test_hidden</title>
-<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node15"><a xlink:href=".././program/flap_test_hidden.html" xlink:title="flap_test_hidden">
+<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node15"><a xlink:href="../program/flap_test_hidden.html" xlink:title="flap_test_hidden">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="925,-276 825,-276 825,-252 925,-252 925,-276"/>
 <text text-anchor="middle" x="875" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_hidden</text>
 </a>
@@ -690,7 +694,7 @@ modules which it uses.
 <!-- program~flap_test_ignore_unknown_clas -->
 <g id="module~~flap_command_line_argument_t~~UsedByGraph_node16" class="node">
 <title>program~flap_test_ignore_unknown_clas</title>
-<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node16"><a xlink:href=".././program/flap_test_ignore_unknown_clas.html" xlink:title="flap_test_ignore_unknown_clas">
+<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node16"><a xlink:href="../program/flap_test_ignore_unknown_clas.html" xlink:title="flap_test_ignore_unknown_clas">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="963,-234 787,-234 787,-210 963,-210 963,-234"/>
 <text text-anchor="middle" x="875" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_ignore_unknown_clas</text>
 </a>
@@ -705,7 +709,7 @@ modules which it uses.
 <!-- program~flap_test_minimal -->
 <g id="module~~flap_command_line_argument_t~~UsedByGraph_node17" class="node">
 <title>program~flap_test_minimal</title>
-<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node17"><a xlink:href=".././program/flap_test_minimal.html" xlink:title="flap_test_minimal">
+<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node17"><a xlink:href="../program/flap_test_minimal.html" xlink:title="flap_test_minimal">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="928,-192 822,-192 822,-168 928,-168 928,-192"/>
 <text text-anchor="middle" x="875" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_minimal</text>
 </a>
@@ -720,7 +724,7 @@ modules which it uses.
 <!-- program~flap_test_nargs_insufficient -->
 <g id="module~~flap_command_line_argument_t~~UsedByGraph_node18" class="node">
 <title>program~flap_test_nargs_insufficient</title>
-<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node18"><a xlink:href=".././program/flap_test_nargs_insufficient.html" xlink:title="flap_test_nargs_insufficient">
+<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node18"><a xlink:href="../program/flap_test_nargs_insufficient.html" xlink:title="flap_test_nargs_insufficient">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="953.5,-150 796.5,-150 796.5,-126 953.5,-126 953.5,-150"/>
 <text text-anchor="middle" x="875" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_nargs_insufficient</text>
 </a>
@@ -735,7 +739,7 @@ modules which it uses.
 <!-- program~flap_test_nargs_insufficient~2 -->
 <g id="module~~flap_command_line_argument_t~~UsedByGraph_node19" class="node">
 <title>program~flap_test_nargs_insufficient~2</title>
-<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node19"><a xlink:href=".././program/flap_test_nargs_insufficient~2.html" xlink:title="flap_test_nargs_insufficient">
+<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node19"><a xlink:href="../program/flap_test_nargs_insufficient~2.html" xlink:title="flap_test_nargs_insufficient">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="953.5,-108 796.5,-108 796.5,-84 953.5,-84 953.5,-108"/>
 <text text-anchor="middle" x="875" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_nargs_insufficient</text>
 </a>
@@ -750,7 +754,7 @@ modules which it uses.
 <!-- program~flap_test_nested -->
 <g id="module~~flap_command_line_argument_t~~UsedByGraph_node20" class="node">
 <title>program~flap_test_nested</title>
-<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node20"><a xlink:href=".././program/flap_test_nested.html" xlink:title="flap_test_nested">
+<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node20"><a xlink:href="../program/flap_test_nested.html" xlink:title="flap_test_nested">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="924.5,-66 825.5,-66 825.5,-42 924.5,-42 924.5,-66"/>
 <text text-anchor="middle" x="875" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_nested</text>
 </a>
@@ -765,7 +769,7 @@ modules which it uses.
 <!-- program~flap_test_string -->
 <g id="module~~flap_command_line_argument_t~~UsedByGraph_node21" class="node">
 <title>program~flap_test_string</title>
-<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node21"><a xlink:href=".././program/flap_test_string.html" xlink:title="flap_test_string">
+<g id="a_module~~flap_command_line_argument_t~~UsedByGraph_node21"><a xlink:href="../program/flap_test_string.html" xlink:title="flap_test_string">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="921.5,-24 828.5,-24 828.5,0 921.5,0 921.5,-24"/>
 <text text-anchor="middle" x="875" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_string</text>
 </a>
@@ -783,17 +787,17 @@ modules which it uses.
                   var panmoduleflap_command_line_argument_tUsedByGraph = svgPanZoom('#moduleflap_command_line_argument_tUsedByGraph',
                     {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
                   );
-                </script>        <div><a type="button" class="graph-help" data-toggle="modal" href="#UsedByGraph-help-text">Help</a></div>
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#UsedByGraph-help-text">Help</a>
+          </div>
           <div class="modal fade" id="UsedByGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                   <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-              <div class="modal-body">
+                <div class="modal-body">
 <p>Nodes of different colours represent the following: </p>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -956,6 +960,23 @@ parameter
                 <td>&#39;PRINT_HELP&#39;</td>
             <td>
                 <p>Print help message.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-action_print_mark"></span>
+              character(len=*),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>ACTION_PRINT_MARK</strong></td>
+<td> =</td>
+                <td>&#39;PRINT_MARKDOWN&#39;</td>
+            <td>
+                <p>Print help to Markdown file.</p>
             </td>
         </tr>
         <tr>
@@ -1130,7 +1151,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-error_m_exclude"></span>
+              <span class="anchor" id="variable-error_m_exclude~2"></span>
               integer(kind=I4P),
             </td>
               <td>private,</td>
@@ -1436,7 +1457,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-progname~3"></span>
+              <span class="anchor" id="variable-progname"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -1453,7 +1474,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-version~2"></span>
+              <span class="anchor" id="variable-version"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -1470,7 +1491,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-help~4"></span>
+              <span class="anchor" id="variable-help"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -1487,7 +1508,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-help_color~2"></span>
+              <span class="anchor" id="variable-help_color"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -1504,7 +1525,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-help_style~2"></span>
+              <span class="anchor" id="variable-help_style"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -1521,7 +1542,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-help_markdown~2"></span>
+              <span class="anchor" id="variable-help_markdown"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -1538,7 +1559,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-description~3"></span>
+              <span class="anchor" id="variable-description"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -1555,7 +1576,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-license~2"></span>
+              <span class="anchor" id="variable-license"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -1572,7 +1593,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-authors~2"></span>
+              <span class="anchor" id="variable-authors"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -1589,7 +1610,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-epilog~2"></span>
+              <span class="anchor" id="variable-epilog"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -1640,7 +1661,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-error_color~2"></span>
+              <span class="anchor" id="variable-error_color"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -1657,7 +1678,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-error_style~2"></span>
+              <span class="anchor" id="variable-error_style"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -1674,7 +1695,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-examples~4"></span>
+              <span class="anchor" id="variable-examples"></span>
               character(len=512),
             </td>
               <td>public,</td>
@@ -1691,7 +1712,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-error~35"></span>
+              <span class="anchor" id="variable-error~4"></span>
               integer(kind=I4P),
             </td>
               <td>public</td>
@@ -1708,7 +1729,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-usage_lun~2"></span>
+              <span class="anchor" id="variable-usage_lun"></span>
               integer(kind=I4P),
             </td>
               <td>public</td>
@@ -1725,7 +1746,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-version_lun~2"></span>
+              <span class="anchor" id="variable-version_lun"></span>
               integer(kind=I4P),
             </td>
               <td>public</td>
@@ -1742,7 +1763,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-error_lun~2"></span>
+              <span class="anchor" id="variable-error_lun"></span>
               integer(kind=I4P),
             </td>
               <td>public</td>
@@ -1759,7 +1780,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-switch"></span>
+              <span class="anchor" id="variable-switch~3"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -1827,7 +1848,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-nargs"></span>
+              <span class="anchor" id="variable-nargs~2"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -1878,7 +1899,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-envvar"></span>
+              <span class="anchor" id="variable-envvar~2"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -1929,7 +1950,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-position"></span>
+              <span class="anchor" id="variable-position~2"></span>
               integer(kind=I4P),
             </td>
               <td>public</td>
@@ -1946,7 +1967,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-is_passed"></span>
+              <span class="anchor" id="variable-is_passed~3"></span>
               logical,
             </td>
               <td>public</td>
@@ -2016,217 +2037,217 @@ parameter
               <tr>
                 <td>  procedure, public, pass(self) ::
   <strong><a href='../type/object.html#boundprocedure-free_object'>free_object</a></strong></td>
-                <td><p>Free dynamic memory.</p></td>
+                <td>../../../../<p>Free dynamic memory.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public, pass(self) ::
   <strong><a href='../type/object.html#boundprocedure-print_version'>print_version</a></strong></td>
-                <td><p>Print version.</p></td>
+                <td>../../../../<p>Print version.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public, pass(self) ::
   <strong><a href='../type/object.html#boundprocedure-print_error_message'>print_error_message</a></strong></td>
-                <td><p>Print meaningful error message.</p></td>
+                <td>../../../../<p>Print meaningful error message.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public, pass(self) ::
   <strong><a href='../type/object.html#boundprocedure-set_examples'>set_examples</a></strong></td>
-                <td><p>Set examples of correct usage.</p></td>
+                <td>../../../../<p>Set examples of correct usage.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public, pass(lhs ) ::
   <strong><a href='../type/object.html#boundprocedure-assign_object'>assign_object</a></strong></td>
-                <td><p>Assignment overloading.</p></td>
+                <td>../../../../<p>Assignment overloading.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='../type/command_line_argument.html#boundprocedure-free'>free</a></strong></td>
-                <td><p>Free dynamic memory.</p></td>
+  <strong><a href='../type/command_line_argument.html#boundprocedure-free~2'>free</a></strong></td>
+                <td>../../../../<p>Free dynamic memory.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='../type/command_line_argument.html#boundprocedure-check'>check</a></strong></td>
-                <td><p>Check data consistency.</p></td>
+  <strong><a href='../type/command_line_argument.html#boundprocedure-check~2'>check</a></strong></td>
+                <td>../../../../<p>Check data consistency.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='../type/command_line_argument.html#boundprocedure-is_required_passed'>is_required_passed</a></strong></td>
-                <td><p>Check if required CLA is passed.</p></td>
+  <strong><a href='../type/command_line_argument.html#boundprocedure-is_required_passed~2'>is_required_passed</a></strong></td>
+                <td>../../../../<p>Check if required CLA is passed.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='../type/command_line_argument.html#boundprocedure-raise_error_m_exclude'>raise_error_m_exclude</a></strong></td>
-                <td><p>Raise error mutually exclusive CLAs passed.</p></td>
+  <strong><a href='../type/command_line_argument.html#boundprocedure-raise_error_m_exclude~2'>raise_error_m_exclude</a></strong></td>
+                <td>../../../../<p>Raise error mutually exclusive CLAs passed.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-raise_error_nargs_insufficient'>raise_error_nargs_insufficient</a></strong></td>
-                <td><p>Raise error insufficient number of argument values passed.</p></td>
+                <td>../../../../<p>Raise error insufficient number of argument values passed.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-raise_error_value_missing'>raise_error_value_missing</a></strong></td>
-                <td><p>Raise error missing value.</p></td>
+                <td>../../../../<p>Raise error missing value.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-raise_error_switch_unknown'>raise_error_switch_unknown</a></strong></td>
-                <td><p>Raise error switch_unknown.</p></td>
+                <td>../../../../<p>Raise error switch_unknown.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-raise_error_duplicated_clas'>raise_error_duplicated_clas</a></strong></td>
-                <td><p>Raise error duplicated CLAs passed.</p></td>
+                <td>../../../../<p>Raise error duplicated CLAs passed.</p></td>
               </tr>
               <tr>
                 <td>  generic, public ::
-  <strong><a href='../type/command_line_argument.html#boundprocedure-get'>get</a></strong> => <a href='../type/command_line_argument.html#boundprocedure-get_cla'>get_cla</a>, <a href='../type/command_line_argument.html#boundprocedure-get_cla_list'>get_cla_list</a></td>
-                <td><p>Get CLA value(s).</p></td>
+  <strong><a href='../type/command_line_argument.html#boundprocedure-get'>get</a></strong> => <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/type/command_line_argument.html#boundprocedure-get_cla'>get_cla</a>, <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/type/command_line_argument.html#boundprocedure-get_cla_list'>get_cla_list</a></td>
+                <td>../../../../<p>Get CLA value(s).</p></td>
               </tr>
               <tr>
                 <td>  generic, public ::
-  <strong><a href='../type/command_line_argument.html#boundprocedure-get_varying'>get_varying</a></strong> => <a href='../type/command_line_argument.html#boundprocedure-get_cla_list_varying_r8p'>get_cla_list_varying_R8P</a>, <a href='../type/command_line_argument.html#boundprocedure-get_cla_list_varying_r4p'>get_cla_list_varying_R4P</a>, <a href='../type/command_line_argument.html#boundprocedure-get_cla_list_varying_i8p'>get_cla_list_varying_I8P</a>, <a href='../type/command_line_argument.html#boundprocedure-get_cla_list_varying_i4p'>get_cla_list_varying_I4P</a>, <a href='../type/command_line_argument.html#boundprocedure-get_cla_list_varying_i2p'>get_cla_list_varying_I2P</a>, <a href='../type/command_line_argument.html#boundprocedure-get_cla_list_varying_i1p'>get_cla_list_varying_I1P</a>, <a href='../type/command_line_argument.html#boundprocedure-get_cla_list_varying_logical'>get_cla_list_varying_logical</a>, <a href='../type/command_line_argument.html#boundprocedure-get_cla_list_varying_char'>get_cla_list_varying_char</a></td>
-                <td><p>Get CLA value(s) from varying size list.</p></td>
+  <strong><a href='../type/command_line_argument.html#boundprocedure-get_varying'>get_varying</a></strong> => <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/type/command_line_argument.html#boundprocedure-get_cla_list_varying_r8p'>get_cla_list_varying_R8P</a>, <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/type/command_line_argument.html#boundprocedure-get_cla_list_varying_r4p'>get_cla_list_varying_R4P</a>, <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/type/command_line_argument.html#boundprocedure-get_cla_list_varying_i8p'>get_cla_list_varying_I8P</a>, <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/type/command_line_argument.html#boundprocedure-get_cla_list_varying_i4p'>get_cla_list_varying_I4P</a>, <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/type/command_line_argument.html#boundprocedure-get_cla_list_varying_i2p'>get_cla_list_varying_I2P</a>, <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/type/command_line_argument.html#boundprocedure-get_cla_list_varying_i1p'>get_cla_list_varying_I1P</a>, <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/type/command_line_argument.html#boundprocedure-get_cla_list_varying_logical'>get_cla_list_varying_logical</a>, <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/type/command_line_argument.html#boundprocedure-get_cla_list_varying_char'>get_cla_list_varying_char</a></td>
+                <td>../../../../<p>Get CLA value(s) from varying size list.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-has_choices'>has_choices</a></strong></td>
-                <td><p>Return true if CLA has defined choices.</p></td>
+                <td>../../../../<p>Return true if CLA has defined choices.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='../type/command_line_argument.html#boundprocedure-sanitize_defaults'>sanitize_defaults</a></strong></td>
-                <td><p>Sanitize default values.</p></td>
+  <strong><a href='../type/command_line_argument.html#boundprocedure-sanitize_defaults~2'>sanitize_defaults</a></strong></td>
+                <td>../../../../<p>Sanitize default values.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='../type/command_line_argument.html#boundprocedure-signature'>signature</a></strong></td>
-                <td><p>Get signature.</p></td>
+  <strong><a href='../type/command_line_argument.html#boundprocedure-signature~3'>signature</a></strong></td>
+                <td>../../../../<p>Get signature.</p></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='../type/command_line_argument.html#boundprocedure-usage'>usage</a></strong></td>
-                <td><p>Get correct usage.</p></td>
+  <strong><a href='../type/command_line_argument.html#boundprocedure-usage~3'>usage</a></strong></td>
+                <td>../../../../<p>Get correct usage.</p></td>
               </tr>
               <tr>
                 <td>  procedure, private ::
-  <strong><a href='../type/command_line_argument.html#boundprocedure-errored'>errored</a></strong></td>
-                <td><p>Trig error occurence and print meaningful message.</p></td>
+  <strong><a href='../type/command_line_argument.html#boundprocedure-errored~2'>errored</a></strong></td>
+                <td>../../../../<p>Trig error occurence and print meaningful message.</p></td>
               </tr>
               <tr>
                 <td>  procedure, private ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-check_envvar_consistency'>check_envvar_consistency</a></strong></td>
-                <td><p>Check data consistency for envvar CLA.</p></td>
+                <td>../../../../<p>Check data consistency for envvar CLA.</p></td>
               </tr>
               <tr>
                 <td>  procedure, private ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-check_action_consistency'>check_action_consistency</a></strong></td>
-                <td><p>Check CLA action consistency.</p></td>
+                <td>../../../../<p>Check CLA action consistency.</p></td>
               </tr>
               <tr>
                 <td>  procedure, private ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-check_optional_consistency'>check_optional_consistency</a></strong></td>
-                <td><p>Check optional CLA consistency.</p></td>
+                <td>../../../../<p>Check optional CLA consistency.</p></td>
               </tr>
               <tr>
                 <td>  procedure, private ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-check_m_exclude_consistency'>check_m_exclude_consistency</a></strong></td>
-                <td><p>Check mutually exclusion consistency.</p></td>
+                <td>../../../../<p>Check mutually exclusion consistency.</p></td>
               </tr>
               <tr>
                 <td>  procedure, private ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-check_named_consistency'>check_named_consistency</a></strong></td>
-                <td><p>Check named CLA consistency.</p></td>
+                <td>../../../../<p>Check named CLA consistency.</p></td>
               </tr>
               <tr>
                 <td>  procedure, private ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-check_positional_consistency'>check_positional_consistency</a></strong></td>
-                <td><p>Check positional CLA consistency.</p></td>
+                <td>../../../../<p>Check positional CLA consistency.</p></td>
               </tr>
               <tr>
                 <td>  procedure, private ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-check_choices'>check_choices</a></strong></td>
-                <td><p>Check if CLA value is in allowed choices.</p></td>
+                <td>../../../../<p>Check if CLA value is in allowed choices.</p></td>
               </tr>
               <tr>
                 <td>  procedure, private ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-check_list_size'>check_list_size</a></strong></td>
-                <td><p>Check CLA multiple values list size consistency.</p></td>
+                <td>../../../../<p>Check CLA multiple values list size consistency.</p></td>
               </tr>
               <tr>
                 <td>  procedure, private ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-get_cla'>get_cla</a></strong></td>
-                <td><p>Get CLA (single) value.</p></td>
+                <td>../../../../<p>Get CLA (single) value.</p></td>
               </tr>
               <tr>
                 <td>  procedure, private ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-get_cla_from_buffer'>get_cla_from_buffer</a></strong></td>
-                <td><p>Get CLA (single) value from a buffer.</p></td>
+                <td>../../../../<p>Get CLA (single) value from a buffer.</p></td>
               </tr>
               <tr>
                 <td>  procedure, private ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-get_cla_list'>get_cla_list</a></strong></td>
-                <td><p>Get CLA multiple values.</p></td>
+                <td>../../../../<p>Get CLA multiple values.</p></td>
               </tr>
               <tr>
                 <td>  procedure, private ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-get_cla_list_from_buffer'>get_cla_list_from_buffer</a></strong></td>
-                <td><p>Get CLA (single) value from a buffer.</p></td>
+                <td>../../../../<p>Get CLA (single) value from a buffer.</p></td>
               </tr>
               <tr>
                 <td>  procedure, private ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-get_cla_list_varying_r16p'>get_cla_list_varying_R16P</a></strong></td>
-                <td><p>Get CLA multiple values, varying size, R16P.</p></td>
+                <td>../../../../<p>Get CLA multiple values, varying size, R16P.</p></td>
               </tr>
               <tr>
                 <td>  procedure, private ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-get_cla_list_varying_r8p'>get_cla_list_varying_R8P</a></strong></td>
-                <td><p>Get CLA multiple values, varying size, R8P.</p></td>
+                <td>../../../../<p>Get CLA multiple values, varying size, R8P.</p></td>
               </tr>
               <tr>
                 <td>  procedure, private ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-get_cla_list_varying_r4p'>get_cla_list_varying_R4P</a></strong></td>
-                <td><p>Get CLA multiple values, varying size, R4P.</p></td>
+                <td>../../../../<p>Get CLA multiple values, varying size, R4P.</p></td>
               </tr>
               <tr>
                 <td>  procedure, private ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-get_cla_list_varying_i8p'>get_cla_list_varying_I8P</a></strong></td>
-                <td><p>Get CLA multiple values, varying size, I8P.</p></td>
+                <td>../../../../<p>Get CLA multiple values, varying size, I8P.</p></td>
               </tr>
               <tr>
                 <td>  procedure, private ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-get_cla_list_varying_i4p'>get_cla_list_varying_I4P</a></strong></td>
-                <td><p>Get CLA multiple values, varying size, I4P.</p></td>
+                <td>../../../../<p>Get CLA multiple values, varying size, I4P.</p></td>
               </tr>
               <tr>
                 <td>  procedure, private ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-get_cla_list_varying_i2p'>get_cla_list_varying_I2P</a></strong></td>
-                <td><p>Get CLA multiple values, varying size, I2P.</p></td>
+                <td>../../../../<p>Get CLA multiple values, varying size, I2P.</p></td>
               </tr>
               <tr>
                 <td>  procedure, private ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-get_cla_list_varying_i1p'>get_cla_list_varying_I1P</a></strong></td>
-                <td><p>Get CLA multiple values, varying size, I1P.</p></td>
+                <td>../../../../<p>Get CLA multiple values, varying size, I1P.</p></td>
               </tr>
               <tr>
                 <td>  procedure, private ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-get_cla_list_varying_logical'>get_cla_list_varying_logical</a></strong></td>
-                <td><p>Get CLA multiple values, varying size, bool.</p></td>
+                <td>../../../../<p>Get CLA multiple values, varying size, bool.</p></td>
               </tr>
               <tr>
                 <td>  procedure, private ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-get_cla_list_varying_char'>get_cla_list_varying_char</a></strong></td>
-                <td><p>Get CLA multiple values, varying size, char.</p></td>
+                <td>../../../../<p>Get CLA multiple values, varying size, char.</p></td>
               </tr>
               <tr>
                 <td>  procedure, private ::
   <strong><a href='../type/command_line_argument.html#boundprocedure-cla_assign_cla'>cla_assign_cla</a></strong></td>
-                <td><p>Assignment operator.</p></td>
+                <td>../../../../<p>Assignment operator.</p></td>
               </tr>
               <tr>
                 <td>  generic, private ::
-  <strong><a href='../type/command_line_argument.html#boundprocedure-assignment%28%3D%29'>assignment(=)</a></strong> => <a href='../type/command_line_argument.html#boundprocedure-cla_assign_cla'>cla_assign_cla</a></td>
-                <td><p>Assignment operator overloading.</p></td>
+  <strong><a href='../type/command_line_argument.html#boundprocedure-assignment%28%3D%29~2'>assignment(=)</a></strong> => <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/type/command_line_argument.html#boundprocedure-cla_assign_cla'>cla_assign_cla</a></td>
+                <td>../../../../<p>Assignment operator overloading.</p></td>
               </tr>
           </tbody>
         </table>
@@ -2239,7 +2260,7 @@ parameter
         <section>
           <h2>Functions</h2>
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-is_required_passed"></span><h3>private  function <a href='../proc/is_required_passed.html'>is_required_passed</a>(self, pref) result(is_ok)  
+    <div class="card-header codesum"><span class="anchor" id="proc-is_required_passed~2"></span> <h3>private  function <a href='../proc/is_required_passed~2.html'>is_required_passed</a>(self, pref) result(is_ok)  
 </h3></div>
     <div class="card-body">
           
@@ -2258,7 +2279,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~3"></span>
+              <span class="anchor" id="variable-self~21"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -2273,7 +2294,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~2"></span>
+              <span class="anchor" id="variable-pref~11"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -2299,7 +2320,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-is_required_val_passed"></span><h3>private  function <a href='../proc/is_required_val_passed.html'>is_required_val_passed</a>(self, pref) result(is_ok)  
+    <div class="card-header codesum"><span class="anchor" id="proc-is_required_val_passed"></span> <h3>private  function <a href='../proc/is_required_val_passed.html'>is_required_val_passed</a>(self, pref) result(is_ok)  
 </h3></div>
     <div class="card-body">
           
@@ -2318,7 +2339,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~4"></span>
+              <span class="anchor" id="variable-self~22"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -2333,7 +2354,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~3"></span>
+              <span class="anchor" id="variable-pref~12"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -2359,7 +2380,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-usage"></span><h3>private  function <a href='../proc/usage.html'>usage</a>(self, pref, markdown)  
+    <div class="card-header codesum"><span class="anchor" id="proc-usage~2"></span> <h3>private  function <a href='../proc/usage~2.html'>usage</a>(self, pref, markdown)  
 </h3></div>
     <div class="card-body">
           
@@ -2378,7 +2399,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~11"></span>
+              <span class="anchor" id="variable-self~29"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(in)</td>
@@ -2393,7 +2414,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~9"></span>
+              <span class="anchor" id="variable-pref~18"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -2408,7 +2429,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-markdown"></span>
+              <span class="anchor" id="variable-markdown~2"></span>
               logical,
             </td>
 <td>intent(in),</td>
@@ -2434,7 +2455,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-signature"></span><h3>private  function <a href='../proc/signature.html'>signature</a>(self, bash_completion, plain)  
+    <div class="card-header codesum"><span class="anchor" id="proc-signature~2"></span> <h3>private  function <a href='../proc/signature~2.html'>signature</a>(self, bash_completion, plain)  
 </h3></div>
     <div class="card-body">
           
@@ -2453,7 +2474,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~12"></span>
+              <span class="anchor" id="variable-self~30"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(in)</td>
@@ -2468,7 +2489,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-bash_completion"></span>
+              <span class="anchor" id="variable-bash_completion~2"></span>
               logical,
             </td>
 <td>intent(in),</td>
@@ -2483,7 +2504,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-plain"></span>
+              <span class="anchor" id="variable-plain~2"></span>
               logical,
             </td>
 <td>intent(in),</td>
@@ -2509,7 +2530,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-has_choices"></span><h3>private pure function <a href='../proc/has_choices.html'>has_choices</a>(self)  
+    <div class="card-header codesum"><span class="anchor" id="proc-has_choices"></span> <h3>private pure function <a href='../proc/has_choices.html'>has_choices</a>(self)  
 </h3></div>
     <div class="card-body">
           
@@ -2528,7 +2549,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~13"></span>
+              <span class="anchor" id="variable-self~31"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(in)</td>
@@ -2554,7 +2575,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-check_list_size"></span><h3>private  function <a href='../proc/check_list_size.html'>check_list_size</a>(self, Nv, val, pref) result(is_ok)  
+    <div class="card-header codesum"><span class="anchor" id="proc-check_list_size"></span> <h3>private  function <a href='../proc/check_list_size.html'>check_list_size</a>(self, Nv, val, pref) result(is_ok)  
 </h3></div>
     <div class="card-body">
           
@@ -2573,7 +2594,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~22"></span>
+              <span class="anchor" id="variable-self~40"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -2618,7 +2639,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~18"></span>
+              <span class="anchor" id="variable-pref~27"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -2649,7 +2670,7 @@ parameter
         <section>
           <h2>Subroutines</h2>
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-free"></span><h3>private elemental subroutine <a href='../proc/free.html'>free</a>(self)  
+    <div class="card-header codesum"><span class="anchor" id="proc-free~2"></span> <h3>private elemental subroutine <a href='../proc/free~2.html'>free</a>(self)  
 </h3></div>
     <div class="card-body">
           
@@ -2668,7 +2689,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self"></span>
+              <span class="anchor" id="variable-self~19"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -2689,7 +2710,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-check"></span><h3>private  subroutine <a href='../proc/check.html'>check</a>(self, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-check~2"></span> <h3>private  subroutine <a href='../proc/check~2.html'>check</a>(self, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -2708,7 +2729,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~2"></span>
+              <span class="anchor" id="variable-self~20"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -2723,7 +2744,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref"></span>
+              <span class="anchor" id="variable-pref~10"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -2744,7 +2765,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-raise_error_m_exclude"></span><h3>private  subroutine <a href='../proc/raise_error_m_exclude.html'>raise_error_m_exclude</a>(self, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-raise_error_m_exclude~2"></span> <h3>private  subroutine <a href='../proc/raise_error_m_exclude~2.html'>raise_error_m_exclude</a>(self, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -2763,7 +2784,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~5"></span>
+              <span class="anchor" id="variable-self~23"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -2778,7 +2799,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~4"></span>
+              <span class="anchor" id="variable-pref~13"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -2799,7 +2820,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-raise_error_nargs_insufficient"></span><h3>private  subroutine <a href='../proc/raise_error_nargs_insufficient.html'>raise_error_nargs_insufficient</a>(self, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-raise_error_nargs_insufficient"></span> <h3>private  subroutine <a href='../proc/raise_error_nargs_insufficient.html'>raise_error_nargs_insufficient</a>(self, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -2818,7 +2839,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~6"></span>
+              <span class="anchor" id="variable-self~24"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -2833,7 +2854,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~5"></span>
+              <span class="anchor" id="variable-pref~14"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -2854,7 +2875,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-raise_error_value_missing"></span><h3>private  subroutine <a href='../proc/raise_error_value_missing.html'>raise_error_value_missing</a>(self, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-raise_error_value_missing"></span> <h3>private  subroutine <a href='../proc/raise_error_value_missing.html'>raise_error_value_missing</a>(self, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -2873,7 +2894,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~7"></span>
+              <span class="anchor" id="variable-self~25"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -2888,7 +2909,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~6"></span>
+              <span class="anchor" id="variable-pref~15"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -2909,7 +2930,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-raise_error_switch_unknown"></span><h3>private  subroutine <a href='../proc/raise_error_switch_unknown.html'>raise_error_switch_unknown</a>(self, switch, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-raise_error_switch_unknown"></span> <h3>private  subroutine <a href='../proc/raise_error_switch_unknown.html'>raise_error_switch_unknown</a>(self, switch, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -2928,7 +2949,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~8"></span>
+              <span class="anchor" id="variable-self~26"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -2943,7 +2964,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-switch~2"></span>
+              <span class="anchor" id="variable-switch~4"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -2958,7 +2979,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~7"></span>
+              <span class="anchor" id="variable-pref~16"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -2979,7 +3000,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-raise_error_duplicated_clas"></span><h3>private  subroutine <a href='../proc/raise_error_duplicated_clas.html'>raise_error_duplicated_clas</a>(self, switch, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-raise_error_duplicated_clas"></span> <h3>private  subroutine <a href='../proc/raise_error_duplicated_clas.html'>raise_error_duplicated_clas</a>(self, switch, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -2998,7 +3019,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~9"></span>
+              <span class="anchor" id="variable-self~27"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -3013,7 +3034,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-switch~3"></span>
+              <span class="anchor" id="variable-switch~5"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -3028,7 +3049,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~8"></span>
+              <span class="anchor" id="variable-pref~17"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -3049,11 +3070,11 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-sanitize_defaults"></span><h3>private  subroutine <a href='../proc/sanitize_defaults.html'>sanitize_defaults</a>(self)  
+    <div class="card-header codesum"><span class="anchor" id="proc-sanitize_defaults~2"></span> <h3>private  subroutine <a href='../proc/sanitize_defaults~2.html'>sanitize_defaults</a>(self)  
 </h3></div>
     <div class="card-body">
           
-  <p>Sanitize defaults values.</p><a href="../proc/sanitize_defaults.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+  <p>Sanitize defaults values.</p><a href="../proc/sanitize_defaults~2.html" class="pull-right"><emph>Read more&hellip;</emph></a>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -3068,7 +3089,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~10"></span>
+              <span class="anchor" id="variable-self~28"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -3089,7 +3110,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-errored"></span><h3>private  subroutine <a href='../proc/errored.html'>errored</a>(self, error, pref, switch, val_str, log_value)  
+    <div class="card-header codesum"><span class="anchor" id="proc-errored~2"></span> <h3>private  subroutine <a href='../proc/errored~2.html'>errored</a>(self, error, pref, switch, val_str, log_value)  
 </h3></div>
     <div class="card-body">
           
@@ -3108,7 +3129,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~14"></span>
+              <span class="anchor" id="variable-self~32"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -3123,7 +3144,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-error~2"></span>
+              <span class="anchor" id="variable-error~6"></span>
               integer(kind=I4P),
             </td>
 <td>intent(in)</td>
@@ -3138,7 +3159,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~10"></span>
+              <span class="anchor" id="variable-pref~19"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -3153,7 +3174,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-switch~4"></span>
+              <span class="anchor" id="variable-switch~6"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -3204,7 +3225,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-check_envvar_consistency"></span><h3>private  subroutine <a href='../proc/check_envvar_consistency.html'>check_envvar_consistency</a>(self, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-check_envvar_consistency"></span> <h3>private  subroutine <a href='../proc/check_envvar_consistency.html'>check_envvar_consistency</a>(self, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -3223,7 +3244,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~15"></span>
+              <span class="anchor" id="variable-self~33"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -3238,7 +3259,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~11"></span>
+              <span class="anchor" id="variable-pref~20"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -3259,7 +3280,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-check_action_consistency"></span><h3>private  subroutine <a href='../proc/check_action_consistency.html'>check_action_consistency</a>(self, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-check_action_consistency"></span> <h3>private  subroutine <a href='../proc/check_action_consistency.html'>check_action_consistency</a>(self, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -3278,7 +3299,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~16"></span>
+              <span class="anchor" id="variable-self~34"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -3293,7 +3314,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~12"></span>
+              <span class="anchor" id="variable-pref~21"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -3314,7 +3335,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-check_optional_consistency"></span><h3>private  subroutine <a href='../proc/check_optional_consistency.html'>check_optional_consistency</a>(self, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-check_optional_consistency"></span> <h3>private  subroutine <a href='../proc/check_optional_consistency.html'>check_optional_consistency</a>(self, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -3333,7 +3354,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~17"></span>
+              <span class="anchor" id="variable-self~35"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -3348,7 +3369,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~13"></span>
+              <span class="anchor" id="variable-pref~22"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -3369,7 +3390,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-check_m_exclude_consistency"></span><h3>private  subroutine <a href='../proc/check_m_exclude_consistency.html'>check_m_exclude_consistency</a>(self, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-check_m_exclude_consistency"></span> <h3>private  subroutine <a href='../proc/check_m_exclude_consistency.html'>check_m_exclude_consistency</a>(self, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -3388,7 +3409,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~18"></span>
+              <span class="anchor" id="variable-self~36"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -3403,7 +3424,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~14"></span>
+              <span class="anchor" id="variable-pref~23"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -3424,7 +3445,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-check_named_consistency"></span><h3>private  subroutine <a href='../proc/check_named_consistency.html'>check_named_consistency</a>(self, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-check_named_consistency"></span> <h3>private  subroutine <a href='../proc/check_named_consistency.html'>check_named_consistency</a>(self, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -3443,7 +3464,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~19"></span>
+              <span class="anchor" id="variable-self~37"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -3458,7 +3479,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~15"></span>
+              <span class="anchor" id="variable-pref~24"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -3479,7 +3500,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-check_positional_consistency"></span><h3>private  subroutine <a href='../proc/check_positional_consistency.html'>check_positional_consistency</a>(self, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-check_positional_consistency"></span> <h3>private  subroutine <a href='../proc/check_positional_consistency.html'>check_positional_consistency</a>(self, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -3498,7 +3519,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~20"></span>
+              <span class="anchor" id="variable-self~38"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -3513,7 +3534,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~16"></span>
+              <span class="anchor" id="variable-pref~25"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -3534,7 +3555,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-check_choices"></span><h3>private  subroutine <a href='../proc/check_choices.html'>check_choices</a>(self, val, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-check_choices"></span> <h3>private  subroutine <a href='../proc/check_choices.html'>check_choices</a>(self, val, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -3553,7 +3574,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~21"></span>
+              <span class="anchor" id="variable-self~39"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -3583,7 +3604,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~17"></span>
+              <span class="anchor" id="variable-pref~26"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -3604,7 +3625,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-get_cla"></span><h3>private  subroutine <a href='../proc/get_cla.html'>get_cla</a>(self, val, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-get_cla"></span> <h3>private  subroutine <a href='../proc/get_cla.html'>get_cla</a>(self, val, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -3623,7 +3644,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~23"></span>
+              <span class="anchor" id="variable-self~41"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -3653,7 +3674,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~19"></span>
+              <span class="anchor" id="variable-pref~28"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -3674,7 +3695,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-get_cla_from_buffer"></span><h3>private  subroutine <a href='../proc/get_cla_from_buffer.html'>get_cla_from_buffer</a>(self, buffer, val, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-get_cla_from_buffer"></span> <h3>private  subroutine <a href='../proc/get_cla_from_buffer.html'>get_cla_from_buffer</a>(self, buffer, val, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -3693,7 +3714,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~24"></span>
+              <span class="anchor" id="variable-self~42"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -3738,7 +3759,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~20"></span>
+              <span class="anchor" id="variable-pref~29"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -3759,7 +3780,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-get_cla_list"></span><h3>private  subroutine <a href='../proc/get_cla_list.html'>get_cla_list</a>(self, pref, val)  
+    <div class="card-header codesum"><span class="anchor" id="proc-get_cla_list"></span> <h3>private  subroutine <a href='../proc/get_cla_list.html'>get_cla_list</a>(self, pref, val)  
 </h3></div>
     <div class="card-body">
           
@@ -3778,7 +3799,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~25"></span>
+              <span class="anchor" id="variable-self~43"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -3793,7 +3814,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~21"></span>
+              <span class="anchor" id="variable-pref~30"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -3829,7 +3850,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-get_cla_list_from_buffer"></span><h3>private  subroutine <a href='../proc/get_cla_list_from_buffer.html'>get_cla_list_from_buffer</a>(self, buffer, val, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-get_cla_list_from_buffer"></span> <h3>private  subroutine <a href='../proc/get_cla_list_from_buffer.html'>get_cla_list_from_buffer</a>(self, buffer, val, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -3848,7 +3869,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~26"></span>
+              <span class="anchor" id="variable-self~44"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -3893,7 +3914,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~22"></span>
+              <span class="anchor" id="variable-pref~31"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -3914,7 +3935,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-get_cla_list_varying_r16p"></span><h3>private  subroutine <a href='../proc/get_cla_list_varying_r16p.html'>get_cla_list_varying_R16P</a>(self, val, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-get_cla_list_varying_r16p"></span> <h3>private  subroutine <a href='../proc/get_cla_list_varying_r16p.html'>get_cla_list_varying_R16P</a>(self, val, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -3933,7 +3954,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~27"></span>
+              <span class="anchor" id="variable-self~45"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -3963,7 +3984,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~23"></span>
+              <span class="anchor" id="variable-pref~32"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -3984,7 +4005,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-get_cla_list_varying_r8p"></span><h3>private  subroutine <a href='../proc/get_cla_list_varying_r8p.html'>get_cla_list_varying_R8P</a>(self, val, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-get_cla_list_varying_r8p"></span> <h3>private  subroutine <a href='../proc/get_cla_list_varying_r8p.html'>get_cla_list_varying_R8P</a>(self, val, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -4003,7 +4024,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~28"></span>
+              <span class="anchor" id="variable-self~46"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -4033,7 +4054,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~24"></span>
+              <span class="anchor" id="variable-pref~33"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -4054,7 +4075,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-get_cla_list_varying_r4p"></span><h3>private  subroutine <a href='../proc/get_cla_list_varying_r4p.html'>get_cla_list_varying_R4P</a>(self, val, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-get_cla_list_varying_r4p"></span> <h3>private  subroutine <a href='../proc/get_cla_list_varying_r4p.html'>get_cla_list_varying_R4P</a>(self, val, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -4073,7 +4094,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~29"></span>
+              <span class="anchor" id="variable-self~47"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -4103,7 +4124,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~25"></span>
+              <span class="anchor" id="variable-pref~34"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -4124,7 +4145,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-get_cla_list_varying_i8p"></span><h3>private  subroutine <a href='../proc/get_cla_list_varying_i8p.html'>get_cla_list_varying_I8P</a>(self, val, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-get_cla_list_varying_i8p"></span> <h3>private  subroutine <a href='../proc/get_cla_list_varying_i8p.html'>get_cla_list_varying_I8P</a>(self, val, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -4143,7 +4164,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~30"></span>
+              <span class="anchor" id="variable-self~48"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -4173,7 +4194,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~26"></span>
+              <span class="anchor" id="variable-pref~35"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -4194,7 +4215,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-get_cla_list_varying_i4p"></span><h3>private  subroutine <a href='../proc/get_cla_list_varying_i4p.html'>get_cla_list_varying_I4P</a>(self, val, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-get_cla_list_varying_i4p"></span> <h3>private  subroutine <a href='../proc/get_cla_list_varying_i4p.html'>get_cla_list_varying_I4P</a>(self, val, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -4213,7 +4234,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~31"></span>
+              <span class="anchor" id="variable-self~49"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -4243,7 +4264,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~27"></span>
+              <span class="anchor" id="variable-pref~36"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -4264,7 +4285,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-get_cla_list_varying_i2p"></span><h3>private  subroutine <a href='../proc/get_cla_list_varying_i2p.html'>get_cla_list_varying_I2P</a>(self, val, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-get_cla_list_varying_i2p"></span> <h3>private  subroutine <a href='../proc/get_cla_list_varying_i2p.html'>get_cla_list_varying_I2P</a>(self, val, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -4283,7 +4304,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~32"></span>
+              <span class="anchor" id="variable-self~50"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -4313,7 +4334,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~28"></span>
+              <span class="anchor" id="variable-pref~37"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -4334,7 +4355,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-get_cla_list_varying_i1p"></span><h3>private  subroutine <a href='../proc/get_cla_list_varying_i1p.html'>get_cla_list_varying_I1P</a>(self, val, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-get_cla_list_varying_i1p"></span> <h3>private  subroutine <a href='../proc/get_cla_list_varying_i1p.html'>get_cla_list_varying_I1P</a>(self, val, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -4353,7 +4374,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~33"></span>
+              <span class="anchor" id="variable-self~51"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -4383,7 +4404,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~29"></span>
+              <span class="anchor" id="variable-pref~38"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -4404,7 +4425,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-get_cla_list_varying_logical"></span><h3>private  subroutine <a href='../proc/get_cla_list_varying_logical.html'>get_cla_list_varying_logical</a>(self, val, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-get_cla_list_varying_logical"></span> <h3>private  subroutine <a href='../proc/get_cla_list_varying_logical.html'>get_cla_list_varying_logical</a>(self, val, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -4423,7 +4444,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~34"></span>
+              <span class="anchor" id="variable-self~52"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -4453,7 +4474,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~30"></span>
+              <span class="anchor" id="variable-pref~39"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -4474,7 +4495,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-get_cla_list_varying_char"></span><h3>private  subroutine <a href='../proc/get_cla_list_varying_char.html'>get_cla_list_varying_char</a>(self, val, pref)  
+    <div class="card-header codesum"><span class="anchor" id="proc-get_cla_list_varying_char"></span> <h3>private  subroutine <a href='../proc/get_cla_list_varying_char.html'>get_cla_list_varying_char</a>(self, val, pref)  
 </h3></div>
     <div class="card-body">
           
@@ -4493,7 +4514,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~35"></span>
+              <span class="anchor" id="variable-self~53"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -4523,7 +4544,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pref~31"></span>
+              <span class="anchor" id="variable-pref~40"></span>
               character(len=*),
             </td>
 <td>intent(in),</td>
@@ -4544,7 +4565,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-cla_assign_cla"></span><h3>private elemental subroutine <a href='../proc/cla_assign_cla.html'>cla_assign_cla</a>(lhs, rhs)  
+    <div class="card-header codesum"><span class="anchor" id="proc-cla_assign_cla"></span> <h3>private elemental subroutine <a href='../proc/cla_assign_cla.html'>cla_assign_cla</a>(lhs, rhs)  
 </h3></div>
     <div class="card-body">
           
@@ -4563,7 +4584,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-lhs"></span>
+              <span class="anchor" id="variable-lhs~3"></span>
               class(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -4578,7 +4599,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-rhs"></span>
+              <span class="anchor" id="variable-rhs~3"></span>
               type(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(in)</td>
@@ -4599,7 +4620,7 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-finalize"></span><h3>private elemental subroutine <a href='../proc/finalize.html'>finalize</a>(self)  
+    <div class="card-header codesum"><span class="anchor" id="proc-finalize~2"></span> <h3>private elemental subroutine <a href='../proc/finalize~2.html'>finalize</a>(self)  
 </h3></div>
     <div class="card-body">
           
@@ -4618,7 +4639,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~36"></span>
+              <span class="anchor" id="variable-self~54"></span>
               type(<a href='../type/command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(inout)</td>
@@ -4651,7 +4672,7 @@ parameter
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
+          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2024 
 </p>
           </div>
           <div class="col">

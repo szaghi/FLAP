@@ -1,3 +1,5 @@
+<!-- -*- mode: jinja2 -*- -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -17,7 +19,8 @@
     <link href="../css/local.css" rel="stylesheet">
       <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
   <body>
@@ -112,9 +115,9 @@
       </a>
       <div id="vars-0" class="collapse">
         <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../program/test_tester_6.html#variable-rk">rk</a>
-            <a class="list-group-item" href="../program/test_tester_6.html#variable-pi">pi</a>
-            <a class="list-group-item" href="../program/test_tester_6.html#variable-test">test</a>
+            <a class="list-group-item" href="../program/test_tester_6.html#variable-rk~2">rk</a>
+            <a class="list-group-item" href="../program/test_tester_6.html#variable-pi~2">pi</a>
+            <a class="list-group-item" href="../program/test_tester_6.html#variable-test~9">test</a>
         </div>
       </div>
     </div>
@@ -180,7 +183,7 @@
 <!-- module~tester -->
 <g id="program~~test_tester_6~~UsesGraph_node2" class="node">
 <title>module~tester</title>
-<g id="a_program~~test_tester_6~~UsesGraph_node2"><a xlink:href=".././module/tester.html" xlink:title="tester">
+<g id="a_program~~test_tester_6~~UsesGraph_node2"><a xlink:href="../module/tester.html" xlink:title="tester">
 <polygon fill="#337ab7" stroke="#337ab7" points="184,-24 130,-24 130,0 184,0 184,-24"/>
 <text text-anchor="middle" x="157" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">tester</text>
 </a>
@@ -206,17 +209,17 @@
 </g>
 </g>
 </svg>
-</div>        <div><a type="button" class="graph-help" data-toggle="modal" href="#UsesGraph-help-text">Help</a></div>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#UsesGraph-help-text">Help</a>
+          </div>
           <div class="modal fade" id="UsesGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                   <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-              <div class="modal-body">
+                <div class="modal-body">
 <p>Nodes of different colours represent the following: </p>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -308,7 +311,7 @@ modules which it uses.
 <!-- none~assert_close -->
 <g id="program~~test_tester_6~~CallsGraph_node2" class="node">
 <title>none~assert_close</title>
-<g id="a_program~~test_tester_6~~CallsGraph_node2"><a xlink:href=".././type/tester_t.html#boundprocedure-assert_close" xlink:title="tester::tester_t%assert_close">
+<g id="a_program~~test_tester_6~~CallsGraph_node2"><a xlink:href="../type/tester_t.html#boundprocedure-assert_close" xlink:title="tester::tester_t%assert_close">
 <polygon fill="#a7506f" stroke="#a7506f" points="282,-171 116,-171 116,-147 282,-147 282,-171"/>
 <text text-anchor="middle" x="199" y="-156.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">tester::tester_t%assert_close</text>
 </a>
@@ -320,25 +323,25 @@ modules which it uses.
 <path fill="none" stroke="#000000" d="M80.21,-143.25C88.13,-144.3 96.77,-145.46 105.65,-146.65"/>
 <polygon fill="#000000" stroke="#000000" points="105.38,-150.14 115.76,-148 106.31,-143.2 105.38,-150.14"/>
 </g>
-<!-- proc~init -->
+<!-- proc~init~2 -->
 <g id="program~~test_tester_6~~CallsGraph_node3" class="node">
-<title>proc~init</title>
-<g id="a_program~~test_tester_6~~CallsGraph_node3"><a xlink:href=".././proc/init.html" xlink:title="tester::tester_t%init">
+<title>proc~init~2</title>
+<g id="a_program~~test_tester_6~~CallsGraph_node3"><a xlink:href="../proc/init~2.html" xlink:title="tester::tester_t%init">
 <polygon fill="#d9534f" stroke="#d9534f" points="257.5,-129 140.5,-129 140.5,-105 257.5,-105 257.5,-129"/>
 <text text-anchor="middle" x="199" y="-114.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">tester::tester_t%init</text>
 </a>
 </g>
 </g>
-<!-- program~test_tester_6&#45;&gt;proc~init -->
+<!-- program~test_tester_6&#45;&gt;proc~init~2 -->
 <g id="program~~test_tester_6~~CallsGraph_edge2" class="edge">
-<title>program~test_tester_6&#45;&gt;proc~init</title>
+<title>program~test_tester_6&#45;&gt;proc~init~2</title>
 <path fill="none" stroke="#000000" d="M80.21,-132.75C95.4,-130.72 113.22,-128.34 130.35,-126.05"/>
 <polygon fill="#000000" stroke="#000000" points="130.88,-129.51 140.33,-124.71 129.95,-122.57 130.88,-129.51"/>
 </g>
 <!-- proc~assert_close_c32 -->
 <g id="program~~test_tester_6~~CallsGraph_node4" class="node">
 <title>proc~assert_close_c32</title>
-<g id="a_program~~test_tester_6~~CallsGraph_node4"><a xlink:href=".././proc/assert_close_c32.html" xlink:title="tester::tester_t%assert_close_c32">
+<g id="a_program~~test_tester_6~~CallsGraph_node4"><a xlink:href="../proc/assert_close_c32.html" xlink:title="tester::tester_t%assert_close_c32">
 <polygon fill="#d9534f" stroke="#d9534f" points="514,-318 324,-318 324,-294 514,-294 514,-318"/>
 <text text-anchor="middle" x="419" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">tester::tester_t%assert_close_c32</text>
 </a>
@@ -353,7 +356,7 @@ modules which it uses.
 <!-- proc~assert_close_c32_1 -->
 <g id="program~~test_tester_6~~CallsGraph_node5" class="node">
 <title>proc~assert_close_c32_1</title>
-<g id="a_program~~test_tester_6~~CallsGraph_node5"><a xlink:href=".././proc/assert_close_c32_1.html" xlink:title="tester::tester_t%assert_close_c32_1">
+<g id="a_program~~test_tester_6~~CallsGraph_node5"><a xlink:href="../proc/assert_close_c32_1.html" xlink:title="tester::tester_t%assert_close_c32_1">
 <polygon fill="#d9534f" stroke="#d9534f" points="520,-276 318,-276 318,-252 520,-252 520,-276"/>
 <text text-anchor="middle" x="419" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">tester::tester_t%assert_close_c32_1</text>
 </a>
@@ -368,7 +371,7 @@ modules which it uses.
 <!-- proc~assert_close_c64 -->
 <g id="program~~test_tester_6~~CallsGraph_node6" class="node">
 <title>proc~assert_close_c64</title>
-<g id="a_program~~test_tester_6~~CallsGraph_node6"><a xlink:href=".././proc/assert_close_c64.html" xlink:title="tester::tester_t%assert_close_c64">
+<g id="a_program~~test_tester_6~~CallsGraph_node6"><a xlink:href="../proc/assert_close_c64.html" xlink:title="tester::tester_t%assert_close_c64">
 <polygon fill="#d9534f" stroke="#d9534f" points="514,-234 324,-234 324,-210 514,-210 514,-234"/>
 <text text-anchor="middle" x="419" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">tester::tester_t%assert_close_c64</text>
 </a>
@@ -383,7 +386,7 @@ modules which it uses.
 <!-- proc~assert_close_c64_1 -->
 <g id="program~~test_tester_6~~CallsGraph_node7" class="node">
 <title>proc~assert_close_c64_1</title>
-<g id="a_program~~test_tester_6~~CallsGraph_node7"><a xlink:href=".././proc/assert_close_c64_1.html" xlink:title="tester::tester_t%assert_close_c64_1">
+<g id="a_program~~test_tester_6~~CallsGraph_node7"><a xlink:href="../proc/assert_close_c64_1.html" xlink:title="tester::tester_t%assert_close_c64_1">
 <polygon fill="#d9534f" stroke="#d9534f" points="520,-192 318,-192 318,-168 520,-168 520,-192"/>
 <text text-anchor="middle" x="419" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">tester::tester_t%assert_close_c64_1</text>
 </a>
@@ -398,7 +401,7 @@ modules which it uses.
 <!-- proc~assert_close_r32 -->
 <g id="program~~test_tester_6~~CallsGraph_node8" class="node">
 <title>proc~assert_close_r32</title>
-<g id="a_program~~test_tester_6~~CallsGraph_node8"><a xlink:href=".././proc/assert_close_r32.html" xlink:title="tester::tester_t%assert_close_r32">
+<g id="a_program~~test_tester_6~~CallsGraph_node8"><a xlink:href="../proc/assert_close_r32.html" xlink:title="tester::tester_t%assert_close_r32">
 <polygon fill="#d9534f" stroke="#d9534f" points="513.5,-150 324.5,-150 324.5,-126 513.5,-126 513.5,-150"/>
 <text text-anchor="middle" x="419" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">tester::tester_t%assert_close_r32</text>
 </a>
@@ -413,7 +416,7 @@ modules which it uses.
 <!-- proc~assert_close_r32_1 -->
 <g id="program~~test_tester_6~~CallsGraph_node9" class="node">
 <title>proc~assert_close_r32_1</title>
-<g id="a_program~~test_tester_6~~CallsGraph_node9"><a xlink:href=".././proc/assert_close_r32_1.html" xlink:title="tester::tester_t%assert_close_r32_1">
+<g id="a_program~~test_tester_6~~CallsGraph_node9"><a xlink:href="../proc/assert_close_r32_1.html" xlink:title="tester::tester_t%assert_close_r32_1">
 <polygon fill="#d9534f" stroke="#d9534f" points="519.5,-108 318.5,-108 318.5,-84 519.5,-84 519.5,-108"/>
 <text text-anchor="middle" x="419" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">tester::tester_t%assert_close_r32_1</text>
 </a>
@@ -428,7 +431,7 @@ modules which it uses.
 <!-- proc~assert_close_r64 -->
 <g id="program~~test_tester_6~~CallsGraph_node10" class="node">
 <title>proc~assert_close_r64</title>
-<g id="a_program~~test_tester_6~~CallsGraph_node10"><a xlink:href=".././proc/assert_close_r64.html" xlink:title="tester::tester_t%assert_close_r64">
+<g id="a_program~~test_tester_6~~CallsGraph_node10"><a xlink:href="../proc/assert_close_r64.html" xlink:title="tester::tester_t%assert_close_r64">
 <polygon fill="#d9534f" stroke="#d9534f" points="513.5,-66 324.5,-66 324.5,-42 513.5,-42 513.5,-66"/>
 <text text-anchor="middle" x="419" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">tester::tester_t%assert_close_r64</text>
 </a>
@@ -443,7 +446,7 @@ modules which it uses.
 <!-- proc~assert_close_r64_1 -->
 <g id="program~~test_tester_6~~CallsGraph_node11" class="node">
 <title>proc~assert_close_r64_1</title>
-<g id="a_program~~test_tester_6~~CallsGraph_node11"><a xlink:href=".././proc/assert_close_r64_1.html" xlink:title="tester::tester_t%assert_close_r64_1">
+<g id="a_program~~test_tester_6~~CallsGraph_node11"><a xlink:href="../proc/assert_close_r64_1.html" xlink:title="tester::tester_t%assert_close_r64_1">
 <polygon fill="#d9534f" stroke="#d9534f" points="519.5,-24 318.5,-24 318.5,0 519.5,0 519.5,-24"/>
 <text text-anchor="middle" x="419" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">tester::tester_t%assert_close_r64_1</text>
 </a>
@@ -457,17 +460,17 @@ modules which it uses.
 </g>
 </g>
 </svg>
-</div>        <div><a type="button" class="graph-help" data-toggle="modal" href="#CallsGraph-help-text">Help</a></div>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#CallsGraph-help-text">Help</a>
+          </div>
           <div class="modal fade" id="CallsGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                   <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-              <div class="modal-body">
+                <div class="modal-body">
 <p>Nodes of different colours represent the following: </p>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -552,7 +555,7 @@ implementation in a submodule of an interface in a parent module.
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-rk"></span>
+              <span class="anchor" id="variable-rk~2"></span>
               integer,
             </td>
             <td>
@@ -568,7 +571,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-pi"></span>
+              <span class="anchor" id="variable-pi~2"></span>
               real(kind=rk),
             </td>
             <td>
@@ -584,7 +587,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-test"></span>
+              <span class="anchor" id="variable-test~9"></span>
               type(<a href='../type/tester_t.html'>tester_t</a>)
             </td>
             <td>
@@ -643,7 +646,7 @@ parameter
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
+          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2024 
 </p>
           </div>
           <div class="col">

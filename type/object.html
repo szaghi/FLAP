@@ -1,3 +1,5 @@
+<!-- -*- mode: jinja2 -*- -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -17,7 +19,8 @@
     <link href="../css/local.css" rel="stylesheet">
       <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
   <body>
@@ -114,25 +117,25 @@
       </a>
       <div id="vars-0" class="collapse">
         <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../type/object.html#variable-progname~3">progname</a>
-            <a class="list-group-item" href="../type/object.html#variable-version~2">version</a>
-            <a class="list-group-item" href="../type/object.html#variable-help~4">help</a>
-            <a class="list-group-item" href="../type/object.html#variable-help_color~2">help_color</a>
-            <a class="list-group-item" href="../type/object.html#variable-help_style~2">help_style</a>
-            <a class="list-group-item" href="../type/object.html#variable-help_markdown~2">help_markdown</a>
-            <a class="list-group-item" href="../type/object.html#variable-description~3">description</a>
-            <a class="list-group-item" href="../type/object.html#variable-license~2">license</a>
-            <a class="list-group-item" href="../type/object.html#variable-authors~2">authors</a>
-            <a class="list-group-item" href="../type/object.html#variable-epilog~2">epilog</a>
+            <a class="list-group-item" href="../type/object.html#variable-progname">progname</a>
+            <a class="list-group-item" href="../type/object.html#variable-version">version</a>
+            <a class="list-group-item" href="../type/object.html#variable-help">help</a>
+            <a class="list-group-item" href="../type/object.html#variable-help_color">help_color</a>
+            <a class="list-group-item" href="../type/object.html#variable-help_style">help_style</a>
+            <a class="list-group-item" href="../type/object.html#variable-help_markdown">help_markdown</a>
+            <a class="list-group-item" href="../type/object.html#variable-description">description</a>
+            <a class="list-group-item" href="../type/object.html#variable-license">license</a>
+            <a class="list-group-item" href="../type/object.html#variable-authors">authors</a>
+            <a class="list-group-item" href="../type/object.html#variable-epilog">epilog</a>
             <a class="list-group-item" href="../type/object.html#variable-m_exclude">m_exclude</a>
             <a class="list-group-item" href="../type/object.html#variable-error_message">error_message</a>
-            <a class="list-group-item" href="../type/object.html#variable-error_color~2">error_color</a>
-            <a class="list-group-item" href="../type/object.html#variable-error_style~2">error_style</a>
-            <a class="list-group-item" href="../type/object.html#variable-examples~4">examples</a>
-            <a class="list-group-item" href="../type/object.html#variable-error~35">error</a>
-            <a class="list-group-item" href="../type/object.html#variable-usage_lun~2">usage_lun</a>
-            <a class="list-group-item" href="../type/object.html#variable-version_lun~2">version_lun</a>
-            <a class="list-group-item" href="../type/object.html#variable-error_lun~2">error_lun</a>
+            <a class="list-group-item" href="../type/object.html#variable-error_color">error_color</a>
+            <a class="list-group-item" href="../type/object.html#variable-error_style">error_style</a>
+            <a class="list-group-item" href="../type/object.html#variable-examples">examples</a>
+            <a class="list-group-item" href="../type/object.html#variable-error~4">error</a>
+            <a class="list-group-item" href="../type/object.html#variable-usage_lun">usage_lun</a>
+            <a class="list-group-item" href="../type/object.html#variable-version_lun">version_lun</a>
+            <a class="list-group-item" href="../type/object.html#variable-error_lun">error_lun</a>
         </div>
       </div>
     </div>
@@ -183,14 +186,15 @@
     </div>
     
     <div class="col-md-9" id='text'>
-      <h2>type, public, abstract :: object</h2>
+      <h2>
+        type, public :: object</h2>
     <p>Base (abstract) class upon which FLAP&rsquo;s concrete classes are built.</p>
-<br>    <div class="card">
-      <div class="card-header">
-  <h3 class="card-title">Inherited by</h3>
-      </div>
-      <div class="card-body">
-     <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<br>      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Inherited by</h3>
+        </div>
+        <div class="card-body">
+          <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.43.0 (0)
@@ -210,14 +214,14 @@
 <!-- type~command_line_argument -->
 <g id="type~~object~~InheritedByGraph_node2" class="node">
 <title>type~command_line_argument</title>
-<g id="a_type~~object~~InheritedByGraph_node2"><a xlink:href=".././type/command_line_argument.html" xlink:title="command_line_argument">
+<g id="a_type~~object~~InheritedByGraph_node2"><a xlink:href="../type/command_line_argument.html" xlink:title="command_line_argument">
 <polygon fill="#5cb85c" stroke="#5cb85c" points="240,-24 91,-24 91,0 240,0 240,-24"/>
 <text text-anchor="middle" x="165.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">command_line_argument</text>
 </a>
 </g>
 </g>
 <!-- type~command_line_argument&#45;&gt;type~object -->
-<g id="type~~object~~InheritedByGraph_edge2" class="edge">
+<g id="type~~object~~InheritedByGraph_edge3" class="edge">
 <title>type~command_line_argument&#45;&gt;type~object</title>
 <path fill="none" stroke="#000000" d="M123.06,-24.05C112.32,-27.87 100.97,-32.54 91,-38 82.11,-42.86 83.08,-50.93 73,-52"/>
 <path fill="none" stroke="#000000" d="M72,-52C69.47,-52.27 66.86,-52.47 64.23,-52.61"/>
@@ -226,14 +230,14 @@
 <!-- type~command_line_arguments_group -->
 <g id="type~~object~~InheritedByGraph_node3" class="node">
 <title>type~command_line_arguments_group</title>
-<g id="a_type~~object~~InheritedByGraph_node3"><a xlink:href=".././type/command_line_arguments_group.html" xlink:title="command_line_arguments_group">
+<g id="a_type~~object~~InheritedByGraph_node3"><a xlink:href="../type/command_line_arguments_group.html" xlink:title="command_line_arguments_group">
 <polygon fill="#5cb85c" stroke="#5cb85c" points="481,-24 291,-24 291,0 481,0 481,-24"/>
 <text text-anchor="middle" x="386" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">command_line_arguments_group</text>
 </a>
 </g>
 </g>
 <!-- type~command_line_arguments_group&#45;&gt;type~object -->
-<g id="type~~object~~InheritedByGraph_edge1" class="edge">
+<g id="type~~object~~InheritedByGraph_edge2" class="edge">
 <title>type~command_line_arguments_group&#45;&gt;type~object</title>
 <path fill="none" stroke="#000000" d="M332.5,-24.04C318.76,-27.86 304.13,-32.53 291,-38 279.42,-42.82 279,-50.97 266.5,-52"/>
 <path fill="none" stroke="#000000" d="M264.5,-52C179.68,-58.99 157.63,-43 73,-52"/>
@@ -248,14 +252,14 @@
 <!-- type~command_line_interface -->
 <g id="type~~object~~InheritedByGraph_node4" class="node">
 <title>type~command_line_interface</title>
-<g id="a_type~~object~~InheritedByGraph_node4"><a xlink:href=".././type/command_line_interface.html" xlink:title="command_line_interface">
+<g id="a_type~~object~~InheritedByGraph_node4"><a xlink:href="../type/command_line_interface.html" xlink:title="command_line_interface">
 <polygon fill="#5cb85c" stroke="#5cb85c" points="688,-44 543,-44 543,-20 688,-20 688,-44"/>
 <text text-anchor="middle" x="615.5" y="-29.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">command_line_interface</text>
 </a>
 </g>
 </g>
 <!-- type~command_line_interface&#45;&gt;type~object -->
-<g id="type~~object~~InheritedByGraph_edge3" class="edge">
+<g id="type~~object~~InheritedByGraph_edge1" class="edge">
 <title>type~command_line_interface&#45;&gt;type~object</title>
 <path fill="none" stroke="#000000" d="M542.7,-36.9C536.71,-37.28 530.75,-37.65 525,-38 410.15,-44.96 381.21,-43.12 266.5,-52"/>
 </g>
@@ -272,17 +276,17 @@
                   var pantypeobjectInheritedByGraph = svgPanZoom('#typeobjectInheritedByGraph',
                     {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
                   );
-                </script>        <div><a type="button" class="graph-help" data-toggle="modal" href="#InheritedByGraph-help-text">Help</a></div>
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#InheritedByGraph-help-text">Help</a>
+          </div>
           <div class="modal fade" id="InheritedByGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                   <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-              <div class="modal-body">
+                <div class="modal-body">
 <p>Nodes of different colours represent the following: </p>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -319,8 +323,8 @@ said component(s).
             </div>
           </div>
         </div>
+        </div>
       </div>
-    </div>
     <br>
 
     <section>
@@ -337,7 +341,7 @@ said component(s).
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-progname~3"></span>
+              <span class="anchor" id="variable-progname"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -354,7 +358,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-version~2"></span>
+              <span class="anchor" id="variable-version"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -371,7 +375,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-help~4"></span>
+              <span class="anchor" id="variable-help"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -388,7 +392,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-help_color~2"></span>
+              <span class="anchor" id="variable-help_color"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -405,7 +409,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-help_style~2"></span>
+              <span class="anchor" id="variable-help_style"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -422,7 +426,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-help_markdown~2"></span>
+              <span class="anchor" id="variable-help_markdown"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -439,7 +443,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-description~3"></span>
+              <span class="anchor" id="variable-description"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -456,7 +460,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-license~2"></span>
+              <span class="anchor" id="variable-license"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -473,7 +477,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-authors~2"></span>
+              <span class="anchor" id="variable-authors"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -490,7 +494,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-epilog~2"></span>
+              <span class="anchor" id="variable-epilog"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -541,7 +545,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-error_color~2"></span>
+              <span class="anchor" id="variable-error_color"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -558,7 +562,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-error_style~2"></span>
+              <span class="anchor" id="variable-error_style"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -575,7 +579,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-examples~4"></span>
+              <span class="anchor" id="variable-examples"></span>
               character(len=512),
             </td>
               <td>public,</td>
@@ -592,7 +596,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-error~35"></span>
+              <span class="anchor" id="variable-error~4"></span>
               integer(kind=I4P),
             </td>
               <td>public</td>
@@ -609,7 +613,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-usage_lun~2"></span>
+              <span class="anchor" id="variable-usage_lun"></span>
               integer(kind=I4P),
             </td>
               <td>public</td>
@@ -626,7 +630,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-version_lun~2"></span>
+              <span class="anchor" id="variable-version_lun"></span>
               integer(kind=I4P),
             </td>
               <td>public</td>
@@ -643,7 +647,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-error_lun~2"></span>
+              <span class="anchor" id="variable-error_lun"></span>
               integer(kind=I4P),
             </td>
               <td>public</td>
@@ -705,7 +709,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/object.html'>object</a>),
+              class(<a href='object.html'>object</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -763,7 +767,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/object.html'>object</a>),
+              class(<a href='object.html'>object</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -836,7 +840,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/object.html'>object</a>),
+              class(<a href='object.html'>object</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -894,7 +898,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/object.html'>object</a>),
+              class(<a href='object.html'>object</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -967,7 +971,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/object.html'>object</a>),
+              class(<a href='object.html'>object</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -982,7 +986,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/object.html'>object</a>),
+              class(<a href='object.html'>object</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -1052,7 +1056,7 @@ said component(s).
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
+          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2024 
 </p>
           </div>
           <div class="col">

@@ -1,3 +1,5 @@
+<!-- -*- mode: jinja2 -*- -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -17,7 +19,8 @@
     <link href="../css/local.css" rel="stylesheet">
       <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
   <body>
@@ -74,7 +77,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title=" 0.4% of total for procedures.">15 statements</a>
+                 title=" 0.3% of total for procedures.">11 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -175,7 +178,7 @@
 <!-- interface~colorize -->
 <g id="proc~~colors_samples~~CallsGraph_node2" class="node">
 <title>interface~colorize</title>
-<g id="a_proc~~colors_samples~~CallsGraph_node2"><a xlink:href=".././interface/colorize.html" xlink:title="face::colorize">
+<g id="a_proc~~colors_samples~~CallsGraph_node2"><a xlink:href="../interface/colorize.html" xlink:title="face::colorize">
 <polygon fill="#a7506f" stroke="#a7506f" points="246,-66 161,-66 161,-42 246,-42 246,-66"/>
 <text text-anchor="middle" x="203.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face::colorize</text>
 </a>
@@ -190,7 +193,7 @@
 <!-- proc~colorize_default -->
 <g id="proc~~colors_samples~~CallsGraph_node3" class="node">
 <title>proc~colorize_default</title>
-<g id="a_proc~~colors_samples~~CallsGraph_node3"><a xlink:href=".././proc/colorize_default.html" xlink:title="face::colorize_default">
+<g id="a_proc~~colors_samples~~CallsGraph_node3"><a xlink:href="../proc/colorize_default.html" xlink:title="face::colorize_default">
 <polygon fill="#d94e8f" stroke="#d94e8f" points="410,-66 282,-66 282,-42 410,-42 410,-66"/>
 <text text-anchor="middle" x="346" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face::colorize_default</text>
 </a>
@@ -205,7 +208,7 @@
 <!-- proc~color_index -->
 <g id="proc~~colors_samples~~CallsGraph_node4" class="node">
 <title>proc~color_index</title>
-<g id="a_proc~~colors_samples~~CallsGraph_node4"><a xlink:href=".././proc/color_index.html" xlink:title="face::color_index">
+<g id="a_proc~~colors_samples~~CallsGraph_node4"><a xlink:href="../proc/color_index.html" xlink:title="face::color_index">
 <polygon fill="#d94e8f" stroke="#d94e8f" points="550,-108 446,-108 446,-84 550,-84 550,-108"/>
 <text text-anchor="middle" x="498" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face::color_index</text>
 </a>
@@ -220,7 +223,7 @@
 <!-- proc~style_index -->
 <g id="proc~~colors_samples~~CallsGraph_node5" class="node">
 <title>proc~style_index</title>
-<g id="a_proc~~colors_samples~~CallsGraph_node5"><a xlink:href=".././proc/style_index.html" xlink:title="face::style_index">
+<g id="a_proc~~colors_samples~~CallsGraph_node5"><a xlink:href="../proc/style_index.html" xlink:title="face::style_index">
 <polygon fill="#d94e8f" stroke="#d94e8f" points="549,-66 447,-66 447,-42 549,-42 549,-66"/>
 <text text-anchor="middle" x="498" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face::style_index</text>
 </a>
@@ -235,7 +238,7 @@
 <!-- proc~upper -->
 <g id="proc~~colors_samples~~CallsGraph_node6" class="node">
 <title>proc~upper</title>
-<g id="a_proc~~colors_samples~~CallsGraph_node6"><a xlink:href=".././proc/upper.html" xlink:title="face::upper">
+<g id="a_proc~~colors_samples~~CallsGraph_node6"><a xlink:href="../proc/upper.html" xlink:title="face::upper">
 <polygon fill="#d94e8f" stroke="#d94e8f" points="535.5,-24 460.5,-24 460.5,0 535.5,0 535.5,-24"/>
 <text text-anchor="middle" x="498" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face::upper</text>
 </a>
@@ -249,17 +252,17 @@
 </g>
 </g>
 </svg>
-</div>        <div><a type="button" class="graph-help" data-toggle="modal" href="#CallsGraph-help-text">Help</a></div>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#CallsGraph-help-text">Help</a>
+          </div>
           <div class="modal fade" id="CallsGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                   <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-              <div class="modal-body">
+                <div class="modal-body">
 <p>Nodes of different colours represent the following: </p>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -353,7 +356,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- program~face_test_basic -->
 <g id="proc~~colors_samples~~CalledByGraph_node2" class="node">
 <title>program~face_test_basic</title>
-<g id="a_proc~~colors_samples~~CalledByGraph_node2"><a xlink:href=".././program/face_test_basic.html" xlink:title="face_test_basic">
+<g id="a_proc~~colors_samples~~CalledByGraph_node2"><a xlink:href="../program/face_test_basic.html" xlink:title="face_test_basic">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="94,-24 0,-24 0,0 94,0 94,-24"/>
 <text text-anchor="middle" x="47" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">face_test_basic</text>
 </a>
@@ -367,17 +370,17 @@ implementation in a submodule of an interface in a parent module.
 </g>
 </g>
 </svg>
-</div>        <div><a type="button" class="graph-help" data-toggle="modal" href="#CalledByGraph-help-text">Help</a></div>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#CalledByGraph-help-text">Help</a>
+          </div>
           <div class="modal fade" id="CalledByGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                   <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-              <div class="modal-body">
+                <div class="modal-body">
 <p>Nodes of different colours represent the following: </p>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -490,7 +493,7 @@ implementation in a submodule of an interface in a parent module.
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
+          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2024 
 </p>
           </div>
           <div class="col">

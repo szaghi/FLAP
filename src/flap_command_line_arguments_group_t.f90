@@ -5,6 +5,7 @@ module flap_command_line_arguments_group_t
 use face, only : colorize
 use flap_command_line_argument_t, only : command_line_argument, &
                                          ACTION_PRINT_HELP,     &
+                                         ACTION_PRINT_MARK,     &
                                          ACTION_PRINT_VERS,     &
                                          ACTION_STORE,          &
                                          ACTION_STORE_STAR,     &
@@ -18,6 +19,7 @@ save
 public :: command_line_arguments_group
 public :: STATUS_PRINT_V
 public :: STATUS_PRINT_H
+public :: STATUS_PRINT_M
 
 type, extends(object) :: command_line_arguments_group
   !< Command Line Arguments Group (CLAsG) class.
@@ -54,6 +56,7 @@ endtype command_line_arguments_group
 ! status codes
 integer(I4P), parameter :: STATUS_PRINT_V = -1 !< Print version status.
 integer(I4P), parameter :: STATUS_PRINT_H = -2 !< Print help status.
+integer(I4P), parameter :: STATUS_PRINT_M = -3 !< Print help status to Markdown file.
 
 ! errors codes
 integer(I4P), parameter :: ERROR_CONSISTENCY = 100 !< CLAs group consistency error.
@@ -393,6 +396,8 @@ contains
                     endif
                  elseif (self%cla(a)%act==action_print_help) then
                     self%error = STATUS_PRINT_H
+                 elseif (self%cla(a)%act==action_print_mark) then
+                    self%error = STATUS_PRINT_M
                  elseif (self%cla(a)%act==action_print_vers) then
                     self%error = STATUS_PRINT_V
                  endif

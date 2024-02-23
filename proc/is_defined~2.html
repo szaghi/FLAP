@@ -1,3 +1,5 @@
+<!-- -*- mode: jinja2 -*- -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -17,7 +19,8 @@
     <link href="../css/local.css" rel="stylesheet">
       <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
   <body>
@@ -161,7 +164,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~61"></span>
+              <span class="anchor" id="variable-self~65"></span>
               class(<a href='../type/command_line_interface.html'>command_line_interface</a>),
             </td>
 <td>intent(in)</td>
@@ -240,7 +243,7 @@
 <!-- proc~is_defined -->
 <g id="proc~~is_defined~2~~CallsGraph_node2" class="node">
 <title>proc~is_defined</title>
-<g id="a_proc~~is_defined~2~~CallsGraph_node2"><a xlink:href=".././proc/is_defined.html" xlink:title="flap_command_line_arguments_group_t::command_line_arguments_group%is_defined">
+<g id="a_proc~~is_defined~2~~CallsGraph_node2"><a xlink:href="../proc/is_defined.html" xlink:title="flap_command_line_arguments_group_t::command_line_arguments_group%is_defined">
 <polygon fill="#d94e8f" stroke="#d94e8f" points="892,-66 418,-66 418,-42 892,-42 892,-66"/>
 <text text-anchor="middle" x="655" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_arguments_group_t::command_line_arguments_group%is_defined</text>
 </a>
@@ -255,7 +258,7 @@
 <!-- proc~is_defined_group -->
 <g id="proc~~is_defined~2~~CallsGraph_node3" class="node">
 <title>proc~is_defined_group</title>
-<g id="a_proc~~is_defined~2~~CallsGraph_node3"><a xlink:href=".././proc/is_defined_group.html" xlink:title="flap_command_line_interface_t::command_line_interface%is_defined_group">
+<g id="a_proc~~is_defined~2~~CallsGraph_node3"><a xlink:href="../proc/is_defined_group.html" xlink:title="flap_command_line_interface_t::command_line_interface%is_defined_group">
 <polygon fill="#d94e8f" stroke="#d94e8f" points="864,-24 446,-24 446,0 864,0 864,-24"/>
 <text text-anchor="middle" x="655" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%is_defined_group</text>
 </a>
@@ -273,17 +276,17 @@
                   var panprocis_defined2CallsGraph = svgPanZoom('#procis_defined2CallsGraph',
                     {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
                   );
-                </script>        <div><a type="button" class="graph-help" data-toggle="modal" href="#CallsGraph-help-text">Help</a></div>
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#CallsGraph-help-text">Help</a>
+          </div>
           <div class="modal fade" id="CallsGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                   <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-              <div class="modal-body">
+                <div class="modal-body">
 <p>Nodes of different colours represent the following: </p>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -377,7 +380,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- proc~parse~2 -->
 <g id="proc~~is_defined~2~~CalledByGraph_node2" class="node">
 <title>proc~parse~2</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node2"><a xlink:href=".././proc/parse~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%parse">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node2"><a xlink:href="../proc/parse~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%parse">
 <polygon fill="#d9534f" stroke="#d9534f" points="1637,-444 1279,-444 1279,-420 1637,-420 1637,-444"/>
 <text text-anchor="middle" x="1458" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%parse</text>
 </a>
@@ -392,7 +395,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- proc~fake_call -->
 <g id="proc~~is_defined~2~~CalledByGraph_node3" class="node">
 <title>proc~fake_call</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node3"><a xlink:href=".././proc/fake_call.html" xlink:title="flap_test_group::fake_call">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node3"><a xlink:href="../proc/fake_call.html" xlink:title="flap_test_group::fake_call">
 <polygon fill="#d9534f" stroke="#d9534f" points="293,-24 145,-24 145,0 293,0 293,-24"/>
 <text text-anchor="middle" x="219" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_group::fake_call</text>
 </a>
@@ -407,7 +410,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- none~get~2 -->
 <g id="proc~~is_defined~2~~CalledByGraph_node21" class="node">
 <title>none~get~2</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node21"><a xlink:href=".././type/command_line_interface.html#boundprocedure-get~2" xlink:title="flap_command_line_interface_t::command_line_interface%get">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node21"><a xlink:href="../type/command_line_interface.html#boundprocedure-get~2" xlink:title="flap_command_line_interface_t::command_line_interface%get">
 <polygon fill="#a7506f" stroke="#a7506f" points="712.5,-322 366.5,-322 366.5,-298 712.5,-298 712.5,-322"/>
 <text text-anchor="middle" x="539.5" y="-307.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get</text>
 </a>
@@ -422,7 +425,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- proc~get_cla_list_varying_char~2 -->
 <g id="proc~~is_defined~2~~CalledByGraph_node4" class="node">
 <title>proc~get_cla_list_varying_char~2</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node4"><a xlink:href=".././proc/get_cla_list_varying_char~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_char">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node4"><a xlink:href="../proc/get_cla_list_varying_char~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_char">
 <polygon fill="#d9534f" stroke="#d9534f" points="1237.5,-612 776.5,-612 776.5,-588 1237.5,-588 1237.5,-612"/>
 <text text-anchor="middle" x="1007" y="-597.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_cla_list_varying_char</text>
 </a>
@@ -437,7 +440,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- proc~get_cla_list_varying_i1p~2 -->
 <g id="proc~~is_defined~2~~CalledByGraph_node5" class="node">
 <title>proc~get_cla_list_varying_i1p~2</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node5"><a xlink:href=".././proc/get_cla_list_varying_i1p~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_I1P">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node5"><a xlink:href="../proc/get_cla_list_varying_i1p~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_I1P">
 <polygon fill="#d9534f" stroke="#d9534f" points="1233.5,-570 780.5,-570 780.5,-546 1233.5,-546 1233.5,-570"/>
 <text text-anchor="middle" x="1007" y="-555.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_cla_list_varying_I1P</text>
 </a>
@@ -452,7 +455,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- proc~get_cla_list_varying_i2p~2 -->
 <g id="proc~~is_defined~2~~CalledByGraph_node6" class="node">
 <title>proc~get_cla_list_varying_i2p~2</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node6"><a xlink:href=".././proc/get_cla_list_varying_i2p~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_I2P">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node6"><a xlink:href="../proc/get_cla_list_varying_i2p~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_I2P">
 <polygon fill="#d9534f" stroke="#d9534f" points="1233.5,-528 780.5,-528 780.5,-504 1233.5,-504 1233.5,-528"/>
 <text text-anchor="middle" x="1007" y="-513.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_cla_list_varying_I2P</text>
 </a>
@@ -467,7 +470,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- proc~get_cla_list_varying_i4p~2 -->
 <g id="proc~~is_defined~2~~CalledByGraph_node7" class="node">
 <title>proc~get_cla_list_varying_i4p~2</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node7"><a xlink:href=".././proc/get_cla_list_varying_i4p~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_I4P">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node7"><a xlink:href="../proc/get_cla_list_varying_i4p~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_I4P">
 <polygon fill="#d9534f" stroke="#d9534f" points="1233.5,-486 780.5,-486 780.5,-462 1233.5,-462 1233.5,-486"/>
 <text text-anchor="middle" x="1007" y="-471.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_cla_list_varying_I4P</text>
 </a>
@@ -482,7 +485,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- proc~get_cla_list_varying_i8p~2 -->
 <g id="proc~~is_defined~2~~CalledByGraph_node8" class="node">
 <title>proc~get_cla_list_varying_i8p~2</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node8"><a xlink:href=".././proc/get_cla_list_varying_i8p~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_I8P">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node8"><a xlink:href="../proc/get_cla_list_varying_i8p~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_I8P">
 <polygon fill="#d9534f" stroke="#d9534f" points="1233.5,-444 780.5,-444 780.5,-420 1233.5,-420 1233.5,-444"/>
 <text text-anchor="middle" x="1007" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_cla_list_varying_I8P</text>
 </a>
@@ -497,7 +500,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- proc~get_cla_list_varying_logical~2 -->
 <g id="proc~~is_defined~2~~CalledByGraph_node9" class="node">
 <title>proc~get_cla_list_varying_logical~2</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node9"><a xlink:href=".././proc/get_cla_list_varying_logical~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_logical">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node9"><a xlink:href="../proc/get_cla_list_varying_logical~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_logical">
 <polygon fill="#d9534f" stroke="#d9534f" points="1243,-738 771,-738 771,-714 1243,-714 1243,-738"/>
 <text text-anchor="middle" x="1007" y="-723.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_cla_list_varying_logical</text>
 </a>
@@ -512,7 +515,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- proc~get_cla_list_varying_r16p~2 -->
 <g id="proc~~is_defined~2~~CalledByGraph_node10" class="node">
 <title>proc~get_cla_list_varying_r16p~2</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node10"><a xlink:href=".././proc/get_cla_list_varying_r16p~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_R16P">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node10"><a xlink:href="../proc/get_cla_list_varying_r16p~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_R16P">
 <polygon fill="#d9534f" stroke="#d9534f" points="1239,-166 775,-166 775,-142 1239,-142 1239,-166"/>
 <text text-anchor="middle" x="1007" y="-151.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_cla_list_varying_R16P</text>
 </a>
@@ -527,7 +530,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- proc~get_cla_list_varying_r4p~2 -->
 <g id="proc~~is_defined~2~~CalledByGraph_node11" class="node">
 <title>proc~get_cla_list_varying_r4p~2</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node11"><a xlink:href=".././proc/get_cla_list_varying_r4p~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_R4P">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node11"><a xlink:href="../proc/get_cla_list_varying_r4p~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_R4P">
 <polygon fill="#d9534f" stroke="#d9534f" points="1235.5,-696 778.5,-696 778.5,-672 1235.5,-672 1235.5,-696"/>
 <text text-anchor="middle" x="1007" y="-681.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_cla_list_varying_R4P</text>
 </a>
@@ -542,7 +545,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- proc~get_cla_list_varying_r8p~2 -->
 <g id="proc~~is_defined~2~~CalledByGraph_node12" class="node">
 <title>proc~get_cla_list_varying_r8p~2</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node12"><a xlink:href=".././proc/get_cla_list_varying_r8p~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_R8P">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node12"><a xlink:href="../proc/get_cla_list_varying_r8p~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list_varying_R8P">
 <polygon fill="#d9534f" stroke="#d9534f" points="1235.5,-654 778.5,-654 778.5,-630 1235.5,-630 1235.5,-654"/>
 <text text-anchor="middle" x="1007" y="-639.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_cla_list_varying_R8P</text>
 </a>
@@ -557,7 +560,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- proc~get_cla_list~2 -->
 <g id="proc~~is_defined~2~~CalledByGraph_node13" class="node">
 <title>proc~get_cla_list~2</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node13"><a xlink:href=".././proc/get_cla_list~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node13"><a xlink:href="../proc/get_cla_list~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla_list">
 <polygon fill="#d9534f" stroke="#d9534f" points="1200.5,-284 813.5,-284 813.5,-260 1200.5,-260 1200.5,-284"/>
 <text text-anchor="middle" x="1007" y="-269.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_cla_list</text>
 </a>
@@ -572,7 +575,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- proc~get_cla~2 -->
 <g id="proc~~is_defined~2~~CalledByGraph_node14" class="node">
 <title>proc~get_cla~2</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node14"><a xlink:href=".././proc/get_cla~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node14"><a xlink:href="../proc/get_cla~2.html" xlink:title="flap_command_line_interface_t::command_line_interface%get_cla">
 <polygon fill="#d9534f" stroke="#d9534f" points="1190.5,-326 823.5,-326 823.5,-302 1190.5,-302 1190.5,-326"/>
 <text text-anchor="middle" x="1007" y="-311.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_cla</text>
 </a>
@@ -587,7 +590,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- program~flap_save_bash_completion -->
 <g id="proc~~is_defined~2~~CalledByGraph_node15" class="node">
 <title>program~flap_save_bash_completion</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node15"><a xlink:href=".././program/flap_save_bash_completion.html" xlink:title="flap_save_bash_completion">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node15"><a xlink:href="../program/flap_save_bash_completion.html" xlink:title="flap_save_bash_completion">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="1086.5,-124 927.5,-124 927.5,-100 1086.5,-100 1086.5,-124"/>
 <text text-anchor="middle" x="1007" y="-109.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_save_bash_completion</text>
 </a>
@@ -602,7 +605,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- program~flap_test_basic -->
 <g id="proc~~is_defined~2~~CalledByGraph_node16" class="node">
 <title>program~flap_test_basic</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node16"><a xlink:href=".././program/flap_test_basic.html" xlink:title="flap_test_basic">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node16"><a xlink:href="../program/flap_test_basic.html" xlink:title="flap_test_basic">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="264.5,-654 173.5,-654 173.5,-630 264.5,-630 264.5,-654"/>
 <text text-anchor="middle" x="219" y="-639.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_basic</text>
 </a>
@@ -617,7 +620,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- none~get_varying~2 -->
 <g id="proc~~is_defined~2~~CalledByGraph_node20" class="node">
 <title>none~get_varying~2</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node20"><a xlink:href=".././type/command_line_interface.html#boundprocedure-get_varying~2" xlink:title="flap_command_line_interface_t::command_line_interface%get_varying">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node20"><a xlink:href="../type/command_line_interface.html#boundprocedure-get_varying~2" xlink:title="flap_command_line_interface_t::command_line_interface%get_varying">
 <polygon fill="#a7506f" stroke="#a7506f" points="735,-612 344,-612 344,-588 735,-588 735,-612"/>
 <text text-anchor="middle" x="539.5" y="-597.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t::command_line_interface%get_varying</text>
 </a>
@@ -638,7 +641,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- program~flap_test_choices_logical -->
 <g id="proc~~is_defined~2~~CalledByGraph_node17" class="node">
 <title>program~flap_test_choices_logical</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node17"><a xlink:href=".././program/flap_test_choices_logical.html" xlink:title="flap_test_choices_logical">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node17"><a xlink:href="../program/flap_test_choices_logical.html" xlink:title="flap_test_choices_logical">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="291,-570 147,-570 147,-546 291,-546 291,-570"/>
 <text text-anchor="middle" x="219" y="-555.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_choices_logical</text>
 </a>
@@ -659,7 +662,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- program~flap_test_nested -->
 <g id="proc~~is_defined~2~~CalledByGraph_node18" class="node">
 <title>program~flap_test_nested</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node18"><a xlink:href=".././program/flap_test_nested.html" xlink:title="flap_test_nested">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node18"><a xlink:href="../program/flap_test_nested.html" xlink:title="flap_test_nested">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="268.5,-528 169.5,-528 169.5,-504 268.5,-504 268.5,-528"/>
 <text text-anchor="middle" x="219" y="-513.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_nested</text>
 </a>
@@ -680,7 +683,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- program~flap_test_string -->
 <g id="proc~~is_defined~2~~CalledByGraph_node19" class="node">
 <title>program~flap_test_string</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node19"><a xlink:href=".././program/flap_test_string.html" xlink:title="flap_test_string">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node19"><a xlink:href="../program/flap_test_string.html" xlink:title="flap_test_string">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="265.5,-66 172.5,-66 172.5,-42 265.5,-42 265.5,-66"/>
 <text text-anchor="middle" x="219" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_string</text>
 </a>
@@ -761,7 +764,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- program~flap_test_group -->
 <g id="proc~~is_defined~2~~CalledByGraph_node22" class="node">
 <title>program~flap_test_group</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node22"><a xlink:href=".././program/flap_test_group.html" xlink:title="flap_test_group">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node22"><a xlink:href="../program/flap_test_group.html" xlink:title="flap_test_group">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="94,-24 0,-24 0,0 94,0 94,-24"/>
 <text text-anchor="middle" x="47" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_group</text>
 </a>
@@ -776,7 +779,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- program~flap_save_man_page -->
 <g id="proc~~is_defined~2~~CalledByGraph_node23" class="node">
 <title>program~flap_save_man_page</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node23"><a xlink:href=".././program/flap_save_man_page.html" xlink:title="flap_save_man_page">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node23"><a xlink:href="../program/flap_save_man_page.html" xlink:title="flap_save_man_page">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="281,-150 157,-150 157,-126 281,-126 281,-150"/>
 <text text-anchor="middle" x="219" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_save_man_page</text>
 </a>
@@ -791,7 +794,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- program~flap_save_usage_to_markdown -->
 <g id="proc~~is_defined~2~~CalledByGraph_node24" class="node">
 <title>program~flap_save_usage_to_markdown</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node24"><a xlink:href=".././program/flap_save_usage_to_markdown.html" xlink:title="flap_save_usage_to_markdown">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node24"><a xlink:href="../program/flap_save_usage_to_markdown.html" xlink:title="flap_save_usage_to_markdown">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="308,-108 130,-108 130,-84 308,-84 308,-108"/>
 <text text-anchor="middle" x="219" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_save_usage_to_markdown</text>
 </a>
@@ -806,7 +809,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- program~flap_test_action_store -->
 <g id="proc~~is_defined~2~~CalledByGraph_node25" class="node">
 <title>program~flap_test_action_store</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node25"><a xlink:href=".././program/flap_test_action_store.html" xlink:title="flap_test_action_store">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node25"><a xlink:href="../program/flap_test_action_store.html" xlink:title="flap_test_action_store">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="282.5,-612 155.5,-612 155.5,-588 282.5,-588 282.5,-612"/>
 <text text-anchor="middle" x="219" y="-597.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_action_store</text>
 </a>
@@ -827,7 +830,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- program~flap_test_ansi_color_style -->
 <g id="proc~~is_defined~2~~CalledByGraph_node26" class="node">
 <title>program~flap_test_ansi_color_style</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node26"><a xlink:href=".././program/flap_test_ansi_color_style.html" xlink:title="flap_test_ansi_color_style">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node26"><a xlink:href="../program/flap_test_ansi_color_style.html" xlink:title="flap_test_ansi_color_style">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="292.5,-486 145.5,-486 145.5,-462 292.5,-462 292.5,-486"/>
 <text text-anchor="middle" x="219" y="-471.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_ansi_color_style</text>
 </a>
@@ -842,7 +845,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- program~flap_test_duplicated_clas -->
 <g id="proc~~is_defined~2~~CalledByGraph_node27" class="node">
 <title>program~flap_test_duplicated_clas</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node27"><a xlink:href=".././program/flap_test_duplicated_clas.html" xlink:title="flap_test_duplicated_clas">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node27"><a xlink:href="../program/flap_test_duplicated_clas.html" xlink:title="flap_test_duplicated_clas">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="291.5,-444 146.5,-444 146.5,-420 291.5,-420 291.5,-444"/>
 <text text-anchor="middle" x="219" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_duplicated_clas</text>
 </a>
@@ -857,7 +860,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- program~flap_test_group_examples -->
 <g id="proc~~is_defined~2~~CalledByGraph_node28" class="node">
 <title>program~flap_test_group_examples</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node28"><a xlink:href=".././program/flap_test_group_examples.html" xlink:title="flap_test_group_examples">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node28"><a xlink:href="../program/flap_test_group_examples.html" xlink:title="flap_test_group_examples">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="294,-402 144,-402 144,-378 294,-378 294,-402"/>
 <text text-anchor="middle" x="219" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_group_examples</text>
 </a>
@@ -872,7 +875,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- program~flap_test_hidden -->
 <g id="proc~~is_defined~2~~CalledByGraph_node29" class="node">
 <title>program~flap_test_hidden</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node29"><a xlink:href=".././program/flap_test_hidden.html" xlink:title="flap_test_hidden">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node29"><a xlink:href="../program/flap_test_hidden.html" xlink:title="flap_test_hidden">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="269,-360 169,-360 169,-336 269,-336 269,-360"/>
 <text text-anchor="middle" x="219" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_hidden</text>
 </a>
@@ -887,7 +890,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- program~flap_test_ignore_unknown_clas -->
 <g id="proc~~is_defined~2~~CalledByGraph_node30" class="node">
 <title>program~flap_test_ignore_unknown_clas</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node30"><a xlink:href=".././program/flap_test_ignore_unknown_clas.html" xlink:title="flap_test_ignore_unknown_clas">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node30"><a xlink:href="../program/flap_test_ignore_unknown_clas.html" xlink:title="flap_test_ignore_unknown_clas">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="307,-318 131,-318 131,-294 307,-294 307,-318"/>
 <text text-anchor="middle" x="219" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_ignore_unknown_clas</text>
 </a>
@@ -902,7 +905,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- program~flap_test_minimal -->
 <g id="proc~~is_defined~2~~CalledByGraph_node31" class="node">
 <title>program~flap_test_minimal</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node31"><a xlink:href=".././program/flap_test_minimal.html" xlink:title="flap_test_minimal">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node31"><a xlink:href="../program/flap_test_minimal.html" xlink:title="flap_test_minimal">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="272,-276 166,-276 166,-252 272,-252 272,-276"/>
 <text text-anchor="middle" x="219" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_minimal</text>
 </a>
@@ -917,7 +920,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- program~flap_test_nargs_insufficient -->
 <g id="proc~~is_defined~2~~CalledByGraph_node32" class="node">
 <title>program~flap_test_nargs_insufficient</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node32"><a xlink:href=".././program/flap_test_nargs_insufficient.html" xlink:title="flap_test_nargs_insufficient">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node32"><a xlink:href="../program/flap_test_nargs_insufficient.html" xlink:title="flap_test_nargs_insufficient">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="297.5,-234 140.5,-234 140.5,-210 297.5,-210 297.5,-234"/>
 <text text-anchor="middle" x="219" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_nargs_insufficient</text>
 </a>
@@ -932,7 +935,7 @@ implementation in a submodule of an interface in a parent module.
 <!-- program~flap_test_nargs_insufficient~2 -->
 <g id="proc~~is_defined~2~~CalledByGraph_node33" class="node">
 <title>program~flap_test_nargs_insufficient~2</title>
-<g id="a_proc~~is_defined~2~~CalledByGraph_node33"><a xlink:href=".././program/flap_test_nargs_insufficient~2.html" xlink:title="flap_test_nargs_insufficient">
+<g id="a_proc~~is_defined~2~~CalledByGraph_node33"><a xlink:href="../program/flap_test_nargs_insufficient~2.html" xlink:title="flap_test_nargs_insufficient">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="297.5,-192 140.5,-192 140.5,-168 297.5,-168 297.5,-192"/>
 <text text-anchor="middle" x="219" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_test_nargs_insufficient</text>
 </a>
@@ -950,17 +953,17 @@ implementation in a submodule of an interface in a parent module.
                   var panprocis_defined2CalledByGraph = svgPanZoom('#procis_defined2CalledByGraph',
                     {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
                   );
-                </script>        <div><a type="button" class="graph-help" data-toggle="modal" href="#CalledByGraph-help-text">Help</a></div>
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#CalledByGraph-help-text">Help</a>
+          </div>
           <div class="modal fade" id="CalledByGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                   <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-              <div class="modal-body">
+                <div class="modal-body">
 <p>Nodes of different colours represent the following: </p>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -1071,7 +1074,7 @@ implementation in a submodule of an interface in a parent module.
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
+          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2024 
 </p>
           </div>
           <div class="col">

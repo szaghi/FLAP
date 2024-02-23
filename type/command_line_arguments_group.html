@@ -1,3 +1,5 @@
+<!-- -*- mode: jinja2 -*- -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -17,7 +19,8 @@
     <link href="../css/local.css" rel="stylesheet">
       <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
   <body>
@@ -74,7 +77,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title="<p>12.4% of total for derived types.</p>Including implementation: 544 statements, 14.4% of total for derived types.">26 statements</a>
+                 title="<p>12.4% of total for derived types.</p>Including implementation: 546 statements, 14.5% of total for derived types.">26 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -114,25 +117,25 @@
       </a>
       <div id="vars-0" class="collapse">
         <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-progname~3">progname</a>
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-version~2">version</a>
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-help~4">help</a>
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-help_color~2">help_color</a>
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-help_style~2">help_style</a>
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-help_markdown~2">help_markdown</a>
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-description~3">description</a>
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-license~2">license</a>
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-authors~2">authors</a>
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-epilog~2">epilog</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-progname">progname</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-version">version</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-help">help</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-help_color">help_color</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-help_style">help_style</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-help_markdown">help_markdown</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-description">description</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-license">license</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-authors">authors</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-epilog">epilog</a>
             <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-m_exclude">m_exclude</a>
             <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-error_message">error_message</a>
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-error_color~2">error_color</a>
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-error_style~2">error_style</a>
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-examples~4">examples</a>
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-error~35">error</a>
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-usage_lun~2">usage_lun</a>
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-version_lun~2">version_lun</a>
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-error_lun~2">error_lun</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-error_color">error_color</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-error_style">error_style</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-examples">examples</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-error~4">error</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-usage_lun">usage_lun</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-version_lun">version_lun</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-error_lun">error_lun</a>
             <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-group">group</a>
             <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-na">Na</a>
             <a class="list-group-item" href="../type/command_line_arguments_group.html#variable-na_required">Na_required</a>
@@ -164,7 +167,7 @@
       </a>
       <div id="fins-0" class="collapse">
         <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#finalproc-finalize~2">finalize</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#finalproc-finalize">finalize</a>
         </div>
       </div>
     </div>
@@ -181,21 +184,21 @@
             <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-print_error_message">print_error_message</a>
             <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-set_examples">set_examples</a>
             <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-assign_object">assign_object</a>
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-free~2">free</a>
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-check~2">check</a>
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-is_required_passed~2">is_required_passed</a>
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-is_passed~2">is_passed</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-free">free</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-check">check</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-is_required_passed">is_required_passed</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-is_passed">is_passed</a>
             <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-is_defined">is_defined</a>
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-raise_error_m_exclude~2">raise_error_m_exclude</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-raise_error_m_exclude">raise_error_m_exclude</a>
             <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-add">add</a>
             <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-parse">parse</a>
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-usage~3">usage</a>
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-signature~3">signature</a>
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-sanitize_defaults~2">sanitize_defaults</a>
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-errored~2">errored</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-usage">usage</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-signature">signature</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-sanitize_defaults">sanitize_defaults</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-errored">errored</a>
             <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-check_m_exclusive">check_m_exclusive</a>
             <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-clasg_assign_clasg">clasg_assign_clasg</a>
-            <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-assignment%28%3D%29~2">assignment(=)</a>
+            <a class="list-group-item" href="../type/command_line_arguments_group.html#boundprocedure-assignment%28%3D%29">assignment(=)</a>
         </div>
       </div>
     </div>
@@ -215,15 +218,16 @@
     </div>
     
     <div class="col-md-9" id='text'>
-      <h2>type, public, extends(<a href='../type/object.html'>object</a>) :: command_line_arguments_group</h2>
+      <h2>
+        type, public, extends(<a href='object.html'>object</a>) :: command_line_arguments_group</h2>
     <p>Command Line Arguments Group (CLAsG) class.</p>
 <p>CLAsG are useful for building nested commands.</p>
-<br>    <div class="card">
-      <div class="card-header">
-  <h3 class="card-title">Inherits</h3>
-      </div>
-      <div class="card-body">
-    <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<br>      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Inherits</h3>
+        </div>
+        <div class="card-body">
+          <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.43.0 (0)
@@ -243,7 +247,7 @@
 <!-- type~command_line_argument -->
 <g id="type~~command_line_arguments_group~~InheritsGraph_node2" class="node">
 <title>type~command_line_argument</title>
-<g id="a_type~~command_line_arguments_group~~InheritsGraph_node2"><a xlink:href=".././type/command_line_argument.html" xlink:title="command_line_argument">
+<g id="a_type~~command_line_arguments_group~~InheritsGraph_node2"><a xlink:href="../type/command_line_argument.html" xlink:title="command_line_argument">
 <polygon fill="#5cb85c" stroke="#5cb85c" points="240,-64 91,-64 91,-40 240,-40 240,-64"/>
 <text text-anchor="middle" x="165.5" y="-49.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">command_line_argument</text>
 </a>
@@ -259,7 +263,7 @@
 <!-- type~object -->
 <g id="type~~command_line_arguments_group~~InheritsGraph_node3" class="node">
 <title>type~object</title>
-<g id="a_type~~command_line_arguments_group~~InheritsGraph_node3"><a xlink:href=".././type/object.html" xlink:title="object">
+<g id="a_type~~command_line_arguments_group~~InheritsGraph_node3"><a xlink:href="../type/object.html" xlink:title="object">
 <polygon fill="#5cb85c" stroke="#5cb85c" points="54,-24 0,-24 0,0 54,0 54,-24"/>
 <text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">object</text>
 </a>
@@ -279,17 +283,17 @@
 </g>
 </g>
 </svg>
-</div>        <div><a type="button" class="graph-help" data-toggle="modal" href="#InheritsGraph-help-text">Help</a></div>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#InheritsGraph-help-text">Help</a>
+          </div>
           <div class="modal fade" id="InheritsGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                   <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-              <div class="modal-body">
+                <div class="modal-body">
 <p>Nodes of different colours represent the following: </p>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -326,14 +330,14 @@ said component(s).
             </div>
           </div>
         </div>
+        </div>
       </div>
-    </div>
-    <div class="card">
-      <div class="card-header">
-  <h3 class="card-title">Inherited by</h3>
-      </div>
-      <div class="card-body">
-     <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Inherited by</h3>
+        </div>
+        <div class="card-body">
+          <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.43.0 (0)
@@ -353,7 +357,7 @@ said component(s).
 <!-- type~command_line_interface -->
 <g id="type~~command_line_arguments_group~~InheritedByGraph_node2" class="node">
 <title>type~command_line_interface</title>
-<g id="a_type~~command_line_arguments_group~~InheritedByGraph_node2"><a xlink:href=".././type/command_line_interface.html" xlink:title="command_line_interface">
+<g id="a_type~~command_line_arguments_group~~InheritedByGraph_node2"><a xlink:href="../type/command_line_interface.html" xlink:title="command_line_interface">
 <polygon fill="#5cb85c" stroke="#5cb85c" points="397,-24 252,-24 252,0 397,0 397,-24"/>
 <text text-anchor="middle" x="324.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">command_line_interface</text>
 </a>
@@ -368,17 +372,17 @@ said component(s).
 </g>
 </g>
 </svg>
-</div>        <div><a type="button" class="graph-help" data-toggle="modal" href="#InheritedByGraph-help-text">Help</a></div>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#InheritedByGraph-help-text">Help</a>
+          </div>
           <div class="modal fade" id="InheritedByGraph-help-text" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                   <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-              <div class="modal-body">
+                <div class="modal-body">
 <p>Nodes of different colours represent the following: </p>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -415,8 +419,8 @@ said component(s).
             </div>
           </div>
         </div>
+        </div>
       </div>
-    </div>
     <br>
 
     <section>
@@ -433,7 +437,7 @@ said component(s).
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-progname~3"></span>
+              <span class="anchor" id="variable-progname"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -450,7 +454,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-version~2"></span>
+              <span class="anchor" id="variable-version"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -467,7 +471,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-help~4"></span>
+              <span class="anchor" id="variable-help"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -484,7 +488,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-help_color~2"></span>
+              <span class="anchor" id="variable-help_color"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -501,7 +505,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-help_style~2"></span>
+              <span class="anchor" id="variable-help_style"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -518,7 +522,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-help_markdown~2"></span>
+              <span class="anchor" id="variable-help_markdown"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -535,7 +539,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-description~3"></span>
+              <span class="anchor" id="variable-description"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -552,7 +556,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-license~2"></span>
+              <span class="anchor" id="variable-license"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -569,7 +573,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-authors~2"></span>
+              <span class="anchor" id="variable-authors"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -586,7 +590,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-epilog~2"></span>
+              <span class="anchor" id="variable-epilog"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -637,7 +641,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-error_color~2"></span>
+              <span class="anchor" id="variable-error_color"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -654,7 +658,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-error_style~2"></span>
+              <span class="anchor" id="variable-error_style"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -671,7 +675,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-examples~4"></span>
+              <span class="anchor" id="variable-examples"></span>
               character(len=512),
             </td>
               <td>public,</td>
@@ -688,7 +692,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-error~35"></span>
+              <span class="anchor" id="variable-error~4"></span>
               integer(kind=I4P),
             </td>
               <td>public</td>
@@ -705,7 +709,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-usage_lun~2"></span>
+              <span class="anchor" id="variable-usage_lun"></span>
               integer(kind=I4P),
             </td>
               <td>public</td>
@@ -722,7 +726,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-version_lun~2"></span>
+              <span class="anchor" id="variable-version_lun"></span>
               integer(kind=I4P),
             </td>
               <td>public</td>
@@ -739,7 +743,7 @@ said component(s).
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-error_lun~2"></span>
+              <span class="anchor" id="variable-error_lun"></span>
               integer(kind=I4P),
             </td>
               <td>public</td>
@@ -825,7 +829,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" id="variable-cla"></span>
-              type(<a href='../type/command_line_argument.html'>command_line_argument</a>),
+              type(<a href='command_line_argument.html'>command_line_argument</a>),
             </td>
               <td>public,</td>
             <td>
@@ -867,7 +871,7 @@ said component(s).
         <h2>Finalization Procedures</h2>
             <div class="card">
     <div class="card-header codesum">
-      <span class="anchor" id="finalproc-finalize~2"></span>
+      <span class="anchor" id="finalproc-finalize"></span>
       <h3>final :: <strong>finalize</strong> </h3>
     </div>
     <div class="card-body">
@@ -877,7 +881,7 @@ said component(s).
     <ul class="list-group">
       <li class="list-group-item">
             <h3>
-    private elemental subroutine <a href='../proc/finalize~2.html'>finalize</a>(self)  
+    private elemental subroutine <a href='../proc/finalize.html'>finalize</a>(self)  
 
     </h3>
     
@@ -896,8 +900,8 @@ said component(s).
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self~50"></span>
-              type(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
+              <span class="anchor" id="variable-self~18"></span>
+              type(<a href='command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -959,7 +963,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/object.html'>object</a>),
+              class(<a href='object.html'>object</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -1017,7 +1021,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/object.html'>object</a>),
+              class(<a href='object.html'>object</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -1090,7 +1094,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/object.html'>object</a>),
+              class(<a href='object.html'>object</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -1148,7 +1152,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/object.html'>object</a>),
+              class(<a href='object.html'>object</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -1221,7 +1225,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/object.html'>object</a>),
+              class(<a href='object.html'>object</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -1236,7 +1240,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/object.html'>object</a>),
+              class(<a href='object.html'>object</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -1260,7 +1264,7 @@ said component(s).
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-free~2"></span>
+      <span class="anchor" id="boundprocedure-free"></span>
       <h3>
           procedure, public ::
   <strong>free</strong>
@@ -1274,7 +1278,7 @@ said component(s).
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private elemental subroutine <a href='../proc/free~2.html'>free</a>(self)  
+    private elemental subroutine <a href='../proc/free.html'>free</a>(self)  
 </h3>
     
 
@@ -1294,7 +1298,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
+              class(<a href='command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -1318,7 +1322,7 @@ said component(s).
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-check~2"></span>
+      <span class="anchor" id="boundprocedure-check"></span>
       <h3>
           procedure, public ::
   <strong>check</strong>
@@ -1332,7 +1336,7 @@ said component(s).
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private  subroutine <a href='../proc/check~2.html'>check</a>(self, pref)  
+    private  subroutine <a href='../proc/check.html'>check</a>(self, pref)  
 </h3>
     
 
@@ -1352,7 +1356,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
+              class(<a href='command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -1391,7 +1395,7 @@ said component(s).
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-is_required_passed~2"></span>
+      <span class="anchor" id="boundprocedure-is_required_passed"></span>
       <h3>
           procedure, public ::
   <strong>is_required_passed</strong>
@@ -1405,7 +1409,7 @@ said component(s).
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private  subroutine <a href='../proc/is_required_passed~2.html'>is_required_passed</a>(self, pref)  
+    private  subroutine <a href='../proc/is_required_passed.html'>is_required_passed</a>(self, pref)  
 </h3>
     
 
@@ -1425,7 +1429,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
+              class(<a href='command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -1464,7 +1468,7 @@ said component(s).
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-is_passed~2"></span>
+      <span class="anchor" id="boundprocedure-is_passed"></span>
       <h3>
           procedure, public ::
   <strong>is_passed</strong>
@@ -1498,7 +1502,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
+              class(<a href='command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -1591,7 +1595,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
+              class(<a href='command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -1650,7 +1654,7 @@ said component(s).
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-raise_error_m_exclude~2"></span>
+      <span class="anchor" id="boundprocedure-raise_error_m_exclude"></span>
       <h3>
           procedure, public ::
   <strong>raise_error_m_exclude</strong>
@@ -1664,7 +1668,7 @@ said component(s).
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private  subroutine <a href='../proc/raise_error_m_exclude~2.html'>raise_error_m_exclude</a>(self, pref)  
+    private  subroutine <a href='../proc/raise_error_m_exclude.html'>raise_error_m_exclude</a>(self, pref)  
 </h3>
     
 
@@ -1684,7 +1688,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
+              class(<a href='command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -1757,7 +1761,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
+              class(<a href='command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -1787,7 +1791,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              type(<a href='../type/command_line_argument.html'>command_line_argument</a>),
+              type(<a href='command_line_argument.html'>command_line_argument</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -1845,7 +1849,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
+              class(<a href='command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -1929,7 +1933,7 @@ said component(s).
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-usage~3"></span>
+      <span class="anchor" id="boundprocedure-usage"></span>
       <h3>
           procedure, public ::
   <strong>usage</strong>
@@ -1943,7 +1947,7 @@ said component(s).
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private  function <a href='../proc/usage~2.html'>usage</a>(self, pref, no_header, markdown)  
+    private  function <a href='../proc/usage.html'>usage</a>(self, pref, no_header, markdown)  
 </h3>
     
 
@@ -1963,7 +1967,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
+              class(<a href='command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -2037,7 +2041,7 @@ said component(s).
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-signature~3"></span>
+      <span class="anchor" id="boundprocedure-signature"></span>
       <h3>
           procedure, public ::
   <strong>signature</strong>
@@ -2051,7 +2055,7 @@ said component(s).
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private  function <a href='../proc/signature~2.html'>signature</a>(self, bash_completion, plain)  
+    private  function <a href='../proc/signature.html'>signature</a>(self, bash_completion, plain)  
 </h3>
     
 
@@ -2071,7 +2075,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
+              class(<a href='command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -2130,7 +2134,7 @@ said component(s).
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-sanitize_defaults~2"></span>
+      <span class="anchor" id="boundprocedure-sanitize_defaults"></span>
       <h3>
           procedure, public ::
   <strong>sanitize_defaults</strong>
@@ -2144,11 +2148,11 @@ said component(s).
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private  subroutine <a href='../proc/sanitize_defaults~2.html'>sanitize_defaults</a>(self)  
+    private  subroutine <a href='../proc/sanitize_defaults.html'>sanitize_defaults</a>(self)  
 </h3>
     
 
-  <p>Sanitize defaults values.</p><a href="../proc/sanitize_defaults~2.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+  <p>Sanitize defaults values.</p><a href="../proc/sanitize_defaults.html" class="pull-right"><emph>Read more&hellip;</emph></a>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -2164,7 +2168,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
+              class(<a href='command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -2188,7 +2192,7 @@ said component(s).
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-errored~2"></span>
+      <span class="anchor" id="boundprocedure-errored"></span>
       <h3>
           procedure, private ::
   <strong>errored</strong>
@@ -2202,7 +2206,7 @@ said component(s).
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private  subroutine <a href='../proc/errored~2.html'>errored</a>(self, error, pref, a1, a2)  
+    private  subroutine <a href='../proc/errored.html'>errored</a>(self, error, pref, a1, a2)  
 </h3>
     
 
@@ -2222,7 +2226,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
+              class(<a href='command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -2340,7 +2344,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
+              class(<a href='command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -2413,7 +2417,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
+              class(<a href='command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -2428,7 +2432,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              type(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
+              type(<a href='command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -2452,10 +2456,10 @@ said component(s).
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-assignment%28%3D%29~2"></span>
+      <span class="anchor" id="boundprocedure-assignment%28%3D%29"></span>
       <h3>
           generic, private ::
-  <strong>assignment(=)</strong> => <a href='../type/command_line_arguments_group.html#boundprocedure-clasg_assign_clasg'>clasg_assign_clasg</a>
+  <strong>assignment(=)</strong> => <a href='/home/runner/work/FLAP/FLAP/doc/html/publish/type/command_line_arguments_group.html#boundprocedure-clasg_assign_clasg'>clasg_assign_clasg</a>
         
       </h3>
     </div>
@@ -2486,7 +2490,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              class(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
+              class(<a href='command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(inout)</td>
               <td></td>            <td>
@@ -2501,7 +2505,7 @@ said component(s).
         <tr>
             <td>
               <span class="anchor" ></span>
-              type(<a href='../type/command_line_arguments_group.html'>command_line_arguments_group</a>),
+              type(<a href='command_line_arguments_group.html'>command_line_arguments_group</a>),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -2569,7 +2573,7 @@ said component(s).
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2023 
+          <div class="col"><p>FLAP was developed by Stefano Zaghi<br>&copy; 2024 
 </p>
           </div>
           <div class="col">
