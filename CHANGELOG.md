@@ -1,4 +1,9 @@
 # Changelog
+## [v1.2.10](https://github.com/szaghi/FLAP/tree/v1.2.10) (2026-02-18)
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v1.2.9...v1.2.10)
+### Miscellaneous
+- Bump FACE and PENF submodules to latest commits ([`6167ff2`](https://github.com/szaghi/FLAP/commit/6167ff2b68b63747ec42de64f89d56b8767fc221))
+
 ## [v1.2.9](https://github.com/szaghi/FLAP/tree/v1.2.9) (2026-02-18)
 [Full Changelog](https://github.com/szaghi/FLAP/compare/v1.2.8...v1.2.9)
 ### Miscellaneous
