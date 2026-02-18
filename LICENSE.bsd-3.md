@@ -1,7 +1,7 @@
 Modified BSD License
 ====================
 
-Copyright © 2023, Stefano Zaghi
+Copyright © 2014-2026, Stefano Zaghi
 
 All rights reserved.
 

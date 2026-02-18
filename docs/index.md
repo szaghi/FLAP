@@ -70,9 +70,9 @@ Contributions are welcome — see the [Contributing](/guide/contributing) page.
 
 ## Copyrights
 
-FLAP is distributed under a multi-licensing system:
+This project is distributed under a multi-licensing system:
 
 - **FOSS projects**: [GPL v3](http://www.gnu.org/licenses/gpl-3.0.html)
 - **Closed source / commercial**: [BSD 2-Clause](http://opensource.org/licenses/BSD-2-Clause), [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause), or [MIT](http://opensource.org/licenses/MIT)
 
-Anyone interested in using, developing, or contributing to FLAP is welcome — pick the license that best fits your needs.
+> Anyone interested in using, developing, or contributing to this project is welcome — pick the license that best fits your needs.

@@ -19,6 +19,25 @@
 - Automatic help, usage, man page, bash completion, and Markdown generation
 - POSIX compliant
 
+**[Documentation](https://szaghi.github.io/FLAP/)** | **[API Reference](https://szaghi.github.io/FLAP/api/)**
+
+---
+
+## Authors
+
+- Stefano Zaghi — [@szaghi](https://github.com/szaghi)
+
+Contributions are welcome — see the [Contributing](/guide/contributing) page.
+
+## Copyrights
+
+This project is distributed under a multi-licensing system:
+
+- **FOSS projects**: [GPL v3](http://www.gnu.org/licenses/gpl-3.0.html)
+- **Closed source / commercial**: [BSD 2-Clause](http://opensource.org/licenses/BSD-2-Clause), [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause), or [MIT](http://opensource.org/licenses/MIT)
+
+> Anyone interested in using, developing, or contributing to this project is welcome — pick the license that best fits your needs.
+
 ---
 
 ## Quick start
@@ -98,19 +117,3 @@ git submodule update --init
 | CMake | `cmake -B build && cmake --build build` |
 
 > **NVFortran note:** pass `-Mbackslash` to work around backslash-in-string handling, e.g. `cmake -D CMAKE_Fortran_FLAGS="-Mbackslash" ...`
-
----
-
-## Documentation
-
-- API docs: [szaghi.github.io/FLAP](http://szaghi.github.io/FLAP/index.html)
-- Generate locally: `FoBiS.py rule -ex makedoc` (requires [FORD](https://github.com/cmacmackin/ford))
-
----
-
-## License
-
-FLAP is multi-licensed:
-
-- Open source projects: [GPL v3](http://www.gnu.org/licenses/gpl-3.0.html)
-- Closed source / commercial: [BSD 2-Clause](http://opensource.org/licenses/BSD-2-Clause), [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause), or [MIT](http://opensource.org/licenses/MIT)
