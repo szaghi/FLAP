@@ -7,7 +7,7 @@ hero:
   tagline: A KISS pure Fortran 2003+ library for building powerful, elegant Command Line Interfaces — inspired by Python's argparse
   actions:
     - theme: brand
-      text: Get Started
+      text: Guide
       link: /guide/
     - theme: alt
       text: API Reference
