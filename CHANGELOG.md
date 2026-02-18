@@ -1,4 +1,9 @@
 # Changelog
+## [v1.2.9](https://github.com/szaghi/FLAP/tree/v1.2.9) (2026-02-18)
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v1.2.8...v1.2.9)
+### Miscellaneous
+- Rename hero CTA button from "Get Started" to "Guide" ([`8be9078`](https://github.com/szaghi/FLAP/commit/8be9078b117d2e19c248be9d7c8bcf1c270c1cc4))
+
 ## [v1.2.8](https://github.com/szaghi/FLAP/tree/v1.2.8) (2026-02-18)
 [Full Changelog](https://github.com/szaghi/FLAP/compare/v1.2.7...v1.2.8)
 ### Documentation
