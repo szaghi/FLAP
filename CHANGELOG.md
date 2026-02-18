@@ -1,4 +1,9 @@
 # Changelog
+## [v1.2.13](https://github.com/szaghi/FLAP/tree/v1.2.13) (2026-02-18)
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v1.2.12...v1.2.13)
+### Miscellaneous
+- Fix copyright years and update README with authors section ([`00b5590`](https://github.com/szaghi/FLAP/commit/00b5590e7e4d11115b25e882898812508825bcb9))
+
 ## [v1.2.12](https://github.com/szaghi/FLAP/tree/v1.2.12) (2026-02-18)
 [Full Changelog](https://github.com/szaghi/FLAP/compare/v1.2.11...v1.2.12)
 ### Documentation
