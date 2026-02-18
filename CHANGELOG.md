@@ -1,4 +1,9 @@
 # Changelog
+## [v1.2.11](https://github.com/szaghi/FLAP/tree/v1.2.11) (2026-02-18)
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v1.2.10...v1.2.11)
+### CI/CD
+- Use dynamic repo name in release tarball ([`5c80c7b`](https://github.com/szaghi/FLAP/commit/5c80c7b87ea3a8477b49ca66a730919a2b0dfa39))
+
 ## [v1.2.10](https://github.com/szaghi/FLAP/tree/v1.2.10) (2026-02-18)
 [Full Changelog](https://github.com/szaghi/FLAP/compare/v1.2.9...v1.2.10)
 ### Miscellaneous
