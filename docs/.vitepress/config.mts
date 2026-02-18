@@ -18,10 +18,26 @@ export default withMermaid({
   },
   themeConfig: {
     nav: [
-      { text: 'Home', link: '/' },
-      { text: 'API', link: '/api/' },
+      { text: 'Home',  link: '/' },
+      { text: 'Guide', link: '/guide/' },
+      { text: 'API',   link: '/api/' },
     ],
     sidebar: {
+      '/guide/': [
+        {
+          text: 'Guide',
+          items: [
+            { text: 'Getting Started',         link: '/guide/' },
+            { text: 'Defining Arguments',      link: '/guide/arguments' },
+            { text: 'Parsing & Getting Values',link: '/guide/parsing' },
+            { text: 'Nested Subcommands',      link: '/guide/subcommands' },
+            { text: 'Advanced Features',       link: '/guide/advanced' },
+            { text: 'Output Formats',          link: '/guide/output' },
+            { text: 'Error Codes',             link: '/guide/errors' },
+            { text: 'Contributing',            link: '/guide/contributing' },
+          ],
+        },
+      ],
       '/api/': [
         {
           text: 'API Reference',
