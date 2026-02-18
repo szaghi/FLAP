@@ -54,15 +54,16 @@ jobs:
     # ── Release artefact ─────────────────────────────────────────────────────
     - name: Build release tarball
       run: |
+        REPO_NAME="${GITHUB_REPOSITORY##*/}"
         VERSION="${{ github.ref_name }}"
-        tar --xform="s%^%FLAP-${VERSION}/%" -czf "FLAP-${VERSION}.tar.gz" \
+        tar --xform="s%^%${REPO_NAME}-${VERSION}/%" -czf "${REPO_NAME}-${VERSION}.tar.gz" \
           --exclude='.git' \
           --exclude='docs/node_modules' \
           --exclude='docs/.vitepress/dist' \
           --exclude='docs/.vitepress/cache' \
           --exclude='exe' --exclude='obj' --exclude='mod' \
           *
-        echo "TARBALL=FLAP-${VERSION}.tar.gz" >> $GITHUB_ENV
+        echo "TARBALL=${REPO_NAME}-${VERSION}.tar.gz" >> $GITHUB_ENV
 
     # ── Release notes from CHANGELOG.md ─────────────────────────────────────
     - name: Extract release notes from CHANGELOG.md
