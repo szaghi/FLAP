@@ -1,0 +1,46 @@
+name: Setup build environment
+description: Install GCC and Python build tools required by CI and release jobs
+
+inputs:
+  gcc-version:
+    description: GCC version to install
+    default: '14'
+  extra-pip-packages:
+    description: Space-separated list of additional pip packages
+    default: ''
+
+runs:
+  using: composite
+  steps:
+
+    - name: Install GCC
+      shell: bash
+      run: |
+        sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
+        sudo apt update
+        sudo apt install -y \
+          gcc-${{ inputs.gcc-version }} \
+          gfortran-${{ inputs.gcc-version }} \
+          g++-${{ inputs.gcc-version }}
+        sudo update-alternatives \
+          --install /usr/bin/gcc     gcc     /usr/bin/gcc-${{ inputs.gcc-version }}     100 \
+          --slave   /usr/bin/gfortran gfortran /usr/bin/gfortran-${{ inputs.gcc-version }} \
+          --slave   /usr/bin/gcov     gcov     /usr/bin/gcov-${{ inputs.gcc-version }}
+
+    - name: Install Python tools
+      shell: bash
+      run: |
+        pip install \
+          markdown markdown-include python-markdown-math \
+          toposort jinja2 pygments beautifulsoup4 \
+          tqdm importlib-metadata ford FoBiS.py \
+          ${{ inputs.extra-pip-packages }}
+
+    - name: Check system
+      shell: bash
+      run: |
+        gfortran --version
+        gcov --version
+        python --version
+        FoBiS.py --version
+        ford --version

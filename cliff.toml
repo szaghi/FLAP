@@ -1,0 +1,57 @@
+[changelog]
+header = "# Changelog\n"
+body = """
+{% if version %}\
+## [{{ version }}](https://github.com/szaghi/FLAP/tree/{{ version }}) \
+({{ timestamp | date(format="%Y-%m-%d") }})
+{% if previous.version %}\
+[Full Changelog](https://github.com/szaghi/FLAP/compare/{{ previous.version }}...{{ version }})
+{% endif %}\
+{% else %}\
+## [Unreleased]
+{% endif %}\
+{% for group, commits in commits | group_by(attribute="group") %}\
+### {{ group | upper_first }}
+{% for commit in commits %}\
+- {{ commit.message | upper_first }}\
+{% if commit.breaking %} ⚠ **BREAKING CHANGE**{% endif %} \
+([`{{ commit.id | truncate(length=7, end="") }}`](https://github.com/szaghi/FLAP/commit/{{ commit.id }}))
+{% endfor %}
+{% endfor %}\
+"""
+trim = true
+footer = ""
+
+[git]
+conventional_commits = true
+
+# Keep non-conventional commits too, grouped as "Miscellaneous"
+filter_unconventional = false
+
+split_commits = false
+
+# Turn #123 references into GitHub issue links
+commit_preprocessors = [
+  { pattern = '#([0-9]+)', replace = "[#$1](https://github.com/szaghi/FLAP/issues/$1)" },
+]
+
+commit_parsers = [
+  { message = "^feat",           group = "New features" },
+  { message = "^fix",            group = "Bug fixes" },
+  { message = "^perf",           group = "Performance" },
+  { message = "^refactor",       group = "Refactoring" },
+  { message = "^docs",           group = "Documentation" },
+  { message = "^test",           group = "Testing" },
+  { message = "^build",          group = "Build system" },
+  { message = "^ci",             group = "CI/CD" },
+  # skip pure release/chore commits from the changelog body
+  { message = "^chore\\(release\\)", skip = true },
+  { message = "^chore",          group = "Miscellaneous" },
+  # catch-all for non-conventional commits
+  { message = ".*",              group = "Miscellaneous" },
+]
+
+protect_breaking_commits = true
+filter_commits = false
+tag_pattern = "v[0-9]+\\.[0-9]+\\.[0-9]+"
+sort_commits = "oldest"

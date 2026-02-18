@@ -38,3 +38,8 @@ test.md
 # mac
 .DS_Store
 
+
+# VitePress
+docs/node_modules/
+docs/.vitepress/dist/
+docs/.vitepress/cache/

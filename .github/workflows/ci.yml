@@ -1,74 +1,29 @@
 name: CI
 
-on: push
+on:
+  push:
+    branches: ["**"]
+    tags-ignore: ["**"]   # tags are handled by release.yml
+  pull_request:
 
 jobs:
-  test-deploy:
-
+  test:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
 
     steps:
-    - name: PREPARE SYSTEM
-      run: |
-        python --version
-        gfortran --version
-        gcov --version
-        sudo apt install graphviz
-        pip install --upgrade markdown
-        pip install --upgrade markdown-include
-        pip install --upgrade python-markdown-math
-        pip install --upgrade toposort
-        pip install --upgrade jinja2
-        pip install --upgrade pygments
-        pip install --upgrade beautifulsoup4
-        pip install --upgrade graphviz
-        pip install --upgrade tqdm
-        pip install --upgrade importlib-metadata
-        pip install --upgrade ford && ford --version
-        pip install --upgrade FoBiS.py && FoBiS.py --version
-    
-    - name: CHECKOUT
-      id: checkout
-      run: |
-        git clone --recursive https://github.com/$GITHUB_REPOSITORY ./
-        git log -n 1
-        tag=`git tag | tail -n 1`
-        echo "RELEASE=$tag" >> $GITHUB_ENV
 
-    - name: MAKE TAR
-      run: |
-        echo "release version:" ${{ env.RELEASE }}
-        FoBiS.py rule -ex maketar
-        ls *.tar.gz
-
-    - name: DEPLOY ASSET
-      if: ${{ !env.ACT }}
-      uses: "marvinpinto/action-automatic-releases@latest"
+    - name: Checkout repository
+      uses: actions/checkout@v4
       with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: ${{ env.RELEASE }}
-        prerelease: false
-        title: ${{ env.RELEASE }}
-        files: |
-          *.tar.gz
-          ./scripts/install.sh
+        submodules: 'true'
 
-    - name: MAKE COVERAGE
-      run: |
-        FoBiS.py rule -ex makecoverage
+    - name: Setup build environment
+      uses: ./.github/actions/setup-build-env
 
-    - name: UPLOAD COVERAGE to CODECOV
-      if: ${{ !env.ACT }}
-      uses: codecov/codecov-action@v3
+    - name: Run tests with coverage
+      run: FoBiS.py rule -ex makecoverage
 
-    - name: MAKE DOC
-      run: |
-        FoBiS.py rule -ex makedoc
-
-    - name: PUSH DOC to GH Pages
-      if: ${{ !env.ACT }}
-      uses: JamesIves/github-pages-deploy-action@v4
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
       with:
-        folder: doc/html
+        token: ${{ secrets.CODECOV_TOKEN }}

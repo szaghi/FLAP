@@ -1,0 +1,91 @@
+name: Release
+
+on:
+  push:
+    tags: ["v[0-9]+.[0-9]+.[0-9]+"]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: 'true'
+
+    - name: Setup build environment
+      uses: ./.github/actions/setup-build-env
+      with:
+        extra-pip-packages: formal-ford2vitepress
+
+    - name: Check formal version
+      run: formal --version
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    # ── Tests & coverage ────────────────────────────────────────────────────
+    - name: Run tests with coverage
+      run: FoBiS.py rule -ex makecoverage
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+
+    # ── Documentation ────────────────────────────────────────────────────────
+    - name: Build documentation
+      run: |
+        formal generate --mirror-sources --diagrams --project docs/ford.md --output docs/api
+        cd docs && npm ci && npm run docs:build
+
+    - name: Deploy docs to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        branch: gh-pages
+        folder: docs/.vitepress/dist
+
+    # ── Release artefact ─────────────────────────────────────────────────────
+    - name: Build release tarball
+      run: |
+        VERSION="${{ github.ref_name }}"
+        tar --xform="s%^%FLAP-${VERSION}/%" -czf "FLAP-${VERSION}.tar.gz" \
+          --exclude='.git' \
+          --exclude='docs/node_modules' \
+          --exclude='docs/.vitepress/dist' \
+          --exclude='docs/.vitepress/cache' \
+          --exclude='exe' --exclude='obj' --exclude='mod' \
+          *
+        echo "TARBALL=FLAP-${VERSION}.tar.gz" >> $GITHUB_ENV
+
+    # ── Release notes from CHANGELOG.md ─────────────────────────────────────
+    - name: Extract release notes from CHANGELOG.md
+      run: |
+        python3 - "${{ github.ref_name }}" CHANGELOG.md > release_notes.md <<'PYEOF'
+        import sys, re
+        tag, path = sys.argv[1], sys.argv[2]
+        with open(path) as f:
+            content = f.read()
+        pattern = rf'(## \[{re.escape(tag)}\].*?)(?=\n## |\Z)'
+        match = re.search(pattern, content, re.DOTALL)
+        print(match.group(1).strip() if match else f"Release {tag}\n\nSee CHANGELOG.md for details.")
+        PYEOF
+
+    # ── Publish GitHub release ───────────────────────────────────────────────
+    - name: Publish GitHub release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ github.ref_name }}
+        name: ${{ github.ref_name }}
+        body_path: release_notes.md
+        files: |
+          ${{ env.TARBALL }}
+          scripts/install.sh
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
