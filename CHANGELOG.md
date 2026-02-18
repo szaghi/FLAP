@@ -1,4 +1,9 @@
 # Changelog
+## [v1.2.8](https://github.com/szaghi/FLAP/tree/v1.2.8) (2026-02-18)
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v1.2.7...v1.2.8)
+### Documentation
+- Add VitePress guide section and formal-generated API reference ([`95027e8`](https://github.com/szaghi/FLAP/commit/95027e81cc7f6a024dd755531007d682a4798b3f))
+
 ## [v1.2.7](https://github.com/szaghi/FLAP/tree/v1.2.7) (2026-02-18)
 [Full Changelog](https://github.com/szaghi/FLAP/compare/v1.2.6...v1.2.7)
 ### Documentation
