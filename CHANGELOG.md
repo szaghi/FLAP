@@ -1,4 +1,9 @@
 # Changelog
+## [v1.2.12](https://github.com/szaghi/FLAP/tree/v1.2.12) (2026-02-18)
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v1.2.11...v1.2.12)
+### Documentation
+- Overhaul README and restructure VitePress guide ([`de2da74`](https://github.com/szaghi/FLAP/commit/de2da7468e75297fd9ad89684156769f6113ef70))
+
 ## [v1.2.11](https://github.com/szaghi/FLAP/tree/v1.2.11) (2026-02-18)
 [Full Changelog](https://github.com/szaghi/FLAP/compare/v1.2.10...v1.2.11)
 ### CI/CD
