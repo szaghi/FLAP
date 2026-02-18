@@ -18,23 +18,51 @@ export default withMermaid({
   },
   themeConfig: {
     nav: [
-      { text: 'Home',  link: '/' },
-      { text: 'Guide', link: '/guide/' },
-      { text: 'API',   link: '/api/' },
+      { text: 'Home', link: '/' },
+      {
+        text: 'Guide',
+        items: [
+          { text: 'About',                   link: '/guide/' },
+          { text: 'Features',                link: '/guide/features' },
+          { text: 'Installation',            link: '/guide/install' },
+          { text: 'Defining Arguments',      link: '/guide/arguments' },
+          { text: 'Parsing & Getting Values',link: '/guide/parsing' },
+          { text: 'Nested Subcommands',      link: '/guide/subcommands' },
+          { text: 'Advanced Features',       link: '/guide/advanced' },
+          { text: 'Output Formats',          link: '/guide/output' },
+          { text: 'Error Codes',             link: '/guide/errors' },
+          { text: 'Contributing',            link: '/guide/contributing' },
+          { text: 'Changelog',               link: '/guide/changelog' },
+        ],
+      },
+      { text: 'API', link: '/api/' },
     ],
     sidebar: {
       '/guide/': [
         {
-          text: 'Guide',
+          text: 'Introduction',
           items: [
-            { text: 'Getting Started',         link: '/guide/' },
-            { text: 'Defining Arguments',      link: '/guide/arguments' },
-            { text: 'Parsing & Getting Values',link: '/guide/parsing' },
-            { text: 'Nested Subcommands',      link: '/guide/subcommands' },
-            { text: 'Advanced Features',       link: '/guide/advanced' },
-            { text: 'Output Formats',          link: '/guide/output' },
-            { text: 'Error Codes',             link: '/guide/errors' },
-            { text: 'Contributing',            link: '/guide/contributing' },
+            { text: 'About',    link: '/guide/' },
+            { text: 'Features', link: '/guide/features' },
+          ],
+        },
+        {
+          text: 'Getting Started',
+          items: [
+            { text: 'Installation',             link: '/guide/install' },
+            { text: 'Defining Arguments',       link: '/guide/arguments' },
+            { text: 'Parsing & Getting Values', link: '/guide/parsing' },
+            { text: 'Nested Subcommands',       link: '/guide/subcommands' },
+            { text: 'Advanced Features',        link: '/guide/advanced' },
+            { text: 'Output Formats',           link: '/guide/output' },
+            { text: 'Error Codes',              link: '/guide/errors' },
+          ],
+        },
+        {
+          text: 'Project',
+          items: [
+            { text: 'Contributing', link: '/guide/contributing' },
+            { text: 'Changelog',    link: '/guide/changelog' },
           ],
         },
       ],

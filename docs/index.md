@@ -37,6 +37,37 @@ features:
     details: Multi-licensed — GPLv3 for FOSS projects, BSD 2/3-Clause or MIT for commercial use. Fortran 2003+ standard compliant.
 ---
 
+## Quick start
+
+A minimal *plate*:
+
+```fortran
+program minimal
+type(command_line_interface) :: cli    ! Command Line Interface (CLI).
+character(99)                :: string ! String value.
+integer                      :: error  ! Error trapping flag.
+
+call cli%init(description = 'minimal FLAP example')
+call cli%add(switch='--string', &
+             switch_ab='-s',    &
+             help='a string',   &
+             required=.true.,   &
+             act='store',       &
+             error=error)
+if (error/=0) stop
+call cli%get(switch='-s', val=string, error=error)
+if (error/=0) stop
+print '(A)', cli%progname//' has been called with the following argument:'
+print '(A)', 'String = '//trim(adjustl(string))
+endprogram minimal
+```
+
+## Authors
+
+- Stefano Zaghi — [@szaghi](https://github.com/szaghi)
+
+Contributions are welcome — see the [Contributing](/guide/contributing) page.
+
 ## Copyrights
 
 FLAP is distributed under a multi-licensing system:

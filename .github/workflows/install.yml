@@ -14,6 +14,14 @@ jobs:
       TAG: ${{ github.event.release.tag_name }}
 
     steps:
+    - name: INSTALL SCRIPT + make
+      run: |
+        WORKDIR=$(mktemp -d)
+        cd "$WORKDIR"
+        wget $(curl -s https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/$TAG | jq -r '.assets[] | select(.name | test("install.sh"; "i")) | .browser_download_url')
+        chmod +x install.sh
+        ./install.sh --download wget --build make
+
     - name: INSTALL SCRIPT + cmake
       run: |
         WORKDIR=$(mktemp -d)
@@ -33,3 +41,4 @@ jobs:
         cd "$WORKDIR"
         git clone https://github.com/$GITHUB_REPOSITORY ./
         fpm build --profile release
+    

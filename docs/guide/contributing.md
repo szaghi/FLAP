@@ -1,3 +1,7 @@
+---
+title: Contributing
+---
+
 # Contributing
 
 Contributions to FLAP are welcome. This page covers the coding conventions and
