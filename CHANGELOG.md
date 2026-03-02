@@ -1,4 +1,9 @@
 # Changelog
+## [v1.2.15](https://github.com/szaghi/FLAP/tree/v1.2.15) (2026-03-02)
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v1.2.14...v1.2.15)
+### Build system
+- Drop spurious fortran_tester link from library target ([`1521572`](https://github.com/szaghi/FLAP/commit/15215729a38cdd4175edf7e7f55d4c3ba08ebf81))
+
 ## [v1.2.14](https://github.com/szaghi/FLAP/tree/v1.2.14) (2026-03-02)
 [Full Changelog](https://github.com/szaghi/FLAP/compare/v1.2.13...v1.2.14)
 ### Documentation
