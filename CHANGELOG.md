@@ -1,4 +1,13 @@
 # Changelog
+## [v1.2.14](https://github.com/szaghi/FLAP/tree/v1.2.14) (2026-03-02)
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v1.2.13...v1.2.14)
+### Documentation
+- Refactor README to match StringiFor style conventions ([`8307fc0`](https://github.com/szaghi/FLAP/commit/8307fc0f630038146ba905fd8417fac7f8ab414b))
+
+### Miscellaneous
+- Remove fortran_tester submodule ([`17d58bd`](https://github.com/szaghi/FLAP/commit/17d58bd8c867206baec6f56cbf8156a1afd3cc4a))
+- Migrate from git submodules to FoBiS.py fetch and overhaul CI ([`51e8149`](https://github.com/szaghi/FLAP/commit/51e81496d0220755c5eb62733d3f77d350cfe155))
+
 ## [v1.2.13](https://github.com/szaghi/FLAP/tree/v1.2.13) (2026-02-18)
 [Full Changelog](https://github.com/szaghi/FLAP/compare/v1.2.12...v1.2.13)
 ### Miscellaneous
