@@ -16,7 +16,7 @@ add_library(${LIB}
         flap_utils_m.f90
 )
 add_library(${NAMESPACE}${LIB} ALIAS ${LIB})
-target_link_libraries(${LIB} FACE::FACE PENF::PENF fortran_tester::fortran_tester)
+target_link_libraries(${LIB} FACE::FACE PENF::PENF)
 
 target_include_directories(${LIB}
     INTERFACE
