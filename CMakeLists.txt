@@ -28,9 +28,6 @@ if(NOT TARGET FACE)
 add_subdirectory(src/third_party/FACE)
 endif()
 
-if(NOT TARGET fortran_tester)
-add_subdirectory(src/third_party/fortran_tester)
-endif()
 # generate the library and install instructions
 add_subdirectory(src/lib)
 

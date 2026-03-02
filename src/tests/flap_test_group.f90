@@ -10,53 +10,47 @@ program flap_test_group
 
 use flap, only : command_line_interface
 use penf
-use tester
 
 implicit none
-type(tester_t)               :: crash_test_dummy      !< Tests handler.
-logical                      :: switch_value_domain   !< Switch sentinel.
-logical                      :: switch_value_grid     !< Switch sentinel.
-logical                      :: switch_value_spectrum !< Switch sentinel.
-
-call crash_test_dummy%init
+logical :: switch_value_domain   !< Switch sentinel.
+logical :: switch_value_grid     !< Switch sentinel.
+logical :: switch_value_spectrum !< Switch sentinel.
 
 call fake_call(args='', spectrum=switch_value_spectrum, domain=switch_value_domain, grid=switch_value_grid)
 print*, 'test_group'
 print*, 'spectrum = ', switch_value_spectrum
 print*, 'domain   = ', switch_value_domain
 print*, 'grid     = ', switch_value_grid
-call crash_test_dummy%assert_equal(switch_value_spectrum, .false.)
-call crash_test_dummy%assert_equal(switch_value_domain, .false.)
-call crash_test_dummy%assert_equal(switch_value_grid , .false.)
+if (switch_value_spectrum .neqv. .false.) error stop 'test_group: spectrum should be .false.'
+if (switch_value_domain   .neqv. .false.) error stop 'test_group: domain should be .false.'
+if (switch_value_grid     .neqv. .false.) error stop 'test_group: grid should be .false.'
 
 call fake_call(args='new -s', spectrum=switch_value_spectrum, domain=switch_value_domain, grid=switch_value_grid)
 print*, 'test_group new -s'
 print*, 'spectrum = ', switch_value_spectrum
 print*, 'domain   = ', switch_value_domain
 print*, 'grid     = ', switch_value_grid
-call crash_test_dummy%assert_equal(switch_value_spectrum, .true.)
-call crash_test_dummy%assert_equal(switch_value_domain, .false.)
-call crash_test_dummy%assert_equal(switch_value_grid , .false.)
+if (switch_value_spectrum .neqv. .true. ) error stop 'test_group new -s: spectrum should be .true.'
+if (switch_value_domain   .neqv. .false.) error stop 'test_group new -s: domain should be .false.'
+if (switch_value_grid     .neqv. .false.) error stop 'test_group new -s: grid should be .false.'
 
 call fake_call(args='new -d', spectrum=switch_value_spectrum, domain=switch_value_domain, grid=switch_value_grid)
 print*, 'test_group new -d'
 print*, 'spectrum = ', switch_value_spectrum
 print*, 'domain   = ', switch_value_domain
 print*, 'grid     = ', switch_value_grid
-call crash_test_dummy%assert_equal(switch_value_spectrum, .false.)
-call crash_test_dummy%assert_equal(switch_value_domain, .true.)
-call crash_test_dummy%assert_equal(switch_value_grid , .false.)
+if (switch_value_spectrum .neqv. .false.) error stop 'test_group new -d: spectrum should be .false.'
+if (switch_value_domain   .neqv. .true. ) error stop 'test_group new -d: domain should be .true.'
+if (switch_value_grid     .neqv. .false.) error stop 'test_group new -d: grid should be .false.'
 
 call fake_call(args='new -g', spectrum=switch_value_spectrum, domain=switch_value_domain, grid=switch_value_grid)
 print*, 'test_group new -g'
 print*, 'spectrum = ', switch_value_spectrum
 print*, 'domain   = ', switch_value_domain
 print*, 'grid     = ', switch_value_grid
-call crash_test_dummy%assert_equal(switch_value_spectrum, .false.)
-call crash_test_dummy%assert_equal(switch_value_domain, .false.)
-call crash_test_dummy%assert_equal(switch_value_grid , .true.)
-
-call crash_test_dummy%print
+if (switch_value_spectrum .neqv. .false.) error stop 'test_group new -g: spectrum should be .false.'
+if (switch_value_domain   .neqv. .false.) error stop 'test_group new -g: domain should be .false.'
+if (switch_value_grid     .neqv. .true. ) error stop 'test_group new -g: grid should be .true.'
 contains
   subroutine fake_call(args, spectrum, domain, grid)
   !---------------------------------------------------------------------------------------------------------------------------------

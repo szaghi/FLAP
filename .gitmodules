@@ -2,10 +2,6 @@
   path = src/third_party/PENF
   url = https://github.com/szaghi/PENF
   branch = master
-[submodule "src/third_party/fortran_tester"]
-  path = src/third_party/fortran_tester
-  url = https://github.com/pdebuyl/fortran_tester
-  branch = master
 [submodule "src/third_party/FACE"]
   path = src/third_party/FACE
   url = https://github.com/szaghi/FACE

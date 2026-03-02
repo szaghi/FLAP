@@ -91,5 +91,3 @@ name = "flap_test_string"
 source-dir = "src/tests"
 main = "flap_test_string.f90"
 
-[test.dependencies]
-fortran_tester = { git="https://github.com/pdebuyl/fortran_tester.git", rev="806a1da52b4cd1ed0fe1650e241bf612e5776db2" }
