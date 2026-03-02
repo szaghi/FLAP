@@ -1,4 +1,26 @@
 # Changelog
+## [v1.2.16](https://github.com/szaghi/FLAP/tree/v1.2.16) (2026-03-02)
+[Full Changelog](https://github.com/szaghi/FLAP/compare/v1.2.15...v1.2.16)
+### Miscellaneous
+- Bump rollup from 4.57.1 to 4.59.0 in /docs
+
+Bumps [rollup](https://github.com/rollup/rollup) from 4.57.1 to 4.59.0.
+- [Release notes](https://github.com/rollup/rollup/releases)
+- [Changelog](https://github.com/rollup/rollup/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/rollup/rollup/compare/v4.57.1...v4.59.0)
+
+---
+updated-dependencies:
+- dependency-name: rollup
+  dependency-version: 4.59.0
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] <support@github.com> ([`10aa772`](https://github.com/szaghi/FLAP/commit/10aa7724fde3e8e4cd6f39429128821843c5a221))
+- Merge pull request [#111](https://github.com/szaghi/FLAP/issues/111) from szaghi/dependabot/npm_and_yarn/docs/rollup-4.59.0
+
+Bump rollup from 4.57.1 to 4.59.0 in /docs ([`7592d76`](https://github.com/szaghi/FLAP/commit/7592d76011b0bfcae54e96056e5adc6a3ddd3b85))
+
 ## [v1.2.15](https://github.com/szaghi/FLAP/tree/v1.2.15) (2026-03-02)
 [Full Changelog](https://github.com/szaghi/FLAP/compare/v1.2.14...v1.2.15)
 ### Build system
