@@ -88,9 +88,10 @@ info "New version:     ${NEW_TAG}"
 echo ""
 echo -e "${BOLD}This will:${RESET}"
 echo -e "  1. Regenerate ${CYAN}CHANGELOG.md${RESET} up to ${BOLD}${NEW_TAG}${RESET}"
-echo -e "  2. Commit with message: ${CYAN}chore(release): ${NEW_TAG}${RESET}"
-echo -e "  3. Create annotated tag ${BOLD}${NEW_TAG}${RESET}"
-echo -e "  4. Push commit and tag to origin  →  triggers GitHub release workflow"
+echo -e "  2. Update ${CYAN}VERSION${RESET} to ${BOLD}${NEW_TAG}${RESET}"
+echo -e "  3. Commit with message: ${CYAN}chore(release): ${NEW_TAG}${RESET}"
+echo -e "  4. Create annotated tag ${BOLD}${NEW_TAG}${RESET}"
+echo -e "  5. Push commit and tag to origin  →  triggers GitHub release workflow"
 echo ""
 read -rp "Proceed? [y/N] " CONFIRM
 [[ "${CONFIRM,,}" == "y" ]] || { warn "Aborted."; exit 0; }
@@ -101,9 +102,14 @@ info "Generating CHANGELOG.md with git-cliff…"
 git cliff --tag "$NEW_TAG" --output CHANGELOG.md
 success "CHANGELOG.md updated"
 
+# ── Update VERSION ────────────────────────────────────────────────────────────
+info "Updating VERSION…"
+echo "$NEW_TAG" > VERSION
+success "VERSION updated"
+
 # ── Commit ────────────────────────────────────────────────────────────────────
-info "Committing changelog…"
-git add CHANGELOG.md
+info "Committing changelog and version…"
+git add CHANGELOG.md VERSION
 git commit -m "chore(release): ${NEW_TAG}"
 success "Committed"
 

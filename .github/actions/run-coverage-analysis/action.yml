@@ -1,0 +1,23 @@
+name: Run coverage
+description: Run the test suite with coverage and extract the overall line percentage
+
+outputs:
+  pct:
+    description: Overall line coverage percentage (e.g. "87.3")
+    value: ${{ steps.cov.outputs.pct }}
+
+runs:
+  using: composite
+  steps:
+
+    - name: Run tests with coverage
+      shell: bash
+      run: FoBiS.py rule -ex makecoverage-analysis
+
+    - name: Read coverage result
+      id: cov
+      shell: bash
+      run: |
+        PCT=$(jq -r '.pct' docs/public/coverage.json)
+        echo "pct=${PCT}" >> "$GITHUB_OUTPUT"
+        echo "## Test coverage: ${PCT}%" >> "$GITHUB_STEP_SUMMARY"

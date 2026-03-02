@@ -5,6 +5,7 @@ on:
     tags: ["v[0-9]+.[0-9]+.[0-9]+"]
 
 jobs:
+
   release:
     runs-on: ubuntu-latest
     permissions:
@@ -14,42 +15,6 @@ jobs:
 
     - name: Checkout repository
       uses: actions/checkout@v4
-      with:
-        submodules: 'true'
-
-    - name: Setup build environment
-      uses: ./.github/actions/setup-build-env
-      with:
-        extra-pip-packages: formal-ford2vitepress
-
-    - name: Check formal version
-      run: formal --version
-
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-
-    # ── Tests & coverage ────────────────────────────────────────────────────
-    - name: Run tests with coverage
-      run: FoBiS.py rule -ex makecoverage
-
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-
-    # ── Documentation ────────────────────────────────────────────────────────
-    - name: Build documentation
-      run: |
-        formal generate --mirror-sources --diagrams --project docs/ford.md --output docs/api
-        cd docs && npm ci && npm run docs:build
-
-    - name: Deploy docs to GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@v4
-      with:
-        branch: gh-pages
-        folder: docs/.vitepress/dist
 
     # ── Release artefact ─────────────────────────────────────────────────────
     - name: Build release tarball

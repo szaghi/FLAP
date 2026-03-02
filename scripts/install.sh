@@ -1,183 +1,179 @@
-#!/bin/bash -
+#!/usr/bin/env bash
+# install.sh — Download and/or build a GitHub Fortran project.
 #
-# File:        intstall.sh
+# Usage:
+#   install.sh [--repo owner/project] [--download git|wget]
+#              [--build fobis|make|cmake] [--mode <fobos-mode>]
+#              [--tag <tag>] [--verbose]
 #
-# Description: A utility script that builds FLAP project
+# Repo resolution order:
+#   1. --repo argument
+#   2. GITHUB_REPOSITORY environment variable
+#   3. git remote of the current directory
 #
-# License:     GPL3+
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#
+# Examples:
+#   install.sh --download wget --build make
+#   install.sh --download wget --build cmake --tag v1.2.3
+#   install.sh --repo szaghi/FoXy --download git --build fobis
 
-# DEBUGGING
-set -e
-set -C # noclobber
+set -euo pipefail
 
-# INTERNAL VARIABLES AND INITIALIZATIONS
-readonly USERNAME="szaghi"
-readonly PROJECT="FLAP"
-readonly GITHUB="https://github.com/$USERNAME/$PROJECT"
-readonly PROGRAM=`basename "$0"`
+# ── Colours ───────────────────────────────────────────────────────────────────
+RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'
+CYAN='\033[0;36m'; BOLD='\033[1m'; RESET='\033[0m'
 
-function projectdownload () {
-  if [ $VERBOSE -eq 1 ]; then
-    echo "download project"
-  fi
+info()    { echo -e "${CYAN}[info]${RESET}  $*"; }
+success() { echo -e "${GREEN}[ok]${RESET}    $*"; }
+warn()    { echo -e "${YELLOW}[warn]${RESET}  $*"; }
+error()   { echo -e "${RED}[error]${RESET} $*" >&2; exit 1; }
 
-  if command -v $DOWNLOAD >/dev/null 2>&1; then
-    if [ $VERBOSE -eq 1 ]; then
-      echo "  using $DOWNLOAD"
-    fi
-  else
-    echo "error: $DOWNLOAD tool (to download project) not found"
-    exit 1
-  fi
-
-  if [ "$DOWNLOAD" == "git" ]; then
-    git clone --recursive $GITHUB
-    cd $PROJECT
-    git submodule update --init --recursive
-    cd -
-  elif [ "$DOWNLOAD" == "wget" ]; then
-    wget $(curl -s https://api.github.com/repos/$USERNAME/$PROJECT/releases/latest | grep 'browser_' | cut -d\" -f4 | grep -i tar.gz)
-    tar xf $PROJECT.tar.gz
-    rm -f $PROJECT.tar.gz
-  fi
-
-  if [ $VERBOSE -eq 1 ]; then
-    echo "project downloaded into: $PROJECT"
-  fi
-}
-
-function projectbuild () {
-  if [ $VERBOSE -eq 1 ]; then
-    echo "build project"
-  fi
-
-  if [ "$BUILD" == "fobis" ]; then
-    BUILD="FoBiS.py"
-  fi
-
-  if command -v $BUILD >/dev/null 2>&1; then
-    if [ $VERBOSE -eq 1 ]; then
-      echo "  using $BUILD"
-    fi
-  else
-    echo "error: $BUILD tool (to build project) not found"
-    exit 1
-  fi
-
-  if [ "$BUILD" == "FoBiS.py" ]; then
-    FoBiS.py build -mode static-gnu
-  elif [ "$BUILD" == "make" ]; then
-    make -j 1 STATIC=yes
-  elif [ "$BUILD" == "cmake" ]; then
-    mkdir -p static
-    cd static
-    cmake ../
-    cmake --build .
-    cd ../
-  fi
-}
-
-function usage () {
-    echo "Install script of $PROJECT"
-    echo "Usage:"
-    echo
-    echo "$PROGRAM --help|-?"
-    echo "    Print this usage output and exit"
-    echo
-    echo "$PROGRAM --download|-d <arg> [--verbose|-v]"
-    echo "    Download the project"
-    echo
-    echo "    --download|-d [arg]  Download the project, arg=git|wget to download with git or wget respectively"
-    echo "    --verbose|-v         Output verbose mode activation"
-    echo
-    echo "$PROGRAM --build|-b <arg> [--verbose|-v]"
-    echo "    Build the project"
-    echo
-    echo "    --build|-b [arg]  Build the project, arg=fobis|make|cmake to build with FoBiS.py, GNU Make or CMake respectively"
-    echo "    --verbose|-v      Output verbose mode activation"
-    echo
-    echo "Examples:"
-    echo
-    echo "$PROGRAM --download git"
-    echo "$PROGRAM --build make"
-    echo "$PROGRAM --download wget --build cmake"
-}
-
+# ── Defaults ──────────────────────────────────────────────────────────────────
+REPO="${GITHUB_REPOSITORY:-}"
 DOWNLOAD=0
 BUILD=0
+MODE="tests-gnu"
+TAG="${TAG:-latest}"
 VERBOSE=0
-
-# RETURN VALUES/EXIT STATUS CODES
 readonly E_BAD_OPTION=254
 
-# PROCESS COMMAND-LINE ARGUMENTS
-if [ $# -eq 0 ]; then
-  usage
-  exit 0
-fi
-while test $# -gt 0; do
-  if [ x"$1" == x"--" ]; then
-    # detect argument termination
-    shift
-    break
-  fi
+# ── Usage ─────────────────────────────────────────────────────────────────────
+usage() {
+  echo "Usage: $0 [options]"
+  echo ""
+  echo "  --repo,     -r <owner/project>   GitHub repository (default: auto-detect)"
+  echo "  --download, -d <git|wget>         Download the project"
+  echo "  --build,    -b <fobis|make|cmake> Build the project"
+  echo "  --mode,     -m <mode>             FoBiS.py build mode (default: tests-gnu)"
+  echo "  --tag,      -t <tag>              Release tag for wget (default: latest)"
+  echo "  --verbose,  -v                    Verbose output"
+  echo "  --help,     -?                    Print this help"
+  echo ""
+  echo "Examples:"
+  echo "  $0 --download wget --build make"
+  echo "  $0 --download wget --build cmake --tag v1.2.3"
+  echo "  $0 --repo szaghi/FoXy --download git --build fobis"
+}
+
+# ── Arguments ─────────────────────────────────────────────────────────────────
+while [[ $# -gt 0 ]]; do
   case $1 in
-    --download | -d )
-      shift
-      DOWNLOAD="$1"
-      shift
-      ;;
-
-    --build | -b )
-      shift
-      BUILD="$1"
-      shift
-      ;;
-
-    --verbose | -v )
-      shift
-      VERBOSE=1
-      ;;
-
-    -? | --help )
-      usage
-      exit
-      ;;
-
-    -* )
-      echo "Unrecognized option: $1" >&2
-      usage
-      exit $E_BAD_OPTION
-      ;;
-
-    * )
-      break
-      ;;
+    --repo     | -r ) REPO="$2";     shift 2 ;;
+    --download | -d ) DOWNLOAD="$2"; shift 2 ;;
+    --build    | -b ) BUILD="$2";    shift 2 ;;
+    --mode     | -m ) MODE="$2";     shift 2 ;;
+    --tag      | -t ) TAG="$2";      shift 2 ;;
+    --verbose  | -v ) VERBOSE=1;     shift   ;;
+    --help     | -? ) usage; exit 0          ;;
+    --         )      shift; break           ;;
+    -*         ) echo "Unrecognized option: $1" >&2; usage; exit $E_BAD_OPTION ;;
+    *          ) break ;;
   esac
 done
 
-if [ "$DOWNLOAD" != "0" ] && [ "$BUILD" == "0" ]; then
+if [[ "$DOWNLOAD" == "0" && "$BUILD" == "0" ]]; then
+  usage
+  exit 0
+fi
+
+# ── Resolve repository ────────────────────────────────────────────────────────
+if [[ -z "$REPO" ]]; then
+  if git rev-parse --is-inside-work-tree &>/dev/null 2>&1; then
+    REMOTE_URL="$(git remote get-url origin 2>/dev/null || true)"
+    REPO="$(echo "$REMOTE_URL" | sed -E 's|.*[:/]([^/]+/[^/]+)$|\1|' | sed 's|\.git$||')"
+  fi
+fi
+[[ -z "$REPO" ]] && error "Cannot determine repository. Use --repo owner/project or set GITHUB_REPOSITORY."
+
+PROJECT="${REPO##*/}"
+GITHUB="https://github.com/$REPO"
+
+[[ $VERBOSE -eq 1 ]] && info "Repository: ${BOLD}${REPO}${RESET}"
+
+# ── Download ──────────────────────────────────────────────────────────────────
+projectdownload() {
+  [[ $VERBOSE -eq 1 ]] && info "Downloading ${PROJECT}…"
+
+  if [[ "$DOWNLOAD" == "git" ]]; then
+    command -v git &>/dev/null || error "git not found."
+    git clone "$GITHUB"
+    cd "$PROJECT"
+    if [[ -f .deps_config.ini || -f src/third_party/.deps_config.ini ]]; then
+      command -v FoBiS.py &>/dev/null || error "FoBiS.py not found (needed for fetch)."
+      FoBiS.py fetch
+    fi
+    cd -
+
+  elif [[ "$DOWNLOAD" == "wget" ]]; then
+    command -v wget &>/dev/null || error "wget not found."
+    command -v curl &>/dev/null || error "curl not found."
+    command -v jq   &>/dev/null || error "jq not found."
+
+    if [[ "$TAG" == "latest" ]]; then
+      API_URL="https://api.github.com/repos/$REPO/releases/latest"
+    else
+      API_URL="https://api.github.com/repos/$REPO/releases/tags/$TAG"
+    fi
+
+    TARBALL_URL=$(curl -s "$API_URL" | jq -r '.assets[] | select(.name | endswith(".tar.gz")) | .browser_download_url')
+    [[ -z "$TARBALL_URL" ]] && error "No tarball found for ${TAG} in ${REPO}."
+
+    TARBALL="${TARBALL_URL##*/}"
+    EXTRACTED="${TARBALL%.tar.gz}"
+    wget "$TARBALL_URL"
+    tar xf "$TARBALL"
+    rm -f "$TARBALL"
+    [[ $VERBOSE -eq 1 ]] && info "Extracted into: ${EXTRACTED}"
+  fi
+
+  success "Downloaded"
+}
+
+# ── Build ─────────────────────────────────────────────────────────────────────
+projectbuild() {
+  [[ $VERBOSE -eq 1 ]] && info "Building ${PROJECT} with ${BUILD}…"
+
+  case "$BUILD" in
+    fobis | FoBiS.py )
+      command -v FoBiS.py &>/dev/null || error "FoBiS.py not found."
+      FoBiS.py build -mode "$MODE"
+      ;;
+    make )
+      command -v make &>/dev/null || error "make not found."
+      make
+      ;;
+    cmake )
+      command -v cmake &>/dev/null || error "cmake not found."
+      cmake -B build
+      cmake --build build
+      ;;
+    * )
+      error "Unknown build tool: ${BUILD}. Use fobis, make, or cmake."
+      ;;
+  esac
+
+  success "Built"
+}
+
+# ── Main ──────────────────────────────────────────────────────────────────────
+if [[ "$DOWNLOAD" != "0" && "$BUILD" == "0" ]]; then
   projectdownload
-elif [ "$DOWNLOAD" == "0" ] && [ "$BUILD" != "0" ]; then
+
+elif [[ "$DOWNLOAD" == "0" && "$BUILD" != "0" ]]; then
   projectbuild
-elif [ "$DOWNLOAD" != "0" ] && [ "$BUILD" != "0" ]; then
+
+elif [[ "$DOWNLOAD" != "0" && "$BUILD" != "0" ]]; then
   projectdownload
-  cd $PROJECT
+  if [[ "$DOWNLOAD" == "wget" ]]; then
+    cd "$EXTRACTED"
+    if [[ -f .deps_config.ini || -f src/third_party/.deps_config.ini ]]; then
+      command -v FoBiS.py &>/dev/null || error "FoBiS.py not found (needed for fetch)."
+      info "Fetching dependencies…"
+      FoBiS.py fetch
+      success "Dependencies fetched"
+    fi
+  else
+    cd "$PROJECT"
+  fi
   projectbuild
 fi
 

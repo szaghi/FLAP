@@ -1,26 +1,31 @@
 name: Test (alternative) Install Methods
 
 on:
-  release:
-    types: [published]
+  workflow_run:
+    workflows: ["Release"]
+    types: [completed]
 
 jobs:
   install:
+    if: github.event.workflow_run.conclusion == 'success'
 
     runs-on: ubuntu-latest
     permissions:
       contents: read
     env:
-      TAG: ${{ github.event.release.tag_name }}
+      TAG: ${{ github.event.workflow_run.head_branch }}
 
     steps:
-    - name: INSTALL SCRIPT + make
+    - name: Install FoBiS.py
+      run: pip install FoBiS.py
+
+    - name: INSTALL SCRIPT + fobis
       run: |
         WORKDIR=$(mktemp -d)
         cd "$WORKDIR"
         wget $(curl -s https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/$TAG | jq -r '.assets[] | select(.name | test("install.sh"; "i")) | .browser_download_url')
         chmod +x install.sh
-        ./install.sh --download wget --build make
+        ./install.sh --download wget --build fobis
 
     - name: INSTALL SCRIPT + cmake
       run: |

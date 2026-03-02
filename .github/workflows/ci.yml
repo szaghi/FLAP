@@ -9,21 +9,21 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
 
     - name: Checkout repository
       uses: actions/checkout@v4
-      with:
-        submodules: 'true'
 
     - name: Setup build environment
       uses: ./.github/actions/setup-build-env
 
-    - name: Run tests with coverage
-      run: FoBiS.py rule -ex makecoverage
+    - name: Fetch dependencies
+      if: hashFiles('**/.deps_config.ini') != ''
+      run: FoBiS.py fetch
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
+    - name: Run tests with coverage
+      id: cov
+      uses: ./.github/actions/run-coverage-analysis
