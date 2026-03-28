@@ -274,5 +274,5 @@ rule_5 = ./scripts/compute-coverage.sh
 [rule-makecoverage-analysis]
 help   = Perform coverage analysis and saving reports in markdown
 rule_1 = FoBiS.py rule -ex makecoverage
-rule_2 = FoBiS.py rule -gcov_analyzer docs/guide/ coverage-analysis
+rule_2 = FoBiS.py rule --gcov-analyzer docs/guide/ coverage-analysis
 rule_3 = rm -f *.gcov parsed.xml source.xml
