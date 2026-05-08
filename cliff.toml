@@ -1,57 +1,72 @@
 [changelog]
-header = "# Changelog\n"
+header = """# Changelog
+
+All notable changes to this project are documented here.
+Versions follow [Semantic Versioning](https://semver.org/).
+Format follows [Keep a Changelog](https://keepachangelog.com/).
+
+"""
 body = """
-{% if version %}\
-## [{{ version }}](https://github.com/szaghi/FLAP/tree/{{ version }}) \
-({{ timestamp | date(format="%Y-%m-%d") }})
-{% if previous.version %}\
-[Full Changelog](https://github.com/szaghi/FLAP/compare/{{ previous.version }}...{{ version }})
-{% endif %}\
-{% else %}\
+{% set has_commits = commits | length > 0 %}\
+{% if version and has_commits %}\
+## [{{ version | trim_start_matches(pat="v") }}] — {{ timestamp | date(format="%Y-%m-%d") }}
+{% elif not version %}\
 ## [Unreleased]
 {% endif %}\
+{% if has_commits %}\
 {% for group, commits in commits | group_by(attribute="group") %}\
-### {{ group | upper_first }}
+### {{ group }}
 {% for commit in commits %}\
-- {{ commit.message | upper_first }}\
-{% if commit.breaking %} ⚠ **BREAKING CHANGE**{% endif %} \
-([`{{ commit.id | truncate(length=7, end="") }}`](https://github.com/szaghi/FLAP/commit/{{ commit.id }}))
+- {% if commit.scope %}**{{ commit.scope }}**: {% endif %}\
+{{ commit.message | upper_first }}\
+{% if commit.breaking %} ⚠ BREAKING CHANGE{% endif %}
+
 {% endfor %}
 {% endfor %}\
+{% endif %}\
 """
-trim = true
 footer = ""
+trim = true
 
 [git]
+commit_preprocessors = [
+    { pattern = "^\\s+",                 replace = ""           },
+    { pattern = "^Merge pull request.*", replace = "chore: merge" },
+    { pattern = "^Merge branch.*",       replace = "chore: merge" },
+    { pattern = "<([^>]+)>",             replace = "`$1`"       },
+    { pattern = "^([A-Z].*)",              replace = "chore: $1"  },
+    { pattern = "^(--.+)",                 replace = "chore: $1"  },
+    { pattern = "^([a-z]+[^:!(a-z].*)",     replace = "chore: $1"  },
+    { pattern = "^([a-z]+)$",               replace = "chore: $1"  },
+]
 conventional_commits = true
-
-# Keep non-conventional commits too, grouped as "Miscellaneous"
-filter_unconventional = false
-
+filter_unconventional = true
 split_commits = false
 
-# Turn #123 references into GitHub issue links
-commit_preprocessors = [
-  { pattern = '#([0-9]+)', replace = "[#$1](https://github.com/szaghi/FLAP/issues/$1)" },
-]
-
 commit_parsers = [
-  { message = "^feat",           group = "New features" },
-  { message = "^fix",            group = "Bug fixes" },
-  { message = "^perf",           group = "Performance" },
-  { message = "^refactor",       group = "Refactoring" },
-  { message = "^docs",           group = "Documentation" },
-  { message = "^test",           group = "Testing" },
-  { message = "^build",          group = "Build system" },
-  { message = "^ci",             group = "CI/CD" },
-  # skip pure release/chore commits from the changelog body
-  { message = "^chore\\(release\\)", skip = true },
-  { message = "^chore",          group = "Miscellaneous" },
-  # catch-all for non-conventional commits
-  { message = ".*",              group = "Miscellaneous" },
+    { message = "^feat",               group = "Added"         },
+    { message = "^fix",                group = "Fixed"         },
+    { message = "^perf",               group = "Performance"   },
+    { message = "^refactor",           group = "Changed"       },
+    { message = "^docs",               group = "Documentation" },
+    { body    = ".*security",          group = "Security"      },
+    { message = "^chore\\(release\\)", skip = true             },
+    { message = "^chore",              skip = true             },
+    { message = "^ci",                 skip = true             },
+    { message = "^style",              skip = true             },
+    { message = "^test",               skip = true             },
+    { message = "^build",              skip = true             },
+    { message = "^init",               skip = true             },
+    { message = ".*",                  skip = true             },
 ]
 
 protect_breaking_commits = true
 filter_commits = false
-tag_pattern = "v[0-9]+\\.[0-9]+\\.[0-9]+"
+tag_pattern = "v[0-9].*"
+skip_tags = ""
+ignore_tags = ""
+topo_order = false
 sort_commits = "oldest"
+
+[remote.github]
+# auto-detected from git remote — no hardcoded repo slug

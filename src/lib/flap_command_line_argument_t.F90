@@ -1354,7 +1354,7 @@ contains
   endif
   endsubroutine get_cla_list_varying_char
 
-  elemental subroutine cla_assign_cla(lhs, rhs)
+  subroutine cla_assign_cla(lhs, rhs)
   !< Assignment operator.
   class(command_line_argument), intent(inout) :: lhs !< Left hand side.
   type(command_line_argument),  intent(in)    :: rhs !< Rigth hand side.

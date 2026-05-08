@@ -75,28 +75,29 @@ feat!: rename check_endian to init_endian
 
 ## Creating a release
 
-Releases are fully automated via `scripts/bump.sh` and GitHub Actions. The only steps needed are:
+Releases are fully automated via `scripts/release.sh` and GitHub Actions. The only steps needed are:
 
 ```bash
 # Install git-cliff once
 npx git-cliff@latest
 
 # Then, to release:
-scripts/bump.sh patch   # v1.2.3 → v1.2.4
-scripts/bump.sh minor   # v1.2.3 → v1.3.0
-scripts/bump.sh major   # v1.2.3 → v2.0.0
-scripts/bump.sh v2.1.0  # explicit version
+scripts/release.sh patch   # v1.2.3 → v1.2.4
+scripts/release.sh minor   # v1.2.3 → v1.3.0
+scripts/release.sh major   # v1.2.3 → v2.0.0
+scripts/release.sh v2.1.0  # explicit version
 ```
 
-`bump.sh` will ask for confirmation, then:
+`release.sh` will ask for confirmation, then:
 
 1. Regenerate `CHANGELOG.md` from the git log via [git-cliff](https://git-cliff.org/)
-2. Commit with `chore(release): vX.Y.Z`
-3. Create an annotated git tag
-4. Push commit + tag
+2. Update `VERSION`
+3. Commit with `chore(release): vX.Y.Z`
+4. Create an annotated git tag
+5. Push commit + tag
 
 Pushing the tag triggers the GitHub Actions release workflow, which automatically:
-- Runs the full test suite and uploads coverage to Codecov
+- Runs the full test suite and uploads coverage
 - Builds this documentation site and deploys it to GitHub Pages
-- Packages a versioned tarball `StringiFor-vX.Y.Z.tar.gz`
+- Packages a versioned tarball
 - Publishes a GitHub release with the changelog section as release notes

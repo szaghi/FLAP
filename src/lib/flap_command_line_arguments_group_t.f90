@@ -638,7 +638,7 @@ contains
   endif
   endsubroutine sanitize_defaults
 
-  elemental subroutine clasg_assign_clasg(lhs, rhs)
+  subroutine clasg_assign_clasg(lhs, rhs)
   !< Assignment operator.
   class(command_line_arguments_group), intent(INOUT) :: lhs !< Left hand side.
   type(command_line_arguments_group),  intent(IN)    :: rhs !< Right hand side.

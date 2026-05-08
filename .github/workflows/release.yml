@@ -1,57 +1,29 @@
-name: Release
+name: Release FLAP
 
 on:
   push:
-    tags: ["v[0-9]+.[0-9]+.[0-9]+"]
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
-
   release:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Generate release notes
+        run: |
+          pip install git-cliff
+          git cliff --latest --strip header > release_notes.md
 
-    # ── Release artefact ─────────────────────────────────────────────────────
-    - name: Build release tarball
-      run: |
-        REPO_NAME="${GITHUB_REPOSITORY##*/}"
-        VERSION="${{ github.ref_name }}"
-        tar --xform="s%^%${REPO_NAME}-${VERSION}/%" -czf "${REPO_NAME}-${VERSION}.tar.gz" \
-          --exclude='.git' \
-          --exclude='docs/node_modules' \
-          --exclude='docs/.vitepress/dist' \
-          --exclude='docs/.vitepress/cache' \
-          --exclude='exe' --exclude='obj' --exclude='mod' \
-          *
-        echo "TARBALL=${REPO_NAME}-${VERSION}.tar.gz" >> $GITHUB_ENV
-
-    # ── Release notes from CHANGELOG.md ─────────────────────────────────────
-    - name: Extract release notes from CHANGELOG.md
-      run: |
-        python3 - "${{ github.ref_name }}" CHANGELOG.md > release_notes.md <<'PYEOF'
-        import sys, re
-        tag, path = sys.argv[1], sys.argv[2]
-        with open(path) as f:
-            content = f.read()
-        pattern = rf'(## \[{re.escape(tag)}\].*?)(?=\n## |\Z)'
-        match = re.search(pattern, content, re.DOTALL)
-        print(match.group(1).strip() if match else f"Release {tag}\n\nSee CHANGELOG.md for details.")
-        PYEOF
-
-    # ── Publish GitHub release ───────────────────────────────────────────────
-    - name: Publish GitHub release
-      uses: softprops/action-gh-release@v2
-      with:
-        tag_name: ${{ github.ref_name }}
-        name: ${{ github.ref_name }}
-        body_path: release_notes.md
-        files: |
-          ${{ env.TARBALL }}
-          scripts/install.sh
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: release_notes.md
+          name: "FLAP ${{ github.ref_name }}"
+          generate_release_notes: false
