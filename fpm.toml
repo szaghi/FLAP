@@ -7,7 +7,7 @@ maintainer = "Stefano Zaghi"
 homepage = "https://github.com/szaghi/FLAP"
 
 [dependencies]
-FACE = { git="https://github.com/szaghi/FACE.git", rev="1455c549ae0c1ead96961ca61a73131d8176b6a4" }
+FACE = { git="https://github.com/szaghi/FACE.git", rev="026723177d4c2192d84dc767bbebed0a139102ad" }
 PENF = { git="https://github.com/szaghi/PENF.git", rev="a519e6cb58873efa85a81b4cf0a547870f510629" }
 
 [library]
