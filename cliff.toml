@@ -68,5 +68,6 @@ ignore_tags = ""
 topo_order = false
 sort_commits = "oldest"
 
-[remote.github]
-# auto-detected from git remote — no hardcoded repo slug
+# [remote.github] is intentionally omitted — not needed for changelog generation
+# and recent git-cliff versions reject the section without explicit owner/repo.
+# Add it back only if you reference {{commit.github.*}} template variables.

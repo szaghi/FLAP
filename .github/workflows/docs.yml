@@ -48,6 +48,23 @@ jobs:
       id: cov
       uses: ./.github/actions/run-coverage-analysis
 
+    # Overwrite docs/public/coverage.json with a shields.io endpoint badge.
+    # The run-coverage-analysis step already consumed the internal {"pct": ...}
+    # form above; the published file (served from Pages) is the badge a README
+    # shields-endpoint URL points at.
+    - name: Write coverage badge JSON
+      env:
+        PCT: ${{ steps.cov.outputs.pct }}
+      run: |
+        if awk "BEGIN{exit !($PCT >= 90)}"; then C=brightgreen
+        elif awk "BEGIN{exit !($PCT >= 80)}"; then C=green
+        elif awk "BEGIN{exit !($PCT >= 70)}"; then C=yellowgreen
+        elif awk "BEGIN{exit !($PCT >= 60)}"; then C=yellow
+        else C=red; fi
+        mkdir -p docs/public
+        printf '{"schemaVersion":1,"label":"coverage","message":"%s%%","color":"%s"}\n' \
+          "$PCT" "$C" > docs/public/coverage.json
+
     - name: Build documentation
       env:
         COVERAGE_PCT: ${{ steps.cov.outputs.pct }}

@@ -1,31 +1,26 @@
 name: Test (alternative) Install Methods
 
 on:
-  workflow_run:
-    workflows: ["Release"]
-    types: [completed]
+  release:
+    types: [published]
 
 jobs:
   install:
-    if: github.event.workflow_run.conclusion == 'success'
 
     runs-on: ubuntu-latest
     permissions:
       contents: read
     env:
-      TAG: ${{ github.event.workflow_run.head_branch }}
+      TAG: ${{ github.event.release.tag_name }}
 
     steps:
-    - name: Install FoBiS.py
-      run: pip install FoBiS.py
-
-    - name: INSTALL SCRIPT + fobis
+    - name: INSTALL SCRIPT + make
       run: |
         WORKDIR=$(mktemp -d)
         cd "$WORKDIR"
         wget $(curl -s https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/$TAG | jq -r '.assets[] | select(.name | test("install.sh"; "i")) | .browser_download_url')
         chmod +x install.sh
-        ./install.sh --download wget --build fobis
+        ./install.sh --download wget --build make
 
     - name: INSTALL SCRIPT + cmake
       run: |
@@ -33,6 +28,7 @@ jobs:
         cd "$WORKDIR"
         wget $(curl -s https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/$TAG | jq -r '.assets[] | select(.name | test("install.sh"; "i")) | .browser_download_url')
         chmod +x install.sh
+        # install.sh skips the cmake build itself when no CMakeLists.txt is present
         ./install.sh --download wget --build cmake
 
     - name: Setup fpm
@@ -45,5 +41,8 @@ jobs:
         WORKDIR=$(mktemp -d)
         cd "$WORKDIR"
         git clone https://github.com/$GITHUB_REPOSITORY ./
+        if [[ ! -f fpm.toml ]]; then
+          echo "fpm.toml not found — skipping fpm build."
+          exit 0
+        fi
         fpm build --profile release
-    

@@ -1,66 +1,76 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Run the project test suite.
+#
+# Usage: run_tests.sh [--np N]
+#   -n, --np N   Run each test under `mpirun -np N` (for MPI-parallel projects).
+#                Omit for serial execution (the default).
+#
+# Test classification by binary name:
+#   exe/*_xfail_*   — expected-failure test. MUST exit non-zero
+#                     (e.g. validates an `error stop` path). Exit 0 is treated
+#                     as a regression (XPASS, counted as failure).
+#   exe/*          — regular test. MUST exit 0.
+#
+# Output labels (autotools convention):
+#   PASS   regular test passed
+#   FAIL   regular test failed
+#   XFAIL  expected-failure test failed as expected (success)
+#   XPASS  expected-failure test passed unexpectedly (failure)
 
-# TODO re-insert after tests suite refactoring
-# all_passed () {
-#   local array="$1[@]"
-#   local ok=1
-#   for element in "${!array}"; do
-#     if [ "$element" == 'F' ]; then
-#       ok=0
-#       break
-#     fi
-#   done
-#   echo $ok
-# }
+NP=0
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --np | -n ) NP="$2"; shift 2 ;;
+    * ) printf "Unknown argument: %s\n" "$1" >&2; exit 2 ;;
+  esac
+done
 
-# echo "Run all tests"
-# declare -a tests_executed
-# for e in $( find ./exe/ -type f -executable -print ); do
-#   is_passed=`$e | grep -i "Are all tests passed? " | awk '{print $5}'`
-#   tests_executed=("${tests_executed[@]}" "$is_passed")
-#   echo "  run test $e, is passed? $is_passed"
-#   if [ "$is_passed" == 'F' ]; then
-#     echo
-#     echo "Test failed"
-#     $e
-#   fi
-# done
-# passed=$(all_passed tests_executed)
-# echo "Number of tests executed ${#tests_executed[@]}"
-# if [ $passed -eq 1 ]; then
-#   echo "All tests passed"
-#   exit 0
-# else
-#   echo "Some tests failed"
-#   exit 1
-# fi
-./exe/flap_test_ansi_color_style
-./exe/flap_test_basic
-./exe/flap_test_basic -v
-./exe/flap_test_basic -h
-./exe/flap_test_basic -s 'Hello FLAP' -i 2
-./exe/flap_test_basic -s 'Hello FLAP' -i 3 -ie 11
-./exe/flap_test_basic 33.0 -s 'Hello FLAP' --integer_list 10 -3 87 -i 3 -r 64.123d0  --boolean --boolean_val .false.
-./exe/flap_test_basic -s 'Hello FLAP' --man_file FLAP.1
-./exe/flap_test_basic -s 'Hello FLAP' -vlI1P 2 1 3 -vlI2P 12 -2 -vlI4P 1 -vlI8P 1 -vlR8P 121.31 -vlR4P 3423121.31 -vlChar foo bar -vlBool T F T F
-./exe/flap_test_basic -s 'Hello FLAP' -- foo.bar bar/baz.f90
-./exe/flap_test_choices_logical
-./exe/flap_test_duplicated_clas --i 1 -i 8
-./exe/flap_test_group
-./exe/flap_test_ignore_unknown_clas --string hello -u
-./exe/flap_test_hidden -s 'hello' -i 2
-./exe/flap_test_minimal -s 'hello'
-./exe/flap_test_nargs_insufficient -i 1 2
-./exe/flap_test_nested
-./exe/flap_test_nested -h
-./exe/flap_test_nested -a
-./exe/flap_test_nested init
-./exe/flap_test_nested init commit -m 'hello'
-./exe/flap_test_nested commit -m 'hello'
-./exe/flap_test_nested tag -a 'hello'
-./exe/flap_test_save_bash_completion
-./exe/flap_test_save_man_page
-./exe/flap_test_save_usage_to_markdown
-./exe/flap_test_string
-./exe/flap_test_value_missing -i
-./exe/flap_test_action_store --read foo --input bar --write fee --output fie --multiple_rrs --multiple_ros --multiple_rrp baz --multiple_rop --multiple_rr3 1 2 3 --multiple_ro3 --multiple_oop foo --multiple_oo3 a b c
+# Serial by default; wrap in mpirun only when --np N (N>0) is requested.
+runner=()
+if [[ "$NP" -gt 0 ]]; then
+  runner=(mpirun -np "$NP")
+fi
+
+if [[ -t 1 ]]; then
+  RED=$'\033[0;31m'; GREEN=$'\033[0;32m'; BOLD=$'\033[1m'; RESET=$'\033[0m'
+else
+  RED=''; GREEN=''; BOLD=''; RESET=''
+fi
+
+pass=0; fail=0
+tmpout=$(mktemp)
+trap 'rm -f "$tmpout"' EXIT
+
+shopt -s nullglob
+for exe in exe/*; do
+  [[ -f "$exe" && -x "$exe" ]] || continue
+  name=$(basename "$exe")
+
+  "${runner[@]}" "$exe" > "$tmpout" 2>&1
+  rc=$?
+
+  if [[ "$name" == *_xfail_* ]]; then
+    # Expected-failure test: non-zero exit is success.
+    if [[ $rc -ne 0 ]]; then
+      printf "  ${GREEN}XFAIL${RESET} %s\n" "$name"
+      pass=$((pass + 1))
+    else
+      printf "  ${RED}XPASS${RESET} %s ${BOLD}(expected non-zero exit)${RESET}\n" "$name"
+      fail=$((fail + 1))
+    fi
+  else
+    # Regular test: zero exit is success.
+    if [[ $rc -eq 0 ]]; then
+      printf "  ${GREEN}PASS${RESET}  %s\n" "$name"
+      pass=$((pass + 1))
+    else
+      printf "  ${RED}FAIL${RESET}  %s\n" "$name"
+      sed 's/^/       /' "$tmpout"
+      fail=$((fail + 1))
+    fi
+  fi
+done
+
+total=$((pass + fail))
+printf "\n${BOLD}%d/%d passed${RESET}\n" "$pass" "$total"
+exit $fail

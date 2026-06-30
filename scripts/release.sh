@@ -84,9 +84,21 @@ command -v git &>/dev/null || die "git not found."
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 cd "$REPO_ROOT"
 
-# ── Detect trunk branch from remote HEAD (set automatically by git clone) ────
-TRUNK="$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|refs/remotes/origin/||')"
-[[ -n "$TRUNK" ]] || TRUNK="main"
+# ── Detect trunk branch ───────────────────────────────────────────────────────
+# 1. local symref refs/remotes/origin/HEAD (set automatically by `git clone`)
+# 2. ask the remote directly (works when the local symref is missing)
+# 3. fallback: master if it exists locally, else main
+TRUNK="$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|refs/remotes/origin/||' || true)"
+if [[ -z "$TRUNK" ]]; then
+  TRUNK="$(git remote show origin 2>/dev/null | sed -n 's/.*HEAD branch: //p' || true)"
+fi
+if [[ -z "$TRUNK" || "$TRUNK" == "(unknown)" ]]; then
+  if git show-ref --verify --quiet refs/heads/master; then
+    TRUNK="master"
+  else
+    TRUNK="main"
+  fi
+fi
 
 # ── Detect repo slug (owner/name) from remote ────────────────────────────────
 REMOTE_URL="$(git remote get-url origin 2>/dev/null || true)"
@@ -133,7 +145,7 @@ CURRENT_BRANCH="$(git symbolic-ref --short HEAD 2>/dev/null || true)"
 [[ -z "$(git status --porcelain)" ]] \
   || die "working tree is dirty — commit or stash changes before bumping"
 
-git fetch --tags --quiet
+FETCH_ERR="$(git fetch --tags 2>&1)" || die "git fetch --tags failed:\n${FETCH_ERR}\n\nIf a local tag diverges from the remote, inspect with:\n  git ls-remote --tags origin <tagname>\n  git show <tagname>\nThen either delete the local tag (git tag -d <tagname>) or force-update (git fetch --tags --force) once you've confirmed the remote is authoritative."
 [[ -z "$(git tag -l "${NEW_TAG}")" ]] || die "tag ${NEW_TAG} already exists"
 
 BEHIND="$(git rev-list --count HEAD..origin/${TRUNK} 2>/dev/null || echo 0)"

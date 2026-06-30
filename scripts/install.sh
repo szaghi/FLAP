@@ -14,7 +14,7 @@
 # Examples:
 #   install.sh --download wget --build make
 #   install.sh --download wget --build cmake --tag v1.2.3
-#   install.sh --repo szaghi/FoXy --download git --build fobis
+#   install.sh --repo owner/project --download git --build fobis
 
 set -euo pipefail
 
@@ -42,7 +42,7 @@ usage() {
   echo ""
   echo "  --repo,     -r <owner/project>   GitHub repository (default: auto-detect)"
   echo "  --download, -d <git|wget>         Download the project"
-  echo "  --build,    -b <fobis|make|cmake> Build the project"
+  echo "  --build,    -b <fobis|make|cmake|fpm> Build the project"
   echo "  --mode,     -m <mode>             FoBiS.py build mode (default: tests-gnu)"
   echo "  --tag,      -t <tag>              Release tag for wget (default: latest)"
   echo "  --verbose,  -v                    Verbose output"
@@ -51,7 +51,7 @@ usage() {
   echo "Examples:"
   echo "  $0 --download wget --build make"
   echo "  $0 --download wget --build cmake --tag v1.2.3"
-  echo "  $0 --repo szaghi/FoXy --download git --build fobis"
+  echo "  $0 --repo owner/project --download git --build fobis"
 }
 
 # ── Arguments ─────────────────────────────────────────────────────────────────
@@ -143,11 +143,23 @@ projectbuild() {
       ;;
     cmake )
       command -v cmake &>/dev/null || error "cmake not found."
+      if [[ ! -f CMakeLists.txt ]]; then
+        warn "CMakeLists.txt not found — skipping cmake build."
+        return
+      fi
       cmake -B build
       cmake --build build
       ;;
+    fpm )
+      command -v fpm &>/dev/null || error "fpm not found."
+      if [[ ! -f fpm.toml ]]; then
+        warn "fpm.toml not found — skipping fpm build."
+        return
+      fi
+      fpm install
+      ;;
     * )
-      error "Unknown build tool: ${BUILD}. Use fobis, make, or cmake."
+      error "Unknown build tool: ${BUILD}. Use fobis, make, cmake, or fpm."
       ;;
   esac
 
