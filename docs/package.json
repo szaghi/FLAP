@@ -1,7 +1,9 @@
 {
   "private": true,
   "scripts": {
-    "docs:api": "formal generate",
+    "docs:api": "formal generate --mirror-sources --diagrams --project ford.md --output api",
+    "predocs:dev": "npm run docs:api",
+    "predocs:build": "npm run docs:api",
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",
     "docs:preview": "vitepress preview"
