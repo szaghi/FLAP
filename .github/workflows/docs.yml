@@ -70,7 +70,10 @@ jobs:
         COVERAGE_PCT: ${{ steps.cov.outputs.pct }}
       run: |
         formal generate --mirror-sources --diagrams --project docs/ford.md --output docs/api
-        cd docs && npm ci && npm run docs:build
+        # npm install (not npm ci): the scaffold ships package.json but not a
+        # lockfile, so the lock may lag a package.json version bump. npm install
+        # reconciles it in-place; npm ci would hard-fail on any drift.
+        cd docs && npm install && npm run docs:build
 
     - name: Upload Pages artifact
       uses: actions/upload-pages-artifact@v3
