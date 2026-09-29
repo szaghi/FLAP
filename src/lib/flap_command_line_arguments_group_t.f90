@@ -20,6 +20,7 @@ public :: command_line_arguments_group
 public :: STATUS_PRINT_V
 public :: STATUS_PRINT_H
 public :: STATUS_PRINT_M
+public :: STATUS_NO_ARGS
 public :: ERROR_CONSISTENCY
 public :: ERROR_M_EXCLUDE
 public :: ERROR_POSITION_DUPLICATE
@@ -36,6 +37,7 @@ type, extends(object) :: command_line_arguments_group
   integer(I4P)                                     :: Na_optional=0_I4P !< Number of optional command line arguments.
   type(command_line_argument), allocatable, public :: cla(:)            !< CLA list [1:Na].
   logical,                                  public :: is_called=.false. !< Flag for checking if CLAs group has been passed to CLI.
+  logical,                                  public :: no_args_is_help=.false. !< Print the help when invoked with no arguments.
   contains
     ! public methods
     procedure, public :: free                  !< Free dynamic memory.
@@ -65,6 +67,7 @@ endtype command_line_arguments_group
 integer(I4P), parameter :: STATUS_PRINT_V = -1 !< Print version status.
 integer(I4P), parameter :: STATUS_PRINT_H = -2 !< Print help status.
 integer(I4P), parameter :: STATUS_PRINT_M = -3 !< Print help status to Markdown file.
+integer(I4P), parameter :: STATUS_NO_ARGS = -5 !< No arguments passed, help printed (no_args_is_help).
 
 ! errors codes
 integer(I4P), parameter :: ERROR_CONSISTENCY = 100 !< CLAs group consistency error.
@@ -90,6 +93,7 @@ contains
   self%Na_required = 0_I4P
   self%Na_optional = 0_I4P
   self%is_called   = .false.
+  self%no_args_is_help = .false.
   endsubroutine free
 
   subroutine check(self, pref)

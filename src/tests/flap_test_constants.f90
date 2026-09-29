@@ -2,7 +2,7 @@
 program flap_test_constants
 !< Pin the public codes registry exported by the flap module (issue #125, section 5): existing values never change.
 use flap, only : command_line_interface,                                                                                          &
-                 STATUS_PRINT_V, STATUS_PRINT_H, STATUS_PRINT_M,                                                                  &
+                 STATUS_PRINT_V, STATUS_PRINT_H, STATUS_PRINT_M, STATUS_NO_ARGS,                                                  &
                  ERROR_OPTIONAL_NO_DEF, ERROR_REQUIRED_M_EXCLUDE, ERROR_POSITIONAL_M_EXCLUDE, ERROR_NAMED_NO_NAME,                &
                  ERROR_POSITIONAL_NO_POSITION, ERROR_POSITIONAL_NO_STORE, ERROR_NOT_IN_CHOICES, ERROR_MISSING_REQUIRED,           &
                  ERROR_M_EXCLUDE, ERROR_CASTING_LOGICAL, ERROR_CHOICES_LOGICAL, ERROR_NO_LIST, ERROR_NARGS_INSUFFICIENT,          &
@@ -28,6 +28,7 @@ contains
   call assert_equal(STATUS_PRINT_V,               -1_I4P,   'STATUS_PRINT_V')
   call assert_equal(STATUS_PRINT_H,               -2_I4P,   'STATUS_PRINT_H')
   call assert_equal(STATUS_PRINT_M,               -3_I4P,   'STATUS_PRINT_M')
+  call assert_equal(STATUS_NO_ARGS,               -5_I4P,   'STATUS_NO_ARGS')
   call assert_equal(ERROR_OPTIONAL_NO_DEF,         1_I4P,   'ERROR_OPTIONAL_NO_DEF')
   call assert_equal(ERROR_REQUIRED_M_EXCLUDE,      2_I4P,   'ERROR_REQUIRED_M_EXCLUDE')
   call assert_equal(ERROR_POSITIONAL_M_EXCLUDE,    3_I4P,   'ERROR_POSITIONAL_M_EXCLUDE')

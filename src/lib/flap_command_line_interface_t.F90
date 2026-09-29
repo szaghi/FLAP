@@ -5,7 +5,8 @@ module flap_command_line_interface_t
 use face, only : colorize
 use flap_command_line_argument_t, only : command_line_argument, ACTION_PRINT_HELP, ACTION_PRINT_MARK, ACTION_PRINT_VERS, &
                                          ACTION_STORE, ERROR_UNKNOWN
-use flap_command_line_arguments_group_t, only : command_line_arguments_group, STATUS_PRINT_H, STATUS_PRINT_M, STATUS_PRINT_V
+use flap_command_line_arguments_group_t, only : command_line_arguments_group, STATUS_NO_ARGS, STATUS_PRINT_H, STATUS_PRINT_M, &
+                                                STATUS_PRINT_V
 use flap_object_t, only : object
 use flap_utils_m
 use penf
@@ -24,6 +25,7 @@ type, extends(object), public :: command_line_interface
   logical                                         :: ignore_unknown_clas=.false. !< Disable errors-raising for passed unknown CLAs.
   logical                                         :: standalone=.true.           !< Stop after help/version/markdown.
   logical                                         :: error_hint=.true.           !< Print a hint after a failed parse.
+  logical                                         :: no_args_is_help=.false.     !< Print the help when no arguments are passed.
   integer(I4P)                                    :: error_unknown_clas=0_I4P    !< Error trapping flag for unknown CLAs.
   contains
     ! public methods
@@ -73,6 +75,7 @@ type, extends(object), public :: command_line_interface
     procedure, private :: group_index                     !< Index of the group with a name, -1 if none.
     procedure, private :: is_fatal                        !< Check if the current error stops parsing.
     procedure, private :: dispatch_status                 !< Print help/version/markdown in the D3 order.
+    procedure, private :: no_args_help                    !< Print the help when no arguments are passed.
     procedure, private :: print_error_hint                !< Print the hint after a failed parse.
     procedure, private :: errored                         !< Trig error occurence and print meaningful message.
     procedure, private :: check                           !< Check data consistency.
@@ -130,11 +133,12 @@ contains
   self%error_unknown_clas  = 0_I4P
   self%standalone          = .true.
   self%error_hint          = .true.
+  self%no_args_is_help     = .false.
   endsubroutine free
 
   subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, &
                   usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone, &
-                  error_hint)
+                  error_hint, no_args_is_help)
   !< Initialize CLI.
   class(command_line_interface), intent(inout) :: self                !< CLI data.
   character(*), optional,        intent(in)    :: progname            !< Program name.
@@ -156,6 +160,8 @@ contains
                                                                       !< false, parse returns STATUS_PRINT_H/V/M instead.
   logical,      optional,        intent(in)    :: error_hint          !< Print "Try 'prog --help' for help." after a failed
                                                                       !< parse (default).
+  logical,      optional,        intent(in)    :: no_args_is_help     !< Print the help (STATUS_NO_ARGS) when no arguments
+                                                                      !< are passed.
   character(len=:), allocatable                :: prog_invocation     !< Complete program invocation.
   integer(I4P)                                 :: invocation_length   !< Length of invocation.
   integer(I4P)                                 :: retrieval_status    !< Retrieval status.
@@ -190,13 +196,14 @@ contains
                           if (present(ignore_unknown_clas)) self%ignore_unknown_clas = ignore_unknown_clas! default set by self%free
                           if (present(standalone))          self%standalone          = standalone         ! default set by self%free
                           if (present(error_hint))          self%error_hint          = error_hint         ! default set by self%free
+                          if (present(no_args_is_help))     self%no_args_is_help     = no_args_is_help    ! default set by self%free
   ! initialize only the first default group
   allocate(self%clasg(0:0))
   call self%clasg(0)%assign_object(self)
   self%clasg(0)%group = ''
   endsubroutine init
 
-  subroutine add_group(self, help, description, exclude, examples, group)
+  subroutine add_group(self, help, description, exclude, examples, group, no_args_is_help)
   !< Add CLAs group to CLI.
   class(command_line_interface), intent(inout)    :: self              !< CLI data.
   character(*), optional,        intent(in)       :: help              !< Help message.
@@ -204,6 +211,7 @@ contains
   character(*), optional,        intent(in)       :: exclude           !< Group name of the mutually exclusive group.
   character(*), optional,        intent(in)       :: examples(1:)      !< Examples of correct usage of the group.
   character(*),                  intent(in)       :: group             !< Name of the grouped CLAs.
+  logical, optional,             intent(in)       :: no_args_is_help   !< Print the help of the group when invoked alone.
   type(command_line_arguments_group), allocatable :: clasg_list_new(:) !< New (extended) CLAs group list.
   character(len=:), allocatable                   :: helpd             !< Help message.
   character(len=:), allocatable                   :: descriptiond      !< Detailed description.
@@ -227,6 +235,7 @@ contains
     clasg_list_new(Ng)%group       = group
     clasg_list_new(Ng)%m_exclude   = excluded
     call clasg_list_new(Ng)%set_examples(examples)
+    if (present(no_args_is_help)) clasg_list_new(Ng)%no_args_is_help = no_args_is_help
     if (allocated(self%clasg)) deallocate(self%clasg)
     allocate(self%clasg(lbound(clasg_list_new,1):ubound(clasg_list_new,1)), source=clasg_list_new)
     deallocate(clasg_list_new)
@@ -582,6 +591,9 @@ contains
   call self%check(pref=pref)
   if (self%is_fatal()) return
 
+  ! no arguments at all, or a command invoked alone: its help, if asked for (F25, first in the D3 order)
+  if (self%no_args_help(ai=ai, pref=pref)) return
+
   ! parse CLI
   do g=0,size(ai,dim=1)-1
     if (ai(g,1)>0) then
@@ -621,6 +633,47 @@ contains
   if ((self%error==0.or.self%error==ERROR_UNKNOWN).and.self%error_unknown_clas==ERROR_UNKNOWN_CLAS_IGNORED) &
     self%error = ERROR_UNKNOWN_CLAS_IGNORED
   endsubroutine parse_core
+
+  function no_args_help(self, ai, pref) result(printed)
+  !< Print the help when no arguments are passed (no_args_is_help), or when a command with the flag is invoked alone.
+  !<
+  !< The status is STATUS_NO_ARGS; in standalone mode (default) the program ends with exit status 2 (a usage error, as in
+  !< click), silently where the compiler supports `stop, quiet=` (F2018; not nvfortran).
+  class(command_line_interface), intent(inout) :: self    !< CLI data.
+  integer(I4P),                  intent(in)    :: ai(0:,1:) !< CLAs grouped indexes.
+  character(*), optional,        intent(in)    :: pref    !< Prefixing string.
+  logical                                      :: printed !< The help has been printed.
+  integer(I4P)                                 :: g       !< Counter for CLAs group.
+  integer(I4P)                                 :: gh      !< Group whose help is printed, -1 if none.
+
+  gh = -1
+  if (self%no_args_is_help) then
+    if (.not.allocated(self%args)) then
+      gh = 0
+    elseif (size(self%args, dim=1) == 0) then
+      gh = 0
+    endif
+  endif
+  if (gh < 0) then
+    do g=1, size(self%clasg, dim=1)-1
+      if (self%clasg(g)%is_called .and. self%clasg(g)%no_args_is_help .and. ai(g,1) > ai(g,2)) then
+        gh = g
+        exit
+      endif
+    enddo
+  endif
+  printed = gh >= 0
+  if (.not.printed) return
+  self%error = STATUS_NO_ARGS
+  write(self%usage_lun, '(A)') self%usage(pref=pref, g=gh)
+  if (self%standalone) then
+#if defined __NVCOMPILER
+    stop 2 ! nvfortran does not support stop quiet= (F2018)
+#else
+    stop 2, quiet=.true.
+#endif
+  endif
+  endfunction no_args_help
 
   function dispatch_status(self, pref) result(dispatched)
   !< Print the help (of the first group that asked for it), the version or the markdown, in this order (D3 of #125).

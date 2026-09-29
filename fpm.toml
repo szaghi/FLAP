@@ -128,6 +128,11 @@ source-dir = "src/tests"
 main = "flap_test_nested.f90"
 
 [[test]]
+name = "flap_test_no_args_is_help"
+source-dir = "src/tests"
+main = "flap_test_no_args_is_help.f90"
+
+[[test]]
 name = "flap_test_object"
 source-dir = "src/tests"
 main = "flap_test_object.f90"

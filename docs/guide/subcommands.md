@@ -16,7 +16,7 @@ Command Line Arguments (CLAs).
 ## Adding a group — `cli%add_group`
 
 ```fortran
-call cli%add_group(group, description, help)
+call cli%add_group(group, description, help, exclude, examples, no_args_is_help)
 ```
 
 | Argument | Type | Purpose |
@@ -24,6 +24,7 @@ call cli%add_group(group, description, help)
 | `group` | `character(*)` | Unique subcommand name |
 | `description` | `character(*)`, optional | Short description shown in top-level help |
 | `help` | `character(*)`, optional | Extended help for per-command help |
+| `no_args_is_help` | `logical`, optional | `prog <group>` alone prints the help of the command (`STATUS_NO_ARGS`) |
 
 ```fortran
 call cli%add_group(group='init',   description='Initialise a new repository')

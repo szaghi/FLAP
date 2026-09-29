@@ -35,6 +35,7 @@ use flap_command_line_arguments_group_t, only : command_line_arguments_group,   
                                                 STATUS_PRINT_V,                               &
                                                 STATUS_PRINT_H,                               &
                                                 STATUS_PRINT_M,                               &
+                                                STATUS_NO_ARGS,                               &
                                                 ERROR_GROUP_CONSISTENCY => ERROR_CONSISTENCY, &
                                                 ERROR_GROUP_M_EXCLUDE => ERROR_M_EXCLUDE,     &
                                                 ERROR_POSITION_DUPLICATE,                     &
@@ -59,6 +60,7 @@ public :: command_line_interface
 public :: STATUS_PRINT_V
 public :: STATUS_PRINT_H
 public :: STATUS_PRINT_M
+public :: STATUS_NO_ARGS
 ! errors 1-99: command line argument
 public :: ERROR_OPTIONAL_NO_DEF
 public :: ERROR_REQUIRED_M_EXCLUDE

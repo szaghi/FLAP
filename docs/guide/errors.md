@@ -25,6 +25,7 @@ positive values are **errors**. Existing values never change.
 
 | Code | Constant | Meaning | Typical cause |
 |---:|---|---|---|
+| `-5` | `STATUS_NO_ARGS` | Help printed, no arguments | `init(no_args_is_help=.true.)` and no argument passed (or a command with `no_args_is_help` invoked alone); in standalone mode the program ends with exit status 2 |
 | `-3` | `STATUS_PRINT_M` | Help written as Markdown | `--markdown` was passed; not a real error |
 | `-2` | `STATUS_PRINT_H` | Help printed | `--help` / `-h` was passed; not a real error |
 | `-1` | `STATUS_PRINT_V` | Version printed | `--version` / `-v` was passed; not a real error |
