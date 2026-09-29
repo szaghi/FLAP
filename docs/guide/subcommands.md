@@ -79,6 +79,14 @@ else
 end if
 ```
 
+### Values that look like command names
+
+The arguments before the first command name belong to the top level; the arguments after a command name belong to that
+command. A value is never mistaken for a command: in `fake_git commit -m tag` the message is `tag` and the `tag` command
+is not called, because `-m` takes exactly one value. This holds for every option with a fixed number of values (one
+value, or `nargs='N'`). A list with a variable number of values (`nargs='+'` or `nargs='*'`) ends at the first command
+name: in `prog --files a b init`, the list is `a b` and `init` is called.
+
 ## Mutually exclusive groups — `cli%set_mutually_exclusive_groups`
 
 ```fortran

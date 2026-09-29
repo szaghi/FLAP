@@ -48,9 +48,63 @@ call check('new alone', [.false., .false., .false.])
 call fake_call('new -x', spectrum, domain, grid, called, error)
 call assert_equal(error, ERROR_UNKNOWN, 'new -x: unknown switch in the group')
 
+call check_values_named_as_commands
+
 call capture_close(lun)
 
 contains
+  subroutine check_values_named_as_commands()
+  !< B04 (#125): a value equal to a command name is the value when the option takes a fixed number of values; a variadic
+  !< list is ended by a command name.
+  type(command_line_interface) :: cli      !< Command Line Interface (CLI).
+  character(99)                :: name     !< Value of --name.
+  character(99)                :: target   !< Value of new --target.
+  character(99)                :: pair(2)  !< Values of --pair.
+  character(99), allocatable   :: list(:)  !< Values of --list.
+  integer(I4P)                 :: err      !< Error trapping flag.
+
+  call define_values(cli, '--name new new --target del')
+  call assert_equal(cli%run_command('new'), .true., '--name new new ...: new called')
+  call assert_equal(cli%run_command('del'), .false., '--name new new ...: del not called')
+  call cli%get(switch='--name', val=name, error=err)
+  call assert_equal(name, 'new', '--name new: value equal to a command name')
+  call cli%get(group='new', switch='--target', val=target, error=err)
+  call assert_equal(target, 'del', 'new --target del: value equal to another command name')
+
+  call define_values(cli, '--pair new del del')
+  call assert_equal(cli%run_command('new'), .false., '--pair new del del: new not called')
+  call assert_equal(cli%run_command('del'), .true., '--pair new del del: del called')
+  call cli%get(switch='--pair', val=pair, error=err)
+  call assert_equal(pair(1), 'new', "--pair new del: nargs='2' value 1")
+  call assert_equal(pair(2), 'del', "--pair new del: nargs='2' value 2")
+
+  call define_values(cli, '--list a b new')
+  call assert_equal(cli%run_command('new'), .true., "--list a b new: a command name ends a nargs='*' list")
+  call cli%get_varying(switch='--list', val=list, error=err)
+  call assert_equal(int(size(list), I4P), 2_I4P, "--list a b new: list size")
+  endsubroutine check_values_named_as_commands
+
+  subroutine define_values(cli, args)
+  !< Define a CLI whose options take values that may equal command names, and parse a command line (it must succeed).
+  type(command_line_interface), intent(out) :: cli  !< Command Line Interface (CLI).
+  character(*),                 intent(in)  :: args !< Command line.
+  integer(I4P)                              :: err  !< Error trapping flag.
+
+  call cli%init(progname='flap_test_group', error_lun=lun, usage_lun=lun)
+  call cli%add(switch='--name', help='a value', required=.false., act='store', def='x', error=err)
+  call assert_equal(err, 0_I4P, 'add --name')
+  call cli%add(switch='--pair', help='two values', required=.false., act='store', nargs='2', def='x y', error=err)
+  call assert_equal(err, 0_I4P, 'add --pair')
+  call cli%add(switch='--list', help='values', required=.false., act='store', nargs='*', def='x', error=err)
+  call assert_equal(err, 0_I4P, 'add --list')
+  call cli%add_group(group='new', description='create')
+  call cli%add(group='new', switch='--target', help='a value', required=.false., act='store', def='x', error=err)
+  call assert_equal(err, 0_I4P, 'add new --target')
+  call cli%add_group(group='del', description='delete')
+  call cli%parse(args=args, error=err)
+  call assert_equal(err, 0_I4P, 'parse "'//args//'"')
+  endsubroutine define_values
+
   subroutine check(label, expected)
   !< Check the three flags.
   character(*), intent(in) :: label       !< Scenario label.

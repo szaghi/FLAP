@@ -42,6 +42,7 @@ type, extends(object) :: command_line_arguments_group
     procedure, public :: is_passed             !< Check if a CLA has been passed.
     procedure, public :: is_defined            !< Check if a CLA has been defined.
     procedure, public :: positional_index      !< Index of the positional CLA declared at a position.
+    procedure, public :: value_arity           !< Number of fixed value slots following a switch.
     procedure, public :: raise_error_m_exclude !< Raise error mutually exclusive CLAs passed.
     procedure, public :: add                   !< Add CLA to CLAsG.
     procedure, public :: parse                 !< Parse CLAsG arguments.
@@ -176,6 +177,32 @@ contains
   enddo
   a = 0
   endfunction positional_index
+
+  function value_arity(self, switch) result(n)
+  !< Return the number of values that always follow a switch of this group, 0 if not fixed or not a switch.
+  !<
+  !< Fixed: `store` with a required value (1) or with an integer `nargs` (N). Not fixed: flags, optional values, environment
+  !< variables and variadic lists (`nargs='+'/'*'`), whose extent is decided while parsing.
+  class(command_line_arguments_group), intent(in) :: self   !< CLAsG data.
+  character(*),                        intent(in) :: switch !< Command line argument, maybe a switch.
+  integer(I4P)                                    :: n      !< Number of fixed value slots.
+  integer(I4P)                                    :: a      !< Counter.
+  integer(I4P)                                    :: iostat !< Conversion status.
+
+  n = 0
+  do a=1, self%Na
+    if (self%cla(a)%is_positional) cycle
+    if (self%cla(a)%switch /= switch .and. self%cla(a)%switch_ab /= switch) cycle
+    if (self%cla(a)%act /= action_store) return
+    if (allocated(self%cla(a)%nargs)) then
+      read(self%cla(a)%nargs, *, iostat=iostat) n
+      if (iostat /= 0) n = 0 ! '+' or '*'
+    elseif (self%cla(a)%is_val_required.and.(.not.allocated(self%cla(a)%envvar))) then
+      n = 1
+    endif
+    return
+  enddo
+  endfunction value_arity
 
   function is_defined(self, switch, pos)
   !< Check if a CLA has been defined.
@@ -383,6 +410,11 @@ contains
                              return
                           elseif (self%is_defined(switch=trim(adjustl(args(arg+1))))) then
                              ! the next argument is a CLA switch, raise value missing error
+                             call self%cla(a)%raise_error_value_missing(pref=pref)
+                             self%error = self%cla(a)%error
+                             return
+                          elseif (len_trim(args(arg+1)) == 0) then
+                             ! an empty argument is not a value (decision D17 of #125: --opt "" is rejected)
                              call self%cla(a)%raise_error_value_missing(pref=pref)
                              self%error = self%cla(a)%error
                              return

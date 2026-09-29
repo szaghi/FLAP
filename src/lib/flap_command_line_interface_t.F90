@@ -601,42 +601,43 @@ contains
   endsubroutine parse
 
   subroutine get_clasg_indexes(self, ai)
-  !< Get the argument indexes of CLAs groups defined parsing the actual passed CLAs.
+  !< Get the argument indexes of each CLAs group (command): ai(g,1:2) is the slice of self%args belonging to group g.
+  !<
+  !< Arguments before the first command name belong to group 0; the arguments after a command name belong to that command.
+  !< The fixed value slots of a switch (`value_arity`) are skipped before testing for a command name, so a value equal to a
+  !< command name stays a value (B04); a variadic list is ended by a command name.
   class(command_line_interface), intent(inout) :: self   !< CLI data.
   integer(I4P), allocatable,     intent(out)   :: ai(:,:)!< CLAs grouped indexes.
   integer(I4P)                                 :: Na     !< Number of command line arguments passed.
   integer(I4P)                                 :: a      !< Counter for CLAs.
-  integer(I4P)                                 :: aa     !< Counter for CLAs.
   integer(I4P)                                 :: g      !< Counter for CLAs group.
-  logical                                      :: found  !< Flag for inquiring if a named group is found.
+  integer(I4P)                                 :: gc     !< Current group.
+  integer(I4P)                                 :: n      !< Fixed value slots of a switch.
 
   allocate(ai(0:size(self%clasg,dim=1)-1,1:2))
   ai = 0
   if (allocated(self%args)) then
     Na = size(self%args,dim=1)
+    gc = 0
     a = 0
-    found = .false.
-    search_named: do while(a<Na)
+    do while (a < Na)
       a = a + 1
-      if (self%is_defined_group(group=trim(self%args(a)), g=g)) then
-        found = .true.
-        self%clasg(g)%is_called = .true.
-        ai(g,1) = a + 1
-        aa = a
-        do while(aa<Na)
-          aa = aa + 1
-          if (self%is_defined_group(group=trim(self%args(aa)))) then
-            a = aa - 1
-            ai(g,2) = a
-            exit
-          else
-            ai(g,2) = aa
-          endif
-        enddo
-      elseif (.not.found) then
-        ai(0,2) = a
+      n = self%clasg(gc)%value_arity(switch=trim(adjustl(self%args(a))))
+      if (n > 0) then
+        ! a switch of the current group and its values: never command names
+        a = min(a + n, Na)
+      elseif (self%is_defined_group(group=trim(self%args(a)), g=g)) then
+        if (g > 0) then
+          ! a command: its arguments start after its name
+          gc = g
+          self%clasg(g)%is_called = .true.
+          ai(g,1) = a + 1
+          ai(g,2) = a
+          cycle
+        endif
       endif
-    enddo search_named
+      ai(gc,2) = a
+    enddo
     if (ai(0,2)>0) then
       ai(0,1) = 1
       self%clasg(0)%is_called = .true.

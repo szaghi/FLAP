@@ -11,7 +11,7 @@ program flap_test_nested
 !< Run with arguments it is the example program above; run without arguments it checks its own scenarios.
 
 use, intrinsic :: iso_fortran_env, only : error_unit
-use flap, only : command_line_interface, ERROR_GROUP_M_EXCLUDE, ERROR_UNKNOWN, ERROR_VALUE_MISSING
+use flap, only : command_line_interface, ERROR_GROUP_M_EXCLUDE, ERROR_UNKNOWN
 use flap_test_utils, only : assert_equal, capture_close, capture_open
 use penf
 
@@ -139,11 +139,12 @@ contains
   call parse('commit -x', cli, error)
   call assert_equal(error, ERROR_UNKNOWN, 'commit -x: unknown switch in the command')
 
-  ! B04 (#125): an option value equal to a command name is taken as that command; these assertions pin the current
-  ! behaviour and flip when B04 is fixed
+  ! B04 (#125): an option value equal to a command name is the value, not the command
   call parse('commit -m tag', cli, error)
-  call assert_equal(error, ERROR_VALUE_MISSING, 'commit -m tag: value taken as the tag command (B04, current behaviour)')
-  call called(cli, 'commit -m tag (B04, current behaviour)', [.false., .true., .true.])
+  call assert_equal(error, 0_I4P, 'commit -m tag: error')
+  call called(cli, 'commit -m tag', [.false., .true., .false.])
+  call cli%get(group='commit', switch='-m', val=message, error=error)
+  call assert_equal(message, 'tag', 'commit -m tag: message')
 
   call capture_close(lun)
   endsubroutine self_test
