@@ -158,38 +158,49 @@ $(DOBJ)face.o: src/third_party/FACE/src/lib/face.F90
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
+$(DOBJ)flap_test_utils.o: src/tests/flap_test_utils.F90 \
+	$(DOBJ)penf.o
+	@echo $(COTEXT)
+	@$(FC) $(OPTSC)  $< -o $@
+
 $(DOBJ)flap_test_nested.o: src/tests/flap_test_nested.f90 \
 	$(DOBJ)flap.o \
+	$(DOBJ)flap_test_utils.o \
 	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
 $(DOBJ)flap_test_hidden.o: src/tests/flap_test_hidden.f90 \
 	$(DOBJ)flap.o \
+	$(DOBJ)flap_test_utils.o \
 	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
 $(DOBJ)flap_test_minimal.o: src/tests/flap_test_minimal.f90 \
 	$(DOBJ)flap.o \
+	$(DOBJ)flap_test_utils.o \
 	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
 $(DOBJ)flap_test_choices_logical.o: src/tests/flap_test_choices_logical.f90 \
 	$(DOBJ)flap.o \
+	$(DOBJ)flap_test_utils.o \
 	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
 $(DOBJ)flap_test_string.o: src/tests/flap_test_string.f90 \
 	$(DOBJ)flap.o \
+	$(DOBJ)flap_test_utils.o \
 	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
 $(DOBJ)flap_test_basic.o: src/tests/flap_test_basic.f90 \
 	$(DOBJ)flap.o \
+	$(DOBJ)flap_test_utils.o \
 	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
