@@ -35,6 +35,8 @@ Alternative build systems (kept working, not the reference): `fpm build` / `fpm 
 
 Tests are standalone programs in `src/tests/flap_test_*.f90`. **Most are smoke tests**: only `flap_test_group` uses `error stop`, the others end with a bare `stop` even on error paths, so "all tests pass" means "nothing crashed", not "behaviour is correct". New tests must assert with `error stop`.
 
+CI: `.github/workflows/ci.yml` (gcc-14 coverage) and the other files listed by `fobis scaffold list` are scaffold-managed (overwritten by `fobis scaffold sync`): do not edit them. Project-specific jobs go in `.github/workflows/matrix.yml` (gfortran 13/14/15 + `tests-gnu-r16p`, gfortran-16 allowed to fail, fpm/CMake/make builds).
+
 Reference compilers: gfortran 13 and 14. gfortran 16 trunk crashes on group help (`prog <group> --help`), a compiler-specific issue tracked as B17 in #125.
 
 ## Architecture

@@ -1,0 +1,96 @@
+name: Compiler matrix
+
+# Project-owned workflow (not managed by `fobis scaffold`): ci.yml keeps the
+# single-compiler coverage job; this one checks compilers, quad precision and
+# the alternative build systems.
+
+on:
+  push:
+    branches: ["**"]
+    tags-ignore: ["**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  fobis:
+    name: fobis ${{ matrix.mode }} / gfortran-${{ matrix.gcc }}
+    runs-on: ubuntu-24.04
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      fail-fast: false
+      matrix:
+        gcc: ['13', '14', '15']
+        mode: [tests-gnu-debug]
+        experimental: [false]
+        include:
+          - gcc: '14'
+            mode: tests-gnu-r16p
+            experimental: false
+          # PPA snapshot 16-20260315: group help crashes (#125, B17)
+          - gcc: '16'
+            mode: tests-gnu-debug
+            experimental: true
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup build environment
+      uses: ./.github/actions/setup-build-env
+      with:
+        gcc-version: ${{ matrix.gcc }}
+
+    - name: Fetch dependencies
+      run: fobis fetch
+
+    - name: Build
+      run: fobis build --mode ${{ matrix.mode }}
+
+    - name: Test
+      run: bash scripts/run_tests.sh
+
+  alt-build:
+    name: ${{ matrix.tool }} / gfortran-14
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        tool: [fpm, cmake, make]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install gfortran-14
+      run: sudo apt-get update && sudo apt-get install -y gfortran-14
+
+    - name: Fetch dependencies
+      if: matrix.tool != 'fpm'
+      run: |
+        pipx install FoBiS.py
+        fobis fetch
+
+    - name: Setup fpm
+      if: matrix.tool == 'fpm'
+      uses: fortran-lang/setup-fpm@v9
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and test (fpm)
+      if: matrix.tool == 'fpm'
+      run: fpm test --compiler gfortran-14
+
+    - name: Build and test (cmake)
+      if: matrix.tool == 'cmake'
+      run: |
+        cmake -B build -DCMAKE_Fortran_COMPILER=gfortran-14
+        cmake --build build -j 2
+        ctest --test-dir build --output-on-failure
+
+    - name: Build and test (make)
+      if: matrix.tool == 'make'
+      run: |
+        make FC=gfortran-14
+        for t in exe/flap_test_*; do "$t" > /dev/null || { echo "FAIL $t"; exit 1; }; done
