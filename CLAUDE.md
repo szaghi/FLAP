@@ -4,90 +4,87 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-FLAP (Fortran command Line Arguments Parser for poor people) is a pure Fortran 2003+ library for building CLIs, inspired by Python's `argparse`. It supports optional/required/boolean/positional/list arguments, mutually exclusive groups, nested subcommands, and automatic help/usage/man page/bash completion/markdown generation.
+FLAP (Fortran command Line Arguments Parser for poor people) is a pure Fortran library for building CLIs, inspired by Python's `argparse`. It supports optional/required/boolean/positional/list arguments, mutually exclusive groups, nested subcommands (groups), environment-variable fallback, and automatic help/usage/man page/bash completion/markdown generation.
+
+Roadmap: GitHub issue **#125** is the authoritative consolidated implementation plan (bug register B01–B17, error-code registry, phases 0–5, release train v1.3.0 → v2.0.0 → v2.x). The per-library issues #1, #11, #25, #77, #78, #113 hold the detailed designs and test tables; where they disagree with #125, #125 wins.
 
 ## Build Commands
 
-FLAP supports four build systems. **FPM is recommended** for development:
+FoBiS (CLI `fobis`, 3.8+) is the primary build tool and the one used in CI. Use the long-form flags; the legacy `FoBiS.py build -mode X` syntax is rejected by FoBiS 3.8+.
 
 ```bash
-# FPM (Fortran Package Manager) - recommended
-fpm build                          # build library
-fpm test                           # run all tests
-fpm test flap_test_basic           # run a single test by name
-
-# FoBiS.py - used in CI, supports coverage
-FoBiS.py build -mode tests-gnu              # build all tests with GNU
-FoBiS.py build -mode static-gnu            # build static library
-FoBiS.py build -mode shared-gnu            # build shared library
-FoBiS.py rule -ex makecoverage             # build + run tests + gcov coverage
-
-# GNU Make
-make                               # build with default settings
-
-# CMake
-cmake -B build && cmake --build build
+fobis fetch                                  # fetch PENF and FACE into src/third_party/ (pinned by fobos.lock)
+fobis build --lmodes                         # list modes
+fobis build --mode tests-gnu                 # build all tests into exe/
+fobis build --mode tests-gnu-debug           # debug tests (-fcheck=all, coverage flags)
+fobis build --mode static-gnu                # static library
+fobis clean --mode tests-gnu-debug           # needed when stale gcov objects in exe/obj break the debug link
+bash scripts/run_tests.sh                    # run every binary in exe/ (exit 0 = PASS; *_xfail_* must exit non-zero)
+fobis rule --ex makedoc                      # API docs (formal) + VitePress site
 ```
 
-Available FoBiS modes: `shared-gnu`, `static-gnu`, `shared-gnu-debug`, `static-gnu-debug`, `tests-gnu`, `tests-gnu-debug`, `shared-intel`, `static-intel`, `shared-intel-debug`, `static-intel-debug`, `tests-intel`, `tests-intel-debug`, `static-nvf`.
+Modes: `shared-gnu`, `static-gnu`, `shared-gnu-debug`, `static-gnu-debug`, `tests-gnu`, `tests-gnu-debug`, and the same six for `intel`, plus `static-nvf`.
 
-## Running Tests
+Alternative build systems (kept working, not the reference): `fpm build` / `fpm test <name>`, `make`, `cmake -B build && cmake --build build`. Their source/test lists are explicit and can drift from the tree:
+- `fpm.toml` has `auto-tests=false` and registers only 14 of the 17 tests (missing `flap_test_action_store`, `flap_test_nargs_insufficient`, `flap_test_value_missing`);
+- `fpm.toml` pins FACE/PENF revisions different from `src/third_party/fobos.lock`.
 
-Tests live in `src/tests/`. With FPM, each test corresponds to an `fpm.toml` `[[test]]` entry. The CI script for running all built test executables is `scripts/run_tests.sh`.
+## Tests
 
-Test names (for `fpm test <name>`):
-- `flap_test_minimal`, `flap_test_basic`, `flap_test_nested`, `flap_test_group`, `flap_test_group_examples`
-- `flap_test_string`, `flap_test_choices_logical`, `flap_test_hidden`
-- `flap_test_duplicated_clas`, `flap_test_ignore_unknown_clas`
-- `flap_test_save_bash_completion`, `flap_test_save_man_page`, `flap_test_save_usage_to_markdown`
-- `flap_test_ansi_color_style`
+Tests are standalone programs in `src/tests/flap_test_*.f90`. **Most are smoke tests**: only `flap_test_group` uses `error stop`, the others end with a bare `stop` even on error paths, so "all tests pass" means "nothing crashed", not "behaviour is correct". New tests must assert with `error stop`.
+
+Reference compilers: gfortran 13 and 14. gfortran 16 trunk crashes on group help (`prog <group> --help`), a compiler-specific issue tracked as B17 in #125.
 
 ## Architecture
 
 ### Module Dependency Chain
 
 ```
-flap.f90                             ← public interface (use this in consuming code)
-└── flap_command_line_interface_t.F90  ← main CLI type
-    ├── flap_command_line_arguments_group_t.f90  ← groups / subcommands
-    │   └── flap_command_line_argument_t.F90     ← individual argument
-    │       ├── flap_object_t.F90                ← base class
-    │       ├── flap_utils_m.f90
-    │       ├── PENF (precision kinds)
-    │       └── FACE (ANSI color output)
-    └── (same sub-deps)
+flap.f90                                         ← public interface (use this in consuming code)
+└── flap_command_line_interface_t.F90            ← main CLI type
+    └── flap_command_line_arguments_group_t.f90  ← groups / subcommands
+        └── flap_command_line_argument_t.F90     ← individual argument
+            ├── flap_object_t.F90                ← base class (error handling, common metadata)
+            ├── flap_utils_m.f90                 ← string helpers (tokenize, unique, ...)
+            ├── PENF                             ← numeric kinds, cton/str
+            └── FACE                             ← ANSI colours
 ```
 
-All source is in `src/lib/`. Third-party dependencies are git submodules in `src/third_party/`: **PENF** (numeric precision kinds), **FACE** (ANSI terminal colors), **fortran_tester** (test assertions).
+All library source is in `src/lib/`. Dependencies (PENF, FACE) are fetched with `fobis fetch` into `src/third_party/`; they are not git submodules.
 
 ### Key Types
 
 | Type | File | Role |
 |------|------|------|
-| `command_line_interface` | `flap_command_line_interface_t.F90` | Top-level API: `init`, `add`, `parse`, `get`, `usage`, `save_*` |
-| `command_line_arguments_group` | `flap_command_line_arguments_group_t.f90` | Named group of CLAs, used for subcommands and mutually exclusive groups |
-| `command_line_argument` | `flap_command_line_argument_t.F90` | Single argument: switch, abbreviation, action, default, nargs, choices, env var |
-| `object` | `flap_object_t.F90` | Base class providing error handling |
+| `command_line_interface` | `flap_command_line_interface_t.F90` | Top-level API: `init`, `add`, `add_group`, `parse`, `get`, `get_varying`, `usage`, `save_*` |
+| `command_line_arguments_group` | `flap_command_line_arguments_group_t.f90` | Named group of CLAs: subcommands and mutually exclusive groups; token-level parsing |
+| `command_line_argument` | `flap_command_line_argument_t.F90` | Single argument: switch, abbreviation, action, default, nargs, choices, envvar; value casting |
+| `object` | `flap_object_t.F90` | Base class: error code/message, help, examples, progname |
+
+### Invariants that are easy to break
+
+- Arguments are untyped until `get`: values are stored as strings and cast in `get` via `class(*)` + `select type`.
+- List values are stored as `v1||!||v2||!||` (`ARGS_SEP` plus a trailing separator). `tokenize` dropping the trailing empty token is load-bearing: do not "fix" it.
+- Builtins (`--help`, `--version`, `--markdown`, `--`) are added inside `parse`, so `save_bash_completion`/man/markdown called before `parse` omit them (B09).
+- Environment variables are read only when the bare switch is passed; an absent switch yields `def` even if the variable is set.
+- The type-bound `assignment(=)` overloads are private and unreachable from other modules; whole-object copies across modules use intrinsic (deep) assignment.
 
 ### Preprocessor
 
-The codebase uses cpp. The flag `-D_R16P_SUPPORTED` is set in all FoBiS templates and enables quad-precision (`R16P`) support from PENF. Files with `.F90` extension (capital F) are preprocessed; `.f90` are not.
+`.F90` files are preprocessed, `.f90` are not. Quad precision is gated on `#if defined _R16P` in both FLAP and PENF. The fobos templates and the CMake support check define `-D_R16P_SUPPORTED`, which **does not** enable that branch: with the current build files `R16P` aliases `R8P` and the quad-precision code is never compiled. Define `-D_R16P` to compile it.
 
 ### `get` Overloading
 
-`command_line_interface%get` has overloaded variants for every PENF kind (`R16P`, `R8P`, `R4P`, `I8P`, `I4P`, `I2P`, `I1P`), plus `logical` and `character`. List variants exist via `get_varying` / action `store_*`.
+`command_line_interface%get` covers every PENF kind (`R16P`, `R8P`, `R4P`, `I8P`, `I4P`, `I2P`, `I1P`), `logical` and `character`, scalar and fixed-size arrays; `get_varying` returns allocatable arrays for `nargs='+'/'*'` lists.
 
 ## Coding Style
 
 From `CONTRIBUTING.md`:
 - Indent with 2 spaces, no tabs
 - `implicit none` on all modules and programs
-- Self-documenting names; FORD-style docstrings on public APIs
+- Self-documenting names; FORD-style `!<` docstrings on public APIs
 - Line length ≤ 132 characters
 
 ## Documentation
 
-Generate API docs with FORD:
-```bash
-FoBiS.py rule -ex makedoc   # runs ford doc/main_page.md
-```
+Docs are a **VitePress** site in `docs/` (guide in `docs/guide/`, API pages generated by `formal` into `docs/api/` from `docs/ford.md`). Build with `fobis rule --ex makedoc`, or `cd docs && npm ci && npm run docs:build`.
