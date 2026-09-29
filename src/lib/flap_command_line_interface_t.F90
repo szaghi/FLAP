@@ -66,6 +66,7 @@ type, extends(object), public :: command_line_interface
     procedure, private :: save_man_page_core              !< Save CLI usage as man page (builtins already present).
     procedure, private :: save_usage_to_markdown_core     !< Save CLI usage as markdown (builtins already present).
     procedure, private :: parse_core                      !< Parse the command line (body of parse).
+    procedure, private :: group_index                     !< Index of the group with a name, -1 if none.
     procedure, private :: is_fatal                        !< Check if the current error stops parsing.
     procedure, private :: errored                         !< Trig error occurence and print meaningful message.
     procedure, private :: check                           !< Check data consistency.
@@ -390,19 +391,32 @@ contains
   !< Check if a CLAs group has been defined.
   class(command_line_interface), intent(in)  :: self    !< CLI data.
   character(*),                  intent(in)  :: group   !< Name of group (command) of CLAs.
-  integer(I4P), optional,        intent(out) :: g       !< Index of group.
+  integer(I4P), optional,        intent(out) :: g       !< Index of group, -1 if not defined.
   logical                                    :: defined !< Check if a CLAs group has been defined.
-  integer(I4P)                               :: gg      !< Counter.
-  integer(I4P)                               :: ggg     !< Counter.
+  integer(I4P)                               :: gg      !< Index of group.
 
-  defined = .false.
-  do gg=0, size(self%clasg,dim=1)-1
-    ggg = gg
-    if (allocated(self%clasg(gg)%group)) defined = (self%clasg(gg)%group==group)
-    if (defined) exit
-  enddo
-  if (present(g)) g = ggg
+  gg = self%group_index(group)
+  defined = gg >= 0
+  if (present(g)) g = gg
   endfunction is_defined_group
+
+  pure function group_index(self, name) result(g)
+  !< Return the index of the group (command) with a name, -1 if there is none: the one resolver of group names.
+  !<
+  !< The top level is the group 0, named ''. Trailing blanks are not significant; the match is case sensitive.
+  class(command_line_interface), intent(in) :: self !< CLI data.
+  character(*),                  intent(in) :: name !< Name of group (command).
+  integer(I4P)                              :: g    !< Index of group, -1 if not defined.
+
+  if (allocated(self%clasg)) then
+    do g=0, ubound(self%clasg, dim=1)
+      if (allocated(self%clasg(g)%group)) then
+        if (self%clasg(g)%group == name) return
+      endif
+    enddo
+  endif
+  g = -1
+  endfunction group_index
 
   function is_called_group(self, group) result(called)
   !< Check if a CLAs group has been run.

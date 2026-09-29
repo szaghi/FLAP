@@ -50,10 +50,39 @@ call assert_equal(error, ERROR_UNKNOWN, 'new -x: unknown switch in the group')
 
 call check_values_named_as_commands
 call check_unknown_group
+call check_group_index
 
 call capture_close(lun)
 
 contains
+  subroutine check_group_index()
+  !< Group names resolve to their index through one resolver (step 0.D.7): -1 when there is no such group.
+  type(command_line_interface) :: cli   !< Command Line Interface (CLI).
+  type(command_line_interface) :: none  !< CLI never initialized.
+  integer(I4P)                 :: g     !< Index of the group.
+  integer(I4P)                 :: err   !< Error trapping flag.
+
+  call cli%init(progname='test', error_lun=lun, usage_lun=lun)
+  call cli%add_group(group='init', description='first')
+  call cli%add_group(group='commit', description='second')
+  call cli%add_group(group='tag', description='third')
+  call assert_equal(cli%is_defined_group(group='', g=g), .true., 'group index: the top level is defined')
+  call assert_equal(g, 0_I4P, 'group index: the top level is 0')
+  call assert_equal(cli%is_defined_group(group='commit', g=g), .true., 'group index: commit is defined')
+  call assert_equal(g, 2_I4P, 'group index: commit is 2')
+  call assert_equal(cli%is_defined_group(group='commit  ', g=g), .true., 'group index: trailing blanks not significant')
+  call assert_equal(g, 2_I4P, 'group index: commit with trailing blanks is 2')
+  call assert_equal(cli%is_defined_group(group='comm', g=g), .false., 'group index: a prefix is not a group')
+  call assert_equal(g, -1_I4P, 'group index: no group gives -1, never a valid index')
+  call assert_equal(cli%is_defined_group(group='Commit', g=g), .false., 'group index: case sensitive')
+  call assert_equal(none%is_defined_group(group='commit', g=g), .false., 'group index: CLI never initialized')
+  call assert_equal(g, -1_I4P, 'group index: CLI never initialized gives -1')
+  call cli%parse(args='commit', error=err)
+  call assert_equal(cli%run_command(group='commit'), .true., 'group index: commit called')
+  call assert_equal(cli%run_command(group='tag'), .false., 'group index: tag not called')
+  call assert_equal(cli%run_command(group='nope'), .false., 'group index: unknown group not called')
+  endsubroutine check_group_index
+
   subroutine check_unknown_group()
   !< B24 (#125): get with an unknown group reports ERROR_MISSING_GROUP and returns, for every getter kind.
   type(command_line_interface) :: cli       !< Command Line Interface (CLI).
