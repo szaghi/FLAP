@@ -19,7 +19,7 @@ type, extends(object), public :: command_line_interface
   !< Command Line Interface (CLI) class.
   private
   type(command_line_arguments_group), allocatable :: clasg(:)                    !< CLA list [1:Na].
-  character(len=:), allocatable                   :: args(:)                     !< Actually passed command line arguments.
+  type(flap_string), allocatable                  :: args(:)                     !< Actually passed command line arguments.
   logical                                         :: disable_hv=.false.          !< Disable automatic 'help' and 'version' CLAs.
   logical                                         :: is_parsed_=.false.          !< Parse status.
   logical                                         :: ignore_unknown_clas=.false. !< Disable errors-raising for passed unknown CLAs.
@@ -603,7 +603,7 @@ contains
     if (ai(g,1)>0) then
       ! pass a copy: gfortran (13-16) hands a section of a deferred-length character array to a character(*) dummy
       ! starting at the first element of the whole array, not of the section
-      gargs = self%args(ai(g,1):ai(g,2))
+      gargs = to_characters(self%args(ai(g,1):ai(g,2)))
       call self%clasg(g)%parse(args=gargs, ignore_unknown_clas=self%ignore_unknown_clas, &
                                pref=pref, error_unknown_clas=unknown)
       ! keep the mark of an ignored unknown argument: a later group must not erase it (B30 of #125)
@@ -642,7 +642,7 @@ contains
   !< Print the help when no arguments are passed (no_args_is_help), or when a command with the flag is invoked alone.
   !<
   !< The status is STATUS_NO_ARGS; in standalone mode (default) the program ends with exit status 2 (a usage error, as in
-  !< click), silently where the compiler supports `stop, quiet=` (F2018; not nvfortran).
+  !< click), silently (quiet_stop).
   class(command_line_interface), intent(inout) :: self    !< CLI data.
   integer(I4P),                  intent(in)    :: ai(0:,1:) !< CLAs grouped indexes.
   character(*), optional,        intent(in)    :: pref    !< Prefixing string.
@@ -670,13 +670,7 @@ contains
   if (.not.printed) return
   self%error = STATUS_NO_ARGS
   write(self%usage_lun, '(A)') self%usage(pref=pref, g=gh)
-  if (self%standalone) then
-#if defined __NVCOMPILER
-    stop 2 ! nvfortran does not support stop quiet= (F2018)
-#else
-    stop 2, quiet=.true.
-#endif
-  endif
+  if (self%standalone) call quiet_stop(2_I4P)
   endfunction no_args_help
 
   function dispatch_status(self, pref) result(dispatched)
@@ -693,7 +687,7 @@ contains
     if (self%clasg(g)%is_action_passed(ACTION_PRINT_HELP)) then
       self%error = STATUS_PRINT_H
       write(self%usage_lun,'(A)') self%usage(pref=pref, g=g)
-      if (self%standalone) stop
+      if (self%standalone) call quiet_stop(0_I4P)
       return
     endif
   enddo
@@ -701,7 +695,7 @@ contains
     if (self%clasg(g)%is_action_passed(ACTION_PRINT_VERS)) then
       self%error = STATUS_PRINT_V
       call self%print_version(pref=pref)
-      if (self%standalone) stop
+      if (self%standalone) call quiet_stop(0_I4P)
       return
     endif
   enddo
@@ -709,7 +703,7 @@ contains
     if (self%clasg(g)%is_action_passed(ACTION_PRINT_MARK)) then
       self%error = STATUS_PRINT_M
       call self%save_usage_to_markdown(trim(self%progname)//'.md')
-      if (self%standalone) stop
+      if (self%standalone) call quiet_stop(0_I4P)
       return
     endif
   enddo
@@ -752,11 +746,11 @@ contains
     a = 0
     do while (a < Na)
       a = a + 1
-      n = self%clasg(gc)%value_arity(switch=trim(adjustl(self%args(a))))
+      n = self%clasg(gc)%value_arity(switch=trim(adjustl(self%args(a)%s)))
       if (n > 0) then
         ! a switch of the current group and its values: never command names
         a = min(a + n, Na)
-      elseif (self%is_defined_group(group=trim(self%args(a)), g=g)) then
+      elseif (self%is_defined_group(group=trim(self%args(a)%s), g=g)) then
         if (g > 0) then
           ! a command: its arguments start after its name
           gc = g
@@ -789,7 +783,6 @@ contains
   character(len=len_trim(args)), allocatable   :: toks(:)!< Command line arguments.
   integer(I4P)                                 :: Na     !< Number of command line arguments passed.
   integer(I4P)                                 :: a      !< Counter for CLAs.
-  integer(I4P)                                 :: length !< Length of the longest argument.
 
   ! prepare CLI arguments list
   if (allocated(self%args)) deallocate(self%args)
@@ -797,16 +790,9 @@ contains
   call split_command_line(strin=trim(args), toks=toks, Nt=Na)
 
   if (Na > 0) then
-    ! allocate CLI arguments list
-    length = 0
-    find_longest_arg: do a=1,Na
-      length = max(length,len_trim(adjustl(toks(a))))
-    enddo find_longest_arg
-    allocate(character(length):: self%args(1:Na))
-
-    ! construct arguments list
+    allocate(self%args(1:Na))
     get_args: do a=1,Na
-      self%args(a) = trim(adjustl(toks(a)))
+      self%args(a)%s = trim(adjustl(toks(a)))
     enddo get_args
   endif
 
@@ -821,7 +807,6 @@ contains
   integer(I4P), allocatable,     intent(out)   :: ai(:,:) !< CLAs grouped indexes.
   character(len=:), allocatable                :: arg     !< Command line argument.
   integer(I4P)                                 :: Na      !< Number of command line arguments passed.
-  integer(I4P)                                 :: length  !< Length of the longest argument.
   integer(I4P)                                 :: l       !< Length of an argument.
   integer(I4P)                                 :: status  !< Retrieval status.
   integer(I4P)                                 :: a       !< Counter for CLAs.
@@ -829,25 +814,20 @@ contains
   if (allocated(self%args)) deallocate(self%args)
   Na = command_argument_count()
   if (Na > 0) then
-    length = 0
-    find_longest_arg: do a=1, Na
+    allocate(self%args(1:Na))
+    get_args: do a=1, Na
       call get_command_argument(a, length=l, status=status)
       if (status /= 0) then
         call self%errored(error=ERROR_ARGUMENT_RETRIEVAL, position=a)
         return
       endif
-      length = max(length, l)
-    enddo find_longest_arg
-    allocate(character(length):: self%args(1:Na))
-    get_args: do a=1, Na
-      call get_command_argument(a, length=l)
       allocate(character(l):: arg)
       call get_command_argument(a, value=arg, status=status)
       if (status /= 0) then
         call self%errored(error=ERROR_ARGUMENT_RETRIEVAL, position=a)
         return
       endif
-      self%args(a) = trim(adjustl(arg))
+      self%args(a)%s = trim(adjustl(arg))
       deallocate(arg)
     enddo get_args
   endif
@@ -1673,13 +1653,13 @@ contains
     function print_examples(prefd, examples) result(exampled)
     !< Print examples of the correct usage.
       character(*),     intent(in)  :: prefd          !< Prefixing string.
-      character(*),     intent(in)  :: examples(1:)   !< Examples to be printed.
+      type(flap_string), intent(in) :: examples(1:)   !< Examples to be printed.
       character(len=:), allocatable :: exampled       !< Examples string.
       integer(I4P)                  :: e              !< Counter.
 
       exampled = new_line('a')//new_line('a')//prefd//'Examples:'
       do e=1, size(examples,dim=1)
-        exampled = exampled//new_line('a')//prefd//'   '//trim(examples(e))
+        exampled = exampled//new_line('a')//prefd//'   '//trim(examples(e)%s)
       enddo
     endfunction print_examples
   endfunction usage_core
@@ -1844,7 +1824,7 @@ contains
     man = man//new_line('a')//'.nf'
     man = man//new_line('a')//'.RS'
     do e=1, size(self%examples,dim=1)
-      man = man//new_line('a')//trim(self%examples(e))
+      man = man//new_line('a')//trim(self%examples(e)%s)
     enddo
     man = man//new_line('a')//'.RE'
     man = man//new_line('a')//'.fi'
@@ -1901,7 +1881,7 @@ contains
     man = man//new_line('a')//new_line('a')//'### Examples'
     do e=1, size(self%examples,dim=1)
       man = man//new_line('a')
-      man = man//new_line('a')//'`'//trim(self%examples(e))//'` '
+      man = man//new_line('a')//'`'//trim(self%examples(e)%s)//'` '
     enddo
   endif
   if (present(error)) then
@@ -1956,4 +1936,18 @@ contains
 
   call self%free
   endsubroutine finalize
+
+  subroutine quiet_stop(code)
+  !< End the program with an exit status, printing nothing (help/version/markdown: 0; no arguments: 2).
+  !<
+  !< F2018 `stop code, quiet=.true.`; nvfortran 26.5 rejects `quiet=` and prints "FORTRAN STOP" on a plain `stop`, so it
+  !< uses its `exit` extension (B33 of #125).
+  integer(I4P), intent(in) :: code !< Exit status.
+
+#if defined __NVCOMPILER
+  call exit(code)
+#else
+  stop code, quiet=.true.
+#endif
+  endsubroutine quiet_stop
 endmodule flap_command_line_interface_t

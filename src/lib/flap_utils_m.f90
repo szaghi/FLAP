@@ -6,6 +6,8 @@ use penf
 implicit none
 private
 public :: count
+public :: flap_string
+public :: to_characters
 public :: LIST_SEP
 public :: list_count
 public :: list_items
@@ -21,6 +23,12 @@ public :: upper_case
 public :: wstrip
 
 character(len=*), parameter :: LIST_SEP = '||!||' !< Separator of the items of a stored list: v1||!||v2||!||.
+
+type :: flap_string
+  !< A string of any length. Arrays of it replace arrays of deferred-length strings in derived types: nvfortran 26.5
+  !< corrupts the heap when copying a type with a `character(len=:), allocatable :: a(:)` component (B33 of #125).
+  character(len=:), allocatable :: s !< The string.
+endtype flap_string
 
 interface count
   !< Overload intrinsic function count for counting substring occurences into strings.
@@ -45,6 +53,24 @@ contains
     c1 = c1 + c2 - 1 + len(substring)
   enddo
   endfunction count_substring
+
+  pure function to_characters(strings) result(chars)
+  !< Return an array of strings as a character array, each element as long as the longest string.
+  type(flap_string), intent(in)            :: strings(:) !< Strings.
+  character(len=:), allocatable            :: chars(:)   !< Characters.
+  integer(I4P)                             :: l          !< Length of the longest string.
+  integer(I4P)                             :: i          !< Counter.
+
+  l = 0
+  do i=1, size(strings, dim=1)
+    if (allocated(strings(i)%s)) l = max(l, len(strings(i)%s))
+  enddo
+  allocate(character(len=l) :: chars(1:size(strings, dim=1)))
+  do i=1, size(strings, dim=1)
+    chars(i) = ''
+    if (allocated(strings(i)%s)) chars(i) = strings(i)%s
+  enddo
+  endfunction to_characters
 
   pure function list_count(list) result(n)
   !< Return the number of items of a stored list; an empty (blank) list has none.

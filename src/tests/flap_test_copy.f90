@@ -85,7 +85,7 @@ contains
   call assert_equal(x%error_color, 'blue', what//': error_color')
   call assert_equal(x%error_style, 'italics', what//': error_style')
   call assert_equal(int(size(x%examples), I4P), 2_I4P, what//': examples')
-  call assert_equal(x%examples(2), 'prog -b', what//': examples(2)')
+  call assert_equal(x%examples(2)%s, 'prog -b', what//': examples(2)')
   call assert_equal(x%error, 7_I4P, what//': error')
   call assert_equal(x%usage_lun, 11_I4P, what//': usage_lun')
   call assert_equal(x%version_lun, 12_I4P, what//': version_lun')

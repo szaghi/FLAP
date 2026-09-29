@@ -80,5 +80,8 @@ values still takes the default: both change in v2.0.0 (see below).
   reports the unknown switch instead of printing the help).
 - A failed `parse` prints one more line, `Try 'prog --help' for help.`; `init(error_hint=.false.)` restores the old
   output.
+- The `examples` component of the CLI, its groups and arguments holds `flap_string` elements: read an example as
+  `cli%examples(i)%s` (it was `cli%examples(i)`). Examples are still set with `init(examples=...)` and
+  `add_group(examples=...)`, unchanged. FLAP now builds and runs with nvfortran.
 - Environment variables become a value source for every option (with precedence rules), and more: see issue
   [#125](https://github.com/szaghi/FLAP/issues/125).
