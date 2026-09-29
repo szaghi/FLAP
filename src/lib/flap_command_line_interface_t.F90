@@ -769,7 +769,12 @@ contains
         call self%clasg(g)%cla(a)%get(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
       endif
     elseif (present(position)) then
-      call self%clasg(g)%cla(position)%get(pref=pref, val=val) ; self%error = self%clasg(g)%cla(position)%error
+      a = self%clasg(g)%positional_index(position)
+      if (a == 0) then
+        call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch='position '//trim(str(position, .true.)))
+      else
+        call self%clasg(g)%cla(a)%get(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+      endif
     else
       call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
     endif
@@ -826,7 +831,12 @@ contains
       call self%clasg(g)%cla(a)%get(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
     endif
   elseif (present(position)) then
-    call self%clasg(g)%cla(position)%get(pref=pref, val=val) ; self%error = error
+    a = self%clasg(g)%positional_index(position)
+    if (a == 0) then
+      call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch='position '//trim(str(position, .true.)))
+    else
+      call self%clasg(g)%cla(a)%get(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+    endif
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
@@ -881,7 +891,12 @@ contains
       call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
     endif
   elseif (present(position)) then
-    call self%clasg(g)%cla(position)%get_varying(pref=pref, val=val) ; self%error = error
+    a = self%clasg(g)%positional_index(position)
+    if (a == 0) then
+      call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch='position '//trim(str(position, .true.)))
+    else
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+    endif
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
@@ -936,7 +951,12 @@ contains
       call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
     endif
   elseif (present(position)) then
-    call self%clasg(g)%cla(position)%get_varying(pref=pref, val=val) ; self%error = error
+    a = self%clasg(g)%positional_index(position)
+    if (a == 0) then
+      call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch='position '//trim(str(position, .true.)))
+    else
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+    endif
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
@@ -991,7 +1011,12 @@ contains
       call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
     endif
   elseif (present(position)) then
-    call self%clasg(g)%cla(position)%get_varying(pref=pref, val=val) ; self%error = error
+    a = self%clasg(g)%positional_index(position)
+    if (a == 0) then
+      call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch='position '//trim(str(position, .true.)))
+    else
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+    endif
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
@@ -1046,7 +1071,12 @@ contains
       call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
     endif
   elseif (present(position)) then
-    call self%clasg(g)%cla(position)%get_varying(pref=pref, val=val) ; self%error = error
+    a = self%clasg(g)%positional_index(position)
+    if (a == 0) then
+      call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch='position '//trim(str(position, .true.)))
+    else
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+    endif
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
@@ -1101,7 +1131,12 @@ contains
       call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
     endif
   elseif (present(position)) then
-    call self%clasg(g)%cla(position)%get_varying(pref=pref, val=val) ; self%error = error
+    a = self%clasg(g)%positional_index(position)
+    if (a == 0) then
+      call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch='position '//trim(str(position, .true.)))
+    else
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+    endif
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
@@ -1156,7 +1191,12 @@ contains
       call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
     endif
   elseif (present(position)) then
-    call self%clasg(g)%cla(position)%get_varying(pref=pref, val=val) ; self%error = error
+    a = self%clasg(g)%positional_index(position)
+    if (a == 0) then
+      call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch='position '//trim(str(position, .true.)))
+    else
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+    endif
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
@@ -1211,7 +1251,12 @@ contains
       call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
     endif
   elseif (present(position)) then
-    call self%clasg(g)%cla(position)%get_varying(pref=pref, val=val) ; self%error = error
+    a = self%clasg(g)%positional_index(position)
+    if (a == 0) then
+      call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch='position '//trim(str(position, .true.)))
+    else
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+    endif
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
@@ -1266,7 +1311,12 @@ contains
       call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
     endif
   elseif (present(position)) then
-    call self%clasg(g)%cla(position)%get_varying(pref=pref, val=val) ; self%error = error
+    a = self%clasg(g)%positional_index(position)
+    if (a == 0) then
+      call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch='position '//trim(str(position, .true.)))
+    else
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+    endif
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif
@@ -1321,7 +1371,12 @@ contains
       call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
     endif
   elseif (present(position)) then
-    call self%clasg(g)%cla(position)%get_varying(pref=pref, val=val) ; self%error = error
+    a = self%clasg(g)%positional_index(position)
+    if (a == 0) then
+      call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch='position '//trim(str(position, .true.)))
+    else
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+    endif
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
   endif

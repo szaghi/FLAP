@@ -69,6 +69,7 @@ All library source is in `src/lib/`. Dependencies (PENF, FACE) are fetched with 
 
 - Arguments are untyped until `get`: values are stored as strings and cast in `get` via `class(*)` + `select type`.
 - List values are stored as `v1||!||v2||!||` (`ARGS_SEP` plus a trailing separator). `tokenize` dropping the trailing empty token is load-bearing: do not "fix" it.
+- Positionals are looked up by their **declared** `position` (`positional_index`), never by an index into the CLA list or by token position.
 - Builtins (`--help`, `--version`, `--markdown`, `--`) are added inside `parse`, so `save_bash_completion`/man/markdown called before `parse` omit them (B09).
 - Environment variables are read only when the bare switch is passed; an absent switch yields `def` even if the variable is set.
 - **gfortran bug (13–16):** a *section* of a deferred-length character array (`a(2:3)` with `character(len=:), allocatable :: a(:)`) passed to an assumed-shape `character(*)` dummy arrives starting at the first element of the whole array. Pass a whole-array copy instead (see the group call in `parse`).

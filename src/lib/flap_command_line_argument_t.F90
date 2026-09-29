@@ -44,6 +44,7 @@ public :: ERROR_ACTION_UNKNOWN
 public :: ERROR_DUPLICATED_CLAS
 public :: ERROR_MISSING_REQUIRED_VAL
 public :: ERROR_UNSUPPORTED_TYPE
+public :: ERROR_POSITIONAL_NARGS
 
 type, extends(object) :: command_line_argument
   !< Command Line Argument (CLA) class.
@@ -156,6 +157,7 @@ integer(I4P), parameter :: ERROR_STORE_STAR_ENVVAR      = 21 !< Action store* no
 integer(I4P), parameter :: ERROR_ACTION_UNKNOWN         = 22 !< Unknown CLA (switch name).
 integer(I4P), parameter :: ERROR_DUPLICATED_CLAS        = 23 !< Duplicated CLAs passed, passed multiple instance of the same CLA.
 integer(I4P), parameter :: ERROR_MISSING_REQUIRED_VAL   = 24 !< Missing required value of CLA.
+integer(I4P), parameter :: ERROR_POSITIONAL_NARGS       = 45 !< Positional CLA with nargs (positionals are scalar).
 integer(I4P), parameter :: ERROR_UNSUPPORTED_TYPE       = 46 !< Value requested into a variable of an unsupported type.
 
 contains
@@ -636,6 +638,9 @@ contains
       self%error_message = prefd//': switch "'//trim(adjustl(switch))//'" has been passed more than once!'
     case(ERROR_MISSING_REQUIRED_VAL)
       self%error_message = prefd//': named option "'//trim(adjustl(self%switch))//'" requires a value that is not passed!'
+    case(ERROR_POSITIONAL_NARGS)
+      self%error_message = prefd//': positional option "'//trim(str(self%position, .true.))//'-th" cannot have nargs: '//&
+                           'positionals take one value each'
     case(ERROR_UNSUPPORTED_TYPE)
       self%error_message = prefd//': the value of "'//trim(adjustl(self%switch))//'" cannot be returned into a variable '//&
                            'of this type!'
@@ -750,6 +755,8 @@ contains
     return
   elseif ((self%is_positional).and.(self%act/=action_store)) then
     call self%errored(pref=pref, error=ERROR_POSITIONAL_NO_STORE)
+  elseif ((self%is_positional).and.allocated(self%nargs)) then
+    call self%errored(pref=pref, error=ERROR_POSITIONAL_NARGS)
   endif
   endsubroutine check_positional_consistency
 

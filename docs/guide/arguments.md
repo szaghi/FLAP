@@ -220,5 +220,11 @@ call cli%add(positional=.true., position=2,   &
              required=.false., act='store', def='1.0', error=error)
 ```
 
-Restrictions: positional arguments cannot use `exclude` or `envvar`, and must use
-`act='store'`.
+The values that are not switches (nor switch values) are assigned in order: the first one to `position=1`, the second
+to `position=2`, and so on, wherever they appear on the command line (`prog in.dat -v 2.0` and `prog -v in.dat 2.0` are
+equivalent). An argument that looks like a switch (a dash followed by anything but a digit or a dot) is never taken as a
+positional value, so `-3.5` and `-` are values while `--bogus` is an unknown switch. A value beyond the last position is
+an unknown argument. Retrieve a positional with `cli%get(position=n, ...)`.
+
+Restrictions: positional arguments cannot use `exclude`, `envvar` or `nargs` (each positional takes one value), and must
+use `act='store'`.

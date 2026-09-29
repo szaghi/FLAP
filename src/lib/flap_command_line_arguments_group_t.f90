@@ -41,6 +41,7 @@ type, extends(object) :: command_line_arguments_group
     procedure, public :: is_required_passed    !< Check if required CLAs are passed.
     procedure, public :: is_passed             !< Check if a CLA has been passed.
     procedure, public :: is_defined            !< Check if a CLA has been defined.
+    procedure, public :: positional_index      !< Index of the positional CLA declared at a position.
     procedure, public :: raise_error_m_exclude !< Raise error mutually exclusive CLAs passed.
     procedure, public :: add                   !< Add CLA to CLAsG.
     procedure, public :: parse                 !< Parse CLAsG arguments.
@@ -154,10 +155,27 @@ contains
         endif
       enddo
     elseif (present(position)) then
-      is_passed = self%cla(position)%is_passed
+      a = self%positional_index(position)
+      if (a > 0) is_passed = self%cla(a)%is_passed
     endif
   endif
   endfunction is_passed
+
+  pure function positional_index(self, position) result(a)
+  !< Return the index of the positional CLA declared at a position, 0 if there is none.
+  !<
+  !< Positionals are looked up by their declared position, never by their index in the CLA list.
+  class(command_line_arguments_group), intent(in) :: self     !< CLAsG data.
+  integer(I4P),                        intent(in) :: position !< Position of the positional CLA.
+  integer(I4P)                                    :: a        !< Index of the positional CLA, 0 if not defined.
+
+  do a=1, self%Na
+    if (self%cla(a)%is_positional) then
+      if (self%cla(a)%position == position) return
+    endif
+  enddo
+  a = 0
+  endfunction positional_index
 
   function is_defined(self, switch, pos)
   !< Check if a CLA has been defined.
@@ -200,6 +218,7 @@ contains
   type(command_line_argument),         intent(in)    :: cla             !< CLA data.
   type(command_line_argument), allocatable           :: cla_list_new(:) !< New (extended) CLA list.
   integer(I4P)                                       :: c               !< Counter.
+  integer(I4P)                                       :: p               !< Insertion index of a positional CLA.
 
   if (self%Na>0_I4P) then
     if (.not.cla%is_positional) then
@@ -209,12 +228,15 @@ contains
       enddo
       cla_list_new(self%Na+1) = cla
     else
+      ! keep positionals near their position in the list (it orders the usage), without overrunning it: lookups use the
+      ! declared position (positional_index), not the list index
+      p = max(1_I4P, min(cla%position, self%Na + 1))
       allocate(cla_list_new(1:self%Na+1))
-      do c=1, cla%position - 1
+      do c=1, p - 1
         cla_list_new(c) = self%cla(c)
       enddo
-      cla_list_new(cla%position) = cla
-      do c=cla%position + 1, self%Na + 1
+      cla_list_new(p) = cla
+      do c=p + 1, self%Na + 1
         cla_list_new(c) = self%cla(c-1)
       enddo
     endif
@@ -249,10 +271,12 @@ contains
   integer(I4P)                                       :: nargs               !< Number of arguments consumed by a CLA.
   logical                                            :: found               !< Flag for checking if switch is a defined CLA.
   logical                                            :: found_val           !< Flag for checking if switch value is found.
+  integer(I4P)                                       :: ipos                !< Positional cursor: positionals consumed so far.
 
   error_unknown_clas = 0
   if (self%is_called) then
      call self%sanitize_defaults
+     ipos = 0
      arg = 0
      do while (arg < size(args, dim=1)) ! loop over CLAs group arguments passed
         arg = arg + 1
@@ -412,31 +436,40 @@ contains
            endif
         enddo
         if (.not.found) then ! current argument (arg-th) does not correspond to a named option
-           if (arg>self%Na) then ! has been passed too much CLAs
-               ! place the error into a new positional dummy CLA
-               call cla%assign_object(self)
-               cla%is_passed = .true.
-               cla%m_exclude = ''
-               call self%add(pref=pref, cla=cla)
-               call self%cla(self%Na)%raise_error_switch_unknown(pref=pref, switch=trim(adjustl(args(arg))))
-               self%error = self%cla(self%Na)%error
-               return
+           ! the n-th such argument is the value of the positional CLA declared at position n (positional cursor)
+           a = 0
+           if (.not.is_switch_like(trim(adjustl(args(arg))))) then
+              ipos = ipos + 1
+              a = self%positional_index(ipos)
            endif
-           if (.not.self%cla(arg)%is_positional) then ! current argument (arg-th) is not positional... there is a problem!
-              call self%cla(arg)%raise_error_switch_unknown(pref=pref, switch=trim(adjustl(args(arg))))
-              self%error = self%cla(arg)%error
+           if (a > 0) then
+              ! positional CLA always stores a value
+              self%cla(a)%val = trim(adjustl(args(arg)))
+              self%cla(a)%is_passed = .true.
+           else
+              ! neither a named option nor a further positional: unknown argument, reported on a scratch CLA
+              call cla%assign_object(self)
+              call cla%raise_error_switch_unknown(pref=pref, switch=trim(adjustl(args(arg))))
+              self%error = cla%error
               error_unknown_clas = self%error
               if (.not.ignore_unknown_clas) return
-           else
-              ! positional CLA always stores a value
-              self%cla(arg)%val = trim(adjustl(args(arg)))
-              self%cla(arg)%is_passed = .true.
            endif
         endif
      enddo
      call self%check_m_exclusive(pref=pref)
   endif
   contains
+     pure function is_switch_like(token)
+     !< Return true if an argument looks like a switch: a dash followed by anything but a digit or a dot.
+     !<
+     !< Such an argument is never taken as a positional value (so "-3.5" and "-" are values, "--bogus" is not).
+     character(*), intent(in) :: token          !< Argument.
+     logical                  :: is_switch_like !< Check result.
+
+     is_switch_like = .false.
+     if (len(token) >= 2) is_switch_like = token(1:1) == '-' .and. index('0123456789.', token(2:2)) == 0
+     endfunction is_switch_like
+
      function n_next_undef_args(args, arg)
      !< Return the number of the next undefined (not named switch) arguments.
      character(*), intent(in) :: args(:)           !< Command line arguments.

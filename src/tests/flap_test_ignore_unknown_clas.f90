@@ -53,13 +53,13 @@ contains
   call run('-s a --bogus', a_string, parse_error, get_error)
   call assert_equal(parse_error, ERROR_UNKNOWN_CLAS_IGNORED, '-s a --bogus: parse error')
   call assert_equal(a_string, 'a', '-s a --bogus: value')
-  ! B20 (#125): the error returned by get depends on where the unknown switch is; these assertions pin the current
-  ! behaviour and flip when B20 is fixed
-  call assert_equal(get_error, 0_I4P, '-s a --bogus: get error (B20, current behaviour)')
+  ! B20 (#125, fixed with B06): the error returned by get no longer depends on where the unknown switch is; parse reports
+  ! the ignored unknowns, get reports only its own CLA
+  call assert_equal(get_error, 0_I4P, '-s a --bogus: get error')
   call run('--bogus -s a', a_string, parse_error, get_error)
   call assert_equal(parse_error, ERROR_UNKNOWN_CLAS_IGNORED, '--bogus -s a: parse error')
   call assert_equal(a_string, 'a', '--bogus -s a: value')
-  call assert_equal(get_error, ERROR_UNKNOWN_CLAS_IGNORED, '--bogus -s a: get error (B20, current behaviour)')
+  call assert_equal(get_error, 0_I4P, '--bogus -s a: get error, same as with the unknown switch last')
 
   call run('--bogus', a_string, parse_error, get_error)
   call assert_equal(parse_error, ERROR_MISSING_REQUIRED, '--bogus only: a missing required switch is still an error')
