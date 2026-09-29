@@ -157,7 +157,7 @@ do i = 1, size(files)
 end do
 ```
 
-> **Note:** `choices` is not supported for `get_varying`.
+`choices` are checked on every value of the list, as by `get`.
 
 ---
 

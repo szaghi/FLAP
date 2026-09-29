@@ -58,7 +58,7 @@ on_error() {
     bumped)
       echo "  Files were modified locally but not committed."
       echo "  To discard and start over:"
-      echo "    git checkout -- VERSION CHANGELOG.md"
+      echo "    git checkout -- VERSION CHANGELOG.md CMakeLists.txt fpm.toml"
       ;;
     committed)
       echo "  Commit was made but not tagged/pushed. To resume:"
@@ -160,7 +160,7 @@ echo -e "  New version     : ${BOLD}${NEW_TAG}${RESET}"
 echo ""
 echo -e "${BOLD}This will:${RESET}"
 echo -e "  1. Regenerate ${CYAN}CHANGELOG.md${RESET} up to ${BOLD}${NEW_TAG}${RESET}"
-echo -e "  2. Update ${CYAN}VERSION${RESET} to ${BOLD}${NEW_TAG}${RESET}"
+echo -e "  2. Update ${CYAN}VERSION${RESET}, ${CYAN}CMakeLists.txt${RESET} and ${CYAN}fpm.toml${RESET} to ${BOLD}${NEW_TAG}${RESET}"
 echo -e "  3. Commit with message: ${CYAN}chore(release): ${NEW_TAG}${RESET}"
 echo -e "  4. Create annotated tag ${BOLD}${NEW_TAG}${RESET}"
 echo -e "  5. Push commit and tag to origin  →  triggers GitHub release workflow"
@@ -181,10 +181,19 @@ echo "$NEW_TAG" > VERSION
 grep -q "^${NEW_TAG}$" VERSION || die "VERSION update failed — file content mismatch"
 success "VERSION updated to ${NEW_TAG}"
 
+# ── Update the version of the CMake project and of the fpm manifest ─────────
+NEW_VER="${NEW_TAG#v}"
+info "Updating CMakeLists.txt and fpm.toml…"
+sed -i -E "s/^(project\(FLAP VERSION )[0-9]+\.[0-9]+\.[0-9]+/\1${NEW_VER}/" CMakeLists.txt
+grep -q "^project(FLAP VERSION ${NEW_VER} " CMakeLists.txt || die "CMakeLists.txt version update failed"
+sed -i -E "s/^version = \"[0-9]+\.[0-9]+\.[0-9]+\"/version = \"${NEW_VER}\"/" fpm.toml
+grep -q "^version = \"${NEW_VER}\"$" fpm.toml || die "fpm.toml version update failed"
+success "CMakeLists.txt and fpm.toml updated to ${NEW_VER}"
+
 # ── Commit ────────────────────────────────────────────────────────────────────
 STAGE="committed"
 info "Committing changelog and version…"
-git add CHANGELOG.md VERSION
+git add CHANGELOG.md VERSION CMakeLists.txt fpm.toml
 git commit -m "chore(release): ${NEW_TAG}"
 success "Committed"
 

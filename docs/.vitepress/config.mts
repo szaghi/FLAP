@@ -32,6 +32,7 @@ export default withMermaid({
           { text: 'Output Formats',          link: '/guide/output' },
           { text: 'Error Codes',             link: '/guide/errors' },
           { text: 'Contributing',            link: '/guide/contributing' },
+          { text: 'Upgrading to v1.3.0',     link: '/guide/migration' },
           { text: 'Changelog',               link: '/guide/changelog' },
         ],
       },
@@ -62,6 +63,7 @@ export default withMermaid({
           text: 'Project',
           items: [
             { text: 'Contributing', link: '/guide/contributing' },
+            { text: 'Upgrading to v1.3.0', link: '/guide/migration' },
             { text: 'Changelog',    link: '/guide/changelog' },
           ],
         },
