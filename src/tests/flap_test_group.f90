@@ -8,7 +8,7 @@ program flap_test_group
 !<###Usage Compile
 !< See [usage instructions](https://github.com/szaghi/FLAP/wiki/Testing-Programs).
 
-use flap, only : command_line_interface, ERROR_UNKNOWN
+use flap, only : command_line_interface, ERROR_MISSING_GROUP, ERROR_UNKNOWN
 use flap_test_utils, only : assert_equal, capture_close, capture_open
 use penf
 
@@ -49,10 +49,31 @@ call fake_call('new -x', spectrum, domain, grid, called, error)
 call assert_equal(error, ERROR_UNKNOWN, 'new -x: unknown switch in the group')
 
 call check_values_named_as_commands
+call check_unknown_group
 
 call capture_close(lun)
 
 contains
+  subroutine check_unknown_group()
+  !< B24 (#125): get with an unknown group reports ERROR_MISSING_GROUP and returns, for every getter kind.
+  type(command_line_interface) :: cli       !< Command Line Interface (CLI).
+  character(99)                :: name      !< Scalar value.
+  character(99)                :: pair(2)   !< Fixed-size list value.
+  character(99), allocatable   :: list(:)   !< Varying-size list value.
+  integer(I4P),  allocatable   :: ilist(:)  !< Varying-size integer list value.
+  integer(I4P)                 :: err       !< Error trapping flag.
+
+  call define_values(cli, '')
+  call cli%get(group='nope', switch='--name', val=name, error=err)
+  call assert_equal(err, ERROR_MISSING_GROUP, 'get, unknown group')
+  call cli%get(group='nope', switch='--pair', val=pair, error=err)
+  call assert_equal(err, ERROR_MISSING_GROUP, 'get into a fixed-size list, unknown group')
+  call cli%get_varying(group='nope', switch='--list', val=list, error=err)
+  call assert_equal(err, ERROR_MISSING_GROUP, 'get_varying (character), unknown group')
+  call cli%get_varying(group='nope', switch='--list', val=ilist, error=err)
+  call assert_equal(err, ERROR_MISSING_GROUP, 'get_varying (integer), unknown group')
+  endsubroutine check_unknown_group
+
   subroutine check_values_named_as_commands()
   !< B04 (#125): a value equal to a command name is the value when the option takes a fixed number of values; a variadic
   !< list is ended by a command name.

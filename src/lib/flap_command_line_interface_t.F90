@@ -725,6 +725,8 @@ contains
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
+      if (present(error)) error = self%error
+      return ! g is not defined (B24)
     endif
   else
     g = 0
@@ -789,6 +791,8 @@ contains
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
+      if (present(error)) error = self%error
+      return ! g is not defined (B24)
     endif
   else
     g = 0
@@ -850,6 +854,8 @@ contains
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
+      if (present(error)) error = self%error
+      return ! g is not defined (B24)
     endif
   else
     g = 0
@@ -911,6 +917,8 @@ contains
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
+      if (present(error)) error = self%error
+      return ! g is not defined (B24)
     endif
   else
     g = 0
@@ -972,6 +980,8 @@ contains
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
+      if (present(error)) error = self%error
+      return ! g is not defined (B24)
     endif
   else
     g = 0
@@ -1033,6 +1043,8 @@ contains
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
+      if (present(error)) error = self%error
+      return ! g is not defined (B24)
     endif
   else
     g = 0
@@ -1094,6 +1106,8 @@ contains
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
+      if (present(error)) error = self%error
+      return ! g is not defined (B24)
     endif
   else
     g = 0
@@ -1155,6 +1169,8 @@ contains
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
+      if (present(error)) error = self%error
+      return ! g is not defined (B24)
     endif
   else
     g = 0
@@ -1216,6 +1232,8 @@ contains
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
+      if (present(error)) error = self%error
+      return ! g is not defined (B24)
     endif
   else
     g = 0
@@ -1277,6 +1295,8 @@ contains
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
+      if (present(error)) error = self%error
+      return ! g is not defined (B24)
     endif
   else
     g = 0
@@ -1338,6 +1358,8 @@ contains
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
+      if (present(error)) error = self%error
+      return ! g is not defined (B24)
     endif
   else
     g = 0
