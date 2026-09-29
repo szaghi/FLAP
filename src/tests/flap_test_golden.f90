@@ -9,7 +9,7 @@ program flap_test_golden
 !<
 !< To regenerate the baselines after an intended output change, run with `FLAP_TEST_GOLDEN_UPDATE=1` and review the diff.
 use flap, only : command_line_interface
-use flap_test_utils, only : assert, assert_equal, child_case, delete_file, read_file, reinvoke, write_file
+use flap_test_utils, only : assert, assert_equal, child_case, delete_file, read_file, reinvoke, scratch_file, write_file
 use penf, only : I4P
 
 implicit none
@@ -125,15 +125,15 @@ contains
   do g = 0, size(groups, kind=I4P) - 1
     call compare(cli%usage(g=g)//new_line('a'), prefix//'.usage-'//trim(groups(g+1))//'.txt')
   enddo
-  call cli%save_man_page(man_file=scratch_name(prefix//'.man'), error=error)
+  call cli%save_man_page(man_file=scratch_file(prefix//'.man'), error=error)
   call assert_equal(error, 0_I4P, prefix//': save_man_page')
-  call compare_file(scratch_name(prefix//'.man'), prefix//'.man')
-  call cli%save_usage_to_markdown(markdown_file=scratch_name(prefix//'.md'), error=error)
+  call compare_file(scratch_file(prefix//'.man'), prefix//'.man')
+  call cli%save_usage_to_markdown(markdown_file=scratch_file(prefix//'.md'), error=error)
   call assert_equal(error, 0_I4P, prefix//': save_usage_to_markdown')
-  call compare_file(scratch_name(prefix//'.md'), prefix//'.md')
-  call cli%save_bash_completion(bash_file=scratch_name(prefix//'.bash'), error=error)
+  call compare_file(scratch_file(prefix//'.md'), prefix//'.md')
+  call cli%save_bash_completion(bash_file=scratch_file(prefix//'.bash'), error=error)
   call assert_equal(error, 0_I4P, prefix//': save_bash_completion')
-  call compare_file(scratch_name(prefix//'.bash'), prefix//'.bash')
+  call compare_file(scratch_file(prefix//'.bash'), prefix//'.bash')
   endsubroutine check_outputs
 
   subroutine check_help(name, args)
@@ -196,9 +196,9 @@ contains
   if (.not.differ) differ = text /= expected
   if (differ) then
     mismatches = mismatches + 1
-    call write_file(scratch_name(golden//'.actual'), text)
+    call write_file(scratch_file(golden//'.actual'), text)
     print '(A)', 'MISMATCH '//path//': '//first_difference(text, expected)
-    print '(A)', '  actual output saved as '//scratch_name(golden//'.actual')
+    print '(A)', '  actual output saved as '//scratch_file(golden//'.actual')
   endif
   endsubroutine compare
 
@@ -268,18 +268,6 @@ contains
     endselect
   enddo
   endfunction label
-
-  function scratch_name(name) result(path)
-  !< Path of a scratch file next to the running executable.
-  character(*), intent(in)  :: name   !< File name.
-  character(:), allocatable :: path   !< File path.
-  integer(I4P)              :: length !< Length of the executable path.
-
-  call get_command_argument(0, length=length)
-  allocate(character(length) :: path)
-  call get_command_argument(0, value=path)
-  path = path//'.'//name
-  endfunction scratch_name
 
   pure function integer_label(n) result(string)
   !< Convert an integer to a string without blanks.

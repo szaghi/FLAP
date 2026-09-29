@@ -25,6 +25,8 @@ public :: delete_file
 public :: read_back
 public :: read_file
 public :: reinvoke
+public :: run_command
+public :: scratch_file
 public :: write_file
 
 character(*), parameter :: CASE_ENV = 'FLAP_TEST_CASE' !< Environment variable selecting the child scenario.
@@ -191,6 +193,35 @@ contains
   open(newunit=lun, file=path, status='old', iostat=iostat)
   if (iostat == 0) close(lun, status='delete')
   endsubroutine delete_file
+
+  function scratch_file(name) result(path)
+  !< Path of a scratch file next to the running executable (a build directory, never the source tree).
+  character(*), intent(in)  :: name   !< File name suffix.
+  character(:), allocatable :: path   !< File path: `<executable>.<name>`.
+  integer(I4P)              :: length !< Length of the executable path.
+
+  call get_command_argument(0, length=length)
+  allocate(character(length) :: path)
+  call get_command_argument(0, value=path)
+  path = path//'.'//name
+  endfunction scratch_file
+
+  subroutine run_command(cmd, exitstat, out)
+  !< Run a shell command (by `sh`) and return its exit status and its standard output and error, merged.
+  character(*),              intent(in)  :: cmd      !< Shell command.
+  integer(I4P),              intent(out) :: exitstat !< Exit status of the command.
+  character(:), allocatable, intent(out) :: out      !< Standard output and error of the command.
+  character(:), allocatable              :: out_file !< File collecting the output.
+  integer(I4P)                           :: cmdstat  !< Command execution status.
+  character(256)                         :: cmdmsg   !< Command execution message.
+
+  out_file = scratch_file('run_command.out')
+  cmdmsg = ''
+  call execute_command_line(cmd//" > '"//out_file//"' 2>&1", wait=.true., exitstat=exitstat, cmdstat=cmdstat, cmdmsg=cmdmsg)
+  if (cmdstat /= 0) call fail('run_command: cannot execute "'//cmd//'": '//trim(cmdmsg))
+  out = read_file(out_file)
+  call delete_file(out_file)
+  endsubroutine run_command
 
   ! self re-invocation
   function child_case() result(case)
