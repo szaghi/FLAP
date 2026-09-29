@@ -47,6 +47,22 @@ call check('--bogus --help', ERROR_UNKNOWN, '--bogus --help: the unknown switch 
 call check('--help compile --bogus', ERROR_UNKNOWN, '--help compile --bogus: the unknown switch of the command wins')
 ! a missing required option does not hide the help
 call check('--help', STATUS_PRINT_H, '--help without the required option: status', required=.true.)
+! B32 (#125): a user switch named like a builtin abbreviation takes precedence, the builtin keeps its long name
+call cli%init(progname='flap_test_standalone', version=VERSION, standalone=.false., usage_lun=lun, version_lun=lun, &
+              error_lun=lun)
+call cli%add(switch='--verbose', switch_ab='-v', help='verbose', required=.false., act='store_true', def='.false.', &
+             error=error)
+call cli%parse(args='-v', error=error)
+call assert_equal(error, 0_I4P, 'user -v: parse (no clash with the builtin --version)')
+call assert(cli%is_passed(switch='--verbose'), 'user -v: it is the user switch')
+call cli%init(progname='flap_test_standalone', version=VERSION, standalone=.false., usage_lun=lun, version_lun=lun, &
+              error_lun=lun)
+call cli%add(switch='--verbose', switch_ab='-v', help='verbose', required=.false., act='store_true', def='.false.', &
+             error=error)
+call cli%parse(args='--version', error=error)
+call assert_equal(error, STATUS_PRINT_V, 'user -v: the builtin --version still works')
+out = read_back(lun)
+
 ! markdown: the file is written, then the status is returned
 progname = scratch_file('markdown')
 call delete_file(progname//'.md')

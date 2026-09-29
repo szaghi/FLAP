@@ -67,8 +67,9 @@ FLAP automatically appends two special arguments to every CLI:
 - `--help` / `-h` — prints the usage message
 - `--version` / `-v` — prints the version string
 
-FLAP checks for name collisions before adding them, so your own `-h` or `-v` switches
-take precedence. To suppress both, use `disable_hv=.true.`.
+Your own switches take precedence: if you define `--version`, the builtin is not added; if you only take its
+abbreviation (`-v` for verbosity), the builtin keeps just `--version`. The same holds for `--help`/`-h` and
+`--markdown`/`-md`. To suppress them, use `disable_hv=.true.`.
 
 ---
 
@@ -107,6 +108,7 @@ All arguments are optional except that either `switch` (for named arguments) or
 | `'store*'` | Stores a single optional value; the default is used when the switch is present but no value follows |
 | `'store_true'` | Stores `.true.` when the switch appears (boolean flag) |
 | `'store_false'` | Stores `.false.` when the switch appears |
+| `'count'` | Counts the occurrences of the switch (repeatable, no value): `-v -v`, `-v --verbose` or the compact `-vv` give 2; read it into any integer. `def` defaults to `'0'` |
 | `'print_help'` | Prints the help message and exits |
 | `'print_version'` | Prints the version and exits |
 
@@ -117,6 +119,11 @@ Actions are case-insensitive.
 call cli%add(switch='--verbose', switch_ab='-v', &
              help='Enable verbose output',       &
              required=.false., act='store_true', def='.false.', error=error)
+
+! counter: -v -v, -vv or --verbose --verbose → 2, absent → 0
+call cli%add(switch='--verbose', switch_ab='-v', &
+             help='Verbosity (repeatable)',      &
+             required=.false., act='count', error=error)
 
 ! optional value: present without a value → default used
 call cli%add(switch='--format', &

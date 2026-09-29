@@ -18,6 +18,7 @@ public :: ACTION_STORE_FALSE
 public :: ACTION_PRINT_HELP
 public :: ACTION_PRINT_MARK
 public :: ACTION_PRINT_VERS
+public :: ACTION_COUNT
 public :: ARGS_SEP
 public :: ERROR_OPTIONAL_NO_DEF
 public :: ERROR_REQUIRED_M_EXCLUDE
@@ -49,6 +50,7 @@ public :: ERROR_LIST_SIZE
 public :: ERROR_DEF_NARGS
 public :: ERROR_INLINE_VALUE_NOT_ALLOWED
 public :: ERROR_INLINE_VALUE_NARGS
+public :: ERROR_COUNT_INCONSISTENT
 
 type, extends(object) :: command_line_argument
   !< Command Line Argument (CLA) class.
@@ -77,6 +79,8 @@ type, extends(object) :: command_line_argument
     procedure, public :: match_token                    !< Check if a command line token names this CLA.
     procedure, public :: match_inline_token             !< Check a token also as NAME=VALUE.
     procedure, public :: set_inline_value               !< Set the value given inline (NAME=VALUE).
+    procedure, public :: is_repeatable                  !< Check if the CLA may be passed more than once.
+    procedure, public :: count_occurrences              !< Count occurrences of a count CLA.
     procedure, public :: raise_error_m_exclude          !< Raise error mutually exclusive CLAs passed.
     procedure, public :: raise_error_nargs_insufficient !< Raise error insufficient number of argument values passed.
     procedure, public :: raise_error_value_missing      !< Raise error missing value.
@@ -106,6 +110,7 @@ type, extends(object) :: command_line_argument
     procedure, public :: usage                           !< Get correct usage.
     ! private methods
     procedure, private :: errored                         !< Trig error occurence and print meaningful message.
+    procedure, private :: check_count_consistency         !< Check data consistency for count CLA.
     procedure, private :: check_envvar_consistency        !< Check data consistency for envvar CLA.
     procedure, private :: check_action_consistency        !< Check CLA action consistency.
     procedure, private :: check_optional_consistency      !< Check optional CLA consistency.
@@ -140,6 +145,7 @@ character(len=*), parameter :: ACTION_STORE_FALSE = 'STORE_FALSE'   !< Store .fa
 character(len=*), parameter :: ACTION_PRINT_HELP  = 'PRINT_HELP'    !< Print help message.
 character(len=*), parameter :: ACTION_PRINT_MARK  = 'PRINT_MARKDOWN'!< Print help to Markdown file.
 character(len=*), parameter :: ACTION_PRINT_VERS  = 'PRINT_VERSION' !< Print version.
+character(len=*), parameter :: ACTION_COUNT       = 'COUNT'         !< Count the occurrences (repeatable, no value).
 character(len=*), parameter :: ARGS_SEP           = LIST_SEP        !< Arguments separator for multiple valued (list) CLA.
 
 ! errors codes
@@ -169,6 +175,7 @@ integer(I4P), parameter :: ERROR_DUPLICATED_CLAS        = 23 !< Duplicated CLAs 
 integer(I4P), parameter :: ERROR_MISSING_REQUIRED_VAL   = 24 !< Missing required value of CLA.
 integer(I4P), parameter :: ERROR_INLINE_VALUE_NOT_ALLOWED = 25 !< Inline value (NAME=VALUE) for a CLA that takes no value.
 integer(I4P), parameter :: ERROR_INLINE_VALUE_NARGS     = 26 !< Inline value (NAME=VALUE) for a list CLA.
+integer(I4P), parameter :: ERROR_COUNT_INCONSISTENT     = 27 !< Count CLA with positional, nargs, envvar or choices.
 integer(I4P), parameter :: ERROR_POSITIONAL_NARGS       = 45 !< Positional CLA with nargs (positionals are scalar).
 integer(I4P), parameter :: ERROR_UNSUPPORTED_TYPE       = 46 !< Value requested into a variable of an unsupported type.
 integer(I4P), parameter :: ERROR_LIST_SIZE              = 47 !< List requested into a fixed-size array of another size.
@@ -204,6 +211,7 @@ contains
   class(command_line_argument), intent(inout) :: self  !< CLA data.
   character(*), optional,       intent(in)    :: pref  !< Prefixing string.
 
+  call self%check_count_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_envvar_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_action_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_optional_consistency(pref=pref) ; if (self%error/=0) return
@@ -267,6 +275,27 @@ contains
     endif
   endif
   endsubroutine match_inline_token
+
+  pure function is_repeatable(self) result(repeatable)
+  !< Check if the CLA may be passed more than once (count).
+  class(command_line_argument), intent(in) :: self       !< CLA data.
+  logical                                  :: repeatable !< Check result.
+
+  repeatable = .false.
+  if (allocated(self%act)) repeatable = self%act==ACTION_COUNT
+  endfunction is_repeatable
+
+  subroutine count_occurrences(self, n, first)
+  !< Add n occurrences to a count CLA; the first occurrence starts from 0 (the default applies only when not passed).
+  class(command_line_argument), intent(inout) :: self  !< CLA data.
+  integer(I4P),                 intent(in)    :: n     !< Occurrences to add.
+  logical,                      intent(in)    :: first !< First occurrence on the command line.
+  integer(I4P)                                :: c     !< Current count.
+
+  c = 0
+  if (.not.first.and.allocated(self%val)) c = cton(str=trim(adjustl(self%val)), knd=1_I4P)
+  self%val = trim(str(c + n, .true.))
+  endsubroutine count_occurrences
 
   subroutine set_inline_value(self, value, pref)
   !< Set the value given inline (NAME=VALUE, F01): only a scalar store takes one; the next argument is not consumed.
@@ -556,6 +585,13 @@ contains
     endif
   elseif (self%act==action_store_star) then
     signature = ' [value]'
+  elseif (self%act==action_count) then
+    ! repeatable, docopt-style
+    if (self%is_required) then
+      signature = ' '//trim(adjustl(self%switch))//'...'
+    else
+      signature = ' ['//trim(adjustl(self%switch))//']...'
+    endif
   else
     if (self%is_required) then
       signature = ' '//trim(adjustl(self%switch))
@@ -737,6 +773,9 @@ contains
     case(ERROR_INLINE_VALUE_NARGS)
       self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" takes a list of values: pass them '//&
                            'after the switch, not inline!'
+    case(ERROR_COUNT_INCONSISTENT)
+      self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" counts its occurrences: it cannot be '//&
+                           'positional, nor have nargs, envvar or choices!'
     case(ERROR_DEF_NARGS)
       self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" takes '//trim(adjustl(self%nargs))//&
                            ' values (nargs), but its default has '//trim(val_str)//'!'
@@ -746,6 +785,17 @@ contains
     call self%print_error_message
   endif
   endsubroutine errored
+
+  subroutine check_count_consistency(self, pref)
+  !< Check count CLA consistency: a named flag without nargs, envvar or choices (F02 of #125).
+  class(command_line_argument), intent(inout) :: self  !< CLA data.
+  character(*), optional,       intent(in)    :: pref  !< Prefixing string.
+
+  if (.not.allocated(self%act)) return
+  if (self%act/=ACTION_COUNT) return
+  if (self%is_positional.or.allocated(self%nargs).or.allocated(self%envvar).or.allocated(self%choices)) &
+    call self%errored(pref=pref, error=ERROR_COUNT_INCONSISTENT)
+  endsubroutine check_count_consistency
 
   subroutine check_envvar_consistency(self, pref)
   !< Check data consistency for envvar CLA.
@@ -801,7 +851,8 @@ contains
         self%act/=ACTION_STORE_FALSE.and.&
         self%act/=ACTION_PRINT_HELP.and. &
         self%act/=ACTION_PRINT_MARK.and. &
-        self%act/=ACTION_PRINT_VERS) then
+        self%act/=ACTION_PRINT_VERS.and. &
+        self%act/=ACTION_COUNT) then
       call self%errored(pref=pref, error=ERROR_ACTION_UNKNOWN)
       return
     endif
@@ -1003,6 +1054,9 @@ contains
       call self%get_cla_from_buffer(buffer=self%def, val=val, pref=pref)
     endif
     if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val, pref=pref)
+  elseif (self%act==action_count) then
+    ! the number of occurrences, or the default when not passed
+    call self%get_cla_from_buffer(buffer=self%stored_list(), val=val, pref=pref)
   elseif (self%act==action_store_true) then
     if (self%is_passed) then
       select type(val)

@@ -32,7 +32,8 @@ use flap_command_line_argument_t, only : command_line_argument,        &
                                          ERROR_LIST_SIZE,              &
                                          ERROR_DEF_NARGS,              &
                                          ERROR_INLINE_VALUE_NOT_ALLOWED, &
-                                         ERROR_INLINE_VALUE_NARGS
+                                         ERROR_INLINE_VALUE_NARGS,     &
+                                         ERROR_COUNT_INCONSISTENT
 use flap_command_line_arguments_group_t, only : command_line_arguments_group,                 &
                                                 STATUS_PRINT_V,                               &
                                                 STATUS_PRINT_H,                               &
@@ -94,6 +95,7 @@ public :: ERROR_LIST_SIZE
 public :: ERROR_DEF_NARGS
 public :: ERROR_INLINE_VALUE_NOT_ALLOWED
 public :: ERROR_INLINE_VALUE_NARGS
+public :: ERROR_COUNT_INCONSISTENT
 ! errors 100-199: group (renamed here: the group module's own names clash with the argument ones)
 public :: ERROR_GROUP_CONSISTENCY
 public :: ERROR_GROUP_M_EXCLUDE

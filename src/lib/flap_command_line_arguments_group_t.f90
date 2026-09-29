@@ -7,6 +7,7 @@ use flap_command_line_argument_t, only : command_line_argument, &
                                          ACTION_PRINT_HELP,     &
                                          ACTION_PRINT_MARK,     &
                                          ACTION_PRINT_VERS,     &
+                                         ACTION_COUNT,          &
                                          ACTION_STORE,          &
                                          ACTION_STORE_STAR
 use flap_object_t, only : object
@@ -48,6 +49,7 @@ type, extends(object) :: command_line_arguments_group
     procedure, public :: is_defined            !< Check if a CLA has been defined.
     procedure, public :: is_switch_token       !< Check if a command line token names a CLA of the group.
     procedure, public :: is_action_passed      !< Check if a CLA with an action has been passed.
+    procedure, public :: match_compact_count   !< Match the compact form -vvv of a count CLA.
     procedure, public :: positional_index      !< Index of the positional CLA declared at a position.
     procedure, public :: value_arity           !< Number of fixed value slots following a switch.
     procedure, public :: reset_parse           !< Forget the result of a parse, keeping the definitions.
@@ -282,6 +284,38 @@ contains
   endif
   endfunction is_defined
 
+  pure subroutine match_compact_count(self, token, a, n)
+  !< Match the compact form of a count, -vvv (D1 rule 3): a dash and one letter repeated, the letter forming the switch_ab
+  !< -v of a count CLA. The caller uses it only when no switch matches the whole token (an exact switch wins).
+  class(command_line_arguments_group), intent(in)  :: self  !< CLAsG data.
+  character(*),                        intent(in)  :: token !< Command line token.
+  integer(I4P),                        intent(out) :: a     !< Index of the count CLA, 0 if no match.
+  integer(I4P),                        intent(out) :: n     !< Occurrences (repetitions of the letter).
+  integer(I4P)                                     :: c     !< Counter.
+  integer(I4P)                                     :: l     !< Length of the token.
+  character(len=:), allocatable                    :: t     !< Token without blanks around.
+
+  a = 0
+  n = 0
+  t = trim(adjustl(token))
+  l = len(t)
+  if (l < 3) return
+  if (t(1:1) /= '-' .or. t(2:2) == '-') return
+  do c=3, l
+    if (t(c:c) /= t(2:2)) return
+  enddo
+  do c=1, self%Na
+    if (.not.allocated(self%cla(c)%act)) cycle
+    if (self%cla(c)%act /= ACTION_COUNT) cycle
+    if (.not.allocated(self%cla(c)%switch_ab)) cycle
+    if (trim(adjustl(self%cla(c)%switch_ab)) == t(1:2)) then
+      a = c
+      n = l - 1
+      return
+    endif
+  enddo
+  endsubroutine match_compact_count
+
   pure function is_action_passed(self, act) result(passed)
   !< Check if a CLA with an action (e.g. print help) has been passed.
   class(command_line_arguments_group), intent(in) :: self   !< CLAsG data.
@@ -309,8 +343,14 @@ contains
   character(len=:), allocatable                   :: inline_val      !< Inline value, if any.
   logical                                         :: has_inline      !< The token is NAME=VALUE.
   logical                                         :: match           !< The token names the CLA.
+  integer(I4P)                                    :: n               !< Occurrences of a compact count.
 
   is_switch_token = .false.
+  call self%match_compact_count(token, a, n)
+  if (a > 0) then
+    is_switch_token = .true.
+    return
+  endif
   do a=1, self%Na
     call self%cla(a)%match_inline_token(token, match, inline_val, has_inline)
     if (match) then
@@ -395,6 +435,8 @@ contains
   character(len=:), allocatable                      :: inline_val          !< Inline value of NAME=VALUE.
   logical                                            :: has_inline          !< The argument is NAME=VALUE.
   logical                                            :: match               !< The argument names the CLA.
+  logical                                            :: first               !< First occurrence of the CLA.
+  integer(I4P)                                       :: n                   !< Occurrences of a compact count.
 
   error_unknown_clas = 0
   if (self%is_called) then
@@ -408,7 +450,8 @@ contains
            if (.not.self%cla(a)%is_positional) then
               call self%cla(a)%match_inline_token(args(arg), match, inline_val, has_inline)
               if (match) then
-                 if (self%cla(a)%is_passed) then
+                 first = .not.self%cla(a)%is_passed
+                 if (self%cla(a)%is_passed.and.(.not.self%cla(a)%is_repeatable())) then
                     ! current CLA has been already passed: raise the error on it and stop parsing
                     call self%cla(a)%raise_error_duplicated_clas(pref=pref, switch=trim(adjustl(args(arg))))
                     self%error = self%cla(a)%error
@@ -556,6 +599,8 @@ contains
                        ! flush default to val if default is set
                        if (allocated(self%cla(a)%def)) self%cla(a)%val = self%cla(a)%def
                     endif
+                 elseif (self%cla(a)%act==action_count) then
+                    call self%cla(a)%count_occurrences(n=1_I4P, first=first)
                  elseif (self%cla(a)%act==action_print_help) then
                     self%error = STATUS_PRINT_H
                  elseif (self%cla(a)%act==action_print_mark) then
@@ -571,6 +616,14 @@ contains
            endif
         enddo
         if (.not.found) then ! current argument (arg-th) does not correspond to a named option
+           ! the compact form of a count, -vvv (D1 rule 3): only when no switch matches the whole argument
+           call self%match_compact_count(args(arg), a, n)
+           if (a > 0) then
+              first = .not.self%cla(a)%is_passed
+              self%cla(a)%is_passed = .true.
+              call self%cla(a)%count_occurrences(n=n, first=first)
+              cycle
+           endif
            ! the n-th such argument is the value of the positional CLA declared at position n (positional cursor)
            a = 0
            if (.not.is_switch_like(trim(adjustl(args(arg))))) then

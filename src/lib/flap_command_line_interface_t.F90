@@ -3,8 +3,8 @@ module flap_command_line_interface_t
 !< Command Line Interface (CLI) class.
 
 use face, only : colorize
-use flap_command_line_argument_t, only : command_line_argument, ACTION_PRINT_HELP, ACTION_PRINT_MARK, ACTION_PRINT_VERS, &
-                                         ACTION_STORE, ERROR_UNKNOWN
+use flap_command_line_argument_t, only : command_line_argument, ACTION_COUNT, ACTION_PRINT_HELP, ACTION_PRINT_MARK, &
+                                         ACTION_PRINT_VERS, ACTION_STORE, ERROR_UNKNOWN
 use flap_command_line_arguments_group_t, only : command_line_arguments_group, STATUS_NO_ARGS, STATUS_PRINT_H, STATUS_PRINT_M, &
                                                 STATUS_PRINT_V
 use flap_object_t, only : object
@@ -315,6 +315,10 @@ contains
   cla%act             = action_store            ; if (present(act          )) cla%act             = trim(adjustl(Upper_Case(act)))
                                                   if (present(def          )) cla%def             = def
                                                   if (present(def          )) cla%val             = def
+  if (cla%act==ACTION_COUNT.and.(.not.present(def))) then
+    cla%def = '0' ! a count starts from 0
+    cla%val = '0'
+  endif
                                                   if (present(nargs        )) cla%nargs           = nargs
                                                   if (present(choices      )) cla%choices         = choices
   cla%m_exclude     = ''                        ; if (present(exclude      )) cla%m_exclude       = exclude
@@ -548,7 +552,7 @@ contains
   endsubroutine parse
 
   subroutine print_error_hint(self)
-  !< Print the last line after a failed parse: "Try '<prog> [<command>] --help' for help." (F26 of #125).
+  !< Print the last line after a failed parse: "Try 'prog [command] --help' for help." (F26 of #125).
   !<
   !< Only when enabled (error_hint) and when there is a help option to suggest (not disable_hv); the command is the first
   !< called one with an error.
@@ -1470,36 +1474,9 @@ contains
   ! add help, markdown and version switches if not done by user
   if (.not.self%disable_hv) then
     do g=0,size(self%clasg,dim=1)-1
-      if (.not.(self%is_defined(group=self%clasg(g)%group, switch='--help').and.&
-                self%is_defined(group=self%clasg(g)%group, switch='-h'))) &
-        call self%add(pref        = pref,                      &
-                      group_index = g,                         &
-                      switch      = '--help',                  &
-                      switch_ab   = '-h',                      &
-                      help        = 'Print this help message', &
-                      required    = .false.,                   &
-                      def         = '',                        &
-                      act         = 'print_help')
-      if (.not.(self%is_defined(group=self%clasg(g)%group, switch='--markdown').and.&
-                self%is_defined(group=self%clasg(g)%group, switch='-md'))) &
-        call self%add(pref        = pref,                      &
-                      group_index = g,                         &
-                      switch      = '--markdown',              &
-                      switch_ab   = '-md',                     &
-                      help        = 'Save this help message in a Markdown file', &
-                      required    = .false.,                   &
-                      def         = '',                        &
-                      act         = 'print_markdown')
-      if (.not.(self%is_defined(group=self%clasg(g)%group, switch='--version').and. &
-                self%is_defined(group=self%clasg(g)%group, switch='-v'))) &
-        call self%add(pref        = pref,            &
-                      group_index = g,               &
-                      switch      = '--version',     &
-                      switch_ab   = '-v',            &
-                      help        = 'Print version', &
-                      required    = .false.,         &
-                      def         = '',              &
-                      act         = 'print_version')
+      call add_builtin(g, '--help',     '-h',  'Print this help message',                   'print_help')
+      call add_builtin(g, '--markdown', '-md', 'Save this help message in a Markdown file', 'print_markdown')
+      call add_builtin(g, '--version',  '-v',  'Print version',                             'print_version')
     enddo
   endif
 
@@ -1515,6 +1492,24 @@ contains
                     def         = '',      &
                     act         = 'store')
   enddo
+  contains
+    subroutine add_builtin(g, switch, switch_ab, help, act)
+    !< Add a builtin to a group, unless the user defined its switch; without its abbreviation if the user took that one
+    !< (B32 of #125: the user's switches take precedence).
+    integer(I4P), intent(in) :: g         !< Group index.
+    character(*), intent(in) :: switch    !< Switch of the builtin.
+    character(*), intent(in) :: switch_ab !< Abbreviation of the builtin.
+    character(*), intent(in) :: help      !< Help message.
+    character(*), intent(in) :: act       !< Action.
+
+    if (self%is_defined(group=self%clasg(g)%group, switch=switch)) return
+    if (self%is_defined(group=self%clasg(g)%group, switch=switch_ab)) then
+      call self%add(pref=pref, group_index=g, switch=switch, help=help, required=.false., def='', act=act)
+    else
+      call self%add(pref=pref, group_index=g, switch=switch, switch_ab=switch_ab, help=help, required=.false., def='', &
+                    act=act)
+    endif
+    endsubroutine add_builtin
   endsubroutine ensure_builtins
 
   function builtins_missing(self) result(missing)
