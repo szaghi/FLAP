@@ -1633,19 +1633,29 @@ contains
   logical, optional,             intent(in) :: bash_completion  !< Return the signature for bash completion.
   logical                                   :: bash_completion_ !< Return the signature for bash completion, local variable.
   character(len=:), allocatable             :: signature        !< Signature.
+  character(len=:), allocatable             :: commands         !< Completion line of the command names.
   integer(I4P)                              :: g                !< Counter.
+  integer(I4P)                              :: c                !< Character position.
 
   bash_completion_ = .false. ; if (present(bash_completion)) bash_completion_ = bash_completion
 
   signature = ''
   if (bash_completion_) then
-    signature = signature//new_line('a')//'    COMPREPLY=( )'
-    signature = signature//new_line('a')//'    COMPREPLY+=( $( compgen -W "'//&
-                self%clasg(0)%signature(bash_completion=bash_completion, plain=.true.)//'" -- $cur ) )'
+    ! top-level words, the command names, then the value completions of the top-level switches (#125, B18: no nested
+    ! COMPREPLY line); the command names come before the value completions, so that they are offered after a flag too
+    signature = self%clasg(0)%signature(bash_completion=.true.)
     if (size(self%clasg,dim=1)>1) then
-      do g=1,size(self%clasg,dim=1)-1
-        signature = signature//new_line('a')//'    COMPREPLY+=( $( compgen -W "'//self%clasg(g)%group//'" -- $cur ) )'
+      commands = new_line('a')//'    COMPREPLY+=( $( compgen -W "'//self%clasg(1)%group
+      do g=2,size(self%clasg,dim=1)-1
+        commands = commands//' '//self%clasg(g)%group
       enddo
+      commands = commands//'" -- $cur ) )'
+      c = index(signature(2:), new_line('a')) ! end of the first line (the one setting COMPREPLY), 0 if it is the last
+      if (c > 0) then
+        signature = signature(1:c)//commands//signature(c+1:)
+      else
+        signature = signature//commands
+      endif
     endif
   else
     signature = self%clasg(0)%signature()
@@ -1677,46 +1687,38 @@ contains
   integer(I4P)                               :: u         !< Unit file handler.
 
   script = '#!/usr/bin/env bash'
+  script = script//new_line('a')//'_completion()'
+  script = script//new_line('a')//'{'
+  script = script//new_line('a')//'  local cur prev group w'
+  script = script//new_line('a')//'  cur=${COMP_WORDS[COMP_CWORD]}'
+  script = script//new_line('a')//'  prev=${COMP_WORDS[COMP_CWORD - 1]}'
   if (size(self%clasg,dim=1)>1) then
-    script = script//new_line('a')//'_completion()'
-    script = script//new_line('a')//'{'
-    script = script//new_line('a')//'  cur=${COMP_WORDS[COMP_CWORD]}'
-    script = script//new_line('a')//'  prev=${COMP_WORDS[COMP_CWORD - 1]}'
-    ! script = script//new_line('a')//'  if [[ $prev == "--help" || $prev == "-h" || $prev == "--version" || $prev == "-v" ]] ; then'
-    ! script = script//new_line('a')//'    COMPREPLY=()'
-    ! script = script//new_line('a')//'  else'
-    script = script//new_line('a')//'  groups=('
-    do g=1,size(self%clasg,dim=1)-1
-      script = script//' "'//self%clasg(g)%group//'"'
+    ! the command is the first word typed so far that is a command name, found again at every call (#125, B21)
+    script = script//new_line('a')//'  group=""'
+    script = script//new_line('a')//'  for w in "${COMP_WORDS[@]:1:$((COMP_CWORD - 1))}"; do'
+    script = script//new_line('a')//'    case "$w" in'
+    script = script//new_line('a')//'      '//self%clasg(1)%group
+    do g=2,size(self%clasg,dim=1)-1
+      script = script//'|'//self%clasg(g)%group
     enddo
-    script = script//' )'
-    ! script = script//new_line('a')//'    base_clas=('//&
-    !          self%clasg(0)%signature(bash_completion=.true., plain=.true.)//' )'
-    ! do g=1,size(self%clasg,dim=1)-1
-    !   script = script//new_line('a')//'    '//self%clasg(g)%group//'_clas=('//&
-    !            self%clasg(g)%signature(bash_completion=.true., plain=.true.)//' )'
-    ! enddo
-    script = script//new_line('a')//'  for g in ${groups[@]}; do'
-    script = script//new_line('a')//'    if [ "$prev" == "$g" ] ; then'
-    script = script//new_line('a')//'      group=$prev '
-    script = script//new_line('a')//'    fi'
+    script = script//') group="$w" ; break ;;'
+    script = script//new_line('a')//'    esac'
     script = script//new_line('a')//'  done'
-    ! script = script//new_line('a')//'  fi'
     script = script//new_line('a')//'  if [ "$group" == "'//self%clasg(1)%group//'" ] ; then'
     script = script//self%clasg(1)%signature(bash_completion=.true.)
     do g=2,size(self%clasg,dim=1)-1
       script = script//new_line('a')//'  elif [ "$group" == "'//self%clasg(g)%group//'" ] ; then'
       script = script//self%clasg(g)%signature(bash_completion=.true.)
     enddo
-      script = script//new_line('a')//'  else'
-      script = script//               '    '//self%signature(bash_completion=.true.)
-      script = script//new_line('a')//'  fi'
-      script = script//new_line('a')//'  return 0'
-      script = script//new_line('a')//'}'
-      script = script//new_line('a')//'complete -F _completion '//basename(self%progname)
+    script = script//new_line('a')//'  else'
+    script = script//self%signature(bash_completion=.true.)
+    script = script//new_line('a')//'  fi'
   else
-    script = script//new_line('a')//'complete -W "'//self%signature(bash_completion=.true.)//'" '//basename(self%progname)
+    script = script//self%signature(bash_completion=.true.)
   endif
+  script = script//new_line('a')//'  return 0'
+  script = script//new_line('a')//'}'
+  script = script//new_line('a')//'complete -F _completion '//basename(self%progname)
   if (present(error)) then
     ! failures are reported through error
     open(newunit=u, file=trim(adjustl(bash_file)), action='write', status='replace', iostat=error)

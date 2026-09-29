@@ -73,33 +73,74 @@ contains
   call assert_contains(out, '--compiler', 'compile <TAB>: offers --compiler')
   call assert_contains(out, '--integer', 'compile <TAB>: offers --integer')
   call assert(index(out, '--clean') == 0, 'compile <TAB>: does not offer the clean switches')
-  ! B21 (#125): the group is detected only when the previous word is the group name, and kept in a global variable; so a
-  ! group option value completes only after a TAB right after the group name, and a stale group leaks into the next command
-  ! line. The first and the last assertions below pin the current behaviour and flip when B21 is fixed
-  call assert(index(complete(script, 'compile --integer ""', 3_I4P), '1 3 5') == 0, &
-              'compile --integer <TAB> in a fresh shell: choices not offered (B21, current behaviour)')
-  call assert_equal(complete(script, 'compile --integer ""', 3_I4P, prime='compile ""', prime_cword=2_I4P), '1 3 5', &
-                    'compile --integer <TAB> after compile <TAB>: choices')
-  call assert_equal(complete(script, 'compile --real ""', 3_I4P, prime='compile ""', prime_cword=2_I4P), '1. 2.', &
-                    'compile --real <TAB> after compile <TAB>: choices')
-  call assert_equal(complete(script, 'compile --compiler ""', 3_I4P, prime='compile ""', prime_cword=2_I4P), '', &
-                    'compile --compiler <TAB> after compile <TAB>: free value, no words')
-  call assert_equal(complete(script, 'clean --clean --cl', 3_I4P, prime='compile ""', prime_cword=2_I4P), '', &
-                    'clean --clean --cl<TAB> after compile <TAB>: stale group (B21, current behaviour)')
+  ! B21 (#125): the group is detected on every call from the words typed so far, with no state kept between calls
+  call assert_equal(complete(script, 'compile --integer ""', 3_I4P), '1 3 5', 'compile --integer <TAB> in a fresh shell: choices')
+  call assert_equal(complete(script, 'compile --real ""', 3_I4P), '1. 2.', 'compile --real <TAB>: choices')
+  call assert_equal(complete(script, 'compile --compiler ""', 3_I4P), '', 'compile --compiler <TAB>: free value, no words')
+  call assert_contains(complete(script, 'clean --clean --cl', 3_I4P, prime='compile ""', prime_cword=2_I4P), '--clean-all', &
+                       'clean --clean --cl<TAB> after compile <TAB>: no stale group')
+  call assert_equal(complete(script, '-b ""', 2_I4P), 'yes no', '-b <TAB>: top-level choices')
   call assert_contains(complete(script, 'clean --cl', 2_I4P), '--clean-all', 'clean --cl<TAB>: offers --clean-all')
   out = complete(script, '""', 1_I4P)
   call assert_contains(out, 'compile', '<TAB>: offers the compile group')
   call assert_contains(out, 'clean', '<TAB>: offers the clean group')
-  ! B18 (#125): the top-level completion offers bogus words; this assertion flips when B18 is fixed
-  call assert_contains(out, 'COMPREPLY=(', '<TAB>: bogus words (B18, current behaviour)')
+  ! B18 (#125): the top-level completion offers the top-level switches and the commands, once each
+  call assert(index(out, 'COMPREPLY') == 0, '<TAB>: no bogus words')
+  call assert_contains(out, '--help', '<TAB>: offers the top-level switches')
+  call assert(index(out, '--help') == index(out, '--help', back=.true.), '<TAB>: each switch once')
 
   call delete_file(script)
+
+  ! B18 (#125): a CLI without commands gets a completion function too (choices included)
+  call check_no_commands
+  call check_flag_then_command
 
   ! B12 (#125): an unwritable file is reported through error, not a crash
   call cli%save_bash_completion(bash_file=scratch_file('no-such-dir/x.bash'), error=error)
   call assert(error /= 0, 'unwritable file: error reported')
   call capture_close(lun)
   endsubroutine self_test
+
+  subroutine check_no_commands()
+  !< A CLI without commands: valid script, switches offered once, choices completed.
+  type(command_line_interface) :: cli      !< Command Line Interface (CLI).
+  character(:), allocatable    :: script   !< Completion script path.
+  character(:), allocatable    :: out      !< Offered words.
+  integer(I4P)                 :: exitstat !< Command exit status.
+  integer(I4P)                 :: error    !< Error trapping flag.
+
+  call cli%init(progname='flap_test_save_bash_completion', error_lun=lun, usage_lun=lun)
+  call cli%add(switch='--level', switch_ab='-l', help='a level', required=.false., act='store', def='1', choices='1,3', &
+               error=error)
+  call cli%add(switch='--verbose', help='a flag', required=.false., act='store_true', def='.false.', error=error)
+  script = scratch_file('solo.bash')
+  call cli%save_bash_completion(bash_file=script, error=error)
+  call assert_equal(error, 0_I4P, 'no commands: save_bash_completion')
+  call run_command("bash -n '"//script//"'", exitstat, out)
+  call assert_equal(exitstat, 0_I4P, 'no commands: bash -n: '//out)
+  out = complete(script, '""', 1_I4P)
+  call assert(index(out, 'COMPREPLY') == 0, 'no commands, <TAB>: no bogus words')
+  call assert_contains(out, '--verbose', 'no commands, <TAB>: offers the switches')
+  call assert(index(out, '--verbose') == index(out, '--verbose', back=.true.), 'no commands, <TAB>: each switch once')
+  call assert_equal(complete(script, '--level ""', 2_I4P), '1 3', 'no commands, --level <TAB>: choices')
+  call delete_file(script)
+  endsubroutine check_no_commands
+
+  subroutine check_flag_then_command()
+  !< After a top-level flag, the commands are still offered.
+  type(command_line_interface) :: cli    !< Command Line Interface (CLI).
+  character(:), allocatable    :: script !< Completion script path.
+  integer(I4P)                 :: error  !< Error trapping flag.
+
+  call cli%init(progname='flap_test_save_bash_completion', error_lun=lun, usage_lun=lun)
+  call cli%add(switch='--verbose', help='a flag', required=.false., act='store_true', def='.false.', error=error)
+  call cli%add_group(group='run', description='a command')
+  script = scratch_file('flag.bash')
+  call cli%save_bash_completion(bash_file=script, error=error)
+  call assert_equal(error, 0_I4P, 'flag then command: save_bash_completion')
+  call assert_contains(complete(script, '--verbose ""', 2_I4P), 'run', '--verbose <TAB>: offers the commands')
+  call delete_file(script)
+  endsubroutine check_flag_then_command
 
   function complete(script, words, cword, prime, prime_cword) result(reply)
   !< Source the completion script in bash and return the words offered for a command line.

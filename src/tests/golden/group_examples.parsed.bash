@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 _completion()
 {
+  local cur prev group w
   cur=${COMP_WORDS[COMP_CWORD]}
   prev=${COMP_WORDS[COMP_CWORD - 1]}
-  groups=( "gwe" "gne" )
-  for g in ${groups[@]}; do
-    if [ "$prev" == "$g" ] ; then
-      group=$prev 
-    fi
+  group=""
+  for w in "${COMP_WORDS[@]:1:$((COMP_CWORD - 1))}"; do
+    case "$w" in
+      gwe|gne) group="$w" ; break ;;
+    esac
   done
   if [ "$group" == "gwe" ] ; then
     COMPREPLY=( $( compgen -W " --integer -i --help -h --markdown -md --version -v" -- $cur ) )
@@ -39,12 +40,22 @@ _completion()
     if [ "$prev" == "--version" ] || [ "$prev" == "-v" ] ; then
        return 0
     fi
-  else    
-    COMPREPLY=( )
-    COMPREPLY+=( $( compgen -W "
-    COMPREPLY=( $( compgen -W " --string -s --help -h --markdown -md --version -v" -- $cur ) ) --string -s --help -h --markdown -md --version -v" -- $cur ) )
-    COMPREPLY+=( $( compgen -W "gwe" -- $cur ) )
-    COMPREPLY+=( $( compgen -W "gne" -- $cur ) )
+  else
+    COMPREPLY=( $( compgen -W " --string -s --help -h --markdown -md --version -v" -- $cur ) )
+    COMPREPLY+=( $( compgen -W "gwe gne" -- $cur ) )
+    if [ "$prev" == "--string" ] || [ "$prev" == "-s" ] ; then
+       COMPREPLY=( )
+       return 0
+    fi
+    if [ "$prev" == "--help" ] || [ "$prev" == "-h" ] ; then
+       return 0
+    fi
+    if [ "$prev" == "--markdown" ] || [ "$prev" == "-md" ] ; then
+       return 0
+    fi
+    if [ "$prev" == "--version" ] || [ "$prev" == "-v" ] ; then
+       return 0
+    fi
   fi
   return 0
 }
