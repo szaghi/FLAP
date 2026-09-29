@@ -33,11 +33,11 @@ Alternative build systems (kept working, not the reference): `fpm build` / `fpm 
 
 ## Tests
 
-Tests are standalone programs in `src/tests/flap_test_*.f90`. **Most are smoke tests**: only `flap_test_group` uses `error stop`, the others end with a bare `stop` even on error paths, so "all tests pass" means "nothing crashed", not "behaviour is correct". New tests must assert: use `src/tests/flap_test_utils.F90` (`assert`, `assert_equal`, `assert_contains`; `capture_open`/`read_back` to capture FLAP output via `init(usage_lun=, error_lun=)`; `reinvoke`/`child_case` to re-run the test as a child process for environment variables, stdin, exit statuses and `--help`/`--version`). `flap_test_harness.f90` is the reference example. A new test also needs a `[[test]]` entry in `fpm.toml`; CMake and FoBiS pick it up automatically.
+Tests are standalone programs in `src/tests/flap_test_*.f90`. **Most are smoke tests**: only `flap_test_group` uses `error stop`, the others end with a bare `stop` even on error paths, so "all tests pass" means "nothing crashed", not "behaviour is correct". New tests must assert: use `src/tests/flap_test_utils.F90` (`assert`, `assert_equal`, `assert_contains`; `capture_open`/`read_back` to capture FLAP output via `init(usage_lun=, error_lun=)`; `reinvoke`/`child_case` to re-run the test as a child process for environment variables, stdin, exit statuses and `--help`/`--version`). `flap_test_harness.f90` is the reference example. Generated outputs (usage per group, man page, markdown, bash completion, `<group> --help`) are pinned by `flap_test_golden` against `src/tests/golden/`; after an **intended** output change regenerate them with a reference compiler (`FLAP_TEST_GOLDEN_UPDATE=1 ./exe/flap_test_golden`, run from the repo root) and review the diff. The files keep significant trailing blanks (see `.gitattributes`). A new test also needs a `[[test]]` entry in `fpm.toml`; CMake and FoBiS pick it up automatically.
 
 CI: `.github/workflows/ci.yml` (gcc-14 coverage) and the other files listed by `fobis scaffold list` are scaffold-managed (overwritten by `fobis scaffold sync`): do not edit them. Project-specific jobs go in `.github/workflows/matrix.yml` (gfortran 13/14/15 + `tests-gnu-r16p`, gfortran-16 allowed to fail, fpm/CMake/make builds).
 
-Reference compilers: gfortran 13 and 14. gfortran 16 trunk crashes on group help (`prog <group> --help`), a compiler-specific issue tracked as B17 in #125.
+Reference compilers: gfortran 13 and 14. gfortran 16 trunk crashes in `usage` for any group (`prog <group> --help`, or a direct `cli%usage(g=1)`), a compiler-specific issue tracked as B17 in #125: with the default `gfortran` = 16 on this machine, `flap_test_golden` fails.
 
 ## Architecture
 

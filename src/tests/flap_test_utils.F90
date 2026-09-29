@@ -21,9 +21,11 @@ public :: assert_equal
 public :: capture_close
 public :: capture_open
 public :: child_case
+public :: delete_file
 public :: read_back
 public :: read_file
 public :: reinvoke
+public :: write_file
 
 character(*), parameter :: CASE_ENV = 'FLAP_TEST_CASE' !< Environment variable selecting the child scenario.
 
@@ -164,6 +166,32 @@ contains
   close(lun)
   endfunction read_file
 
+  subroutine write_file(path, text)
+  !< Write a text to a new file byte by byte (no newline added), replacing any existing one.
+  character(*), intent(in) :: path   !< File path.
+  character(*), intent(in) :: text   !< Text to write, with its own `new_line` characters.
+  integer(I4P)             :: lun    !< File unit.
+  integer(I4P)             :: iostat !< I/O status.
+  character(256)           :: iomsg  !< I/O message.
+
+  iomsg = ''
+  open(newunit=lun, file=path, status='replace', action='write', access='stream', form='unformatted', iostat=iostat, &
+       iomsg=iomsg)
+  if (iostat /= 0) call fail('write_file: cannot open "'//path//'": '//trim(iomsg))
+  write(lun) text
+  close(lun)
+  endsubroutine write_file
+
+  subroutine delete_file(path)
+  !< Delete a file.
+  character(*), intent(in) :: path   !< File path.
+  integer(I4P)             :: lun    !< File unit.
+  integer(I4P)             :: iostat !< I/O status.
+
+  open(newunit=lun, file=path, status='old', iostat=iostat)
+  if (iostat == 0) close(lun, status='delete')
+  endsubroutine delete_file
+
   ! self re-invocation
   function child_case() result(case)
   !< Return the scenario requested by `reinvoke`, or 0 when the program was not re-invoked.
@@ -206,7 +234,7 @@ contains
   in_file = '/dev/null'
   if (present(stdin)) then
     in_file = base//'.in'
-    call write_file(in_file, stdin)
+    call write_file(in_file, stdin//new_line('a'))
   endif
   cmd = 'env'
   if (present(env)) cmd = cmd//' '//env ! before the assignment below: `env` accepts options (-u) only first
@@ -257,31 +285,6 @@ contains
     text = text//line//new_line('a')
   enddo
   endfunction read_all
-
-  subroutine write_file(path, text)
-  !< Write a text to a new file, replacing any existing one.
-  character(*), intent(in) :: path   !< File path.
-  character(*), intent(in) :: text   !< Text to write.
-  integer(I4P)             :: lun    !< File unit.
-  integer(I4P)             :: iostat !< I/O status.
-  character(256)           :: iomsg  !< I/O message.
-
-  iomsg = ''
-  open(newunit=lun, file=path, status='replace', action='write', form='formatted', iostat=iostat, iomsg=iomsg)
-  if (iostat /= 0) call fail('write_file: cannot open "'//path//'": '//trim(iomsg))
-  write(lun, '(A)') text
-  close(lun)
-  endsubroutine write_file
-
-  subroutine delete_file(path)
-  !< Delete a file.
-  character(*), intent(in) :: path   !< File path.
-  integer(I4P)             :: lun    !< File unit.
-  integer(I4P)             :: iostat !< I/O status.
-
-  open(newunit=lun, file=path, status='old', iostat=iostat)
-  if (iostat == 0) close(lun, status='delete')
-  endsubroutine delete_file
 
   pure function integer_to_string(n) result(string)
   !< Convert an integer to a string without blanks.

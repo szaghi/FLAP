@@ -30,3 +30,6 @@ file(GLOB_RECURSE flap_tests *.f90)
 foreach(flap_test IN LISTS flap_tests)
     add_flap_test(${flap_test} "FLAP::FLAP;flap_test_utils")
 endforeach()
+
+# golden baselines are read from the source tree, while ctest runs in the build tree
+set_tests_properties(flap_test_golden PROPERTIES ENVIRONMENT "FLAP_TEST_GOLDEN_DIR=${CMAKE_CURRENT_SOURCE_DIR}/golden")

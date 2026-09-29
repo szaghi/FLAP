@@ -1,0 +1,12 @@
+usage:  flap_test_group_examples gwe [--integer value]
+
+Group with examples
+
+Optional switches:
+   --integer value, -i value
+    default value -1
+    Integer input
+
+Examples:
+   flap_test_group_examples gwe --integer 32
+   flap_test_group_examples gwe -i 12

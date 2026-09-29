@@ -1,0 +1,12 @@
+usage:  flap_test_group_examples gne [--float value]
+
+Group without examples
+
+Optional switches:
+   --float value, -f value
+    default value -1.0
+    Float input
+
+Examples:
+   flap_test_group_examples -s 'test string'
+   flap_test_group_examples --string 'test string'

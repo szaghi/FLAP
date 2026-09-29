@@ -1,0 +1,14 @@
+usage:  test_nested commit [--message value]
+
+fake commit changes to current branch
+
+Optional switches:
+   --message value, -m value
+    Commit message
+
+Examples:
+   test_nested
+   test_nested -h
+   test_nested init
+   test_nested commit -m "fix bug-1"
+   test_nested tag -a "v2.1.5"

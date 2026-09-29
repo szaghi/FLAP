@@ -1,0 +1,18 @@
+usage:  flap_test_group_examples gwe [--integer value] [--help] [--markdown] [--version]
+
+Group with examples
+
+Optional switches:
+   --integer value, -i value
+    default value -1
+    Integer input
+   --help, -h
+    Print this help message
+   --markdown, -md
+    Save this help message in a Markdown file
+   --version, -v
+    Print version
+
+Examples:
+   flap_test_group_examples gwe --integer 32
+   flap_test_group_examples gwe -i 12

@@ -1,0 +1,2 @@
+# golden baselines: exact bytes, trailing blanks are significant (markdown line breaks)
+src/tests/golden/** text eol=lf -whitespace

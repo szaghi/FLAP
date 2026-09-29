@@ -1,0 +1,14 @@
+usage:  test_nested tag [--annotate value]
+
+fake tag current commit
+
+Optional switches:
+   --annotate value, -a value
+    Tag annotation
+
+Examples:
+   test_nested
+   test_nested -h
+   test_nested init
+   test_nested commit -m "fix bug-1"
+   test_nested tag -a "v2.1.5"

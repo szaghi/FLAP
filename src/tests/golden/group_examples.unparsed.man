@@ -1,0 +1,35 @@
+.TH flap_test_group_examples "1" "<DATE>" "version unknown" "flap_test_group_examples Manual"
+.SH NAME
+flap_test_group_examples - manual page for flap_test_group_examples version unknown
+.SH SYNOPSIS
+.B flap_test_group_examples
+[--string value] {gwe,gne} ...
+.SH DESCRIPTION
+group examples usage FLAP example
+.SH OPTIONS
+
+
+
+Optional switches:
+   --string value, -s value
+    default value test
+    String input
+
+Commands:
+  gwe
+          Group with examples
+  gne
+          Group without examples
+
+For more detailed commands help try:
+  flap_test_group_examples gwe -h,--help
+  flap_test_group_examples gne -h,--help
+.SH EXAMPLES
+.PP
+.nf
+.RS
+flap_test_group_examples -s 'test string'
+flap_test_group_examples --string 'test string'
+.RE
+.fi
+.PP
