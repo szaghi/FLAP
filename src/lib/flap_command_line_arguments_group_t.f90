@@ -262,9 +262,10 @@ contains
               if (trim(adjustl(self%cla(a)%switch   ))==trim(adjustl(args(arg))).or.&
                   trim(adjustl(self%cla(a)%switch_ab))==trim(adjustl(args(arg)))) then
                  if (self%cla(a)%is_passed) then
-                    ! current CLA has been already passed, raise an error
-                    call self%cla(arg)%raise_error_duplicated_clas(pref=pref, switch=trim(adjustl(args(arg))))
-                    self%error = self%cla(arg)%error
+                    ! current CLA has been already passed: raise the error on it and stop parsing
+                    call self%cla(a)%raise_error_duplicated_clas(pref=pref, switch=trim(adjustl(args(arg))))
+                    self%error = self%cla(a)%error
+                    return
                  else
                     self%cla(a)%is_passed = .true.
                     found = .true.

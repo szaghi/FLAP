@@ -49,8 +49,27 @@ contains
   call assert_contains(read_back(lun), 'has been passed more than once', '-i 1 -i 2: message')
   call run('-i 1 --i 2', rval, error)
   call assert_equal(error, ERROR_DUPLICATED_CLAS, '-i 1 --i 2: error')
+  ! B01 (#125): parsing stops at the first duplicate, so a later error does not replace it
+  call run('-i 1 -i 2 --bogus', rval, error)
+  call assert_equal(error, ERROR_DUPLICATED_CLAS, '-i 1 -i 2 --bogus: the duplicate is reported')
+  ! B01 (#125): the error is raised on the duplicated CLA, not on the CLA at the token index (out of bounds here)
+  call run_list('-l 1 2 3 4 5 6 -l 7', error)
+  call assert_equal(error, ERROR_DUPLICATED_CLAS, '-l 1 2 3 4 5 6 -l 7: error')
+  call assert_contains(read_back(lun), 'switch "-l" has been passed more than once', '-l 1 2 3 4 5 6 -l 7: message')
   call capture_close(lun)
   endsubroutine self_test
+
+  subroutine run_list(args, error)
+  !< Define a CLI with a list CLA (messages captured) and parse a command line.
+  character(*), intent(in)     :: args  !< Command line.
+  integer(I4P), intent(out)    :: error !< Error trapping flag of parse.
+  type(command_line_interface) :: cli   !< Command Line Interface (CLI).
+
+  call cli%init(progname='test_duplicated_clas', error_lun=lun, usage_lun=lun)
+  call cli%add(switch='--list', switch_ab='-l', help='list', required=.false., act='store', nargs='*', def='0', error=error)
+  call assert_equal(error, 0_I4P, 'add --list')
+  call cli%parse(args=args, error=error)
+  endsubroutine run_list
 
   subroutine run(args, rval, error)
   !< Define the example CLI (messages captured), parse a command line and get the value.
