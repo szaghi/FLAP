@@ -319,6 +319,6 @@ contains
   character(len=*), intent(in)  :: string    !< String to be modified.
   character(len=:), allocatable :: newstring !< New modified string.
 
-  allocate(newstring, source=trim(adjustl(string)))
+  newstring = trim(adjustl(string)) ! not allocate(source=...): nvfortran 26.5 crashes on it (B31 of #125)
   endfunction wstrip
 endmodule flap_utils_m
