@@ -2,7 +2,7 @@
 
 Manual page for `test_nested` version v2.1.5
 
-`test_nested [--authors] {init,commit,tag} ...`
+`test_nested [--authors] [--help] [--markdown] [--version] {init,commit,tag} ...`
 
 <DATE>
 
@@ -18,6 +18,15 @@ Optional switches:
 * `--authors`, `-a`    
     default value .false.  
     Print authors names  
+
+* `--help`, `-h`    
+    Print this help message  
+
+* `--markdown`, `-md`    
+    Save this help message in a Markdown file  
+
+* `--version`, `-v`    
+    Print version  
 
 Commands:
   init

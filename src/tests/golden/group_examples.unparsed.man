@@ -3,7 +3,7 @@
 flap_test_group_examples - manual page for flap_test_group_examples version unknown
 .SH SYNOPSIS
 .B flap_test_group_examples
-[--string value] {gwe,gne} ...
+[--string value] [--help] [--markdown] [--version] {gwe,gne} ...
 .SH DESCRIPTION
 group examples usage FLAP example
 .SH OPTIONS
@@ -14,6 +14,12 @@ Optional switches:
    --string value, -s value
     default value test
     String input
+   --help, -h
+    Print this help message
+   --markdown, -md
+    Save this help message in a Markdown file
+   --version, -v
+    Print version
 
 Commands:
   gwe

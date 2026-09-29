@@ -1,4 +1,4 @@
-usage:  flap_test_group_examples gne [--float value]
+usage:  flap_test_group_examples gne [--float value] [--help] [--markdown] [--version]
 
 Group without examples
 
@@ -6,6 +6,12 @@ Optional switches:
    --float value, -f value
     default value -1.0
     Float input
+   --help, -h
+    Print this help message
+   --markdown, -md
+    Save this help message in a Markdown file
+   --version, -v
+    Print version
 
 Examples:
    flap_test_group_examples -s 'test string'

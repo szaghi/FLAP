@@ -2,7 +2,7 @@
 
 Manual page for `flap_test_group_examples` version unknown
 
-`flap_test_group_examples [--string value] {gwe,gne} ...`
+`flap_test_group_examples [--string value] [--help] [--markdown] [--version] {gwe,gne} ...`
 
 <DATE>
 
@@ -18,6 +18,15 @@ Optional switches:
 * `--string value`, `-s value`    
     default value test  
     String input  
+
+* `--help`, `-h`    
+    Print this help message  
+
+* `--markdown`, `-md`    
+    Save this help message in a Markdown file  
+
+* `--version`, `-v`    
+    Print version  
 
 Commands:
   gwe

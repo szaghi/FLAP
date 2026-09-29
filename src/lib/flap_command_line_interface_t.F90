@@ -57,6 +57,13 @@ type, extends(object), public :: command_line_interface
     procedure, public :: save_man_page                   !< Save CLI usage as man page.
     procedure, public :: save_usage_to_markdown          !< Save CLI usage as markdown.
     ! private methods
+    procedure, private :: ensure_builtins                 !< Add the builtin CLAs (help, markdown, version, --) if missing.
+    procedure, private :: builtins_missing                !< Check if the builtin CLAs still have to be added.
+    procedure, private :: usage_core                      !< Get CLI usage (builtins already present).
+    procedure, private :: signature_core                  !< Get CLI signature (builtins already present).
+    procedure, private :: save_bash_completion_core       !< Save bash completion script (builtins already present).
+    procedure, private :: save_man_page_core              !< Save CLI usage as man page (builtins already present).
+    procedure, private :: save_usage_to_markdown_core     !< Save CLI usage as markdown (builtins already present).
     procedure, private :: errored                         !< Trig error occurence and print meaningful message.
     procedure, private :: check                           !< Check data consistency.
     procedure, private :: check_m_exclusive               !< Check if two mutually exclusive CLAs group have been called.
@@ -449,54 +456,7 @@ contains
   if (present(error)) error = 0
   if (self%is_parsed_) return
 
-  ! add help, markdown and version switches if not done by user
-  if (.not.self%disable_hv) then
-    do g=0,size(self%clasg,dim=1)-1
-      if (.not.(self%is_defined(group=self%clasg(g)%group, switch='--help').and.&
-                self%is_defined(group=self%clasg(g)%group, switch='-h'))) &
-        call self%add(pref        = pref,                      &
-                      group_index = g,                         &
-                      switch      = '--help',                  &
-                      switch_ab   = '-h',                      &
-                      help        = 'Print this help message', &
-                      required    = .false.,                   &
-                      def         = '',                        &
-                      act         = 'print_help')
-      if (.not.(self%is_defined(group=self%clasg(g)%group, switch='--markdown').and.&
-                self%is_defined(group=self%clasg(g)%group, switch='-md'))) &
-        call self%add(pref        = pref,                      &
-                      group_index = g,                         &
-                      switch      = '--markdown',              &
-                      switch_ab   = '-md',                     &
-                      help        = 'Save this help message in a Markdown file', &
-                      required    = .false.,                   &
-                      def         = '',                        &
-                      act         = 'print_markdown')
-      if (.not.(self%is_defined(group=self%clasg(g)%group, switch='--version').and. &
-                self%is_defined(group=self%clasg(g)%group, switch='-v'))) &
-        call self%add(pref        = pref,            &
-                      group_index = g,               &
-                      switch      = '--version',     &
-                      switch_ab   = '-v',            &
-                      help        = 'Print version', &
-                      required    = .false.,         &
-                      def         = '',              &
-                      act         = 'print_version')
-    enddo
-  endif
-
-  ! add hidden CLA '--' for getting the rid of eventual trailing CLAs garbage
-  do g=0,size(self%clasg,dim=1)-1
-    if (.not.self%is_defined(group=self%clasg(g)%group, switch='--')) &
-      call self%add(pref        = pref,    &
-                    group_index = g,       &
-                    switch      = '--',    &
-                    required    = .false., &
-                    hidden      = .true.,  &
-                    nargs       = '*',     &
-                    def         = '',      &
-                    act         = 'store')
-  enddo
+  call self%ensure_builtins(pref=pref)
 
   ! parse passed CLAs grouping in indexes
   if (present(args)) then
@@ -1386,7 +1346,169 @@ contains
   if (present(error)) error = self%error
   endsubroutine get_cla_list_varying_char
 
+  subroutine ensure_builtins(self, pref)
+  !< Add the builtin CLAs if not done by the user: --help, --markdown and --version (unless disabled) and the hidden "--"
+  !< collecting trailing arguments, in every group. Idempotent.
+  !<
+  !< Called by parse and, on a copy, by every output method (usage, signature, save_*), so that their output is the same
+  !< before and after parse (#125, B09).
+  class(command_line_interface), intent(inout) :: self !< CLI data.
+  character(*), optional,        intent(in)    :: pref !< Prefixing string.
+  integer(I4P)                                 :: g    !< Counter for CLAs group.
+
+  ! add help, markdown and version switches if not done by user
+  if (.not.self%disable_hv) then
+    do g=0,size(self%clasg,dim=1)-1
+      if (.not.(self%is_defined(group=self%clasg(g)%group, switch='--help').and.&
+                self%is_defined(group=self%clasg(g)%group, switch='-h'))) &
+        call self%add(pref        = pref,                      &
+                      group_index = g,                         &
+                      switch      = '--help',                  &
+                      switch_ab   = '-h',                      &
+                      help        = 'Print this help message', &
+                      required    = .false.,                   &
+                      def         = '',                        &
+                      act         = 'print_help')
+      if (.not.(self%is_defined(group=self%clasg(g)%group, switch='--markdown').and.&
+                self%is_defined(group=self%clasg(g)%group, switch='-md'))) &
+        call self%add(pref        = pref,                      &
+                      group_index = g,                         &
+                      switch      = '--markdown',              &
+                      switch_ab   = '-md',                     &
+                      help        = 'Save this help message in a Markdown file', &
+                      required    = .false.,                   &
+                      def         = '',                        &
+                      act         = 'print_markdown')
+      if (.not.(self%is_defined(group=self%clasg(g)%group, switch='--version').and. &
+                self%is_defined(group=self%clasg(g)%group, switch='-v'))) &
+        call self%add(pref        = pref,            &
+                      group_index = g,               &
+                      switch      = '--version',     &
+                      switch_ab   = '-v',            &
+                      help        = 'Print version', &
+                      required    = .false.,         &
+                      def         = '',              &
+                      act         = 'print_version')
+    enddo
+  endif
+
+  ! add hidden CLA '--' for getting the rid of eventual trailing CLAs garbage
+  do g=0,size(self%clasg,dim=1)-1
+    if (.not.self%is_defined(group=self%clasg(g)%group, switch='--')) &
+      call self%add(pref        = pref,    &
+                    group_index = g,       &
+                    switch      = '--',    &
+                    required    = .false., &
+                    hidden      = .true.,  &
+                    nargs       = '*',     &
+                    def         = '',      &
+                    act         = 'store')
+  enddo
+  endsubroutine ensure_builtins
+
+  function builtins_missing(self) result(missing)
+  !< Check if the builtin CLAs still have to be added (the hidden "--" is added last, in every group).
+  class(command_line_interface), intent(in) :: self    !< CLI data.
+  logical                                   :: missing !< Check result.
+  integer(I4P)                              :: g       !< Counter for CLAs group.
+
+  missing = .false.
+  do g=0, size(self%clasg, dim=1) - 1
+    if (.not.self%clasg(g)%is_defined(switch='--')) then
+      missing = .true.
+      return
+    endif
+  enddo
+  endfunction builtins_missing
+
   function usage(self, g, pref, no_header, no_examples, no_epilog, markdown) result(usaged)
+  !< Get CLI usage, builtins included whether or not parse has been called.
+  class(command_line_interface), intent(in) :: self        !< CLI data.
+  integer(I4P),                  intent(in) :: g           !< Group index.
+  character(*), optional,        intent(in) :: pref        !< Prefixing string.
+  logical,      optional,        intent(in) :: no_header   !< Avoid insert header to usage.
+  logical,      optional,        intent(in) :: no_examples !< Avoid insert examples to usage.
+  logical,      optional,        intent(in) :: no_epilog   !< Avoid insert epilogue to usage.
+  logical,      optional,        intent(in) :: markdown    !< Format things with markdown
+  character(len=:), allocatable             :: usaged      !< Usage string.
+  type(command_line_interface)              :: cli         !< Copy of the CLI with the builtins.
+
+  if (self%builtins_missing()) then
+    cli = self
+    call cli%ensure_builtins(pref=pref)
+    usaged = cli%usage_core(g=g, pref=pref, no_header=no_header, no_examples=no_examples, no_epilog=no_epilog, &
+                            markdown=markdown)
+  else
+    usaged = self%usage_core(g=g, pref=pref, no_header=no_header, no_examples=no_examples, no_epilog=no_epilog, &
+                             markdown=markdown)
+  endif
+  endfunction usage
+
+  function signature(self, bash_completion)
+  !< Get CLI signature, builtins included whether or not parse has been called.
+  class(command_line_interface), intent(in) :: self            !< CLI data.
+  logical, optional,             intent(in) :: bash_completion !< Return the signature for bash completion.
+  character(len=:), allocatable             :: signature       !< Signature.
+  type(command_line_interface)              :: cli             !< Copy of the CLI with the builtins.
+
+  if (self%builtins_missing()) then
+    cli = self
+    call cli%ensure_builtins
+    signature = cli%signature_core(bash_completion=bash_completion)
+  else
+    signature = self%signature_core(bash_completion=bash_completion)
+  endif
+  endfunction signature
+
+  subroutine save_bash_completion(self, bash_file, error)
+  !< Save bash completion script (for named CLAs only), builtins included whether or not parse has been called.
+  class(command_line_interface), intent(in)  :: self      !< CLI data.
+  character(*),                  intent(in)  :: bash_file !< Output file name of bash completion script.
+  integer(I4P), optional,        intent(out) :: error     !< Error trapping flag.
+  type(command_line_interface)               :: cli       !< Copy of the CLI with the builtins.
+
+  if (self%builtins_missing()) then
+    cli = self
+    call cli%ensure_builtins
+    call cli%save_bash_completion_core(bash_file=bash_file, error=error)
+  else
+    call self%save_bash_completion_core(bash_file=bash_file, error=error)
+  endif
+  endsubroutine save_bash_completion
+
+  subroutine save_man_page(self, man_file, error)
+  !< Save CLI usage as man page, builtins included whether or not parse has been called.
+  class(command_line_interface), intent(in)  :: self     !< CLI data.
+  character(*),                  intent(in)  :: man_file !< Output file name for saving man page.
+  integer(I4P), optional,        intent(out) :: error    !< Error trapping flag.
+  type(command_line_interface)               :: cli      !< Copy of the CLI with the builtins.
+
+  if (self%builtins_missing()) then
+    cli = self
+    call cli%ensure_builtins
+    call cli%save_man_page_core(man_file=man_file, error=error)
+  else
+    call self%save_man_page_core(man_file=man_file, error=error)
+  endif
+  endsubroutine save_man_page
+
+  subroutine save_usage_to_markdown(self, markdown_file, error)
+  !< Save CLI usage as markdown, builtins included whether or not parse has been called.
+  class(command_line_interface), intent(in)  :: self          !< CLI data.
+  character(*),                  intent(in)  :: markdown_file !< Output file name for saving markdown.
+  integer(I4P), optional,        intent(out) :: error         !< Error trapping flag.
+  type(command_line_interface)               :: cli           !< Copy of the CLI with the builtins.
+
+  if (self%builtins_missing()) then
+    cli = self
+    call cli%ensure_builtins
+    call cli%save_usage_to_markdown_core(markdown_file=markdown_file, error=error)
+  else
+    call self%save_usage_to_markdown_core(markdown_file=markdown_file, error=error)
+  endif
+  endsubroutine save_usage_to_markdown
+
+  function usage_core(self, g, pref, no_header, no_examples, no_epilog, markdown) result(usaged)
   !< Print correct usage of CLI.
   class(command_line_interface), intent(in) :: self             !< CLI data.
   integer(I4P),                  intent(in) :: g                !< Group index.
@@ -1454,9 +1576,9 @@ contains
         exampled = exampled//new_line('a')//prefd//'   '//trim(examples(e))
       enddo
     endfunction print_examples
-  endfunction usage
+  endfunction usage_core
 
-  function signature(self, bash_completion)
+  function signature_core(self, bash_completion) result(signature)
   !< Get signature.
   class(command_line_interface), intent(in) :: self             !< CLI data.
   logical, optional,             intent(in) :: bash_completion  !< Return the signature for bash completion.
@@ -1466,6 +1588,7 @@ contains
 
   bash_completion_ = .false. ; if (present(bash_completion)) bash_completion_ = bash_completion
 
+  signature = ''
   if (bash_completion_) then
     signature = signature//new_line('a')//'    COMPREPLY=( )'
     signature = signature//new_line('a')//'    COMPREPLY+=( $( compgen -W "'//&
@@ -1485,7 +1608,7 @@ contains
       signature = signature//'} ...'
     endif
   endif
-  endfunction signature
+  endfunction signature_core
 
   subroutine print_usage(self, pref)
   !< Print correct usage.
@@ -1495,7 +1618,7 @@ contains
   write(self%usage_lun, '(A)') self%usage(pref=pref, g=0)
   endsubroutine print_usage
 
-  subroutine save_bash_completion(self, bash_file, error)
+  subroutine save_bash_completion_core(self, bash_file, error)
   !< Save bash completion script (for named CLAs only).
   class(command_line_interface), intent(in)  :: self      !< CLI data.
   character(*),                  intent(in)  :: bash_file !< Output file name of bash completion script.
@@ -1567,9 +1690,9 @@ contains
         if (pos>0) basename = basename(pos+1:)
       endif
       endfunction basename
-  endsubroutine save_bash_completion
+  endsubroutine save_bash_completion_core
 
-  subroutine save_man_page(self, man_file, error)
+  subroutine save_man_page_core(self, man_file, error)
   !< Save CLI usage as man page.
   class(command_line_interface), intent(in)  :: self               !< CLI data.
   character(*),                  intent(in)  :: man_file           !< Output file name for saving man page.
@@ -1624,9 +1747,9 @@ contains
     write(u, "(A)")man
   endif
   close(u)
-  endsubroutine save_man_page
+  endsubroutine save_man_page_core
 
-  subroutine save_usage_to_markdown(self, markdown_file, error)
+  subroutine save_usage_to_markdown_core(self, markdown_file, error)
   !< Save CLI usage as markdown.
   class(command_line_interface), intent(in)  :: self               !< CLI data.
   character(*),                  intent(in)  :: markdown_file      !< Output file name for saving man page.
@@ -1672,7 +1795,7 @@ contains
     write(u, "(A)")man
   endif
   close(u)
-  endsubroutine save_usage_to_markdown
+  endsubroutine save_usage_to_markdown_core
 
   ! private methods
   subroutine errored(self, error, pref, group, switch, position)
