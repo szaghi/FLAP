@@ -5,7 +5,7 @@ program flap_test_save_usage_to_markdown
 !< Run with arguments it is the example program above; run without arguments it checks its own scenarios.
 
 use flap, only : command_line_interface
-use flap_test_utils, only : assert_contains, assert_equal, capture_close, capture_open, delete_file, read_file, scratch_file
+use flap_test_utils, only : assert, assert_contains, assert_equal, capture_close, capture_open, delete_file, read_file, scratch_file
 use penf
 
 implicit none
@@ -71,6 +71,10 @@ contains
   call assert_contains(text, '### Examples', 'examples section')
   call assert_contains(text, 'flap_save_usage_to_markdown -1.5 -m test.md -i 102', 'examples content')
   call delete_file(md)
+
+  ! B12 (#125): an unwritable file is reported through error, not a crash
+  call cli%save_usage_to_markdown(markdown_file=scratch_file('no-such-dir/x.md'), error=error)
+  call assert(error /= 0, 'unwritable file: error reported')
   call capture_close(lun)
   endsubroutine self_test
 endprogram flap_test_save_usage_to_markdown

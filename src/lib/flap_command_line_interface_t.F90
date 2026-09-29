@@ -1627,7 +1627,7 @@ contains
   integer(I4P)                               :: g         !< CLAs groups counter.
   integer(I4P)                               :: u         !< Unit file handler.
 
-  script = '#/usr/bin/env bash'
+  script = '#!/usr/bin/env bash'
   if (size(self%clasg,dim=1)>1) then
     script = script//new_line('a')//'_completion()'
     script = script//new_line('a')//'{'
@@ -1668,10 +1668,14 @@ contains
   else
     script = script//new_line('a')//'complete -W "'//self%signature(bash_completion=.true.)//'" '//basename(self%progname)
   endif
-  open(newunit=u,file=trim(adjustl(bash_file)))
   if (present(error)) then
+    ! failures are reported through error
+    open(newunit=u, file=trim(adjustl(bash_file)), action='write', status='replace', iostat=error)
+    if (error /= 0) return
     write(u, "(A)", iostat=error)script
   else
+    ! without error, a failure stops the program as for any unchecked Fortran I/O
+    open(newunit=u, file=trim(adjustl(bash_file)), action='write', status='replace')
     write(u, "(A)")script
   endif
   close(u)
@@ -1740,10 +1744,14 @@ contains
   endif
   if (self%authors /= '') man = man//new_line('a')//'.SH AUTHOR'//new_line('a')//self%authors
   if (self%license /= '') man = man//new_line('a')//'.SH COPYRIGHT'//new_line('a')//self%license
-  open(newunit=u,file=trim(adjustl(man_file)))
   if (present(error)) then
+    ! failures are reported through error
+    open(newunit=u, file=trim(adjustl(man_file)), action='write', status='replace', iostat=error)
+    if (error /= 0) return
     write(u, "(A)", iostat=error)man
   else
+    ! without error, a failure stops the program as for any unchecked Fortran I/O
+    open(newunit=u, file=trim(adjustl(man_file)), action='write', status='replace')
     write(u, "(A)")man
   endif
   close(u)
@@ -1788,10 +1796,14 @@ contains
       man = man//new_line('a')//'`'//trim(self%examples(e))//'` '
     enddo
   endif
-  open(newunit=u,file=trim(adjustl(markdown_file)))
   if (present(error)) then
+    ! failures are reported through error
+    open(newunit=u, file=trim(adjustl(markdown_file)), action='write', status='replace', iostat=error)
+    if (error /= 0) return
     write(u, "(A)", iostat=error)man
   else
+    ! without error, a failure stops the program as for any unchecked Fortran I/O
+    open(newunit=u, file=trim(adjustl(markdown_file)), action='write', status='replace')
     write(u, "(A)")man
   endif
   close(u)

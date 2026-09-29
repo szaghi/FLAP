@@ -64,8 +64,7 @@ contains
   call assert_equal(error, 0_I4P, 'save_bash_completion: error')
   text = read_file(script)
   call assert_contains(text, 'complete -F _completion flap_test_save_bash_completion', 'script registers the function')
-  ! B12 (#125): the shebang lacks "!"; this assertion flips when B12 is fixed
-  call assert_equal(text(1:18), '#/usr/bin/env bash', 'shebang (B12, current behaviour)')
+  call assert_equal(text(1:19), '#!/usr/bin/env bash', 'shebang (B12)')
 
   call run_command("bash -n '"//script//"'", exitstat, out)
   call assert_equal(exitstat, 0_I4P, 'bash -n: '//out)
@@ -95,6 +94,10 @@ contains
   call assert_contains(out, 'COMPREPLY=(', '<TAB>: bogus words (B18, current behaviour)')
 
   call delete_file(script)
+
+  ! B12 (#125): an unwritable file is reported through error, not a crash
+  call cli%save_bash_completion(bash_file=scratch_file('no-such-dir/x.bash'), error=error)
+  call assert(error /= 0, 'unwritable file: error reported')
   call capture_close(lun)
   endsubroutine self_test
 

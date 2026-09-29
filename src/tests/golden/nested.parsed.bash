@@ -1,4 +1,4 @@
-#/usr/bin/env bash
+#!/usr/bin/env bash
 _completion()
 {
   cur=${COMP_WORDS[COMP_CWORD]}

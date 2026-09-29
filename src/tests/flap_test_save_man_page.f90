@@ -5,7 +5,7 @@ program flap_test_save_man_page
 !< Run with arguments it is the example program above; run without arguments it checks its own scenarios.
 
 use flap, only : command_line_interface
-use flap_test_utils, only : assert_contains, assert_equal, capture_close, capture_open, delete_file, read_file, scratch_file
+use flap_test_utils, only : assert, assert_contains, assert_equal, capture_close, capture_open, delete_file, read_file, scratch_file
 use penf
 
 implicit none
@@ -75,6 +75,10 @@ contains
   call assert_contains(text, '.SH AUTHOR'//new_line('a')//'Batman and Robin', 'AUTHOR section')
   call assert_contains(text, '.SH COPYRIGHT'//new_line('a')//'GPL v3', 'COPYRIGHT section')
   call delete_file(man)
+
+  ! B12 (#125): an unwritable file is reported through error, not a crash
+  call cli%save_man_page(man_file=scratch_file('no-such-dir/x.man'), error=error)
+  call assert(error /= 0, 'unwritable file: error reported')
   call capture_close(lun)
   endsubroutine self_test
 endprogram flap_test_save_man_page
