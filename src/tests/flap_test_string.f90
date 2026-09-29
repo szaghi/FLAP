@@ -12,7 +12,7 @@ program flap_test_string
 !< arguments it checks its own scenarios.
 
 use, intrinsic :: iso_fortran_env, only : error_unit
-use flap, only : command_line_interface, ERROR_UNKNOWN
+use flap, only : command_line_interface, ERROR_VALUE_MISSING
 use flap_test_utils, only : assert_equal, capture_close, capture_open
 use penf
 
@@ -131,9 +131,23 @@ contains
   call assert_equal(sval, 'say "hi"', 'double quotes inside single quotes')
   call run("-s 'a  b'", sval, error)
   call assert_equal(sval, 'a  b', 'inner blanks preserved')
-  ! B03 (#125): a single quote inside double quotes breaks the tokenizer; this assertion flips when B03 is fixed
+  ! B03 (#125): single-pass quote scanner, shell-like
   call run('-s "it''s"', sval, error)
-  call assert_equal(error, ERROR_UNKNOWN, 'single quote inside double quotes (B03, current behaviour)')
+  call assert_equal(error, 0_I4P, 'single quote inside double quotes: error')
+  call assert_equal(sval, "it's", 'single quote inside double quotes')
+  call run('-s "it''s a ''test''"', sval, error)
+  call assert_equal(sval, "it's a 'test'", 'single quotes inside double quotes, with blanks')
+  call run('-s ab"c d"e', sval, error)
+  call assert_equal(sval, 'abc de', 'quoted part joined to the adjacent text (no blank inserted)')
+  ! blanks around every argument are stripped downstream, exactly as for the real command line
+  call run("-s '  padded  '", sval, error)
+  call assert_equal(sval, 'padded', 'blanks around a quoted value are stripped, as on the command line')
+  call run('-s'//achar(9)//'tab', sval, error)
+  call assert_equal(sval, 'tab', 'a tab separates arguments')
+  call run('-s "unterminated', sval, error)
+  call assert_equal(sval, 'unterminated', 'an unterminated quote extends to the end of the string')
+  call run("-s ''", sval, error)
+  call assert_equal(error, ERROR_VALUE_MISSING, '-s '''': an empty argument, like -s "" on the command line')
   call capture_close(lun)
   endsubroutine self_test
 

@@ -8,6 +8,7 @@ private
 public :: count
 public :: replace
 public :: replace_all
+public :: split_command_line
 public :: tokenize
 public :: unique
 public :: upper_case
@@ -116,6 +117,60 @@ contains
   enddo
   if (present(Nt)) Nt = n
   endsubroutine tokenize
+
+  pure subroutine split_command_line(strin, toks, Nt)
+  !< Split a command line string into arguments, in one pass, with shell-like quoting.
+  !<
+  !< Blanks and tabs separate arguments outside quotes. Text inside `'...'` or `"..."` is taken literally (both kinds, a quote
+  !< of the other kind included); a quoted part is joined to the adjacent text (`ab"c d"e` is `abc de`), and a quoted empty
+  !< string is an empty argument. An unterminated quote extends to the end of the string. There are no escape characters.
+  character(len=*),          intent(in)               :: strin   !< Command line string.
+  character(len=len(strin)), intent(out), allocatable :: toks(:) !< Arguments.
+  integer(I4P),              intent(out)              :: Nt      !< Number of arguments.
+  character(len=len(strin))                           :: tok     !< Argument being scanned.
+  character(len=1)                                    :: quote   !< Open quote, blank when outside quotes.
+  logical                                             :: in_tok  !< An argument is being scanned.
+  logical                                             :: close_tok !< The argument being scanned ends here.
+  integer(I4P)                                        :: l       !< Length of the argument being scanned.
+  integer(I4P)                                        :: c       !< Character counter.
+  integer(I4P)                                        :: pass    !< Pass: 1 counts the arguments, 2 stores them.
+
+  do pass=1, 2
+    Nt = 0
+    l = 0
+    in_tok = .false.
+    quote = ' '
+    do c=1, len(strin) + 1 ! the position after the last character acts as a final separator
+      close_tok = .false.
+      if (c > len(strin)) then
+        close_tok = in_tok
+      elseif (quote /= ' ') then
+        if (strin(c:c) == quote) then
+          quote = ' '
+        else
+          l = l + 1
+          tok(l:l) = strin(c:c)
+        endif
+      elseif (strin(c:c) == "'" .or. strin(c:c) == '"') then
+        quote = strin(c:c)
+        in_tok = .true.
+      elseif (strin(c:c) == ' ' .or. strin(c:c) == achar(9)) then
+        close_tok = in_tok
+      else
+        l = l + 1
+        tok(l:l) = strin(c:c)
+        in_tok = .true.
+      endif
+      if (close_tok) then
+        Nt = Nt + 1
+        if (pass == 2) toks(Nt) = tok(1:l)
+        l = 0
+        in_tok = .false.
+      endif
+    enddo
+    if (pass == 1) allocate(toks(1:Nt))
+  enddo
+  endsubroutine split_command_line
 
   elemental function unique(string, substring) result(uniq)
   !< Reduce to one (unique) multiple (sequential) occurrences of a characters substring into a string.

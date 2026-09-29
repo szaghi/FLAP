@@ -39,6 +39,17 @@ Pass `args` to parse a string instead of the real `argv`. This is useful for uni
 call cli%parse(args='--level 3 --verbose', error=error)
 ```
 
+The string is split the way a shell splits a command line:
+
+- blanks and tabs separate arguments outside quotes;
+- text inside `'...'` or `"..."` is taken literally, so a value can contain blanks and quotes of the other kind
+  (`--msg "it's done"`);
+- a quoted part is joined to the adjacent text (`a"b c"d` is the single argument `ab cd`);
+- a quoted empty string (`''`) is an empty argument;
+- there are no escape characters, and an unterminated quote extends to the end of the string.
+
+As with the real command line, blanks around each argument are removed.
+
 ---
 
 ## Retrieving values — `cli%get`

@@ -646,16 +646,14 @@ contains
 
   subroutine get_args_from_string(self, args, ai)
   !< Get CLAs from string.
+  !<
+  !< The string is split as a shell would split a command line: see `split_command_line`.
   class(command_line_interface), intent(inout) :: self   !< CLI data.
   character(*),                  intent(in)    :: args   !< String containing command line arguments.
   integer(I4P), allocatable,     intent(out)   :: ai(:,:)!< CLAs grouped indexes.
-  character(len=len_trim(args))                :: argsd  !< Dummy string containing command line arguments.
-  character(len=len_trim(args)), allocatable   :: toks(:)!< CLAs tokenized.
-  integer(I4P)                                 :: Nt     !< Number of tokens.
+  character(len=len_trim(args)), allocatable   :: toks(:)!< Command line arguments.
   integer(I4P)                                 :: Na     !< Number of command line arguments passed.
   integer(I4P)                                 :: a      !< Counter for CLAs.
-  integer(I4P)                                 :: t      !< Counter for tokens.
-  integer(I4P)                                 :: c      !< Counter for characters inside tokens.
 #ifndef __GFORTRAN__
   integer(I4P)                                 :: length !< Maxium lenght of arguments string.
 #endif
@@ -663,25 +661,7 @@ contains
   ! prepare CLI arguments list
   if (allocated(self%args)) deallocate(self%args)
 
-  ! sanitize arguments string
-  argsd = trim(args)
-  if (index(args,"'")>0) then
-    argsd = sanitize_args(argsin=argsd,delimiter="'")
-  elseif (index(args,'"')>0) then
-    argsd = sanitize_args(argsin=argsd,delimiter='"')
-  endif
-
-  ! tokenize arguments string; the previously sanitized white spaces inside tokens are restored
-  call tokenize(strin=argsd, delimiter=' ', toks=toks, Nt=Nt)
-  Na = 0
-  find_number_of_valid_arguments: do t=1,Nt
-    if (trim(adjustl(toks(t)))/='') then
-      Na = Na + 1
-      do c=1,len(toks(t))
-        if (toks(t)(c:c)=="'") toks(t)(c:c)=" "
-      enddo
-    endif
-  enddo find_number_of_valid_arguments
+  call split_command_line(strin=trim(args), toks=toks, Nt=Na)
 
   if (Na > 0) then
     ! allocate CLI arguments list
@@ -689,52 +669,19 @@ contains
     allocate(self%args(1:Na))
 #else
     length = 0
-    find_longest_arg: do t=1,Nt
-      if (trim(adjustl(toks(t)))/='') length = max(length,len_trim(adjustl(toks(t))))
+    find_longest_arg: do a=1,Na
+      length = max(length,len_trim(adjustl(toks(a))))
     enddo find_longest_arg
     allocate(character(length):: self%args(1:Na))
 #endif
 
     ! construct arguments list
-    a = 0
-    get_args: do t=1,Nt
-      if (trim(adjustl(toks(t)))/='') then
-        a = a + 1
-        self%args(a) = trim(adjustl(toks(t)))
-      endif
+    get_args: do a=1,Na
+      self%args(a) = trim(adjustl(toks(a)))
     enddo get_args
   endif
 
   call self%get_clasg_indexes(ai=ai)
-  contains
-    function sanitize_args(argsin, delimiter) result(sanitized)
-    !< Sanitize arguments string.
-    !<
-    !< Substitute white spaces enclosed into string-arguments, i.e. 'string argument with spaces...' or
-    !< "string argument with spaces..." with a safe equivalent for tokenization against white spaces, i.e. the finally tokenized
-    !< string is string'argument'with'spaces...
-    !<
-    !< @note The white spaces are reintroduce later.
-    character(*), intent(in)                     :: argsin    !< Arguments string.
-    character(*), intent(in)                     :: delimiter !< Delimiter enclosing string argument.
-    character(len=len_trim(argsin))              :: sanitized !< Arguments string sanitized.
-    character(len=len_trim(argsin)), allocatable :: tok(:)    !< Arguments string tokens.
-    integer(I4P)                                 :: Nt        !< Number of command line arguments passed.
-    integer(I4P)                                 :: t         !< Counter.
-    integer(I4P)                                 :: tt        !< Counter.
-
-    call tokenize(strin=trim(argsin), delimiter=delimiter, toks=tok, Nt=Nt)
-    do t=2, Nt, 2
-      do tt=1,len_trim(adjustl(tok(t)))
-        if (tok(t)(tt:tt)==' ') tok(t)(tt:tt) = "'"
-      enddo
-    enddo
-    sanitized = ''
-    do t=1, Nt
-      sanitized = trim(sanitized)//" "//trim(adjustl(tok(t)))
-    enddo
-    sanitized = trim(adjustl(sanitized))
-    endfunction sanitize_args
   endsubroutine get_args_from_string
 
   subroutine get_args_from_invocation(self, ai)
