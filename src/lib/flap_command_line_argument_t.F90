@@ -70,6 +70,7 @@ type, extends(object) :: command_line_argument
     procedure, public :: free                           !< Free dynamic memory.
     procedure, public :: check                          !< Check data consistency.
     procedure, public :: is_required_passed             !< Check if required CLA is passed.
+    procedure, public :: match_token                    !< Check if a command line token names this CLA.
     procedure, public :: raise_error_m_exclude          !< Raise error mutually exclusive CLAs passed.
     procedure, public :: raise_error_nargs_insufficient !< Raise error insufficient number of argument values passed.
     procedure, public :: raise_error_value_missing      !< Raise error missing value.
@@ -210,6 +211,21 @@ contains
     is_ok = .false.
   endif
   endfunction is_required_passed
+
+  pure function match_token(self, token) result(match)
+  !< Check if a command line token names this CLA: the one matcher of switch names (decision D1 of #125).
+  !<
+  !< Rule 1: the token is the switch or its abbreviation; blanks around both are not significant. A positional never matches.
+  class(command_line_argument), intent(in) :: self  !< CLA data.
+  character(*),                 intent(in) :: token !< Command line token.
+  logical                                  :: match !< Check result.
+
+  match = .false.
+  if (self%is_positional .or. len_trim(token) == 0) return
+  if (allocated(self%switch)) match = adjustl(self%switch) == adjustl(token)
+  if (match) return
+  if (allocated(self%switch_ab)) match = adjustl(self%switch_ab) == adjustl(token)
+  endfunction match_token
 
   function is_required_val_passed(self, pref) result(is_ok)
   !< Check if required value of CLA is passed.

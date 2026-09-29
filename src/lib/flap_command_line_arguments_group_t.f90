@@ -41,6 +41,7 @@ type, extends(object) :: command_line_arguments_group
     procedure, public :: is_required_passed    !< Check if required CLAs are passed.
     procedure, public :: is_passed             !< Check if a CLA has been passed.
     procedure, public :: is_defined            !< Check if a CLA has been defined.
+    procedure, public :: is_switch_token       !< Check if a command line token names a CLA of the group.
     procedure, public :: positional_index      !< Index of the positional CLA declared at a position.
     procedure, public :: value_arity           !< Number of fixed value slots following a switch.
     procedure, public :: reset_parse           !< Forget the result of a parse, keeping the definitions.
@@ -99,8 +100,7 @@ contains
     if (.not.self%cla(a)%is_positional) then
       do aa=1, self%Na
         if ((a/=aa).and.(.not.self%cla(aa)%is_positional)) then
-          if ((self%cla(a)%switch==self%cla(aa)%switch   ).or.(self%cla(a)%switch_ab==self%cla(aa)%switch   ).or.&
-              (self%cla(a)%switch==self%cla(aa)%switch_ab).or.(self%cla(a)%switch_ab==self%cla(aa)%switch_ab)) then
+          if (self%cla(aa)%match_token(self%cla(a)%switch).or.self%cla(aa)%match_token(self%cla(a)%switch_ab)) then
             call self%errored(pref=pref, error=ERROR_CONSISTENCY, a1=a, a2=aa)
             exit CLA_unique
           endif
@@ -149,11 +149,9 @@ contains
   if (self%Na>0) then
     if (present(switch)) then
       do a=1, self%Na
-        if (.not.self%cla(a)%is_positional) then
-          if ((self%cla(a)%switch==switch).or.(self%cla(a)%switch_ab==switch)) then
-            is_passed = self%cla(a)%is_passed
-            exit
-          endif
+        if (self%cla(a)%match_token(switch)) then
+          is_passed = self%cla(a)%is_passed
+          exit
         endif
       enddo
     elseif (present(position)) then
@@ -206,8 +204,7 @@ contains
 
   n = 0
   do a=1, self%Na
-    if (self%cla(a)%is_positional) cycle
-    if (self%cla(a)%switch /= switch .and. self%cla(a)%switch_ab /= switch) cycle
+    if (.not.self%cla(a)%match_token(switch)) cycle
     if (self%cla(a)%act /= action_store) return
     if (allocated(self%cla(a)%nargs)) then
       read(self%cla(a)%nargs, *, iostat=iostat) n
@@ -231,16 +228,30 @@ contains
   if (present(pos)) pos = 0
   if (self%Na>0) then
     do a=1, self%Na
-      if (.not.self%cla(a)%is_positional) then
-        if ((self%cla(a)%switch==switch).or.(self%cla(a)%switch_ab==switch)) then
-          is_defined = .true.
-          if (present(pos)) pos = a
-          exit
-        endif
+      if (self%cla(a)%match_token(switch)) then
+        is_defined = .true.
+        if (present(pos)) pos = a
+        exit
       endif
     enddo
   endif
   endfunction is_defined
+
+  pure function is_switch_token(self, token)
+  !< Check if a command line token names a CLA of the group: the look-ahead test of the parser, built on match_token.
+  class(command_line_arguments_group), intent(in) :: self            !< CLAsG data.
+  character(*),                        intent(in) :: token           !< Command line token.
+  logical                                         :: is_switch_token !< Check result.
+  integer(I4P)                                    :: a               !< CLA counter.
+
+  is_switch_token = .false.
+  do a=1, self%Na
+    if (self%cla(a)%match_token(token)) then
+      is_switch_token = .true.
+      return
+    endif
+  enddo
+  endfunction is_switch_token
 
   subroutine raise_error_m_exclude(self, pref)
   !< Raise error mutually exclusive CLAs passed.
@@ -325,8 +336,7 @@ contains
         found = .false.
         do a=1, self%Na ! loop over CLAs group clas named options
            if (.not.self%cla(a)%is_positional) then
-              if (trim(adjustl(self%cla(a)%switch   ))==trim(adjustl(args(arg))).or.&
-                  trim(adjustl(self%cla(a)%switch_ab))==trim(adjustl(args(arg)))) then
+              if (self%cla(a)%match_token(args(arg))) then
                  if (self%cla(a)%is_passed) then
                     ! current CLA has been already passed: raise the error on it and stop parsing
                     call self%cla(a)%raise_error_duplicated_clas(pref=pref, switch=trim(adjustl(args(arg))))
@@ -350,7 +360,7 @@ contains
                        ! verify if the value has been passed directly to cli
                        if (arg + 1 <= size(args,dim=1)) then
                           ! there are still other arguments to check
-                          if (.not.self%is_defined(switch=trim(adjustl(args(arg+1))))) then
+                          if (.not.self%is_switch_token(args(arg+1))) then
                              ! argument seems good...
                              arg = arg + 1
                              self%cla(a)%val = trim(adjustl(args(arg)))
@@ -424,7 +434,7 @@ contains
                              call self%cla(a)%raise_error_value_missing(pref=pref)
                              self%error = self%cla(a)%error
                              return
-                          elseif (self%is_defined(switch=trim(adjustl(args(arg+1))))) then
+                          elseif (self%is_switch_token(args(arg+1))) then
                              ! the next argument is a CLA switch, raise value missing error
                              call self%cla(a)%raise_error_value_missing(pref=pref)
                              self%error = self%cla(a)%error
@@ -444,7 +454,7 @@ contains
                           ! value is not required, check if it is passed
                           if (arg + 1 <= size(args, dim=1)) then
                              ! there are arguments to check
-                             if (.not.self%is_defined(switch=trim(adjustl(args(arg+1))))) then
+                             if (.not.self%is_switch_token(args(arg+1))) then
                                 ! value found
                                 arg = arg + 1
                                 self%cla(a)%val = trim(adjustl(args(arg)))
@@ -457,7 +467,7 @@ contains
                  elseif (self%cla(a)%act==action_store_star) then
                     if (arg + 1 <= size(args, dim=1)) then ! verify if the value has been passed directly to cli
                        ! there are still other arguments to check
-                       if (.not.self%is_defined(switch=trim(adjustl(args(arg+1))))) then
+                       if (.not.self%is_switch_token(args(arg+1))) then
                           ! arguments seem good...
                           arg = arg + 1
                           self%cla(a)%val = trim(adjustl(args(arg)))
@@ -527,7 +537,7 @@ contains
 
      n_next_undef_args = 0
      do i=arg + 1, size(args,dim=1)
-        if (.not.self%is_defined(switch=trim(adjustl(args(i))))) then
+        if (.not.self%is_switch_token(args(i))) then
            n_next_undef_args = i
         else
            exit

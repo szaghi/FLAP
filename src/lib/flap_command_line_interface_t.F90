@@ -734,15 +734,7 @@ contains
   if (self%error==0.or.self%error_unknown_clas==ERROR_UNKNOWN_CLAS_IGNORED) then
     if (present(switch)) then
       ! search for the CLA corresponding to switch
-      found = .false.
-      do a=1,self%clasg(g)%Na
-        if (.not.self%clasg(g)%cla(a)%is_positional) then
-          if ((self%clasg(g)%cla(a)%switch==switch).or.(self%clasg(g)%cla(a)%switch_ab==switch)) then
-            found = .true.
-            exit
-          endif
-        endif
-      enddo
+      found = self%clasg(g)%is_defined(switch=switch, pos=a)
       if (.not.found) then
         call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch=switch)
       else
@@ -799,15 +791,7 @@ contains
   endif
   if (present(switch)) then
     ! search for the CLA corresponding to switch
-    found = .false.
-    do a=1, self%clasg(g)%Na
-      if (.not.self%clasg(g)%cla(a)%is_positional) then
-        if ((self%clasg(g)%cla(a)%switch==switch).or.(self%clasg(g)%cla(a)%switch_ab==switch)) then
-          found = .true.
-          exit
-        endif
-      endif
-    enddo
+    found = self%clasg(g)%is_defined(switch=switch, pos=a)
     if (.not.found) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch=switch)
     else
@@ -862,15 +846,7 @@ contains
   endif
   if (present(switch)) then
     ! search for the CLA corresponding to switch
-    found = .false.
-    do a=1, self%clasg(g)%Na
-      if (.not.self%clasg(g)%cla(a)%is_positional) then
-        if ((self%clasg(g)%cla(a)%switch==switch).or.(self%clasg(g)%cla(a)%switch_ab==switch)) then
-          found = .true.
-          exit
-        endif
-      endif
-    enddo
+    found = self%clasg(g)%is_defined(switch=switch, pos=a)
     if (.not.found) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch=switch)
     else
@@ -925,15 +901,7 @@ contains
   endif
   if (present(switch)) then
     ! search for the CLA corresponding to switch
-    found = .false.
-    do a=1, self%clasg(g)%Na
-      if (.not.self%clasg(g)%cla(a)%is_positional) then
-        if ((self%clasg(g)%cla(a)%switch==switch).or.(self%clasg(g)%cla(a)%switch_ab==switch)) then
-          found = .true.
-          exit
-        endif
-      endif
-    enddo
+    found = self%clasg(g)%is_defined(switch=switch, pos=a)
     if (.not.found) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch=switch)
     else
@@ -988,15 +956,7 @@ contains
   endif
   if (present(switch)) then
     ! search for the CLA corresponding to switch
-    found = .false.
-    do a=1, self%clasg(g)%Na
-      if (.not.self%clasg(g)%cla(a)%is_positional) then
-        if ((self%clasg(g)%cla(a)%switch==switch).or.(self%clasg(g)%cla(a)%switch_ab==switch)) then
-          found = .true.
-          exit
-        endif
-      endif
-    enddo
+    found = self%clasg(g)%is_defined(switch=switch, pos=a)
     if (.not.found) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch=switch)
     else
@@ -1051,15 +1011,7 @@ contains
   endif
   if (present(switch)) then
     ! search for the CLA corresponding to switch
-    found = .false.
-    do a=1, self%clasg(g)%Na
-      if (.not.self%clasg(g)%cla(a)%is_positional) then
-        if ((self%clasg(g)%cla(a)%switch==switch).or.(self%clasg(g)%cla(a)%switch_ab==switch)) then
-          found = .true.
-          exit
-        endif
-      endif
-    enddo
+    found = self%clasg(g)%is_defined(switch=switch, pos=a)
     if (.not.found) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch=switch)
     else
@@ -1114,15 +1066,7 @@ contains
   endif
   if (present(switch)) then
     ! search for the CLA corresponding to switch
-    found = .false.
-    do a=1, self%clasg(g)%Na
-      if (.not.self%clasg(g)%cla(a)%is_positional) then
-        if ((self%clasg(g)%cla(a)%switch==switch).or.(self%clasg(g)%cla(a)%switch_ab==switch)) then
-          found = .true.
-          exit
-        endif
-      endif
-    enddo
+    found = self%clasg(g)%is_defined(switch=switch, pos=a)
     if (.not.found) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch=switch)
     else
@@ -1177,15 +1121,7 @@ contains
   endif
   if (present(switch)) then
     ! search for the CLA corresponding to switch
-    found = .false.
-    do a=1, self%clasg(g)%Na
-      if (.not.self%clasg(g)%cla(a)%is_positional) then
-        if ((self%clasg(g)%cla(a)%switch==switch).or.(self%clasg(g)%cla(a)%switch_ab==switch)) then
-          found = .true.
-          exit
-        endif
-      endif
-    enddo
+    found = self%clasg(g)%is_defined(switch=switch, pos=a)
     if (.not.found) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch=switch)
     else
@@ -1240,15 +1176,7 @@ contains
   endif
   if (present(switch)) then
     ! search for the CLA corresponding to switch
-    found = .false.
-    do a=1, self%clasg(g)%Na
-      if (.not.self%clasg(g)%cla(a)%is_positional) then
-        if ((self%clasg(g)%cla(a)%switch==switch).or.(self%clasg(g)%cla(a)%switch_ab==switch)) then
-          found = .true.
-          exit
-        endif
-      endif
-    enddo
+    found = self%clasg(g)%is_defined(switch=switch, pos=a)
     if (.not.found) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch=switch)
     else
@@ -1303,15 +1231,7 @@ contains
   endif
   if (present(switch)) then
     ! search for the CLA corresponding to switch
-    found = .false.
-    do a=1, self%clasg(g)%Na
-      if (.not.self%clasg(g)%cla(a)%is_positional) then
-        if ((self%clasg(g)%cla(a)%switch==switch).or.(self%clasg(g)%cla(a)%switch_ab==switch)) then
-          found = .true.
-          exit
-        endif
-      endif
-    enddo
+    found = self%clasg(g)%is_defined(switch=switch, pos=a)
     if (.not.found) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch=switch)
     else
@@ -1366,15 +1286,7 @@ contains
   endif
   if (present(switch)) then
     ! search for the CLA corresponding to switch
-    found = .false.
-    do a=1, self%clasg(g)%Na
-      if (.not.self%clasg(g)%cla(a)%is_positional) then
-        if ((self%clasg(g)%cla(a)%switch==switch).or.(self%clasg(g)%cla(a)%switch_ab==switch)) then
-          found = .true.
-          exit
-        endif
-      endif
-    enddo
+    found = self%clasg(g)%is_defined(switch=switch, pos=a)
     if (.not.found) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch=switch)
     else

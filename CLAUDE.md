@@ -69,6 +69,7 @@ All library source is in `src/lib/`. Dependencies (PENF, FACE) are fetched with 
 
 - Arguments are untyped until `get`: values are stored as strings and cast in `get` via `class(*)` + `select type`.
 - List values are stored as `v1||!||v2||!||` (`ARGS_SEP` plus a trailing separator). `tokenize` dropping the trailing empty token is load-bearing: do not "fix" it.
+- Switch names are matched only by `command_line_argument%match_token` (decision D1 of #125); the parser's look-ahead uses the group's `is_switch_token`. Never compare `switch`/`switch_ab` directly: inline values, `-vvv`, negation and case folding extend the matcher, not its callers.
 - Positionals are looked up by their **declared** `position` (`positional_index`), never by an index into the CLA list or by token position.
 - Builtins (`--help`, `--version`, `--markdown`, `--`) are added by `ensure_builtins`: `parse` calls it, and every output method (`usage`, `signature`, `save_*`) works on a copy with the builtins, so its output is the same before and after `parse`. A new output method must follow the same wrapper + `*_core` pattern.
 - Environment variables are read only when the bare switch is passed; an absent switch yields `def` even if the variable is set.
