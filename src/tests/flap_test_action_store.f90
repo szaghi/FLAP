@@ -344,7 +344,7 @@ contains
                help='a required CLA with optional multiple (3) values', &
                required=.true.,                                         &
                val_required=.false.,                                    &
-               def='default.ro31 default.ro32',                         &
+               def='default.ro31 default.ro32 default.ro33',            &
                act='store',                                             &
                nargs='3',                                               &
                error=error)
@@ -380,8 +380,9 @@ contains
   call check_list(cli, '-mrop', [character(12) :: 'default.rop1', 'default.rop2'], "nargs='+' with optional values alone: default")
   call check_list(cli, '-moop', [character(12) :: 'default.oop1', 'default.oop2', 'default.oop3'], "nargs='+' not passed: default")
   call check_list(cli, '-mrr3', [character(12) :: '1', '2', '3'], "nargs='3' values")
-  ! the default of -mro3 has 2 values although nargs='3': defaults are not checked against nargs (current behaviour)
-  call check_list(cli, '-mro3', [character(12) :: 'default.ro31', 'default.ro32'], "nargs='3' passed alone: default")
+  ! B28 (#125): a default must have nargs values (it had 2 for nargs='3', a definition error now)
+  call check_list(cli, '-mro3', [character(12) :: 'default.ro31', 'default.ro32', 'default.ro33'], &
+                   "nargs='3' passed alone: default")
   call check_list(cli, '-moo3', [character(12) :: 'default.oo31', 'default.oo32', 'default.oo33'], "nargs='3' not passed: default")
 
   call parse(REQUIRED//' --input bar --write fee --output fie --multiple_oos foe --multiple_oop foo --multiple_oo3 a b c', cli)

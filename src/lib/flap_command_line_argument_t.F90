@@ -46,6 +46,7 @@ public :: ERROR_MISSING_REQUIRED_VAL
 public :: ERROR_UNSUPPORTED_TYPE
 public :: ERROR_POSITIONAL_NARGS
 public :: ERROR_LIST_SIZE
+public :: ERROR_DEF_NARGS
 
 type, extends(object) :: command_line_argument
   !< Command Line Argument (CLA) class.
@@ -104,6 +105,7 @@ type, extends(object) :: command_line_argument
     procedure, private :: check_envvar_consistency        !< Check data consistency for envvar CLA.
     procedure, private :: check_action_consistency        !< Check CLA action consistency.
     procedure, private :: check_optional_consistency      !< Check optional CLA consistency.
+    procedure, private :: check_def_nargs_consistency     !< Check the count of a list default against nargs.
     procedure, private :: check_m_exclude_consistency     !< Check mutually exclusion consistency.
     procedure, private :: check_named_consistency         !< Check named CLA consistency.
     procedure, private :: check_positional_consistency    !< Check positional CLA consistency.
@@ -164,6 +166,7 @@ integer(I4P), parameter :: ERROR_MISSING_REQUIRED_VAL   = 24 !< Missing required
 integer(I4P), parameter :: ERROR_POSITIONAL_NARGS       = 45 !< Positional CLA with nargs (positionals are scalar).
 integer(I4P), parameter :: ERROR_UNSUPPORTED_TYPE       = 46 !< Value requested into a variable of an unsupported type.
 integer(I4P), parameter :: ERROR_LIST_SIZE              = 47 !< List requested into a fixed-size array of another size.
+integer(I4P), parameter :: ERROR_DEF_NARGS              = 48 !< List default whose count differs from an integer nargs.
 
 contains
   ! public methods
@@ -198,6 +201,7 @@ contains
   call self%check_envvar_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_action_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_optional_consistency(pref=pref) ; if (self%error/=0) return
+  call self%check_def_nargs_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_m_exclude_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_named_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_positional_consistency(pref=pref)
@@ -674,6 +678,9 @@ contains
     case(ERROR_UNSUPPORTED_TYPE)
       self%error_message = prefd//': the value of "'//trim(adjustl(self%switch))//'" cannot be returned into a variable '//&
                            'of this type!'
+    case(ERROR_DEF_NARGS)
+      self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" takes '//trim(adjustl(self%nargs))//&
+                           ' values (nargs), but its default has '//trim(val_str)//'!'
     case(ERROR_LIST_SIZE)
       self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" has '//trim(val_str)//'!'
     endselect
@@ -741,6 +748,35 @@ contains
     endif
   endif
   endsubroutine check_action_consistency
+
+  subroutine check_def_nargs_consistency(self, pref)
+  !< Check that a list default has as many values as an integer nargs (B28 of #125); '+' and '*' take any count.
+  class(command_line_argument), intent(inout) :: self   !< CLA data.
+  character(*), optional,       intent(in)    :: pref   !< Prefixing string.
+  integer(I4P)                                :: nargs  !< Number of values required.
+  integer(I4P)                                :: n      !< Number of default values.
+  integer(I4P)                                :: iostat !< Conversion status.
+  integer(I4P)                                :: c      !< Counter.
+
+  if (.not.(allocated(self%nargs).and.allocated(self%def))) return
+  read(self%nargs, *, iostat=iostat) nargs
+  if (iostat /= 0) return ! '+' or '*'
+  if (index(self%def, LIST_SEP) > 0) then
+    n = list_count(self%def) ! already stored as a list
+  else
+    n = 0 ! blank separated values
+    do c=1, len(self%def)
+      if (self%def(c:c) /= ' ') then
+        if (c == 1) then
+          n = n + 1
+        elseif (self%def(c-1:c-1) == ' ') then
+          n = n + 1
+        endif
+      endif
+    enddo
+  endif
+  if (n /= nargs) call self%errored(pref=pref, error=ERROR_DEF_NARGS, val_str=trim(str(n, .true.)))
+  endsubroutine check_def_nargs_consistency
 
   subroutine check_optional_consistency(self, pref)
   !< Check optional CLA consistency.

@@ -165,6 +165,9 @@ call cli%add(switch='--files', switch_ab='-f', &
              nargs='*', def='', error=error)
 ```
 
+With `nargs='N'` the default must have exactly N values: `nargs='3', def='0 0'` is a definition error
+(`ERROR_DEF_NARGS`). `'+'` and `'*'` accept a default of any length.
+
 ### Mutually exclusive arguments (`exclude`)
 
 Declare that two arguments cannot be used together:

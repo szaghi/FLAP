@@ -29,7 +29,8 @@ use flap_command_line_argument_t, only : command_line_argument,        &
                                          ERROR_MISSING_REQUIRED_VAL,   &
                                          ERROR_UNSUPPORTED_TYPE,       &
                                          ERROR_POSITIONAL_NARGS,       &
-                                         ERROR_LIST_SIZE
+                                         ERROR_LIST_SIZE,              &
+                                         ERROR_DEF_NARGS
 use flap_command_line_arguments_group_t, only : command_line_arguments_group,                 &
                                                 STATUS_PRINT_V,                               &
                                                 STATUS_PRINT_H,                               &
@@ -83,6 +84,7 @@ public :: ERROR_MISSING_REQUIRED_VAL
 public :: ERROR_UNSUPPORTED_TYPE
 public :: ERROR_POSITIONAL_NARGS
 public :: ERROR_LIST_SIZE
+public :: ERROR_DEF_NARGS
 ! errors 100-199: group (renamed here: the group module's own names clash with the argument ones)
 public :: ERROR_GROUP_CONSISTENCY
 public :: ERROR_GROUP_M_EXCLUDE

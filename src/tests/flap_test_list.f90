@@ -3,7 +3,8 @@ program flap_test_list
 !< List storage: one API over the stored list format, used by the parser and by every list getter (issue #125, step 0.D.3).
 !<
 !< Every CLI scenario uses a fresh CLI, so the scenarios are independent.
-use flap, only : command_line_interface, ERROR_CASTING_LOGICAL, ERROR_LIST_SIZE, ERROR_UNSUPPORTED_TYPE
+use flap, only : command_line_interface, ERROR_CASTING_LOGICAL, ERROR_DEF_NARGS, ERROR_LIST_SIZE, &
+                 ERROR_UNSUPPORTED_TYPE
 use flap_test_utils, only : assert, assert_equal, capture_close, capture_open
 use flap_utils_m, only : list_count, list_items, list_join, list_push
 use penf, only : I4P
@@ -37,6 +38,7 @@ call check_flag_defaults
 call check_bad_logical
 call check_list_size
 call check_flag_varying
+call check_def_nargs
 call capture_close(lun)
 
 contains
@@ -165,4 +167,30 @@ contains
   call cli%parse(args=args, error=error)
   call assert_equal(error, 0_I4P, 'flag lists: parse '//args)
   endsubroutine define_flags
+
+  subroutine check_def_nargs
+  !< B28 (#125): a list default whose count differs from an integer nargs is a definition error.
+  call check_def('store',      '2', '1 2',      0_I4P,           'nargs=2, 2 values')
+  call check_def('store',      '2', '  1   2 ', 0_I4P,           'nargs=2, 2 values among blanks')
+  call check_def('store',      '2', '1 2 3',    ERROR_DEF_NARGS, 'nargs=2, 3 values')
+  call check_def('store',      '2', '1',        ERROR_DEF_NARGS, 'nargs=2, 1 value')
+  call check_def('store',      '+', '1 2 3',    0_I4P,           'nargs=+, any count')
+  call check_def('store',      '*', '1',        0_I4P,           'nargs=*, any count')
+  call check_def('store_true', '2', 'F',        ERROR_DEF_NARGS, 'list of flags, nargs=2, 1 value')
+  endsubroutine check_def_nargs
+
+  subroutine check_def(act, nargs, def, expected, message)
+  !< Define a list option and check the definition error.
+  character(*), intent(in)     :: act      !< Action.
+  character(*), intent(in)     :: nargs    !< Number of values.
+  character(*), intent(in)     :: def      !< Default.
+  integer(I4P), intent(in)     :: expected !< Expected error.
+  character(*), intent(in)     :: message  !< Description of the check.
+  type(command_line_interface) :: cli      !< Command Line Interface (CLI).
+  integer(I4P)                 :: error    !< Error trapping flag.
+
+  call cli%init(progname='flap_test_list', error_lun=lun, usage_lun=lun)
+  call cli%add(switch='--l', help='a list', required=.false., act=act, nargs=nargs, def=def, error=error)
+  call assert_equal(error, expected, 'definition, '//message)
+  endsubroutine check_def
 endprogram flap_test_list
