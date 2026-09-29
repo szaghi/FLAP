@@ -28,8 +28,8 @@ fobis rule --ex makedoc                      # API docs (formal) + VitePress sit
 Modes: `shared-gnu`, `static-gnu`, `shared-gnu-debug`, `static-gnu-debug`, `tests-gnu`, `tests-gnu-debug`, and the same six for `intel`, plus `static-nvf` and `tests-gnu-r16p`. All test modes share `exe/` (hard-coded in `scripts/run_tests.sh`), so wipe it with `fobis rule --ex delexe` when switching modes.
 
 Alternative build systems (kept working, not the reference): `fpm build` / `fpm test <name>`, `make`, `cmake -B build && cmake --build build`. Their source/test lists are explicit and can drift from the tree:
-- `fpm.toml` has `auto-tests=false` and registers only 14 of the 17 tests (missing `flap_test_action_store`, `flap_test_nargs_insufficient`, `flap_test_value_missing`);
-- `fpm.toml` pins FACE/PENF revisions different from `src/third_party/fobos.lock`.
+- `fpm.toml` has `auto-tests=false`: every new test needs a `[[test]]` entry;
+- the FACE/PENF `rev` pins in `fpm.toml` must match the commits in `src/third_party/fobos.lock` (update both together).
 
 ## Tests
 

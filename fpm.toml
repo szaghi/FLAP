@@ -7,8 +7,8 @@ maintainer = "Stefano Zaghi"
 homepage = "https://github.com/szaghi/FLAP"
 
 [dependencies]
-FACE = { git="https://github.com/szaghi/FACE.git", rev="026723177d4c2192d84dc767bbebed0a139102ad" }
-PENF = { git="https://github.com/szaghi/PENF.git", rev="a519e6cb58873efa85a81b4cf0a547870f510629" }
+FACE = { git="https://github.com/szaghi/FACE.git", rev="c91f6a7f777e629e27e3b5f0834bd514ee77c366" }
+PENF = { git="https://github.com/szaghi/PENF.git", rev="f3067f771510938ea4f39afef502c3c4b846b54d" }
 
 [library]
 source-dir = "src/lib"
@@ -20,6 +20,11 @@ library = true
 auto-executables = false
 auto-examples = false
 auto-tests = false
+
+[[test]]
+name = "flap_test_action_store"
+source-dir = "src/tests"
+main = "flap_test_action_store.f90"
 
 [[test]]
 name = "flap_test_ansi_color_style"
@@ -67,6 +72,11 @@ source-dir = "src/tests"
 main = "flap_test_minimal.f90"
 
 [[test]]
+name = "flap_test_nargs_insufficient"
+source-dir = "src/tests"
+main = "flap_test_nargs_insufficient.f90"
+
+[[test]]
 name = "flap_test_nested"
 source-dir = "src/tests"
 main = "flap_test_nested.f90"
@@ -91,3 +101,7 @@ name = "flap_test_string"
 source-dir = "src/tests"
 main = "flap_test_string.f90"
 
+[[test]]
+name = "flap_test_value_missing"
+source-dir = "src/tests"
+main = "flap_test_value_missing.f90"
