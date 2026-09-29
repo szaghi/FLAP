@@ -45,7 +45,8 @@ use flap_command_line_interface_t, only : command_line_interface,      &
                                           ERROR_MISSING_SELECTION_CLA, &
                                           ERROR_TOO_FEW_CLAS,          &
                                           ERROR_UNKNOWN_CLAS_IGNORED,  &
-                                          ERROR_ARGUMENT_RETRIEVAL
+                                          ERROR_ARGUMENT_RETRIEVAL,    &
+                                          ERROR_USER
 
 implicit none
 private
@@ -99,4 +100,5 @@ public :: ERROR_MISSING_SELECTION_CLA
 public :: ERROR_TOO_FEW_CLAS
 public :: ERROR_UNKNOWN_CLAS_IGNORED
 public :: ERROR_ARGUMENT_RETRIEVAL
+public :: ERROR_USER
 endmodule flap

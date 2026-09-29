@@ -66,6 +66,7 @@ positive values are **errors**. Existing values never change.
 | `1002` | `ERROR_MISSING_SELECTION_CLA` | No argument selected | `get` called with neither `switch=` nor `position=` |
 | `1003` | `ERROR_TOO_FEW_CLAS` | Insufficient arguments for CLI | Reserved: not raised by the current version |
 | `1004` | `ERROR_UNKNOWN_CLAS_IGNORED` | Unknown arguments ignored | `init(ignore_unknown_clas=.true.)` and an unknown switch was passed |
+| `1005` | `ERROR_USER` | Application error | Returned by `cli%raise_error` (see below) |
 | `1012` | `ERROR_ARGUMENT_RETRIEVAL` | A command line argument cannot be read | `get_command_argument` failed (processor error; not expected in practice) |
 
 The two group codes are named `ERROR_GROUP_*` in the `flap` module; inside the group module they are
@@ -98,6 +99,26 @@ end select
 When several of them are passed, one wins, in this order: a syntax error anywhere on the command line
 (an unknown or duplicated switch, a missing value) is returned first, then help, then version, then
 Markdown. `--version --help` prints the help; `--help compile --bogus` reports the unknown switch.
+
+## Reporting application errors
+
+Checks that only your program can do (*`--nx` must be even*, *`--t-end` must exceed `--t-start`*) can be reported
+in FLAP's own style (program name, error colour, error unit) with `raise_error`:
+
+```fortran
+call cli%get(switch='--nx', val=nx, error=error)
+if (mod(nx, 2) /= 0) error = cli%raise_error('must be even', switch='--nx')
+if (error /= 0) stop 1
+```
+
+```text
+solver: error: switch "--nx": must be even
+usage: solver ...
+```
+
+It returns `ERROR_USER` (and sets `cli%error`) and never stops: the program decides what to do. The usage follows the
+message unless `show_usage=.false.`; with `group='post'` it is the usage of that command (an undefined group returns
+`ERROR_MISSING_GROUP` and prints nothing). It works before or after `parse`.
 
 ## Error hint
 

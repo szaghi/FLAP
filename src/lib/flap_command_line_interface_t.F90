@@ -33,6 +33,7 @@ type, extends(object), public :: command_line_interface
     procedure, public :: add                             !< Add CLA to CLI.
     procedure, public :: is_passed                       !< Check if a CLA has been passed.
     procedure, public :: is_defined_group                !< Check if a CLAs group has been defined.
+    procedure, public :: raise_error                     !< Report an application error in FLAP's style.
     procedure, public :: is_defined                      !< Check if a CLA has been defined.
     procedure, public :: is_parsed                       !< Check if CLI has been parsed.
     procedure, public :: set_mutually_exclusive_groups   !< Set two CLAs group as mutually exclusive.
@@ -102,6 +103,7 @@ integer(I4P), parameter, public :: ERROR_MISSING_GROUP         = 1001 !< Group n
 integer(I4P), parameter, public :: ERROR_MISSING_SELECTION_CLA = 1002 !< CLA selection in CLI failing.
 integer(I4P), parameter, public :: ERROR_TOO_FEW_CLAS          = 1003 !< Insufficient arguments for CLI.
 integer(I4P), parameter, public :: ERROR_UNKNOWN_CLAS_IGNORED  = 1004 !< Unknown CLAs passed, but ignored.
+integer(I4P), parameter, public :: ERROR_USER                  = 1005 !< Application error reported by raise_error.
 integer(I4P), parameter, public :: ERROR_ARGUMENT_RETRIEVAL    = 1012 !< A command line argument cannot be retrieved.
 
 contains
@@ -432,6 +434,40 @@ contains
   endif
   g = -1
   endfunction group_index
+
+  function raise_error(self, message, switch, group, show_usage) result(error)
+  !< Report an application error in FLAP's style (prefix, colours, error unit) and return ERROR_USER; never stop (F17 of #125).
+  !<
+  !< For validation only the application can do (e.g. "--nx must be even"); by default the usage (of `group`) follows the
+  !< message. An undefined `group` returns ERROR_MISSING_GROUP and prints nothing.
+  class(command_line_interface), intent(inout) :: self        !< CLI data.
+  character(*),                  intent(in)    :: message     !< Error message.
+  character(*), optional,        intent(in)    :: switch      !< Offending switch, prefixing the message.
+  character(*), optional,        intent(in)    :: group       !< Group (command) whose usage is printed (default: top level).
+  logical,      optional,        intent(in)    :: show_usage  !< Print the usage after the message (default .true.).
+  integer(I4P)                                 :: error       !< ERROR_USER, or ERROR_MISSING_GROUP.
+  logical                                      :: show_usage_ !< Print the usage, local variable.
+  integer(I4P)                                 :: g           !< Index of the group.
+
+  show_usage_ = .true. ; if (present(show_usage)) show_usage_ = show_usage
+  g = 0
+  if (present(group)) then
+    if (.not.self%is_defined_group(group=group, g=g)) then
+      self%error = ERROR_MISSING_GROUP
+      error = self%error
+      return
+    endif
+  endif
+  self%error = ERROR_USER
+  if (present(switch)) then
+    self%error_message = self%error_prefix()//': switch "'//trim(adjustl(switch))//'": '//message
+  else
+    self%error_message = self%error_prefix()//': '//message
+  endif
+  call self%print_error_message
+  if (show_usage_) write(self%usage_lun, '(A)') self%usage(g=g)
+  error = self%error
+  endfunction raise_error
 
   function is_called_group(self, group) result(called)
   !< Check if a CLAs group has been run.
