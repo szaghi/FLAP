@@ -21,8 +21,12 @@ function(add_flap_test test_src libraries)
 #    )
 endfunction()
 
+# shared test utilities (assertions, output capture, self re-invocation); *.F90 is not globbed as a test program
+add_library(flap_test_utils STATIC flap_test_utils.F90)
+target_link_libraries(flap_test_utils FLAP::FLAP)
+
 file(GLOB_RECURSE flap_tests *.f90)
 
 foreach(flap_test IN LISTS flap_tests)
-    add_flap_test(${flap_test} FLAP::FLAP)
+    add_flap_test(${flap_test} "FLAP::FLAP;flap_test_utils")
 endforeach()

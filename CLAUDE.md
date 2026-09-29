@@ -33,7 +33,7 @@ Alternative build systems (kept working, not the reference): `fpm build` / `fpm 
 
 ## Tests
 
-Tests are standalone programs in `src/tests/flap_test_*.f90`. **Most are smoke tests**: only `flap_test_group` uses `error stop`, the others end with a bare `stop` even on error paths, so "all tests pass" means "nothing crashed", not "behaviour is correct". New tests must assert with `error stop`.
+Tests are standalone programs in `src/tests/flap_test_*.f90`. **Most are smoke tests**: only `flap_test_group` uses `error stop`, the others end with a bare `stop` even on error paths, so "all tests pass" means "nothing crashed", not "behaviour is correct". New tests must assert: use `src/tests/flap_test_utils.F90` (`assert`, `assert_equal`, `assert_contains`; `capture_open`/`read_back` to capture FLAP output via `init(usage_lun=, error_lun=)`; `reinvoke`/`child_case` to re-run the test as a child process for environment variables, stdin, exit statuses and `--help`/`--version`). `flap_test_harness.f90` is the reference example. A new test also needs a `[[test]]` entry in `fpm.toml`; CMake and FoBiS pick it up automatically.
 
 CI: `.github/workflows/ci.yml` (gcc-14 coverage) and the other files listed by `fobis scaffold list` are scaffold-managed (overwritten by `fobis scaffold sync`): do not edit them. Project-specific jobs go in `.github/workflows/matrix.yml` (gfortran 13/14/15 + `tests-gnu-r16p`, gfortran-16 allowed to fail, fpm/CMake/make builds).
 
