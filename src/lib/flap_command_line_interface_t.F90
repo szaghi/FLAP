@@ -3,7 +3,8 @@ module flap_command_line_interface_t
 !< Command Line Interface (CLI) class.
 
 use face, only : colorize
-use flap_command_line_argument_t, only : command_line_argument, ACTION_STORE, ERROR_UNKNOWN
+use flap_command_line_argument_t, only : command_line_argument, ACTION_PRINT_HELP, ACTION_PRINT_MARK, ACTION_PRINT_VERS, &
+                                         ACTION_STORE, ERROR_UNKNOWN
 use flap_command_line_arguments_group_t, only : command_line_arguments_group, STATUS_PRINT_H, STATUS_PRINT_M, STATUS_PRINT_V
 use flap_object_t, only : object
 use flap_utils_m
@@ -21,6 +22,7 @@ type, extends(object), public :: command_line_interface
   logical                                         :: disable_hv=.false.          !< Disable automatic 'help' and 'version' CLAs.
   logical                                         :: is_parsed_=.false.          !< Parse status.
   logical                                         :: ignore_unknown_clas=.false. !< Disable errors-raising for passed unknown CLAs.
+  logical                                         :: standalone=.true.           !< Stop after help/version/markdown.
   integer(I4P)                                    :: error_unknown_clas=0_I4P    !< Error trapping flag for unknown CLAs.
   contains
     ! public methods
@@ -68,6 +70,7 @@ type, extends(object), public :: command_line_interface
     procedure, private :: parse_core                      !< Parse the command line (body of parse).
     procedure, private :: group_index                     !< Index of the group with a name, -1 if none.
     procedure, private :: is_fatal                        !< Check if the current error stops parsing.
+    procedure, private :: dispatch_status                 !< Print help/version/markdown in the D3 order.
     procedure, private :: errored                         !< Trig error occurence and print meaningful message.
     procedure, private :: check                           !< Check data consistency.
     procedure, private :: check_m_exclusive               !< Check if two mutually exclusive CLAs group have been called.
@@ -121,10 +124,11 @@ contains
   self%is_parsed_          = .false.
   self%ignore_unknown_clas = .false.
   self%error_unknown_clas  = 0_I4P
+  self%standalone          = .true.
   endsubroutine free
 
   subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, &
-                  usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas)
+                  usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone)
   !< Initialize CLI.
   class(command_line_interface), intent(inout) :: self                !< CLI data.
   character(*), optional,        intent(in)    :: progname            !< Program name.
@@ -142,6 +146,8 @@ contains
   character(*), optional,        intent(in)    :: error_color         !< ANSI color of error messages.
   character(*), optional,        intent(in)    :: error_style         !< ANSI style of error messages.
   logical,      optional,        intent(in)    :: ignore_unknown_clas !< Disable errors-raising for passed unknown CLAs.
+  logical,      optional,        intent(in)    :: standalone          !< Stop after help/version/markdown (default); if
+                                                                      !< false, parse returns STATUS_PRINT_H/V/M instead.
   character(len=:), allocatable                :: prog_invocation     !< Complete program invocation.
   integer(I4P)                                 :: invocation_length   !< Length of invocation.
   integer(I4P)                                 :: retrieval_status    !< Retrieval status.
@@ -174,6 +180,7 @@ contains
   self%error_color = '' ; if (present(error_color))         self%error_color         = error_color
   self%error_style = '' ; if (present(error_style))         self%error_style         = error_style
                           if (present(ignore_unknown_clas)) self%ignore_unknown_clas = ignore_unknown_clas! default set by self%free
+                          if (present(standalone))          self%standalone          = standalone         ! default set by self%free
   ! initialize only the first default group
   allocate(self%clasg(0:0))
   call self%clasg(0)%assign_object(self)
@@ -522,26 +529,12 @@ contains
       call self%clasg(g)%sanitize_defaults
     endif
     self%error = self%clasg(g)%error
-    if (self%error < 0) exit
-    if (self%is_fatal()) exit
+    if (self%is_fatal()) exit ! a status (help, version, markdown) does not stop parsing: syntax errors come first (D3)
   enddo
   if (self%is_fatal()) return
 
-  ! trap the special cases of version/help printing
-  if (self%error == STATUS_PRINT_V) then
-    call self%print_version(pref=pref)
-    stop
-  elseif (self%error == STATUS_PRINT_H) then
-    do g=0,size(ai,dim=1)-1
-      if(self%clasg(g)%error == STATUS_PRINT_H) then
-        write(self%usage_lun,'(A)') self%usage(pref=pref, g=g)
-        stop
-      endif
-    enddo
-  elseif (self%error == STATUS_PRINT_M) then
-    call self%save_usage_to_markdown(trim(self%progname)//'.md')
-    stop
-  endif
+  ! dispatch the statuses (D3): help, then version, then markdown
+  if (self%dispatch_status(pref=pref)) return
 
   ! check if all required CLAs have been passed
   do g=0, size(ai,dim=1)-1
@@ -559,6 +552,43 @@ contains
   ! check if the only error found is for unknown passed CLAs and if it is ignored by the user
   if (self%error==ERROR_UNKNOWN.and.self%error_unknown_clas==ERROR_UNKNOWN_CLAS_IGNORED) self%error = ERROR_UNKNOWN_CLAS_IGNORED
   endsubroutine parse_core
+
+  function dispatch_status(self, pref) result(dispatched)
+  !< Print the help (of the first group that asked for it), the version or the markdown, in this order (D3 of #125).
+  !<
+  !< In standalone mode (default) the program stops; otherwise the status is left in self%error for parse to return.
+  class(command_line_interface), intent(inout) :: self       !< CLI data.
+  character(*), optional,        intent(in)    :: pref       !< Prefixing string.
+  logical                                      :: dispatched !< A status has been dispatched.
+  integer(I4P)                                 :: g          !< Counter for CLAs group.
+
+  dispatched = .true.
+  do g=0, size(self%clasg, dim=1)-1
+    if (self%clasg(g)%is_action_passed(ACTION_PRINT_HELP)) then
+      self%error = STATUS_PRINT_H
+      write(self%usage_lun,'(A)') self%usage(pref=pref, g=g)
+      if (self%standalone) stop
+      return
+    endif
+  enddo
+  do g=0, size(self%clasg, dim=1)-1
+    if (self%clasg(g)%is_action_passed(ACTION_PRINT_VERS)) then
+      self%error = STATUS_PRINT_V
+      call self%print_version(pref=pref)
+      if (self%standalone) stop
+      return
+    endif
+  enddo
+  do g=0, size(self%clasg, dim=1)-1
+    if (self%clasg(g)%is_action_passed(ACTION_PRINT_MARK)) then
+      self%error = STATUS_PRINT_M
+      call self%save_usage_to_markdown(trim(self%progname)//'.md')
+      if (self%standalone) stop
+      return
+    endif
+  enddo
+  dispatched = .false.
+  endfunction dispatch_status
 
   function is_fatal(self)
   !< Check if the current error stops parsing: any error but an unknown argument that is ignored (then recorded as such).

@@ -163,6 +163,11 @@ source-dir = "src/tests"
 main = "flap_test_signature.f90"
 
 [[test]]
+name = "flap_test_standalone"
+source-dir = "src/tests"
+main = "flap_test_standalone.f90"
+
+[[test]]
 name = "flap_test_string"
 source-dir = "src/tests"
 main = "flap_test_string.f90"

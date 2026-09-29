@@ -23,6 +23,7 @@ customise the help and version messages.
 | `examples` | `character(*), dimension(:)` | not set | Usage examples shown at the end of help |
 | `epilog` | `character(*)` | `''` | Message printed after the help |
 | `disable_hv` | `logical` | `.false.` | Suppress the automatic `--help`/`--version` flags |
+| `standalone` | `logical` | `.true.` | Stop after printing help/version/Markdown; `.false.` makes `parse` return `STATUS_PRINT_H`/`V`/`M` instead (see [Error Codes](./errors#handling-status-codes)) |
 
 > **Note on `examples`:** Fortran requires all elements of a character array to have the
 > same length, so pad shorter examples with trailing spaces.

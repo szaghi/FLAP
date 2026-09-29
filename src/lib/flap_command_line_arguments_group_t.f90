@@ -45,6 +45,7 @@ type, extends(object) :: command_line_arguments_group
     procedure, public :: is_passed             !< Check if a CLA has been passed.
     procedure, public :: is_defined            !< Check if a CLA has been defined.
     procedure, public :: is_switch_token       !< Check if a command line token names a CLA of the group.
+    procedure, public :: is_action_passed      !< Check if a CLA with an action has been passed.
     procedure, public :: positional_index      !< Index of the positional CLA declared at a position.
     procedure, public :: value_arity           !< Number of fixed value slots following a switch.
     procedure, public :: reset_parse           !< Forget the result of a parse, keeping the definitions.
@@ -276,6 +277,24 @@ contains
     enddo
   endif
   endfunction is_defined
+
+  pure function is_action_passed(self, act) result(passed)
+  !< Check if a CLA with an action (e.g. print help) has been passed.
+  class(command_line_arguments_group), intent(in) :: self   !< CLAsG data.
+  character(*),                        intent(in) :: act    !< Action.
+  logical                                         :: passed !< Check result.
+  integer(I4P)                                    :: a      !< CLA counter.
+
+  passed = .false.
+  do a=1, self%Na
+    if (self%cla(a)%is_passed .and. allocated(self%cla(a)%act)) then
+      if (self%cla(a)%act == act) then
+        passed = .true.
+        return
+      endif
+    endif
+  enddo
+  endfunction is_action_passed
 
   pure function is_switch_token(self, token)
   !< Check if a command line token names a CLA of the group: the look-ahead test of the parser, built on match_token.

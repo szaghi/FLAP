@@ -73,14 +73,15 @@ The two group codes are named `ERROR_GROUP_*` in the `flap` module; inside the g
 
 ## Handling status codes
 
-Negative codes mean that FLAP printed help, version or Markdown text. In the current version `parse`
-ends the program itself (`stop`, exit status 0) right after printing, so these statuses are **not**
-returned to your code. A mode that returns them instead of stopping is planned
-([#125](https://github.com/szaghi/FLAP/issues/125)); with it, a program will be able to handle them
-like this:
+Negative codes mean that FLAP printed help, version or Markdown text. By default `parse` ends the
+program itself (`stop`, exit status 0) right after printing, so these statuses are not returned to your
+code. With `init(standalone=.false.)` `parse` prints and **returns** the status instead: the program can
+clean up first (close files, call `MPI_Finalize`), and help/version can be tested in-process.
 
 ```fortran
 use flap, only : command_line_interface, STATUS_PRINT_H, STATUS_PRINT_M, STATUS_PRINT_V
+...
+call cli%init(progname='solver', version='v2.1.0', standalone=.false.)
 ...
 call cli%parse(error=error)
 select case (error)
@@ -93,6 +94,10 @@ select case (error)
     stop 1
 end select
 ```
+
+When several of them are passed, one wins, in this order: a syntax error anywhere on the command line
+(an unknown or duplicated switch, a missing value) is returned first, then help, then version, then
+Markdown. `--version --help` prints the help; `--help compile --bogus` reports the unknown switch.
 
 ## Accessing the error message
 

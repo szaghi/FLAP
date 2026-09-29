@@ -75,5 +75,8 @@ values still takes the default: both change in v2.0.0 (see below).
 
 - An explicitly empty value (`--opt ""`, `--opt=`) is accepted as the empty string.
 - `nargs='*'` passed with no values gives an empty list; the default applies only when the option is absent.
+- `init(standalone=.false.)` makes `parse` return the help/version/Markdown status instead of stopping; with several
+  of them passed, a syntax error anywhere on the command line wins, then help, version, Markdown (`--help compile --bogus`
+  reports the unknown switch instead of printing the help).
 - Environment variables become a value source for every option (with precedence rules), and more: see issue
   [#125](https://github.com/szaghi/FLAP/issues/125).
