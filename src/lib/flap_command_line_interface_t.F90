@@ -721,6 +721,7 @@ contains
     call self%parse(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
+  self%error = 0 ! report only this get: the error of a previous get must not leak into it (B22)
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -784,6 +785,7 @@ contains
     call self%parse(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
+  self%error = 0 ! report only this get: the error of a previous get must not leak into it (B22)
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -844,6 +846,7 @@ contains
     call self%parse(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
+  self%error = 0 ! report only this get: the error of a previous get must not leak into it (B22)
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -904,6 +907,7 @@ contains
     call self%parse(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
+  self%error = 0 ! report only this get: the error of a previous get must not leak into it (B22)
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -964,6 +968,7 @@ contains
     call self%parse(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
+  self%error = 0 ! report only this get: the error of a previous get must not leak into it (B22)
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -1024,6 +1029,7 @@ contains
     call self%parse(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
+  self%error = 0 ! report only this get: the error of a previous get must not leak into it (B22)
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -1084,6 +1090,7 @@ contains
     call self%parse(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
+  self%error = 0 ! report only this get: the error of a previous get must not leak into it (B22)
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -1144,6 +1151,7 @@ contains
     call self%parse(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
+  self%error = 0 ! report only this get: the error of a previous get must not leak into it (B22)
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -1204,6 +1212,7 @@ contains
     call self%parse(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
+  self%error = 0 ! report only this get: the error of a previous get must not leak into it (B22)
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -1264,6 +1273,7 @@ contains
     call self%parse(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
+  self%error = 0 ! report only this get: the error of a previous get must not leak into it (B22)
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -1324,6 +1334,7 @@ contains
     call self%parse(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
+  self%error = 0 ! report only this get: the error of a previous get must not leak into it (B22)
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)

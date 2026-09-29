@@ -3,7 +3,7 @@ program flap_test_positional
 !< Positional arguments (issue #125, B06): matched by their declared position, wherever they are on the command line.
 !<
 !< The CLI declares the positionals out of order (position 2 first) and mixes them with a named option. Every scenario uses a
-!< fresh CLI: after a failed get, later gets on the same CLI return the old error (B22).
+!< fresh CLI, so the scenarios are independent.
 use flap, only : command_line_interface, ERROR_MISSING_CLA, ERROR_NO_LIST, ERROR_POSITIONAL_NARGS, ERROR_UNKNOWN, &
                  ERROR_UNKNOWN_CLAS_IGNORED
 use flap_test_utils, only : assert_contains, assert_equal, capture_close, capture_open, read_back

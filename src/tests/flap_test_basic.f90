@@ -346,11 +346,15 @@ contains
   call parse('-s hello -i 2 -r 5.0', cli)
   call cli%get(switch='-i', val=ival, error=error)
   call assert_equal(error, ERROR_NOT_IN_CHOICES, '-i 2: not in choices')
-  ! B22 (#125): after a failed get, the next scalar gets return the same error without reading their value; this
-  ! assertion pins the current behaviour and flips when B22 is fixed
+  ! B22 (#125): a failed get does not affect the next ones, which read their own value
   rval = -99._R8P
   call cli%get(switch='-r', val=rval, error=error)
-  call assert(error == ERROR_NOT_IN_CHOICES .and. rval == -99._R8P, 'get -r after a failed get (B22, current behaviour)')
+  call assert_equal(error, 0_I4P, 'get -r after a failed get: error')
+  call assert_equal(rval, 5._R8P, 'get -r after a failed get: value')
+  call cli%get(switch='-il', val=ilist, error=error)
+  call assert_equal(error, 0_I4P, 'list get after a failed get: error')
+  call cli%get_varying(switch='-vlI4P', val=vlistI4P, error=error)
+  call assert_equal(error, 0_I4P, 'varying get after a failed get: error')
 
   ! environment variable: read only when the bare switch is passed (current semantics, #11 feature 3 changes it)
   call reinvoke(1_I4P, exitstat, out, err, args='-s hello -e', env='FLAP_NUM_INT=7')

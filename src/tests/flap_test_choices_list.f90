@@ -2,7 +2,7 @@
 program flap_test_choices_list
 !< Choices are enforced on every value of a list, by both get and get_varying (issue #125, B08).
 !<
-!< Every scenario uses a fresh CLI: after a failed get, later gets on the same CLI return the old error (B22).
+!< Every scenario uses a fresh CLI, so the scenarios are independent.
 use flap, only : command_line_interface, ERROR_NOT_IN_CHOICES
 use flap_test_utils, only : assert_equal, capture_close, capture_open
 use penf, only : I4P, R8P

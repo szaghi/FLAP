@@ -2,7 +2,7 @@
 program flap_test_unsupported_type
 !< Getting a value into a variable of an unsupported type is an error, never a silent no-op (issue #125, B07).
 !<
-!< Every scenario uses a fresh CLI: after a failed get, later gets on the same CLI return the old error (B22).
+!< Every scenario uses a fresh CLI, so the scenarios are independent.
 use flap, only : command_line_interface, ERROR_UNSUPPORTED_TYPE
 use flap_test_utils, only : assert, assert_contains, assert_equal, capture_close, capture_open, read_back
 use penf, only : I4P, R4P
