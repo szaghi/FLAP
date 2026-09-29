@@ -63,11 +63,11 @@ on_error() {
     committed)
       echo "  Commit was made but not tagged/pushed. To resume:"
       echo "    git tag -a ${NEW_TAG} -m \"Release ${NEW_TAG}\""
-      echo "    git push origin ${TRUNK} --follow-tags"
+      echo "    git push origin ${TRUNK} ${NEW_TAG}"
       ;;
     tagged)
       echo "  Tag ${NEW_TAG} was created locally but not pushed. To resume:"
-      echo "    git push origin ${TRUNK} --follow-tags"
+      echo "    git push origin ${TRUNK} ${NEW_TAG}"
       ;;
   esac
   echo -e "${RED}${BOLD}================================================================${RESET}"
@@ -205,7 +205,8 @@ success "Tagged"
 
 # ── Push ──────────────────────────────────────────────────────────────────────
 info "Pushing ${TRUNK} + tag to origin…"
-git push origin "${TRUNK}" --follow-tags
+# push the new tag only: --follow-tags would also publish any other local annotated tag reachable from the trunk
+git push origin "${TRUNK}" "${NEW_TAG}"
 success "Pushed"
 
 echo ""
