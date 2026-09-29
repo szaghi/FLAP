@@ -1065,15 +1065,28 @@ contains
       endif
     enddo
   type is(character(*))
-    do v=1, Nv
-      val(v)=vals(v)
-      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref)
-      if (self%error/=0) exit
-    enddo
+    ! delegate to a character(*) dummy: gfortran 13.3 and 14.2 assign the elements of a class(*) character array with a
+    ! wrong element length inside `type is(character(*))` (fixed in 13.4 and 14.3)
+    call get_cla_list_character(self, val=val, vals=vals(1:Nv), pref=pref)
   class default
     call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
   endselect
   endsubroutine get_cla_list_from_buffer
+
+  subroutine get_cla_list_character(self, val, vals, pref)
+  !< Get CLA multiple values into a character array, checking the choices of each value.
+  class(command_line_argument), intent(inout) :: self    !< CLA data.
+  character(*),                 intent(inout) :: val(1:) !< CLA values.
+  character(*),                 intent(in)    :: vals(1:)!< Values to store.
+  character(*), optional,       intent(in)    :: pref    !< Prefixing string.
+  integer(I4P)                                :: v       !< Values counter.
+
+  do v=1, size(vals, dim=1)
+    val(v) = vals(v)
+    if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+    if (self%error/=0) exit
+  enddo
+  endsubroutine get_cla_list_character
 
   subroutine get_cla_list_varying_R16P(self, val, pref)
   !< Get CLA (multiple) value with varying size, real(R16P).

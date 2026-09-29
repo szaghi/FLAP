@@ -73,6 +73,7 @@ All library source is in `src/lib/`. Dependencies (PENF, FACE) are fetched with 
 - Builtins (`--help`, `--version`, `--markdown`, `--`) are added inside `parse`, so `save_bash_completion`/man/markdown called before `parse` omit them (B09).
 - Environment variables are read only when the bare switch is passed; an absent switch yields `def` even if the variable is set.
 - **gfortran bug (13–16):** a *section* of a deferred-length character array (`a(2:3)` with `character(len=:), allocatable :: a(:)`) passed to an assumed-shape `character(*)` dummy arrives starting at the first element of the whole array. Pass a whole-array copy instead (see the group call in `parse`).
+- **gfortran 13.3 / 14.2 bug** (Ubuntu 24.04 default compilers; fixed in 13.4 and 14.3): inside `type is(character(*))` on a `class(*)` *array* dummy, element assignment uses a wrong element length. Delegate to a helper with a plain `character(*)` array dummy (see `get_cla_list_character`). CI covers these versions: the fobis gfortran-13 job and the cmake/fpm/make jobs use the Ubuntu archive compilers.
 - The type-bound `assignment(=)` overloads are private and unreachable from other modules; whole-object copies across modules use intrinsic (deep) assignment.
 
 ### Preprocessor
