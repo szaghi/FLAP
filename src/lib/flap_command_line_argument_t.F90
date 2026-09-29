@@ -830,8 +830,8 @@ contains
     if (trim(adjustl(val))=='') then
       ! there is no real value, but only for nargs=+ this is a real error
       is_ok = .false.
-      if (self%nargs=='+') then
-        call self%errored(pref=pref, error=ERROR_NARGS_INSUFFICIENT)
+      if (allocated(self%nargs)) then ! nested: Fortran does not short-circuit .and.
+        if (self%nargs=='+') call self%errored(pref=pref, error=ERROR_NARGS_INSUFFICIENT)
       endif
     endif
   endif
