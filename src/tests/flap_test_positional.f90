@@ -4,8 +4,8 @@ program flap_test_positional
 !<
 !< The CLI declares the positionals out of order (position 2 first) and mixes them with a named option. Every scenario uses a
 !< fresh CLI, so the scenarios are independent.
-use flap, only : command_line_interface, ERROR_MISSING_CLA, ERROR_NO_LIST, ERROR_POSITIONAL_NARGS, ERROR_UNKNOWN, &
-                 ERROR_UNKNOWN_CLAS_IGNORED
+use flap, only : command_line_interface, ERROR_MISSING_CLA, ERROR_NO_LIST, ERROR_POSITION_DUPLICATE, ERROR_POSITION_GAP, &
+                 ERROR_POSITIONAL_NARGS, ERROR_UNKNOWN, ERROR_UNKNOWN_CLAS_IGNORED
 use flap_test_utils, only : assert_contains, assert_equal, capture_close, capture_open, read_back
 use penf, only : I4P
 
@@ -61,6 +61,27 @@ call assert_equal(error, ERROR_NO_LIST, 'varying get of a scalar positional: err
 call cli%init(progname='flap_test_positional', error_lun=lun, usage_lun=lun)
 call cli%add(positional=.true., position=1, help='a list', required=.false., nargs='+', def='1', error=error)
 call assert_equal(error, ERROR_POSITIONAL_NARGS, 'nargs on a positional: definition error')
+
+! B29 (#125, D20): positions are 1..N without duplicates
+call cli%init(progname='flap_test_positional', error_lun=lun, usage_lun=lun)
+call cli%add(positional=.true., position=1, help='first', required=.false., def='D1', error=error)
+call cli%add(positional=.true., position=1, help='again', required=.false., def='D1', error=error)
+call assert_equal(error, ERROR_POSITION_DUPLICATE, 'position declared twice: definition error')
+call assert_contains(read_back(lun), 'position 1', 'position declared twice: message names the position')
+
+call cli%init(progname='flap_test_positional', error_lun=lun, usage_lun=lun)
+call cli%add(positional=.true., position=1, help='first', required=.false., def='D1', error=error)
+call cli%add(positional=.true., position=3, help='third', required=.false., def='D3', error=error)
+call assert_equal(error, 0_I4P, 'positions 1 and 3: accepted while defining (2 may follow)')
+call cli%parse(args='a', error=error)
+call assert_equal(error, ERROR_POSITION_GAP, 'positions 1 and 3: gap when parsing')
+call assert_contains(read_back(lun), 'position 2', 'positions 1 and 3: message names the missing position')
+
+call cli%init(progname='flap_test_positional', error_lun=lun, usage_lun=lun)
+call cli%add_group(group='cmd', description='a command')
+call cli%add(group='cmd', positional=.true., position=2, help='second', required=.false., def='D2', error=error)
+call cli%parse(args='', error=error)
+call assert_equal(error, ERROR_POSITION_GAP, 'gap in a command not called: still a definition error')
 
 call capture_close(lun)
 

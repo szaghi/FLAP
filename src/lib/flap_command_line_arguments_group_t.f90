@@ -22,6 +22,8 @@ public :: STATUS_PRINT_H
 public :: STATUS_PRINT_M
 public :: ERROR_CONSISTENCY
 public :: ERROR_M_EXCLUDE
+public :: ERROR_POSITION_DUPLICATE
+public :: ERROR_POSITION_GAP
 
 type, extends(object) :: command_line_arguments_group
   !< Command Line Arguments Group (CLAsG) class.
@@ -38,6 +40,7 @@ type, extends(object) :: command_line_arguments_group
     ! public methods
     procedure, public :: free                  !< Free dynamic memory.
     procedure, public :: check                 !< Check data consistency.
+    procedure, public :: check_position_gaps   !< Check that the declared positions have no gap.
     procedure, public :: is_required_passed    !< Check if required CLAs are passed.
     procedure, public :: is_passed             !< Check if a CLA has been passed.
     procedure, public :: is_defined            !< Check if a CLA has been defined.
@@ -65,6 +68,8 @@ integer(I4P), parameter :: STATUS_PRINT_M = -3 !< Print help status to Markdown 
 ! errors codes
 integer(I4P), parameter :: ERROR_CONSISTENCY = 100 !< CLAs group consistency error.
 integer(I4P), parameter :: ERROR_M_EXCLUDE   = 101 !< Two mutually exclusive CLAs group have been called.
+integer(I4P), parameter :: ERROR_POSITION_DUPLICATE = 105 !< Two positional CLAs declared at the same position.
+integer(I4P), parameter :: ERROR_POSITION_GAP       = 106 !< Declared positions are not 1..N: one is missing.
 
 contains
   ! public methods
@@ -92,20 +97,35 @@ contains
   character(*), optional,              intent(in)    :: pref  !< Prefixing string.
   integer(I4P)                                       :: a     !< Counter.
   integer(I4P)                                       :: aa    !< Counter.
+  logical                                            :: clash !< Two CLAs have the same switch.
 
   ! verify if CLAs switches are unique
+  clash = .false.
   CLA_unique: do a=1, self%Na
     if (.not.self%cla(a)%is_positional) then
       do aa=1, self%Na
         if ((a/=aa).and.(.not.self%cla(aa)%is_positional)) then
           if (self%cla(aa)%match_token(self%cla(a)%switch).or.self%cla(aa)%match_token(self%cla(a)%switch_ab)) then
             call self%errored(pref=pref, error=ERROR_CONSISTENCY, a1=a, a2=aa)
+            clash = .true.
             exit CLA_unique
           endif
         endif
       enddo
     endif
   enddo CLA_unique
+  ! verify that positions are unique (B29 of #125, D20)
+  POS_unique: do a=1, self%Na
+    if (clash) exit POS_unique
+    if (.not.self%cla(a)%is_positional) cycle
+    do aa=a + 1, self%Na
+      if (.not.self%cla(aa)%is_positional) cycle
+      if (self%cla(aa)%position == self%cla(a)%position) then
+        call self%errored(pref=pref, error=ERROR_POSITION_DUPLICATE, position=self%cla(a)%position)
+        exit POS_unique
+      endif
+    enddo
+  enddo POS_unique
   ! update mutually exclusive relations
   CLA_exclude: do a=1, self%Na
     if (.not.self%cla(a)%is_positional) then
@@ -117,6 +137,28 @@ contains
     endif
   enddo CLA_exclude
   endsubroutine check
+
+  subroutine check_position_gaps(self, pref)
+  !< Check that the declared positions are 1..N without gaps (B29 of #125, D20).
+  !<
+  !< Checked when parsing starts, not in add: positionals may be declared in any order.
+  class(command_line_arguments_group), intent(inout) :: self  !< CLAsG data.
+  character(*), optional,              intent(in)    :: pref  !< Prefixing string.
+  integer(I4P)                                       :: p     !< Position.
+  integer(I4P)                                       :: pmax  !< Highest declared position.
+  integer(I4P)                                       :: a     !< Counter.
+
+  pmax = 0
+  do a=1, self%Na
+    if (self%cla(a)%is_positional) pmax = max(pmax, self%cla(a)%position)
+  enddo
+  do p=1, pmax
+    if (self%positional_index(p) == 0) then
+      call self%errored(pref=pref, error=ERROR_POSITION_GAP, position=p)
+      return
+    endif
+  enddo
+  endsubroutine check_position_gaps
 
   subroutine is_required_passed(self, pref)
   !< Check if required CLAs are passed.
@@ -613,14 +655,16 @@ contains
   endfunction signature
 
   ! private methods
-  subroutine errored(self, error, pref, a1, a2)
+  subroutine errored(self, error, pref, a1, a2, position)
   !< Trig error occurrence and print meaningful message.
-  class(command_line_arguments_group), intent(inout) :: self  !< CLAsG data.
-  integer(I4P),                        intent(in)    :: error !< Error occurred.
-  character(*), optional,              intent(in)    :: pref  !< Prefixing string.
-  integer(I4P), optional,              intent(in)    :: a1    !< First index CLAs group inconsistent.
-  integer(I4P), optional,              intent(in)    :: a2    !< Second index CLAs group inconsistent.
-  character(len=:), allocatable                      :: prefd !< Prefixing string.
+  class(command_line_arguments_group), intent(inout) :: self     !< CLAsG data.
+  integer(I4P),                        intent(in)    :: error    !< Error occurred.
+  character(*), optional,              intent(in)    :: pref     !< Prefixing string.
+  integer(I4P), optional,              intent(in)    :: a1       !< First index CLAs group inconsistent.
+  integer(I4P), optional,              intent(in)    :: a2       !< Second index CLAs group inconsistent.
+  integer(I4P), optional,              intent(in)    :: position !< Position of positional CLAs.
+  character(len=:), allocatable                      :: prefd    !< Prefixing string.
+  character(len=:), allocatable                      :: where    !< Group (command) of the error, if any.
 
   self%error = error
   if (self%error/=0) then
@@ -642,6 +686,14 @@ contains
     case(ERROR_M_EXCLUDE)
       self%error_message = prefd//': the group "'//self%group//'" and "'//self%m_exclude//'" are mutually'//&
                            ' exclusive, but both have been called!'
+    case(ERROR_POSITION_DUPLICATE)
+      where = '' ; if (self%group /= '') where = ' of group (command) "'//self%group//'"'
+      self%error_message = prefd//': position '//trim(str(position, .true.))//' is declared by two positional options'//&
+                           where//'!'
+    case(ERROR_POSITION_GAP)
+      where = '' ; if (self%group /= '') where = ' of group (command) "'//self%group//'"'
+      self%error_message = prefd//': no positional option'//where//' is declared at position '//&
+                           trim(str(position, .true.))//', but higher positions are!'
     endselect
     call self%print_error_message
   endif

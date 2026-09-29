@@ -234,3 +234,7 @@ an unknown argument. Retrieve a positional with `cli%get(position=n, ...)`.
 
 Restrictions: positional arguments cannot use `exclude`, `envvar` or `nargs` (each positional takes one value), and must
 use `act='store'`.
+
+Positions may be declared in any order, but they must be `1..N` without duplicates: declaring a position twice is an
+error at `add` (`ERROR_POSITION_DUPLICATE`), and a missing position (`1` and `3` without `2`) is an error when parsing
+starts (`ERROR_POSITION_GAP`).

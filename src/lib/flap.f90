@@ -36,7 +36,9 @@ use flap_command_line_arguments_group_t, only : command_line_arguments_group,   
                                                 STATUS_PRINT_H,                               &
                                                 STATUS_PRINT_M,                               &
                                                 ERROR_GROUP_CONSISTENCY => ERROR_CONSISTENCY, &
-                                                ERROR_GROUP_M_EXCLUDE => ERROR_M_EXCLUDE
+                                                ERROR_GROUP_M_EXCLUDE => ERROR_M_EXCLUDE,     &
+                                                ERROR_POSITION_DUPLICATE,                     &
+                                                ERROR_POSITION_GAP
 use flap_command_line_interface_t, only : command_line_interface,      &
                                           ERROR_MISSING_CLA,           &
                                           ERROR_MISSING_GROUP,         &
@@ -88,6 +90,8 @@ public :: ERROR_DEF_NARGS
 ! errors 100-199: group (renamed here: the group module's own names clash with the argument ones)
 public :: ERROR_GROUP_CONSISTENCY
 public :: ERROR_GROUP_M_EXCLUDE
+public :: ERROR_POSITION_DUPLICATE
+public :: ERROR_POSITION_GAP
 ! errors 1000-1999: command line interface
 public :: ERROR_MISSING_CLA
 public :: ERROR_MISSING_GROUP

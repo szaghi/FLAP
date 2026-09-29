@@ -59,6 +59,8 @@ positive values are **errors**. Existing values never change.
 | `48` | `ERROR_DEF_NARGS` | Default count differs from `nargs` | `nargs='N'` with a default of another number of values: give the default N values |
 | `100` | `ERROR_GROUP_CONSISTENCY` | Group (command) consistency broken | Two arguments of a group share a switch |
 | `101` | `ERROR_GROUP_M_EXCLUDE` | Two mutually exclusive groups both passed | Both sides of `set_mutually_exclusive_groups` given |
+| `105` | `ERROR_POSITION_DUPLICATE` | Position declared twice | Two positionals of a group (command) with the same `position` (raised by `add`) |
+| `106` | `ERROR_POSITION_GAP` | Missing position | Positions are not `1..N`, e.g. `1` and `3` without `2` (raised when parsing starts) |
 | `1000` | `ERROR_MISSING_CLA` | Argument not found in CLI | `get` or `is_passed` called for an undefined switch |
 | `1001` | `ERROR_MISSING_GROUP` | Group not found in CLI | `get` or `run_command` called for an undefined group |
 | `1002` | `ERROR_MISSING_SELECTION_CLA` | No argument selected | `get` called with neither `switch=` nor `position=` |

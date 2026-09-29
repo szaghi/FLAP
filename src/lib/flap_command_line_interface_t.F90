@@ -328,6 +328,7 @@ contains
   do g=0,size(self%clasg,dim=1)-1
     ! check group consistency
     call self%clasg(g)%check(pref=pref)
+    if (self%clasg(g)%error==0) call self%clasg(g)%check_position_gaps(pref=pref)
     self%error = self%clasg(g)%error
     if (present(error)) error = self%error
     if (self%error/=0) exit
