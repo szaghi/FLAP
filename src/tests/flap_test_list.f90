@@ -3,7 +3,7 @@ program flap_test_list
 !< List storage: one API over the stored list format, used by the parser and by every list getter (issue #125, step 0.D.3).
 !<
 !< Every CLI scenario uses a fresh CLI, so the scenarios are independent.
-use flap, only : command_line_interface, ERROR_CASTING_LOGICAL
+use flap, only : command_line_interface, ERROR_CASTING_LOGICAL, ERROR_LIST_SIZE
 use flap_test_utils, only : assert, assert_equal, capture_close, capture_open
 use flap_utils_m, only : list_count, list_items, list_join, list_push
 use penf, only : I4P
@@ -35,6 +35,7 @@ call assert_equal(list_join(list, ' '), '', 'list_join: empty list')
 call capture_open(lun)
 call check_flag_defaults
 call check_bad_logical
+call check_list_size
 call capture_close(lun)
 
 contains
@@ -77,4 +78,46 @@ contains
   call cli%get_varying(switch='--l', val=l, error=error)
   call assert_equal(error, ERROR_CASTING_LOGICAL, 'bad logical, get_varying: casting error')
   endsubroutine check_bad_logical
+
+  subroutine check_list_size
+  !< B27 (#125): get into a fixed-size array needs exactly as many values as its size; otherwise the array is untouched.
+  type(command_line_interface) :: cli   !< Command Line Interface (CLI).
+  integer(I4P)                 :: i2(2) !< Too few slots.
+  integer(I4P)                 :: i3(3) !< Exact size.
+  integer(I4P)                 :: i4(4) !< Too many slots.
+  character(5)                 :: c1(1) !< Too few slots, character.
+  logical                      :: l3(3) !< Too many slots, flags.
+  integer(I4P)                 :: error !< Error trapping flag.
+
+  call cli%init(progname='flap_test_list', error_lun=lun, usage_lun=lun)
+  call cli%add(switch='--l', help='integers', required=.false., act='store', nargs='+', def='1', error=error)
+  call cli%add(switch='--d', help='integers', required=.false., act='store', nargs='2', def='7 8', error=error)
+  call cli%add(switch='--c', help='words', required=.false., act='store', nargs='*', def='a', error=error)
+  call cli%add(switch='--t', help='flags', required=.false., act='store_true', nargs='2', def='F T', error=error)
+  call cli%parse(args='--l 1 2 3 --c ab cd', error=error)
+  call assert_equal(error, 0_I4P, 'list size: parse')
+  i2 = -9
+  call cli%get(switch='--l', val=i2, error=error)
+  call assert_equal(error, ERROR_LIST_SIZE, '3 values into 2 slots: error')
+  call assert(all(i2 == -9), '3 values into 2 slots: untouched')
+  i4 = -9
+  call cli%get(switch='--l', val=i4, error=error)
+  call assert_equal(error, ERROR_LIST_SIZE, '3 values into 4 slots: error')
+  call assert(all(i4 == -9), '3 values into 4 slots: untouched')
+  call cli%get(switch='--l', val=i3, error=error)
+  call assert_equal(error, 0_I4P, '3 values into 3 slots: error')
+  call assert(all(i3 == [1, 2, 3]), '3 values into 3 slots: values')
+  i3 = -9
+  call cli%get(switch='--d', val=i3, error=error)
+  call assert_equal(error, ERROR_LIST_SIZE, 'default of 2 values into 3 slots: error')
+  call assert(all(i3 == -9), 'default of 2 values into 3 slots: untouched')
+  c1 = 'zz'
+  call cli%get(switch='--c', val=c1, error=error)
+  call assert_equal(error, ERROR_LIST_SIZE, '2 words into 1 slot: error')
+  call assert_equal(c1(1), 'zz', '2 words into 1 slot: untouched')
+  l3 = .true.
+  call cli%get(switch='--t', val=l3, error=error)
+  call assert_equal(error, ERROR_LIST_SIZE, 'default of 2 flags into 3 slots: error')
+  call assert(all(l3), 'default of 2 flags into 3 slots: untouched')
+  endsubroutine check_list_size
 endprogram flap_test_list

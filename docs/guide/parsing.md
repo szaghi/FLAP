@@ -119,6 +119,9 @@ integer :: coords(3)
 call cli%get(switch='--coords', val=coords, error=error)
 ```
 
+The array must have exactly as many elements as the values (passed or default): otherwise `get` returns
+`ERROR_LIST_SIZE` and leaves the array untouched. For lists of unknown length (`nargs='+'`/`'*'`) use `get_varying`.
+
 ### Arguments belonging to a subcommand group
 
 ```fortran

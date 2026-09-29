@@ -45,6 +45,7 @@ public :: ERROR_DUPLICATED_CLAS
 public :: ERROR_MISSING_REQUIRED_VAL
 public :: ERROR_UNSUPPORTED_TYPE
 public :: ERROR_POSITIONAL_NARGS
+public :: ERROR_LIST_SIZE
 
 type, extends(object) :: command_line_argument
   !< Command Line Argument (CLA) class.
@@ -162,6 +163,7 @@ integer(I4P), parameter :: ERROR_DUPLICATED_CLAS        = 23 !< Duplicated CLAs 
 integer(I4P), parameter :: ERROR_MISSING_REQUIRED_VAL   = 24 !< Missing required value of CLA.
 integer(I4P), parameter :: ERROR_POSITIONAL_NARGS       = 45 !< Positional CLA with nargs (positionals are scalar).
 integer(I4P), parameter :: ERROR_UNSUPPORTED_TYPE       = 46 !< Value requested into a variable of an unsupported type.
+integer(I4P), parameter :: ERROR_LIST_SIZE              = 47 !< List requested into a fixed-size array of another size.
 
 contains
   ! public methods
@@ -672,6 +674,8 @@ contains
     case(ERROR_UNSUPPORTED_TYPE)
       self%error_message = prefd//': the value of "'//trim(adjustl(self%switch))//'" cannot be returned into a variable '//&
                            'of this type!'
+    case(ERROR_LIST_SIZE)
+      self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" has '//trim(val_str)//'!'
     endselect
     call self%print_error_message
   endif
@@ -1036,6 +1040,12 @@ contains
   integer(I4P)                                :: v       !< Values counter.
 
   call list_items(buffer, vals, Nv)
+  if (Nv /= size(val, dim=1)) then
+    ! B27 (#125): never write past the end of the array, nor leave part of it silently unset
+    call self%errored(pref=pref, error=ERROR_LIST_SIZE, val_str=trim(str(Nv, .true.))//' values, but the array has '//&
+                      trim(str(int(size(val, dim=1), I4P), .true.))//' elements')
+    return
+  endif
   select type(val)
 #if defined _R16P
   type is(real(R16P))
