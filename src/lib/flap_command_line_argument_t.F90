@@ -43,6 +43,7 @@ public :: ERROR_STORE_STAR_ENVVAR
 public :: ERROR_ACTION_UNKNOWN
 public :: ERROR_DUPLICATED_CLAS
 public :: ERROR_MISSING_REQUIRED_VAL
+public :: ERROR_UNSUPPORTED_TYPE
 
 type, extends(object) :: command_line_argument
   !< Command Line Argument (CLA) class.
@@ -155,6 +156,7 @@ integer(I4P), parameter :: ERROR_STORE_STAR_ENVVAR      = 21 !< Action store* no
 integer(I4P), parameter :: ERROR_ACTION_UNKNOWN         = 22 !< Unknown CLA (switch name).
 integer(I4P), parameter :: ERROR_DUPLICATED_CLAS        = 23 !< Duplicated CLAs passed, passed multiple instance of the same CLA.
 integer(I4P), parameter :: ERROR_MISSING_REQUIRED_VAL   = 24 !< Missing required value of CLA.
+integer(I4P), parameter :: ERROR_UNSUPPORTED_TYPE       = 46 !< Value requested into a variable of an unsupported type.
 
 contains
   ! public methods
@@ -634,6 +636,9 @@ contains
       self%error_message = prefd//': switch "'//trim(adjustl(switch))//'" has been passed more than once!'
     case(ERROR_MISSING_REQUIRED_VAL)
       self%error_message = prefd//': named option "'//trim(adjustl(self%switch))//'" requires a value that is not passed!'
+    case(ERROR_UNSUPPORTED_TYPE)
+      self%error_message = prefd//': the value of "'//trim(adjustl(self%switch))//'" cannot be returned into a variable '//&
+                           'of this type!'
     endselect
     call self%print_error_message
   endif
@@ -811,6 +816,8 @@ contains
     enddo
   type is(logical)
     call self%errored(pref=pref, error=ERROR_CHOICES_LOGICAL)
+  class default
+    call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
   endselect
   if (.not.val_in.and.(self%error==0)) then
     call self%errored(pref=pref, error=ERROR_NOT_IN_CHOICES, val_str=val_str)
@@ -857,12 +864,16 @@ contains
       select type(val)
       type is(logical)
         val = .true.
+      class default
+        call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
       endselect
     elseif (allocated(self%def)) then
       select type(val)
       type is(logical)
         read(self%def, *, iostat=self%error)val
         if (self%error/=0) call self%errored(pref=pref, error=ERROR_CASTING_LOGICAL, log_value=self%def)
+      class default
+        call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
       endselect
     endif
   elseif (self%act==action_store_false) then
@@ -870,12 +881,16 @@ contains
       select type(val)
       type is(logical)
         val = .false.
+      class default
+        call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
       endselect
     elseif (allocated(self%def)) then
       select type(val)
       type is(logical)
         read(self%def, *, iostat=self%error)val
         if (self%error/=0) call self%errored(pref=pref, error=ERROR_CASTING_LOGICAL, log_value=self%def)
+      class default
+        call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
       endselect
     endif
   endif
@@ -911,6 +926,8 @@ contains
     if (self%error/=0) call self%errored(pref=pref, error=ERROR_CASTING_LOGICAL, log_value=buffer)
   type is(character(*))
     val = buffer
+  class default
+    call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
   endselect
   endsubroutine get_cla_from_buffer
 
@@ -939,6 +956,8 @@ contains
       select type(val)
       type is(logical)
         val = .true.
+      class default
+        call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
       endselect
     else
       call tokenize(strin=self%def, delimiter=' ', toks=valsD, Nt=Nv)
@@ -947,6 +966,8 @@ contains
         do v=1,Nv
           read(valsD(v),*)val(v)
         enddo
+      class default
+        call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
       endselect
     endif
   elseif (self%act==action_store_false) then
@@ -954,6 +975,8 @@ contains
       select type(val)
       type is(logical)
         val = .false.
+      class default
+        call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
       endselect
     else
       call tokenize(strin=self%def, delimiter=' ', toks=valsD, Nt=Nv)
@@ -962,6 +985,8 @@ contains
         do v=1, Nv
           read(valsD(v),*)val(v)
         enddo
+      class default
+        call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
       endselect
     endif
   endif
@@ -1038,6 +1063,8 @@ contains
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref)
       if (self%error/=0) exit
     enddo
+  class default
+    call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
   endselect
   endsubroutine get_cla_list_from_buffer
 

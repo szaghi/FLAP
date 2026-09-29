@@ -8,7 +8,7 @@ use flap, only : command_line_interface,                                        
                  ERROR_M_EXCLUDE, ERROR_CASTING_LOGICAL, ERROR_CHOICES_LOGICAL, ERROR_NO_LIST, ERROR_NARGS_INSUFFICIENT,          &
                  ERROR_VALUE_MISSING, ERROR_UNKNOWN, ERROR_ENVVAR_POSITIONAL, ERROR_ENVVAR_NOT_STORE, ERROR_ENVVAR_NARGS,         &
                  ERROR_STORE_STAR_POSITIONAL, ERROR_STORE_STAR_NARGS, ERROR_STORE_STAR_ENVVAR, ERROR_ACTION_UNKNOWN,              &
-                 ERROR_DUPLICATED_CLAS, ERROR_MISSING_REQUIRED_VAL,                                                               &
+                 ERROR_DUPLICATED_CLAS, ERROR_MISSING_REQUIRED_VAL, ERROR_UNSUPPORTED_TYPE,                                       &
                  ERROR_GROUP_CONSISTENCY, ERROR_GROUP_M_EXCLUDE,                                                                  &
                  ERROR_MISSING_CLA, ERROR_MISSING_GROUP, ERROR_MISSING_SELECTION_CLA, ERROR_TOO_FEW_CLAS,                         &
                  ERROR_UNKNOWN_CLAS_IGNORED, ERROR_ARGUMENT_RETRIEVAL
@@ -51,6 +51,7 @@ contains
   call assert_equal(ERROR_ACTION_UNKNOWN,         22_I4P,   'ERROR_ACTION_UNKNOWN')
   call assert_equal(ERROR_DUPLICATED_CLAS,        23_I4P,   'ERROR_DUPLICATED_CLAS')
   call assert_equal(ERROR_MISSING_REQUIRED_VAL,   24_I4P,   'ERROR_MISSING_REQUIRED_VAL')
+  call assert_equal(ERROR_UNSUPPORTED_TYPE,       46_I4P,   'ERROR_UNSUPPORTED_TYPE')
   call assert_equal(ERROR_GROUP_CONSISTENCY,     100_I4P,   'ERROR_GROUP_CONSISTENCY')
   call assert_equal(ERROR_GROUP_M_EXCLUDE,       101_I4P,   'ERROR_GROUP_M_EXCLUDE')
   call assert_equal(ERROR_MISSING_CLA,          1000_I4P,   'ERROR_MISSING_CLA')

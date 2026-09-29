@@ -53,6 +53,7 @@ positive values are **errors**. Existing values never change.
 | `22` | `ERROR_ACTION_UNKNOWN` | Unknown action | `act=` set to an unrecognised string |
 | `23` | `ERROR_DUPLICATED_CLAS` | Argument passed more than once | The same switch appears twice on the command line |
 | `24` | `ERROR_MISSING_REQUIRED_VAL` | Required value not passed | A switch that needs a value got none |
+| `46` | `ERROR_UNSUPPORTED_TYPE` | Unsupported variable type | `get` into a type FLAP cannot fill (e.g. `complex`, or a non-logical for a flag) |
 | `100` | `ERROR_GROUP_CONSISTENCY` | Group (command) consistency broken | Two arguments of a group share a switch |
 | `101` | `ERROR_GROUP_M_EXCLUDE` | Two mutually exclusive groups both passed | Both sides of `set_mutually_exclusive_groups` given |
 | `1000` | `ERROR_MISSING_CLA` | Argument not found in CLI | `get` or `is_passed` called for an undefined switch |
