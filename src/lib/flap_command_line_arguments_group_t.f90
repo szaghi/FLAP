@@ -20,6 +20,8 @@ public :: command_line_arguments_group
 public :: STATUS_PRINT_V
 public :: STATUS_PRINT_H
 public :: STATUS_PRINT_M
+public :: ERROR_CONSISTENCY
+public :: ERROR_M_EXCLUDE
 
 type, extends(object) :: command_line_arguments_group
   !< Command Line Arguments Group (CLAsG) class.

@@ -42,6 +42,11 @@ source-dir = "src/tests"
 main = "flap_test_choices_logical.f90"
 
 [[test]]
+name = "flap_test_constants"
+source-dir = "src/tests"
+main = "flap_test_constants.f90"
+
+[[test]]
 name = "flap_test_duplicated_clas"
 source-dir = "src/tests"
 main = "flap_test_duplicated_clas.f90"
