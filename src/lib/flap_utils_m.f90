@@ -6,6 +6,7 @@ use penf
 implicit none
 private
 public :: count
+public :: read_env
 public :: replace
 public :: replace_all
 public :: split_command_line
@@ -37,6 +38,27 @@ contains
     c1 = c1 + c2 - 1 + len(substring)
   enddo
   endfunction count_substring
+
+  subroutine read_env(name, value, found)
+  !< Read an environment variable, whatever the length of its value: the only environment lookup of the library.
+  !<
+  !< Every lookup goes through here (step 0.D.2 of #125), so that options such as `ignore_env` apply to all of them.
+  character(*),              intent(in)  :: name   !< Name of the variable.
+  character(:), allocatable, intent(out) :: value  !< Value; empty when the variable is not set.
+  logical,                   intent(out) :: found  !< True if the variable is set (maybe to an empty value).
+  integer(I4P)                           :: length !< Length of the value.
+  integer(I4P)                           :: status !< Retrieval status.
+
+  value = ''
+  call get_environment_variable(name=name, length=length, status=status)
+  found = status == 0
+  if (.not.found .or. length == 0) return
+  deallocate(value)
+  allocate(character(length) :: value)
+  call get_environment_variable(name=name, value=value, status=status)
+  found = status == 0
+  if (.not.found) value = ''
+  endsubroutine read_env
 
   pure function replace(string, substring, restring) result(newstring)
   !< Replace substring (only first occurrence) into a string.

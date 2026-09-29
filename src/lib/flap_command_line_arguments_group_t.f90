@@ -11,6 +11,7 @@ use flap_command_line_argument_t, only : command_line_argument, &
                                          ACTION_STORE_STAR,     &
                                          ARGS_SEP
 use flap_object_t, only : object
+use flap_utils_m, only : read_env
 use penf
 
 implicit none
@@ -316,7 +317,7 @@ contains
   character(*), optional,              intent(in)    :: pref                !< Prefixing string.
   integer(I4P),                        intent(out)   :: error_unknown_clas  !< Error flag for passed unknown CLAs.
   type(command_line_argument)                        :: cla                 !< CLA data.
-  character(500)                                     :: envvar              !< Environment variables buffer.
+  character(:), allocatable                          :: envvar              !< Value of an environment variable.
   integer(I4P)                                       :: arg                 !< Argument counter.
   integer(I4P)                                       :: a                   !< Counter.
   integer(I4P)                                       :: aa                  !< Counter.
@@ -369,10 +370,9 @@ contains
                        endif
                        if (.not.found_val) then
                           ! value not found, try to take val from environment
-                          call get_environment_variable(name=self%cla(a)%envvar, value=envvar, status=aa)
-                          if (aa==0) then
+                          call read_env(name=self%cla(a)%envvar, value=envvar, found=found_val)
+                          if (found_val) then
                              self%cla(a)%val = trim(adjustl(envvar))
-                             found_val = .true.
                           else
                              ! no found, raise value missing error
                              call self%cla(a)%raise_error_value_missing(pref=pref)

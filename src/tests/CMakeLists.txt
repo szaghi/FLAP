@@ -33,3 +33,5 @@ endforeach()
 
 # golden baselines are read from the source tree, while ctest runs in the build tree
 set_tests_properties(flap_test_golden PROPERTIES ENVIRONMENT "FLAP_TEST_GOLDEN_DIR=${CMAKE_CURRENT_SOURCE_DIR}/golden")
+# the static check of flap_test_envvar reads the library sources
+set_tests_properties(flap_test_envvar PROPERTIES ENVIRONMENT "FLAP_TEST_LIB_DIR=${PROJECT_SOURCE_DIR}/src/lib")
