@@ -583,14 +583,19 @@ contains
   endif
   endfunction signature
 
-  function signature_usage(self) result(signature)
+  function signature_usage(self, bare) result(signature)
   !< Get the signature for the usage text (human readable): the only place for rendering changes such as metavars.
+  !<
+  !< A bare signature has no optional brackets, as a member of a mutually exclusive set, where the set is bracketed.
   class(command_line_argument), intent(in) :: self      !< CLA data.
+  logical, optional,            intent(in) :: bare      !< Render without optional brackets.
   character(len=:), allocatable            :: signature !< Signature.
   integer(I4P)                             :: nargs     !< Number of arguments consumed by CLA.
   integer(I4P)                             :: a         !< Counter.
+  logical                                  :: required  !< Render as required (no brackets).
 
   signature = ''
+  required = self%is_required ; if (present(bare)) required = required .or. bare
   if (self%is_hidden) return
   if (self%act==action_store) then
     if (.not.self%is_positional) then
@@ -611,13 +616,13 @@ contains
         signature = 'value'
       endif
       if (.not.self%is_val_required) signature = '['//signature//']'
-      if (self%is_required) then
+      if (required) then
         signature = ' '//trim(adjustl(self%switch))//' '//signature
       else
         signature = ' ['//trim(adjustl(self%switch))//' '//signature//']'
       endif
     else
-      if (self%is_required) then
+      if (required) then
         signature = ' value'
       else
         signature = ' [value]'
@@ -627,20 +632,20 @@ contains
     signature = ' [value]'
   elseif (self%act==action_append) then
     ! repeatable, docopt-style
-    if (self%is_required) then
+    if (required) then
       signature = ' '//trim(adjustl(self%switch))//' value...'
     else
       signature = ' ['//trim(adjustl(self%switch))//' value]...'
     endif
   elseif (self%act==action_count) then
     ! repeatable, docopt-style
-    if (self%is_required) then
+    if (required) then
       signature = ' '//trim(adjustl(self%switch))//'...'
     else
       signature = ' ['//trim(adjustl(self%switch))//']...'
     endif
   else
-    if (self%is_required) then
+    if (required) then
       signature = ' '//trim(adjustl(self%switch))
     else
       signature = ' ['//trim(adjustl(self%switch))//']'

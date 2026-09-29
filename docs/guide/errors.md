@@ -65,6 +65,9 @@ positive values are **errors**. Existing values never change.
 | `48` | `ERROR_DEF_NARGS` | Default count differs from `nargs` | `nargs='N'` with a default of another number of values: give the default N values |
 | `100` | `ERROR_GROUP_CONSISTENCY` | Group (command) consistency broken | Two arguments of a group share a switch |
 | `101` | `ERROR_GROUP_M_EXCLUDE` | Two mutually exclusive groups both passed | Both sides of `set_mutually_exclusive_groups` given |
+| `102` | `ERROR_M_EXCLUDE_SET` | Two members of a mutually exclusive set passed | `--mesh m --restart r` with `set_mutually_exclusive_switches(switches='--mesh,--restart')` |
+| `103` | `ERROR_M_EXCLUDE_SET_REQUIRED` | No member of a required set passed | None of the switches of a set with `required=.true.` given |
+| `104` | `ERROR_M_EXCLUDE_SET_DEFINITION` | Invalid mutually exclusive set | Fewer than two switches, an undefined, repeated or `required` member, or a switch already in a set (returned by `set_mutually_exclusive_switches`, then by `parse`) |
 | `105` | `ERROR_POSITION_DUPLICATE` | Position declared twice | Two positionals of a group (command) with the same `position` (raised by `add`) |
 | `106` | `ERROR_POSITION_GAP` | Missing position | Positions are not `1..N`, e.g. `1` and `3` without `2` (raised when parsing starts) |
 | `1000` | `ERROR_MISSING_CLA` | Argument not found in CLI | `get` or `is_passed` called for an undefined switch |
@@ -75,7 +78,7 @@ positive values are **errors**. Existing values never change.
 | `1005` | `ERROR_USER` | Application error | Returned by `cli%raise_error` (see below) |
 | `1012` | `ERROR_ARGUMENT_RETRIEVAL` | A command line argument cannot be read | `get_command_argument` failed (processor error; not expected in practice) |
 
-The two group codes are named `ERROR_GROUP_*` in the `flap` module; inside the group module they are
+The first two group codes are named `ERROR_GROUP_*` in the `flap` module; inside the group module they are
 `ERROR_CONSISTENCY` and `ERROR_M_EXCLUDE`, which would clash with the argument-level `ERROR_M_EXCLUDE` (`9`).
 
 ## Handling status codes

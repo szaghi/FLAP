@@ -87,8 +87,54 @@ $ ./myapp --json --csv
 myapp: error: switches "--json" and "--csv" are mutually exclusive!
 ```
 
+`exclude` is pairwise and cannot be combined with `required=.true.`: for more than two
+switches, or for "exactly one of", use a mutually exclusive set (below).
+
 For mutually exclusive **subcommands** (groups), use `set_mutually_exclusive_groups` —
 see the [Subcommands](./subcommands) page.
+
+---
+
+## Mutually exclusive sets
+
+`cli%set_mutually_exclusive_switches` declares a set of switches of which **at most one** may be passed; with `required=.true.`,
+**exactly one** must be passed. This is argparse's `add_mutually_exclusive_group`, and
+the recommended mechanism over pairwise `exclude`:
+
+```fortran
+call cli%add(switch='--mesh',    switch_ab='-m', help='Mesh file',    required=.false., act='store', def='')
+call cli%add(switch='--restart', switch_ab='-r', help='Restart file', required=.false., act='store', def='')
+call cli%add(switch='--left',  help='Go left',  required=.false., act='store_true', def='.false.')
+call cli%add(switch='--right', help='Go right', required=.false., act='store_true', def='.false.')
+call cli%set_mutually_exclusive_switches(switches='--mesh,--restart', required=.true., error=error)
+call cli%set_mutually_exclusive_switches(switches='--left,--right', error=error)
+```
+
+```shell
+$ ./solver -m m.grd                  # ok
+$ ./solver -m m.grd -r r.h5
+solver: error: switches "--mesh", "--restart" are mutually exclusive!
+$ ./solver
+solver: error: one of "--mesh", "--restart" is required!
+$ ./solver --help                    # the help is printed: a set never blocks --help/--version
+```
+
+The usage shows the sets in docopt notation, `(a | b)` for a required set and `[a | b]` otherwise:
+
+```
+usage: solver (--mesh value | --restart value) [--left | --right] [--help] [--markdown] [--version]
+```
+
+Rules:
+
+- the members are comma separated, named by switch or abbreviation, and must be **already added**
+  to the group (pass `group=` for the options of a command); a set of a command is checked only
+  when the command is called;
+- a member cannot be individually `required`, and a switch belongs to at most one set;
+- only **passed** members count: a default neither satisfies a required set nor violates a set;
+- the sets are checked after help/version and after the required options, as the last validation;
+- an invalid set is not added: the call returns `ERROR_M_EXCLUDE_SET_DEFINITION` (`104`), and
+  `parse` returns the same error, so a wrong definition cannot go unnoticed.
 
 ---
 

@@ -44,7 +44,10 @@ use flap_command_line_arguments_group_t, only : command_line_arguments_group,   
                                                 ERROR_GROUP_CONSISTENCY => ERROR_CONSISTENCY, &
                                                 ERROR_GROUP_M_EXCLUDE => ERROR_M_EXCLUDE,     &
                                                 ERROR_POSITION_DUPLICATE,                     &
-                                                ERROR_POSITION_GAP
+                                                ERROR_POSITION_GAP,                           &
+                                                ERROR_M_EXCLUDE_SET,                          &
+                                                ERROR_M_EXCLUDE_SET_REQUIRED,                 &
+                                                ERROR_M_EXCLUDE_SET_DEFINITION
 use flap_command_line_interface_t, only : command_line_interface,      &
                                           ERROR_MISSING_CLA,           &
                                           ERROR_MISSING_GROUP,         &
@@ -105,6 +108,9 @@ public :: ERROR_GROUP_CONSISTENCY
 public :: ERROR_GROUP_M_EXCLUDE
 public :: ERROR_POSITION_DUPLICATE
 public :: ERROR_POSITION_GAP
+public :: ERROR_M_EXCLUDE_SET
+public :: ERROR_M_EXCLUDE_SET_REQUIRED
+public :: ERROR_M_EXCLUDE_SET_DEFINITION
 ! errors 1000-1999: command line interface
 public :: ERROR_MISSING_CLA
 public :: ERROR_MISSING_GROUP

@@ -199,7 +199,8 @@ call cli%add(switch='--integer', switch_ab='-i',  &
              choices='1,3,5', exclude='-ie', error=error)
 ```
 
-If both are passed, FLAP reports an error automatically.
+If both are passed, FLAP reports an error automatically. For more than two switches, or to require
+exactly one of them, use a [mutually exclusive set](./advanced#mutually-exclusive-sets).
 
 ### Environment variable fallback (`envvar`)
 

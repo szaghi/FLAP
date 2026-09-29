@@ -13,6 +13,7 @@ use flap, only : command_line_interface,                                        
                  ERROR_APPEND_INCONSISTENT, ERROR_APPEND_SCALAR_GET,                                                              &
                  ERROR_LIST_SIZE, ERROR_DEF_NARGS,                                                                                &
                  ERROR_GROUP_CONSISTENCY, ERROR_GROUP_M_EXCLUDE, ERROR_POSITION_DUPLICATE, ERROR_POSITION_GAP,                    &
+                 ERROR_M_EXCLUDE_SET, ERROR_M_EXCLUDE_SET_REQUIRED, ERROR_M_EXCLUDE_SET_DEFINITION,                               &
                  ERROR_MISSING_CLA, ERROR_MISSING_GROUP, ERROR_MISSING_SELECTION_CLA, ERROR_TOO_FEW_CLAS,                         &
                  ERROR_UNKNOWN_CLAS_IGNORED, ERROR_ARGUMENT_RETRIEVAL, ERROR_USER
 use flap_test_utils, only : assert_equal, capture_close, capture_open
@@ -66,6 +67,9 @@ contains
   call assert_equal(ERROR_DEF_NARGS,              48_I4P,   'ERROR_DEF_NARGS')
   call assert_equal(ERROR_GROUP_CONSISTENCY,     100_I4P,   'ERROR_GROUP_CONSISTENCY')
   call assert_equal(ERROR_GROUP_M_EXCLUDE,       101_I4P,   'ERROR_GROUP_M_EXCLUDE')
+  call assert_equal(ERROR_M_EXCLUDE_SET,         102_I4P,   'ERROR_M_EXCLUDE_SET')
+  call assert_equal(ERROR_M_EXCLUDE_SET_REQUIRED, 103_I4P,  'ERROR_M_EXCLUDE_SET_REQUIRED')
+  call assert_equal(ERROR_M_EXCLUDE_SET_DEFINITION, 104_I4P, 'ERROR_M_EXCLUDE_SET_DEFINITION')
   call assert_equal(ERROR_POSITION_DUPLICATE,    105_I4P,   'ERROR_POSITION_DUPLICATE')
   call assert_equal(ERROR_POSITION_GAP,          106_I4P,   'ERROR_POSITION_GAP')
   call assert_equal(ERROR_MISSING_CLA,          1000_I4P,   'ERROR_MISSING_CLA')

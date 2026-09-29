@@ -12,7 +12,7 @@ use flap_command_line_argument_t, only : command_line_argument, &
                                          ACTION_STORE,          &
                                          ACTION_STORE_STAR
 use flap_object_t, only : object
-use flap_utils_m, only : list_push, read_env
+use flap_utils_m, only : list_count, list_items, list_push, read_env, tokenize
 use penf
 
 implicit none
@@ -25,8 +25,17 @@ public :: STATUS_PRINT_M
 public :: STATUS_NO_ARGS
 public :: ERROR_CONSISTENCY
 public :: ERROR_M_EXCLUDE
+public :: ERROR_M_EXCLUDE_SET
+public :: ERROR_M_EXCLUDE_SET_REQUIRED
+public :: ERROR_M_EXCLUDE_SET_DEFINITION
 public :: ERROR_POSITION_DUPLICATE
 public :: ERROR_POSITION_GAP
+
+type :: exclusive_set
+  !< Mutually exclusive set of switches: at most one member may be passed, exactly one if required (F03 of #125).
+  character(len=:), allocatable :: switches            !< Members, by their switch, as a stored list (LIST_SEP).
+  logical                       :: is_required=.false. !< Exactly one member must be passed.
+endtype exclusive_set
 
 type, extends(object) :: command_line_arguments_group
   !< Command Line Arguments Group (CLAsG) class.
@@ -40,12 +49,15 @@ type, extends(object) :: command_line_arguments_group
   type(command_line_argument), allocatable, public :: cla(:)            !< CLA list [1:Na].
   logical,                                  public :: is_called=.false. !< Flag for checking if CLAs group has been passed to CLI.
   logical,                                  public :: no_args_is_help=.false. !< Print the help when invoked with no arguments.
+  type(exclusive_set), allocatable                 :: m_sets(:)         !< Mutually exclusive sets of switches.
   contains
     ! public methods
     procedure, public :: free                  !< Free dynamic memory.
     procedure, public :: check                 !< Check data consistency.
     procedure, public :: check_position_gaps   !< Check that the declared positions have no gap.
     procedure, public :: is_required_passed    !< Check if required CLAs are passed.
+    procedure, public :: add_exclusive_set     !< Add a mutually exclusive set of switches.
+    procedure, public :: check_exclusive_sets  !< Check the mutually exclusive sets of switches.
     procedure, public :: is_passed             !< Check if a CLA has been passed.
     procedure, public :: is_defined            !< Check if a CLA has been defined.
     procedure, public :: is_switch_token       !< Check if a command line token names a CLA of the group.
@@ -63,6 +75,8 @@ type, extends(object) :: command_line_arguments_group
     ! private methods
     procedure, private :: errored                             !< Trig error occurrence and print meaningful message.
     procedure, private :: check_m_exclusive                   !< Check if two mutually exclusive CLAs have been passed.
+    procedure, private :: exclusive_set_of                    !< Index of the mutually exclusive set of a CLA.
+    procedure, private :: exclusive_set_signature             !< Usage signature of a mutually exclusive set.
     final              :: finalize                            !< Free dynamic memory when finalizing.
 endtype command_line_arguments_group
 
@@ -75,6 +89,9 @@ integer(I4P), parameter :: STATUS_NO_ARGS = -5 !< No arguments passed, help prin
 ! errors codes
 integer(I4P), parameter :: ERROR_CONSISTENCY = 100 !< CLAs group consistency error.
 integer(I4P), parameter :: ERROR_M_EXCLUDE   = 101 !< Two mutually exclusive CLAs group have been called.
+integer(I4P), parameter :: ERROR_M_EXCLUDE_SET            = 102 !< Two members of a mutually exclusive set have been passed.
+integer(I4P), parameter :: ERROR_M_EXCLUDE_SET_REQUIRED   = 103 !< No member of a required mutually exclusive set passed.
+integer(I4P), parameter :: ERROR_M_EXCLUDE_SET_DEFINITION = 104 !< Invalid definition of a mutually exclusive set.
 integer(I4P), parameter :: ERROR_POSITION_DUPLICATE = 105 !< Two positional CLAs declared at the same position.
 integer(I4P), parameter :: ERROR_POSITION_GAP       = 106 !< Declared positions are not 1..N: one is missing.
 
@@ -97,6 +114,7 @@ contains
   self%Na_optional = 0_I4P
   self%is_called   = .false.
   self%no_args_is_help = .false.
+  if (allocated(self%m_sets)) deallocate(self%m_sets)
   endsubroutine free
 
   subroutine check(self, pref)
@@ -184,6 +202,105 @@ contains
     enddo
   endif
   endsubroutine is_required_passed
+
+  subroutine add_exclusive_set(self, switches, required, pref)
+  !< Add a mutually exclusive set of switches (F03 of #125): at most one member may be passed, exactly one if required.
+  !<
+  !< The members are comma separated and must be already defined, named switches (by switch or abbreviation, stored by their
+  !< switch), not individually required, distinct and in no other set. An invalid set is not added: the error is
+  !< ERROR_M_EXCLUDE_SET_DEFINITION.
+  class(command_line_arguments_group), intent(inout) :: self        !< CLAsG data.
+  character(*),                        intent(in)    :: switches    !< Comma separated members.
+  logical, optional,                   intent(in)    :: required    !< Exactly one member must be passed (default .false.).
+  character(*), optional,              intent(in)    :: pref        !< Prefixing string.
+  character(len=len_trim(switches)+1), allocatable   :: toks(:)     !< Members as given.
+  type(exclusive_set)                                :: new_set     !< New set.
+  type(exclusive_set), allocatable                   :: new_sets(:) !< New (extended) sets list.
+  character(len=:), allocatable                      :: reason      !< Why the set is invalid.
+  integer(I4P)                                       :: n           !< Number of members.
+  integer(I4P)                                       :: t           !< Counter.
+  integer(I4P)                                       :: tt          !< Counter.
+  integer(I4P)                                       :: a           !< Index of the CLA of a member.
+  integer(I4P)                                       :: aa          !< Index of the CLA of another member.
+
+  ! tokenize ignores a delimiter in the last position: the added comma keeps a last empty member ('--a,--b,')
+  call tokenize(strin=trim(switches)//',', delimiter=',', toks=toks, Nt=n)
+  reason = ''
+  new_set%switches = ''
+  do t=1, n
+    if (len_trim(toks(t)) == 0) then
+      reason = 'a member is empty'
+    elseif (.not.self%is_defined(switch=trim(adjustl(toks(t))), pos=a)) then
+      reason = '"'//trim(adjustl(toks(t)))//'" is not defined'
+    elseif (self%cla(a)%is_required) then
+      reason = '"'//trim(adjustl(toks(t)))//'" is required'
+    elseif (self%exclusive_set_of(a) > 0) then
+      reason = '"'//trim(adjustl(toks(t)))//'" is already in a set'
+    else
+      do tt=1, t - 1
+        if (self%is_defined(switch=trim(adjustl(toks(tt))), pos=aa)) then
+          if (aa == a) reason = '"'//trim(adjustl(toks(t)))//'" is repeated'
+        endif
+      enddo
+    endif
+    if (reason /= '') exit
+    call list_push(new_set%switches, trim(adjustl(self%cla(a)%switch)))
+  enddo
+  if (reason == '' .and. n < 2) reason = 'it needs at least two switches'
+  if (reason /= '') then
+    call self%errored(pref=pref, error=ERROR_M_EXCLUDE_SET_DEFINITION, members=trim(switches), reason=reason)
+    return
+  endif
+  new_set%is_required = .false. ; if (present(required)) new_set%is_required = required
+  if (allocated(self%m_sets)) then
+    allocate(new_sets(1:size(self%m_sets, dim=1)+1))
+    new_sets(1:size(self%m_sets, dim=1)) = self%m_sets
+    new_sets(size(new_sets, dim=1)) = new_set
+    call move_alloc(from=new_sets, to=self%m_sets)
+  else
+    self%m_sets = [new_set]
+  endif
+  endsubroutine add_exclusive_set
+
+  subroutine check_exclusive_sets(self, pref)
+  !< Check the mutually exclusive sets of a called group: at most one member passed, exactly one for a required set.
+  !<
+  !< Only passed members count: a default neither satisfies nor violates a set. Called after the statuses (help, version,
+  !< markdown), like the required check (E4 of #125).
+  class(command_line_arguments_group), intent(inout) :: self    !< CLAsG data.
+  character(*), optional,              intent(in)    :: pref    !< Prefixing string.
+  character(len=:), allocatable                      :: items(:)!< Members.
+  character(len=:), allocatable                      :: passed  !< Passed members, quoted.
+  integer(I4P)                                       :: n       !< Number of members.
+  integer(I4P)                                       :: np      !< Number of passed members.
+  integer(I4P)                                       :: s       !< Counter.
+  integer(I4P)                                       :: i       !< Counter.
+
+  if (.not.self%is_called .or. .not.allocated(self%m_sets)) return
+  do s=1, size(self%m_sets, dim=1)
+    call list_items(self%m_sets(s)%switches, items, n)
+    passed = ''
+    np = 0
+    do i=1, n
+      if (self%is_passed(switch=trim(items(i)))) then
+        np = np + 1
+        passed = passed//', "'//trim(items(i))//'"'
+      endif
+    enddo
+    if (np > 1) then
+      call self%errored(pref=pref, error=ERROR_M_EXCLUDE_SET, members=passed(3:))
+      return
+    elseif (np == 0 .and. self%m_sets(s)%is_required) then
+      passed = ''
+      do i=1, n
+        passed = passed//', "'//trim(items(i))//'"'
+      enddo
+      call self%errored(pref=pref, error=ERROR_M_EXCLUDE_SET_REQUIRED, members=passed(3:))
+      write(self%usage_lun, '(A)') self%usage(pref=pref)
+      return
+    endif
+  enddo
+  endsubroutine check_exclusive_sets
 
   pure function is_passed(self, switch, position)
   !< Check if a CLA has been passed.
@@ -741,6 +858,7 @@ contains
   logical                                         :: plain_           !< Return the signature as plain switches list, local var.
   character(len=:), allocatable                   :: signature        !< Signature.
   integer(I4P)                                    :: a                !< Counter.
+  integer(I4P)                                    :: s                !< Index of a mutually exclusive set.
 
   signature = ''
   bash_completion_ = .false. ; if (present(bash_completion)) bash_completion_ = bash_completion
@@ -759,13 +877,29 @@ contains
     enddo
   else
     do a=1, self%Na
-      signature = signature//self%cla(a)%signature_usage()
+      s = self%exclusive_set_of(a)
+      if (s == 0) then
+        signature = signature//self%cla(a)%signature_usage()
+      elseif (a == first_member(s)) then
+        ! a set is rendered once, where its first member is
+        signature = signature//self%exclusive_set_signature(s)
+      endif
     enddo
   endif
+  contains
+    function first_member(s) result(first)
+    !< Return the index of the first CLA (in the list) of a set.
+    integer(I4P), intent(in) :: s     !< Index of the set.
+    integer(I4P)             :: first !< Index of its first CLA.
+
+    do first=1, self%Na
+      if (self%exclusive_set_of(first) == s) return
+    enddo
+    endfunction first_member
   endfunction signature
 
   ! private methods
-  subroutine errored(self, error, pref, a1, a2, position)
+  subroutine errored(self, error, pref, a1, a2, position, members, reason)
   !< Trig error occurrence and print meaningful message.
   class(command_line_arguments_group), intent(inout) :: self     !< CLAsG data.
   integer(I4P),                        intent(in)    :: error    !< Error occurred.
@@ -773,6 +907,8 @@ contains
   integer(I4P), optional,              intent(in)    :: a1       !< First index CLAs group inconsistent.
   integer(I4P), optional,              intent(in)    :: a2       !< Second index CLAs group inconsistent.
   integer(I4P), optional,              intent(in)    :: position !< Position of positional CLAs.
+  character(*), optional,              intent(in)    :: members  !< Members of a mutually exclusive set.
+  character(*), optional,              intent(in)    :: reason   !< Why a mutually exclusive set is invalid.
   character(len=:), allocatable                      :: prefd    !< Prefixing string.
   character(len=:), allocatable                      :: where    !< Group (command) of the error, if any.
 
@@ -804,6 +940,15 @@ contains
       where = '' ; if (self%group /= '') where = ' of group (command) "'//self%group//'"'
       self%error_message = prefd//': no positional option'//where//' is declared at position '//&
                            trim(str(position, .true.))//', but higher positions are!'
+    case(ERROR_M_EXCLUDE_SET)
+      where = '' ; if (self%group /= '') where = ' in group (command) "'//self%group//'"'
+      self%error_message = prefd//': switches '//members//' are mutually exclusive'//where//'!'
+    case(ERROR_M_EXCLUDE_SET_REQUIRED)
+      where = '' ; if (self%group /= '') where = ' in group (command) "'//self%group//'"'
+      self%error_message = prefd//': one of '//members//' is required'//where//'!'
+    case(ERROR_M_EXCLUDE_SET_DEFINITION)
+      where = '' ; if (self%group /= '') where = ' of group (command) "'//self%group//'"'
+      self%error_message = prefd//': invalid mutually exclusive set "'//members//'"'//where//': '//reason//'!'
     endselect
     call self%print_error_message
   endif
@@ -829,6 +974,54 @@ contains
     enddo
   endif
   endsubroutine check_m_exclusive
+
+  pure function exclusive_set_of(self, a) result(s)
+  !< Return the index of the mutually exclusive set of a CLA, 0 if it is in none.
+  class(command_line_arguments_group), intent(in) :: self     !< CLAsG data.
+  integer(I4P),                        intent(in) :: a        !< Index of the CLA.
+  integer(I4P)                                    :: s        !< Index of the set.
+  character(len=:), allocatable                   :: items(:) !< Members.
+  integer(I4P)                                    :: n        !< Number of members.
+  integer(I4P)                                    :: i        !< Counter.
+
+  if (allocated(self%m_sets)) then
+    do s=1, size(self%m_sets, dim=1)
+      call list_items(self%m_sets(s)%switches, items, n)
+      do i=1, n
+        if (self%cla(a)%match_token(trim(items(i)))) return
+      enddo
+    enddo
+  endif
+  s = 0
+  endfunction exclusive_set_of
+
+  function exclusive_set_signature(self, s) result(signature)
+  !< Return the usage signature of a mutually exclusive set, docopt style: (a | b) if required, [a | b] otherwise.
+  class(command_line_arguments_group), intent(in) :: self      !< CLAsG data.
+  integer(I4P),                        intent(in) :: s         !< Index of the set.
+  character(len=:), allocatable                   :: signature !< Signature.
+  character(len=:), allocatable                   :: items(:)  !< Members.
+  character(len=:), allocatable                   :: member    !< Signature of a member.
+  integer(I4P)                                    :: n         !< Number of members.
+  integer(I4P)                                    :: i         !< Counter.
+  integer(I4P)                                    :: a         !< Index of the CLA of a member.
+
+  signature = ''
+  call list_items(self%m_sets(s)%switches, items, n)
+  do i=1, n
+    if (.not.self%is_defined(switch=trim(items(i)), pos=a)) cycle
+    member = trim(adjustl(self%cla(a)%signature_usage(bare=.true.)))
+    if (member == '') cycle ! hidden
+    if (signature /= '') signature = signature//' | '
+    signature = signature//member
+  enddo
+  if (signature == '') return
+  if (self%m_sets(s)%is_required) then
+    signature = ' ('//signature//')'
+  else
+    signature = ' ['//signature//']'
+  endif
+  endfunction exclusive_set_signature
 
   subroutine sanitize_defaults(self)
   !< Sanitize defaults values.

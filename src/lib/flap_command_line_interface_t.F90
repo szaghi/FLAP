@@ -39,6 +39,7 @@ type, extends(object), public :: command_line_interface
     procedure, public :: is_defined                      !< Check if a CLA has been defined.
     procedure, public :: is_parsed                       !< Check if CLI has been parsed.
     procedure, public :: set_mutually_exclusive_groups   !< Set two CLAs group as mutually exclusive.
+    procedure, public :: set_mutually_exclusive_switches !< Set a mutually exclusive set of switches.
     procedure, public :: run_command => is_called_group  !< Check if a CLAs group has been run.
     procedure, public :: parse                           !< Parse Command Line Interfaces.
     procedure, public :: reset_parse                     !< Forget the result of a parse, keeping the definitions.
@@ -255,6 +256,31 @@ contains
     self%clasg(g2)%m_exclude = group1
   endif
   endsubroutine set_mutually_exclusive_groups
+
+  subroutine set_mutually_exclusive_switches(self, switches, required, group, pref, error)
+  !< Set a mutually exclusive set of switches (F03 of #125): at most one member may be passed, exactly one if required.
+  !<
+  !< The members (comma separated, by switch or abbreviation) must be already added to the group, not required, and in no
+  !< other set; otherwise the set is not added and the error is ERROR_M_EXCLUDE_SET_DEFINITION. Only passed members count:
+  !< a default neither satisfies nor violates a set.
+  class(command_line_interface), intent(inout) :: self     !< CLI data.
+  character(*),                  intent(in)    :: switches !< Comma separated members, e.g. '--mesh,--restart'.
+  logical,      optional,        intent(in)    :: required !< Exactly one member must be passed (default .false.).
+  character(*), optional,        intent(in)    :: group    !< Group (command) of the members (default: the top level).
+  character(*), optional,        intent(in)    :: pref     !< Prefixing string.
+  integer(I4P), optional,        intent(out)   :: error    !< Error trapping flag.
+  integer(I4P)                                 :: g        !< Index of the group.
+
+  g = 0
+  if (present(group)) g = self%group_index(group)
+  if (g < 0) then
+    self%error = ERROR_MISSING_GROUP
+  else
+    call self%clasg(g)%add_exclusive_set(switches=switches, required=required, pref=pref)
+    self%error = self%clasg(g)%error
+  endif
+  if (present(error)) error = self%error
+  endsubroutine set_mutually_exclusive_switches
 
   subroutine add(self, pref, group, group_index, switch, switch_ab, help, help_markdown, help_color, help_style, &
                  required, val_required, positional, position, hidden, act, def, nargs, choices, exclude, envvar, error)
@@ -622,6 +648,14 @@ contains
   ! check if all required CLAs have been passed
   do g=0, size(ai,dim=1)-1
     call self%clasg(g)%is_required_passed(pref=pref)
+    self%error = self%clasg(g)%error
+    if (self%is_fatal()) exit
+  enddo
+  if (self%is_fatal()) return
+
+  ! check the mutually exclusive sets of switches: after the statuses and the values (E4 of #125)
+  do g=0, size(ai,dim=1)-1
+    call self%clasg(g)%check_exclusive_sets(pref=pref)
     self%error = self%clasg(g)%error
     if (self%is_fatal()) exit
   enddo

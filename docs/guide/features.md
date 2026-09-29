@@ -30,7 +30,8 @@ call cli%add(group='commit', switch='--message', switch_ab='-m', ...)
 ```
 
 Use `cli%run_command(group)` to discover which subcommand was selected at runtime.
-Entire groups can be declared mutually exclusive with `set_mutually_exclusive_groups`.
+Entire groups can be declared mutually exclusive with `set_mutually_exclusive_groups`, and sets of
+switches (at most one, or exactly one, of them) with `set_mutually_exclusive_switches`.
 
 ## Output Formats
 
