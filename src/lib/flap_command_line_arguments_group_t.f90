@@ -7,6 +7,7 @@ use flap_command_line_argument_t, only : command_line_argument, &
                                          ACTION_PRINT_HELP,     &
                                          ACTION_PRINT_MARK,     &
                                          ACTION_PRINT_VERS,     &
+                                         ACTION_APPEND,         &
                                          ACTION_COUNT,          &
                                          ACTION_STORE,          &
                                          ACTION_STORE_STAR
@@ -252,6 +253,10 @@ contains
   n = 0
   do a=1, self%Na
     if (.not.self%cla(a)%match_token(switch)) cycle
+    if (self%cla(a)%act == action_append) then
+      n = 1 ! one value per occurrence
+      return
+    endif
     if (self%cla(a)%act /= action_store) return
     if (allocated(self%cla(a)%nargs)) then
       read(self%cla(a)%nargs, *, iostat=iostat) n
@@ -465,7 +470,7 @@ contains
                  ! check action
                  if (has_inline) then
                     ! NAME=VALUE (D1 rule 2): the value is inline, the next argument is not consumed
-                    call self%cla(a)%set_inline_value(value=inline_val, pref=pref)
+                    call self%cla(a)%set_inline_value(value=inline_val, pref=pref, first=first)
                     if (self%cla(a)%error/=0) then
                        self%error = self%cla(a)%error
                        return
@@ -601,6 +606,20 @@ contains
                     endif
                  elseif (self%cla(a)%act==action_count) then
                     call self%cla(a)%count_occurrences(n=1_I4P, first=first)
+                 elseif (self%cla(a)%act==action_append) then
+                    ! one value per occurrence, as for a store with a required value
+                    if (arg+1>size(args)) then
+                       call self%cla(a)%raise_error_value_missing(pref=pref)
+                    elseif (self%is_switch_token(args(arg+1))) then
+                       call self%cla(a)%raise_error_value_missing(pref=pref)
+                    else
+                       arg = arg + 1
+                       call self%cla(a)%append_value(value=args(arg), first=first, pref=pref)
+                    endif
+                    if (self%cla(a)%error/=0) then
+                       self%error = self%cla(a)%error
+                       return
+                    endif
                  elseif (self%cla(a)%act==action_print_help) then
                     self%error = STATUS_PRINT_H
                  elseif (self%cla(a)%act==action_print_mark) then

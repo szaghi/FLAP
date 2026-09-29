@@ -57,6 +57,8 @@ positive values are **errors**. Existing values never change.
 | `25` | `ERROR_INLINE_VALUE_NOT_ALLOWED` | Inline value for a flag | `--flag=yes` on an option that takes no value |
 | `26` | `ERROR_INLINE_VALUE_NARGS` | Inline value for a list | `--list=1` on an option with `nargs`: pass the values after the switch |
 | `27` | `ERROR_COUNT_INCONSISTENT` | Invalid count | A `count` option that is positional or has `nargs`, `envvar` or `choices` |
+| `28` | `ERROR_APPEND_INCONSISTENT` | Invalid append | An `append` option that is positional or has `nargs` or `envvar` |
+| `29` | `ERROR_APPEND_SCALAR_GET` | Scalar get of an append | An `append` option holds a list: read it with `get_varying` or into an array |
 | `45` | `ERROR_POSITIONAL_NARGS` | `nargs` on a positional argument | Positionals take one value each: use a named list option |
 | `46` | `ERROR_UNSUPPORTED_TYPE` | Unsupported variable type | `get` into a type FLAP cannot fill (e.g. `complex`, or a non-logical for a flag) |
 | `47` | `ERROR_LIST_SIZE` | List size differs from the array size | `get` into a fixed-size array with more or fewer elements than the values: use an array of the right size, or `get_varying` |

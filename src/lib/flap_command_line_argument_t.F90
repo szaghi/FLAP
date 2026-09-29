@@ -19,6 +19,7 @@ public :: ACTION_PRINT_HELP
 public :: ACTION_PRINT_MARK
 public :: ACTION_PRINT_VERS
 public :: ACTION_COUNT
+public :: ACTION_APPEND
 public :: ARGS_SEP
 public :: ERROR_OPTIONAL_NO_DEF
 public :: ERROR_REQUIRED_M_EXCLUDE
@@ -51,6 +52,8 @@ public :: ERROR_DEF_NARGS
 public :: ERROR_INLINE_VALUE_NOT_ALLOWED
 public :: ERROR_INLINE_VALUE_NARGS
 public :: ERROR_COUNT_INCONSISTENT
+public :: ERROR_APPEND_INCONSISTENT
+public :: ERROR_APPEND_SCALAR_GET
 
 type, extends(object) :: command_line_argument
   !< Command Line Argument (CLA) class.
@@ -81,6 +84,8 @@ type, extends(object) :: command_line_argument
     procedure, public :: set_inline_value               !< Set the value given inline (NAME=VALUE).
     procedure, public :: is_repeatable                  !< Check if the CLA may be passed more than once.
     procedure, public :: count_occurrences              !< Count occurrences of a count CLA.
+    procedure, public :: append_value                   !< Collect a value of an append CLA.
+    procedure, public :: is_list                        !< Check if the CLA holds a list (nargs or append).
     procedure, public :: raise_error_m_exclude          !< Raise error mutually exclusive CLAs passed.
     procedure, public :: raise_error_nargs_insufficient !< Raise error insufficient number of argument values passed.
     procedure, public :: raise_error_value_missing      !< Raise error missing value.
@@ -111,6 +116,7 @@ type, extends(object) :: command_line_argument
     ! private methods
     procedure, private :: errored                         !< Trig error occurence and print meaningful message.
     procedure, private :: check_count_consistency         !< Check data consistency for count CLA.
+    procedure, private :: check_append_consistency        !< Check data consistency for append CLA.
     procedure, private :: check_envvar_consistency        !< Check data consistency for envvar CLA.
     procedure, private :: check_action_consistency        !< Check CLA action consistency.
     procedure, private :: check_optional_consistency      !< Check optional CLA consistency.
@@ -146,6 +152,7 @@ character(len=*), parameter :: ACTION_PRINT_HELP  = 'PRINT_HELP'    !< Print hel
 character(len=*), parameter :: ACTION_PRINT_MARK  = 'PRINT_MARKDOWN'!< Print help to Markdown file.
 character(len=*), parameter :: ACTION_PRINT_VERS  = 'PRINT_VERSION' !< Print version.
 character(len=*), parameter :: ACTION_COUNT       = 'COUNT'         !< Count the occurrences (repeatable, no value).
+character(len=*), parameter :: ACTION_APPEND      = 'APPEND'        !< Collect one value per occurrence (repeatable).
 character(len=*), parameter :: ARGS_SEP           = LIST_SEP        !< Arguments separator for multiple valued (list) CLA.
 
 ! errors codes
@@ -176,6 +183,8 @@ integer(I4P), parameter :: ERROR_MISSING_REQUIRED_VAL   = 24 !< Missing required
 integer(I4P), parameter :: ERROR_INLINE_VALUE_NOT_ALLOWED = 25 !< Inline value (NAME=VALUE) for a CLA that takes no value.
 integer(I4P), parameter :: ERROR_INLINE_VALUE_NARGS     = 26 !< Inline value (NAME=VALUE) for a list CLA.
 integer(I4P), parameter :: ERROR_COUNT_INCONSISTENT     = 27 !< Count CLA with positional, nargs, envvar or choices.
+integer(I4P), parameter :: ERROR_APPEND_INCONSISTENT    = 28 !< Append CLA with positional, nargs or envvar.
+integer(I4P), parameter :: ERROR_APPEND_SCALAR_GET      = 29 !< Scalar get of an append CLA (a list).
 integer(I4P), parameter :: ERROR_POSITIONAL_NARGS       = 45 !< Positional CLA with nargs (positionals are scalar).
 integer(I4P), parameter :: ERROR_UNSUPPORTED_TYPE       = 46 !< Value requested into a variable of an unsupported type.
 integer(I4P), parameter :: ERROR_LIST_SIZE              = 47 !< List requested into a fixed-size array of another size.
@@ -212,6 +221,7 @@ contains
   character(*), optional,       intent(in)    :: pref  !< Prefixing string.
 
   call self%check_count_consistency(pref=pref) ; if (self%error/=0) return
+  call self%check_append_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_envvar_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_action_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_optional_consistency(pref=pref) ; if (self%error/=0) return
@@ -282,8 +292,33 @@ contains
   logical                                  :: repeatable !< Check result.
 
   repeatable = .false.
-  if (allocated(self%act)) repeatable = self%act==ACTION_COUNT
+  if (allocated(self%act)) repeatable = self%act==ACTION_COUNT.or.self%act==ACTION_APPEND
   endfunction is_repeatable
+
+  pure function is_list(self) result(list)
+  !< Check if the CLA holds a list: nargs, or the append action.
+  class(command_line_argument), intent(in) :: self !< CLA data.
+  logical                                  :: list !< Check result.
+
+  list = allocated(self%nargs)
+  if (.not.list.and.allocated(self%act)) list = self%act==ACTION_APPEND
+  endfunction is_list
+
+  subroutine append_value(self, value, first, pref)
+  !< Collect one value of an append CLA; the first occurrence replaces the default (D9 of #125). An empty value is a
+  !< missing value (D17).
+  class(command_line_argument), intent(inout) :: self  !< CLA data.
+  character(*),                 intent(in)    :: value !< Value.
+  logical,                      intent(in)    :: first !< First occurrence on the command line.
+  character(*), optional,       intent(in)    :: pref  !< Prefixing string.
+
+  if (len_trim(value) == 0) then
+    call self%raise_error_value_missing(pref=pref)
+    return
+  endif
+  if (first.and.allocated(self%val)) deallocate(self%val)
+  call list_push(self%val, trim(adjustl(value)))
+  endsubroutine append_value
 
   subroutine count_occurrences(self, n, first)
   !< Add n occurrences to a count CLA; the first occurrence starts from 0 (the default applies only when not passed).
@@ -297,16 +332,21 @@ contains
   self%val = trim(str(c + n, .true.))
   endsubroutine count_occurrences
 
-  subroutine set_inline_value(self, value, pref)
+  subroutine set_inline_value(self, value, pref, first)
   !< Set the value given inline (NAME=VALUE, F01): only a scalar store takes one; the next argument is not consumed.
   !<
   !< An empty value follows the rule of a separate empty value (D17 of #125): rejected when the value is required.
   class(command_line_argument), intent(inout) :: self  !< CLA data.
   character(*),                 intent(in)    :: value !< Inline value.
   character(*), optional,       intent(in)    :: pref  !< Prefixing string.
+  logical,      optional,       intent(in)    :: first !< First occurrence on the command line (append, default .true.).
+  logical                                     :: first_ !< First occurrence, local variable.
 
+  first_ = .true. ; if (present(first)) first_ = first
   if (allocated(self%nargs)) then
     call self%errored(pref=pref, error=ERROR_INLINE_VALUE_NARGS)
+  elseif (self%act==action_append) then
+    call self%append_value(value=value, first=first_, pref=pref)
   elseif (self%act==action_store.or.self%act==action_store_star) then
     if (self%act==action_store.and.self%is_val_required.and.len_trim(value)==0) then
       call self%raise_error_value_missing(pref=pref)
@@ -383,7 +423,7 @@ contains
     if (allocated(self%def)) then
       ! strip leading and trailing white spaces
       self%def = wstrip(self%def)
-      if (allocated(self%nargs)) then
+      if (self%is_list()) then
         ! store the white space separated values as a list (items joined by LIST_SEP: idempotent, as parse calls it again)
         self%def = unique(string=self%def, substring=' ')
         self%def = replace_all(string=self%def, substring=' ', restring=LIST_SEP)
@@ -585,6 +625,13 @@ contains
     endif
   elseif (self%act==action_store_star) then
     signature = ' [value]'
+  elseif (self%act==action_append) then
+    ! repeatable, docopt-style
+    if (self%is_required) then
+      signature = ' '//trim(adjustl(self%switch))//' value...'
+    else
+      signature = ' ['//trim(adjustl(self%switch))//' value]...'
+    endif
   elseif (self%act==action_count) then
     ! repeatable, docopt-style
     if (self%is_required) then
@@ -625,7 +672,7 @@ contains
   values = new_line('a')//'    if [ "$prev" == "'//self%switch//'" ] || [ "$prev" == "'//self%switch_ab//'" ] ; then'
   if (self%has_choices()) then
      values = values//new_line('a')//'       COMPREPLY=( $( compgen -W "'//choices(self%choices)//'" -- $cur ) )'
-  elseif ((self%act==action_store).or.(self%act==action_store_star)) then
+  elseif ((self%act==action_store).or.(self%act==action_store_star).or.(self%act==action_append)) then
      values = values//new_line('a')//'       COMPREPLY=( )'
   endif
   values = values//new_line('a')//'       return 0'
@@ -776,6 +823,12 @@ contains
     case(ERROR_COUNT_INCONSISTENT)
       self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" counts its occurrences: it cannot be '//&
                            'positional, nor have nargs, envvar or choices!'
+    case(ERROR_APPEND_INCONSISTENT)
+      self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" collects a value per occurrence: it '//&
+                           'cannot be positional, nor have nargs or envvar!'
+    case(ERROR_APPEND_SCALAR_GET)
+      self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" collects a list of values: get it '//&
+                           'into an array (get or get_varying), not a scalar!'
     case(ERROR_DEF_NARGS)
       self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" takes '//trim(adjustl(self%nargs))//&
                            ' values (nargs), but its default has '//trim(val_str)//'!'
@@ -796,6 +849,17 @@ contains
   if (self%is_positional.or.allocated(self%nargs).or.allocated(self%envvar).or.allocated(self%choices)) &
     call self%errored(pref=pref, error=ERROR_COUNT_INCONSISTENT)
   endsubroutine check_count_consistency
+
+  subroutine check_append_consistency(self, pref)
+  !< Check append CLA consistency: a named option collecting one value per occurrence, without nargs or envvar (F02).
+  class(command_line_argument), intent(inout) :: self  !< CLA data.
+  character(*), optional,       intent(in)    :: pref  !< Prefixing string.
+
+  if (.not.allocated(self%act)) return
+  if (self%act/=ACTION_APPEND) return
+  if (self%is_positional.or.allocated(self%nargs).or.allocated(self%envvar)) &
+    call self%errored(pref=pref, error=ERROR_APPEND_INCONSISTENT)
+  endsubroutine check_append_consistency
 
   subroutine check_envvar_consistency(self, pref)
   !< Check data consistency for envvar CLA.
@@ -852,7 +916,8 @@ contains
         self%act/=ACTION_PRINT_HELP.and. &
         self%act/=ACTION_PRINT_MARK.and. &
         self%act/=ACTION_PRINT_VERS.and. &
-        self%act/=ACTION_COUNT) then
+        self%act/=ACTION_COUNT.and.      &
+        self%act/=ACTION_APPEND) then
       call self%errored(pref=pref, error=ERROR_ACTION_UNKNOWN)
       return
     endif
@@ -1054,6 +1119,8 @@ contains
       call self%get_cla_from_buffer(buffer=self%def, val=val, pref=pref)
     endif
     if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val, pref=pref)
+  elseif (self%act==action_append) then
+    call self%errored(pref=pref, error=ERROR_APPEND_SCALAR_GET)
   elseif (self%act==action_count) then
     ! the number of occurrences, or the default when not passed
     call self%get_cla_from_buffer(buffer=self%stored_list(), val=val, pref=pref)
@@ -1136,11 +1203,11 @@ contains
   class(*),                     intent(inout) :: val(1:)  !< CLA values.
 
   if (.not.self%is_required_passed(pref=pref)) return
-  if (.not.allocated(self%nargs)) then
+  if (.not.self%is_list()) then
     call self%errored(pref=pref,error=ERROR_NO_LIST)
     return
   endif
-  if (self%act==action_store) then
+  if (self%act==action_store.or.self%act==action_append) then
     call self%get_cla_list_from_buffer(buffer=self%stored_list(), val=val, pref=pref)
   elseif (self%act==action_store_true) then
     if (self%is_passed) then
@@ -1282,11 +1349,11 @@ contains
   integer(I4P)                                :: v       !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
-  if (.not.allocated(self%nargs)) then
+  if (.not.self%is_list()) then
     call self%errored(pref=pref, error=ERROR_NO_LIST)
     return
   endif
-  if (self%act==action_store) then
+  if (self%act==action_store.or.self%act==action_append) then
     call list_items(self%stored_list(), vals, Nv)
     if (.not.self%check_list_size(vals=vals, pref=pref)) return
     allocate(real(R16P):: val(1:Nv))
@@ -1310,11 +1377,11 @@ contains
   integer(I4P)                                :: v       !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
-  if (.not.allocated(self%nargs)) then
+  if (.not.self%is_list()) then
     call self%errored(pref=pref, error=ERROR_NO_LIST)
     return
   endif
-  if (self%act==action_store) then
+  if (self%act==action_store.or.self%act==action_append) then
     call list_items(self%stored_list(), vals, Nv)
     if (.not.self%check_list_size(vals=vals, pref=pref)) return
     allocate(real(R8P):: val(1:Nv))
@@ -1338,11 +1405,11 @@ contains
   integer(I4P)                                :: v       !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
-  if (.not.allocated(self%nargs)) then
+  if (.not.self%is_list()) then
     call self%errored(pref=pref, error=ERROR_NO_LIST)
     return
   endif
-  if (self%act==action_store) then
+  if (self%act==action_store.or.self%act==action_append) then
     call list_items(self%stored_list(), vals, Nv)
     if (.not.self%check_list_size(vals=vals, pref=pref)) return
     allocate(real(R4P):: val(1:Nv))
@@ -1366,11 +1433,11 @@ contains
   integer(I4P)                                :: v       !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
-  if (.not.allocated(self%nargs)) then
+  if (.not.self%is_list()) then
     call self%errored(pref=pref, error=ERROR_NO_LIST)
     return
   endif
-  if (self%act==action_store) then
+  if (self%act==action_store.or.self%act==action_append) then
     call list_items(self%stored_list(), vals, Nv)
     if (.not.self%check_list_size(vals=vals, pref=pref)) return
     allocate(integer(I8P):: val(1:Nv))
@@ -1394,11 +1461,11 @@ contains
   integer(I4P)                                :: v       !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
-  if (.not.allocated(self%nargs)) then
+  if (.not.self%is_list()) then
     call self%errored(pref=pref, error=ERROR_NO_LIST)
     return
   endif
-  if (self%act==action_store) then
+  if (self%act==action_store.or.self%act==action_append) then
     call list_items(self%stored_list(), vals, Nv)
     if (.not.self%check_list_size(vals=vals, pref=pref)) return
     allocate(integer(I4P):: val(1:Nv))
@@ -1422,11 +1489,11 @@ contains
   integer(I4P)                                :: v       !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
-  if (.not.allocated(self%nargs)) then
+  if (.not.self%is_list()) then
     call self%errored(pref=pref, error=ERROR_NO_LIST)
     return
   endif
-  if (self%act==action_store) then
+  if (self%act==action_store.or.self%act==action_append) then
     call list_items(self%stored_list(), vals, Nv)
     if (.not.self%check_list_size(vals=vals, pref=pref)) return
     allocate(integer(I2P):: val(1:Nv))
@@ -1450,11 +1517,11 @@ contains
   integer(I4P)                                :: v       !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
-  if (.not.allocated(self%nargs)) then
+  if (.not.self%is_list()) then
     call self%errored(pref=pref, error=ERROR_NO_LIST)
     return
   endif
-  if (self%act==action_store) then
+  if (self%act==action_store.or.self%act==action_append) then
     call list_items(self%stored_list(), vals, Nv)
     if (.not.self%check_list_size(vals=vals, pref=pref)) return
     allocate(integer(I1P):: val(1:Nv))
@@ -1478,11 +1545,11 @@ contains
   integer(I4P)                                :: v       !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
-  if (.not.allocated(self%nargs)) then
+  if (.not.self%is_list()) then
     call self%errored(pref=pref, error=ERROR_NO_LIST)
     return
   endif
-  if (self%act==action_store) then
+  if (self%act==action_store.or.self%act==action_append) then
     call list_items(self%stored_list(), vals, Nv)
     if (.not.self%check_list_size(vals=vals, pref=pref)) return
     allocate(logical:: val(1:Nv))
@@ -1525,11 +1592,11 @@ contains
   integer(I4P)                                :: v       !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
-  if (.not.allocated(self%nargs)) then
+  if (.not.self%is_list()) then
     call self%errored(pref=pref, error=ERROR_NO_LIST)
     return
   endif
-  if (self%act==action_store) then
+  if (self%act==action_store.or.self%act==action_append) then
     call list_items(self%stored_list(), vals, Nv)
     if (.not.self%check_list_size(vals=vals, pref=pref)) return
     allocate(val(1:Nv))
