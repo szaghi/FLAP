@@ -105,6 +105,7 @@ type, extends(object) :: command_line_argument
     procedure, private :: check_positional_consistency    !< Check positional CLA consistency.
     procedure, private :: check_choices                   !< Check if CLA value is in allowed choices.
     procedure, private :: check_list_size                 !< Check CLA multiple values list size consistency.
+    procedure, private :: stored_list                     !< Stored list of values (parsed or default).
     procedure, private :: get_cla                         !< Get CLA (single) value.
     procedure, private :: get_cla_from_buffer             !< Get CLA (single) value from a buffer.
     procedure, private :: get_cla_list                    !< Get CLA multiple values.
@@ -131,7 +132,7 @@ character(len=*), parameter :: ACTION_STORE_FALSE = 'STORE_FALSE'   !< Store .fa
 character(len=*), parameter :: ACTION_PRINT_HELP  = 'PRINT_HELP'    !< Print help message.
 character(len=*), parameter :: ACTION_PRINT_MARK  = 'PRINT_MARKDOWN'!< Print help to Markdown file.
 character(len=*), parameter :: ACTION_PRINT_VERS  = 'PRINT_VERSION' !< Print version.
-character(len=*), parameter :: ARGS_SEP           = '||!||'         !< Arguments separator for multiple valued (list) CLA.
+character(len=*), parameter :: ARGS_SEP           = LIST_SEP        !< Arguments separator for multiple valued (list) CLA.
 
 ! errors codes
 integer(I4P), parameter :: ERROR_OPTIONAL_NO_DEF        = 1  !< Optional CLA without default value.
@@ -293,9 +294,9 @@ contains
       ! strip leading and trailing white spaces
       self%def = wstrip(self%def)
       if (allocated(self%nargs)) then
-        ! replace white space separator with FLAP ARGS_SEP
+        ! store the white space separated values as a list (items joined by LIST_SEP: idempotent, as parse calls it again)
         self%def = unique(string=self%def, substring=' ')
-        self%def = replace_all(string=self%def, substring=' ', restring=ARGS_SEP)
+        self%def = replace_all(string=self%def, substring=' ', restring=LIST_SEP)
       endif
     endif
   ! endif
@@ -410,9 +411,9 @@ contains
       if (self%def /= '') then
         if (markdownd) then
           ! two spaces make a line break in markdown.
-          usage = usage//'  '//new_line('a')//prefd//repeat(' ', 4)//'default value '//trim(replace_all(self%def,ARGS_SEP,' '))
+          usage = usage//'  '//new_line('a')//prefd//repeat(' ', 4)//'default value '//trim(list_join(self%def, ' '))
         else
-          usage = usage//new_line('a')//prefd//repeat(' ', indent)//'default value '//trim(replace_all(self%def,ARGS_SEP,' '))
+          usage = usage//new_line('a')//prefd//repeat(' ', indent)//'default value '//trim(list_join(self%def, ' '))
         endif
       endif
     endif
@@ -847,25 +848,35 @@ contains
   endif
   endsubroutine check_choices
 
-  function check_list_size(self, Nv, val, pref) result(is_ok)
-  !< Check CLA multiple values list size consistency.
-  class(command_line_argument), intent(inout) :: self  !< CLA data.
-  integer(I4P),                 intent(in)    :: Nv    !< Number of values.
-  character(*),                 intent(in)    :: val   !< First value.
-  character(*), optional,       intent(in)    :: pref  !< Prefixing string.
-  logical                                     :: is_ok !< Check result.
+  function check_list_size(self, vals, pref) result(is_ok)
+  !< Check CLA multiple values list size consistency: a list without values (or with a single blank one) is empty.
+  class(command_line_argument), intent(inout) :: self    !< CLA data.
+  character(*),                 intent(in)    :: vals(:) !< Stored values.
+  character(*), optional,       intent(in)    :: pref    !< Prefixing string.
+  logical                                     :: is_ok   !< Check result.
 
-  is_ok = .true.
-  if (Nv==1) then
-    if (trim(adjustl(val))=='') then
-      ! there is no real value, but only for nargs=+ this is a real error
-      is_ok = .false.
-      if (allocated(self%nargs)) then ! nested: Fortran does not short-circuit .and.
-        if (self%nargs=='+') call self%errored(pref=pref, error=ERROR_NARGS_INSUFFICIENT)
-      endif
+  is_ok = size(vals, dim=1) > 1
+  if (size(vals, dim=1) == 1) is_ok = len_trim(vals(1)) > 0
+  if (.not.is_ok) then
+    ! there is no real value, but only for nargs=+ this is a real error
+    if (allocated(self%nargs)) then ! nested: Fortran does not short-circuit .and.
+      if (self%nargs=='+') call self%errored(pref=pref, error=ERROR_NARGS_INSUFFICIENT)
     endif
   endif
   endfunction check_list_size
+
+  function stored_list(self) result(list)
+  !< Return the stored list of values: the parsed one if the CLA has been passed, the default one otherwise.
+  class(command_line_argument), intent(in) :: self !< CLA data.
+  character(:), allocatable                :: list !< Stored list.
+
+  list = ''
+  if (self%is_passed.and.allocated(self%val)) then
+    list = self%val
+  elseif (allocated(self%def)) then
+    list = self%def
+  endif
+  endfunction stored_list
 
   subroutine get_cla(self, val, pref)
   !< Get CLA (single) value.
@@ -959,9 +970,6 @@ contains
   class(command_line_argument), intent(inout) :: self     !< CLA data.
   character(*), optional,       intent(in)    :: pref     !< Prefixing string.
   class(*),                     intent(inout) :: val(1:)  !< CLA values.
-  integer(I4P)                                :: Nv       !< Number of values.
-  character(len=len(self%def)), allocatable   :: valsD(:) !< String array of values based on self%def.
-  integer(I4P)                                :: v        !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
   if (.not.allocated(self%nargs)) then
@@ -969,11 +977,7 @@ contains
     return
   endif
   if (self%act==action_store) then
-    if (self%is_passed) then
-      call self%get_cla_list_from_buffer(buffer=self%val, val=val, pref=pref)
-    else ! using default value
-      call self%get_cla_list_from_buffer(buffer=self%def, val=val, pref=pref)
-    endif
+    call self%get_cla_list_from_buffer(buffer=self%stored_list(), val=val, pref=pref)
   elseif (self%act==action_store_true) then
     if (self%is_passed) then
       select type(val)
@@ -983,12 +987,9 @@ contains
         call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
       endselect
     else
-      call tokenize(strin=self%def, delimiter=' ', toks=valsD, Nt=Nv)
       select type(val)
       type is(logical)
-        do v=1,Nv
-          read(valsD(v),*)val(v)
-        enddo
+        call self%get_cla_list_from_buffer(buffer=self%stored_list(), val=val, pref=pref)
       class default
         call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
       endselect
@@ -1002,12 +1003,9 @@ contains
         call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
       endselect
     else
-      call tokenize(strin=self%def, delimiter=' ', toks=valsD, Nt=Nv)
       select type(val)
       type is(logical)
-        do v=1, Nv
-          read(valsD(v),*)val(v)
-        enddo
+        call self%get_cla_list_from_buffer(buffer=self%stored_list(), val=val, pref=pref)
       class default
         call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
       endselect
@@ -1023,10 +1021,10 @@ contains
   class(*),                     intent(inout) :: val(1:) !< CLA value.
   character(*), optional,       intent(in)    :: pref    !< Prefixing string.
   integer(I4P)                                :: Nv      !< Number of values.
-  character(len=len(buffer)), allocatable     :: vals(:) !< String array of values based on buffer value.
+  character(:), allocatable                   :: vals(:) !< Stored values.
   integer(I4P)                                :: v       !< Values counter.
 
-  call tokenize(strin=buffer, delimiter=args_sep, toks=vals, Nt=Nv)
+  call list_items(buffer, vals, Nv)
   select type(val)
 #if defined _R16P
   type is(real(R16P))
@@ -1083,7 +1081,7 @@ contains
   type is(character(*))
     ! delegate to a character(*) dummy: gfortran 13.3 and 14.2 assign the elements of a class(*) character array with a
     ! wrong element length inside `type is(character(*))` (fixed in 13.4 and 14.3)
-    call get_cla_list_character(self, val=val, vals=vals(1:Nv), pref=pref)
+    call get_cla_list_character(self, val=val, vals=vals, pref=pref)
   class default
     call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
   endselect
@@ -1106,13 +1104,12 @@ contains
 
   subroutine get_cla_list_varying_R16P(self, val, pref)
   !< Get CLA (multiple) value with varying size, real(R16P).
-  class(command_line_argument), intent(inout) :: self     !< CLA data.
-  real(R16P), allocatable,      intent(out)   :: val(:)   !< CLA values.
-  character(*), optional,       intent(in)    :: pref     !< Prefixing string.
-  integer(I4P)                                :: Nv       !< Number of values.
-  character(len=len(self%val)), allocatable   :: valsV(:) !< String array of values based on self%val.
-  character(len=len(self%def)), allocatable   :: valsD(:) !< String array of values based on self%def.
-  integer(I4P)                                :: v        !< Values counter.
+  class(command_line_argument), intent(inout) :: self    !< CLA data.
+  real(R16P), allocatable      , intent(out)   :: val(:)  !< CLA values.
+  character(*), optional,       intent(in)    :: pref    !< Prefixing string.
+  character(:), allocatable                   :: vals(:) !< Stored values (parsed or default).
+  integer(I4P)                                :: Nv      !< Number of values.
+  integer(I4P)                                :: v       !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
   if (.not.allocated(self%nargs)) then
@@ -1120,45 +1117,25 @@ contains
     return
   endif
   if (self%act==action_store) then
-    if (self%is_passed) then
-      call tokenize(strin=self%val, delimiter=ARGS_SEP, toks=valsV, Nt=Nv)
-      if (.not.self%check_list_size(Nv=Nv, val=valsV(1), pref=pref)) return
-      allocate(real(R16P):: val(1:Nv))
-      do v=1, Nv
-        val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsV(v))), knd=1._R16P)
-        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
-        if (self%error/=0) exit
-      enddo
-    else ! using default value
-      call tokenize(strin=self%def, delimiter=ARGS_SEP, toks=valsD, Nt=Nv)
-      if (.not.self%check_list_size(Nv=Nv, val=valsD(1), pref=pref)) return
-      if (Nv==1) then
-        if (trim(adjustl(valsD(1)))=='') then
-          if (self%nargs=='+') then
-            call self%errored(pref=pref, error=ERROR_NARGS_INSUFFICIENT)
-          endif
-          return
-        endif
-      endif
-      allocate(real(R16P):: val(1:Nv))
-      do v=1, Nv
-        val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsD(v))), knd=1._R16P)
-        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
-        if (self%error/=0) exit
-      enddo
-    endif
+    call list_items(self%stored_list(), vals, Nv)
+    if (.not.self%check_list_size(vals=vals, pref=pref)) return
+    allocate(real(R16P):: val(1:Nv))
+    do v=1, Nv
+      val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1._R16P)
+      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+      if (self%error/=0) exit
+    enddo
   endif
   endsubroutine get_cla_list_varying_R16P
 
   subroutine get_cla_list_varying_R8P(self, val, pref)
   !< Get CLA (multiple) value with varying size, real(R8P).
-  class(command_line_argument), intent(inout) :: self     !< CLA data.
-  real(R8P), allocatable,       intent(out)   :: val(:)   !< CLA values.
-  character(*), optional,       intent(in)    :: pref     !< Prefixing string.
-  integer(I4P)                                :: Nv       !< Number of values.
-  character(len=len(self%val)), allocatable   :: valsV(:) !< String array of values based on self%val.
-  character(len=len(self%def)), allocatable   :: valsD(:) !< String array of values based on self%def.
-  integer(I4P)                                :: v        !< Values counter.
+  class(command_line_argument), intent(inout) :: self    !< CLA data.
+  real(R8P), allocatable       , intent(out)   :: val(:)  !< CLA values.
+  character(*), optional,       intent(in)    :: pref    !< Prefixing string.
+  character(:), allocatable                   :: vals(:) !< Stored values (parsed or default).
+  integer(I4P)                                :: Nv      !< Number of values.
+  integer(I4P)                                :: v       !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
   if (.not.allocated(self%nargs)) then
@@ -1166,37 +1143,25 @@ contains
     return
   endif
   if (self%act==action_store) then
-    if (self%is_passed) then
-      call tokenize(strin=self%val, delimiter=ARGS_SEP, toks=valsV, Nt=Nv)
-      if (.not.self%check_list_size(Nv=Nv, val=valsV(1), pref=pref)) return
-      allocate(real(R8P):: val(1:Nv))
-      do v=1, Nv
-        val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsV(v))), knd=1._R8P)
-        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
-        if (self%error/=0) exit
-      enddo
-    else ! using default value
-      call tokenize(strin=self%def, delimiter=ARGS_SEP, toks=valsD, Nt=Nv)
-      if (.not.self%check_list_size(Nv=Nv, val=valsD(1), pref=pref)) return
-      allocate(real(R8P):: val(1:Nv))
-      do v=1, Nv
-        val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsD(v))), knd=1._R8P)
-        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
-        if (self%error/=0) exit
-      enddo
-    endif
+    call list_items(self%stored_list(), vals, Nv)
+    if (.not.self%check_list_size(vals=vals, pref=pref)) return
+    allocate(real(R8P):: val(1:Nv))
+    do v=1, Nv
+      val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1._R8P)
+      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+      if (self%error/=0) exit
+    enddo
   endif
   endsubroutine get_cla_list_varying_R8P
 
   subroutine get_cla_list_varying_R4P(self, val, pref)
   !< Get CLA (multiple) value with varying size, real(R4P).
-  class(command_line_argument), intent(inout) :: self     !< CLA data.
-  real(R4P), allocatable,       intent(out)   :: val(:)   !< CLA values.
-  character(*), optional,       intent(in)    :: pref     !< Prefixing string.
-  integer(I4P)                                :: Nv       !< Number of values.
-  character(len=len(self%val)), allocatable   :: valsV(:) !< String array of values based on self%val.
-  character(len=len(self%def)), allocatable   :: valsD(:) !< String array of values based on self%def.
-  integer(I4P)                                :: v        !< Values counter.
+  class(command_line_argument), intent(inout) :: self    !< CLA data.
+  real(R4P), allocatable       , intent(out)   :: val(:)  !< CLA values.
+  character(*), optional,       intent(in)    :: pref    !< Prefixing string.
+  character(:), allocatable                   :: vals(:) !< Stored values (parsed or default).
+  integer(I4P)                                :: Nv      !< Number of values.
+  integer(I4P)                                :: v       !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
   if (.not.allocated(self%nargs)) then
@@ -1204,37 +1169,25 @@ contains
     return
   endif
   if (self%act==action_store) then
-    if (self%is_passed) then
-      call tokenize(strin=self%val, delimiter=ARGS_SEP, toks=valsV, Nt=Nv)
-      if (.not.self%check_list_size(Nv=Nv, val=valsV(1), pref=pref)) return
-      allocate(real(R4P):: val(1:Nv))
-      do v=1, Nv
-        val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsV(v))), knd=1._R4P)
-        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
-        if (self%error/=0) exit
-      enddo
-    else ! using default value
-      call tokenize(strin=self%def, delimiter=ARGS_SEP, toks=valsD, Nt=Nv)
-      if (.not.self%check_list_size(Nv=Nv, val=valsD(1), pref=pref)) return
-      allocate(real(R4P):: val(1:Nv))
-      do v=1, Nv
-        val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsD(v))), knd=1._R4P)
-        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
-        if (self%error/=0) exit
-      enddo
-    endif
+    call list_items(self%stored_list(), vals, Nv)
+    if (.not.self%check_list_size(vals=vals, pref=pref)) return
+    allocate(real(R4P):: val(1:Nv))
+    do v=1, Nv
+      val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1._R4P)
+      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+      if (self%error/=0) exit
+    enddo
   endif
   endsubroutine get_cla_list_varying_R4P
 
   subroutine get_cla_list_varying_I8P(self, val, pref)
   !< Get CLA (multiple) value with varying size, integer(I8P).
-  class(command_line_argument), intent(inout) :: self     !< CLA data.
-  integer(I8P), allocatable,    intent(out)   :: val(:)   !< CLA values.
-  character(*), optional,       intent(in)    :: pref     !< Prefixing string.
-  integer(I4P)                                :: Nv       !< Number of values.
-  character(len=len(self%val)), allocatable   :: valsV(:) !< String array of values based on self%val.
-  character(len=len(self%def)), allocatable   :: valsD(:) !< String array of values based on self%def.
-  integer(I4P)                                :: v        !< Values counter.
+  class(command_line_argument), intent(inout) :: self    !< CLA data.
+  integer(I8P), allocatable    , intent(out)   :: val(:)  !< CLA values.
+  character(*), optional,       intent(in)    :: pref    !< Prefixing string.
+  character(:), allocatable                   :: vals(:) !< Stored values (parsed or default).
+  integer(I4P)                                :: Nv      !< Number of values.
+  integer(I4P)                                :: v       !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
   if (.not.allocated(self%nargs)) then
@@ -1242,37 +1195,25 @@ contains
     return
   endif
   if (self%act==action_store) then
-    if (self%is_passed) then
-      call tokenize(strin=self%val, delimiter=ARGS_SEP, toks=valsV, Nt=Nv)
-      if (.not.self%check_list_size(Nv=Nv, val=valsV(1), pref=pref)) return
-      allocate(integer(I8P):: val(1:Nv))
-      do v=1, Nv
-        val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsV(v))), knd=1_I8P)
-        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
-        if (self%error/=0) exit
-      enddo
-    else ! using default value
-      call tokenize(strin=self%def, delimiter=ARGS_SEP, toks=valsD, Nt=Nv)
-      if (.not.self%check_list_size(Nv=Nv, val=valsD(1), pref=pref)) return
-      allocate(integer(I8P):: val(1:Nv))
-      do v=1, Nv
-        val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsD(v))), knd=1_I8P)
-        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
-        if (self%error/=0) exit
-      enddo
-    endif
+    call list_items(self%stored_list(), vals, Nv)
+    if (.not.self%check_list_size(vals=vals, pref=pref)) return
+    allocate(integer(I8P):: val(1:Nv))
+    do v=1, Nv
+      val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1_I8P)
+      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+      if (self%error/=0) exit
+    enddo
   endif
   endsubroutine get_cla_list_varying_I8P
 
   subroutine get_cla_list_varying_I4P(self, val, pref)
   !< Get CLA (multiple) value with varying size, integer(I4P).
-  class(command_line_argument), intent(INOUT) :: self     !< CLA data.
-  integer(I4P), allocatable,    intent(OUT)   :: val(:)   !< CLA values.
-  character(*), optional,       intent(IN)    :: pref     !< Prefixing string.
-  integer(I4P)                                :: Nv       !< Number of values.
-  character(len=len(self%val)), allocatable   :: valsV(:) !< String array of values based on self%val.
-  character(len=len(self%def)), allocatable   :: valsD(:) !< String array of values based on self%def.
-  integer(I4P)                                :: v        !< Values counter.
+  class(command_line_argument), intent(inout) :: self    !< CLA data.
+  integer(I4P), allocatable    , intent(out)   :: val(:)  !< CLA values.
+  character(*), optional,       intent(in)    :: pref    !< Prefixing string.
+  character(:), allocatable                   :: vals(:) !< Stored values (parsed or default).
+  integer(I4P)                                :: Nv      !< Number of values.
+  integer(I4P)                                :: v       !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
   if (.not.allocated(self%nargs)) then
@@ -1280,37 +1221,25 @@ contains
     return
   endif
   if (self%act==action_store) then
-    if (self%is_passed) then
-      call tokenize(strin=self%val, delimiter=ARGS_SEP, toks=valsV, Nt=Nv)
-      if (.not.self%check_list_size(Nv=Nv, val=valsV(1), pref=pref)) return
-      allocate(integer(I4P):: val(1:Nv))
-      do v=1, Nv
-        val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsV(v))), knd=1_I4P)
-        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
-        if (self%error/=0) exit
-      enddo
-    else ! using default value
-      call tokenize(strin=self%def, delimiter=ARGS_SEP, toks=valsD, Nt=Nv)
-      if (.not.self%check_list_size(Nv=Nv, val=valsD(1), pref=pref)) return
-      allocate(integer(I4P):: val(1:Nv))
-      do v=1, Nv
-        val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsD(v))), knd=1_I4P)
-        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
-        if (self%error/=0) exit
-      enddo
-    endif
+    call list_items(self%stored_list(), vals, Nv)
+    if (.not.self%check_list_size(vals=vals, pref=pref)) return
+    allocate(integer(I4P):: val(1:Nv))
+    do v=1, Nv
+      val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1_I4P)
+      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+      if (self%error/=0) exit
+    enddo
   endif
   endsubroutine get_cla_list_varying_I4P
 
   subroutine get_cla_list_varying_I2P(self, val, pref)
   !< Get CLA (multiple) value with varying size, integer(I2P).
-  class(command_line_argument), intent(inout) :: self     !< CLA data.
-  integer(I2P), allocatable,    intent(out)   :: val(:)   !< CLA values.
-  character(*), optional,       intent(in)    :: pref     !< Prefixing string.
-  integer(I4P)                                :: Nv       !< Number of values.
-  character(len=len(self%val)), allocatable   :: valsV(:) !< String array of values based on self%val.
-  character(len=len(self%def)), allocatable   :: valsD(:) !< String array of values based on self%def.
-  integer(I4P)                                :: v        !< Values counter.
+  class(command_line_argument), intent(inout) :: self    !< CLA data.
+  integer(I2P), allocatable    , intent(out)   :: val(:)  !< CLA values.
+  character(*), optional,       intent(in)    :: pref    !< Prefixing string.
+  character(:), allocatable                   :: vals(:) !< Stored values (parsed or default).
+  integer(I4P)                                :: Nv      !< Number of values.
+  integer(I4P)                                :: v       !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
   if (.not.allocated(self%nargs)) then
@@ -1318,37 +1247,25 @@ contains
     return
   endif
   if (self%act==action_store) then
-    if (self%is_passed) then
-      call tokenize(strin=self%val, delimiter=ARGS_SEP, toks=valsV, Nt=Nv)
-      if (.not.self%check_list_size(Nv=Nv, val=valsV(1), pref=pref)) return
-      allocate(integer(I2P):: val(1:Nv))
-      do v=1, Nv
-        val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsV(v))), knd=1_I2P)
-        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
-        if (self%error/=0) exit
-      enddo
-    else ! using default value
-      call tokenize(strin=self%def, delimiter=ARGS_SEP, toks=valsD, Nt=Nv)
-      if (.not.self%check_list_size(Nv=Nv, val=valsD(1), pref=pref)) return
-      allocate(integer(I2P):: val(1:Nv))
-      do v=1, Nv
-        val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsD(v))), knd=1_I2P)
-        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
-        if (self%error/=0) exit
-      enddo
-    endif
+    call list_items(self%stored_list(), vals, Nv)
+    if (.not.self%check_list_size(vals=vals, pref=pref)) return
+    allocate(integer(I2P):: val(1:Nv))
+    do v=1, Nv
+      val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1_I2P)
+      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+      if (self%error/=0) exit
+    enddo
   endif
   endsubroutine get_cla_list_varying_I2P
 
   subroutine get_cla_list_varying_I1P(self, val, pref)
   !< Get CLA (multiple) value with varying size, integer(I1P).
-  class(command_line_argument), intent(inout) :: self     !< CLA data.
-  integer(I1P), allocatable,    intent(out)   :: val(:)   !< CLA values.
-  character(*), optional,       intent(in)    :: pref     !< Prefixing string.
-  integer(I4P)                                :: Nv       !< Number of values.
-  character(len=len(self%val)), allocatable   :: valsV(:) !< String array of values based on self%val.
-  character(len=len(self%def)), allocatable   :: valsD(:) !< String array of values based on self%def.
-  integer(I4P)                                :: v        !< Values counter.
+  class(command_line_argument), intent(inout) :: self    !< CLA data.
+  integer(I1P), allocatable    , intent(out)   :: val(:)  !< CLA values.
+  character(*), optional,       intent(in)    :: pref    !< Prefixing string.
+  character(:), allocatable                   :: vals(:) !< Stored values (parsed or default).
+  integer(I4P)                                :: Nv      !< Number of values.
+  integer(I4P)                                :: v       !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
   if (.not.allocated(self%nargs)) then
@@ -1356,37 +1273,25 @@ contains
     return
   endif
   if (self%act==action_store) then
-    if (self%is_passed) then
-      call tokenize(strin=self%val, delimiter=ARGS_SEP, toks=valsV, Nt=Nv)
-      if (.not.self%check_list_size(Nv=Nv, val=valsV(1), pref=pref)) return
-      allocate(integer(I1P):: val(1:Nv))
-      do v=1, Nv
-        val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsV(v))), knd=1_I1P)
-        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
-        if (self%error/=0) exit
-      enddo
-    else ! using default value
-      call tokenize(strin=self%def, delimiter=ARGS_SEP, toks=valsD, Nt=Nv)
-      if (.not.self%check_list_size(Nv=Nv, val=valsD(1), pref=pref)) return
-      allocate(integer(I1P):: val(1:Nv))
-      do v=1, Nv
-        val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsD(v))), knd=1_I1P)
-        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
-        if (self%error/=0) exit
-      enddo
-    endif
+    call list_items(self%stored_list(), vals, Nv)
+    if (.not.self%check_list_size(vals=vals, pref=pref)) return
+    allocate(integer(I1P):: val(1:Nv))
+    do v=1, Nv
+      val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1_I1P)
+      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+      if (self%error/=0) exit
+    enddo
   endif
   endsubroutine get_cla_list_varying_I1P
 
   subroutine get_cla_list_varying_logical(self, val, pref)
   !< Get CLA (multiple) value with varying size, logical.
-  class(command_line_argument), intent(inout) :: self     !< CLA data.
-  logical, allocatable,         intent(out)   :: val(:)   !< CLA values.
-  character(*), optional,       intent(in)    :: pref     !< Prefixing string.
-  integer(I4P)                                :: Nv       !< Number of values.
-  character(len=len(self%val)), allocatable   :: valsV(:) !< String array of values based on self%val.
-  character(len=len(self%def)), allocatable   :: valsD(:) !< String array of values based on self%def.
-  integer(I4P)                                :: v        !< Values counter.
+  class(command_line_argument), intent(inout) :: self    !< CLA data.
+  logical, allocatable         , intent(out)   :: val(:)  !< CLA values.
+  character(*), optional,       intent(in)    :: pref    !< Prefixing string.
+  character(:), allocatable                   :: vals(:) !< Stored values (parsed or default).
+  integer(I4P)                                :: Nv      !< Number of values.
+  integer(I4P)                                :: v       !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
   if (.not.allocated(self%nargs)) then
@@ -1394,67 +1299,42 @@ contains
     return
   endif
   if (self%act==action_store) then
-    if (self%is_passed) then
-      call tokenize(strin=self%val, delimiter=ARGS_SEP, toks=valsV, Nt=Nv)
-      if (.not.self%check_list_size(Nv=Nv, val=valsV(1), pref=pref)) return
-      allocate(logical:: val(1:Nv))
-      do v=1,Nv
-        read(valsV(v), *, iostat=self%error)val(v)
-        if (self%error/=0) then
-          call self%errored(pref=pref, error=ERROR_CASTING_LOGICAL, log_value=valsD(v))
-          exit
-        endif
-      enddo
-    else ! using default value
-      call tokenize(strin=self%def, delimiter=ARGS_SEP, toks=valsD, Nt=Nv)
-      if (.not.self%check_list_size(Nv=Nv, val=valsD(1), pref=pref)) return
-      allocate(logical:: val(1:Nv))
-      do v=1,Nv
-        read(valsD(v), *, iostat=self%error)val(v)
-        if (self%error/=0) then
-          call self%errored(pref=pref, error=ERROR_CASTING_LOGICAL, log_value=valsD(v))
-          exit
-        endif
-      enddo
-    endif
+    call list_items(self%stored_list(), vals, Nv)
+    if (.not.self%check_list_size(vals=vals, pref=pref)) return
+    allocate(logical:: val(1:Nv))
+    do v=1, Nv
+      read(vals(v), *, iostat=self%error)val(v)
+      if (self%error/=0) then
+        call self%errored(pref=pref, error=ERROR_CASTING_LOGICAL, log_value=vals(v))
+        exit
+      endif
+    enddo
   endif
   endsubroutine get_cla_list_varying_logical
 
   subroutine get_cla_list_varying_char(self, val, pref)
   !< Get CLA (multiple) value with varying size, character.
-  class(command_line_argument), intent(inout) :: self     !< CLA data.
-  character(*), allocatable,    intent(out)   :: val(:)   !< CLA values.
-  character(*), optional,       intent(in)    :: pref     !< Prefixing string.
-  integer(I4P)                                :: Nv       !< Number of values.
-  character(len=len(self%val)), allocatable   :: valsV(:) !< String array of values based on self%val.
-  character(len=len(self%def)), allocatable   :: valsD(:) !< String array of values based on self%def.
-  integer(I4P)                                :: v        !< Values counter.
+  class(command_line_argument), intent(inout) :: self    !< CLA data.
+  character(*), allocatable    , intent(out)   :: val(:)  !< CLA values.
+  character(*), optional,       intent(in)    :: pref    !< Prefixing string.
+  character(:), allocatable                   :: vals(:) !< Stored values (parsed or default).
+  integer(I4P)                                :: Nv      !< Number of values.
+  integer(I4P)                                :: v       !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
   if (.not.allocated(self%nargs)) then
-     call self%errored(pref=pref, error=ERROR_NO_LIST)
-     return
+    call self%errored(pref=pref, error=ERROR_NO_LIST)
+    return
   endif
   if (self%act==action_store) then
-     if (self%is_passed) then
-        call tokenize(strin=self%val, delimiter=ARGS_SEP, toks=valsV, Nt=Nv)
-        if (.not.self%check_list_size(Nv=Nv, val=valsV(1), pref=pref)) return
-        allocate(val(1:Nv))
-        do v=1, Nv
-           val(v) = trim(adjustl(valsV(v)))
-           if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
-           if (self%error/=0) exit
-        enddo
-     else ! using default value
-        call tokenize(strin=self%def, delimiter=ARGS_SEP, toks=valsD, Nt=Nv)
-        if (.not.self%check_list_size(Nv=Nv, val=valsD(1), pref=pref)) return
-        allocate(val(1:Nv))
-        do v=1, Nv
-          val(v) = trim(adjustl(valsD(v)))
-          if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
-          if (self%error/=0) exit
-        enddo
-     endif
+    call list_items(self%stored_list(), vals, Nv)
+    if (.not.self%check_list_size(vals=vals, pref=pref)) return
+    allocate(val(1:Nv))
+    do v=1, Nv
+      val(v) = trim(adjustl(vals(v)))
+      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+      if (self%error/=0) exit
+    enddo
   endif
   endsubroutine get_cla_list_varying_char
 

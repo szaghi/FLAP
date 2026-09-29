@@ -8,10 +8,9 @@ use flap_command_line_argument_t, only : command_line_argument, &
                                          ACTION_PRINT_MARK,     &
                                          ACTION_PRINT_VERS,     &
                                          ACTION_STORE,          &
-                                         ACTION_STORE_STAR,     &
-                                         ARGS_SEP
+                                         ACTION_STORE_STAR
 use flap_object_t, only : object
-use flap_utils_m, only : read_env
+use flap_utils_m, only : list_push, read_env
 use penf
 
 implicit none
@@ -388,8 +387,8 @@ contains
                           aaa = n_next_undef_args(args=args, arg=arg)
                           if (aaa>=arg+1) then
                              self%cla(a)%val = ''
-                             do aa=aaa, arg + 1, -1 ! decreasing loop due to gfortran bug
-                                self%cla(a)%val = trim(adjustl(args(aa)))//args_sep//trim(self%cla(a)%val)
+                             do aa=arg + 1, aaa
+                                call list_push(self%cla(a)%val, trim(adjustl(args(aa))))
                                 found_val = .true.
                              enddo
                              arg = aaa
@@ -402,8 +401,8 @@ contains
                           aaa = n_next_undef_args(args=args, arg=arg)
                           if (aaa>=arg+1) then
                              self%cla(a)%val = ''
-                             do aa=aaa, arg + 1, -1 ! decreasing loop due to gfortran bug
-                                self%cla(a)%val = trim(adjustl(args(aa)))//args_sep//trim(self%cla(a)%val)
+                             do aa=arg + 1, aaa
+                                call list_push(self%cla(a)%val, trim(adjustl(args(aa))))
                                 found_val = .true.
                              enddo
                              arg = aaa
@@ -413,8 +412,8 @@ contains
                           ! take nargs values when at least nargs follow: further values are the next arguments (B19)
                           if (n_next_undef_args(args=args, arg=arg) >= arg + nargs) then
                              self%cla(a)%val = ''
-                             do aa=arg + nargs, arg + 1, -1 ! decreasing loop due to gfortran bug
-                                self%cla(a)%val = trim(adjustl(args(aa)))//args_sep//trim(self%cla(a)%val)
+                             do aa=arg + 1, arg + nargs
+                                call list_push(self%cla(a)%val, trim(adjustl(args(aa))))
                              enddo
                              found_val = .true.
                              arg = arg + nargs

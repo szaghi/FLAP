@@ -6,6 +6,11 @@ use penf
 implicit none
 private
 public :: count
+public :: LIST_SEP
+public :: list_count
+public :: list_items
+public :: list_join
+public :: list_push
 public :: read_env
 public :: replace
 public :: replace_all
@@ -14,6 +19,8 @@ public :: tokenize
 public :: unique
 public :: upper_case
 public :: wstrip
+
+character(len=*), parameter :: LIST_SEP = '||!||' !< Separator of the items of a stored list: v1||!||v2||!||.
 
 interface count
   !< Overload intrinsic function count for counting substring occurences into strings.
@@ -38,6 +45,60 @@ contains
     c1 = c1 + c2 - 1 + len(substring)
   enddo
   endfunction count_substring
+
+  pure function list_count(list) result(n)
+  !< Return the number of items of a stored list; an empty (blank) list has none.
+  character(*), intent(in) :: list !< Stored list.
+  integer(I4P)             :: n    !< Number of items.
+
+  n = 0
+  if (len_trim(list) == 0) return
+  n = count(list, LIST_SEP)
+  if (len(list) < len(LIST_SEP)) then
+    n = 1
+  elseif (list(len(list)-len(LIST_SEP)+1:) /= LIST_SEP) then
+    n = n + 1 ! last item without its trailing separator (as the defaults are stored)
+  endif
+  endfunction list_count
+
+  pure subroutine list_items(list, items, n)
+  !< Return the items of a stored list, each as long as the whole list; an empty (blank) list has none.
+  character(*),              intent(in)  :: list     !< Stored list.
+  character(:), allocatable, intent(out) :: items(:) !< Items.
+  integer(I4P),              intent(out) :: n        !< Number of items.
+  character(len(list)), allocatable      :: toks(:)  !< Tokens.
+
+  n = list_count(list)
+  allocate(character(len(list)) :: items(n))
+  if (n == 0) return
+  call tokenize(strin=list, delimiter=LIST_SEP, toks=toks)
+  items = toks(1:n)
+  endsubroutine list_items
+
+  pure function list_join(list, sep) result(joined)
+  !< Return the items of a stored list with a separator between them.
+  character(*), intent(in)  :: list   !< Stored list.
+  character(*), intent(in)  :: sep    !< Separator.
+  character(:), allocatable :: joined !< Joined items.
+  integer(I4P)              :: last   !< End of the last item.
+
+  joined = ''
+  if (len_trim(list) == 0) return
+  last = len(list)
+  if (last >= len(LIST_SEP)) then
+    if (list(last-len(LIST_SEP)+1:) == LIST_SEP) last = last - len(LIST_SEP)
+  endif
+  joined = replace_all(string=list(1:last), substring=LIST_SEP, restring=sep)
+  endfunction list_join
+
+  pure subroutine list_push(list, item)
+  !< Append an item to a stored list (an unallocated list is empty).
+  character(:), allocatable, intent(inout) :: list !< Stored list.
+  character(*),              intent(in)    :: item !< Item.
+
+  if (.not.allocated(list)) list = ''
+  list = list//item//LIST_SEP
+  endsubroutine list_push
 
   subroutine read_env(name, value, found)
   !< Read an environment variable, whatever the length of its value: the only environment lookup of the library.
