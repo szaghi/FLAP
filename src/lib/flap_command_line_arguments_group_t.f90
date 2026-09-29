@@ -583,81 +583,35 @@ contains
   endfunction usage
 
   function signature(self, bash_completion, plain)
-  !< Get CLAsG signature.
+  !< Get CLAsG signature: the usage text, or the bash completion (a COMPREPLY line with the switches, then the value tests).
   class(command_line_arguments_group), intent(in) :: self             !< CLAsG data.
   logical, optional,                   intent(in) :: bash_completion  !< Return the signature for bash completion.
-  logical, optional,                   intent(in) :: plain            !< Return the signature as plain switches list.
-  ! logical                                         :: plain_           !< Return the signature as plain switches list, local var.
+  logical, optional,                   intent(in) :: plain            !< Return the value tests as plain switches lists.
   logical                                         :: bash_completion_ !< Return the signature for bash completion, local variable.
+  logical                                         :: plain_           !< Return the signature as plain switches list, local var.
   character(len=:), allocatable                   :: signature        !< Signature.
-  ! logical                                         :: clas_choices     !< Flag to check if there are CLAs with choices.
-  integer(I4P)                                    :: a!, aa            !< Counter.
+  integer(I4P)                                    :: a                !< Counter.
 
   signature = ''
   bash_completion_ = .false. ; if (present(bash_completion)) bash_completion_ = bash_completion
-  ! plain_ = .false. ; if (present(plain)) plain_ = plain
-  ! if (bash_completion_) then
-  !   ! if (plain_) then
-  !   !   do a=1, self%Na
-  !   !     signature = signature//self%cla(a)%signature(bash_completion=bash_completion, plain=plain)
-  !   !   enddo
-  !   ! else
-  !     clas_choices = .false.
-  !     do a=1, self%Na
-  !       if (self%cla(a)%has_choices()) then
-  !         aa = a
-  !         clas_choices = .true.
-  !         exit
-  !       endif
-  !     enddo
-  !     if (clas_choices) then
-  !       signature = signature//new_line('a')//&
-  !                   '    if [ "$prev" == "'//self%cla(aa)%switch//'" ] || [ "$prev" == "'//self%cla(aa)%switch_ab//'" ] ; then'
-  !       signature = signature//new_line('a')//'       COMPREPLY=( $( compgen -W "'//choices(self%cla(aa)%choices)//'" -- $cur ) )'
-  !       do a=aa+1, self%Na
-  !         if (self%cla(a)%has_choices()) then
-  !           signature = signature//new_line('a')//&
-  !                       '    elif [ "$prev" == "'//self%cla(a)%switch//'" ] || [ "$prev" == "'//self%cla(a)%switch_ab//'" ] ; then'
-  !           signature = signature//new_line('a')//'       COMPREPLY=( $( compgen -W "'//choices(self%cla(a)%choices)//&
-  !                       '" -- $cur ) )'
-  !         endif
-  !       enddo
-  !       signature = signature//new_line('a')//'    else'//new_line('a')//'      COMPREPLY=( $( compgen -W "'
-  !       do a=1, self%Na
-  !         signature = signature//self%cla(a)%signature(bash_completion=bash_completion)
-  !       enddo
-  !       signature = signature//'" -- $cur ) )'//new_line('a')//'    fi'
-  !     else
-  !       signature = signature//new_line('a')//'    COMPREPLY=( $( compgen -W "'
-  !       do a=1, self%Na
-  !         signature = signature//self%cla(a)%signature(bash_completion=bash_completion)
-  !       enddo
-  !       signature = signature//'" -- $cur ) )'
-  !     endif
-  !   ! endif
-  ! else
-    if (bash_completion_) then
-      do a=1, self%Na
-        signature = signature//self%cla(a)%signature(bash_completion=bash_completion, plain=.true.)
-      enddo
-      signature = new_line('a')//'    COMPREPLY=( $( compgen -W "'//signature//'" -- $cur ) )'
-    endif
+  plain_ = .false. ; if (present(plain)) plain_ = plain
+  if (bash_completion_) then
     do a=1, self%Na
-      signature = signature//self%cla(a)%signature(bash_completion=bash_completion, plain=plain)
+      signature = signature//self%cla(a)%completion_words()
     enddo
-  ! endif
-  !contains
-  !  pure function choices(choices_c)
-  !  !< Return space-separated choices list from a comma-separated one.
-  !  character(len=*), intent(in)  :: choices_c !< Comma-separated list of choices.
-  !  character(len=len(choices_c)) :: choices   !< Space-separated list of choices.
-  !  integer(I4P)                  :: c         !< Counter.
-
-  !  choices = choices_c
-  !  do c=1, len(choices)
-  !    if (choices(c:c)==',') choices(c:c) = ' '
-  !  enddo
-  !  endfunction choices
+    signature = new_line('a')//'    COMPREPLY=( $( compgen -W "'//signature//'" -- $cur ) )'
+    do a=1, self%Na
+      if (plain_) then
+        signature = signature//self%cla(a)%completion_words()
+      else
+        signature = signature//self%cla(a)%completion_values()
+      endif
+    enddo
+  else
+    do a=1, self%Na
+      signature = signature//self%cla(a)%signature_usage()
+    enddo
+  endif
   endfunction signature
 
   ! private methods

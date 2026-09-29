@@ -94,6 +94,9 @@ type, extends(object) :: command_line_argument
     procedure, public :: has_choices                     !< Return true if CLA has defined choices.
     procedure, public :: sanitize_defaults               !< Sanitize default values.
     procedure, public :: signature                       !< Get signature.
+    procedure, public :: signature_usage                 !< Get the signature for the usage text.
+    procedure, public :: completion_words                !< Get the bash completion words (switches).
+    procedure, public :: completion_values               !< Get the bash completion of the value.
     procedure, public :: usage                           !< Get correct usage.
     ! private methods
     procedure, private :: errored                         !< Trig error occurence and print meaningful message.
@@ -432,96 +435,107 @@ contains
   endfunction usage
 
   function signature(self, bash_completion, plain)
-  !< Get signature.
-  class(command_line_argument), intent(in) :: self             !< CLA data.
-  logical, optional,            intent(in) :: bash_completion  !< Return the signature for bash completion.
-  logical, optional,            intent(in) :: plain            !< Return the signature as plain switches list.
-  logical                                  :: plain_           !< Return the signature as plain switches list, local var.
+  !< Get signature: dispatch to the renderer of the requested output.
+  !<
+  !< Usage text: signature_usage; bash completion: completion_words (plain) or completion_values.
+  class(command_line_argument), intent(in) :: self            !< CLA data.
+  logical, optional,            intent(in) :: bash_completion !< Return the signature for bash completion.
+  logical, optional,            intent(in) :: plain           !< Return the signature as plain switches list.
+  character(len=:), allocatable            :: signature       !< Signature.
   logical                                  :: bash_completion_ !< Return the signature for bash completion, local variable.
-  character(len=:), allocatable            :: signature        !< Signature.
-  integer(I4P)                             :: nargs            !< Number of arguments consumed by CLA.
-  integer(I4P)                             :: a                !< Counter.
+  logical                                  :: plain_           !< Return the signature as plain switches list, local var.
 
   bash_completion_ = .false. ; if (present(bash_completion)) bash_completion_ = bash_completion
   plain_ = .false. ; if (present(plain)) plain_ = plain
-  if (.not.self%is_hidden) then
-    if (bash_completion_) then
-      if (.not.self%is_positional) then
-        if (plain_) then
-          if (trim(adjustl(self%switch))/=trim(adjustl(self%switch_ab))) then
-            signature = ' '//trim(adjustl(self%switch))//' '//trim(adjustl(self%switch_ab))
-          else
-            signature = ' '//trim(adjustl(self%switch))
-          endif
-        else
-          signature = new_line('a')//'    if [ "$prev" == "'//self%switch//'" ] || [ "$prev" == "'//self%switch_ab//'" ] ; then'
-          if (self%has_choices()) then
-             signature = signature//new_line('a')//'       COMPREPLY=( $( compgen -W "'//choices(self%choices)//'" -- $cur ) )'
-          elseif ((self%act==action_store).or.(self%act==action_store_star)) then
-             signature = signature//new_line('a')//'       COMPREPLY=( )'
-          endif
-          signature = signature//new_line('a')//'       return 0'
-          signature = signature//new_line('a')//'    fi'
-        endif
-        ! if (trim(adjustl(self%switch))/=trim(adjustl(self%switch_ab))) then
-          ! if (plain_) then
-          !   signature = ' "'//trim(adjustl(self%switch))//'" "'//trim(adjustl(self%switch_ab))//'"'
-          ! else
-            ! signature = ' '//trim(adjustl(self%switch))//' '//trim(adjustl(self%switch_ab))
-          ! endif
-        ! else
-          ! if (plain_) then
-          !   signature = ' "'//trim(adjustl(self%switch))//'"'
-          ! else
-            ! signature = ' '//trim(adjustl(self%switch))
-          ! endif
-        ! endif
+  if (.not.bash_completion_) then
+    signature = self%signature_usage()
+  elseif (plain_) then
+    signature = self%completion_words()
+  else
+    signature = self%completion_values()
+  endif
+  endfunction signature
+
+  function signature_usage(self) result(signature)
+  !< Get the signature for the usage text (human readable): the only place for rendering changes such as metavars.
+  class(command_line_argument), intent(in) :: self      !< CLA data.
+  character(len=:), allocatable            :: signature !< Signature.
+  integer(I4P)                             :: nargs     !< Number of arguments consumed by CLA.
+  integer(I4P)                             :: a         !< Counter.
+
+  signature = ''
+  if (self%is_hidden) return
+  if (self%act==action_store) then
+    if (.not.self%is_positional) then
+      if (allocated(self%nargs)) then
+        select case(self%nargs)
+        case('+')
+          signature = 'value#1 [value#2 value#3...]'
+        case('*')
+          signature = '[value#1 value#2 value#3...]'
+        case default
+          nargs = cton(str=trim(adjustl(self%nargs)),knd=1_I4P)
+          signature = ''
+          do a=1, nargs
+            signature = signature//'value#'//trim(str(a, .true.))//' '
+          enddo
+        endselect
+      else
+        signature = 'value'
+      endif
+      if (.not.self%is_val_required) signature = '['//signature//']'
+      if (self%is_required) then
+        signature = ' '//trim(adjustl(self%switch))//' '//signature
+      else
+        signature = ' ['//trim(adjustl(self%switch))//' '//signature//']'
       endif
     else
-      if (self%act==action_store) then
-        if (.not.self%is_positional) then
-          if (allocated(self%nargs)) then
-            select case(self%nargs)
-            case('+')
-              signature = 'value#1 [value#2 value#3...]'
-            case('*')
-              signature = '[value#1 value#2 value#3...]'
-            case default
-              nargs = cton(str=trim(adjustl(self%nargs)),knd=1_I4P)
-              signature = ''
-              do a=1, nargs
-                signature = signature//'value#'//trim(str(a, .true.))//' '
-              enddo
-            endselect
-          else
-            signature = 'value'
-          endif
-          if (.not.self%is_val_required) signature = '['//signature//']'
-          if (self%is_required) then
-            signature = ' '//trim(adjustl(self%switch))//' '//signature
-          else
-            signature = ' ['//trim(adjustl(self%switch))//' '//signature//']'
-          endif
-        else
-          if (self%is_required) then
-            signature = ' value'
-          else
-            signature = ' [value]'
-          endif
-        endif
-      elseif (self%act==action_store_star) then
-        signature = ' [value]'
+      if (self%is_required) then
+        signature = ' value'
       else
-        if (self%is_required) then
-          signature = ' '//trim(adjustl(self%switch))
-        else
-          signature = ' ['//trim(adjustl(self%switch))//']'
-        endif
+        signature = ' [value]'
       endif
     endif
+  elseif (self%act==action_store_star) then
+    signature = ' [value]'
   else
-    signature = ''
+    if (self%is_required) then
+      signature = ' '//trim(adjustl(self%switch))
+    else
+      signature = ' ['//trim(adjustl(self%switch))//']'
+    endif
   endif
+  endfunction signature_usage
+
+  function completion_words(self) result(words)
+  !< Get the bash completion words of a named CLA: its switches, blank separated (none for positional or hidden CLAs).
+  class(command_line_argument), intent(in) :: self  !< CLA data.
+  character(len=:), allocatable            :: words !< Completion words.
+
+  words = ''
+  if (self%is_hidden.or.self%is_positional) return
+  if (trim(adjustl(self%switch))/=trim(adjustl(self%switch_ab))) then
+    words = ' '//trim(adjustl(self%switch))//' '//trim(adjustl(self%switch_ab))
+  else
+    words = ' '//trim(adjustl(self%switch))
+  endif
+  endfunction completion_words
+
+  function completion_values(self) result(values)
+  !< Get the bash completion of the value following a named CLA: a `prev` test offering its choices, or nothing for a value.
+  class(command_line_argument), intent(in) :: self   !< CLA data.
+  character(len=:), allocatable            :: values !< Completion of the value.
+
+  values = ''
+  if (self%is_hidden.or.self%is_positional) return
+  values = new_line('a')//'    if [ "$prev" == "'//self%switch//'" ] || [ "$prev" == "'//self%switch_ab//'" ] ; then'
+  if (self%has_choices()) then
+     values = values//new_line('a')//'       COMPREPLY=( $( compgen -W "'//choices(self%choices)//'" -- $cur ) )'
+  elseif ((self%act==action_store).or.(self%act==action_store_star)) then
+     values = values//new_line('a')//'       COMPREPLY=( )'
+  endif
+  values = values//new_line('a')//'       return 0'
+  values = values//new_line('a')//'    fi'
   contains
     pure function choices(choices_c)
     !< Return space-separated choices list from a comma-separated one.
@@ -534,7 +548,7 @@ contains
       if (choices(c:c)==',') choices(c:c) = ' '
     enddo
     endfunction choices
-  endfunction signature
+  endfunction completion_values
 
   pure function has_choices(self)
   !< Return true if CLA has choices.
