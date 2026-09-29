@@ -3,7 +3,7 @@ program flap_test_list
 !< List storage: one API over the stored list format, used by the parser and by every list getter (issue #125, step 0.D.3).
 !<
 !< Every CLI scenario uses a fresh CLI, so the scenarios are independent.
-use flap, only : command_line_interface, ERROR_CASTING_LOGICAL, ERROR_LIST_SIZE
+use flap, only : command_line_interface, ERROR_CASTING_LOGICAL, ERROR_LIST_SIZE, ERROR_UNSUPPORTED_TYPE
 use flap_test_utils, only : assert, assert_equal, capture_close, capture_open
 use flap_utils_m, only : list_count, list_items, list_join, list_push
 use penf, only : I4P
@@ -36,6 +36,7 @@ call capture_open(lun)
 call check_flag_defaults
 call check_bad_logical
 call check_list_size
+call check_flag_varying
 call capture_close(lun)
 
 contains
@@ -120,4 +121,48 @@ contains
   call assert_equal(error, ERROR_LIST_SIZE, 'default of 2 flags into 3 slots: error')
   call assert(all(l3), 'default of 2 flags into 3 slots: untouched')
   endsubroutine check_list_size
+
+  subroutine check_flag_varying
+  !< B26 (#125): get_varying on a list of flags gives the defaults, or as many .true./.false. when passed.
+  type(command_line_interface) :: cli   !< Command Line Interface (CLI).
+  logical, allocatable         :: l(:)  !< Values.
+  integer(I4P), allocatable    :: i(:)  !< Values of an unsupported type.
+  integer(I4P)                 :: error !< Error trapping flag.
+
+  call define_flags(cli, '')
+  call cli%get_varying(switch='--t', val=l, error=error)
+  call assert_equal(error, 0_I4P, 'store_true list not passed: error')
+  call assert(allocated(l), 'store_true list not passed: allocated')
+  call assert_equal(int(size(l), I4P), 2_I4P, 'store_true list not passed: size')
+  call assert((.not.l(1)) .and. l(2), 'store_true list not passed: the defaults')
+  call cli%get_varying(switch='--x', val=l, error=error)
+  call assert_equal(error, ERROR_CASTING_LOGICAL, 'list default not a logical: casting error')
+  call cli%get_varying(switch='--t', val=i, error=error)
+  call assert_equal(error, ERROR_UNSUPPORTED_TYPE, 'integers for a list of flags: unsupported type')
+
+  call define_flags(cli, '--t --f')
+  call cli%get_varying(switch='--t', val=l, error=error)
+  call assert_equal(error, 0_I4P, 'store_true list passed: error')
+  call assert_equal(int(size(l), I4P), 2_I4P, 'store_true list passed: size')
+  call assert(all(l), 'store_true list passed: all .true.')
+  call cli%get_varying(switch='--f', val=l, error=error)
+  call assert_equal(error, 0_I4P, 'store_false list passed: error')
+  call assert_equal(int(size(l), I4P), 3_I4P, 'store_false list passed: size')
+  call assert(all(.not.l), 'store_false list passed: all .false.')
+  endsubroutine check_flag_varying
+
+  subroutine define_flags(cli, args)
+  !< Define lists of flags and parse a command line.
+  type(command_line_interface), intent(inout) :: cli   !< Command Line Interface (CLI).
+  character(*),                 intent(in)    :: args  !< Command line.
+  integer(I4P)                                :: error !< Error trapping flag.
+
+  call cli%free
+  call cli%init(progname='flap_test_list', error_lun=lun, usage_lun=lun)
+  call cli%add(switch='--t', help='flags', required=.false., act='store_true', nargs='2', def='F T', error=error)
+  call cli%add(switch='--f', help='flags', required=.false., act='store_false', nargs='3', def='T T F', error=error)
+  call cli%add(switch='--x', help='flags', required=.false., act='store_true', nargs='2', def='F X', error=error)
+  call cli%parse(args=args, error=error)
+  call assert_equal(error, 0_I4P, 'flag lists: parse '//args)
+  endsubroutine define_flags
 endprogram flap_test_list

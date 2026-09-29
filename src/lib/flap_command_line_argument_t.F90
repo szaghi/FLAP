@@ -1146,6 +1146,8 @@ contains
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
       if (self%error/=0) exit
     enddo
+  elseif (self%act==action_store_true.or.self%act==action_store_false) then
+    call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
   endif
   endsubroutine get_cla_list_varying_R16P
 
@@ -1172,6 +1174,8 @@ contains
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
       if (self%error/=0) exit
     enddo
+  elseif (self%act==action_store_true.or.self%act==action_store_false) then
+    call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
   endif
   endsubroutine get_cla_list_varying_R8P
 
@@ -1198,6 +1202,8 @@ contains
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
       if (self%error/=0) exit
     enddo
+  elseif (self%act==action_store_true.or.self%act==action_store_false) then
+    call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
   endif
   endsubroutine get_cla_list_varying_R4P
 
@@ -1224,6 +1230,8 @@ contains
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
       if (self%error/=0) exit
     enddo
+  elseif (self%act==action_store_true.or.self%act==action_store_false) then
+    call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
   endif
   endsubroutine get_cla_list_varying_I8P
 
@@ -1250,6 +1258,8 @@ contains
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
       if (self%error/=0) exit
     enddo
+  elseif (self%act==action_store_true.or.self%act==action_store_false) then
+    call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
   endif
   endsubroutine get_cla_list_varying_I4P
 
@@ -1276,6 +1286,8 @@ contains
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
       if (self%error/=0) exit
     enddo
+  elseif (self%act==action_store_true.or.self%act==action_store_false) then
+    call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
   endif
   endsubroutine get_cla_list_varying_I2P
 
@@ -1302,6 +1314,8 @@ contains
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
       if (self%error/=0) exit
     enddo
+  elseif (self%act==action_store_true.or.self%act==action_store_false) then
+    call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
   endif
   endsubroutine get_cla_list_varying_I1P
 
@@ -1330,6 +1344,25 @@ contains
         exit
       endif
     enddo
+  elseif (self%act==action_store_true.or.self%act==action_store_false) then
+    ! a list of flags (B26 of #125): its defaults, or as many values as the defaults set by the flag when passed
+    if (allocated(self%def)) then
+      call list_items(self%def, vals, Nv)
+    else
+      call list_items('', vals, Nv)
+    endif
+    allocate(logical:: val(1:Nv))
+    if (self%is_passed) then
+      val = self%act==action_store_true
+    else
+      do v=1, Nv
+        read(vals(v), *, iostat=self%error)val(v)
+        if (self%error/=0) then
+          call self%errored(pref=pref, error=ERROR_CASTING_LOGICAL, log_value=vals(v))
+          exit
+        endif
+      enddo
+    endif
   endif
   endsubroutine get_cla_list_varying_logical
 
@@ -1356,6 +1389,8 @@ contains
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
       if (self%error/=0) exit
     enddo
+  elseif (self%act==action_store_true.or.self%act==action_store_false) then
+    call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
   endif
   endsubroutine get_cla_list_varying_char
 
