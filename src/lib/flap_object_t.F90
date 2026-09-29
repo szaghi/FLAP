@@ -25,11 +25,7 @@ type, abstract, public :: object
   character(len=:), allocatable :: error_message      !< Meaningful error message to standard-error.
   character(len=:), allocatable :: error_color        !< ANSI color of error messages.
   character(len=:), allocatable :: error_style        !< ANSI style of error messages.
-#ifdef __GFORTRAN__
-  character(512  ), allocatable :: examples(:)        !< Examples of correct usage.
-#else
   character(len=:), allocatable :: examples(:)        !< Examples of correct usage.
-#endif
   integer(I4P)                  :: error=0_I4P        !< Error trapping flag.
   integer(I4P)                  :: usage_lun=stderr   !< Output unit to print help/usage messages
   integer(I4P)                  :: version_lun=stdout !< Output unit to print version message
@@ -99,11 +95,7 @@ contains
   character(*), optional, intent(in)    :: examples(1:) !< Examples of correct usage.
 
   if (present(examples)) then
-#ifdef __GFORTRAN__
-    allocate(self%examples(1:size(examples)))
-#else
-    allocate(character(len=len(examples(1))):: self%examples(1:size(examples))) ! does not work with gfortran 4.9.2
-#endif
+    allocate(character(len=len(examples)):: self%examples(1:size(examples)))
     self%examples = examples
   endif
   endsubroutine set_examples

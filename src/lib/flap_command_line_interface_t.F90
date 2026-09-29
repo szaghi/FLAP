@@ -17,11 +17,7 @@ type, extends(object), public :: command_line_interface
   !< Command Line Interface (CLI) class.
   private
   type(command_line_arguments_group), allocatable :: clasg(:)                    !< CLA list [1:Na].
-#ifdef __GFORTRAN__
-  character(512  ), allocatable                   :: args(:)                     !< Actually passed command line arguments.
-#else
   character(len=:), allocatable                   :: args(:)                     !< Actually passed command line arguments.
-#endif
   logical                                         :: disable_hv=.false.          !< Disable automatic 'help' and 'version' CLAs.
   logical                                         :: is_parsed_=.false.          !< Parse status.
   logical                                         :: ignore_unknown_clas=.false. !< Disable errors-raising for passed unknown CLAs.
@@ -86,13 +82,13 @@ type, extends(object), public :: command_line_interface
     final              :: finalize                        !< Free dynamic memory when finalizing.
 endtype command_line_interface
 
-integer(I4P), parameter, public :: MAX_VAL_LEN = 1000 !< Maximum number of characters of CLA value.
 ! errors codes
 integer(I4P), parameter, public :: ERROR_MISSING_CLA           = 1000 !< CLA not found in CLI.
 integer(I4P), parameter, public :: ERROR_MISSING_GROUP         = 1001 !< Group not found in CLI.
 integer(I4P), parameter, public :: ERROR_MISSING_SELECTION_CLA = 1002 !< CLA selection in CLI failing.
 integer(I4P), parameter, public :: ERROR_TOO_FEW_CLAS          = 1003 !< Insufficient arguments for CLI.
 integer(I4P), parameter, public :: ERROR_UNKNOWN_CLAS_IGNORED  = 1004 !< Unknown CLAs passed, but ignored.
+integer(I4P), parameter, public :: ERROR_ARGUMENT_RETRIEVAL    = 1012 !< A command line argument cannot be retrieved.
 
 contains
   ! public methods
@@ -448,6 +444,7 @@ contains
   integer(I4P), optional,        intent(out)   :: error   !< Error trapping flag.
   integer(I4P)                                 :: g       !< Counter for CLAs group.
   integer(I4P), allocatable                    :: ai(:,:) !< Counter for CLAs grouped.
+  character(len=:), allocatable                :: gargs(:)!< Arguments of a group.
 
   if (present(error)) error = 0
   if (self%is_parsed_) return
@@ -507,6 +504,10 @@ contains
   else
     call self%get_args(ai=ai)
   endif
+  if (self%error == ERROR_ARGUMENT_RETRIEVAL) then
+    if (present(error)) error = self%error
+    return
+  endif
 
   ! check CLI consistency
   call self%check(pref=pref)
@@ -522,7 +523,10 @@ contains
   ! parse CLI
   do g=0,size(ai,dim=1)-1
     if (ai(g,1)>0) then
-      call self%clasg(g)%parse(args=self%args(ai(g,1):ai(g,2)), ignore_unknown_clas=self%ignore_unknown_clas, &
+      ! pass a copy: gfortran (13-16) hands a section of a deferred-length character array to a character(*) dummy
+      ! starting at the first element of the whole array, not of the section
+      gargs = self%args(ai(g,1):ai(g,2))
+      call self%clasg(g)%parse(args=gargs, ignore_unknown_clas=self%ignore_unknown_clas, &
                                pref=pref, error_unknown_clas=self%error_unknown_clas)
     else
       call self%clasg(g)%sanitize_defaults
@@ -654,9 +658,7 @@ contains
   character(len=len_trim(args)), allocatable   :: toks(:)!< Command line arguments.
   integer(I4P)                                 :: Na     !< Number of command line arguments passed.
   integer(I4P)                                 :: a      !< Counter for CLAs.
-#ifndef __GFORTRAN__
-  integer(I4P)                                 :: length !< Maxium lenght of arguments string.
-#endif
+  integer(I4P)                                 :: length !< Length of the longest argument.
 
   ! prepare CLI arguments list
   if (allocated(self%args)) deallocate(self%args)
@@ -665,15 +667,11 @@ contains
 
   if (Na > 0) then
     ! allocate CLI arguments list
-#ifdef __GFORTRAN__
-    allocate(self%args(1:Na))
-#else
     length = 0
     find_longest_arg: do a=1,Na
       length = max(length,len_trim(adjustl(toks(a))))
     enddo find_longest_arg
     allocate(character(length):: self%args(1:Na))
-#endif
 
     ! construct arguments list
     get_args: do a=1,Na
@@ -686,29 +684,40 @@ contains
 
   subroutine get_args_from_invocation(self, ai)
   !< Get CLAs from CLI invocation.
+  !<
+  !< Every argument is read whole: its length is queried first, and a failed retrieval raises ERROR_ARGUMENT_RETRIEVAL.
   class(command_line_interface), intent(inout) :: self    !< CLI data.
   integer(I4P), allocatable,     intent(out)   :: ai(:,:) !< CLAs grouped indexes.
+  character(len=:), allocatable                :: arg     !< Command line argument.
   integer(I4P)                                 :: Na      !< Number of command line arguments passed.
-  character(max_val_len)                       :: switch  !< Switch name.
+  integer(I4P)                                 :: length  !< Length of the longest argument.
+  integer(I4P)                                 :: l       !< Length of an argument.
+  integer(I4P)                                 :: status  !< Retrieval status.
   integer(I4P)                                 :: a       !< Counter for CLAs.
-  integer(I4P)                                 :: aa      !< Counter for CLAs.
 
   if (allocated(self%args)) deallocate(self%args)
   Na = command_argument_count()
   if (Na > 0) then
-#ifdef __GFORTRAN__
-    allocate(self%args(1:Na))
-#else
-    aa = 0
+    length = 0
     find_longest_arg: do a=1, Na
-      call get_command_argument(a,switch)
-      aa = max(aa,len_trim(switch))
+      call get_command_argument(a, length=l, status=status)
+      if (status /= 0) then
+        call self%errored(error=ERROR_ARGUMENT_RETRIEVAL, position=a)
+        return
+      endif
+      length = max(length, l)
     enddo find_longest_arg
-    allocate(character(aa):: self%args(1:Na))
-#endif
+    allocate(character(length):: self%args(1:Na))
     get_args: do a=1, Na
-      call get_command_argument(a,switch)
-      self%args(a) = trim(adjustl(switch))
+      call get_command_argument(a, length=l)
+      allocate(character(l):: arg)
+      call get_command_argument(a, value=arg, status=status)
+      if (status /= 0) then
+        call self%errored(error=ERROR_ARGUMENT_RETRIEVAL, position=a)
+        return
+      endif
+      self%args(a) = trim(adjustl(arg))
+      deallocate(arg)
     enddo get_args
   endif
 
@@ -1610,14 +1619,15 @@ contains
   endsubroutine save_usage_to_markdown
 
   ! private methods
-  subroutine errored(self, error, pref, group, switch)
+  subroutine errored(self, error, pref, group, switch, position)
   !< Trig error occurrence and print meaningful message.
-  class(command_line_interface), intent(inout) :: self   !< Object data.
-  integer(I4P),                  intent(in)    :: error  !< Error occurred.
-  character(*), optional,        intent(in)    :: pref   !< Prefixing string.
-  character(*), optional,        intent(in)    :: group  !< Group name.
-  character(*), optional,        intent(in)    :: switch !< CLA switch name.
-  character(len=:), allocatable                :: prefd  !< Prefixing string.
+  class(command_line_interface), intent(inout) :: self     !< Object data.
+  integer(I4P),                  intent(in)    :: error    !< Error occurred.
+  character(*), optional,        intent(in)    :: pref     !< Prefixing string.
+  character(*), optional,        intent(in)    :: group    !< Group name.
+  character(*), optional,        intent(in)    :: switch   !< CLA switch name.
+  integer(I4P), optional,        intent(in)    :: position !< Position of the command line argument.
+  character(len=:), allocatable                :: prefd    !< Prefixing string.
 
   self%error = error
   if (self%error/=0) then
@@ -1630,6 +1640,8 @@ contains
       self%error_message = prefd//': to get an option value one of switch "name" or "position" must be provided!'
     case(ERROR_MISSING_GROUP)
       self%error_message = prefd//': ther is no group (command) named "'//trim(adjustl(group))//'"!'
+    case(ERROR_ARGUMENT_RETRIEVAL)
+      self%error_message = prefd//': the command line argument number '//trim(str(position, .true.))//' cannot be retrieved!'
     case(ERROR_TOO_FEW_CLAS)
       ! self%error_message = prefd//': too few arguments ('//trim(str(.true.,Na))//')'//&
                          ! ' respect the required ('//trim(str(.true.,self%Na_required))//')'

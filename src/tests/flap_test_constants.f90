@@ -10,7 +10,8 @@ use flap, only : command_line_interface,                                        
                  ERROR_STORE_STAR_POSITIONAL, ERROR_STORE_STAR_NARGS, ERROR_STORE_STAR_ENVVAR, ERROR_ACTION_UNKNOWN,              &
                  ERROR_DUPLICATED_CLAS, ERROR_MISSING_REQUIRED_VAL,                                                               &
                  ERROR_GROUP_CONSISTENCY, ERROR_GROUP_M_EXCLUDE,                                                                  &
-                 ERROR_MISSING_CLA, ERROR_MISSING_GROUP, ERROR_MISSING_SELECTION_CLA, ERROR_TOO_FEW_CLAS, ERROR_UNKNOWN_CLAS_IGNORED
+                 ERROR_MISSING_CLA, ERROR_MISSING_GROUP, ERROR_MISSING_SELECTION_CLA, ERROR_TOO_FEW_CLAS,                         &
+                 ERROR_UNKNOWN_CLAS_IGNORED, ERROR_ARGUMENT_RETRIEVAL
 use flap_test_utils, only : assert_equal, capture_close, capture_open
 use penf, only : I4P
 
@@ -57,6 +58,7 @@ contains
   call assert_equal(ERROR_MISSING_SELECTION_CLA, 1002_I4P,  'ERROR_MISSING_SELECTION_CLA')
   call assert_equal(ERROR_TOO_FEW_CLAS,         1003_I4P,   'ERROR_TOO_FEW_CLAS')
   call assert_equal(ERROR_UNKNOWN_CLAS_IGNORED, 1004_I4P,   'ERROR_UNKNOWN_CLAS_IGNORED')
+  call assert_equal(ERROR_ARGUMENT_RETRIEVAL,   1012_I4P,   'ERROR_ARGUMENT_RETRIEVAL')
   endsubroutine check_values
 
   subroutine check_returned_codes()

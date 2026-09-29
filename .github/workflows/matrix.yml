@@ -28,7 +28,7 @@ jobs:
           - gcc: '14'
             mode: tests-gnu-r16p
             experimental: false
-          # PPA snapshot 16-20260315: group help crashes (#125, B17)
+          # trunk snapshot (PPA 16-20260315): tracked, but allowed to fail
           - gcc: '16'
             mode: tests-gnu-debug
             experimental: true

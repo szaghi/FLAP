@@ -60,6 +60,7 @@ positive values are **errors**. Existing values never change.
 | `1002` | `ERROR_MISSING_SELECTION_CLA` | No argument selected | `get` called with neither `switch=` nor `position=` |
 | `1003` | `ERROR_TOO_FEW_CLAS` | Insufficient arguments for CLI | Reserved: not raised by the current version |
 | `1004` | `ERROR_UNKNOWN_CLAS_IGNORED` | Unknown arguments ignored | `init(ignore_unknown_clas=.true.)` and an unknown switch was passed |
+| `1012` | `ERROR_ARGUMENT_RETRIEVAL` | A command line argument cannot be read | `get_command_argument` failed (processor error; not expected in practice) |
 
 The two group codes are named `ERROR_GROUP_*` in the `flap` module; inside the group module they are
 `ERROR_CONSISTENCY` and `ERROR_M_EXCLUDE`, which would clash with the argument-level `ERROR_M_EXCLUDE` (`9`).
