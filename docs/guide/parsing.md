@@ -50,6 +50,21 @@ The string is split the way a shell splits a command line:
 
 As with the real command line, blanks around each argument are removed.
 
+### Inline values: `--option=value`
+
+A value can also be attached to its switch with `=`, in both forms of the switch:
+
+```console
+prog --speed=15 --output="run 1.dat" -s=15
+```
+
+The argument is split at the **first** `=` (`--out=a=b` gives `a=b`), and only when the part before it is a switch of
+the command being parsed: `a=b` stays a positional value and `--unknown=3` an unknown switch. The next argument is not
+consumed, and an inline value wins over the environment variable of the option. Only options storing a single value
+take one: `--flag=yes` is `ERROR_INLINE_VALUE_NOT_ALLOWED`, and a list (`nargs`) is `ERROR_INLINE_VALUE_NARGS` (pass its
+values after the switch). An empty inline value (`--out=`) follows the rule of `--out ""`: it is rejected when the value
+is required.
+
 ### Parsing more than once
 
 `parse` works once: after a successful parse, further calls return immediately (`error = 0`) and keep the first

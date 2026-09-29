@@ -301,15 +301,19 @@ contains
   endfunction is_action_passed
 
   pure function is_switch_token(self, token)
-  !< Check if a command line token names a CLA of the group: the look-ahead test of the parser, built on match_token.
+  !< Check if a command line token names a CLA of the group, also as NAME=VALUE: the look-ahead test of the parser.
   class(command_line_arguments_group), intent(in) :: self            !< CLAsG data.
   character(*),                        intent(in) :: token           !< Command line token.
   logical                                         :: is_switch_token !< Check result.
   integer(I4P)                                    :: a               !< CLA counter.
+  character(len=:), allocatable                   :: inline_val      !< Inline value, if any.
+  logical                                         :: has_inline      !< The token is NAME=VALUE.
+  logical                                         :: match           !< The token names the CLA.
 
   is_switch_token = .false.
   do a=1, self%Na
-    if (self%cla(a)%match_token(token)) then
+    call self%cla(a)%match_inline_token(token, match, inline_val, has_inline)
+    if (match) then
       is_switch_token = .true.
       return
     endif
@@ -388,6 +392,9 @@ contains
   logical                                            :: found               !< Flag for checking if switch is a defined CLA.
   logical                                            :: found_val           !< Flag for checking if switch value is found.
   integer(I4P)                                       :: ipos                !< Positional cursor: positionals consumed so far.
+  character(len=:), allocatable                      :: inline_val          !< Inline value of NAME=VALUE.
+  logical                                            :: has_inline          !< The argument is NAME=VALUE.
+  logical                                            :: match               !< The argument names the CLA.
 
   error_unknown_clas = 0
   if (self%is_called) then
@@ -399,7 +406,8 @@ contains
         found = .false.
         do a=1, self%Na ! loop over CLAs group clas named options
            if (.not.self%cla(a)%is_positional) then
-              if (self%cla(a)%match_token(args(arg))) then
+              call self%cla(a)%match_inline_token(args(arg), match, inline_val, has_inline)
+              if (match) then
                  if (self%cla(a)%is_passed) then
                     ! current CLA has been already passed: raise the error on it and stop parsing
                     call self%cla(a)%raise_error_duplicated_clas(pref=pref, switch=trim(adjustl(args(arg))))
@@ -412,7 +420,14 @@ contains
                  found_val = .false.
 
                  ! check action
-                 if (self%cla(a)%act==action_store) then
+                 if (has_inline) then
+                    ! NAME=VALUE (D1 rule 2): the value is inline, the next argument is not consumed
+                    call self%cla(a)%set_inline_value(value=inline_val, pref=pref)
+                    if (self%cla(a)%error/=0) then
+                       self%error = self%cla(a)%error
+                       return
+                    endif
+                 elseif (self%cla(a)%act==action_store) then
                     ! flush default (if any) to value as starting point
                     if (allocated(self%cla(a)%def)) self%cla(a)%val = self%cla(a)%def
 

@@ -47,6 +47,8 @@ public :: ERROR_UNSUPPORTED_TYPE
 public :: ERROR_POSITIONAL_NARGS
 public :: ERROR_LIST_SIZE
 public :: ERROR_DEF_NARGS
+public :: ERROR_INLINE_VALUE_NOT_ALLOWED
+public :: ERROR_INLINE_VALUE_NARGS
 
 type, extends(object) :: command_line_argument
   !< Command Line Argument (CLA) class.
@@ -73,6 +75,8 @@ type, extends(object) :: command_line_argument
     procedure, public :: check                          !< Check data consistency.
     procedure, public :: is_required_passed             !< Check if required CLA is passed.
     procedure, public :: match_token                    !< Check if a command line token names this CLA.
+    procedure, public :: match_inline_token             !< Check a token also as NAME=VALUE.
+    procedure, public :: set_inline_value               !< Set the value given inline (NAME=VALUE).
     procedure, public :: raise_error_m_exclude          !< Raise error mutually exclusive CLAs passed.
     procedure, public :: raise_error_nargs_insufficient !< Raise error insufficient number of argument values passed.
     procedure, public :: raise_error_value_missing      !< Raise error missing value.
@@ -163,6 +167,8 @@ integer(I4P), parameter :: ERROR_STORE_STAR_ENVVAR      = 21 !< Action store* no
 integer(I4P), parameter :: ERROR_ACTION_UNKNOWN         = 22 !< Unknown CLA (switch name).
 integer(I4P), parameter :: ERROR_DUPLICATED_CLAS        = 23 !< Duplicated CLAs passed, passed multiple instance of the same CLA.
 integer(I4P), parameter :: ERROR_MISSING_REQUIRED_VAL   = 24 !< Missing required value of CLA.
+integer(I4P), parameter :: ERROR_INLINE_VALUE_NOT_ALLOWED = 25 !< Inline value (NAME=VALUE) for a CLA that takes no value.
+integer(I4P), parameter :: ERROR_INLINE_VALUE_NARGS     = 26 !< Inline value (NAME=VALUE) for a list CLA.
 integer(I4P), parameter :: ERROR_POSITIONAL_NARGS       = 45 !< Positional CLA with nargs (positionals are scalar).
 integer(I4P), parameter :: ERROR_UNSUPPORTED_TYPE       = 46 !< Value requested into a variable of an unsupported type.
 integer(I4P), parameter :: ERROR_LIST_SIZE              = 47 !< List requested into a fixed-size array of another size.
@@ -224,6 +230,7 @@ contains
   !< Check if a command line token names this CLA: the one matcher of switch names (decision D1 of #125).
   !<
   !< Rule 1: the token is the switch or its abbreviation; blanks around both are not significant. A positional never matches.
+  !< Rule 2 (NAME=VALUE) is match_inline_token, built on this one.
   class(command_line_argument), intent(in) :: self  !< CLA data.
   character(*),                 intent(in) :: token !< Command line token.
   logical                                  :: match !< Check result.
@@ -234,6 +241,53 @@ contains
   if (match) return
   if (allocated(self%switch_ab)) match = adjustl(self%switch_ab) == adjustl(token)
   endfunction match_token
+
+  pure subroutine match_inline_token(self, token, match, inline_val, has_inline)
+  !< Check if a command line token names this CLA by rule 1 (match_token) or rule 2 of decision D1: NAME=VALUE, split at
+  !< the first '=', with NAME matching by rule 1 (inline values, F01).
+  class(command_line_argument),  intent(in)  :: self       !< CLA data.
+  character(*),                  intent(in)  :: token      !< Command line token.
+  logical,                       intent(out) :: match      !< Check result.
+  character(len=:), allocatable, intent(out) :: inline_val !< VALUE of NAME=VALUE ('' otherwise).
+  logical,                       intent(out) :: has_inline !< The token is NAME=VALUE.
+  character(len=len(token))                  :: t          !< Token without leading blanks.
+  integer(I4P)                               :: e          !< Position of the first '='.
+
+  inline_val = ''
+  has_inline = .false.
+  match = self%match_token(token)
+  if (match) return
+  t = adjustl(token)
+  e = index(t, '=')
+  if (e > 1) then
+    match = self%match_token(t(1:e-1))
+    if (match) then
+      has_inline = .true.
+      inline_val = trim(t(e+1:))
+    endif
+  endif
+  endsubroutine match_inline_token
+
+  subroutine set_inline_value(self, value, pref)
+  !< Set the value given inline (NAME=VALUE, F01): only a scalar store takes one; the next argument is not consumed.
+  !<
+  !< An empty value follows the rule of a separate empty value (D17 of #125): rejected when the value is required.
+  class(command_line_argument), intent(inout) :: self  !< CLA data.
+  character(*),                 intent(in)    :: value !< Inline value.
+  character(*), optional,       intent(in)    :: pref  !< Prefixing string.
+
+  if (allocated(self%nargs)) then
+    call self%errored(pref=pref, error=ERROR_INLINE_VALUE_NARGS)
+  elseif (self%act==action_store.or.self%act==action_store_star) then
+    if (self%act==action_store.and.self%is_val_required.and.len_trim(value)==0) then
+      call self%raise_error_value_missing(pref=pref)
+    else
+      self%val = trim(adjustl(value))
+    endif
+  else
+    call self%errored(pref=pref, error=ERROR_INLINE_VALUE_NOT_ALLOWED)
+  endif
+  endsubroutine set_inline_value
 
   function is_required_val_passed(self, pref) result(is_ok)
   !< Check if required value of CLA is passed.
@@ -678,6 +732,11 @@ contains
     case(ERROR_UNSUPPORTED_TYPE)
       self%error_message = prefd//': the value of "'//trim(adjustl(self%switch))//'" cannot be returned into a variable '//&
                            'of this type!'
+    case(ERROR_INLINE_VALUE_NOT_ALLOWED)
+      self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" does not take a value!'
+    case(ERROR_INLINE_VALUE_NARGS)
+      self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" takes a list of values: pass them '//&
+                           'after the switch, not inline!'
     case(ERROR_DEF_NARGS)
       self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" takes '//trim(adjustl(self%nargs))//&
                            ' values (nargs), but its default has '//trim(val_str)//'!'

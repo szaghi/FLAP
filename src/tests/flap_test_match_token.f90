@@ -11,6 +11,9 @@ type(command_line_argument)        :: cla   !< Named CLA.
 type(command_line_argument)        :: pos   !< Positional CLA.
 type(command_line_argument)        :: bare  !< Named CLA without an abbreviation.
 type(command_line_arguments_group) :: group !< Group.
+character(len=:), allocatable      :: inline_val !< Inline value.
+logical                            :: match      !< Match result.
+logical                            :: has_inline !< NAME=VALUE form.
 
 cla%switch = '--verbose'
 cla%switch_ab = '-v'
@@ -21,9 +24,20 @@ call assert(cla%match_token('  -v'), 'leading blanks are not significant')
 call assert(.not.cla%match_token('--verb'), 'a prefix does not match')
 call assert(.not.cla%match_token('--verbose-more'), 'a longer name does not match')
 call assert(.not.cla%match_token('--Verbose'), 'the match is case sensitive')
-call assert(.not.cla%match_token('--verbose=1'), 'NAME=VALUE does not match (rule 2 is not implemented)')
+call assert(.not.cla%match_token('--verbose=1'), 'NAME=VALUE does not match by rule 1 (rule 2 is match_inline_token)')
 call assert(.not.cla%match_token('-vv'), 'the compact count form does not match (rule 3 is not implemented)')
 call assert(.not.cla%match_token(''), 'an empty token does not match')
+
+call cla%match_inline_token('--verbose=1', match, inline_val, has_inline)
+call assert(match .and. has_inline .and. inline_val == '1', 'rule 2: NAME=VALUE matches, value split off')
+call cla%match_inline_token('-v=a=b', match, inline_val, has_inline)
+call assert(match .and. has_inline .and. inline_val == 'a=b', 'rule 2: split at the first =')
+call cla%match_inline_token('-v', match, inline_val, has_inline)
+call assert(match .and. .not.has_inline, 'rule 2 helper: a plain switch matches by rule 1')
+call cla%match_inline_token('--verb=1', match, inline_val, has_inline)
+call assert(.not.match, 'rule 2: NAME must match exactly')
+call cla%match_inline_token('=1', match, inline_val, has_inline)
+call assert(.not.match, 'rule 2: an empty NAME never matches')
 
 bare%switch = '--bare'
 call assert(bare%match_token('--bare'), 'switch without abbreviation matches')
@@ -41,4 +55,6 @@ call assert(group%is_switch_token(' -v '), 'group: abbreviation with blanks is a
 call assert(.not.group%is_switch_token('--other'), 'group: undefined switch is not a switch token')
 call assert(.not.group%is_switch_token('value'), 'group: a value is not a switch token')
 call assert(.not.group%is_switch_token(''), 'group: an empty argument is not a switch token')
+call assert(group%is_switch_token('--verbose=x'), 'group: NAME=VALUE is a switch token (look-ahead)')
+call assert(.not.group%is_switch_token('a=b'), 'group: a value with = is not a switch token')
 endprogram flap_test_match_token
