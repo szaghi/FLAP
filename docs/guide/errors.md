@@ -99,6 +99,20 @@ When several of them are passed, one wins, in this order: a syntax error anywher
 (an unknown or duplicated switch, a missing value) is returned first, then help, then version, then
 Markdown. `--version --help` prints the help; `--help compile --bogus` reports the unknown switch.
 
+## Error hint
+
+After a failed `parse` FLAP prints one more line to the error unit, pointing to the help (the command is named when
+the error is inside one):
+
+```text
+solver: error: switch "--mehs" is unknown!
+Try 'solver --help' for help.
+```
+
+It is printed once, as the last line, only when there is a `--help` to suggest (not with `disable_hv=.true.`), and
+never for statuses, ignored unknown arguments or errors raised later by `get`. Disable it with
+`init(error_hint=.false.)`.
+
 ## Accessing the error message
 
 `command_line_interface` has a public `error_message` attribute that contains a

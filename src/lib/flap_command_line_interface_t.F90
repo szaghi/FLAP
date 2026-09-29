@@ -23,6 +23,7 @@ type, extends(object), public :: command_line_interface
   logical                                         :: is_parsed_=.false.          !< Parse status.
   logical                                         :: ignore_unknown_clas=.false. !< Disable errors-raising for passed unknown CLAs.
   logical                                         :: standalone=.true.           !< Stop after help/version/markdown.
+  logical                                         :: error_hint=.true.           !< Print a hint after a failed parse.
   integer(I4P)                                    :: error_unknown_clas=0_I4P    !< Error trapping flag for unknown CLAs.
   contains
     ! public methods
@@ -71,6 +72,7 @@ type, extends(object), public :: command_line_interface
     procedure, private :: group_index                     !< Index of the group with a name, -1 if none.
     procedure, private :: is_fatal                        !< Check if the current error stops parsing.
     procedure, private :: dispatch_status                 !< Print help/version/markdown in the D3 order.
+    procedure, private :: print_error_hint                !< Print the hint after a failed parse.
     procedure, private :: errored                         !< Trig error occurence and print meaningful message.
     procedure, private :: check                           !< Check data consistency.
     procedure, private :: check_m_exclusive               !< Check if two mutually exclusive CLAs group have been called.
@@ -125,10 +127,12 @@ contains
   self%ignore_unknown_clas = .false.
   self%error_unknown_clas  = 0_I4P
   self%standalone          = .true.
+  self%error_hint          = .true.
   endsubroutine free
 
   subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, &
-                  usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone)
+                  usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone, &
+                  error_hint)
   !< Initialize CLI.
   class(command_line_interface), intent(inout) :: self                !< CLI data.
   character(*), optional,        intent(in)    :: progname            !< Program name.
@@ -148,6 +152,8 @@ contains
   logical,      optional,        intent(in)    :: ignore_unknown_clas !< Disable errors-raising for passed unknown CLAs.
   logical,      optional,        intent(in)    :: standalone          !< Stop after help/version/markdown (default); if
                                                                       !< false, parse returns STATUS_PRINT_H/V/M instead.
+  logical,      optional,        intent(in)    :: error_hint          !< Print "Try 'prog --help' for help." after a failed
+                                                                      !< parse (default).
   character(len=:), allocatable                :: prog_invocation     !< Complete program invocation.
   integer(I4P)                                 :: invocation_length   !< Length of invocation.
   integer(I4P)                                 :: retrieval_status    !< Retrieval status.
@@ -181,6 +187,7 @@ contains
   self%error_style = '' ; if (present(error_style))         self%error_style         = error_style
                           if (present(ignore_unknown_clas)) self%ignore_unknown_clas = ignore_unknown_clas! default set by self%free
                           if (present(standalone))          self%standalone          = standalone         ! default set by self%free
+                          if (present(error_hint))          self%error_hint          = error_hint         ! default set by self%free
   ! initialize only the first default group
   allocate(self%clasg(0:0))
   call self%clasg(0)%assign_object(self)
@@ -491,8 +498,29 @@ contains
   if (present(error)) error = 0
   if (self%is_parsed_) return
   call self%parse_core(pref=pref, args=args)
+  if (self%error > 0 .and. self%error /= ERROR_UNKNOWN_CLAS_IGNORED) call self%print_error_hint
   if (present(error)) error = self%error
   endsubroutine parse
+
+  subroutine print_error_hint(self)
+  !< Print the last line after a failed parse: "Try '<prog> [<command>] --help' for help." (F26 of #125).
+  !<
+  !< Only when enabled (error_hint) and when there is a help option to suggest (not disable_hv); the command is the first
+  !< called one with an error.
+  class(command_line_interface), intent(in) :: self    !< CLI data.
+  character(len=:), allocatable             :: command !< Command of the error, if any.
+  integer(I4P)                              :: g       !< Counter for CLAs group.
+
+  if (.not.self%error_hint .or. self%disable_hv) return
+  command = ''
+  do g=1, size(self%clasg, dim=1)-1
+    if (self%clasg(g)%is_called .and. self%clasg(g)%error > 0) then
+      command = ' '//self%clasg(g)%group
+      exit
+    endif
+  enddo
+  write(self%error_lun, '(A)') "Try '"//self%progname//command//" --help' for help."
+  endsubroutine print_error_hint
 
   subroutine parse_core(self, pref, args)
   !< Parse the command line (the body of parse, which returns early once parsed and hands the error back).
@@ -502,6 +530,7 @@ contains
   integer(I4P)                                 :: g       !< Counter for CLAs group.
   integer(I4P), allocatable                    :: ai(:,:) !< Counter for CLAs grouped.
   character(len=:), allocatable                :: gargs(:)!< Arguments of a group.
+  integer(I4P)                                 :: unknown !< Unknown argument error of a group.
 
   call self%ensure_builtins(pref=pref)
 
@@ -524,7 +553,9 @@ contains
       ! starting at the first element of the whole array, not of the section
       gargs = self%args(ai(g,1):ai(g,2))
       call self%clasg(g)%parse(args=gargs, ignore_unknown_clas=self%ignore_unknown_clas, &
-                               pref=pref, error_unknown_clas=self%error_unknown_clas)
+                               pref=pref, error_unknown_clas=unknown)
+      ! keep the mark of an ignored unknown argument: a later group must not erase it (B30 of #125)
+      if (unknown /= 0 .and. self%error_unknown_clas /= ERROR_UNKNOWN_CLAS_IGNORED) self%error_unknown_clas = unknown
     else
       call self%clasg(g)%sanitize_defaults
     endif
@@ -549,8 +580,10 @@ contains
 
   self%is_parsed_ = .true.
 
-  ! check if the only error found is for unknown passed CLAs and if it is ignored by the user
-  if (self%error==ERROR_UNKNOWN.and.self%error_unknown_clas==ERROR_UNKNOWN_CLAS_IGNORED) self%error = ERROR_UNKNOWN_CLAS_IGNORED
+  ! check if the only error found is for unknown passed CLAs and if it is ignored by the user; a later group may have reset
+  ! the error to 0 (B30 of #125)
+  if ((self%error==0.or.self%error==ERROR_UNKNOWN).and.self%error_unknown_clas==ERROR_UNKNOWN_CLAS_IGNORED) &
+    self%error = ERROR_UNKNOWN_CLAS_IGNORED
   endsubroutine parse_core
 
   function dispatch_status(self, pref) result(dispatched)

@@ -78,5 +78,7 @@ values still takes the default: both change in v2.0.0 (see below).
 - `init(standalone=.false.)` makes `parse` return the help/version/Markdown status instead of stopping; with several
   of them passed, a syntax error anywhere on the command line wins, then help, version, Markdown (`--help compile --bogus`
   reports the unknown switch instead of printing the help).
+- A failed `parse` prints one more line, `Try 'prog --help' for help.`; `init(error_hint=.false.)` restores the old
+  output.
 - Environment variables become a value source for every option (with precedence rules), and more: see issue
   [#125](https://github.com/szaghi/FLAP/issues/125).
