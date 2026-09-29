@@ -10,7 +10,7 @@ Roadmap: GitHub issue **#125** is the authoritative consolidated implementation 
 
 ## Build Commands
 
-FoBiS (CLI `fobis`, 3.8+) is the primary build tool and the one used in CI. Use the long-form flags; the legacy `FoBiS.py build -mode X` syntax is rejected by FoBiS 3.8+.
+FoBiS (CLI `fobis`, 3.8+) is the primary build tool and the one used in CI. Use the long-form flags (`--mode`, `--ex`, `--coverage`); FoBiS 3.8.22 still accepts the legacy single-dash forms, but new scripts, rules and docs use the long form.
 
 ```bash
 fobis fetch                                  # fetch PENF and FACE into src/third_party/ (pinned by fobos.lock)
@@ -19,11 +19,13 @@ fobis build --mode tests-gnu                 # build all tests into exe/
 fobis build --mode tests-gnu-debug           # debug tests (-fcheck=all, coverage flags)
 fobis build --mode static-gnu                # static library
 fobis clean --mode tests-gnu-debug           # needed when stale gcov objects in exe/obj break the debug link
+fobis rule --ex delexe                       # wipe exe/ (fobis clean keeps executables); do it when switching modes
+fobis build --mode tests-gnu-r16p            # debug tests with -D_R16P: real quad precision (R16P = real128)
 bash scripts/run_tests.sh                    # run every binary in exe/ (exit 0 = PASS; *_xfail_* must exit non-zero)
 fobis rule --ex makedoc                      # API docs (formal) + VitePress site
 ```
 
-Modes: `shared-gnu`, `static-gnu`, `shared-gnu-debug`, `static-gnu-debug`, `tests-gnu`, `tests-gnu-debug`, and the same six for `intel`, plus `static-nvf`.
+Modes: `shared-gnu`, `static-gnu`, `shared-gnu-debug`, `static-gnu-debug`, `tests-gnu`, `tests-gnu-debug`, and the same six for `intel`, plus `static-nvf` and `tests-gnu-r16p`. All test modes share `exe/` (hard-coded in `scripts/run_tests.sh`), so wipe it with `fobis rule --ex delexe` when switching modes.
 
 Alternative build systems (kept working, not the reference): `fpm build` / `fpm test <name>`, `make`, `cmake -B build && cmake --build build`. Their source/test lists are explicit and can drift from the tree:
 - `fpm.toml` has `auto-tests=false` and registers only 14 of the 17 tests (missing `flap_test_action_store`, `flap_test_nargs_insufficient`, `flap_test_value_missing`);
@@ -71,7 +73,7 @@ All library source is in `src/lib/`. Dependencies (PENF, FACE) are fetched with 
 
 ### Preprocessor
 
-`.F90` files are preprocessed, `.f90` are not. Quad precision is gated on `#if defined _R16P` in both FLAP and PENF. The fobos templates and the CMake support check define `-D_R16P_SUPPORTED`, which **does not** enable that branch: with the current build files `R16P` aliases `R8P` and the quad-precision code is never compiled. Define `-D_R16P` to compile it.
+`.F90` files are preprocessed, `.f90` are not. Quad precision is gated on `#if defined _R16P` in both FLAP and PENF. The fobos templates and the CMake support check define `-D_R16P_SUPPORTED`, which **does not** enable that branch: with the current build files `R16P` aliases `R8P` and the quad-precision code is never compiled. Define `-D_R16P` to compile it (mode `tests-gnu-r16p`).
 
 ### `get` Overloading
 
