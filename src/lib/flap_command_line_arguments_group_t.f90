@@ -54,8 +54,6 @@ type, extends(object) :: command_line_arguments_group
     ! private methods
     procedure, private :: errored                             !< Trig error occurrence and print meaningful message.
     procedure, private :: check_m_exclusive                   !< Check if two mutually exclusive CLAs have been passed.
-    procedure, private :: clasg_assign_clasg                  !< Assignment operator.
-    generic,   private :: assignment(=) => clasg_assign_clasg !< Assignment operator overloading.
     final              :: finalize                            !< Free dynamic memory when finalizing.
 endtype command_line_arguments_group
 
@@ -684,23 +682,6 @@ contains
   endif
   endsubroutine sanitize_defaults
 
-  subroutine clasg_assign_clasg(lhs, rhs)
-  !< Assignment operator.
-  class(command_line_arguments_group), intent(INOUT) :: lhs !< Left hand side.
-  type(command_line_arguments_group),  intent(IN)    :: rhs !< Right hand side.
-
-  ! object members
-  call lhs%assign_object(rhs)
-  ! command_line_arguments_group members
-  if (allocated(rhs%group)) lhs%group = rhs%group
-  if (allocated(rhs%cla  )) then
-    if (allocated(lhs%cla)) deallocate(lhs%cla) ; allocate(lhs%cla(1:size(rhs%cla,dim=1)),source=rhs%cla)
-  endif
-  lhs%Na          = rhs%Na
-  lhs%Na_required = rhs%Na_required
-  lhs%Na_optional = rhs%Na_optional
-  lhs%is_called   = rhs%is_called
-  endsubroutine clasg_assign_clasg
 
   elemental subroutine finalize(self)
   !< Free dynamic memory when finalizing.

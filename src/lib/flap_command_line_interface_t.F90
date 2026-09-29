@@ -87,8 +87,6 @@ type, extends(object), public :: command_line_interface
     procedure, private :: get_cla_list_varying_I1P        !< Get CLA multiple values from CLAs list parsed, varying size, I1P.
     procedure, private :: get_cla_list_varying_logical    !< Get CLA multiple values from CLAs list parsed, varying size, bool.
     procedure, private :: get_cla_list_varying_char       !< Get CLA multiple values from CLAs list parsed, varying size, char.
-    procedure, private :: cli_assign_cli                  !< CLI assignment overloading.
-    generic,   private :: assignment(=) => cli_assign_cli !< CLI assignment overloading.
     final              :: finalize                        !< Free dynamic memory when finalizing.
 endtype command_line_interface
 
@@ -1789,21 +1787,6 @@ contains
   endif
   endsubroutine errored
 
-  subroutine cli_assign_cli(lhs, rhs)
-  !< Assignment operator.
-  class(command_line_interface), intent(inout) :: lhs !< Left hand side.
-  type(command_line_interface),  intent(in)    :: rhs !< Right hand side.
-
-  ! object members
-  call lhs%assign_object(rhs)
-  ! command_line_interface members
-  if (allocated(rhs%clasg)) then
-    if (allocated(lhs%clasg)) deallocate(lhs%clasg)
-    allocate(lhs%clasg(lbound(rhs%clasg,1):ubound(rhs%clasg,1)), source=rhs%clasg)
-  endif
-  if (allocated(rhs%examples)) lhs%examples   = rhs%examples
-                               lhs%disable_hv = rhs%disable_hv
-  endsubroutine cli_assign_cli
 
   elemental subroutine finalize(self)
   !< Free dynamic memory when finalizing.

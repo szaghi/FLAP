@@ -122,8 +122,6 @@ type, extends(object) :: command_line_argument
     procedure, private :: get_cla_list_varying_I1P        !< Get CLA multiple values, varying size, I1P.
     procedure, private :: get_cla_list_varying_logical    !< Get CLA multiple values, varying size, bool.
     procedure, private :: get_cla_list_varying_char       !< Get CLA multiple values, varying size, char.
-    procedure, private :: cla_assign_cla                  !< Assignment operator.
-    generic,   private :: assignment(=) => cla_assign_cla !< Assignment operator overloading.
     final              :: finalize                        !< Free dynamic memory when finalizing.
 endtype command_line_argument
 
@@ -1351,29 +1349,6 @@ contains
   endif
   endsubroutine get_cla_list_varying_char
 
-  subroutine cla_assign_cla(lhs, rhs)
-  !< Assignment operator.
-  class(command_line_argument), intent(inout) :: lhs !< Left hand side.
-  type(command_line_argument),  intent(in)    :: rhs !< Rigth hand side.
-
-  ! object members
-  call lhs%assign_object(rhs)
-  ! command_line_argument members
-  if (allocated(rhs%switch   )) lhs%switch          = rhs%switch
-  if (allocated(rhs%switch_ab)) lhs%switch_ab       = rhs%switch_ab
-  if (allocated(rhs%act      )) lhs%act             = rhs%act
-  if (allocated(rhs%def      )) lhs%def             = rhs%def
-  if (allocated(rhs%nargs    )) lhs%nargs           = rhs%nargs
-  if (allocated(rhs%choices  )) lhs%choices         = rhs%choices
-  if (allocated(rhs%val      )) lhs%val             = rhs%val
-  if (allocated(rhs%envvar   )) lhs%envvar          = rhs%envvar
-                                lhs%is_required     = rhs%is_required
-                                lhs%is_positional   = rhs%is_positional
-                                lhs%position        = rhs%position
-                                lhs%is_passed       = rhs%is_passed
-                                lhs%is_hidden       = rhs%is_hidden
-                                lhs%is_val_required = rhs%is_val_required
-  endsubroutine cla_assign_cla
 
   elemental subroutine finalize(self)
   !< Free dynamic memory when finalizing.
