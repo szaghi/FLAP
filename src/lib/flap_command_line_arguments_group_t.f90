@@ -672,8 +672,7 @@ contains
 
   self%error = error
   if (self%error/=0) then
-    prefd = '' ; if (present(pref)) prefd = pref
-    prefd = prefd//self%progname//': '//colorize('error', color_fg=self%error_color, style=self%error_style)
+    prefd = self%error_prefix(pref=pref)
     select case(self%error)
     case(ERROR_CONSISTENCY)
       if (self%group /= '') then

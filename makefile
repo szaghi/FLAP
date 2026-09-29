@@ -115,6 +115,7 @@ $(DOBJ)flap_command_line_argument_t.o: src/lib/flap_command_line_argument_t.F90 
 	@$(FC) $(OPTSC)  $< -o $@
 
 $(DOBJ)flap_object_t.o: src/lib/flap_object_t.F90 \
+	$(DOBJ)face.o \
 	$(DOBJ)penf.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@

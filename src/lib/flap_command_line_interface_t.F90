@@ -65,6 +65,8 @@ type, extends(object), public :: command_line_interface
     procedure, private :: save_bash_completion_core       !< Save bash completion script (builtins already present).
     procedure, private :: save_man_page_core              !< Save CLI usage as man page (builtins already present).
     procedure, private :: save_usage_to_markdown_core     !< Save CLI usage as markdown (builtins already present).
+    procedure, private :: parse_core                      !< Parse the command line (body of parse).
+    procedure, private :: is_fatal                        !< Check if the current error stops parsing.
     procedure, private :: errored                         !< Trig error occurence and print meaningful message.
     procedure, private :: check                           !< Check data consistency.
     procedure, private :: check_m_exclusive               !< Check if two mutually exclusive CLAs group have been called.
@@ -465,12 +467,21 @@ contains
   character(*), optional,        intent(in)    :: pref    !< Prefixing string.
   character(*), optional,        intent(in)    :: args    !< String containing command line arguments.
   integer(I4P), optional,        intent(out)   :: error   !< Error trapping flag.
-  integer(I4P)                                 :: g       !< Counter for CLAs group.
-  integer(I4P), allocatable                    :: ai(:,:) !< Counter for CLAs grouped.
-  character(len=:), allocatable                :: gargs(:)!< Arguments of a group.
 
   if (present(error)) error = 0
   if (self%is_parsed_) return
+  call self%parse_core(pref=pref, args=args)
+  if (present(error)) error = self%error
+  endsubroutine parse
+
+  subroutine parse_core(self, pref, args)
+  !< Parse the command line (the body of parse, which returns early once parsed and hands the error back).
+  class(command_line_interface), intent(inout) :: self    !< CLI data.
+  character(*), optional,        intent(in)    :: pref    !< Prefixing string.
+  character(*), optional,        intent(in)    :: args    !< String containing command line arguments.
+  integer(I4P)                                 :: g       !< Counter for CLAs group.
+  integer(I4P), allocatable                    :: ai(:,:) !< Counter for CLAs grouped.
+  character(len=:), allocatable                :: gargs(:)!< Arguments of a group.
 
   call self%ensure_builtins(pref=pref)
 
@@ -480,21 +491,11 @@ contains
   else
     call self%get_args(ai=ai)
   endif
-  if (self%error == ERROR_ARGUMENT_RETRIEVAL) then
-    if (present(error)) error = self%error
-    return
-  endif
+  if (self%error == ERROR_ARGUMENT_RETRIEVAL) return
 
   ! check CLI consistency
   call self%check(pref=pref)
-  if (self%error>0) then
-    if (((self%error==ERROR_UNKNOWN).and.(.not.self%ignore_unknown_clas)).or.(self%error/=ERROR_UNKNOWN)) then
-       if (present(error)) error = self%error
-       return
-    else
-       self%error_unknown_clas = ERROR_UNKNOWN_CLAS_IGNORED
-    endif
-  endif
+  if (self%is_fatal()) return
 
   ! parse CLI
   do g=0,size(ai,dim=1)-1
@@ -509,23 +510,9 @@ contains
     endif
     self%error = self%clasg(g)%error
     if (self%error < 0) exit
-    if (self%error > 0) then
-       if (((self%error==ERROR_UNKNOWN).and.(.not.self%ignore_unknown_clas)).or.(self%error/=ERROR_UNKNOWN)) then
-          if (present(error)) error = self%error
-          exit
-       else
-          self%error_unknown_clas = ERROR_UNKNOWN_CLAS_IGNORED
-       endif
-    endif
+    if (self%is_fatal()) exit
   enddo
-  if (self%error>0) then
-    if (((self%error==ERROR_UNKNOWN).and.(.not.self%ignore_unknown_clas)).or.(self%error/=ERROR_UNKNOWN)) then
-       if (present(error)) error = self%error
-       return
-    else
-       self%error_unknown_clas = ERROR_UNKNOWN_CLAS_IGNORED
-    endif
-  endif
+  if (self%is_fatal()) return
 
   ! trap the special cases of version/help printing
   if (self%error == STATUS_PRINT_V) then
@@ -547,23 +534,9 @@ contains
   do g=0, size(ai,dim=1)-1
     call self%clasg(g)%is_required_passed(pref=pref)
     self%error = self%clasg(g)%error
-    if (self%error>0) then
-       if (((self%error==ERROR_UNKNOWN).and.(.not.self%ignore_unknown_clas)).or.(self%error/=ERROR_UNKNOWN)) then
-          if (present(error)) error = self%error
-          exit
-       else
-          self%error_unknown_clas = ERROR_UNKNOWN_CLAS_IGNORED
-       endif
-    endif
+    if (self%is_fatal()) exit
   enddo
-  if (self%error>0) then
-    if (((self%error==ERROR_UNKNOWN).and.(.not.self%ignore_unknown_clas)).or.(self%error/=ERROR_UNKNOWN)) then
-       if (present(error)) error = self%error
-       return
-    else
-       self%error_unknown_clas = ERROR_UNKNOWN_CLAS_IGNORED
-    endif
-  endif
+  if (self%is_fatal()) return
 
   ! check mutually exclusive interaction
   call self%check_m_exclusive(pref=pref)
@@ -572,9 +545,21 @@ contains
 
   ! check if the only error found is for unknown passed CLAs and if it is ignored by the user
   if (self%error==ERROR_UNKNOWN.and.self%error_unknown_clas==ERROR_UNKNOWN_CLAS_IGNORED) self%error = ERROR_UNKNOWN_CLAS_IGNORED
+  endsubroutine parse_core
 
-  if (present(error)) error = self%error
-  endsubroutine parse
+  function is_fatal(self)
+  !< Check if the current error stops parsing: any error but an unknown argument that is ignored (then recorded as such).
+  class(command_line_interface), intent(inout) :: self     !< CLI data.
+  logical                                      :: is_fatal !< Check result.
+
+  is_fatal = .false.
+  if (self%error <= 0) return
+  if (self%error == ERROR_UNKNOWN .and. self%ignore_unknown_clas) then
+    self%error_unknown_clas = ERROR_UNKNOWN_CLAS_IGNORED
+  else
+    is_fatal = .true.
+  endif
+  endfunction is_fatal
 
   subroutine get_clasg_indexes(self, ai)
   !< Get the argument indexes of each CLAs group (command): ai(g,1:2) is the slice of self%args belonging to group g.
@@ -1785,8 +1770,7 @@ contains
 
   self%error = error
   if (self%error/=0) then
-    prefd = '' ; if (present(pref)) prefd = pref
-    prefd = prefd//self%progname//': '//colorize('error', color_fg=self%error_color, style=self%error_style)
+    prefd = self%error_prefix(pref=pref)
     select case(self%error)
     case(ERROR_MISSING_CLA)
       self%error_message = prefd//': there is no option "'//trim(adjustl(switch))//'"!'

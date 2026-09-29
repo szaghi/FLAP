@@ -3,6 +3,7 @@ module flap_object_t
 !< Base (abstract) class upon which FLAP's concrete classes are built.
 
 use, intrinsic :: iso_fortran_env, only : stdout=>output_unit, stderr=>error_unit
+use face, only : colorize
 use penf
 
 implicit none
@@ -32,6 +33,7 @@ type, abstract, public :: object
   integer(I4P)                  :: error_lun=stderr   !< Error unit to print error messages
   contains
     ! public methods
+    procedure, pass(self) :: error_prefix        !< Prefix of error messages.
     procedure, pass(self) :: free_object         !< Free dynamic memory.
     procedure, pass(self) :: print_version       !< Print version.
     procedure, pass(self) :: print_error_message !< Print meaningful error message.
@@ -65,6 +67,16 @@ contains
   self%version_lun = stdout
   self%error_lun = stderr
   endsubroutine free_object
+
+  function error_prefix(self, pref) result(prefd)
+  !< Return the prefix of every error message: the prefixing string, the program name and a (colorized) "error".
+  class(object),          intent(in) :: self  !< Object data.
+  character(*), optional, intent(in) :: pref  !< Prefixing string.
+  character(len=:), allocatable      :: prefd !< Prefix of error messages.
+
+  prefd = '' ; if (present(pref)) prefd = pref
+  prefd = prefd//self%progname//': '//colorize('error', color_fg=self%error_color, style=self%error_style)
+  endfunction error_prefix
 
   subroutine print_version(self, pref)
   !< Print version.
