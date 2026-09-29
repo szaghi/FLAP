@@ -50,6 +50,21 @@ The string is split the way a shell splits a command line:
 
 As with the real command line, blanks around each argument are removed.
 
+### Parsing more than once
+
+`parse` works once: after a successful parse, further calls return immediately (`error = 0`) and keep the first
+result. To parse another command line with the same definitions, call `reset_parse` first:
+
+```fortran
+call cli%parse(args='--level 3', error=error)
+! ...
+call cli%reset_parse                            ! forget values, passed flags, called commands and errors
+call cli%parse(args='--level 5', error=error)   ! parsed again
+```
+
+A parse that fails does not count as done: the next `get` parses again, and without `args` it parses the **real**
+command line. Call `reset_parse` before trying another string.
+
 ---
 
 ## Retrieving values — `cli%get`

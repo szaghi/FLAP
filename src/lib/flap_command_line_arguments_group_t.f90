@@ -43,6 +43,7 @@ type, extends(object) :: command_line_arguments_group
     procedure, public :: is_defined            !< Check if a CLA has been defined.
     procedure, public :: positional_index      !< Index of the positional CLA declared at a position.
     procedure, public :: value_arity           !< Number of fixed value slots following a switch.
+    procedure, public :: reset_parse           !< Forget the result of a parse, keeping the definitions.
     procedure, public :: raise_error_m_exclude !< Raise error mutually exclusive CLAs passed.
     procedure, public :: add                   !< Add CLA to CLAsG.
     procedure, public :: parse                 !< Parse CLAsG arguments.
@@ -177,6 +178,20 @@ contains
   enddo
   a = 0
   endfunction positional_index
+
+  subroutine reset_parse(self)
+  !< Forget the result of a parse (called status, passed values, errors), keeping the definitions.
+  class(command_line_arguments_group), intent(inout) :: self !< CLAsG data.
+  integer(I4P)                                       :: a    !< Counter.
+
+  self%is_called = .false.
+  self%error = 0
+  do a=1, self%Na
+    self%cla(a)%is_passed = .false.
+    if (allocated(self%cla(a)%val)) deallocate(self%cla(a)%val)
+    self%cla(a)%error = 0
+  enddo
+  endsubroutine reset_parse
 
   function value_arity(self, switch) result(n)
   !< Return the number of values that always follow a switch of this group, 0 if not fixed or not a switch.

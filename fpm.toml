@@ -117,6 +117,11 @@ source-dir = "src/tests"
 main = "flap_test_positional.f90"
 
 [[test]]
+name = "flap_test_reparse"
+source-dir = "src/tests"
+main = "flap_test_reparse.f90"
+
+[[test]]
 name = "flap_test_save_bash_completion"
 source-dir = "src/tests"
 main = "flap_test_save_bash_completion.f90"

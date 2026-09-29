@@ -35,6 +35,7 @@ type, extends(object), public :: command_line_interface
     procedure, public :: set_mutually_exclusive_groups   !< Set two CLAs group as mutually exclusive.
     procedure, public :: run_command => is_called_group  !< Check if a CLAs group has been run.
     procedure, public :: parse                           !< Parse Command Line Interfaces.
+    procedure, public :: reset_parse                     !< Forget the result of a parse, keeping the definitions.
     generic,   public :: get =>   &
                          get_cla, &
                          get_cla_list                    !< Get CLA value(s) from CLAs list parsed.
@@ -437,6 +438,21 @@ contains
 
   is_parsed = self%is_parsed_
   endfunction is_parsed
+
+  subroutine reset_parse(self)
+  !< Forget the result of a parse, keeping the definitions (options, commands, builtins): the next parse (or get) parses
+  !< again. Without it, a second call of parse is ignored and the first result is kept.
+  class(command_line_interface), intent(inout) :: self !< CLI data.
+  integer(I4P)                                 :: g    !< Counter for CLAs group.
+
+  self%is_parsed_ = .false.
+  self%error = 0
+  self%error_unknown_clas = 0
+  if (allocated(self%args)) deallocate(self%args)
+  do g=0, size(self%clasg, dim=1) - 1
+    call self%clasg(g)%reset_parse
+  enddo
+  endsubroutine reset_parse
 
   subroutine parse(self, pref, args, error)
   !< Parse Command Line Interfaces by means of a previously initialized CLAs groups list.
