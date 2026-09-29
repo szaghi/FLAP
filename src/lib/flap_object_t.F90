@@ -59,6 +59,7 @@ contains
   if (allocated(self%error_message)) deallocate(self%error_message)
   if (allocated(self%error_color  )) deallocate(self%error_color  )
   if (allocated(self%error_style  )) deallocate(self%error_style  )
+  if (allocated(self%examples     )) deallocate(self%examples     )
   self%error = 0_I4P
   self%usage_lun = stderr
   self%version_lun = stdout
@@ -90,10 +91,11 @@ contains
   endsubroutine print_error_message
 
   subroutine set_examples(self, examples)
-  !< Set examples of correct usage.
+  !< Set the examples of correct usage: exactly the given ones, or none.
   class(object),          intent(inout) :: self         !< Object data.
   character(*), optional, intent(in)    :: examples(1:) !< Examples of correct usage.
 
+  if (allocated(self%examples)) deallocate(self%examples)
   if (present(examples)) then
     allocate(character(len=len(examples)):: self%examples(1:size(examples)))
     self%examples = examples
@@ -119,6 +121,7 @@ contains
   if (allocated(rhs%error_message)) lhs%error_message = rhs%error_message
   if (allocated(rhs%error_color  )) lhs%error_color   = rhs%error_color
   if (allocated(rhs%error_style  )) lhs%error_style   = rhs%error_style
+  if (allocated(rhs%examples     )) lhs%examples      = rhs%examples
                                     lhs%error         = rhs%error
                                     lhs%usage_lun     = rhs%usage_lun
                                     lhs%version_lun   = rhs%version_lun
