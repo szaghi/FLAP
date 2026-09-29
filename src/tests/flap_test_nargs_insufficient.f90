@@ -9,7 +9,7 @@ program flap_test_nargs_insufficient
 !< See [usage instructions](https://github.com/szaghi/FLAP/wiki/Testing-Programs).
 !<
 !< Run with arguments it is the example program above; run without arguments it checks its own scenarios.
-use flap, only : command_line_interface, ERROR_NARGS_INSUFFICIENT
+use flap, only : command_line_interface, ERROR_NARGS_INSUFFICIENT, ERROR_UNKNOWN
 use flap_test_utils, only : assert_equal, capture_close, capture_open
 use penf
 
@@ -48,9 +48,9 @@ contains
   call assert_equal(error, ERROR_NARGS_INSUFFICIENT, '-i 1 2: error')
   call run('-i', rval, error)
   call assert_equal(error, ERROR_NARGS_INSUFFICIENT, '-i without values: error')
-  ! B19 (#125): too MANY values are also reported as "insufficient"; this assertion flips when B19 is fixed
+  ! B19 (#125): nargs='3' takes three values; a fourth one is the next argument (here unknown, no positional is defined)
   call run('-i 1 2 3 4', rval, error)
-  call assert_equal(error, ERROR_NARGS_INSUFFICIENT, '-i 1 2 3 4: error (B19, current behaviour)')
+  call assert_equal(error, ERROR_UNKNOWN, '-i 1 2 3 4: the fourth value is an unknown argument')
   call capture_close(lun)
   endsubroutine self_test
 

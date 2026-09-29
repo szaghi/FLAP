@@ -326,6 +326,12 @@ contains
   call parse('33.0 -s hello', cli)
   call cli%get(position=1_I4P, val=prval, error=error) ; call assert_equal(prval, 33._R8P, 'positional value')
 
+  ! B19 (#125): nargs='3' takes three values, the following one is the positional
+  call parse('-s hello -il 1 2 3 44.0', cli)
+  call cli%get(switch='-il', val=ilist, error=error)
+  call assert_equal(int(ilist, I4P), [1_I4P, 2_I4P, 3_I4P], "nargs='3' followed by a positional: list")
+  call cli%get(position=1_I4P, val=prval, error=error) ; call assert_equal(prval, 44._R8P, "nargs='3' followed by a positional")
+
   ! nargs='*' without values keeps the default list (current behaviour); nargs='+' requires at least one value
   call parse('-s hello -vlI4P', cli)
   call cli%get_varying(switch='-vlI4P', val=vlistI4P, error=error)

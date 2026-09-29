@@ -400,7 +400,8 @@ contains
                           endif
                        case default
                           nargs = cton(str=trim(adjustl(self%cla(a)%nargs)), knd=1_I4P)
-                          if ((arg + nargs == n_next_undef_args(args=args, arg=arg))) then
+                          ! take nargs values when at least nargs follow: further values are the next arguments (B19)
+                          if (n_next_undef_args(args=args, arg=arg) >= arg + nargs) then
                              self%cla(a)%val = ''
                              do aa=arg + nargs, arg + 1, -1 ! decreasing loop due to gfortran bug
                                 self%cla(a)%val = trim(adjustl(args(aa)))//args_sep//trim(self%cla(a)%val)
