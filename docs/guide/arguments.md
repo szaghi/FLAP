@@ -138,6 +138,9 @@ $ ./myapp --level 2
 myapp: error: the value "2" is not in the choices list (1,3,5)
 ```
 
+For a list-valued argument (`nargs`), every value is checked, by both `get` and `get_varying`, and so is the default
+when it is used. `choices` cannot be used with logical values.
+
 ### List-valued arguments (`nargs`)
 
 Use `nargs` to consume multiple values from a single switch.

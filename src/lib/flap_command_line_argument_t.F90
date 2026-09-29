@@ -1110,6 +1110,7 @@ contains
       allocate(real(R16P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsV(v))), knd=1._R16P)
+        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
         if (self%error/=0) exit
       enddo
     else ! using default value
@@ -1126,6 +1127,7 @@ contains
       allocate(real(R16P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsD(v))), knd=1._R16P)
+        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
         if (self%error/=0) exit
       enddo
     endif
@@ -1154,6 +1156,7 @@ contains
       allocate(real(R8P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsV(v))), knd=1._R8P)
+        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
         if (self%error/=0) exit
       enddo
     else ! using default value
@@ -1162,6 +1165,7 @@ contains
       allocate(real(R8P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsD(v))), knd=1._R8P)
+        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
         if (self%error/=0) exit
       enddo
     endif
@@ -1190,6 +1194,7 @@ contains
       allocate(real(R4P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsV(v))), knd=1._R4P)
+        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
         if (self%error/=0) exit
       enddo
     else ! using default value
@@ -1198,6 +1203,7 @@ contains
       allocate(real(R4P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsD(v))), knd=1._R4P)
+        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
         if (self%error/=0) exit
       enddo
     endif
@@ -1226,6 +1232,7 @@ contains
       allocate(integer(I8P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsV(v))), knd=1_I8P)
+        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
         if (self%error/=0) exit
       enddo
     else ! using default value
@@ -1234,6 +1241,7 @@ contains
       allocate(integer(I8P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsD(v))), knd=1_I8P)
+        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
         if (self%error/=0) exit
       enddo
     endif
@@ -1262,6 +1270,7 @@ contains
       allocate(integer(I4P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsV(v))), knd=1_I4P)
+        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
         if (self%error/=0) exit
       enddo
     else ! using default value
@@ -1270,6 +1279,7 @@ contains
       allocate(integer(I4P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsD(v))), knd=1_I4P)
+        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
         if (self%error/=0) exit
       enddo
     endif
@@ -1298,6 +1308,7 @@ contains
       allocate(integer(I2P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsV(v))), knd=1_I2P)
+        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
         if (self%error/=0) exit
       enddo
     else ! using default value
@@ -1306,6 +1317,7 @@ contains
       allocate(integer(I2P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsD(v))), knd=1_I2P)
+        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
         if (self%error/=0) exit
       enddo
     endif
@@ -1334,6 +1346,7 @@ contains
       allocate(integer(I1P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsV(v))), knd=1_I1P)
+        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
         if (self%error/=0) exit
       enddo
     else ! using default value
@@ -1342,6 +1355,7 @@ contains
       allocate(integer(I1P):: val(1:Nv))
       do v=1, Nv
         val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(valsD(v))), knd=1_I1P)
+        if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
         if (self%error/=0) exit
       enddo
     endif
@@ -1412,6 +1426,8 @@ contains
         allocate(val(1:Nv))
         do v=1, Nv
            val(v) = trim(adjustl(valsV(v)))
+           if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+           if (self%error/=0) exit
         enddo
      else ! using default value
         call tokenize(strin=self%def, delimiter=ARGS_SEP, toks=valsD, Nt=Nv)
@@ -1419,6 +1435,8 @@ contains
         allocate(val(1:Nv))
         do v=1, Nv
           val(v) = trim(adjustl(valsD(v)))
+          if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+          if (self%error/=0) exit
         enddo
      endif
   endif
