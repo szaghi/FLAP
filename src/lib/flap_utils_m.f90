@@ -20,21 +20,21 @@ interface count
 endinterface
 contains
   elemental function count_substring(string, substring) result(No)
-  !< Count the number of occurences of a substring into a string.
+  !< Count the number of (non-overlapping) occurences of a substring into a string.
   character(*), intent(in) :: string    !< String.
   character(*), intent(in) :: substring !< Substring.
   integer(I4P)             :: No        !< Number of occurrences.
-  integer(I4P)             :: c1        !< Counters.
-  integer(I4P)             :: c2        !< Counters.
+  integer(I4P)             :: c1        !< Start of the part of the string still to be searched.
+  integer(I4P)             :: c2        !< Position of the next occurrence, relative to c1.
 
   No = 0
-  if (len(substring)>len(string)) return
+  if (len(substring) == 0 .or. len(substring) > len(string)) return
   c1 = 1
   do
     c2 = index(string=string(c1:), substring=substring)
-    if (c2==0) return
+    if (c2 == 0) return
     No = No + 1
-    c1 = c1 + c2 + len(substring)
+    c1 = c1 + c2 - 1 + len(substring)
   enddo
   endfunction count_substring
 
@@ -60,20 +60,28 @@ contains
   pure function replace_all(string, substring, restring) result(newstring)
   !< Replace substring (all occurrences) into a string.
   !<
+  !< The string is scanned once from left to right, so a replacement containing the substring is not replaced again.
   !< @note Leading and trailing white spaces are stripped out.
-  character(len=*), intent(in)  :: string             !< String to be modified.
-  character(len=*), intent(in)  :: substring          !< Substring to be replaced.
-  character(len=*), intent(in)  :: restring           !< String to be inserted.
-  character(len=:), allocatable :: newstring          !< New modified string.
+  character(len=*), intent(in)  :: string    !< String to be modified.
+  character(len=*), intent(in)  :: substring !< Substring to be replaced.
+  character(len=*), intent(in)  :: restring  !< String to be inserted.
+  character(len=:), allocatable :: newstring !< New modified string.
+  character(len=:), allocatable :: rest      !< Part of the string still to be scanned.
+  integer(I4P)                  :: pos       !< Position of the next occurrence in rest.
 
-  newstring = wstrip(string)
+  rest = wstrip(string)
+  if (len(substring) == 0) then
+    newstring = rest
+    return
+  endif
+  newstring = ''
   do
-    if (index(newstring, substring)>0) then
-      newstring = replace(string=newstring, substring=substring, restring=restring)
-    else
-      exit
-    endif
+    pos = index(rest, substring)
+    if (pos == 0) exit
+    newstring = newstring//rest(1:pos-1)//restring
+    rest = rest(pos+len(substring):)
   enddo
+  newstring = newstring//rest
   endfunction replace_all
 
   pure subroutine tokenize(strin, delimiter, toks, Nt)
@@ -175,36 +183,36 @@ contains
   elemental function unique(string, substring) result(uniq)
   !< Reduce to one (unique) multiple (sequential) occurrences of a characters substring into a string.
   !<
-  !< For example the string ' ab-cre-cre-ab' is reduce to 'ab-cre-ab' if the substring is '-cre'.
-  !< @note Eventual multiple trailing white space are not reduced to one occurrence.
-  character(len=*), intent(in) :: string    !< String to be parsed.
-  character(len=*), intent(in) :: substring !< Substring which multiple occurences must be reduced to one.
-  character(len=len(string))   :: uniq      !< String parsed.
-  integer(I4P)                 :: Lsub      !< Lenght of substring.
-  integer(I4P)                 :: c1        !< Counter.
-  integer(I4P)                 :: c2        !< Counter.
+  !< For example the string ' ab-cre-cre-ab' is reduce to ' ab-cre-ab' if the substring is '-cre'. The result has the length
+  !< of the input string, padded with trailing blanks.
+  character(len=*), intent(in)  :: string    !< String to be parsed.
+  character(len=*), intent(in)  :: substring !< Substring which multiple occurences must be reduced to one.
+  character(len=len(string))    :: uniq      !< String parsed.
+  character(len=:), allocatable :: reduced   !< Reduced string.
+  logical                       :: previous  !< The previous piece was an occurrence of the substring.
+  integer(I4P)                  :: Lsub      !< Lenght of substring.
+  integer(I4P)                  :: c         !< Counter.
 
   uniq = string
-  Lsub=len(substring)
-  if (Lsub>len(string)) return
-  c1 = 1
-  Loop1: do
-    if (c1>=len_trim(uniq)) exit Loop1
-    if (uniq(c1:c1+Lsub-1)==substring.and.uniq(c1+Lsub:c1+2*Lsub-1)==substring) then
-      c2 = c1 + Lsub
-      Loop2: do
-        if (c2>=len_trim(uniq)) exit Loop2
-        if (uniq(c2:c2+Lsub-1)==substring) then
-          c2 = c2 + Lsub
-        else
-          exit Loop2
-        endif
-      enddo Loop2
-      uniq = uniq(1:c1)//uniq(c2:)
-    else
-      c1 = c1 + Lsub
+  Lsub = len(substring)
+  if (Lsub == 0 .or. Lsub > len(string)) return
+  reduced = ''
+  previous = .false.
+  c = 1
+  do while (c <= len(string))
+    if (c + Lsub - 1 <= len(string)) then
+      if (string(c:c+Lsub-1) == substring) then
+        if (.not.previous) reduced = reduced//substring
+        previous = .true.
+        c = c + Lsub
+        cycle
+      endif
     endif
-  enddo Loop1
+    reduced = reduced//string(c:c)
+    previous = .false.
+    c = c + 1
+  enddo
+  uniq = reduced
   endfunction unique
 
   elemental function upper_case(string)
