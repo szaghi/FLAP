@@ -623,8 +623,10 @@ contains
   type(command_line_argument)                  :: cla           !< CLA data.
   integer(I4P)                                 :: g             !< Counter.
 
-  ! initialize CLA
+  ! initialize CLA; each add reports only its own definition: the error of a previous failed add is not inherited (B34)
+  self%error = 0
   call cla%assign_object(self)
+  cla%error = 0
   if (present(switch)) then
     cla%switch    = switch
     cla%switch_ab = switch
@@ -859,7 +861,7 @@ contains
     self%error_message = self%error_prefix()//': '//message
   endif
   call self%print_error_message
-  if (show_usage_) write(self%usage_lun, '(A)') self%usage(g=g)
+  if (show_usage_) call write_text(self%usage_lun, self%usage(g=g))
   error = self%error
   endfunction raise_error
 
@@ -1097,7 +1099,7 @@ contains
   printed = gh >= 0
   if (.not.printed) return
   self%error = STATUS_NO_ARGS
-  write(self%usage_lun, '(A)') self%usage(pref=pref, g=gh)
+  call write_text(self%usage_lun, self%usage(pref=pref, g=gh))
   if (self%standalone) call quiet_stop(2_I4P)
   endfunction no_args_help
 
@@ -1114,7 +1116,7 @@ contains
   do g=0, size(self%clasg, dim=1)-1
     if (self%clasg(g)%is_action_passed(ACTION_PRINT_HELP)) then
       self%error = STATUS_PRINT_H
-      write(self%usage_lun,'(A)') self%usage(pref=pref, g=g)
+      call write_text(self%usage_lun, self%usage(pref=pref, g=g))
       if (self%standalone) call quiet_stop(0_I4P)
       return
     endif
@@ -2146,7 +2148,7 @@ contains
   class(command_line_interface), intent(in) :: self  !< CLI data.
   character(*), optional,        intent(in) :: pref  !< Prefixing string.
 
-  write(self%usage_lun, '(A)') self%usage(pref=pref, g=0)
+  call write_text(self%usage_lun, self%usage(pref=pref, g=0))
   endsubroutine print_usage
 
   subroutine save_bash_completion_core(self, bash_file, error)

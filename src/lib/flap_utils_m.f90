@@ -22,6 +22,7 @@ public :: tokenize
 public :: unique
 public :: upper_case
 public :: wstrip
+public :: write_text
 
 character(len=*), parameter :: LIST_SEP = '||!||' !< Separator of the items of a stored list: v1||!||v2||!||.
 
@@ -294,6 +295,15 @@ contains
     if (pass == 1) allocate(toks(1:Nt))
   enddo
   endsubroutine split_command_line
+
+  subroutine write_text(lun, text)
+  !< Write a text on a unit. The text is an argument, so a function building it (usage, signature) is evaluated before the
+  !< write starts: nvfortran 26.5 loses the output of a write whose output list calls a function that does I/O itself.
+  integer(I4P), intent(in) :: lun  !< Unit.
+  character(*), intent(in) :: text !< Text.
+
+  write(lun, '(A)') text
+  endsubroutine write_text
 
   pure subroutine csv_split(record, fields, nf, error)
   !< Split one CSV record (an RFC 4180 subset), the format of list values read from the environment (F22 of #125).

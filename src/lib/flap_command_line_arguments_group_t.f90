@@ -18,7 +18,7 @@ use flap_command_line_argument_t, only : command_line_argument, &
                                          SOURCE_NONE
 use flap_config_m, only : config_file
 use flap_object_t, only : object
-use flap_utils_m, only : list_count, list_items, list_push, read_env, tokenize
+use flap_utils_m, only : list_count, list_items, list_push, read_env, tokenize, write_text
 use penf
 
 implicit none
@@ -208,7 +208,7 @@ contains
     do a=1, self%Na
       if (.not.self%cla(a)%is_required_passed(pref=pref)) then
         self%error = self%cla(a)%error
-        write(self%usage_lun, '(A)') self%usage(pref=pref)
+        call write_text(self%usage_lun, self%usage(pref=pref))
         return
       endif
     enddo
@@ -325,7 +325,7 @@ contains
         given = given//', "'//trim(items(i))//'"'
       enddo
       call self%errored(pref=pref, error=ERROR_M_EXCLUDE_SET_REQUIRED, members=given(3:))
-      write(self%usage_lun, '(A)') self%usage(pref=pref)
+      call write_text(self%usage_lun, self%usage(pref=pref))
       return
     endif
   enddo

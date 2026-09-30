@@ -66,8 +66,8 @@ call check('run', 'FLAP_ES_MESH=m FLAP_ES_RUN_N=4', 'n=[4]', 'option of a comman
 call reinvoke(2_I4P, exitstat, out, err, args='--mesh x', env='FLAP_ES_LEVEL=5 FLAP_ES_VERBOSE=yes')
 call assert_contains(out, 'level=[1] verbose=F', 'ignore_env: defaults')
 
-! definitions: flags and lists accept an envvar; positionals (T3.11) and store* do not; a fresh
-! CLI for each invalid definition, since a failed add is returned again by the next one (B34)
+! definitions: flags and lists accept an envvar; positionals (T3.11) and store* do not. One CLI for all: every add reports
+! only its own definition, a failed add does not leak into the next ones (B34 of #125)
 call capture_open(lun)
 call cli%init(progname='flap_test_env_source', error_lun=lun, usage_lun=lun)
 call cli%add(switch='--flag', help='flag', required=.false., act='store_true', def='.false.', envvar='FLAP_F', error=error)
@@ -76,12 +76,10 @@ call cli%add(switch='--off', help='flag', required=.false., act='store_false', d
 call assert_equal(error, 0_I4P, 'store_false with envvar: allowed')
 call cli%add(positional=.true., position=1, help='p', required=.false., def='p', envvar='FLAP_P', error=error)
 call assert_equal(error, ERROR_ENVVAR_POSITIONAL, 'positional with envvar: error')
-call cli%init(progname='flap_test_env_source', error_lun=lun, usage_lun=lun)
 call cli%add(switch='--star', help='s', required=.false., act='store*', def='s', envvar='FLAP_S', error=error)
-call assert_equal(error, ERROR_ENVVAR_NOT_STORE, 'store* with envvar: error')
-call cli%init(progname='flap_test_env_source', error_lun=lun, usage_lun=lun)
+call assert_equal(error, ERROR_ENVVAR_NOT_STORE, 'store* with envvar after a failed add: its own error (B34)')
 call cli%add(switch='--list', help='l', required=.false., act='store', nargs='+', def='1', envvar='FLAP_L', error=error)
-call assert_equal(error, 0_I4P, 'list with envvar: allowed (F22)')
+call assert_equal(error, 0_I4P, 'list with envvar after failed adds: allowed (F22, B34)')
 call capture_close(lun)
 
 contains

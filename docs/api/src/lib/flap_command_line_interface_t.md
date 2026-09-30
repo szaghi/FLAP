@@ -1354,6 +1354,7 @@ subroutine print_usage(self, pref)
 ```mermaid
 flowchart TD
   print_usage["print_usage"] --> usage["usage"]
+  print_usage["print_usage"] --> write_text["write_text"]
   style print_usage fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -1800,6 +1801,7 @@ flowchart TD
   raise_error["raise_error"] --> is_defined_group["is_defined_group"]
   raise_error["raise_error"] --> print_error_message["print_error_message"]
   raise_error["raise_error"] --> usage["usage"]
+  raise_error["raise_error"] --> write_text["write_text"]
   style raise_error fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -1920,6 +1922,7 @@ flowchart TD
   parse_core["parse_core"] --> no_args_help["no_args_help"]
   no_args_help["no_args_help"] --> quiet_stop["quiet_stop"]
   no_args_help["no_args_help"] --> usage["usage"]
+  no_args_help["no_args_help"] --> write_text["write_text"]
   style no_args_help fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -1952,6 +1955,7 @@ flowchart TD
   dispatch_status["dispatch_status"] --> quiet_stop["quiet_stop"]
   dispatch_status["dispatch_status"] --> save_usage_to_markdown["save_usage_to_markdown"]
   dispatch_status["dispatch_status"] --> usage["usage"]
+  dispatch_status["dispatch_status"] --> write_text["write_text"]
   style dispatch_status fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 

@@ -283,6 +283,7 @@ flowchart TD
   parse_core["parse_core"] --> is_required_passed["is_required_passed"]
   is_required_passed["is_required_passed"] --> is_required_passed["is_required_passed"]
   is_required_passed["is_required_passed"] --> usage["usage"]
+  is_required_passed["is_required_passed"] --> write_text["write_text"]
   style is_required_passed fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -350,6 +351,7 @@ flowchart TD
   check_exclusive_sets["check_exclusive_sets"] --> is_defined["is_defined"]
   check_exclusive_sets["check_exclusive_sets"] --> list_items["list_items"]
   check_exclusive_sets["check_exclusive_sets"] --> usage["usage"]
+  check_exclusive_sets["check_exclusive_sets"] --> write_text["write_text"]
   style check_exclusive_sets fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 

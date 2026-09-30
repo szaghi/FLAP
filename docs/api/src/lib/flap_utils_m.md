@@ -24,6 +24,7 @@ graph LR
 - [read_env](#read-env)
 - [tokenize](#tokenize)
 - [split_command_line](#split-command-line)
+- [write_text](#write-text)
 - [csv_split](#csv-split)
 - [count_substring](#count-substring)
 - [to_characters](#to-characters)
@@ -222,6 +223,35 @@ subroutine split_command_line(strin, toks, Nt)
 flowchart TD
   get_args_from_string["get_args_from_string"] --> split_command_line["split_command_line"]
   style split_command_line fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### write_text
+
+Write a text on a unit. The text is an argument, so a function building it (usage, signature) is evaluated before the
+ write starts: nvfortran 26.5 loses the output of a write whose output list calls a function that does I/O itself.
+
+```fortran
+subroutine write_text(lun, text)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `lun` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in |  | Unit. |
+| `text` | character(len=*) | in |  | Text. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  check_exclusive_sets["check_exclusive_sets"] --> write_text["write_text"]
+  dispatch_status["dispatch_status"] --> write_text["write_text"]
+  is_required_passed["is_required_passed"] --> write_text["write_text"]
+  no_args_help["no_args_help"] --> write_text["write_text"]
+  print_usage["print_usage"] --> write_text["write_text"]
+  raise_error["raise_error"] --> write_text["write_text"]
+  style write_text fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### csv_split
