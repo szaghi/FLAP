@@ -112,6 +112,7 @@ type, extends(object) :: command_line_argument
   logical,                       public :: min_open=.false.       !< The minimum is excluded.
   logical,                       public :: max_open=.false.       !< The maximum is excluded.
   logical,                       public :: clamp=.false.          !< An out-of-range value becomes the bound.
+  logical,                       public :: case_sensitive=.true.  !< Character choices match only in their case (F14).
   logical,                       public :: is_negated=.false.     !< The last spelling of a flag pair passed is the negation.
   logical,                       public :: pair_passed=.false.    !< Both spellings of a flag pair passed (D5: once each).
   contains
@@ -131,6 +132,7 @@ type, extends(object) :: command_line_argument
     procedure, public :: check_paths                    !< Check the path value(s): existence and permissions.
     procedure, public :: match_token                    !< Check if a command line token names this CLA.
     procedure, public :: match_negation                 !< Check if a command line token is the negation of this flag.
+    procedure, public :: same_name                      !< Compare a switch name with a token (case rule of F14).
     procedure, public :: is_pair_override               !< Check if a flag passed may be passed again by its other spelling.
     procedure, public :: flag_value                     !< Value of a flag passed on the command line.
     procedure, public :: match_inline_token             !< Check a token also as NAME=VALUE.
@@ -297,6 +299,7 @@ contains
   self%min_open        = .false.
   self%max_open        = .false.
   self%clamp           = .false.
+  self%case_sensitive  = .true.
   self%is_negated      = .false.
   self%pair_passed     = .false.
   endsubroutine free
@@ -542,15 +545,16 @@ contains
   !<
   !< Rule 1: the token is the switch, its abbreviation or its negation (F11); blanks around both are not significant. A
   !< positional never matches. Rule 2 (NAME=VALUE) is match_inline_token, built on this one; match_negation tells which.
+  !< With case_insensitive (F14, inherited from the CLI) the names match in any case.
   class(command_line_argument), intent(in) :: self  !< CLA data.
   character(*),                 intent(in) :: token !< Command line token.
   logical                                  :: match !< Check result.
 
   match = .false.
   if (self%is_positional .or. len_trim(token) == 0) return
-  if (allocated(self%switch)) match = adjustl(self%switch) == adjustl(token)
+  if (allocated(self%switch)) match = self%same_name(self%switch, token)
   if (match) return
-  if (allocated(self%switch_ab)) match = adjustl(self%switch_ab) == adjustl(token)
+  if (allocated(self%switch_ab)) match = self%same_name(self%switch_ab, token)
   if (match) return
   match = self%match_negation(token)
   endfunction match_token
@@ -563,8 +567,22 @@ contains
 
   match = .false.
   if (self%is_positional .or. len_trim(token) == 0 .or. .not.allocated(self%switch_neg)) return
-  match = adjustl(self%switch_neg) == adjustl(token)
+  match = self%same_name(self%switch_neg, token)
   endfunction match_negation
+
+  pure function same_name(self, name, token) result(same)
+  !< Compare a switch name with a token, blanks around them not significant; in any case with case_insensitive (F14).
+  class(command_line_argument), intent(in) :: self  !< CLA data.
+  character(*),                 intent(in) :: name  !< Switch name.
+  character(*),                 intent(in) :: token !< Command line token.
+  logical                                  :: same  !< Check result.
+
+  if (self%case_insensitive) then
+    same = upper_case(adjustl(name)) == upper_case(adjustl(token))
+  else
+    same = adjustl(name) == adjustl(token)
+  endif
+  endfunction same_name
 
   pure function is_pair_override(self, negated) result(override)
   !< Check if a flag already passed may be passed again: the other spelling of a flag pair, not yet passed (D5 of #125).
@@ -1610,7 +1628,7 @@ contains
   !<
   !< @note This procedure can be called if and only if cla%choices has been allocated.
   class(command_line_argument), intent(inout) :: self    !< CLA data.
-  class(*),                     intent(in)    :: val     !< CLA value.
+  class(*),                     intent(inout) :: val     !< CLA value; a character one becomes the declared spelling.
   character(*), optional,       intent(in)    :: pref    !< Prefixing string.
   character(len(self%choices)), allocatable   :: toks(:) !< Tokens for parsing choices list.
   integer(I4P)                                :: Nc      !< Number of choices.
@@ -1663,9 +1681,20 @@ contains
     enddo
   type is(character(*))
     val_str = val
-    do c=1, Nc
-      if (val==toks(c)) val_in = .true.
-    enddo
+    if (self%case_sensitive) then
+      do c=1, Nc
+        if (val==toks(c)) val_in = .true.
+      enddo
+    else
+      ! any case (F14): the value becomes the declared spelling of the choice
+      do c=1, Nc
+        if (upper_case(trim(adjustl(val)))==upper_case(trim(adjustl(toks(c))))) then
+          val_in = .true.
+          val = trim(adjustl(toks(c)))
+          exit
+        endif
+      enddo
+    endif
   type is(logical)
     call self%errored(pref=pref, error=ERROR_CHOICES_LOGICAL)
   class default

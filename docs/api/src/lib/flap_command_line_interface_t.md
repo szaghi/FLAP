@@ -135,6 +135,7 @@ classDiagram
 | `usage_lun` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Output unit to print help/usage messages |
 | `version_lun` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Output unit to print version message |
 | `error_lun` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Error unit to print error messages |
+| `case_insensitive` | logical |  | Match switches and command names in any case (F14). |
 | `clasg` | type([command_line_arguments_group](/api/src/lib/flap_command_line_arguments_group_t#command-line-arguments-group)) | allocatable | CLA list [1:Na]. |
 | `args` | type([flap_string](/api/src/lib/flap_utils_m#flap-string)) | allocatable | Actually passed command line arguments. |
 | `disable_hv` | logical |  | Disable automatic 'help' and 'version' CLAs. |
@@ -250,7 +251,7 @@ flowchart TD
 Initialize CLI.
 
 ```fortran
-subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone, error_hint, no_args_is_help, ignore_env, auto_envvar_prefix)
+subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone, error_hint, no_args_is_help, ignore_env, auto_envvar_prefix, case_insensitive)
 ```
 
 **Arguments**
@@ -278,6 +279,7 @@ subroutine init(self, progname, version, help, description, license, authors, ex
 | `no_args_is_help` | logical | in | optional | Print the help (STATUS_NO_ARGS) when no arguments |
 | `ignore_env` | logical | in | optional | Turn every environment lookup off (F20): envvar |
 | `auto_envvar_prefix` | character(len=*) | in | optional | Generate the envvar of the options without one: |
+| `case_insensitive` | logical | in | optional | Match switches and command names in any case (F14); |
 
 **Call graph**
 
@@ -472,7 +474,7 @@ Add CLA to CLI.
  @note If CLA belongs to a not yet present group it is created on the fly.
 
 ```fortran
-subroutine add(self, pref, group, group_index, switch, switch_ab, switch_neg, help, help_markdown, help_color, help_style, required, val_required, positional, position, hidden, act, def, nargs, choices, exclude, envvar, must_exist, readable, writable, allow_dash, deprecated, min, max, min_open, max_open, clamp, error)
+subroutine add(self, pref, group, group_index, switch, switch_ab, switch_neg, help, help_markdown, help_color, help_style, required, val_required, positional, position, hidden, act, def, nargs, choices, exclude, envvar, must_exist, readable, writable, allow_dash, deprecated, min, max, min_open, max_open, clamp, case_sensitive, error)
 ```
 
 **Arguments**
@@ -511,6 +513,7 @@ subroutine add(self, pref, group, group_index, switch, switch_ab, switch_neg, he
 | `min_open` | logical | in | optional | The minimum is excluded (default .false.). |
 | `max_open` | logical | in | optional | The maximum is excluded (default .false.). |
 | `clamp` | logical | in | optional | An out-of-range value becomes the bound (default .false.). |
+| `case_sensitive` | logical | in | optional | Character choices match only in their case (default |
 | `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | optional | Error trapping flag. |
 
 **Call graph**
@@ -1752,7 +1755,8 @@ flowchart TD
 
 Return the index of the group (command) with a name, -1 if there is none: the one resolver of group names.
 
- The top level is the group 0, named ''. Trailing blanks are not significant; the match is case sensitive.
+ The top level is the group 0, named ''. Trailing blanks are not significant; the match is case sensitive, in any case
+ with case_insensitive (F14).
 
 **Attributes**: pure
 
@@ -1776,6 +1780,7 @@ flowchart TD
   is_defined_group["is_defined_group"] --> group_index["group_index"]
   load_config["load_config"] --> group_index["group_index"]
   set_mutually_exclusive_switches["set_mutually_exclusive_switches"] --> group_index["group_index"]
+  group_index["group_index"] --> upper_case["upper_case"]
   style group_index fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 

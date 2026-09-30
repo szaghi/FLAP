@@ -159,7 +159,7 @@ contains
 
   subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, &
                   usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone, &
-                  error_hint, no_args_is_help, ignore_env, auto_envvar_prefix)
+                  error_hint, no_args_is_help, ignore_env, auto_envvar_prefix, case_insensitive)
   !< Initialize CLI.
   class(command_line_interface), intent(inout) :: self                !< CLI data.
   character(*), optional,        intent(in)    :: progname            !< Program name.
@@ -187,6 +187,8 @@ contains
                                                                       !< names are still shown in the help.
   character(*), optional,        intent(in)    :: auto_envvar_prefix  !< Generate the envvar of the options without one:
                                                                       !< PREFIX[_GROUP]_NAME (F07).
+  logical,      optional,        intent(in)    :: case_insensitive    !< Match switches and command names in any case (F14);
+                                                                      !< values and choices keep theirs.
   character(len=:), allocatable                :: prog_invocation     !< Complete program invocation.
   integer(I4P)                                 :: invocation_length   !< Length of invocation.
   integer(I4P)                                 :: retrieval_status    !< Retrieval status.
@@ -223,6 +225,7 @@ contains
                           if (present(error_hint))          self%error_hint          = error_hint         ! default set by self%free
                           if (present(no_args_is_help))     self%no_args_is_help     = no_args_is_help    ! default set by self%free
                           if (present(ignore_env))          self%ignore_env          = ignore_env         ! default set by self%free
+                          if (present(case_insensitive))    self%case_insensitive    = case_insensitive   ! default set by self%free
   self%auto_envvar_prefix = '' ; if (present(auto_envvar_prefix)) self%auto_envvar_prefix = trim(adjustl(auto_envvar_prefix))
   ! initialize only the first default group
   allocate(self%clasg(0:0))
@@ -584,7 +587,8 @@ contains
 
   subroutine add(self, pref, group, group_index, switch, switch_ab, switch_neg, help, help_markdown, help_color, help_style, &
                  required, val_required, positional, position, hidden, act, def, nargs, choices, exclude, envvar, &
-                 must_exist, readable, writable, allow_dash, deprecated, min, max, min_open, max_open, clamp, error)
+                 must_exist, readable, writable, allow_dash, deprecated, min, max, min_open, max_open, clamp, &
+                 case_sensitive, error)
   !< Add CLA to CLI.
   !<
   !< @note If not otherwise declared the action on CLA value is set to "store" a value that must be passed after the switch name
@@ -619,6 +623,8 @@ contains
   logical,      optional,        intent(in)    :: min_open      !< The minimum is excluded (default .false.).
   logical,      optional,        intent(in)    :: max_open      !< The maximum is excluded (default .false.).
   logical,      optional,        intent(in)    :: clamp         !< An out-of-range value becomes the bound (default .false.).
+  logical,      optional,        intent(in)    :: case_sensitive !< Character choices match only in their case (default
+                                                                   !< .true.); otherwise any case, giving the declared one.
   character(*), optional,        intent(in)    :: act           !< CLA value action.
   character(*), optional,        intent(in)    :: def           !< Default value.
   character(*), optional,        intent(in)    :: nargs         !< Number of arguments consumed by CLA.
@@ -663,6 +669,7 @@ contains
                                                   if (present(min_open     )) cla%min_open        = min_open
                                                   if (present(max_open     )) cla%max_open        = max_open
                                                   if (present(clamp        )) cla%clamp           = clamp
+                                                  if (present(case_sensitive)) cla%case_sensitive = case_sensitive
   cla%act             = action_store            ; if (present(act          )) cla%act             = trim(adjustl(Upper_Case(act)))
   if (cla%act == ACTION_ALTERNATE .and. .not.present(def)) then
     ! an alternate action is a flag (F16)
@@ -828,7 +835,8 @@ contains
   pure function group_index(self, name) result(g)
   !< Return the index of the group (command) with a name, -1 if there is none: the one resolver of group names.
   !<
-  !< The top level is the group 0, named ''. Trailing blanks are not significant; the match is case sensitive.
+  !< The top level is the group 0, named ''. Trailing blanks are not significant; the match is case sensitive, in any case
+  !< with case_insensitive (F14).
   class(command_line_interface), intent(in) :: self !< CLI data.
   character(*),                  intent(in) :: name !< Name of group (command).
   integer(I4P)                              :: g    !< Index of group, -1 if not defined.
@@ -836,7 +844,11 @@ contains
   if (allocated(self%clasg)) then
     do g=0, ubound(self%clasg, dim=1)
       if (allocated(self%clasg(g)%group)) then
-        if (self%clasg(g)%group == name) return
+        if (self%case_insensitive) then
+          if (upper_case(self%clasg(g)%group) == upper_case(name)) return
+        elseif (self%clasg(g)%group == name) then
+          return
+        endif
       endif
     enddo
   endif

@@ -26,6 +26,7 @@ customise the help and version messages.
 | `standalone` | `logical` | `.true.` | Stop after printing help/version/Markdown; `.false.` makes `parse` return `STATUS_PRINT_H`/`V`/`M` instead (see [Error Codes](./errors#handling-status-codes)) |
 | `error_hint` | `logical` | `.true.` | After a failed `parse`, print `Try 'prog --help' for help.` (see [Error Codes](./errors#error-hint)) |
 | `no_args_is_help` | `logical` | `.false.` | With no arguments, print the help instead of parsing (`STATUS_NO_ARGS`; exit status 2 in standalone mode) |
+| `case_insensitive` | `logical` | `.false.` | Match switches (abbreviations and negations included) and command names in any case: `--MESH` is `--mesh`, `COMPILE` is `compile`. Values and choices keep their case; two switches differing only by case are a consistency error (100). Call `init` before `add` |
 
 > **Note on `examples`:** Fortran requires all elements of a character array to have the
 > same length, so pad shorter examples with trailing spaces.
@@ -77,7 +78,7 @@ abbreviation (`-v` for verbosity), the builtin keeps just `--version`. The same 
 
 ```fortran
 call cli%add(switch, switch_ab, switch_neg, help, required, act, def, &
-             nargs, choices, exclude, envvar,             &
+             nargs, choices, case_sensitive, exclude, envvar, &
              positional, position, hidden,                &
              must_exist, readable, writable, allow_dash,  &
              deprecated, min, max, min_open, max_open,    &
@@ -188,6 +189,9 @@ myapp: error: the value "2" is not in the choices list (1,3,5)
 
 For a list-valued argument (`nargs`), every value is checked, by both `get` and `get_varying`, and so is the default
 when it is used. `choices` cannot be used with logical values.
+
+With `case_sensitive=.false.`, a `character` value matches its choice in any case and `get` returns the **declared
+spelling**: with `choices='weno5,muscl'`, `--scheme WENO5` gives `weno5`. Numeric choices are unaffected.
 
 ### List-valued arguments (`nargs`)
 

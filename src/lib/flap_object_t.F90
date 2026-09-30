@@ -32,6 +32,7 @@ type, abstract, public :: object
   integer(I4P)                  :: usage_lun=stderr   !< Output unit to print help/usage messages
   integer(I4P)                  :: version_lun=stdout !< Output unit to print version message
   integer(I4P)                  :: error_lun=stderr   !< Error unit to print error messages
+  logical                       :: case_insensitive=.false. !< Match switches and command names in any case (F14).
   contains
     ! public methods
     procedure, pass(self) :: error_prefix        !< Prefix of error messages.
@@ -67,6 +68,7 @@ contains
   self%usage_lun = stderr
   self%version_lun = stdout
   self%error_lun = stderr
+  self%case_insensitive = .false.
   endsubroutine free_object
 
   function error_prefix(self, pref) result(prefd)
@@ -142,5 +144,6 @@ contains
                                     lhs%usage_lun     = rhs%usage_lun
                                     lhs%version_lun   = rhs%version_lun
                                     lhs%error_lun     = rhs%error_lun
+                                    lhs%case_insensitive = rhs%case_insensitive
   endsubroutine assign_object
 endmodule flap_object_t

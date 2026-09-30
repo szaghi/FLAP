@@ -79,6 +79,7 @@ graph LR
 - [takes_config_value](#takes-config-value)
 - [match_token](#match-token)
 - [match_negation](#match-negation)
+- [same_name](#same-name)
 - [is_pair_override](#is-pair-override)
 - [flag_value](#flag-value)
 - [is_repeatable](#is-repeatable)
@@ -199,6 +200,7 @@ classDiagram
 | `usage_lun` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Output unit to print help/usage messages |
 | `version_lun` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Output unit to print version message |
 | `error_lun` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Error unit to print error messages |
+| `case_insensitive` | logical |  | Match switches and command names in any case (F14). |
 | `switch` | character(len=:) | allocatable | Switch name. |
 | `switch_ab` | character(len=:) | allocatable | Abbreviated switch name. |
 | `switch_neg` | character(len=:) | allocatable | Negation of a flag, --no-x (F11); allocated if any. |
@@ -226,6 +228,7 @@ classDiagram
 | `min_open` | logical |  | The minimum is excluded. |
 | `max_open` | logical |  | The maximum is excluded. |
 | `clamp` | logical |  | An out-of-range value becomes the bound. |
+| `case_sensitive` | logical |  | Character choices match only in their case (F14). |
 | `is_negated` | logical |  | The last spelling of a flag pair passed is the negation. |
 | `pair_passed` | logical |  | Both spellings of a flag pair passed (D5: once each). |
 
@@ -254,6 +257,7 @@ classDiagram
 | `check_paths` |  | Check the path value(s): existence and permissions. |
 | `match_token` |  | Check if a command line token names this CLA. |
 | `match_negation` |  | Check if a command line token is the negation of this flag. |
+| `same_name` |  | Compare a switch name with a token (case rule of F14). |
 | `is_pair_override` |  | Check if a flag passed may be passed again by its other spelling. |
 | `flag_value` |  | Value of a flag passed on the command line. |
 | `match_inline_token` |  | Check a token also as NAME=VALUE. |
@@ -1172,7 +1176,7 @@ subroutine check_choices(self, val, pref)
 | Name | Type | Intent | Attributes | Description |
 |------|------|--------|------------|-------------|
 | `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
-| `val` | class(*) | in |  | CLA value. |
+| `val` | class(*) | inout |  | CLA value; a character one becomes the declared spelling. |
 | `pref` | character(len=*) | in | optional | Prefixing string. |
 
 **Call graph**
@@ -1194,6 +1198,7 @@ flowchart TD
   check_choices["check_choices"] --> errored["errored"]
   check_choices["check_choices"] --> str["str"]
   check_choices["check_choices"] --> tokenize["tokenize"]
+  check_choices["check_choices"] --> upper_case["upper_case"]
   style check_choices fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -1974,6 +1979,7 @@ Check if a command line token names this CLA: the one matcher of switch names (d
 
  Rule 1: the token is the switch, its abbreviation or its negation (F11); blanks around both are not significant. A
  positional never matches. Rule 2 (NAME=VALUE) is match_inline_token, built on this one; match_negation tells which.
+ With case_insensitive (F14, inherited from the CLI) the names match in any case.
 
 **Attributes**: pure
 
@@ -2001,6 +2007,7 @@ flowchart TD
   match_inline_token["match_inline_token"] --> match_token["match_token"]
   value_arity["value_arity"] --> match_token["match_token"]
   match_token["match_token"] --> match_negation["match_negation"]
+  match_token["match_token"] --> same_name["same_name"]
   style match_token fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -2029,7 +2036,38 @@ function match_negation(self, token) result(match)
 flowchart TD
   match_token["match_token"] --> match_negation["match_negation"]
   parse["parse"] --> match_negation["match_negation"]
+  match_negation["match_negation"] --> same_name["same_name"]
   style match_negation fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### same_name
+
+Compare a switch name with a token, blanks around them not significant; in any case with case_insensitive (F14).
+
+**Attributes**: pure
+
+**Returns**: `logical`
+
+```fortran
+function same_name(self, name, token) result(same)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+| `name` | character(len=*) | in |  | Switch name. |
+| `token` | character(len=*) | in |  | Command line token. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  match_negation["match_negation"] --> same_name["same_name"]
+  match_token["match_token"] --> same_name["same_name"]
+  same_name["same_name"] --> upper_case["upper_case"]
+  style same_name fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### is_pair_override

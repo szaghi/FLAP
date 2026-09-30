@@ -23,7 +23,7 @@ a%progname = 'prog' ; a%version = 'v1' ; a%help = 'help' ; a%help_color = 'red' 
 a%help_markdown = 'md' ; a%description = 'desc' ; a%license = 'MIT' ; a%authors = 'me' ; a%epilog = 'bye'
 a%m_exclude = '--x' ; a%error_message = 'msg' ; a%error_color = 'blue' ; a%error_style = 'italics'
 call a%set_examples(['prog -a', 'prog -b'])
-a%error = 7 ; a%usage_lun = 11 ; a%version_lun = 12 ; a%error_lun = 13
+a%error = 7 ; a%usage_lun = 11 ; a%version_lun = 12 ; a%error_lun = 13 ; a%case_insensitive = .true.
 ! argument components
 a%switch = '--sw' ; a%switch_ab = '-s' ; a%act = 'STORE' ; a%def = '1' ; a%nargs = '2' ; a%choices = '1,2' ; a%val = '2'
 a%envvar = 'ENV' ; a%is_required = .true. ; a%is_positional = .true. ; a%position = 3 ; a%is_passed = .true.
@@ -91,5 +91,6 @@ contains
   call assert_equal(x%usage_lun, 11_I4P, what//': usage_lun')
   call assert_equal(x%version_lun, 12_I4P, what//': version_lun')
   call assert_equal(x%error_lun, 13_I4P, what//': error_lun')
+  call assert(x%case_insensitive, what//': case_insensitive')
   endsubroutine check_object
 endprogram flap_test_copy

@@ -497,7 +497,10 @@ function upper_case(string)
 ```mermaid
 flowchart TD
   add["add"] --> upper_case["upper_case"]
+  check_choices["check_choices"] --> upper_case["upper_case"]
   envvar_name["envvar_name"] --> upper_case["upper_case"]
+  group_index["group_index"] --> upper_case["upper_case"]
+  same_name["same_name"] --> upper_case["upper_case"]
   set_source_value["set_source_value"] --> upper_case["upper_case"]
   style upper_case fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
