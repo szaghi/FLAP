@@ -4,6 +4,17 @@ All notable changes to this project are documented here.
 Versions follow [Semantic Versioning](https://semver.org/).
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.4.0] — 2026-09-30
+### Added
+- **cli**: Usage_on_error, a shorter output after an error
+
+- **cli**: --man builtin and the file names of --man and --markdown
+
+
+### Fixed
+- **completion**: Bash offers the options not yet typed, of the last command
+
+
 ## [2.3.1] — 2026-09-30
 ### Documentation
 - Colours section, current build commands, upgrade page
