@@ -78,6 +78,7 @@ type, extends(object), public :: command_line_interface
     procedure, public :: save_bash_completion            !< Save bash completion script (for named CLAs only).
     procedure, public :: save_zsh_completion             !< Save zsh completion script (bash script via bashcompinit).
     procedure, public :: save_fish_completion            !< Save fish completion script (native).
+    procedure, public :: save_powershell_completion      !< Save PowerShell completion script (native completer).
     procedure, public :: save_man_page                   !< Save CLI usage as man page.
     procedure, public :: save_usage_to_markdown          !< Save CLI usage as markdown.
     ! private methods
@@ -2405,6 +2406,80 @@ contains
   endif
   close(u)
   endsubroutine save_fish_completion
+
+  subroutine save_powershell_completion(self, powershell_file, error)
+  !< Save PowerShell completion script (F15 of #125): a native argument completer with the tables of the commands (names
+  !< and aliases) and of the options of each group; it completes the choices after an option, nothing after another option
+  !< taking a value (PowerShell then completes paths), otherwise the options and, at the top level, the commands. Builtins
+  !< included whether or not parse has been called. Dot-source it, e.g. from $PROFILE.
+  class(command_line_interface), intent(in)  :: self            !< CLI data.
+  character(*),                  intent(in)  :: powershell_file !< Output file name of PowerShell completion script.
+  integer(I4P), optional,        intent(out) :: error           !< Error trapping flag.
+  type(command_line_interface)               :: cli             !< Copy of the CLI with the builtins.
+  character(len=:), allocatable              :: script          !< Script text.
+  character(len=:), allocatable              :: prog            !< Program name, without its path.
+  character(len=:), allocatable              :: nl              !< New line.
+  integer(I4P)                               :: g               !< Counter.
+  integer(I4P)                               :: p               !< Position of the last path separator.
+  integer(I4P)                               :: u               !< Unit file handler.
+
+  cli = self
+  if (cli%builtins_missing()) call cli%ensure_builtins
+  prog = trim(adjustl(cli%progname))
+  p = max(index(prog, '/', back=.true.), index(prog, achar(92), back=.true.)) ! achar(92): a backslash
+  prog = prog(p+1:)
+  nl = new_line('a')
+  script = '# PowerShell completion of '//prog//': dot-source this file (. ./'//prog//'.ps1), e.g. from your $PROFILE'
+  script = script//nl//"Register-ArgumentCompleter -Native -CommandName '"//ps_escape(prog)//"' -ScriptBlock {"
+  script = script//nl//'  param($wordToComplete, $commandAst, $cursorPosition)'
+  script = script//nl//'  $commands = @{'
+  do g=1, size(cli%clasg, dim=1) - 1
+    script = script//cli%clasg(g)%completion_powershell(commands=.true.)
+  enddo
+  script = script//nl//'  }'
+  script = script//nl//'  $options = @{'
+  do g=0, size(cli%clasg, dim=1) - 1
+    script = script//cli%clasg(g)%completion_powershell(commands=.false.)
+  enddo
+  script = script//nl//'  }'
+  script = script//nl//'  # the words before the one completed; the command is the first of them that is a command name'
+  script = script//nl//'  $before = @($commandAst.CommandElements | Where-Object { $_.Extent.EndOffset -lt $cursorPosition } |'
+  script = script//nl//'             ForEach-Object { $_.ToString() })'
+  script = script//nl//"  $group = ''"
+  script = script//nl//'  foreach ($w in ($before | Select-Object -Skip 1)) {'
+  script = script//nl//'    if ($commands.ContainsKey($w)) { $group = $commands[$w]; break }'
+  script = script//nl//'  }'
+  script = script//nl//"  $prev = if ($before.Count -gt 1) { $before[-1] } else { '' }"
+  script = script//nl//'  # the value of an option: its choices, or nothing (PowerShell then completes paths)'
+  script = script//nl//'  foreach ($o in $options[$group]) {'
+  script = script//nl//'    if ($o.n -ceq $prev -and $o.v) {'
+  script = script//nl//'      if ($null -ne $o.c) {'
+  script = script//nl//'        $o.c | Where-Object { $_ -clike "$wordToComplete*" } |'
+  script = script//nl//"          ForEach-Object { "// &
+                    "[System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_) }"
+  script = script//nl//'      }'
+  script = script//nl//'      return'
+  script = script//nl//'    }'
+  script = script//nl//'  }'
+  script = script//nl//'  $options[$group] | Where-Object { $_.n -clike "$wordToComplete*" } |'
+  script = script//nl//"    ForEach-Object { "// &
+                    "[System.Management.Automation.CompletionResult]::new($_.n, $_.n, 'ParameterName', $_.d) }"
+  script = script//nl//"  if ($group -eq '') {"
+  script = script//nl//'    $commands.Keys | Where-Object { $_ -clike "$wordToComplete*" } | Sort-Object |'
+  script = script//nl//"      ForEach-Object { "// &
+                    "[System.Management.Automation.CompletionResult]::new($_, $_, 'Command', $commands[$_]) }"
+  script = script//nl//'  }'
+  script = script//nl//'}'
+  if (present(error)) then
+    open(newunit=u, file=trim(adjustl(powershell_file)), action='write', status='replace', iostat=error)
+    if (error /= 0) return
+    write(u, "(A)", iostat=error) script
+  else
+    open(newunit=u, file=trim(adjustl(powershell_file)), action='write', status='replace')
+    write(u, "(A)") script
+  endif
+  close(u)
+  endsubroutine save_powershell_completion
 
   subroutine save_man_page(self, man_file, error)
   !< Save CLI usage as man page, builtins included whether or not parse has been called.

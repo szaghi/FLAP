@@ -49,8 +49,14 @@ jobs:
       run: fobis build --mode ${{ matrix.mode }}
 
     - name: Install shells for the completion tests
-      # flap_test_shell_completion checks the zsh/fish scripts only where the shell exists (pwsh is preinstalled)
-      run: sudo apt-get update -q && sudo apt-get install -y -q zsh fish
+      # flap_test_shell_completion checks the zsh/fish scripts only where the shell exists (pwsh is preinstalled);
+      # bounded, and without the slow man-db trigger (an install once hung for 30 minutes)
+      timeout-minutes: 10
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo rm -f /var/lib/man-db/auto-update
+        sudo apt-get update -q && sudo apt-get install -y -q --no-install-recommends zsh fish
 
     - name: Test
       run: bash scripts/run_tests.sh

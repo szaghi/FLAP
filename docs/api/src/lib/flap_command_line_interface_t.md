@@ -60,6 +60,7 @@ graph LR
 - [save_bash_completion](#save-bash-completion)
 - [save_zsh_completion](#save-zsh-completion)
 - [save_fish_completion](#save-fish-completion)
+- [save_powershell_completion](#save-powershell-completion)
 - [save_man_page](#save-man-page)
 - [save_usage_to_markdown](#save-usage-to-markdown)
 - [print_usage](#print-usage)
@@ -197,6 +198,7 @@ classDiagram
 | `save_bash_completion` |  | Save bash completion script (for named CLAs only). |
 | `save_zsh_completion` |  | Save zsh completion script (bash script via bashcompinit). |
 | `save_fish_completion` |  | Save fish completion script (native). |
+| `save_powershell_completion` |  | Save PowerShell completion script (native completer). |
 | `save_man_page` |  | Save CLI usage as man page. |
 | `save_usage_to_markdown` |  | Save CLI usage as markdown. |
 | `ensure_builtins` |  | Add the builtin CLAs (help, markdown, version, --) if missing. |
@@ -1389,6 +1391,7 @@ flowchart TD
   save_bash_completion["save_bash_completion"] --> ensure_builtins["ensure_builtins"]
   save_fish_completion["save_fish_completion"] --> ensure_builtins["ensure_builtins"]
   save_man_page["save_man_page"] --> ensure_builtins["ensure_builtins"]
+  save_powershell_completion["save_powershell_completion"] --> ensure_builtins["ensure_builtins"]
   save_usage_to_markdown["save_usage_to_markdown"] --> ensure_builtins["ensure_builtins"]
   save_zsh_completion["save_zsh_completion"] --> ensure_builtins["ensure_builtins"]
   signature["signature"] --> ensure_builtins["ensure_builtins"]
@@ -1477,6 +1480,36 @@ flowchart TD
   save_fish_completion["save_fish_completion"] --> completion_fish["completion_fish"]
   save_fish_completion["save_fish_completion"] --> ensure_builtins["ensure_builtins"]
   style save_fish_completion fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### save_powershell_completion
+
+Save PowerShell completion script (F15 of #125): a native argument completer with the tables of the commands (names
+ and aliases) and of the options of each group; it completes the choices after an option, nothing after another option
+ taking a value (PowerShell then completes paths), otherwise the options and, at the top level, the commands. Builtins
+ included whether or not parse has been called. Dot-source it, e.g. from $PROFILE.
+
+```fortran
+subroutine save_powershell_completion(self, powershell_file, error)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | in |  | CLI data. |
+| `powershell_file` | character(len=*) | in |  | Output file name of PowerShell completion script. |
+| `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | optional | Error trapping flag. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  save_powershell_completion["save_powershell_completion"] --> builtins_missing["builtins_missing"]
+  save_powershell_completion["save_powershell_completion"] --> completion_powershell["completion_powershell"]
+  save_powershell_completion["save_powershell_completion"] --> ensure_builtins["ensure_builtins"]
+  save_powershell_completion["save_powershell_completion"] --> ps_escape["ps_escape"]
+  style save_powershell_completion fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### save_man_page
@@ -2261,6 +2294,7 @@ flowchart TD
   save_bash_completion["save_bash_completion"] --> builtins_missing["builtins_missing"]
   save_fish_completion["save_fish_completion"] --> builtins_missing["builtins_missing"]
   save_man_page["save_man_page"] --> builtins_missing["builtins_missing"]
+  save_powershell_completion["save_powershell_completion"] --> builtins_missing["builtins_missing"]
   save_usage_to_markdown["save_usage_to_markdown"] --> builtins_missing["builtins_missing"]
   save_zsh_completion["save_zsh_completion"] --> builtins_missing["builtins_missing"]
   signature["signature"] --> builtins_missing["builtins_missing"]

@@ -35,6 +35,7 @@ graph LR
 - [unique](#unique)
 - [upper_case](#upper-case)
 - [fish_escape](#fish-escape)
+- [ps_escape](#ps-escape)
 - [levenshtein](#levenshtein)
 - [suggestions](#suggestions)
 - [wstrip](#wstrip)
@@ -444,6 +445,7 @@ function replace_all(string, substring, restring) result(newstring)
 flowchart TD
   check_map_consistency["check_map_consistency"] --> replace_all["replace_all"]
   completion_fish["completion_fish"] --> replace_all["replace_all"]
+  completion_powershell["completion_powershell"] --> replace_all["replace_all"]
   envvar_name["envvar_name"] --> replace_all["replace_all"]
   list_join["list_join"] --> replace_all["replace_all"]
   sanitize_defaults["sanitize_defaults"] --> replace_all["replace_all"]
@@ -543,6 +545,34 @@ flowchart TD
   completion_fish["completion_fish"] --> fish_escape["fish_escape"]
   completion_fish["completion_fish"] --> fish_escape["fish_escape"]
   style fish_escape fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### ps_escape
+
+Return a text for a PowerShell single-quoted string (F15 of #125): a quote is doubled, new lines become blanks.
+
+**Attributes**: pure
+
+**Returns**: `character(len=:)`
+
+```fortran
+function ps_escape(text) result(escaped)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `text` | character(len=*) | in |  | Text. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  completion_powershell["completion_powershell"] --> ps_escape["ps_escape"]
+  completion_powershell["completion_powershell"] --> ps_escape["ps_escape"]
+  save_powershell_completion["save_powershell_completion"] --> ps_escape["ps_escape"]
+  style ps_escape fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### levenshtein

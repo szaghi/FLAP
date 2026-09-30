@@ -182,6 +182,7 @@ type, extends(object) :: command_line_argument
     procedure, public :: completion_words                !< Get the bash completion words (switches).
     procedure, public :: completion_values               !< Get the bash completion of the value.
     procedure, public :: completion_fish                 !< Get the fish completion lines.
+    procedure, public :: completion_powershell           !< Get the PowerShell completion entries.
     procedure, public :: usage                           !< Get correct usage.
     ! private methods
     procedure, private :: errored                         !< Trig error occurence and print meaningful message.
@@ -1187,6 +1188,42 @@ contains
     endif
     endfunction fish_name
   endfunction completion_fish
+
+  function completion_powershell(self) result(entries)
+  !< Get the PowerShell completion entries of a named CLA (F15 of #125), one per switch name, each on its own line:
+  !< @{ n = name; d = help; c = choices or $null; v = takes a value }. A negation takes no value. None for positional or
+  !< hidden CLAs.
+  class(command_line_argument), intent(in) :: self    !< CLA data.
+  character(len=:), allocatable            :: entries !< Completion entries.
+  character(len=:), allocatable            :: rest    !< Choice, value and closing of an entry.
+  character(len=:), allocatable            :: desc    !< Description.
+  logical                                  :: value   !< The CLA takes a value.
+
+  entries = ''
+  if (self%is_hidden .or. self%is_positional .or. .not.allocated(self%switch)) return
+  value = self%act == ACTION_STORE .or. self%act == ACTION_APPEND .or. self%act == ACTION_STORE_STAR
+  if (value .and. self%has_choices()) then
+    rest = "; c = @('"//replace_all(string=ps_escape(self%choices), substring=',', restring="', '")//"'); v = $true }"
+  elseif (value) then
+    rest = '; c = $null; v = $true }'
+  else
+    rest = '; c = $null; v = $false }'
+  endif
+  desc = "'; d = '"//ps_escape(trim(adjustl(self%help)))//"'"
+  entries = entry(self%switch)//rest
+  if (allocated(self%switch_ab)) then
+    if (trim(adjustl(self%switch_ab)) /= trim(adjustl(self%switch))) entries = entries//entry(self%switch_ab)//rest
+  endif
+  if (allocated(self%switch_neg)) entries = entries//entry(self%switch_neg)//'; c = $null; v = $false }'
+  contains
+    function entry(switch) result(head)
+    !< The beginning of the entry of a switch name.
+    character(*), intent(in)      :: switch !< Switch.
+    character(len=:), allocatable :: head   !< Beginning of the entry.
+
+    head = new_line('a')//"      @{ n = '"//ps_escape(trim(adjustl(switch)))//desc
+    endfunction entry
+  endfunction completion_powershell
 
   function completion_values(self) result(values)
   !< Get the bash completion of the value following a named CLA: a `prev` test offering its choices, or nothing for a value.

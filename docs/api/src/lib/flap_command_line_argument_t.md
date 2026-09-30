@@ -97,6 +97,7 @@ graph LR
 - [signature_usage](#signature-usage)
 - [completion_words](#completion-words)
 - [completion_fish](#completion-fish)
+- [completion_powershell](#completion-powershell)
 - [completion_values](#completion-values)
 - [has_choices](#has-choices)
 - [check_list_size](#check-list-size)
@@ -302,6 +303,7 @@ classDiagram
 | `completion_words` |  | Get the bash completion words (switches). |
 | `completion_values` |  | Get the bash completion of the value. |
 | `completion_fish` |  | Get the fish completion lines. |
+| `completion_powershell` |  | Get the PowerShell completion entries. |
 | `usage` |  | Get correct usage. |
 | `errored` |  | Trig error occurence and print meaningful message. |
 | `check_count_consistency` |  | Check data consistency for count CLA. |
@@ -2624,6 +2626,36 @@ flowchart TD
   style completion_fish fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
+### completion_powershell
+
+Get the PowerShell completion entries of a named CLA (F15 of #125), one per switch name, each on its own line:
+ @{ n = name; d = help; c = choices or $null; v = takes a value }. A negation takes no value. None for positional or
+ hidden CLAs.
+
+**Returns**: `character(len=:)`
+
+```fortran
+function completion_powershell(self) result(entries)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  completion_powershell["completion_powershell"] --> completion_powershell["completion_powershell"]
+  save_powershell_completion["save_powershell_completion"] --> completion_powershell["completion_powershell"]
+  completion_powershell["completion_powershell"] --> has_choices["has_choices"]
+  completion_powershell["completion_powershell"] --> ps_escape["ps_escape"]
+  completion_powershell["completion_powershell"] --> replace_all["replace_all"]
+  style completion_powershell fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
 ### completion_values
 
 Get the bash completion of the value following a named CLA: a `prev` test offering its choices, or nothing for a value.
@@ -2674,6 +2706,7 @@ function has_choices(self)
 ```mermaid
 flowchart TD
   completion_fish["completion_fish"] --> has_choices["has_choices"]
+  completion_powershell["completion_powershell"] --> has_choices["has_choices"]
   completion_values["completion_values"] --> has_choices["has_choices"]
   style has_choices fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```

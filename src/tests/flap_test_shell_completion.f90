@@ -1,12 +1,14 @@
-!< Shell completion scripts: bash file-name fallback, zsh, fish (issue #125, step 4.2; #11 12a-12c, T12.1-T12.3).
+!< Shell completion scripts: bash file-name fallback, zsh, fish, PowerShell (issue #125, step 4.2; #11 12, T12.1-T12.4).
 program flap_test_shell_completion
-!< Shell completion scripts: bash file-name fallback, zsh, fish (issue #125, step 4.2; #11 12a-12c, T12.1-T12.3).
+!< Shell completion scripts: bash file-name fallback, zsh, fish, PowerShell (issue #125, step 4.2; #11 12, T12.1-T12.4).
 !<
 !< The bash script is registered with `complete -o default`, so an empty completion (a free value) falls back to file names.
 !< The zsh script is the bash one behind bashcompinit. The bash function is run for real (bash is always there), through a
 !< driver script; zsh and fish are checked (syntax and completions) only when installed. The fish script is native: long
 !< (-l), one-letter (-s) and multi-letter old-style (-o) switches, choices, file names for free values, commands and aliases.
-!< FLAP_TEST_FISH_FUNCTIONS, if set, is prepended to fish_function_path (a fish unpacked outside /usr).
+!< FLAP_TEST_FISH_FUNCTIONS, if set, is prepended to fish_function_path (a fish unpacked outside /usr). The PowerShell script
+!< registers a native completer, queried with TabExpansion2 when pwsh is present; an empty result lets PowerShell complete
+!< paths (a free value).
 use flap, only : command_line_interface
 use flap_test_utils, only : assert, assert_contains, assert_equal, capture_close, capture_open, delete_file, read_back, &
                             read_file, run_command, scratch_file, write_file
@@ -19,6 +21,7 @@ character(:), allocatable    :: script   !< Script text.
 character(:), allocatable    :: bash     !< Bash script file.
 character(:), allocatable    :: zsh      !< Zsh script file.
 character(:), allocatable    :: fish     !< Fish script file.
+character(:), allocatable    :: ps1      !< PowerShell script file.
 character(:), allocatable    :: driver   !< Driver script file.
 integer(I4P)                 :: lun      !< Capture unit.
 integer(I4P)                 :: error    !< Error trapping flag.
@@ -27,6 +30,7 @@ integer(I4P)                 :: exitstat !< Exit status of a command.
 bash = scratch_file('bash')
 zsh = scratch_file('zsh')
 fish = scratch_file('fish')
+ps1 = scratch_file('ps1')
 driver = scratch_file('driver')
 call capture_open(lun)
 call define
@@ -85,6 +89,27 @@ endif
 call delete_file(bash)
 call delete_file(zsh)
 call delete_file(fish)
+! T12.4: PowerShell, a native argument completer
+call cli%save_powershell_completion(powershell_file=ps1, error=error)
+call assert_equal(error, 0_I4P, 'PowerShell script saved')
+script = read_file(ps1)
+call assert_contains(script, "Register-ArgumentCompleter -Native -CommandName 'flap_test_shell_completion'", &
+                     'PowerShell: native completer')
+call assert_contains(script, "'co' = 'compile'", 'PowerShell: an alias maps to its command')
+call assert_contains(script, "@{ n = '--scheme'; d = 'scheme'; c = @('weno5', 'muscl'); v = $true }", 'PowerShell: choices')
+call assert_contains(script, "@{ n = '--quote'; d = 'it''s quoted'; c = $null; v = $true }", 'PowerShell: a quote escaped')
+call assert_contains(script, "@{ n = '--no-restart'; d = 'restart'; c = $null; v = $false }", 'PowerShell: a negation')
+call assert(index(script, 'secret') == 0, 'PowerShell: hidden excluded')
+call run_command('if command -v pwsh > /dev/null; then echo yes; else echo no; fi', exitstat, out)
+if (index(out, 'yes') > 0) then
+  call assert_equal(ps_completed(ps1, 'flap_test_shell_completion --me'), '[--mesh]', 'PowerShell: a switch')
+  call assert_equal(ps_completed(ps1, 'flap_test_shell_completion --scheme '), '[weno5 muscl]', 'PowerShell: choices')
+  call assert_equal(ps_completed(ps1, 'flap_test_shell_completion compile --o'), '[--opt]', 'PowerShell: a command switch')
+  call assert_equal(ps_completed(ps1, 'flap_test_shell_completion co --o'), '[--opt]', 'PowerShell: through an alias')
+  call assert_equal(ps_completed(ps1, 'flap_test_shell_completion c'), '[co compile]', 'PowerShell: commands and aliases')
+  call assert_equal(ps_completed(ps1, 'flap_test_shell_completion --no-r'), '[--no-restart]', 'PowerShell: a negation')
+endif
+call delete_file(ps1)
 call delete_file(driver)
 ! an unwritable file is reported
 call cli%save_zsh_completion(zsh_file='/nonexistent/dir/x.zsh', error=error)
@@ -159,4 +184,30 @@ contains
   words = output
   if (index(words, new_line('a')) > 0) words = words(:index(words, new_line('a'))-1)
   endfunction fish_completed
+
+  function ps_completed(file, line) result(words)
+  !< Query PowerShell's completion (TabExpansion2) of a command line with a script, and return the completed words as
+  !< [w1 w2 ...].
+  character(*), intent(in)      :: file   !< Completion script.
+  character(*), intent(in)      :: line   !< Command line.
+  character(len=:), allocatable :: words  !< Completed words.
+  character(len=:), allocatable :: output !< Output.
+  character(len=:), allocatable :: psdrv  !< Driver script (pwsh -File wants the .ps1 extension).
+  integer(I4P)                  :: stat   !< Exit status.
+  integer(I4P)                  :: e      !< Position.
+
+  psdrv = scratch_file('driver.ps1')
+  call write_file(psdrv, '. '//file//new_line('a')//"$l = '"//line//"'"//new_line('a')// &
+                  '"[" + ((TabExpansion2 -inputScript $l -cursorColumn $l.Length).CompletionMatches.CompletionText '// &
+                  '-join " ") + "]"'//new_line('a'))
+  call run_command('pwsh -NoProfile -NonInteractive -File '//psdrv, stat, output)
+  call delete_file(psdrv)
+  call assert_equal(stat, 0_I4P, 'PowerShell: completion of "'//line//'" runs')
+  words = ''
+  e = index(output, '[')
+  if (e == 0) return
+  words = output(e:)
+  e = index(words, new_line('a'))
+  if (e > 0) words = words(:e-1)
+  endfunction ps_completed
 endprogram flap_test_shell_completion

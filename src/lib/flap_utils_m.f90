@@ -8,6 +8,7 @@ private
 public :: count
 public :: csv_split
 public :: fish_escape
+public :: ps_escape
 public :: flap_string
 public :: levenshtein
 public :: to_characters
@@ -468,6 +469,25 @@ contains
     endselect
   enddo
   endfunction fish_escape
+
+  pure function ps_escape(text) result(escaped)
+  !< Return a text for a PowerShell single-quoted string (F15 of #125): a quote is doubled, new lines become blanks.
+  character(*), intent(in)      :: text    !< Text.
+  character(len=:), allocatable :: escaped !< Escaped text.
+  integer(I4P)                  :: c       !< Counter.
+
+  escaped = ''
+  do c=1, len(text)
+    select case(text(c:c))
+    case("'")
+      escaped = escaped//"''"
+    case(achar(10), achar(13))
+      escaped = escaped//' '
+    case default
+      escaped = escaped//text(c:c)
+    endselect
+  enddo
+  endfunction ps_escape
 
   pure function levenshtein(a, b) result(d)
   !< Return the Levenshtein (edit) distance of two strings: insertions, deletions and substitutions, two-row dynamic

@@ -18,8 +18,8 @@ use flap_command_line_argument_t, only : command_line_argument, &
                                          SOURCE_NONE
 use flap_config_m, only : config_file
 use flap_object_t, only : object
-use flap_utils_m, only : fish_escape, flap_string, list_count, list_items, list_push, read_env, suggestions, tokenize, &
-                         upper_case, write_text
+use flap_utils_m, only : fish_escape, flap_string, list_count, list_items, list_push, ps_escape, read_env, suggestions, &
+                         tokenize, upper_case, write_text
 use penf
 
 implicit none
@@ -69,6 +69,7 @@ type, extends(object) :: command_line_arguments_group
     procedure, public :: name_count            !< Number of names of the group (command): 1 + aliases.
     procedure, public :: has_examples          !< Check if the group (command) has examples.
     procedure, public :: completion_fish       !< Fish completion lines of the group (command) and its CLAs.
+    procedure, public :: completion_powershell !< PowerShell completion tables of the group (command).
     procedure, public :: examples_text         !< Examples of the group (command), for its help.
     procedure, public :: name_of               !< Name (1) or alias (2, ...) of the group (command).
     procedure, public :: check                 !< Check data consistency.
@@ -209,6 +210,29 @@ contains
     lines = lines//self%cla(a)%completion_fish(head)
   enddo
   endfunction completion_fish
+
+  function completion_powershell(self, commands) result(text)
+  !< Get the PowerShell completion table rows of the group (F15 of #125): with commands, its names and aliases mapped to
+  !< its name ('co' = 'compile'); otherwise its options, as the entry of the options table ('compile' = @(...)).
+  class(command_line_arguments_group), intent(in) :: self     !< CLAsG data.
+  logical,                             intent(in) :: commands !< Return the command rows instead of the options.
+  character(len=:), allocatable                   :: text     !< Rows.
+  integer(I4P)                                    :: a        !< Counter.
+  integer(I4P)                                    :: i        !< Counter.
+
+  text = ''
+  if (commands) then
+    do i=1, self%name_count()
+      text = text//new_line('a')//"    '"//ps_escape(self%name_of(i))//"' = '"//ps_escape(self%group)//"'"
+    enddo
+  else
+    text = new_line('a')//"    '"//ps_escape(self%group)//"' = @("
+    do a=1, self%Na
+      text = text//self%cla(a)%completion_powershell()
+    enddo
+    text = text//new_line('a')//'    )'
+  endif
+  endfunction completion_powershell
 
   pure function has_examples(self) result(has)
   !< Check if the group (command) has examples.

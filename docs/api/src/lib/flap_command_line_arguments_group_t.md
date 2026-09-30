@@ -44,6 +44,7 @@ graph LR
 - [is_named](#is-named)
 - [has_alias](#has-alias)
 - [completion_fish](#completion-fish)
+- [completion_powershell](#completion-powershell)
 - [has_examples](#has-examples)
 - [examples_text](#examples-text)
 - [name_count](#name-count)
@@ -159,6 +160,7 @@ classDiagram
 | `name_count` |  | Number of names of the group (command): 1 + aliases. |
 | `has_examples` |  | Check if the group (command) has examples. |
 | `completion_fish` |  | Fish completion lines of the group (command) and its CLAs. |
+| `completion_powershell` |  | PowerShell completion tables of the group (command). |
 | `examples_text` |  | Examples of the group (command), for its help. |
 | `name_of` |  | Name (1) or alias (2, ...) of the group (command). |
 | `check` |  | Check data consistency. |
@@ -863,6 +865,37 @@ flowchart TD
   style completion_fish fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
+### completion_powershell
+
+Get the PowerShell completion table rows of the group (F15 of #125): with commands, its names and aliases mapped to
+ its name ('co' = 'compile'); otherwise its options, as the entry of the options table ('compile' = @(...)).
+
+**Returns**: `character(len=:)`
+
+```fortran
+function completion_powershell(self, commands) result(text)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_arguments_group](/api/src/lib/flap_command_line_arguments_group_t#command-line-arguments-group)) | in |  | CLAsG data. |
+| `commands` | logical | in |  | Return the command rows instead of the options. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  completion_powershell["completion_powershell"] --> completion_powershell["completion_powershell"]
+  save_powershell_completion["save_powershell_completion"] --> completion_powershell["completion_powershell"]
+  completion_powershell["completion_powershell"] --> completion_powershell["completion_powershell"]
+  completion_powershell["completion_powershell"] --> name_count["name_count"]
+  completion_powershell["completion_powershell"] --> name_of["name_of"]
+  completion_powershell["completion_powershell"] --> ps_escape["ps_escape"]
+  style completion_powershell fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
 ### has_examples
 
 Check if the group (command) has examples.
@@ -938,6 +971,7 @@ function name_count(self) result(n)
 
 ```mermaid
 flowchart TD
+  completion_powershell["completion_powershell"] --> name_count["name_count"]
   parse_core["parse_core"] --> name_count["name_count"]
   style name_count fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -965,6 +999,7 @@ function name_of(self, i) result(name)
 
 ```mermaid
 flowchart TD
+  completion_powershell["completion_powershell"] --> name_of["name_of"]
   parse_core["parse_core"] --> name_of["name_of"]
   style name_of fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
