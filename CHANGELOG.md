@@ -4,6 +4,23 @@ All notable changes to this project are documented here.
 Versions follow [Semantic Versioning](https://semver.org/).
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.1.0] — 2026-09-30
+### Added
+- **cla**: Numeric ranges min/max/open/clamp, checked by get
+
+- **cla**: Switch_neg flag pairs --x/--no-x, the last one wins
+
+- **cli**: Case-insensitive switches, commands and choices
+
+- **cli**: Subcommand aliases, add_group(aliases=)
+
+- **parse**: "did you mean" suggestions for unknown switches and commands
+
+- **cla**: Key=value options, add(map=, map_keys=), get_map
+
+- **cli**: Copy_options, reusable option sets between commands
+
+
 ## [2.0.0] — 2026-09-30
 ### Added
 - **cli**: Standalone init option; parse returns the help/version/markdown status
