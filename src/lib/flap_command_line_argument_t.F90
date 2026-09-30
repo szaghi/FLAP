@@ -56,6 +56,10 @@ public :: ERROR_POSITIONAL_NARGS
 public :: ERROR_LIST_SIZE
 public :: ERROR_DEF_NARGS
 public :: ERROR_ENVVAR_CSV
+public :: ERROR_PATH_NOT_FOUND
+public :: ERROR_PATH_NOT_READABLE
+public :: ERROR_PATH_NOT_WRITABLE
+public :: ERROR_PATH_INCONSISTENT
 public :: ERROR_INLINE_VALUE_NOT_ALLOWED
 public :: ERROR_INLINE_VALUE_NARGS
 public :: ERROR_COUNT_INCONSISTENT
@@ -90,6 +94,10 @@ type, extends(object) :: command_line_argument
   logical,                       public :: is_val_required=.true. !< Flag for set required value for not required (optional) CLA.
   integer(I4P),                  public :: source=SOURCE_NONE     !< Source of the value (SOURCE_*).
   logical,                       public :: is_config=.false.      !< The CLA names the configuration file (act='config').
+  logical,                       public :: must_exist=.false.     !< The value is a path that must exist.
+  logical,                       public :: readable=.false.       !< The value is a path that must be readable (and exist).
+  logical,                       public :: writable=.false.       !< The value is a path writable if it exists.
+  logical,                       public :: allow_dash=.false.     !< '-' passes the path checks (standard input/output).
   contains
     ! public methods
     procedure, public :: free                           !< Free dynamic memory.
@@ -100,6 +108,8 @@ type, extends(object) :: command_line_argument
     procedure, public :: config_key                     !< Key of the CLA in a configuration file.
     procedure, public :: takes_config_value             !< Check if the CLA takes a value from a configuration file.
     procedure, public :: value_text                     !< Resolved value as text (provenance report).
+    procedure, public :: has_path_checks                !< Check if the value is a path to check.
+    procedure, public :: check_paths                    !< Check the path value(s): existence and permissions.
     procedure, public :: match_token                    !< Check if a command line token names this CLA.
     procedure, public :: match_inline_token             !< Check a token also as NAME=VALUE.
     procedure, public :: set_inline_value               !< Set the value given inline (NAME=VALUE).
@@ -143,6 +153,7 @@ type, extends(object) :: command_line_argument
     procedure, private :: check_optional_consistency      !< Check optional CLA consistency.
     procedure, private :: check_def_nargs_consistency     !< Check the count of a list default against nargs.
     procedure, private :: check_m_exclude_consistency     !< Check mutually exclusion consistency.
+    procedure, private :: check_path_consistency          !< Check that the path checks are on an option taking a value.
     procedure, private :: check_named_consistency         !< Check named CLA consistency.
     procedure, private :: check_positional_consistency    !< Check positional CLA consistency.
     procedure, private :: check_choices                   !< Check if CLA value is in allowed choices.
@@ -212,6 +223,10 @@ integer(I4P), parameter :: ERROR_UNSUPPORTED_TYPE       = 46 !< Value requested 
 integer(I4P), parameter :: ERROR_LIST_SIZE              = 47 !< List requested into a fixed-size array of another size.
 integer(I4P), parameter :: ERROR_DEF_NARGS              = 48 !< List default whose count differs from an integer nargs.
 integer(I4P), parameter :: ERROR_ENVVAR_CSV             = 43 !< List value of an environment variable: unterminated quote.
+integer(I4P), parameter :: ERROR_PATH_NOT_FOUND         = 33 !< Path value that does not exist (must_exist, readable).
+integer(I4P), parameter :: ERROR_PATH_NOT_READABLE      = 34 !< Path value that cannot be opened for reading (readable).
+integer(I4P), parameter :: ERROR_PATH_NOT_WRITABLE      = 35 !< Existing path value that cannot be opened for writing.
+integer(I4P), parameter :: ERROR_PATH_INCONSISTENT      = 49 !< Path checks on an option taking no value.
 
 contains
   ! public methods
@@ -238,6 +253,10 @@ contains
   self%is_val_required = .true.
   self%source          = SOURCE_NONE
   self%is_config       = .false.
+  self%must_exist      = .false.
+  self%readable        = .false.
+  self%writable        = .false.
+  self%allow_dash      = .false.
   endsubroutine free
 
   subroutine check(self, pref)
@@ -252,6 +271,7 @@ contains
   call self%check_optional_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_def_nargs_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_m_exclude_consistency(pref=pref) ; if (self%error/=0) return
+  call self%check_path_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_named_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_positional_consistency(pref=pref)
   endsubroutine check
@@ -356,6 +376,66 @@ contains
     text = self%stored_list()
   endif
   endfunction value_text
+
+  elemental function has_path_checks(self) result(checks)
+  !< Check if the value is a path to check (must_exist, readable or writable).
+  class(command_line_argument), intent(in) :: self   !< CLA data.
+  logical                                  :: checks !< Check result.
+
+  checks = self%must_exist .or. self%readable .or. self%writable
+  endfunction has_path_checks
+
+  subroutine check_paths(self, pref)
+  !< Check the path value(s), whatever their source (F09 of #125): every item of a list; an empty value, and '-' with
+  !< allow_dash, are not checked. Standard Fortran only: inquire for existence, an open for reading (readable) or for
+  !< appending, writing nothing (writable, only if the file exists); the message carries the reason of the processor.
+  !< Directories are not told apart: a directory exists and opens for reading.
+  class(command_line_argument), intent(inout) :: self     !< CLA data.
+  character(*), optional,       intent(in)    :: pref     !< Prefixing string.
+  character(len=:), allocatable               :: items(:) !< Values.
+  character(len=:), allocatable               :: path     !< Value.
+  character(256)                              :: iomsg    !< I/O message.
+  logical                                     :: exists   !< The path exists.
+  integer(I4P)                                :: n        !< Number of values.
+  integer(I4P)                                :: i        !< Counter.
+  integer(I4P)                                :: lun      !< Unit.
+  integer(I4P)                                :: iostat   !< I/O status.
+
+  if (.not.self%has_path_checks() .or. self%source == SOURCE_NONE) return
+  if (self%is_list()) then
+    call list_items(self%stored_list(), items, n)
+  else
+    n = 1
+    items = [self%stored_list()]
+  endif
+  do i=1, n
+    path = trim(adjustl(items(i)))
+    if (path == '') cycle
+    if (self%allow_dash .and. path == '-') cycle
+    inquire(file=path, exist=exists)
+    if ((self%must_exist .or. self%readable) .and. .not.exists) then
+      call self%errored(pref=pref, error=ERROR_PATH_NOT_FOUND, val_str=path)
+      return
+    endif
+    iomsg = ''
+    if (self%readable) then
+      open(newunit=lun, file=path, status='old', action='read', iostat=iostat, iomsg=iomsg)
+      if (iostat /= 0) then
+        call self%errored(pref=pref, error=ERROR_PATH_NOT_READABLE, val_str=path, log_value=trim(iomsg))
+        return
+      endif
+      close(lun)
+    endif
+    if (self%writable .and. exists) then
+      open(newunit=lun, file=path, status='old', action='write', position='append', iostat=iostat, iomsg=iomsg)
+      if (iostat /= 0) then
+        call self%errored(pref=pref, error=ERROR_PATH_NOT_WRITABLE, val_str=path, log_value=trim(iomsg))
+        return
+      endif
+      close(lun)
+    endif
+  enddo
+  endsubroutine check_paths
 
   pure function takes_config_value(self) result(takes)
   !< Check if the CLA takes a value from a configuration file: a named store (lists included), store_true or store_false.
@@ -963,6 +1043,17 @@ contains
                            ' values (nargs), but its default has '//trim(val_str)//'!'
     case(ERROR_LIST_SIZE)
       self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" has '//trim(val_str)//'!'
+    case(ERROR_PATH_NOT_FOUND)
+      self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'": path "'//trim(val_str)//'" does not exist!'
+    case(ERROR_PATH_NOT_READABLE)
+      self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'": path "'//trim(val_str)//&
+                           '" is not readable: '//trim(log_value)//'!'
+    case(ERROR_PATH_NOT_WRITABLE)
+      self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'": path "'//trim(val_str)//&
+                           '" is not writable: '//trim(log_value)//'!'
+    case(ERROR_PATH_INCONSISTENT)
+      self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'": must_exist, readable, writable and '//&
+                           'allow_dash need an option taking a value (store, store*, append)!'
     case(ERROR_ENVVAR_CSV)
       self%error_message = prefd//': environment variable "'//trim(adjustl(self%envvar))//'" of option "'//&
                            trim(adjustl(self%switch))//'": unterminated quote in the list "'//trim(val_str)//'"!'
@@ -1093,6 +1184,17 @@ contains
   if (allocated(self%nargs)) is_inconsistent = ((.not.allocated(self%def)).and.(self%nargs=='*')).or.is_inconsistent
   if (is_inconsistent) call self%errored(pref=pref, error=ERROR_OPTIONAL_NO_DEF)
   endsubroutine check_optional_consistency
+
+  subroutine check_path_consistency(self, pref)
+  !< Check that the path checks (must_exist, readable, writable, allow_dash) are on an option taking a value: store,
+  !< store* or append (F09 of #125).
+  class(command_line_argument), intent(inout) :: self !< CLA data.
+  character(*), optional,       intent(in)    :: pref !< Prefixing string.
+
+  if (.not.(self%has_path_checks().or.self%allow_dash)) return
+  if (self%act /= ACTION_STORE .and. self%act /= ACTION_STORE_STAR .and. self%act /= ACTION_APPEND) &
+    call self%errored(pref=pref, error=ERROR_PATH_INCONSISTENT)
+  endsubroutine check_path_consistency
 
   subroutine check_m_exclude_consistency(self, pref)
   !< Check mutually exclusion consistency.

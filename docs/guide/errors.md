@@ -59,11 +59,15 @@ positive values are **errors**. Existing values never change.
 | `27` | `ERROR_COUNT_INCONSISTENT` | Invalid count | A `count` option that is positional or has `nargs`, `envvar` or `choices` |
 | `28` | `ERROR_APPEND_INCONSISTENT` | Invalid append | An `append` option that is positional or has `nargs` or `envvar` |
 | `29` | `ERROR_APPEND_SCALAR_GET` | Scalar get of an append | An `append` option holds a list: read it with `get_varying` or into an array |
+| `33` | `ERROR_PATH_NOT_FOUND` | Path does not exist | `must_exist=`/`readable=` and the file is missing |
+| `34` | `ERROR_PATH_NOT_READABLE` | Path not readable | `readable=` and the file cannot be opened for reading (the message gives the reason) |
+| `35` | `ERROR_PATH_NOT_WRITABLE` | Path not writable | `writable=` and the existing file cannot be opened for writing |
 | `43` | `ERROR_ENVVAR_CSV` | Unterminated quote in a list from the environment | `WORKERS='1,"99'` for an option with `nargs` and `envvar='WORKERS'` |
 | `45` | `ERROR_POSITIONAL_NARGS` | `nargs` on a positional argument | Positionals take one value each: use a named list option |
 | `46` | `ERROR_UNSUPPORTED_TYPE` | Unsupported variable type | `get` into a type FLAP cannot fill (e.g. `complex`, or a non-logical for a flag) |
 | `47` | `ERROR_LIST_SIZE` | List size differs from the array size | `get` into a fixed-size array with more or fewer elements than the values: use an array of the right size, or `get_varying` |
 | `48` | `ERROR_DEF_NARGS` | Default count differs from `nargs` | `nargs='N'` with a default of another number of values: give the default N values |
+| `49` | `ERROR_PATH_INCONSISTENT` | Path checks on an option without value | `must_exist`/`readable`/`writable`/`allow_dash` on a flag, `count`, ... |
 | `100` | `ERROR_GROUP_CONSISTENCY` | Group (command) consistency broken | Two arguments of a group share a switch |
 | `101` | `ERROR_GROUP_M_EXCLUDE` | Two mutually exclusive groups both passed | Both sides of `set_mutually_exclusive_groups` given |
 | `102` | `ERROR_M_EXCLUDE_SET` | Two members of a mutually exclusive set passed | `--mesh m --restart r` with `set_mutually_exclusive_switches(switches='--mesh,--restart')` |

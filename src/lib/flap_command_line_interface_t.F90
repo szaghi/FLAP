@@ -531,7 +531,8 @@ contains
   endsubroutine set_mutually_exclusive_switches
 
   subroutine add(self, pref, group, group_index, switch, switch_ab, help, help_markdown, help_color, help_style, &
-                 required, val_required, positional, position, hidden, act, def, nargs, choices, exclude, envvar, error)
+                 required, val_required, positional, position, hidden, act, def, nargs, choices, exclude, envvar, &
+                 must_exist, readable, writable, allow_dash, error)
   !< Add CLA to CLI.
   !<
   !< @note If not otherwise declared the action on CLA value is set to "store" a value that must be passed after the switch name
@@ -555,6 +556,10 @@ contains
   logical,      optional,        intent(in)    :: positional    !< Flag for checking if CLA is a positional or a named CLA.
   integer(I4P), optional,        intent(in)    :: position      !< Position of positional CLA.
   logical,      optional,        intent(in)    :: hidden        !< Flag for hiding CLA, thus it does not compare into help.
+  logical,      optional,        intent(in)    :: must_exist    !< The value is a path that must exist (F09).
+  logical,      optional,        intent(in)    :: readable      !< The value is a path that must be readable (and exist).
+  logical,      optional,        intent(in)    :: writable      !< The value is a path writable if it exists.
+  logical,      optional,        intent(in)    :: allow_dash    !< '-' passes the path checks (standard input/output).
   character(*), optional,        intent(in)    :: act           !< CLA value action.
   character(*), optional,        intent(in)    :: def           !< Default value.
   character(*), optional,        intent(in)    :: nargs         !< Number of arguments consumed by CLA.
@@ -586,6 +591,10 @@ contains
   cla%is_positional   = .false.                 ; if (present(positional   )) cla%is_positional   = positional
   cla%position        = 0_I4P                   ; if (present(position     )) cla%position        = position
   cla%is_hidden       = .false.                 ; if (present(hidden       )) cla%is_hidden       = hidden
+                                                  if (present(must_exist   )) cla%must_exist      = must_exist
+                                                  if (present(readable     )) cla%readable        = readable
+                                                  if (present(writable     )) cla%writable        = writable
+                                                  if (present(allow_dash   )) cla%allow_dash      = allow_dash
   cla%act             = action_store            ; if (present(act          )) cla%act             = trim(adjustl(Upper_Case(act)))
   if (cla%act == ACTION_CONFIG) then
     ! the configuration file option (F08): a store CLA whose value names the file
@@ -940,7 +949,9 @@ contains
 
   ! settle the source of the values not given on the command line (R chain, F06)
   do g=0, size(self%clasg,dim=1)-1
-    call self%clasg(g)%resolve_values(ignore_env=self%ignore_env, config=config)
+    ! the path values of the top level and of the called commands are checked (F09)
+    call self%clasg(g)%resolve_values(ignore_env=self%ignore_env, config=config, &
+                                      check_paths=(g == 0 .or. self%clasg(g)%is_called))
     self%error = self%clasg(g)%error
     if (self%is_fatal()) exit
   enddo

@@ -365,7 +365,7 @@ contains
   enddo
   endsubroutine reset_parse
 
-  subroutine resolve_values(self, ignore_env, config)
+  subroutine resolve_values(self, ignore_env, config, check_paths)
   !< Settle the source of the values not given on the command line (the value-resolution chain R, F06 of #125).
   !<
   !< Called after all groups are parsed, before the required check. The source of a parsed value (command line, or the
@@ -375,6 +375,7 @@ contains
   class(command_line_arguments_group), intent(inout) :: self       !< CLAsG data.
   logical, optional,                   intent(in)    :: ignore_env !< Turn every environment lookup off.
   type(config_file), optional,         intent(in)    :: config     !< Configuration file.
+  logical, optional,                   intent(in)    :: check_paths !< Check the path values (F09).
   character(len=:), allocatable                      :: envvar     !< Value of an environment variable.
   character(len=:), allocatable                      :: cvalue     !< Value from the configuration file.
   logical                                            :: found      !< The variable is set.
@@ -406,6 +407,17 @@ contains
       self%cla(a)%source = SOURCE_NONE
     endif
   enddo
+  if (present(check_paths)) then
+    if (check_paths) then
+      do a=1, self%Na
+        call self%cla(a)%check_paths
+        if (self%cla(a)%error /= 0) then
+          self%error = self%cla(a)%error
+          return
+        endif
+      enddo
+    endif
+  endif
   endsubroutine resolve_values
 
   function config_key_index(self, key) result(a)

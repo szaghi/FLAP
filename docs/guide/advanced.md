@@ -267,6 +267,35 @@ arguments. A default is mandatory.
 
 ---
 
+## Path checks — `must_exist`, `readable`, `writable`, `allow_dash`
+
+An option whose value is a file name can have it checked by `parse`, whatever its source (command line, environment,
+configuration file or default):
+
+```fortran
+call cli%add(switch='--mesh', help='Mesh file', required=.true.,  act='store', readable=.true.)
+call cli%add(switch='--log',  help='Log file',  required=.false., act='store', def='-', writable=.true., allow_dash=.true.)
+```
+
+```shell
+$ ./solver --mesh wnig.grd      # error: option "--mesh": path "wnig.grd" does not exist!
+$ ./solver --mesh secret.grd    # error: option "--mesh": path "secret.grd" is not readable: <reason>!
+```
+
+| Keyword | Check |
+|---|---|
+| `must_exist` | the file exists (`ERROR_PATH_NOT_FOUND`, 33) |
+| `readable` | it exists and opens for reading (`ERROR_PATH_NOT_READABLE`, 34, with the reason given by the system) |
+| `writable` | if it exists, it opens for writing, nothing written (`ERROR_PATH_NOT_WRITABLE`, 35); a missing file passes and is not created |
+| `allow_dash` | `-` passes every check (your program maps it to standard input/output); otherwise `-` is a file name |
+
+- Every item of a list is checked; an empty value (`def=''`) is not checked. The options of a command are checked only
+  when the command is called.
+- Only for options taking a value (`store`, `store*`, `append`): elsewhere the keywords are `ERROR_PATH_INCONSISTENT` (49).
+- Standard Fortran only, so **directories are not told apart**: a directory exists and opens for reading.
+- **nvfortran 26.5:** opening a read-only file for writing succeeds (the error comes at the first write), so `writable`
+  does not detect a read-only file with that compiler.
+
 ## Hidden arguments
 
 Hidden arguments participate in parsing normally but are invisible in help and usage:

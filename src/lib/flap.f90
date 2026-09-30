@@ -37,6 +37,10 @@ use flap_command_line_argument_t, only : command_line_argument,        &
                                          ERROR_LIST_SIZE,              &
                                          ERROR_DEF_NARGS,              &
                                          ERROR_ENVVAR_CSV,             &
+                                         ERROR_PATH_NOT_FOUND,         &
+                                         ERROR_PATH_NOT_READABLE,      &
+                                         ERROR_PATH_NOT_WRITABLE,      &
+                                         ERROR_PATH_INCONSISTENT,      &
                                          ERROR_INLINE_VALUE_NOT_ALLOWED, &
                                          ERROR_INLINE_VALUE_NARGS,     &
                                          ERROR_COUNT_INCONSISTENT,     &
@@ -112,6 +116,10 @@ public :: ERROR_POSITIONAL_NARGS
 public :: ERROR_LIST_SIZE
 public :: ERROR_DEF_NARGS
 public :: ERROR_ENVVAR_CSV
+public :: ERROR_PATH_NOT_FOUND
+public :: ERROR_PATH_NOT_READABLE
+public :: ERROR_PATH_NOT_WRITABLE
+public :: ERROR_PATH_INCONSISTENT
 public :: ERROR_INLINE_VALUE_NOT_ALLOWED
 public :: ERROR_INLINE_VALUE_NARGS
 public :: ERROR_COUNT_INCONSISTENT

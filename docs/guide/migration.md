@@ -98,3 +98,4 @@ values still takes the default: both change in v2.0.0 (see below).
 - `init(auto_envvar_prefix='APP')` gives every option without `envvar` the variable `APP[_COMMAND]_NAME`.
 - `cli%set_config(file='app.ini')` reads values from an INI file, below the environment and above the defaults.
 - `cli%get_source(switch=...)` tells where a value comes from; `cli%provenance()` reports every value with its source.
+- `add(..., must_exist=, readable=, writable=, allow_dash=)` checks file-name values at parse time.
