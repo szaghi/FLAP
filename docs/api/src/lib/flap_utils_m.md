@@ -90,6 +90,7 @@ subroutine list_items(list, items, n)
 ```mermaid
 flowchart TD
   check_exclusive_sets["check_exclusive_sets"] --> list_items["list_items"]
+  check_map_list["check_map_list"] --> list_items["list_items"]
   check_paths["check_paths"] --> list_items["list_items"]
   exclusive_set_of["exclusive_set_of"] --> list_items["list_items"]
   exclusive_set_signature["exclusive_set_signature"] --> list_items["list_items"]
@@ -103,6 +104,8 @@ flowchart TD
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> list_items["list_items"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> list_items["list_items"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> list_items["list_items"]
+  get_map["get_map"] --> list_items["list_items"]
+  get_map_value["get_map_value"] --> list_items["list_items"]
   list_items["list_items"] --> list_count["list_count"]
   list_items["list_items"] --> tokenize["tokenize"]
   style list_items fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -132,6 +135,7 @@ flowchart TD
   add_exclusive_set["add_exclusive_set"] --> list_push["list_push"]
   append_value["append_value"] --> list_push["list_push"]
   parse["parse"] --> list_push["list_push"]
+  set_inline_value["set_inline_value"] --> list_push["list_push"]
   set_source_value["set_source_value"] --> list_push["list_push"]
   style list_push fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -437,10 +441,12 @@ function replace_all(string, substring, restring) result(newstring)
 
 ```mermaid
 flowchart TD
+  check_map_consistency["check_map_consistency"] --> replace_all["replace_all"]
   envvar_name["envvar_name"] --> replace_all["replace_all"]
   list_join["list_join"] --> replace_all["replace_all"]
   sanitize_defaults["sanitize_defaults"] --> replace_all["replace_all"]
   set_source_value["set_source_value"] --> replace_all["replace_all"]
+  usage["usage"] --> replace_all["replace_all"]
   replace_all["replace_all"] --> wstrip["wstrip"]
   style replace_all fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -471,8 +477,10 @@ function unique(string, substring) result(uniq)
 
 ```mermaid
 flowchart TD
+  check_map_consistency["check_map_consistency"] --> unique["unique"]
   sanitize_defaults["sanitize_defaults"] --> unique["unique"]
   set_source_value["set_source_value"] --> unique["unique"]
+  usage["usage"] --> unique["unique"]
   style unique fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -553,6 +561,7 @@ function suggestions(token, candidates, case_insensitive) result(hint)
 
 ```mermaid
 flowchart TD
+  check_map_list["check_map_list"] --> suggestions["suggestions"]
   suggestions["suggestions"] --> similarity["similarity"]
   style suggestions fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -579,6 +588,7 @@ function wstrip(string) result(newstring)
 
 ```mermaid
 flowchart TD
+  check_map_consistency["check_map_consistency"] --> wstrip["wstrip"]
   replace_all["replace_all"] --> wstrip["wstrip"]
   sanitize_defaults["sanitize_defaults"] --> wstrip["wstrip"]
   set_source_value["set_source_value"] --> wstrip["wstrip"]

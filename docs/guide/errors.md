@@ -68,6 +68,11 @@ positive values are **errors**. Existing values never change.
 | `35` | `ERROR_PATH_NOT_WRITABLE` | Path not writable | `writable=` and the existing file cannot be opened for writing |
 | `36` | `ERROR_SWITCH_NEG_INCONSISTENT` | Invalid flag negation | `switch_neg=` on an argument that is not a named `store_true`/`store_false` flag without `nargs`, blank, or equal to its own switch names |
 | `37` | `ERROR_ALTERNATE_INCONSISTENT` | Invalid alternate action | `act='alternate'` with `nargs`, `envvar`, `choices`, `exclude`, `required=.true.` or `positional` |
+| `38` | `ERROR_MAP_FORMAT` | Map item not `KEY=VALUE` | A map pair without `=` or with an empty key (command line, environment, configuration or default) |
+| `39` | `ERROR_MAP_DUPLICATE_KEY` | Map key repeated | The same key twice in a map |
+| `40` | `ERROR_MAP_UNKNOWN_KEY` | Map key not allowed | A key outside `map_keys`; the message lists the allowed keys and suggests the closest |
+| `41` | `ERROR_MAP_KEY_MISSING` | Map key not given | `get_map_value` of a missing key without `found=` |
+| `42` | `ERROR_MAP_INCONSISTENT` | Invalid map | `map=.true.` on a positional, a flag, a scalar `store` or with `choices`; `map_keys` without `map`; `get_map` of an option that is not a map |
 | `43` | `ERROR_ENVVAR_CSV` | Unterminated quote in a list from the environment | `WORKERS='1,"99'` for an option with `nargs` and `envvar='WORKERS'` |
 | `44` | `ERROR_DEPRECATED_REQUIRED` | A required option cannot be deprecated | `deprecated=` combined with `required=.true.` |
 | `45` | `ERROR_POSITIONAL_NARGS` | `nargs` on a positional argument | Positionals take one value each: use a named list option |

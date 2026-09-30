@@ -15,7 +15,8 @@ use flap, only : command_line_interface,                                        
                  ERROR_LIST_SIZE, ERROR_DEF_NARGS, ERROR_ENVVAR_CSV,                                                              &
                  ERROR_PATH_NOT_FOUND, ERROR_PATH_NOT_READABLE, ERROR_PATH_NOT_WRITABLE, ERROR_PATH_INCONSISTENT,                 &
                  ERROR_DEPRECATED_REQUIRED, ERROR_ALTERNATE_INCONSISTENT, ERROR_RANGE_DEFINITION, ERROR_OUT_OF_RANGE,             &
-                 ERROR_RANGE_TYPE, ERROR_SWITCH_NEG_INCONSISTENT,                                                                 &
+                 ERROR_RANGE_TYPE, ERROR_SWITCH_NEG_INCONSISTENT, ERROR_MAP_FORMAT, ERROR_MAP_DUPLICATE_KEY,                      &
+                 ERROR_MAP_UNKNOWN_KEY, ERROR_MAP_KEY_MISSING, ERROR_MAP_INCONSISTENT,                                            &
                  ERROR_GROUP_CONSISTENCY, ERROR_GROUP_M_EXCLUDE, ERROR_POSITION_DUPLICATE, ERROR_POSITION_GAP,                    &
                  ERROR_M_EXCLUDE_SET, ERROR_M_EXCLUDE_SET_REQUIRED, ERROR_M_EXCLUDE_SET_DEFINITION,                               &
                  ERROR_MISSING_CLA, ERROR_MISSING_GROUP, ERROR_MISSING_SELECTION_CLA, ERROR_TOO_FEW_CLAS,                         &
@@ -81,6 +82,11 @@ contains
   call assert_equal(STATUS_ALTERNATE,             -4_I4P,   'STATUS_ALTERNATE')
   call assert_equal(ERROR_ALTERNATE_INCONSISTENT, 37_I4P,   'ERROR_ALTERNATE_INCONSISTENT')
   call assert_equal(ERROR_SWITCH_NEG_INCONSISTENT, 36_I4P,  'ERROR_SWITCH_NEG_INCONSISTENT')
+  call assert_equal(ERROR_MAP_FORMAT,             38_I4P,   'ERROR_MAP_FORMAT')
+  call assert_equal(ERROR_MAP_DUPLICATE_KEY,      39_I4P,   'ERROR_MAP_DUPLICATE_KEY')
+  call assert_equal(ERROR_MAP_UNKNOWN_KEY,        40_I4P,   'ERROR_MAP_UNKNOWN_KEY')
+  call assert_equal(ERROR_MAP_KEY_MISSING,        41_I4P,   'ERROR_MAP_KEY_MISSING')
+  call assert_equal(ERROR_MAP_INCONSISTENT,       42_I4P,   'ERROR_MAP_INCONSISTENT')
   call assert_equal(ERROR_RANGE_DEFINITION,       30_I4P,   'ERROR_RANGE_DEFINITION')
   call assert_equal(ERROR_OUT_OF_RANGE,           31_I4P,   'ERROR_OUT_OF_RANGE')
   call assert_equal(ERROR_RANGE_TYPE,             32_I4P,   'ERROR_RANGE_TYPE')

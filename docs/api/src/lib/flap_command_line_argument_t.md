@@ -46,6 +46,11 @@ graph LR
 - [check_range](#check-range)
 - [check_alternate_consistency](#check-alternate-consistency)
 - [check_switch_neg_consistency](#check-switch-neg-consistency)
+- [check_map_consistency](#check-map-consistency)
+- [check_map](#check-map)
+- [check_map_list](#check-map-list)
+- [get_map](#get-map)
+- [get_map_value](#get-map-value)
 - [check_path_consistency](#check-path-consistency)
 - [check_m_exclude_consistency](#check-m-exclude-consistency)
 - [check_named_consistency](#check-named-consistency)
@@ -157,6 +162,11 @@ graph LR
 | `ERROR_DEPRECATED_REQUIRED` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | A required option cannot be deprecated. |
 | `ERROR_ALTERNATE_INCONSISTENT` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | An alternate action with an attribute of a value. |
 | `ERROR_SWITCH_NEG_INCONSISTENT` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | A negation (switch_neg) of a CLA that is not a named flag. |
+| `ERROR_MAP_FORMAT` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | A map item that is not KEY=VALUE (empty KEY included). |
+| `ERROR_MAP_DUPLICATE_KEY` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | A map key given twice. |
+| `ERROR_MAP_UNKNOWN_KEY` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | A map key outside map_keys. |
+| `ERROR_MAP_KEY_MISSING` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | A map key not given, looked up without found. |
+| `ERROR_MAP_INCONSISTENT` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | A map on a CLA that is not a named list, or not a map. |
 | `ERROR_RANGE_DEFINITION` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Invalid range (bounds, clamp to an open real bound). |
 | `ERROR_OUT_OF_RANGE` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Value out of its range. |
 | `ERROR_RANGE_TYPE` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Range with a character or logical get. |
@@ -230,6 +240,8 @@ classDiagram
 | `max_open` | logical |  | The maximum is excluded. |
 | `clamp` | logical |  | An out-of-range value becomes the bound. |
 | `case_sensitive` | logical |  | Character choices match only in their case (F14). |
+| `is_map` | logical |  | The values are KEY=VALUE pairs (F18). |
+| `map_keys` | character(len=:) | allocatable | Allowed keys of a map, comma separated (F18). |
 | `is_negated` | logical |  | The last spelling of a flag pair passed is the negation. |
 | `pair_passed` | logical |  | Both spellings of a flag pair passed (D5: once each). |
 
@@ -262,6 +274,9 @@ classDiagram
 | `is_pair_override` |  | Check if a flag passed may be passed again by its other spelling. |
 | `flag_value` |  | Value of a flag passed on the command line. |
 | `names` |  | Visible switch names, for suggestions. |
+| `check_map` |  | Check the KEY=VALUE pairs of a map. |
+| `get_map` |  | Get the keys and values of a map. |
+| `get_map_value` |  | Get the value of a key of a map. |
 | `match_inline_token` |  | Check a token also as NAME=VALUE. |
 | `set_inline_value` |  | Set the value given inline (NAME=VALUE). |
 | `is_repeatable` |  | Check if the CLA may be passed more than once. |
@@ -293,6 +308,8 @@ classDiagram
 | `check_path_consistency` |  | Check that the path checks are on an option taking a value. |
 | `check_alternate_consistency` |  | Check that an alternate action has no attribute of a value. |
 | `check_switch_neg_consistency` |  | Check that a negation belongs to a named scalar flag. |
+| `check_map_consistency` |  | Check that a map is a named list, its default included. |
+| `check_map_list` |  | Check the KEY=VALUE pairs of a stored list. |
 | `check_range_consistency` |  | Check the range definition. |
 | `check_range` |  | Check (or clamp) a value against the range. |
 | `check_named_consistency` |  | Check named CLA consistency. |
@@ -370,6 +387,7 @@ flowchart TD
   check["check"] --> check_def_nargs_consistency["check_def_nargs_consistency"]
   check["check"] --> check_envvar_consistency["check_envvar_consistency"]
   check["check"] --> check_m_exclude_consistency["check_m_exclude_consistency"]
+  check["check"] --> check_map_consistency["check_map_consistency"]
   check["check"] --> check_named_consistency["check_named_consistency"]
   check["check"] --> check_optional_consistency["check_optional_consistency"]
   check["check"] --> check_path_consistency["check_path_consistency"]
@@ -559,6 +577,7 @@ flowchart TD
   parse["parse"] --> set_inline_value["set_inline_value"]
   set_inline_value["set_inline_value"] --> append_value["append_value"]
   set_inline_value["set_inline_value"] --> errored["errored"]
+  set_inline_value["set_inline_value"] --> list_push["list_push"]
   style set_inline_value fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -753,6 +772,8 @@ flowchart TD
   check_exclusive_sets["check_exclusive_sets"] --> errored["errored"]
   check_list_size["check_list_size"] --> errored["errored"]
   check_m_exclude_consistency["check_m_exclude_consistency"] --> errored["errored"]
+  check_map_consistency["check_map_consistency"] --> errored["errored"]
+  check_map_list["check_map_list"] --> errored["errored"]
   check_named_consistency["check_named_consistency"] --> errored["errored"]
   check_optional_consistency["check_optional_consistency"] --> errored["errored"]
   check_path_consistency["check_path_consistency"] --> errored["errored"]
@@ -787,9 +808,12 @@ flowchart TD
   get_cla_list_varying_char["get_cla_list_varying_char"] --> errored["errored"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> errored["errored"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> errored["errored"]
+  get_map["get_map"] --> errored["errored"]
+  get_map_value["get_map_value"] --> errored["errored"]
   get_source["get_source"] --> errored["errored"]
   is_required_passed["is_required_passed"] --> errored["errored"]
   is_required_val_passed["is_required_val_passed"] --> errored["errored"]
+  map_cla["map_cla"] --> errored["errored"]
   raise_error_duplicated_clas["raise_error_duplicated_clas"] --> errored["errored"]
   raise_error_m_exclude["raise_error_m_exclude"] --> errored["errored"]
   raise_error_m_exclude["raise_error_m_exclude"] --> errored["errored"]
@@ -1067,6 +1091,151 @@ flowchart TD
   style check_switch_neg_consistency fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
+### check_map_consistency
+
+Check a map (F18 of #125): a named store list (nargs) or append, without choices, not the configuration file; map_keys
+ only on a map. The default pairs are checked as passed ones.
+
+```fortran
+subroutine check_map_consistency(self, pref)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  check["check"] --> check_map_consistency["check_map_consistency"]
+  check_map_consistency["check_map_consistency"] --> check_map_list["check_map_list"]
+  check_map_consistency["check_map_consistency"] --> errored["errored"]
+  check_map_consistency["check_map_consistency"] --> replace_all["replace_all"]
+  check_map_consistency["check_map_consistency"] --> unique["unique"]
+  check_map_consistency["check_map_consistency"] --> wstrip["wstrip"]
+  style check_map_consistency fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### check_map
+
+Check the KEY=VALUE pairs of a map, whatever their source (F18 of #125): called by parse after the values are settled.
+
+```fortran
+subroutine check_map(self, pref)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  check_maps["check_maps"] --> check_map["check_map"]
+  check_map["check_map"] --> check_map_list["check_map_list"]
+  check_map["check_map"] --> stored_list["stored_list"]
+  style check_map fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### check_map_list
+
+Check the items of a stored list as KEY=VALUE pairs: format (a non-empty KEY before the first '='), repeated keys, and
+ the map_keys whitelist (with a "Did you mean" hint).
+
+```fortran
+subroutine check_map_list(self, list, pref)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `list` | character(len=*) | in |  | Stored list. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  check_map["check_map"] --> check_map_list["check_map_list"]
+  check_map_consistency["check_map_consistency"] --> check_map_list["check_map_list"]
+  check_map_list["check_map_list"] --> errored["errored"]
+  check_map_list["check_map_list"] --> key_list["key_list"]
+  check_map_list["check_map_list"] --> list_items["list_items"]
+  check_map_list["check_map_list"] --> suggestions["suggestions"]
+  style check_map_list fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### get_map
+
+Get the keys and values of a map (F18 of #125), in the order given; ERROR_MAP_INCONSISTENT if the CLA is not a map.
+
+```fortran
+subroutine get_map(self, keys, values, pref)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `keys` | character(len=*) | out | allocatable | Keys. |
+| `values` | character(len=*) | out | allocatable | Values. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  get_map["get_map"] --> get_map["get_map"]
+  get_map["get_map"] --> errored["errored"]
+  get_map["get_map"] --> list_items["list_items"]
+  get_map["get_map"] --> stored_list["stored_list"]
+  style get_map fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### get_map_value
+
+Get the value of a key of a map, converted to the type of val (F18 of #125). A missing key leaves val untouched:
+ found=.false., or ERROR_MAP_KEY_MISSING without found. A conversion error keeps its code and names the key.
+
+```fortran
+subroutine get_map_value(self, key, val, found, pref)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `key` | character(len=*) | in |  | Key. |
+| `val` | class(*) | inout |  | Value. |
+| `found` | logical | out | optional | The key is in the map. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  get_map_value["get_map_value"] --> get_map_value["get_map_value"]
+  get_map_value["get_map_value"] --> error_prefix["error_prefix"]
+  get_map_value["get_map_value"] --> errored["errored"]
+  get_map_value["get_map_value"] --> get_cla_from_buffer["get_cla_from_buffer"]
+  get_map_value["get_map_value"] --> list_items["list_items"]
+  get_map_value["get_map_value"] --> print_error_message["print_error_message"]
+  get_map_value["get_map_value"] --> stored_list["stored_list"]
+  style get_map_value fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
 ### check_path_consistency
 
 Check that the path checks (must_exist, readable, writable, allow_dash) are on an option taking a value: store,
@@ -1260,6 +1429,7 @@ subroutine get_cla_from_buffer(self, buffer, val, pref)
 ```mermaid
 flowchart TD
   get_cla["get_cla"] --> get_cla_from_buffer["get_cla_from_buffer"]
+  get_map_value["get_map_value"] --> get_cla_from_buffer["get_cla_from_buffer"]
   get_cla_from_buffer["get_cla_from_buffer"] --> cton["cton"]
   get_cla_from_buffer["get_cla_from_buffer"] --> errored["errored"]
   style get_cla_from_buffer fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -2285,7 +2455,9 @@ flowchart TD
   usage["usage"] --> has_range["has_range"]
   usage["usage"] --> list_join["list_join"]
   usage["usage"] --> range_text["range_text"]
+  usage["usage"] --> replace_all["replace_all"]
   usage["usage"] --> str["str"]
+  usage["usage"] --> unique["unique"]
   style usage fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -2489,6 +2661,7 @@ function stored_list(self) result(list)
 
 ```mermaid
 flowchart TD
+  check_map["check_map"] --> stored_list["stored_list"]
   check_paths["check_paths"] --> stored_list["stored_list"]
   get_cla["get_cla"] --> stored_list["stored_list"]
   get_cla_list["get_cla_list"] --> stored_list["stored_list"]
@@ -2501,6 +2674,8 @@ flowchart TD
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> stored_list["stored_list"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> stored_list["stored_list"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> stored_list["stored_list"]
+  get_map["get_map"] --> stored_list["stored_list"]
+  get_map_value["get_map_value"] --> stored_list["stored_list"]
   value_text["value_text"] --> stored_list["stored_list"]
   stored_list["stored_list"] --> has_value["has_value"]
   style stored_list fill:#3e63dd,stroke:#99b,stroke-width:2px

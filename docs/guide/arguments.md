@@ -78,7 +78,8 @@ abbreviation (`-v` for verbosity), the builtin keeps just `--version`. The same 
 
 ```fortran
 call cli%add(switch, switch_ab, switch_neg, help, required, act, def, &
-             nargs, choices, case_sensitive, exclude, envvar, &
+             nargs, choices, case_sensitive, map, map_keys,   &
+             exclude, envvar,                                 &
              positional, position, hidden,                &
              must_exist, readable, writable, allow_dash,  &
              deprecated, min, max, min_open, max_open,    &
@@ -219,6 +220,41 @@ call cli%add(switch='--files', switch_ab='-f', &
 
 With `nargs='N'` the default must have exactly N values: `nargs='3', def='0 0'` is a definition error
 (`ERROR_DEF_NARGS`). `'+'` and `'*'` accept a default of any length.
+
+### Key=value options (`map`)
+
+With `map=.true.`, a list option takes `KEY=VALUE` pairs, typically to override input-deck parameters:
+
+```fortran
+call cli%add(switch='--set', switch_ab='-s', help='Override input-deck parameters', required=.false., &
+             act='store', nargs='+', map=.true., map_keys='cfl,nx,ny,t_end', def='cfl=0.8', error=error)
+call cli%parse(error=error)
+read(deck_unit, nml=params)                                          ! values from the input deck
+call cli%get_map_value(switch='--set', key='cfl', val=cfl, found=found) ! override only if given
+call cli%get_map_value(switch='--set', key='nx',  val=nx,  found=found)
+```
+
+```console
+$ solver --set cfl=0.5 nx=256          # cfl=0.5, nx=256, the others from the deck
+$ solver --set cfl=0.5 cfl=0.6         # error: key "cfl" of "--set" given twice!
+$ solver --set cfll=0.5                # error: unknown key "cfll" for "--set" (allowed: cfl, nx, ny, t_end)! Did you mean "cfl"?
+$ solver --set nx                      # error: "--set" expects KEY=VALUE, got "nx"!
+$ solver                               # the default: cfl=0.8
+```
+
+- A pair is split at the **first** `=`: `label=a=b` is the key `label` with the value `a=b`; `a=` has an empty value.
+- A map is a named `act='store'` option with `nargs` (`'+'`, `'*'` or a number), or `act='append'`
+  (`--set a=1 --set b=2`); `--set=a=1` is one pair. Positionals, flags and `choices` are not allowed
+  (`ERROR_MAP_INCONSISTENT`, 42).
+- `parse` checks the pairs, whatever their source (command line, environment as comma-separated pairs, configuration
+  file as blank-separated pairs, default): `ERROR_MAP_FORMAT` (38), `ERROR_MAP_DUPLICATE_KEY` (39), and, with
+  `map_keys`, `ERROR_MAP_UNKNOWN_KEY` (40, listing the allowed keys and suggesting the closest). Keys are case-sensitive.
+- Passed pairs **replace** the default ones, they are not merged.
+- `cli%get_map(switch, keys, values, group, error)` returns all the pairs, in order, into `character(len=...),
+  allocatable` arrays. `cli%get_map_value(switch, key, val, found, group, error)` converts one value to the type of `val`
+  (any kind `get` supports); a missing key leaves `val` untouched and sets `found=.false.`, or is
+  `ERROR_MAP_KEY_MISSING` (41) without `found`. A failed conversion keeps its error code and names the key.
+- The usage shows `[--set KEY=VALUE [KEY=VALUE...]]`, and the help lists `keys: cfl, nx, ny, t_end`.
 
 ### Mutually exclusive arguments (`exclude`)
 

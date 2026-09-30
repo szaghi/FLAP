@@ -44,6 +44,11 @@ use flap_command_line_argument_t, only : command_line_argument,        &
                                          ERROR_DEPRECATED_REQUIRED,    &
                                          ERROR_ALTERNATE_INCONSISTENT, &
                                          ERROR_SWITCH_NEG_INCONSISTENT, &
+                                         ERROR_MAP_FORMAT,             &
+                                         ERROR_MAP_DUPLICATE_KEY,      &
+                                         ERROR_MAP_UNKNOWN_KEY,        &
+                                         ERROR_MAP_KEY_MISSING,        &
+                                         ERROR_MAP_INCONSISTENT,       &
                                          ERROR_RANGE_DEFINITION,       &
                                          ERROR_OUT_OF_RANGE,           &
                                          ERROR_RANGE_TYPE,             &
@@ -132,6 +137,11 @@ public :: ERROR_PATH_INCONSISTENT
 public :: ERROR_DEPRECATED_REQUIRED
 public :: ERROR_ALTERNATE_INCONSISTENT
 public :: ERROR_SWITCH_NEG_INCONSISTENT
+public :: ERROR_MAP_FORMAT
+public :: ERROR_MAP_DUPLICATE_KEY
+public :: ERROR_MAP_UNKNOWN_KEY
+public :: ERROR_MAP_KEY_MISSING
+public :: ERROR_MAP_INCONSISTENT
 public :: ERROR_RANGE_DEFINITION
 public :: ERROR_OUT_OF_RANGE
 public :: ERROR_RANGE_TYPE

@@ -25,6 +25,7 @@ graph LR
 - [exclusive_set](#exclusive-set)
 - [command_line_arguments_group](#command-line-arguments-group)
 - [free](#free)
+- [check_maps](#check-maps)
 - [check](#check)
 - [check_position_gaps](#check-position-gaps)
 - [is_required_passed](#is-required-passed)
@@ -159,6 +160,7 @@ classDiagram
 | `is_required_passed` |  | Check if required CLAs are passed. |
 | `add_exclusive_set` |  | Add a mutually exclusive set of switches. |
 | `check_exclusive_sets` |  | Check the mutually exclusive sets of switches. |
+| `check_maps` |  | Check the KEY=VALUE pairs of the map CLAs. |
 | `is_passed` |  | Check if a CLA has been passed. |
 | `is_defined` |  | Check if a CLA has been defined. |
 | `is_switch_token` |  | Check if a command line token names a CLA of the group. |
@@ -204,6 +206,30 @@ subroutine free(self)
 flowchart TD
   free["free"] --> free_object["free_object"]
   style free fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### check_maps
+
+Check the KEY=VALUE pairs of the map CLAs (F18 of #125), whatever their source; the first error stops.
+
+```fortran
+subroutine check_maps(self, pref)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_arguments_group](/api/src/lib/flap_command_line_arguments_group_t#command-line-arguments-group)) | inout |  | CLAsG data. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  parse_core["parse_core"] --> check_maps["check_maps"]
+  check_maps["check_maps"] --> check_map["check_map"]
+  style check_maps fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### check
@@ -547,6 +573,7 @@ flowchart TD
   get_cla_list_varying_char["get_cla_list_varying_char"] --> parse["parse"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> parse["parse"]
   get_source["get_source"] --> parse["parse"]
+  map_cla["map_cla"] --> parse["parse"]
   parse_core["parse_core"] --> parse["parse"]
   provenance["provenance"] --> parse["parse"]
   parse["parse"] --> append_value["append_value"]
@@ -612,6 +639,8 @@ flowchart TD
   check_exclusive_sets["check_exclusive_sets"] --> errored["errored"]
   check_list_size["check_list_size"] --> errored["errored"]
   check_m_exclude_consistency["check_m_exclude_consistency"] --> errored["errored"]
+  check_map_consistency["check_map_consistency"] --> errored["errored"]
+  check_map_list["check_map_list"] --> errored["errored"]
   check_named_consistency["check_named_consistency"] --> errored["errored"]
   check_optional_consistency["check_optional_consistency"] --> errored["errored"]
   check_path_consistency["check_path_consistency"] --> errored["errored"]
@@ -646,9 +675,12 @@ flowchart TD
   get_cla_list_varying_char["get_cla_list_varying_char"] --> errored["errored"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> errored["errored"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> errored["errored"]
+  get_map["get_map"] --> errored["errored"]
+  get_map_value["get_map_value"] --> errored["errored"]
   get_source["get_source"] --> errored["errored"]
   is_required_passed["is_required_passed"] --> errored["errored"]
   is_required_val_passed["is_required_val_passed"] --> errored["errored"]
+  map_cla["map_cla"] --> errored["errored"]
   raise_error_duplicated_clas["raise_error_duplicated_clas"] --> errored["errored"]
   raise_error_m_exclude["raise_error_m_exclude"] --> errored["errored"]
   raise_error_m_exclude["raise_error_m_exclude"] --> errored["errored"]
@@ -1044,6 +1076,7 @@ flowchart TD
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> is_defined["is_defined"]
   get_source["get_source"] --> is_defined["is_defined"]
   is_defined["is_defined"] --> is_defined["is_defined"]
+  map_cla["map_cla"] --> is_defined["is_defined"]
   is_defined["is_defined"] --> match_token["match_token"]
   style is_defined fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```

@@ -64,6 +64,11 @@ public :: ERROR_PATH_INCONSISTENT
 public :: ERROR_DEPRECATED_REQUIRED
 public :: ERROR_ALTERNATE_INCONSISTENT
 public :: ERROR_SWITCH_NEG_INCONSISTENT
+public :: ERROR_MAP_FORMAT
+public :: ERROR_MAP_DUPLICATE_KEY
+public :: ERROR_MAP_UNKNOWN_KEY
+public :: ERROR_MAP_KEY_MISSING
+public :: ERROR_MAP_INCONSISTENT
 public :: ERROR_RANGE_DEFINITION
 public :: ERROR_OUT_OF_RANGE
 public :: ERROR_RANGE_TYPE
@@ -113,6 +118,8 @@ type, extends(object) :: command_line_argument
   logical,                       public :: max_open=.false.       !< The maximum is excluded.
   logical,                       public :: clamp=.false.          !< An out-of-range value becomes the bound.
   logical,                       public :: case_sensitive=.true.  !< Character choices match only in their case (F14).
+  logical,                       public :: is_map=.false.         !< The values are KEY=VALUE pairs (F18).
+  character(len=:), allocatable, public :: map_keys               !< Allowed keys of a map, comma separated (F18).
   logical,                       public :: is_negated=.false.     !< The last spelling of a flag pair passed is the negation.
   logical,                       public :: pair_passed=.false.    !< Both spellings of a flag pair passed (D5: once each).
   contains
@@ -136,6 +143,9 @@ type, extends(object) :: command_line_argument
     procedure, public :: is_pair_override               !< Check if a flag passed may be passed again by its other spelling.
     procedure, public :: flag_value                     !< Value of a flag passed on the command line.
     procedure, public :: names                          !< Visible switch names, for suggestions.
+    procedure, public :: check_map                      !< Check the KEY=VALUE pairs of a map.
+    procedure, public :: get_map                        !< Get the keys and values of a map.
+    procedure, public :: get_map_value                  !< Get the value of a key of a map.
     procedure, public :: match_inline_token             !< Check a token also as NAME=VALUE.
     procedure, public :: set_inline_value               !< Set the value given inline (NAME=VALUE).
     procedure, public :: is_repeatable                  !< Check if the CLA may be passed more than once.
@@ -181,6 +191,8 @@ type, extends(object) :: command_line_argument
     procedure, private :: check_path_consistency          !< Check that the path checks are on an option taking a value.
     procedure, private :: check_alternate_consistency     !< Check that an alternate action has no attribute of a value.
     procedure, private :: check_switch_neg_consistency    !< Check that a negation belongs to a named scalar flag.
+    procedure, private :: check_map_consistency           !< Check that a map is a named list, its default included.
+    procedure, private :: check_map_list                  !< Check the KEY=VALUE pairs of a stored list.
     procedure, private :: check_range_consistency         !< Check the range definition.
     procedure, private :: check_range                     !< Check (or clamp) a value against the range.
     procedure, private :: check_named_consistency         !< Check named CLA consistency.
@@ -260,6 +272,11 @@ integer(I4P), parameter :: ERROR_PATH_INCONSISTENT      = 49 !< Path checks on a
 integer(I4P), parameter :: ERROR_DEPRECATED_REQUIRED    = 44 !< A required option cannot be deprecated.
 integer(I4P), parameter :: ERROR_ALTERNATE_INCONSISTENT = 37 !< An alternate action with an attribute of a value.
 integer(I4P), parameter :: ERROR_SWITCH_NEG_INCONSISTENT = 36 !< A negation (switch_neg) of a CLA that is not a named flag.
+integer(I4P), parameter :: ERROR_MAP_FORMAT             = 38 !< A map item that is not KEY=VALUE (empty KEY included).
+integer(I4P), parameter :: ERROR_MAP_DUPLICATE_KEY      = 39 !< A map key given twice.
+integer(I4P), parameter :: ERROR_MAP_UNKNOWN_KEY        = 40 !< A map key outside map_keys.
+integer(I4P), parameter :: ERROR_MAP_KEY_MISSING        = 41 !< A map key not given, looked up without found.
+integer(I4P), parameter :: ERROR_MAP_INCONSISTENT       = 42 !< A map on a CLA that is not a named list, or not a map.
 integer(I4P), parameter :: ERROR_RANGE_DEFINITION       = 30 !< Invalid range (bounds, clamp to an open real bound).
 integer(I4P), parameter :: ERROR_OUT_OF_RANGE           = 31 !< Value out of its range.
 integer(I4P), parameter :: ERROR_RANGE_TYPE             = 32 !< Range with a character or logical get.
@@ -301,6 +318,8 @@ contains
   self%max_open        = .false.
   self%clamp           = .false.
   self%case_sensitive  = .true.
+  self%is_map          = .false.
+  if (allocated(self%map_keys)) deallocate(self%map_keys)
   self%is_negated      = .false.
   self%pair_passed     = .false.
   endsubroutine free
@@ -312,6 +331,7 @@ contains
 
   call self%check_alternate_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_switch_neg_consistency(pref=pref) ; if (self%error/=0) return
+  call self%check_map_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_range_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_count_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_append_consistency(pref=pref) ; if (self%error/=0) return
@@ -713,7 +733,11 @@ contains
   logical                                     :: first_ !< First occurrence, local variable.
 
   first_ = .true. ; if (present(first)) first_ = first
-  if (allocated(self%nargs)) then
+  if (allocated(self%nargs).and.self%is_map) then
+    ! --set=a=1: one KEY=VALUE pair (F18)
+    if (allocated(self%val)) deallocate(self%val)
+    call list_push(self%val, trim(adjustl(value)))
+  elseif (allocated(self%nargs)) then
     call self%errored(pref=pref, error=ERROR_INLINE_VALUE_NARGS)
   elseif (self%act==action_append) then
     call self%append_value(value=value, first=first_, pref=pref)
@@ -823,6 +847,19 @@ contains
       if (.not.self%is_positional) then
         if (allocated(self%nargs)) then
           usage = ''
+          if (self%is_map) then
+            ! KEY=VALUE pairs (F18)
+            select case(self%nargs)
+            case('+')
+              usage = usage//' KEY=VALUE [KEY=VALUE...]'
+            case('*')
+              usage = usage//' [KEY=VALUE...]'
+            case default
+              do a=1, cton(str=trim(adjustl(self%nargs)),knd=1_I4P)
+                usage = usage//' KEY=VALUE'
+              enddo
+            endselect
+          else
           select case(self%nargs)
           case('+')
             usage = usage//' value#1 [value#2...]'
@@ -833,6 +870,7 @@ contains
               usage = usage//' value#'//trim(str(a, .true.))
             enddo
           endselect
+          endif
           if (trim(adjustl(self%switch))/=trim(adjustl(self%switch_ab))) then
             if (markdownd) then
               usage = new_line('a')//'* `'//trim(adjustl(self%switch))//usage//'`, `'//trim(adjustl(self%switch_ab))//usage//'`  '
@@ -906,6 +944,15 @@ contains
         usage = usage//new_line('a')//prefd//repeat(' ',10)//'environment variable name "'//trim(adjustl(self%envvar))//'"'
       endif
     endif
+    if (allocated(self%map_keys)) then
+      if (markdownd) then
+        usage = usage//'  '//new_line('a')//prefd//repeat(' ', 4)//'keys: '//replace_all(string=unique(string=&
+                replace_all(string=self%map_keys, substring=' ', restring=''), substring=','), substring=',', restring=', ')
+      else
+        usage = usage//new_line('a')//prefd//repeat(' ', indent)//'keys: '//replace_all(string=unique(string=&
+                replace_all(string=self%map_keys, substring=' ', restring=''), substring=','), substring=',', restring=', ')
+      endif
+    endif
     if (self%has_range()) then
       if (markdownd) then
         usage = usage//'  '//new_line('a')//prefd//repeat(' ', 4)//'range '//self%range_text()
@@ -975,7 +1022,21 @@ contains
   if (self%is_hidden) return
   if (self%act==action_store) then
     if (.not.self%is_positional) then
-      if (allocated(self%nargs)) then
+      if (allocated(self%nargs).and.self%is_map) then
+        ! KEY=VALUE pairs (F18)
+        select case(self%nargs)
+        case('+')
+          signature = 'KEY=VALUE [KEY=VALUE...]'
+        case('*')
+          signature = '[KEY=VALUE...]'
+        case default
+          nargs = cton(str=trim(adjustl(self%nargs)),knd=1_I4P)
+          signature = 'KEY=VALUE'
+          do a=2, nargs
+            signature = signature//' KEY=VALUE'
+          enddo
+        endselect
+      elseif (allocated(self%nargs)) then
         select case(self%nargs)
         case('+')
           signature = 'value#1 [value#2 value#3...]'
@@ -1009,9 +1070,10 @@ contains
   elseif (self%act==action_append) then
     ! repeatable, docopt-style
     if (required) then
-      signature = ' '//trim(adjustl(self%switch))//' value...'
+      signature = ' '//trim(adjustl(self%switch))//' '//merge('KEY=VALUE', 'value    ', self%is_map)
+      signature = trim(signature)//'...'
     else
-      signature = ' ['//trim(adjustl(self%switch))//' value]...'
+      signature = ' ['//trim(adjustl(self%switch))//' '//trim(merge('KEY=VALUE', 'value    ', self%is_map))//']...'
     endif
   elseif (self%act==action_count) then
     ! repeatable, docopt-style
@@ -1237,6 +1299,18 @@ contains
     case(ERROR_RANGE_TYPE)
       self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" has a range: get it into a number, not a '//&
                            'character or a logical!'
+    case(ERROR_MAP_FORMAT)
+      self%error_message = prefd//': "'//trim(adjustl(self%switch))//'" expects KEY=VALUE, got "'//val_str//'"!'
+    case(ERROR_MAP_DUPLICATE_KEY)
+      self%error_message = prefd//': key "'//val_str//'" of "'//trim(adjustl(self%switch))//'" given twice!'
+    case(ERROR_MAP_UNKNOWN_KEY)
+      self%error_message = prefd//': unknown key "'//val_str//'" for "'//trim(adjustl(self%switch))//'"'
+      if (present(hint)) self%error_message = self%error_message//hint
+    case(ERROR_MAP_KEY_MISSING)
+      self%error_message = prefd//': key "'//val_str//'" of "'//trim(adjustl(self%switch))//'" is not given!'
+    case(ERROR_MAP_INCONSISTENT)
+      self%error_message = prefd//': a map (KEY=VALUE pairs) is a named option with act="store" and nargs, or '//&
+                           'act="append", without choices; map_keys needs map=.true.; get_map needs a map!'
     case(ERROR_SWITCH_NEG_INCONSISTENT)
       self%error_message = prefd//': negation "'//trim(adjustl(self%switch_neg))//'": only a named store_true/store_false '//&
                            'flag without nargs has one, different from its switch names!'
@@ -1607,6 +1681,174 @@ contains
   if (ok .and. allocated(self%switch_ab)) ok = adjustl(self%switch_ab) /= adjustl(self%switch_neg)
   if (.not.ok) call self%errored(pref=pref, error=ERROR_SWITCH_NEG_INCONSISTENT)
   endsubroutine check_switch_neg_consistency
+
+  subroutine check_map_consistency(self, pref)
+  !< Check a map (F18 of #125): a named store list (nargs) or append, without choices, not the configuration file; map_keys
+  !< only on a map. The default pairs are checked as passed ones.
+  class(command_line_argument), intent(inout) :: self !< CLA data.
+  character(*), optional,       intent(in)    :: pref !< Prefixing string.
+  logical                                     :: ok   !< Consistency.
+
+  if (.not.self%is_map) then
+    if (allocated(self%map_keys)) call self%errored(pref=pref, error=ERROR_MAP_INCONSISTENT)
+    return
+  endif
+  ok = allocated(self%act) .and. (.not.self%is_positional) .and. (.not.allocated(self%choices)) .and. (.not.self%is_config)
+  if (ok) ok = (self%act == ACTION_STORE .and. allocated(self%nargs)) .or. self%act == ACTION_APPEND
+  if (.not.ok) then
+    call self%errored(pref=pref, error=ERROR_MAP_INCONSISTENT)
+    return
+  endif
+  if (allocated(self%def)) call self%check_map_list(list=replace_all(string=unique(string=wstrip(self%def), substring=' '), &
+                                                                     substring=' ', restring=LIST_SEP), pref=pref)
+  endsubroutine check_map_consistency
+
+  subroutine check_map(self, pref)
+  !< Check the KEY=VALUE pairs of a map, whatever their source (F18 of #125): called by parse after the values are settled.
+  class(command_line_argument), intent(inout) :: self !< CLA data.
+  character(*), optional,       intent(in)    :: pref !< Prefixing string.
+
+  if (self%is_map) call self%check_map_list(list=self%stored_list(), pref=pref)
+  endsubroutine check_map
+
+  subroutine check_map_list(self, list, pref)
+  !< Check the items of a stored list as KEY=VALUE pairs: format (a non-empty KEY before the first '='), repeated keys, and
+  !< the map_keys whitelist (with a "Did you mean" hint).
+  class(command_line_argument), intent(inout) :: self     !< CLA data.
+  character(*),                 intent(in)    :: list     !< Stored list.
+  character(*), optional,       intent(in)    :: pref     !< Prefixing string.
+  character(:), allocatable                   :: items(:) !< Items.
+  type(flap_string), allocatable              :: keys(:)  !< Keys, as found.
+  type(flap_string), allocatable              :: allowed(:) !< Allowed keys.
+  character(len=:), allocatable               :: key      !< Current key.
+  character(len=:), allocatable               :: names    !< Allowed keys, for the message.
+  integer(I4P)                                :: n        !< Number of items.
+  integer(I4P)                                :: i        !< Counter.
+  integer(I4P)                                :: k        !< Counter.
+  integer(I4P)                                :: e        !< Position of the first '='.
+
+  call list_items(list, items, n)
+  allowed = key_list()
+  allocate(keys(n))
+  do i=1, n
+    e = index(items(i), '=')
+    if (e <= 1) then
+      call self%errored(pref=pref, error=ERROR_MAP_FORMAT, val_str=trim(items(i)))
+      return
+    endif
+    key = items(i)(:e-1)
+    do k=1, i-1
+      if (keys(k)%s == key) then
+        call self%errored(pref=pref, error=ERROR_MAP_DUPLICATE_KEY, val_str=key)
+        return
+      endif
+    enddo
+    keys(i)%s = key
+    if (size(allowed, dim=1) > 0) then
+      if (.not.any([(allowed(k)%s == key, k=1, size(allowed, dim=1))])) then
+        names = allowed(1)%s
+        do k=2, size(allowed, dim=1)
+          names = names//', '//allowed(k)%s
+        enddo
+        call self%errored(pref=pref, error=ERROR_MAP_UNKNOWN_KEY, val_str=key, &
+                          hint=' (allowed: '//names//')!'//suggestions(key, allowed, .false.))
+        return
+      endif
+    endif
+  enddo
+  contains
+    function key_list() result(list)
+    !< The allowed keys (map_keys split at the commas, trimmed), sized first and filled by element.
+    type(flap_string), allocatable :: list(:) !< Keys.
+    character(len=:), allocatable  :: rest    !< Keys not yet split.
+    integer(I4P)                   :: c       !< Position of the next comma.
+    integer(I4P)                   :: m       !< Counter.
+
+    if (.not.allocated(self%map_keys)) then
+      allocate(list(0))
+      return
+    endif
+    if (len_trim(self%map_keys) == 0) then
+      allocate(list(0))
+      return
+    endif
+    allocate(list(count(transfer(self%map_keys, 'a', len(self%map_keys)) == ',') + 1))
+    rest = self%map_keys
+    m = 0
+    do
+      c = index(rest, ',')
+      m = m + 1
+      if (c > 0) then
+        list(m)%s = trim(adjustl(rest(:c-1)))
+        rest = rest(c+1:)
+      else
+        list(m)%s = trim(adjustl(rest))
+        exit
+      endif
+    enddo
+    endfunction key_list
+  endsubroutine check_map_list
+
+  subroutine get_map(self, keys, values, pref)
+  !< Get the keys and values of a map (F18 of #125), in the order given; ERROR_MAP_INCONSISTENT if the CLA is not a map.
+  class(command_line_argument), intent(inout) :: self      !< CLA data.
+  character(*), allocatable,    intent(out)   :: keys(:)   !< Keys.
+  character(*), allocatable,    intent(out)   :: values(:) !< Values.
+  character(*), optional,       intent(in)    :: pref      !< Prefixing string.
+  character(:), allocatable                   :: items(:)  !< Items.
+  integer(I4P)                                :: n         !< Number of items.
+  integer(I4P)                                :: i         !< Counter.
+  integer(I4P)                                :: e         !< Position of the first '='.
+
+  self%error = 0
+  if (.not.self%is_map) then
+    call self%errored(pref=pref, error=ERROR_MAP_INCONSISTENT)
+    return
+  endif
+  call list_items(self%stored_list(), items, n)
+  allocate(keys(n), values(n))
+  do i=1, n
+    e = index(items(i), '=')
+    keys(i) = items(i)(:e-1)
+    values(i) = trim(items(i)(e+1:))
+  enddo
+  endsubroutine get_map
+
+  subroutine get_map_value(self, key, val, found, pref)
+  !< Get the value of a key of a map, converted to the type of val (F18 of #125). A missing key leaves val untouched:
+  !< found=.false., or ERROR_MAP_KEY_MISSING without found. A conversion error keeps its code and names the key.
+  class(command_line_argument), intent(inout) :: self     !< CLA data.
+  character(*),                 intent(in)    :: key      !< Key.
+  class(*),                     intent(inout) :: val      !< Value.
+  logical, optional,            intent(out)   :: found    !< The key is in the map.
+  character(*), optional,       intent(in)    :: pref     !< Prefixing string.
+  character(:), allocatable                   :: items(:) !< Items.
+  integer(I4P)                                :: n        !< Number of items.
+  integer(I4P)                                :: i        !< Counter.
+  integer(I4P)                                :: e        !< Position of the first '='.
+
+  self%error = 0
+  if (present(found)) found = .false.
+  if (.not.self%is_map) then
+    call self%errored(pref=pref, error=ERROR_MAP_INCONSISTENT)
+    return
+  endif
+  call list_items(self%stored_list(), items, n)
+  do i=1, n
+    e = index(items(i), '=')
+    if (e <= 1) cycle
+    if (items(i)(:e-1) /= trim(key)) cycle
+    if (present(found)) found = .true.
+    call self%get_cla_from_buffer(buffer=trim(items(i)(e+1:)), val=val, pref=pref)
+    if (self%error /= 0) then
+      self%error_message = self%error_prefix(pref=pref)//': value "'//trim(items(i)(e+1:))//'" of key "'//trim(key)//&
+                           '" of "'//trim(adjustl(self%switch))//'" cannot be converted!'
+      call self%print_error_message
+    endif
+    return
+  enddo
+  if (.not.present(found)) call self%errored(pref=pref, error=ERROR_MAP_KEY_MISSING, val_str=trim(key))
+  endsubroutine get_map_value
 
   subroutine check_path_consistency(self, pref)
   !< Check that the path checks (must_exist, readable, writable, allow_dash) are on an option taking a value: store,

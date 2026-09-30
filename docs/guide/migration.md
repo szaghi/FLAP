@@ -119,5 +119,7 @@ values still takes the default: both change in v2.0.0 (see below).
   (1008). `add_group` gains `error=`, and, as `add`, reports only its own definition.
 - An unknown switch or command is reported with "Did you mean" suggestions (`ERROR_UNKNOWN` unchanged; the message gains
   the hint).
+- `add(..., map=.true., map_keys=)` declares a `KEY=VALUE` option, read with `get_map` and `get_map_value` (F18); new
+  errors 38–42. See [Key=value options](./arguments#key-value-options-map).
 - With real quad precision (`-D_R16P`), `get` into `real(R16P)` now converts in quad precision (it converted in single
   precision, B35 of #125).

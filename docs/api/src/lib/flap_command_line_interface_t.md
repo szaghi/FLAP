@@ -52,6 +52,8 @@ graph LR
 - [get_cla_list_varying_I2P](#get-cla-list-varying-i2p)
 - [get_cla_list_varying_I1P](#get-cla-list-varying-i1p)
 - [get_cla_list_varying_logical](#get-cla-list-varying-logical)
+- [get_map](#get-map)
+- [get_map_value](#get-map-value)
 - [get_cla_list_varying_char](#get-cla-list-varying-char)
 - [ensure_builtins](#ensure-builtins)
 - [save_bash_completion](#save-bash-completion)
@@ -77,6 +79,7 @@ graph LR
 - [no_args_help](#no-args-help)
 - [dispatch_status](#dispatch-status)
 - [is_fatal](#is-fatal)
+- [map_cla](#map-cla)
 - [builtins_missing](#builtins-missing)
 - [usage](#usage)
 - [signature](#signature)
@@ -179,6 +182,8 @@ classDiagram
 | `run_command` |  | Check if a CLAs group has been run. |
 | `parse` |  | Parse Command Line Interfaces. |
 | `reset_parse` |  | Forget the result of a parse, keeping the definitions. |
+| `get_map` |  | Get the keys and values of a map option (F18). |
+| `get_map_value` |  | Get the value of a key of a map option (F18). |
 | `get` |  | Get CLA value(s) from CLAs list parsed. |
 | `get_varying` |  | Get CLA value(s) from CLAs list parsed, varying size list. |
 | `usage` |  | Get CLI usage. |
@@ -220,6 +225,7 @@ classDiagram
 | `get_cla_list_varying_I1P` |  | Get CLA multiple values from CLAs list parsed, varying size, I1P. |
 | `get_cla_list_varying_logical` |  | Get CLA multiple values from CLAs list parsed, varying size, bool. |
 | `get_cla_list_varying_char` |  | Get CLA multiple values from CLAs list parsed, varying size, char. |
+| `map_cla` |  | Locate the CLA of a map getter. |
 
 ## Subroutines
 
@@ -485,7 +491,7 @@ Add CLA to CLI.
  @note If CLA belongs to a not yet present group it is created on the fly.
 
 ```fortran
-subroutine add(self, pref, group, group_index, switch, switch_ab, switch_neg, help, help_markdown, help_color, help_style, required, val_required, positional, position, hidden, act, def, nargs, choices, exclude, envvar, must_exist, readable, writable, allow_dash, deprecated, min, max, min_open, max_open, clamp, case_sensitive, error)
+subroutine add(self, pref, group, group_index, switch, switch_ab, switch_neg, help, help_markdown, help_color, help_style, required, val_required, positional, position, hidden, act, def, nargs, choices, exclude, envvar, must_exist, readable, writable, allow_dash, deprecated, min, max, min_open, max_open, clamp, case_sensitive, map, map_keys, error)
 ```
 
 **Arguments**
@@ -525,6 +531,8 @@ subroutine add(self, pref, group, group_index, switch, switch_ab, switch_neg, he
 | `max_open` | logical | in | optional | The maximum is excluded (default .false.). |
 | `clamp` | logical | in | optional | An out-of-range value becomes the bound (default .false.). |
 | `case_sensitive` | logical | in | optional | Character choices match only in their case (default |
+| `map` | logical | in | optional | The values are KEY=VALUE pairs (F18). |
+| `map_keys` | character(len=*) | in | optional | Allowed keys of a map, comma separated (F18). |
 | `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | optional | Error trapping flag. |
 
 **Call graph**
@@ -660,6 +668,7 @@ flowchart TD
   get_cla_list_varying_char["get_cla_list_varying_char"] --> parse["parse"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> parse["parse"]
   get_source["get_source"] --> parse["parse"]
+  map_cla["map_cla"] --> parse["parse"]
   parse_core["parse_core"] --> parse["parse"]
   provenance["provenance"] --> parse["parse"]
   parse["parse"] --> parse_core["parse_core"]
@@ -716,6 +725,7 @@ flowchart TD
   parse_core["parse_core"] --> check["check"]
   parse_core["parse_core"] --> check_exclusive_sets["check_exclusive_sets"]
   parse_core["parse_core"] --> check_m_exclusive["check_m_exclusive"]
+  parse_core["parse_core"] --> check_maps["check_maps"]
   parse_core["parse_core"] --> dispatch_status["dispatch_status"]
   parse_core["parse_core"] --> ensure_builtins["ensure_builtins"]
   parse_core["parse_core"] --> get_args["get_args"]
@@ -1203,6 +1213,70 @@ flowchart TD
   style get_cla_list_varying_logical fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
+### get_map
+
+Get the keys and values of a map option (F18 of #125), in the order given; passed pairs replace the default ones.
+
+```fortran
+subroutine get_map(self, switch, keys, values, group, pref, args, error)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | inout |  | CLI data. |
+| `switch` | character(len=*) | in |  | Switch name. |
+| `keys` | character(len=*) | out | allocatable | Keys. |
+| `values` | character(len=*) | out | allocatable | Values. |
+| `group` | character(len=*) | in | optional | Name of group (command) of CLA. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+| `args` | character(len=*) | in | optional | String containing command line arguments. |
+| `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | optional | Error trapping flag. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  get_map["get_map"] --> get_map["get_map"]
+  get_map["get_map"] --> get_map["get_map"]
+  get_map["get_map"] --> map_cla["map_cla"]
+  style get_map fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### get_map_value
+
+Get the value of a key of a map option, converted to the type of val (F18 of #125). A missing key leaves val untouched:
+ found=.false., or ERROR_MAP_KEY_MISSING when found is absent.
+
+```fortran
+subroutine get_map_value(self, switch, key, val, found, group, pref, args, error)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | inout |  | CLI data. |
+| `switch` | character(len=*) | in |  | Switch name. |
+| `key` | character(len=*) | in |  | Key. |
+| `val` | class(*) | inout |  | Value. |
+| `found` | logical | out | optional | The key is in the map. |
+| `group` | character(len=*) | in | optional | Name of group (command) of CLA. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+| `args` | character(len=*) | in | optional | String containing command line arguments. |
+| `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | optional | Error trapping flag. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  get_map_value["get_map_value"] --> get_map_value["get_map_value"]
+  get_map_value["get_map_value"] --> get_map_value["get_map_value"]
+  get_map_value["get_map_value"] --> map_cla["map_cla"]
+  style get_map_value fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
 ### get_cla_list_varying_char
 
 Get CLA multiple values from CLAs list parsed with varying size list, character.
@@ -1497,6 +1571,8 @@ flowchart TD
   check_exclusive_sets["check_exclusive_sets"] --> errored["errored"]
   check_list_size["check_list_size"] --> errored["errored"]
   check_m_exclude_consistency["check_m_exclude_consistency"] --> errored["errored"]
+  check_map_consistency["check_map_consistency"] --> errored["errored"]
+  check_map_list["check_map_list"] --> errored["errored"]
   check_named_consistency["check_named_consistency"] --> errored["errored"]
   check_optional_consistency["check_optional_consistency"] --> errored["errored"]
   check_path_consistency["check_path_consistency"] --> errored["errored"]
@@ -1531,9 +1607,12 @@ flowchart TD
   get_cla_list_varying_char["get_cla_list_varying_char"] --> errored["errored"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> errored["errored"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> errored["errored"]
+  get_map["get_map"] --> errored["errored"]
+  get_map_value["get_map_value"] --> errored["errored"]
   get_source["get_source"] --> errored["errored"]
   is_required_passed["is_required_passed"] --> errored["errored"]
   is_required_val_passed["is_required_val_passed"] --> errored["errored"]
+  map_cla["map_cla"] --> errored["errored"]
   raise_error_duplicated_clas["raise_error_duplicated_clas"] --> errored["errored"]
   raise_error_m_exclude["raise_error_m_exclude"] --> errored["errored"]
   raise_error_m_exclude["raise_error_m_exclude"] --> errored["errored"]
@@ -1759,6 +1838,7 @@ flowchart TD
   is_called_group["is_called_group"] --> is_defined_group["is_defined_group"]
   is_defined["is_defined"] --> is_defined_group["is_defined_group"]
   is_passed["is_passed"] --> is_defined_group["is_defined_group"]
+  map_cla["map_cla"] --> is_defined_group["is_defined_group"]
   raise_error["raise_error"] --> is_defined_group["is_defined_group"]
   set_mutually_exclusive_groups["set_mutually_exclusive_groups"] --> is_defined_group["is_defined_group"]
   is_defined_group["is_defined_group"] --> group_index["group_index"]
@@ -1900,6 +1980,7 @@ flowchart TD
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> is_defined["is_defined"]
   get_source["get_source"] --> is_defined["is_defined"]
   is_defined["is_defined"] --> is_defined["is_defined"]
+  map_cla["map_cla"] --> is_defined["is_defined"]
   is_defined["is_defined"] --> is_defined["is_defined"]
   is_defined["is_defined"] --> is_defined_group["is_defined_group"]
   style is_defined fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -2010,6 +2091,42 @@ function is_fatal(self)
 flowchart TD
   parse_core["parse_core"] --> is_fatal["is_fatal"]
   style is_fatal fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### map_cla
+
+Locate the CLA of a map getter, parsing first if needed: false (with the error set) if the parse failed or the group or
+ the switch is not defined.
+
+**Returns**: `logical`
+
+```fortran
+function map_cla(self, switch, group, pref, args, g, a) result(ok)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | inout |  | CLI data. |
+| `switch` | character(len=*) | in |  | Switch name. |
+| `group` | character(len=*) | in | optional | Name of group (command) of CLA. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+| `args` | character(len=*) | in | optional | String containing command line arguments. |
+| `g` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out |  | Index of the group. |
+| `a` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out |  | Index of the CLA. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  get_map["get_map"] --> map_cla["map_cla"]
+  get_map_value["get_map_value"] --> map_cla["map_cla"]
+  map_cla["map_cla"] --> errored["errored"]
+  map_cla["map_cla"] --> is_defined["is_defined"]
+  map_cla["map_cla"] --> is_defined_group["is_defined_group"]
+  map_cla["map_cla"] --> parse["parse"]
+  style map_cla fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### builtins_missing

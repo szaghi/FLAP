@@ -73,6 +73,7 @@ type, extends(object) :: command_line_arguments_group
     procedure, public :: is_required_passed    !< Check if required CLAs are passed.
     procedure, public :: add_exclusive_set     !< Add a mutually exclusive set of switches.
     procedure, public :: check_exclusive_sets  !< Check the mutually exclusive sets of switches.
+    procedure, public :: check_maps            !< Check the KEY=VALUE pairs of the map CLAs.
     procedure, public :: is_passed             !< Check if a CLA has been passed.
     procedure, public :: is_defined            !< Check if a CLA has been defined.
     procedure, public :: is_switch_token       !< Check if a command line token names a CLA of the group.
@@ -164,6 +165,22 @@ contains
     if (alias) return
   enddo
   endfunction has_alias
+
+  subroutine check_maps(self, pref)
+  !< Check the KEY=VALUE pairs of the map CLAs (F18 of #125), whatever their source; the first error stops.
+  class(command_line_arguments_group), intent(inout) :: self !< CLAsG data.
+  character(*), optional,              intent(in)    :: pref !< Prefixing string.
+  integer(I4P)                                       :: a    !< Counter.
+
+  do a=1, self%Na
+    if (.not.self%cla(a)%is_map) cycle
+    call self%cla(a)%check_map(pref=pref)
+    if (self%cla(a)%error /= 0) then
+      self%error = self%cla(a)%error
+      return
+    endif
+  enddo
+  endsubroutine check_maps
 
   pure function name_count(self) result(n)
   !< Return the number of names of the group (command): its name and its aliases (F19).

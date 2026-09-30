@@ -153,6 +153,7 @@ flowchart TD
   errored["errored"] --> print_error_message["print_error_message"]
   errored["errored"] --> print_error_message["print_error_message"]
   errored["errored"] --> print_error_message["print_error_message"]
+  get_map_value["get_map_value"] --> print_error_message["print_error_message"]
   raise_error["raise_error"] --> print_error_message["print_error_message"]
   style print_error_message fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -235,6 +236,7 @@ flowchart TD
   errored["errored"] --> error_prefix["error_prefix"]
   errored["errored"] --> error_prefix["error_prefix"]
   errored["errored"] --> error_prefix["error_prefix"]
+  get_map_value["get_map_value"] --> error_prefix["error_prefix"]
   raise_error["raise_error"] --> error_prefix["error_prefix"]
   error_prefix["error_prefix"] --> colorize["colorize"]
   style error_prefix fill:#3e63dd,stroke:#99b,stroke-width:2px

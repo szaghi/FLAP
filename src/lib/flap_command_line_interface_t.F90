@@ -54,6 +54,8 @@ type, extends(object), public :: command_line_interface
     procedure, public :: run_command => is_called_group  !< Check if a CLAs group has been run.
     procedure, public :: parse                           !< Parse Command Line Interfaces.
     procedure, public :: reset_parse                     !< Forget the result of a parse, keeping the definitions.
+    procedure, public :: get_map                         !< Get the keys and values of a map option (F18).
+    procedure, public :: get_map_value                   !< Get the value of a key of a map option (F18).
     generic,   public :: get =>   &
                          get_cla, &
                          get_cla_list                    !< Get CLA value(s) from CLAs list parsed.
@@ -111,6 +113,7 @@ type, extends(object), public :: command_line_interface
     procedure, private :: get_cla_list_varying_I1P        !< Get CLA multiple values from CLAs list parsed, varying size, I1P.
     procedure, private :: get_cla_list_varying_logical    !< Get CLA multiple values from CLAs list parsed, varying size, bool.
     procedure, private :: get_cla_list_varying_char       !< Get CLA multiple values from CLAs list parsed, varying size, char.
+    procedure, private :: map_cla                         !< Locate the CLA of a map getter.
     final              :: finalize                        !< Free dynamic memory when finalizing.
 endtype command_line_interface
 
@@ -681,7 +684,7 @@ contains
   subroutine add(self, pref, group, group_index, switch, switch_ab, switch_neg, help, help_markdown, help_color, help_style, &
                  required, val_required, positional, position, hidden, act, def, nargs, choices, exclude, envvar, &
                  must_exist, readable, writable, allow_dash, deprecated, min, max, min_open, max_open, clamp, &
-                 case_sensitive, error)
+                 case_sensitive, map, map_keys, error)
   !< Add CLA to CLI.
   !<
   !< @note If not otherwise declared the action on CLA value is set to "store" a value that must be passed after the switch name
@@ -716,6 +719,8 @@ contains
   logical,      optional,        intent(in)    :: min_open      !< The minimum is excluded (default .false.).
   logical,      optional,        intent(in)    :: max_open      !< The maximum is excluded (default .false.).
   logical,      optional,        intent(in)    :: clamp         !< An out-of-range value becomes the bound (default .false.).
+  logical,      optional,        intent(in)    :: map           !< The values are KEY=VALUE pairs (F18).
+  character(*), optional,        intent(in)    :: map_keys      !< Allowed keys of a map, comma separated (F18).
   logical,      optional,        intent(in)    :: case_sensitive !< Character choices match only in their case (default
                                                                    !< .true.); otherwise any case, giving the declared one.
   character(*), optional,        intent(in)    :: act           !< CLA value action.
@@ -763,6 +768,8 @@ contains
                                                   if (present(max_open     )) cla%max_open        = max_open
                                                   if (present(clamp        )) cla%clamp           = clamp
                                                   if (present(case_sensitive)) cla%case_sensitive = case_sensitive
+                                                  if (present(map          )) cla%is_map          = map
+                                                  if (present(map_keys     )) cla%map_keys        = map_keys
   cla%act             = action_store            ; if (present(act          )) cla%act             = trim(adjustl(Upper_Case(act)))
   if (cla%act == ACTION_ALTERNATE .and. .not.present(def)) then
     ! an alternate action is a flag (F16)
@@ -1178,6 +1185,15 @@ contains
   ! check if all required CLAs have been passed
   do g=0, size(ai,dim=1)-1
     call self%clasg(g)%is_required_passed(pref=pref)
+    self%error = self%clasg(g)%error
+    if (self%is_fatal()) exit
+  enddo
+  if (self%is_fatal()) return
+
+  ! check the KEY=VALUE pairs of the maps (F18), whatever their source: the top level, the commands called
+  do g=0, size(ai,dim=1)-1
+    if (g > 0 .and. .not.self%clasg(g)%is_called) cycle
+    call self%clasg(g)%check_maps(pref=pref)
     self%error = self%clasg(g)%error
     if (self%is_fatal()) exit
   enddo
@@ -1955,6 +1971,84 @@ contains
   if (self%error==ERROR_UNKNOWN.and.self%error_unknown_clas==ERROR_UNKNOWN_CLAS_IGNORED) self%error = ERROR_UNKNOWN_CLAS_IGNORED
   if (present(error)) error = self%error
   endsubroutine get_cla_list_varying_logical
+
+  subroutine get_map(self, switch, keys, values, group, pref, args, error)
+  !< Get the keys and values of a map option (F18 of #125), in the order given; passed pairs replace the default ones.
+  class(command_line_interface), intent(inout) :: self      !< CLI data.
+  character(*),                  intent(in)    :: switch    !< Switch name.
+  character(*), allocatable,     intent(out)   :: keys(:)   !< Keys.
+  character(*), allocatable,     intent(out)   :: values(:) !< Values.
+  character(*), optional,        intent(in)    :: group     !< Name of group (command) of CLA.
+  character(*), optional,        intent(in)    :: pref      !< Prefixing string.
+  character(*), optional,        intent(in)    :: args      !< String containing command line arguments.
+  integer(I4P), optional,        intent(out)   :: error     !< Error trapping flag.
+  integer(I4P)                                 :: g         !< Group counter.
+  integer(I4P)                                 :: a         !< Argument counter.
+
+  if (.not.self%map_cla(switch=switch, group=group, pref=pref, args=args, g=g, a=a)) then
+    if (present(error)) error = self%error
+    return
+  endif
+  call self%clasg(g)%cla(a)%get_map(keys=keys, values=values, pref=pref) ; self%error = self%clasg(g)%cla(a)%error
+  if (present(error)) error = self%error
+  endsubroutine get_map
+
+  subroutine get_map_value(self, switch, key, val, found, group, pref, args, error)
+  !< Get the value of a key of a map option, converted to the type of val (F18 of #125). A missing key leaves val untouched:
+  !< found=.false., or ERROR_MAP_KEY_MISSING when found is absent.
+  class(command_line_interface), intent(inout) :: self   !< CLI data.
+  character(*),                  intent(in)    :: switch !< Switch name.
+  character(*),                  intent(in)    :: key    !< Key.
+  class(*),                      intent(inout) :: val    !< Value.
+  logical,      optional,        intent(out)   :: found  !< The key is in the map.
+  character(*), optional,        intent(in)    :: group  !< Name of group (command) of CLA.
+  character(*), optional,        intent(in)    :: pref   !< Prefixing string.
+  character(*), optional,        intent(in)    :: args   !< String containing command line arguments.
+  integer(I4P), optional,        intent(out)   :: error  !< Error trapping flag.
+  integer(I4P)                                 :: g      !< Group counter.
+  integer(I4P)                                 :: a      !< Argument counter.
+
+  if (present(found)) found = .false.
+  if (.not.self%map_cla(switch=switch, group=group, pref=pref, args=args, g=g, a=a)) then
+    if (present(error)) error = self%error
+    return
+  endif
+  call self%clasg(g)%cla(a)%get_map_value(key=key, val=val, found=found, pref=pref) ; self%error = self%clasg(g)%cla(a)%error
+  if (present(error)) error = self%error
+  endsubroutine get_map_value
+
+  function map_cla(self, switch, group, pref, args, g, a) result(ok)
+  !< Locate the CLA of a map getter, parsing first if needed: false (with the error set) if the parse failed or the group or
+  !< the switch is not defined.
+  class(command_line_interface), intent(inout) :: self   !< CLI data.
+  character(*),                  intent(in)    :: switch !< Switch name.
+  character(*), optional,        intent(in)    :: group  !< Name of group (command) of CLA.
+  character(*), optional,        intent(in)    :: pref   !< Prefixing string.
+  character(*), optional,        intent(in)    :: args   !< String containing command line arguments.
+  integer(I4P),                  intent(out)   :: g      !< Index of the group.
+  integer(I4P),                  intent(out)   :: a      !< Index of the CLA.
+  logical                                      :: ok     !< The CLA is found.
+
+  ok = .false.
+  g = 0
+  a = 0
+  if (.not.self%is_parsed_) then
+    call self%parse(pref=pref, args=args)
+    if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
+  endif
+  self%error = 0 ! report only this get (B22)
+  if (present(group)) then
+    if (.not.self%is_defined_group(group=group, g=g)) then
+      call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
+      return
+    endif
+  endif
+  if (.not.self%clasg(g)%is_defined(switch=switch, pos=a)) then
+    call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch=switch)
+    return
+  endif
+  ok = .true.
+  endfunction map_cla
 
   subroutine get_cla_list_varying_char(self, val, pref, args, group, switch, position, error)
   !< Get CLA multiple values from CLAs list parsed with varying size list, character.
