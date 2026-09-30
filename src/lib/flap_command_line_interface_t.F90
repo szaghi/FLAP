@@ -252,6 +252,7 @@ contains
   integer(I4P), optional,        intent(out)      :: error             !< Error trapping flag.
   type(command_line_arguments_group), allocatable :: clasg_list_new(:) !< New (extended) CLAs group list.
   type(flap_string), allocatable                  :: alias_list(:)     !< Valid aliases.
+  integer(I4P)                                    :: na                !< Number of valid aliases.
   character(len=:), allocatable                   :: clash             !< Message of an invalid alias ('' for none).
   character(len=:), allocatable                   :: helpd             !< Help message.
   character(len=:), allocatable                   :: descriptiond      !< Detailed description.
@@ -289,7 +290,7 @@ contains
     call clasg_list_new(Ng)%set_examples(examples)
     if (present(no_args_is_help)) clasg_list_new(Ng)%no_args_is_help = no_args_is_help
     if (present(deprecated)) clasg_list_new(Ng)%deprecated = deprecated
-    if (clash == '' .and. size(alias_list, dim=1) > 0) clasg_list_new(Ng)%aliases = alias_list
+    if (clash == '' .and. na > 0) clasg_list_new(Ng)%aliases = alias_list(1:na)
     if (allocated(self%clasg)) deallocate(self%clasg)
     allocate(self%clasg(lbound(clasg_list_new,1):ubound(clasg_list_new,1)), source=clasg_list_new)
     deallocate(clasg_list_new)
@@ -304,8 +305,13 @@ contains
     integer(I4P)                  :: i     !< Counter.
 
     clash = ''
-    allocate(alias_list(0))
-    if (.not.present(aliases)) return
+    na = 0
+    if (.not.present(aliases)) then
+      allocate(alias_list(0))
+      return
+    endif
+    ! sized first (commas + 1), filled by element: no array constructor growing an array of flap_string (gfortran 16)
+    allocate(alias_list(count(transfer(aliases, 'a', len(aliases)) == ',') + 1))
     if (len_trim(aliases) == 0) return
     rest = aliases
     do
@@ -323,12 +329,13 @@ contains
       elseif (same_name(alias, group)) then
         clash = ': alias "'//alias//'" of command "'//trim(group)//'" is the command itself!'
       else
-        do i=1, size(alias_list, dim=1)
+        do i=1, na
           if (same_name(alias, alias_list(i)%s)) clash = ': alias "'//alias//'" of command "'//trim(group)//'" is repeated!'
         enddo
       endif
       if (clash /= '') return
-      alias_list = [alias_list, flap_string(alias)]
+      na = na + 1
+      alias_list(na)%s = alias
       if (c == 0) exit
     enddo
     endsubroutine parse_aliases
@@ -1075,6 +1082,9 @@ contains
   integer(I4P)                                 :: unknown !< Unknown argument error of a group.
   type(config_file)                            :: config  !< Configuration file.
   logical                                      :: alternate !< An alternate action has been passed.
+  type(flap_string), allocatable               :: commands(:) !< Names and aliases of the commands (suggestions, F10).
+  integer(I4P)                                 :: c       !< Counter.
+  integer(I4P)                                 :: n       !< Counter.
 
   call self%ensure_builtins(pref=pref)
 
@@ -1093,14 +1103,35 @@ contains
   ! no arguments at all, or a command invoked alone: its help, if asked for (F25, first in the D3 order)
   if (self%no_args_help(ai=ai, pref=pref)) return
 
+  ! the names and aliases of the commands, the candidates of an unknown top-level argument (F10); sized first and filled by
+  ! element through the group methods (the gfortran 16 trunk miscompiles the aliases read here, or an array constructor
+  ! growing an array of flap_string)
+  n = 0
+  do g=1, size(self%clasg, dim=1) - 1
+    n = n + self%clasg(g)%name_count()
+  enddo
+  allocate(commands(n))
+  n = 0
+  do g=1, size(self%clasg, dim=1) - 1
+    do c=1, self%clasg(g)%name_count()
+      n = n + 1
+      commands(n)%s = self%clasg(g)%name_of(c)
+    enddo
+  enddo
+
   ! parse CLI
   do g=0,size(ai,dim=1)-1
     if (ai(g,1)>0) then
       ! pass a copy: gfortran (13-16) hands a section of a deferred-length character array to a character(*) dummy
       ! starting at the first element of the whole array, not of the section
       gargs = to_characters(self%args(ai(g,1):ai(g,2)))
-      call self%clasg(g)%parse(args=gargs, ignore_unknown_clas=self%ignore_unknown_clas, &
-                               pref=pref, error_unknown_clas=unknown, ignore_env=self%ignore_env)
+      if (g == 0) then
+        call self%clasg(g)%parse(args=gargs, ignore_unknown_clas=self%ignore_unknown_clas, &
+                                 pref=pref, error_unknown_clas=unknown, ignore_env=self%ignore_env, commands=commands)
+      else
+        call self%clasg(g)%parse(args=gargs, ignore_unknown_clas=self%ignore_unknown_clas, &
+                                 pref=pref, error_unknown_clas=unknown, ignore_env=self%ignore_env)
+      endif
       ! keep the mark of an ignored unknown argument: a later group must not erase it (B30 of #125)
       if (unknown /= 0 .and. self%error_unknown_clas /= ERROR_UNKNOWN_CLAS_IGNORED) self%error_unknown_clas = unknown
     else

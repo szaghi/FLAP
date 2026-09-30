@@ -18,7 +18,8 @@ use flap_command_line_argument_t, only : command_line_argument, &
                                          SOURCE_NONE
 use flap_config_m, only : config_file
 use flap_object_t, only : object
-use flap_utils_m, only : flap_string, list_count, list_items, list_push, read_env, tokenize, upper_case, write_text
+use flap_utils_m, only : flap_string, list_count, list_items, list_push, read_env, suggestions, tokenize, upper_case, &
+                         write_text
 use penf
 
 implicit none
@@ -65,6 +66,8 @@ type, extends(object) :: command_line_arguments_group
     procedure, public :: is_named              !< Check if a name is the name of the group (command) or an alias.
     procedure, public :: has_alias             !< Check if a name is an alias of the group (command).
     procedure, public :: names                 !< Name and aliases of the group (command), separated.
+    procedure, public :: name_count            !< Number of names of the group (command): 1 + aliases.
+    procedure, public :: name_of               !< Name (1) or alias (2, ...) of the group (command).
     procedure, public :: check                 !< Check data consistency.
     procedure, public :: check_position_gaps   !< Check that the declared positions have no gap.
     procedure, public :: is_required_passed    !< Check if required CLAs are passed.
@@ -161,6 +164,28 @@ contains
     if (alias) return
   enddo
   endfunction has_alias
+
+  pure function name_count(self) result(n)
+  !< Return the number of names of the group (command): its name and its aliases (F19).
+  class(command_line_arguments_group), intent(in) :: self !< CLAsG data.
+  integer(I4P)                                    :: n    !< Number of names.
+
+  n = 1
+  if (allocated(self%aliases)) n = n + size(self%aliases, dim=1)
+  endfunction name_count
+
+  pure function name_of(self, i) result(name)
+  !< Return the i-th name of the group (command): 1 its name, 2... its aliases (F19).
+  class(command_line_arguments_group), intent(in) :: self !< CLAsG data.
+  integer(I4P),                        intent(in) :: i    !< Index of the name.
+  character(len=:), allocatable                   :: name !< Name.
+
+  if (i == 1) then
+    name = self%group
+  else
+    name = self%aliases(i-1)%s
+  endif
+  endfunction name_of
 
   pure function names(self, sep) result(list)
   !< Return the name of the group (command) followed by its aliases, separated by sep (help listing, completion).
@@ -690,7 +715,7 @@ contains
   call self%check(pref=pref)
   endsubroutine add
 
-  subroutine parse(self, args, ignore_unknown_clas, pref, error_unknown_clas, ignore_env)
+  subroutine parse(self, args, ignore_unknown_clas, pref, error_unknown_clas, ignore_env, commands)
   !< Parse CLAsG arguments.
   class(command_line_arguments_group), intent(inout) :: self                !< CLAsG data.
   character(*),                        intent(in)    :: args(:)             !< Command line arguments.
@@ -698,6 +723,8 @@ contains
   character(*), optional,              intent(in)    :: pref                !< Prefixing string.
   integer(I4P),                        intent(out)   :: error_unknown_clas  !< Error flag for passed unknown CLAs.
   logical,      optional,              intent(in)    :: ignore_env          !< Turn every environment lookup off.
+  type(flap_string), optional,         intent(in)    :: commands(:)         !< Command names and aliases (top level), for the
+                                                                            !< suggestions of an unknown argument (F10).
   type(command_line_argument)                        :: cla                 !< CLA data.
   character(:), allocatable                          :: envvar              !< Value of an environment variable.
   integer(I4P)                                       :: arg                 !< Argument counter.
@@ -933,7 +960,7 @@ contains
            else
               ! neither a named option nor a further positional: unknown argument, reported on a scratch CLA
               call cla%assign_object(self)
-              call cla%raise_error_switch_unknown(pref=pref, switch=trim(adjustl(args(arg))))
+              call cla%raise_error_switch_unknown(pref=pref, switch=trim(adjustl(args(arg))), hint=hint(args(arg)))
               self%error = cla%error
               error_unknown_clas = self%error
               if (.not.ignore_unknown_clas) return
@@ -942,6 +969,45 @@ contains
      enddo
   endif
   contains
+     pure function hint(token)
+     !< "Did you mean" hint of an unknown argument (F10): the switch names of the group for a switch (the name before an
+     !< inline '='), the command names for another argument.
+     character(*), intent(in)       :: token !< Unknown argument.
+     character(len=:), allocatable  :: hint  !< Hint.
+     type(flap_string), allocatable :: names(:) !< Candidates.
+     type(flap_string), allocatable :: cnames(:) !< Names of a CLA.
+     character(len=:), allocatable  :: name  !< Name of the argument.
+     integer(I4P)                   :: c     !< Counter.
+     integer(I4P)                   :: i     !< Counter.
+     integer(I4P)                   :: n     !< Number of candidates.
+
+     name = trim(adjustl(token))
+     if (is_switch_like(name)) then
+       c = index(name, '=')
+       if (c > 1) name = name(:c-1)
+       ! sized first, filled by element: no array constructor growing an array of flap_string (gfortran 16 trunk crashes)
+       n = 0
+       do c=1, self%Na
+         cnames = self%cla(c)%names()
+         n = n + size(cnames, dim=1)
+       enddo
+       allocate(names(n))
+       n = 0
+       do c=1, self%Na
+         cnames = self%cla(c)%names()
+         do i=1, size(cnames, dim=1)
+           n = n + 1
+           names(n)%s = cnames(i)%s
+         enddo
+       enddo
+     elseif (present(commands)) then
+       names = commands
+     else
+       allocate(names(0))
+     endif
+     hint = suggestions(name, names, self%case_insensitive)
+     endfunction hint
+
      pure function is_switch_like(token)
      !< Return true if an argument looks like a switch: a dash followed by anything but a digit or a dot.
      !<

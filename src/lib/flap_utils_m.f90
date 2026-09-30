@@ -8,6 +8,7 @@ private
 public :: count
 public :: csv_split
 public :: flap_string
+public :: levenshtein
 public :: to_characters
 public :: LIST_SEP
 public :: list_count
@@ -18,6 +19,7 @@ public :: read_env
 public :: replace
 public :: replace_all
 public :: split_command_line
+public :: suggestions
 public :: tokenize
 public :: unique
 public :: upper_case
@@ -443,6 +445,96 @@ contains
     if (n2>0) upper_case(n1:n1) = upper_alphabet(n2:n2)
   enddo
   endfunction upper_case
+
+  pure function levenshtein(a, b) result(d)
+  !< Return the Levenshtein (edit) distance of two strings: insertions, deletions and substitutions, two-row dynamic
+  !< programming, O(len(a) len(b)).
+  character(*), intent(in)  :: a       !< First string.
+  character(*), intent(in)  :: b       !< Second string.
+  integer(I4P)              :: d       !< Distance.
+  integer(I4P), allocatable :: prev(:) !< Distances of the previous row.
+  integer(I4P), allocatable :: curr(:) !< Distances of the current row.
+  integer(I4P)              :: i       !< Counter of a.
+  integer(I4P)              :: j       !< Counter of b.
+
+  allocate(prev(0:len(b)), curr(0:len(b)))
+  prev = [(j, j=0, len(b))]
+  do i=1, len(a)
+    curr(0) = i
+    do j=1, len(b)
+      curr(j) = min(prev(j) + 1, curr(j-1) + 1, prev(j-1) + merge(0, 1, a(i:i) == b(j:j)))
+    enddo
+    prev = curr
+  enddo
+  d = prev(len(b))
+  endfunction levenshtein
+
+  pure function suggestions(token, candidates, case_insensitive) result(hint)
+  !< Return the "Did you mean" hint of an unknown token (F10 of #125): up to three candidates with similarity
+  !< 1 - d/max(len) >= 0.6 (d the Levenshtein distance), most similar first (declaration order among equals), with click's
+  !< wording: ' Did you mean "x"?' or ' (Did you mean one of: "x", "y"?)'; '' for none. Case-folded with case_insensitive.
+  character(*),      intent(in) :: token            !< Unknown token.
+  type(flap_string), intent(in) :: candidates(:)    !< Candidate names.
+  logical,           intent(in) :: case_insensitive !< Compare in any case.
+  character(len=:), allocatable :: hint             !< Hint.
+  real(R8P),        allocatable :: score(:)         !< Similarity of each candidate.
+  logical,          allocatable :: taken(:)         !< Candidate already chosen (or excluded).
+  integer(I4P)                  :: pick(3)          !< Chosen candidates.
+  integer(I4P)                  :: n                !< Number of chosen candidates.
+  integer(I4P)                  :: c                !< Counter.
+  integer(I4P)                  :: best             !< Best candidate left.
+  integer(I4P)                  :: k                !< Counter.
+  real(R8P), parameter          :: cutoff = 0.6_R8P !< Minimum similarity.
+
+  hint = ''
+  allocate(score(size(candidates)), taken(size(candidates)))
+  do c=1, size(candidates)
+    score(c) = similarity(candidates(c)%s)
+    ! a name listed twice (a switch equal to its abbreviation, say) is one candidate
+    taken(c) = score(c) < cutoff .or. any([(candidates(c)%s == candidates(k)%s, k=1, c-1)])
+  enddo
+  n = 0
+  do while (n < 3)
+    best = 0
+    do c=1, size(candidates)
+      if (taken(c)) cycle
+      if (best == 0) then
+        best = c
+      elseif (score(c) > score(best)) then
+        best = c
+      endif
+    enddo
+    if (best == 0) exit
+    n = n + 1
+    pick(n) = best
+    taken(best) = .true.
+  enddo
+  if (n == 1) then
+    hint = ' Did you mean "'//candidates(pick(1))%s//'"?'
+  elseif (n > 1) then
+    hint = ' (Did you mean one of: "'//candidates(pick(1))%s//'"'
+    do c=2, n
+      hint = hint//', "'//candidates(pick(c))%s//'"'
+    enddo
+    hint = hint//'?)'
+  endif
+  contains
+    pure function similarity(name) result(sim)
+    !< Similarity of a candidate to the token, 1 - d/max(len).
+    character(*), intent(in) :: name !< Candidate.
+    real(R8P)                :: sim  !< Similarity.
+    integer(I4P)             :: l    !< Longest length.
+
+    l = max(len(name), len(token))
+    sim = 0._R8P
+    if (l == 0 .or. len(name) == 0) return
+    if (case_insensitive) then
+      sim = 1._R8P - real(levenshtein(upper_case(name), upper_case(token)), R8P) / l
+    else
+      sim = 1._R8P - real(levenshtein(name, token), R8P) / l
+    endif
+    endfunction similarity
+  endfunction suggestions
 
   pure function wstrip(string) result(newstring)
   !< Strip out leading and trailing white spaces from a string.

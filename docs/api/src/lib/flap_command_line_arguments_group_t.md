@@ -42,6 +42,8 @@ graph LR
 - [finalize](#finalize)
 - [is_named](#is-named)
 - [has_alias](#has-alias)
+- [name_count](#name-count)
+- [name_of](#name-of)
 - [names](#names)
 - [is_passed](#is-passed)
 - [positional_index](#positional-index)
@@ -150,6 +152,8 @@ classDiagram
 | `is_named` |  | Check if a name is the name of the group (command) or an alias. |
 | `has_alias` |  | Check if a name is an alias of the group (command). |
 | `names` |  | Name and aliases of the group (command), separated. |
+| `name_count` |  | Number of names of the group (command): 1 + aliases. |
+| `name_of` |  | Name (1) or alias (2, ...) of the group (command). |
 | `check` |  | Check data consistency. |
 | `check_position_gaps` |  | Check that the declared positions have no gap. |
 | `is_required_passed` |  | Check if required CLAs are passed. |
@@ -512,7 +516,7 @@ flowchart TD
 Parse CLAsG arguments.
 
 ```fortran
-subroutine parse(self, args, ignore_unknown_clas, pref, error_unknown_clas, ignore_env)
+subroutine parse(self, args, ignore_unknown_clas, pref, error_unknown_clas, ignore_env, commands)
 ```
 
 **Arguments**
@@ -525,6 +529,7 @@ subroutine parse(self, args, ignore_unknown_clas, pref, error_unknown_clas, igno
 | `pref` | character(len=*) | in | optional | Prefixing string. |
 | `error_unknown_clas` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out |  | Error flag for passed unknown CLAs. |
 | `ignore_env` | logical | in | optional | Turn every environment lookup off. |
+| `commands` | type([flap_string](/api/src/lib/flap_utils_m#flap-string)) | in | optional | Command names and aliases (top level), for the |
 
 **Call graph**
 
@@ -548,6 +553,7 @@ flowchart TD
   parse["parse"] --> assign_object["assign_object"]
   parse["parse"] --> count_occurrences["count_occurrences"]
   parse["parse"] --> cton["cton"]
+  parse["parse"] --> hint["hint"]
   parse["parse"] --> is_pair_override["is_pair_override"]
   parse["parse"] --> is_repeatable["is_repeatable"]
   parse["parse"] --> is_switch_like["is_switch_like"]
@@ -784,6 +790,59 @@ flowchart TD
   is_named["is_named"] --> has_alias["has_alias"]
   has_alias["has_alias"] --> same["same"]
   style has_alias fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### name_count
+
+Return the number of names of the group (command): its name and its aliases (F19).
+
+**Attributes**: pure
+
+**Returns**: integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables))
+
+```fortran
+function name_count(self) result(n)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_arguments_group](/api/src/lib/flap_command_line_arguments_group_t#command-line-arguments-group)) | in |  | CLAsG data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  parse_core["parse_core"] --> name_count["name_count"]
+  style name_count fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### name_of
+
+Return the i-th name of the group (command): 1 its name, 2... its aliases (F19).
+
+**Attributes**: pure
+
+**Returns**: `character(len=:)`
+
+```fortran
+function name_of(self, i) result(name)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_arguments_group](/api/src/lib/flap_command_line_arguments_group_t#command-line-arguments-group)) | in |  | CLAsG data. |
+| `i` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in |  | Index of the name. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  parse_core["parse_core"] --> name_of["name_of"]
+  style name_of fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### names

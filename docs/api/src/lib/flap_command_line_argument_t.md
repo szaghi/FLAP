@@ -81,6 +81,7 @@ graph LR
 - [match_negation](#match-negation)
 - [same_name](#same-name)
 - [is_pair_override](#is-pair-override)
+- [names](#names)
 - [flag_value](#flag-value)
 - [is_repeatable](#is-repeatable)
 - [is_list](#is-list)
@@ -260,6 +261,7 @@ classDiagram
 | `same_name` |  | Compare a switch name with a token (case rule of F14). |
 | `is_pair_override` |  | Check if a flag passed may be passed again by its other spelling. |
 | `flag_value` |  | Value of a flag passed on the command line. |
+| `names` |  | Visible switch names, for suggestions. |
 | `match_inline_token` |  | Check a token also as NAME=VALUE. |
 | `set_inline_value` |  | Set the value given inline (NAME=VALUE). |
 | `is_repeatable` |  | Check if the CLA may be passed more than once. |
@@ -638,7 +640,7 @@ flowchart TD
 Raise error switch_unknown.
 
 ```fortran
-subroutine raise_error_switch_unknown(self, switch, pref)
+subroutine raise_error_switch_unknown(self, switch, pref, hint)
 ```
 
 **Arguments**
@@ -648,6 +650,7 @@ subroutine raise_error_switch_unknown(self, switch, pref)
 | `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
 | `switch` | character(len=*) | in | optional | CLA switch name. |
 | `pref` | character(len=*) | in | optional | Prefixing string. |
+| `hint` | character(len=*) | in | optional | "Did you mean" hint, appended to the message (F10). |
 
 **Call graph**
 
@@ -718,7 +721,7 @@ flowchart TD
 Trig error occurence and print meaningful message.
 
 ```fortran
-subroutine errored(self, error, pref, switch, val_str, log_value)
+subroutine errored(self, error, pref, switch, val_str, log_value, hint)
 ```
 
 **Arguments**
@@ -731,6 +734,7 @@ subroutine errored(self, error, pref, switch, val_str, log_value)
 | `switch` | character(len=*) | in | optional | CLA switch name. |
 | `val_str` | character(len=*) | in | optional | Value string. |
 | `log_value` | character(len=*) | in | optional | Logical value to be casted. |
+| `hint` | character(len=*) | in | optional | Hint appended to the message (unknown switch, F10). |
 
 **Call graph**
 
@@ -2095,6 +2099,34 @@ function is_pair_override(self, negated) result(override)
 flowchart TD
   parse["parse"] --> is_pair_override["is_pair_override"]
   style is_pair_override fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### names
+
+Return the switch names of a visible named CLA (switch, abbreviation, negation), for the suggestions of F10.
+
+**Attributes**: pure
+
+**Returns**: type([flap_string](/api/src/lib/flap_utils_m#flap-string))
+
+```fortran
+function names(self) result(list)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  save_bash_completion_core["save_bash_completion_core"] --> names["names"]
+  signature_core["signature_core"] --> names["names"]
+  usage_core["usage_core"] --> names["names"]
+  style names fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### flag_value

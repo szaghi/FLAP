@@ -135,6 +135,7 @@ type, extends(object) :: command_line_argument
     procedure, public :: same_name                      !< Compare a switch name with a token (case rule of F14).
     procedure, public :: is_pair_override               !< Check if a flag passed may be passed again by its other spelling.
     procedure, public :: flag_value                     !< Value of a flag passed on the command line.
+    procedure, public :: names                          !< Visible switch names, for suggestions.
     procedure, public :: match_inline_token             !< Check a token also as NAME=VALUE.
     procedure, public :: set_inline_value               !< Set the value given inline (NAME=VALUE).
     procedure, public :: is_repeatable                  !< Check if the CLA may be passed more than once.
@@ -594,6 +595,36 @@ contains
              (negated .neqv. self%is_negated)
   endfunction is_pair_override
 
+  pure function names(self) result(list)
+  !< Return the switch names of a visible named CLA (switch, abbreviation, negation), for the suggestions of F10.
+  class(command_line_argument), intent(in) :: self    !< CLA data.
+  type(flap_string), allocatable           :: list(:) !< Names.
+  integer(I4P)                             :: n       !< Number of names.
+
+  ! sized first, filled by element: no array constructor growing an array of flap_string (gfortran 16 trunk crashes)
+  n = 0
+  if (.not.(self%is_positional .or. self%is_hidden)) then
+    if (allocated(self%switch)) n = n + 1
+    if (allocated(self%switch_ab)) n = n + 1
+    if (allocated(self%switch_neg)) n = n + 1
+  endif
+  allocate(list(n))
+  if (n == 0) return
+  n = 0
+  if (allocated(self%switch)) then
+    n = n + 1
+    list(n)%s = trim(adjustl(self%switch))
+  endif
+  if (allocated(self%switch_ab)) then
+    n = n + 1
+    list(n)%s = trim(adjustl(self%switch_ab))
+  endif
+  if (allocated(self%switch_neg)) then
+    n = n + 1
+    list(n)%s = trim(adjustl(self%switch_neg))
+  endif
+  endfunction names
+
   pure function flag_value(self) result(val)
   !< Return the value of a flag passed on the command line: .true. for store_true (.false. for store_false), the opposite
   !< when the last spelling passed is the negation (F11 of #125).
@@ -730,13 +761,14 @@ contains
   call self%errored(pref=pref, error=ERROR_VALUE_MISSING)
   endsubroutine raise_error_value_missing
 
-  subroutine raise_error_switch_unknown(self, switch, pref)
+  subroutine raise_error_switch_unknown(self, switch, pref, hint)
   !< Raise error switch_unknown.
   class(command_line_argument), intent(inout) :: self   !< CLA data.
   character(*), optional,       intent(in)    :: switch !< CLA switch name.
   character(*), optional,       intent(in)    :: pref   !< Prefixing string.
+  character(*), optional,       intent(in)    :: hint   !< "Did you mean" hint, appended to the message (F10).
 
-  call self%errored(pref=pref, error=ERROR_UNKNOWN, switch=switch)
+  call self%errored(pref=pref, error=ERROR_UNKNOWN, switch=switch, hint=hint)
   endsubroutine raise_error_switch_unknown
 
   subroutine raise_error_duplicated_clas(self, switch, pref)
@@ -1052,7 +1084,7 @@ contains
   endfunction has_choices
 
   ! private methods
-  subroutine errored(self, error, pref, switch, val_str, log_value)
+  subroutine errored(self, error, pref, switch, val_str, log_value, hint)
   !< Trig error occurence and print meaningful message.
   class(command_line_argument), intent(inout) :: self      !< CLA data.
   integer(I4P),                 intent(in)    :: error     !< Error occurred.
@@ -1060,6 +1092,7 @@ contains
   character(*), optional,       intent(in)    :: switch    !< CLA switch name.
   character(*), optional,       intent(in)    :: val_str   !< Value string.
   character(*), optional,       intent(in)    :: log_value !< Logical value to be casted.
+  character(*), optional,       intent(in)    :: hint      !< Hint appended to the message (unknown switch, F10).
   character(len=:), allocatable               :: prefd     !< Prefixing string.
 
   self%error = error
@@ -1137,6 +1170,7 @@ contains
       self%error_message = prefd//': named option "'//trim(adjustl(self%switch))//'" needs a value that is not passed!'
     case(ERROR_UNKNOWN)
       self%error_message = prefd//': switch "'//trim(adjustl(switch))//'" is unknown!'
+      if (present(hint)) self%error_message = self%error_message//hint
     case(ERROR_ENVVAR_POSITIONAL)
       self%error_message = prefd//': "'//trim(str(self%position, .true.))//'-th" positional option '//&
                            'has "envvar" value that is not allowed for positional option!'

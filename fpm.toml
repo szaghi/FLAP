@@ -278,6 +278,11 @@ source-dir = "src/tests"
 main = "flap_test_string.f90"
 
 [[test]]
+name = "flap_test_suggest"
+source-dir = "src/tests"
+main = "flap_test_suggest.f90"
+
+[[test]]
 name = "flap_test_unsupported_type"
 source-dir = "src/tests"
 main = "flap_test_unsupported_type.f90"

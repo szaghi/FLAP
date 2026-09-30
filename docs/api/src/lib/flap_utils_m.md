@@ -34,6 +34,8 @@ graph LR
 - [replace_all](#replace-all)
 - [unique](#unique)
 - [upper_case](#upper-case)
+- [levenshtein](#levenshtein)
+- [suggestions](#suggestions)
 - [wstrip](#wstrip)
 
 ## Variables
@@ -503,6 +505,56 @@ flowchart TD
   same_name["same_name"] --> upper_case["upper_case"]
   set_source_value["set_source_value"] --> upper_case["upper_case"]
   style upper_case fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### levenshtein
+
+Return the Levenshtein (edit) distance of two strings: insertions, deletions and substitutions, two-row dynamic
+ programming, O(len(a) len(b)).
+
+**Attributes**: pure
+
+**Returns**: integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables))
+
+```fortran
+function levenshtein(a, b) result(d)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `a` | character(len=*) | in |  | First string. |
+| `b` | character(len=*) | in |  | Second string. |
+
+### suggestions
+
+Return the "Did you mean" hint of an unknown token (F10 of #125): up to three candidates with similarity
+ 1 - d/max(len) >= 0.6 (d the Levenshtein distance), most similar first (declaration order among equals), with click's
+ wording: ' Did you mean "x"?' or ' (Did you mean one of: "x", "y"?)'; '' for none. Case-folded with case_insensitive.
+
+**Attributes**: pure
+
+**Returns**: `character(len=:)`
+
+```fortran
+function suggestions(token, candidates, case_insensitive) result(hint)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `token` | character(len=*) | in |  | Unknown token. |
+| `candidates` | type([flap_string](/api/src/lib/flap_utils_m#flap-string)) | in |  | Candidate names. |
+| `case_insensitive` | logical | in |  | Compare in any case. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  suggestions["suggestions"] --> similarity["similarity"]
+  style suggestions fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### wstrip

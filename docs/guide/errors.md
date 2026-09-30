@@ -45,7 +45,7 @@ positive values are **errors**. Existing values never change.
 | `12` | `ERROR_NO_LIST` | Argument is not list-valued | `get` used with an array on a scalar argument |
 | `13` | `ERROR_NARGS_INSUFFICIENT` | Insufficient list arguments | `nargs='N'` but fewer than N values were passed |
 | `14` | `ERROR_VALUE_MISSING` | Missing value | A named argument was passed but no value followed |
-| `15` | `ERROR_UNKNOWN` | Unknown switch | An unrecognised switch was passed on the command line |
+| `15` | `ERROR_UNKNOWN` | Unknown switch | An unrecognised switch (or argument) was passed on the command line; the message suggests the closest names (see [Did you mean](#did-you-mean)) |
 | `16` | `ERROR_ENVVAR_POSITIONAL` | `envvar` not allowed for positional | `envvar=` combined with `positional=.true.` |
 | `17` | `ERROR_ENVVAR_NOT_STORE` | `envvar` requires `act='store'`, `store_true` or `store_false` | Environment variable used with an incompatible action (`store*`, `count`, `append`, ...) |
 | `18` | `ERROR_ENVVAR_NARGS` | `envvar` not allowed for list-valued | No longer raised: lists accept an `envvar` (comma-separated values) |
@@ -150,13 +150,28 @@ After a failed `parse` FLAP prints one more line to the error unit, pointing to 
 the error is inside one):
 
 ```text
-solver: error: switch "--mehs" is unknown!
+solver: error: switch "--mehs" is unknown! Did you mean "--mesh"?
 Try 'solver --help' for help.
 ```
 
 It is printed once, as the last line, only when there is a `--help` to suggest (not with `disable_hv=.true.`), and
 never for statuses, ignored unknown arguments or errors raised later by `get`. Disable it with
 `init(error_hint=.false.)`.
+
+## Did you mean
+
+An unknown argument gets up to three suggestions, most similar first, with click's wording:
+
+```text
+solver: error: switch "--verbse" is unknown! Did you mean "--verbose"?
+solver: error: switch "--mas" is unknown! (Did you mean one of: "--mass", "--mach"?)
+solver: error: switch "comit" is unknown! Did you mean "commit"?
+```
+
+The candidates are the visible switches, abbreviations and negations of the command being parsed (hidden switches never),
+and, at the top level, for an argument that is not a switch, the command names and aliases. A name is suggested when
+its similarity `1 - d/max(len)` is at least 0.6, `d` being the Levenshtein (edit) distance; in any case with
+`init(case_insensitive=.true.)`. The name of `--name=value` is the part before `=`.
 
 ## Accessing the error message
 

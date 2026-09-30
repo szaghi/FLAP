@@ -723,6 +723,8 @@ flowchart TD
   parse_core["parse_core"] --> is_fatal["is_fatal"]
   parse_core["parse_core"] --> is_required_passed["is_required_passed"]
   parse_core["parse_core"] --> load_config["load_config"]
+  parse_core["parse_core"] --> name_count["name_count"]
+  parse_core["parse_core"] --> name_of["name_of"]
   parse_core["parse_core"] --> no_args_help["no_args_help"]
   parse_core["parse_core"] --> parse["parse"]
   parse_core["parse_core"] --> resolve_values["resolve_values"]
