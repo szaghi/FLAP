@@ -7,6 +7,7 @@ use flap_command_line_argument_t, only : command_line_argument, ACTION_COUNT, AC
                                          ACTION_PRINT_VERS, ACTION_STORE, ACTION_STORE_FALSE, ACTION_STORE_TRUE, ERROR_UNKNOWN
 use flap_command_line_arguments_group_t, only : command_line_arguments_group, STATUS_NO_ARGS, STATUS_PRINT_H, STATUS_PRINT_M, &
                                                 STATUS_PRINT_V
+use flap_config_m, only : config_file
 use flap_object_t, only : object
 use flap_utils_m
 use penf
@@ -28,6 +29,8 @@ type, extends(object), public :: command_line_interface
   logical                                         :: no_args_is_help=.false.     !< Print the help when no arguments are passed.
   logical                                         :: ignore_env=.false.          !< Turn every environment lookup off.
   character(len=:), allocatable                   :: auto_envvar_prefix          !< Prefix of the generated envvar names.
+  character(len=:), allocatable                   :: config_path                 !< Configuration file (F08).
+  logical                                         :: config_required=.false.     !< The configuration file must exist.
   integer(I4P)                                    :: error_unknown_clas=0_I4P    !< Error trapping flag for unknown CLAs.
   contains
     ! public methods
@@ -42,6 +45,7 @@ type, extends(object), public :: command_line_interface
     procedure, public :: is_parsed                       !< Check if CLI has been parsed.
     procedure, public :: set_mutually_exclusive_groups   !< Set two CLAs group as mutually exclusive.
     procedure, public :: set_mutually_exclusive_switches !< Set a mutually exclusive set of switches.
+    procedure, public :: set_config                      !< Set the configuration file.
     procedure, public :: run_command => is_called_group  !< Check if a CLAs group has been run.
     procedure, public :: parse                           !< Parse Command Line Interfaces.
     procedure, public :: reset_parse                     !< Forget the result of a parse, keeping the definitions.
@@ -83,6 +87,7 @@ type, extends(object), public :: command_line_interface
     procedure, private :: errored                         !< Trig error occurence and print meaningful message.
     procedure, private :: check                           !< Check data consistency.
     procedure, private :: check_m_exclusive               !< Check if two mutually exclusive CLAs group have been called.
+    procedure, private :: load_config                     !< Load and check the configuration file.
     procedure, private :: get_clasg_indexes               !< Get CLAs groups indexes.
     generic,   private :: get_args =>           &
                           get_args_from_string, &
@@ -110,6 +115,8 @@ integer(I4P), parameter, public :: ERROR_MISSING_SELECTION_CLA = 1002 !< CLA sel
 integer(I4P), parameter, public :: ERROR_TOO_FEW_CLAS          = 1003 !< Insufficient arguments for CLI.
 integer(I4P), parameter, public :: ERROR_UNKNOWN_CLAS_IGNORED  = 1004 !< Unknown CLAs passed, but ignored.
 integer(I4P), parameter, public :: ERROR_USER                  = 1005 !< Application error reported by raise_error.
+integer(I4P), parameter, public :: ERROR_CONFIG_NOT_FOUND      = 1006 !< Required configuration file not found.
+integer(I4P), parameter, public :: ERROR_CONFIG_UNKNOWN_KEY    = 1007 !< Configuration file: unknown key or malformed line.
 integer(I4P), parameter, public :: ERROR_ARGUMENT_RETRIEVAL    = 1012 !< A command line argument cannot be retrieved.
 
 contains
@@ -139,6 +146,8 @@ contains
   self%no_args_is_help     = .false.
   self%ignore_env          = .false.
   if (allocated(self%auto_envvar_prefix)) deallocate(self%auto_envvar_prefix)
+  if (allocated(self%config_path)) deallocate(self%config_path)
+  self%config_required     = .false.
   endsubroutine free
 
   subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, &
@@ -266,6 +275,80 @@ contains
     self%clasg(g2)%m_exclude = group1
   endif
   endsubroutine set_mutually_exclusive_groups
+
+  subroutine set_config(self, file, required, error)
+  !< Set the configuration file (F08 of #125): an INI file whose values come below the environment and above the defaults.
+  !<
+  !< Read by parse, after help/version: keys are long switches without the dashes, sections are groups (commands). A
+  !< missing file is skipped, unless required (ERROR_CONFIG_NOT_FOUND); an unknown key or a malformed line is
+  !< ERROR_CONFIG_UNKNOWN_KEY, unless ignore_unknown_clas.
+  class(command_line_interface), intent(inout) :: self     !< CLI data.
+  character(*),                  intent(in)    :: file     !< File name.
+  logical,      optional,        intent(in)    :: required !< The file must exist (default .false.).
+  integer(I4P), optional,        intent(out)   :: error    !< Error trapping flag.
+
+  self%config_path = trim(adjustl(file))
+  self%config_required = .false. ; if (present(required)) self%config_required = required
+  if (present(error)) error = 0
+  endsubroutine set_config
+
+  subroutine load_config(self, config, pref)
+  !< Load the configuration file, if any, and check it: every key must name an option taking a value (D18 of #125).
+  class(command_line_interface), intent(inout) :: self    !< CLI data.
+  type(config_file),             intent(inout) :: config  !< Configuration file.
+  character(*), optional,        intent(in)    :: pref    !< Prefixing string.
+  character(len=:), allocatable                :: iomsg   !< I/O message.
+  character(len=:), allocatable                :: where   !< File and line of an error.
+  logical                                      :: found   !< The file exists.
+  integer(I4P)                                 :: iostat  !< I/O status.
+  integer(I4P)                                 :: i       !< Counter.
+  integer(I4P)                                 :: g       !< Group of an entry.
+  integer(I4P)                                 :: a       !< CLA of an entry.
+
+  if (.not.allocated(self%config_path)) return
+  if (self%config_path == '') return
+  call config%load(file=self%config_path, found=found, iostat=iostat, iomsg=iomsg)
+  if (.not.found) then
+    if (self%config_required) call report(ERROR_CONFIG_NOT_FOUND, ': configuration file "'//self%config_path//'" not found!')
+    return
+  endif
+  if (iostat /= 0) then
+    call report(ERROR_CONFIG_NOT_FOUND, ': configuration file "'//self%config_path//'" cannot be read: '//iomsg//'!')
+    return
+  endif
+  if (self%ignore_unknown_clas) return
+  if (config%bad_line > 0) then
+    call report(ERROR_CONFIG_UNKNOWN_KEY, ': configuration file "'//self%config_path//'", line '//&
+                trim(str(config%bad_line, .true.))//': not "key = value", "[section]" or a comment!')
+    return
+  endif
+  do i=1, config%n
+    where = ': configuration file "'//self%config_path//'", line '//trim(str(config%line(i), .true.))//': '
+    g = self%group_index(config%section(i)%s)
+    if (g < 0) then
+      call report(ERROR_CONFIG_UNKNOWN_KEY, where//'section "'//config%section(i)%s//'" is not a command!')
+      return
+    endif
+    a = self%clasg(g)%config_key_index(config%key(i)%s)
+    if (a == 0) then
+      call report(ERROR_CONFIG_UNKNOWN_KEY, where//'unknown option "'//config%key(i)%s//'"!')
+      return
+    elseif (.not.self%clasg(g)%cla(a)%takes_config_value()) then
+      call report(ERROR_CONFIG_UNKNOWN_KEY, where//'option "'//config%key(i)%s//'" takes no value!')
+      return
+    endif
+  enddo
+  contains
+    subroutine report(error, message)
+    !< Report an error of the configuration file.
+    integer(I4P), intent(in) :: error   !< Error code.
+    character(*), intent(in) :: message !< Message, after the prefix.
+
+    self%error = error
+    self%error_message = self%error_prefix(pref)//message
+    call self%print_error_message
+    endsubroutine report
+  endsubroutine load_config
 
   subroutine set_mutually_exclusive_switches(self, switches, required, group, pref, error)
   !< Set a mutually exclusive set of switches (F03 of #125): at most one member may be passed, exactly one if required.
@@ -649,6 +732,7 @@ contains
   integer(I4P), allocatable                    :: ai(:,:) !< Counter for CLAs grouped.
   character(len=:), allocatable                :: gargs(:)!< Arguments of a group.
   integer(I4P)                                 :: unknown !< Unknown argument error of a group.
+  type(config_file)                            :: config  !< Configuration file.
 
   call self%ensure_builtins(pref=pref)
 
@@ -688,9 +772,13 @@ contains
   ! dispatch the statuses (D3): help, then version, then markdown
   if (self%dispatch_status(pref=pref)) return
 
+  ! the configuration file (F08): after the statuses, so that a broken file never blocks the help
+  call self%load_config(config=config, pref=pref)
+  if (self%is_fatal()) return
+
   ! settle the source of the values not given on the command line (R chain, F06)
   do g=0, size(self%clasg,dim=1)-1
-    call self%clasg(g)%resolve_values(ignore_env=self%ignore_env)
+    call self%clasg(g)%resolve_values(ignore_env=self%ignore_env, config=config)
     self%error = self%clasg(g)%error
     if (self%is_fatal()) exit
   enddo

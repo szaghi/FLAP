@@ -94,7 +94,9 @@ type, extends(object) :: command_line_argument
     procedure, public :: check                          !< Check data consistency.
     procedure, public :: is_required_passed             !< Check if required CLA is passed.
     procedure, public :: has_value                      !< Check if the value is given by the user (explicit source).
-    procedure, public :: set_env_value                  !< Set the value read from the environment variable.
+    procedure, public :: set_source_value               !< Set a value read from the environment or a configuration file.
+    procedure, public :: config_key                     !< Key of the CLA in a configuration file.
+    procedure, public :: takes_config_value             !< Check if the CLA takes a value from a configuration file.
     procedure, public :: match_token                    !< Check if a command line token names this CLA.
     procedure, public :: match_inline_token             !< Check a token also as NAME=VALUE.
     procedure, public :: set_inline_value               !< Set the value given inline (NAME=VALUE).
@@ -272,19 +274,26 @@ contains
   has_value = self%source < SOURCE_DEFAULT
   endfunction has_value
 
-  subroutine set_env_value(self, value)
-  !< Set the value read from the environment variable (source SOURCE_ENVIRONMENT, F07 of #125).
+  subroutine set_source_value(self, value, source)
+  !< Set a value read from the environment variable (F07 of #125) or from a configuration file (F08), with its source.
   !<
-  !< A flag (store_true/store_false) takes the variable as its value: 1/0, true/false, t/f, yes/no, y/n, on/off, in any
-  !< case (click's set); anything else is kept, so that get reports ERROR_CASTING_LOGICAL. A list (nargs) reads it as one
-  !< CSV record (F22): an unterminated quote is ERROR_ENVVAR_CSV.
+  !< A flag (store_true/store_false) takes it as its value: 1/0, true/false, t/f, yes/no, y/n, on/off, in any case (click's
+  !< set); anything else is kept, so that get reports ERROR_CASTING_LOGICAL. A list (nargs) reads an environment variable
+  !< as one CSV record (F22: an unterminated quote is ERROR_ENVVAR_CSV), a configuration value as blank separated values
+  !< (as def).
   class(command_line_argument), intent(inout) :: self      !< CLA data.
-  character(*),                 intent(in)    :: value     !< Value of the variable.
+  character(*),                 intent(in)    :: value     !< Value.
+  integer(I4P),                 intent(in)    :: source    !< SOURCE_ENVIRONMENT or SOURCE_CONFIG.
   type(flap_string), allocatable              :: fields(:) !< Fields of a list.
   integer(I4P)                                :: nf        !< Number of fields.
   integer(I4P)                                :: f         !< Counter.
   integer(I4P)                                :: error     !< Split error.
 
+  if (self%is_list().and.source == SOURCE_CONFIG) then
+    self%val = replace_all(string=unique(string=wstrip(value), substring=' '), substring=' ', restring=LIST_SEP)
+    self%source = source
+    return
+  endif
   if (self%is_list()) then
     call csv_split(record=value, fields=fields, nf=nf, error=error)
     if (error /= 0) then
@@ -295,7 +304,7 @@ contains
     do f=1, nf
       call list_push(self%val, fields(f)%s)
     enddo
-    self%source = SOURCE_ENVIRONMENT
+    self%source = source
     return
   endif
   self%val = trim(adjustl(value))
@@ -307,8 +316,35 @@ contains
       self%val = '.false.'
     endselect
   endif
-  self%source = SOURCE_ENVIRONMENT
-  endsubroutine set_env_value
+  self%source = source
+  endsubroutine set_source_value
+
+  pure function config_key(self) result(key)
+  !< Return the key of the CLA in a configuration file: its switch without the leading dashes ('' for a positional).
+  class(command_line_argument), intent(in) :: self !< CLA data.
+  character(len=:), allocatable            :: key  !< Key.
+  integer(I4P)                             :: c    !< First character after the dashes.
+
+  key = ''
+  if (self%is_positional .or. .not.allocated(self%switch)) return
+  key = trim(adjustl(self%switch))
+  c = verify(key, '-')
+  if (c > 0) then
+    key = key(c:)
+  else
+    key = ''
+  endif
+  endfunction config_key
+
+  pure function takes_config_value(self) result(takes)
+  !< Check if the CLA takes a value from a configuration file: a named store (lists included), store_true or store_false.
+  class(command_line_argument), intent(in) :: self  !< CLA data.
+  logical                                  :: takes !< Check result.
+
+  takes = .false.
+  if (self%is_positional .or. .not.allocated(self%act)) return
+  takes = self%act == ACTION_STORE .or. self%act == ACTION_STORE_TRUE .or. self%act == ACTION_STORE_FALSE
+  endfunction takes_config_value
 
   pure function match_token(self, token) result(match)
   !< Check if a command line token names this CLA: the one matcher of switch names (decision D1 of #125).

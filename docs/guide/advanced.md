@@ -104,6 +104,40 @@ $ SOLVER_MESH_FILE=wing.grd ./solver --mesh-file body.grd   # the command line w
 An explicit `envvar=` wins over the generated name. Positionals, `store*`, `count` and `append` get no name.
 The help shows the generated names.
 
+### Configuration files — `cli%set_config`
+
+An INI file supplies values below the environment and above the defaults, so the full order is
+**command line > environment variable > configuration file > default**:
+
+```fortran
+call cli%init(progname='solver')
+call cli%add(switch='--mesh-file', help='Mesh', required=.true., act='store')
+call cli%add(switch='--cfl', help='CFL', required=.false., act='store', def='0.5')
+call cli%add_group(group='post', description='Post processing')
+call cli%add(group='post', switch='--format', help='Format', required=.false., act='store', def='vtk')
+call cli%set_config(file='solver.ini')              ! required=.true. makes a missing file an error
+call cli%parse(error=error)
+```
+
+```ini
+# solver.ini
+mesh-file = wing.grd        ; keys are the long switches without the dashes
+cfl       = 0.8
+[post]                      # a section is a command
+format    = vtu
+```
+
+- Keys before any section belong to the top level; a `[section]` holds the options of that command.
+- A value is the text after `=`, blanks trimmed; one pair of quotes (`'` or `"`) is stripped, and a quoted value keeps its
+  `#` and `;`. An inline comment starts at a `#` or `;` preceded by a blank. An empty value counts as unset.
+- A list (`nargs`) is blank separated, as in `def=`; a flag reads `yes/no`, `on/off`, `1/0`, `true/false`, ...
+- An unknown key or section, a key naming an option that takes no value (`count`, `append`, `store*`), or a line that is
+  not `key = value`, `[section]` or a comment is an error, `ERROR_CONFIG_UNKNOWN_KEY` (1007), naming the line; with
+  `init(ignore_unknown_clas=.true.)` such lines are ignored. The last of repeated keys wins.
+- A missing file is skipped, unless `set_config(..., required=.true.)`: then `ERROR_CONFIG_NOT_FOUND` (1006).
+- The file is read by `parse` after `--help`/`--version`, so a broken file never blocks the help. A value from it
+  satisfies a required option and is checked against `choices` by `get`.
+
 ### Ignoring the environment — `init(ignore_env=.true.)`
 
 For reproducible runs (a batch job whose environment must not leak in, tests, CI sandboxes),

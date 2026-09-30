@@ -61,7 +61,9 @@ use flap_command_line_interface_t, only : command_line_interface,      &
                                           ERROR_TOO_FEW_CLAS,          &
                                           ERROR_UNKNOWN_CLAS_IGNORED,  &
                                           ERROR_ARGUMENT_RETRIEVAL,    &
-                                          ERROR_USER
+                                          ERROR_USER,                  &
+                                         ERROR_CONFIG_NOT_FOUND,      &
+                                         ERROR_CONFIG_UNKNOWN_KEY
 
 implicit none
 private
@@ -131,4 +133,6 @@ public :: ERROR_TOO_FEW_CLAS
 public :: ERROR_UNKNOWN_CLAS_IGNORED
 public :: ERROR_ARGUMENT_RETRIEVAL
 public :: ERROR_USER
+public :: ERROR_CONFIG_NOT_FOUND
+public :: ERROR_CONFIG_UNKNOWN_KEY
 endmodule flap

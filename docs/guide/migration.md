@@ -96,3 +96,4 @@ values still takes the default: both change in v2.0.0 (see below).
   reading comma-separated values (`ERROR_ENVVAR_NARGS` is no longer raised). More (configuration files): see issue
   [#125](https://github.com/szaghi/FLAP/issues/125).
 - `init(auto_envvar_prefix='APP')` gives every option without `envvar` the variable `APP[_COMMAND]_NAME`.
+- `cli%set_config(file='app.ini')` reads values from an INI file, below the environment and above the defaults.

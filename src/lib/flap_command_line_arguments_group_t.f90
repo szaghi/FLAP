@@ -12,9 +12,11 @@ use flap_command_line_argument_t, only : command_line_argument, &
                                          ACTION_STORE,          &
                                          ACTION_STORE_STAR,     &
                                          SOURCE_COMMANDLINE,    &
+                                         SOURCE_CONFIG,         &
                                          SOURCE_DEFAULT,        &
                                          SOURCE_ENVIRONMENT,    &
                                          SOURCE_NONE
+use flap_config_m, only : config_file
 use flap_object_t, only : object
 use flap_utils_m, only : list_count, list_items, list_push, read_env, tokenize
 use penf
@@ -71,6 +73,7 @@ type, extends(object) :: command_line_arguments_group
     procedure, public :: value_arity           !< Number of fixed value slots following a switch.
     procedure, public :: reset_parse           !< Forget the result of a parse, keeping the definitions.
     procedure, public :: resolve_values        !< Settle the source of the values not given on the command line.
+    procedure, public :: config_key_index      !< Index of the CLA named by a configuration file key.
     procedure, public :: raise_error_m_exclude !< Raise error mutually exclusive CLAs passed.
     procedure, public :: add                   !< Add CLA to CLAsG.
     procedure, public :: parse                 !< Parse CLAsG arguments.
@@ -362,15 +365,18 @@ contains
   enddo
   endsubroutine reset_parse
 
-  subroutine resolve_values(self, ignore_env)
+  subroutine resolve_values(self, ignore_env, config)
   !< Settle the source of the values not given on the command line (the value-resolution chain R, F06 of #125).
   !<
   !< Called after all groups are parsed, before the required check. The source of a parsed value (command line, or the
   !< environment for a bare switch with envvar) is recorded while parsing, so that it survives a parse stopped by an error.
-  !< The others take, in order, the environment variable if set and not blank (F07), the default, or nothing.
+  !< The others take, in order, the environment variable if set and not blank (F07), the configuration file (section =
+  !< group name, key = switch without dashes; F08) if the value is not blank, the default, or nothing.
   class(command_line_arguments_group), intent(inout) :: self       !< CLAsG data.
   logical, optional,                   intent(in)    :: ignore_env !< Turn every environment lookup off.
+  type(config_file), optional,         intent(in)    :: config     !< Configuration file.
   character(len=:), allocatable                      :: envvar     !< Value of an environment variable.
+  character(len=:), allocatable                      :: cvalue     !< Value from the configuration file.
   logical                                            :: found      !< The variable is set.
   integer(I4P)                                       :: a          !< Counter.
 
@@ -379,11 +385,18 @@ contains
     if (allocated(self%cla(a)%envvar).and.(.not.self%cla(a)%is_positional)) then
       call read_env(name=self%cla(a)%envvar, value=envvar, found=found, ignore=ignore_env)
       if (found.and.len_trim(envvar) > 0) then
-        call self%cla(a)%set_env_value(value=envvar)
+        call self%cla(a)%set_source_value(value=envvar, source=SOURCE_ENVIRONMENT)
         if (self%cla(a)%error /= 0) then
           self%error = self%cla(a)%error
           return
         endif
+        cycle
+      endif
+    endif
+    if (present(config).and.self%cla(a)%takes_config_value()) then
+      call config%lookup(section=self%group, key=self%cla(a)%config_key(), value=cvalue, found=found)
+      if (found.and.len_trim(cvalue) > 0) then
+        call self%cla(a)%set_source_value(value=cvalue, source=SOURCE_CONFIG)
         cycle
       endif
     endif
@@ -394,6 +407,19 @@ contains
     endif
   enddo
   endsubroutine resolve_values
+
+  function config_key_index(self, key) result(a)
+  !< Return the index of the CLA named by a configuration file key (its switch without dashes), 0 if none.
+  class(command_line_arguments_group), intent(in) :: self !< CLAsG data.
+  character(*),                        intent(in) :: key  !< Key.
+  integer(I4P)                                    :: a    !< Index of the CLA.
+
+  do a=1, self%Na
+    if (self%cla(a)%is_positional) cycle
+    if (self%cla(a)%config_key() == key) return
+  enddo
+  a = 0
+  endfunction config_key_index
 
   function value_arity(self, switch) result(n)
   !< Return the number of values that always follow a switch of this group, 0 if not fixed or not a switch.

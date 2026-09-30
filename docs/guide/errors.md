@@ -77,6 +77,8 @@ positive values are **errors**. Existing values never change.
 | `1003` | `ERROR_TOO_FEW_CLAS` | Insufficient arguments for CLI | Reserved: not raised by the current version |
 | `1004` | `ERROR_UNKNOWN_CLAS_IGNORED` | Unknown arguments ignored | `init(ignore_unknown_clas=.true.)` and an unknown switch was passed |
 | `1005` | `ERROR_USER` | Application error | Returned by `cli%raise_error` (see below) |
+| `1006` | `ERROR_CONFIG_NOT_FOUND` | Configuration file not found | `set_config(file=..., required=.true.)` and the file is missing (or cannot be read) |
+| `1007` | `ERROR_CONFIG_UNKNOWN_KEY` | Configuration file: unknown key | An unknown key or section, a key of an option taking no value, or a malformed line (the message names the line) |
 | `1012` | `ERROR_ARGUMENT_RETRIEVAL` | A command line argument cannot be read | `get_command_argument` failed (processor error; not expected in practice) |
 
 The first two group codes are named `ERROR_GROUP_*` in the `flap` module; inside the group module they are
