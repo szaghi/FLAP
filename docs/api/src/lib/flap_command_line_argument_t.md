@@ -23,6 +23,12 @@ graph LR
 - [command_line_argument](#command-line-argument)
 - [free](#free)
 - [check](#check)
+- [set_source_value](#set-source-value)
+- [check_paths](#check-paths)
+- [match_inline_token](#match-inline-token)
+- [append_value](#append-value)
+- [count_occurrences](#count-occurrences)
+- [set_inline_value](#set-inline-value)
 - [raise_error_m_exclude](#raise-error-m-exclude)
 - [raise_error_nargs_insufficient](#raise-error-nargs-insufficient)
 - [raise_error_value_missing](#raise-error-value-missing)
@@ -30,9 +36,14 @@ graph LR
 - [raise_error_duplicated_clas](#raise-error-duplicated-clas)
 - [sanitize_defaults](#sanitize-defaults)
 - [errored](#errored)
+- [check_count_consistency](#check-count-consistency)
+- [check_append_consistency](#check-append-consistency)
 - [check_envvar_consistency](#check-envvar-consistency)
 - [check_action_consistency](#check-action-consistency)
+- [check_def_nargs_consistency](#check-def-nargs-consistency)
 - [check_optional_consistency](#check-optional-consistency)
+- [check_alternate_consistency](#check-alternate-consistency)
+- [check_path_consistency](#check-path-consistency)
 - [check_m_exclude_consistency](#check-m-exclude-consistency)
 - [check_named_consistency](#check-named-consistency)
 - [check_positional_consistency](#check-positional-consistency)
@@ -41,6 +52,7 @@ graph LR
 - [get_cla_from_buffer](#get-cla-from-buffer)
 - [get_cla_list](#get-cla-list)
 - [get_cla_list_from_buffer](#get-cla-list-from-buffer)
+- [get_cla_list_character](#get-cla-list-character)
 - [get_cla_list_varying_R16P](#get-cla-list-varying-r16p)
 - [get_cla_list_varying_R8P](#get-cla-list-varying-r8p)
 - [get_cla_list_varying_R4P](#get-cla-list-varying-r4p)
@@ -50,26 +62,47 @@ graph LR
 - [get_cla_list_varying_I1P](#get-cla-list-varying-i1p)
 - [get_cla_list_varying_logical](#get-cla-list-varying-logical)
 - [get_cla_list_varying_char](#get-cla-list-varying-char)
-- [cla_assign_cla](#cla-assign-cla)
 - [finalize](#finalize)
 - [is_required_passed](#is-required-passed)
+- [has_value](#has-value)
+- [config_key](#config-key)
+- [value_text](#value-text)
+- [deprecation_note](#deprecation-note)
+- [has_path_checks](#has-path-checks)
+- [takes_config_value](#takes-config-value)
+- [match_token](#match-token)
+- [is_repeatable](#is-repeatable)
+- [is_list](#is-list)
 - [is_required_val_passed](#is-required-val-passed)
 - [usage](#usage)
 - [signature](#signature)
+- [signature_usage](#signature-usage)
+- [completion_words](#completion-words)
+- [completion_values](#completion-values)
 - [has_choices](#has-choices)
 - [check_list_size](#check-list-size)
+- [stored_list](#stored-list)
 
 ## Variables
 
 | Name | Type | Attributes | Description |
 |------|------|------------|-------------|
+| `SOURCE_COMMANDLINE` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Value passed on the command line. |
+| `SOURCE_ENVIRONMENT` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Value read from the environment variable. |
+| `SOURCE_CONFIG` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Value read from a configuration file. |
+| `SOURCE_DEFAULT` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Default value. |
+| `SOURCE_NONE` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | No value. |
 | `ACTION_STORE` | character(len=*) | parameter | Store value (if invoked a value must be passed). |
+| `ACTION_CONFIG` | character(len=*) | parameter | Name the configuration file (stored as a store CLA). |
+| `ACTION_ALTERNATE` | character(len=*) | parameter | Alternate action: bypass the value validation (F16). |
 | `ACTION_STORE_STAR` | character(len=*) | parameter | Store value or revert on default if invoked alone. |
 | `ACTION_STORE_TRUE` | character(len=*) | parameter | Store .true. without the necessity of a value. |
 | `ACTION_STORE_FALSE` | character(len=*) | parameter | Store .false. without the necessity of a value. |
 | `ACTION_PRINT_HELP` | character(len=*) | parameter | Print help message. |
 | `ACTION_PRINT_MARK` | character(len=*) | parameter | Print help to Markdown file. |
 | `ACTION_PRINT_VERS` | character(len=*) | parameter | Print version. |
+| `ACTION_COUNT` | character(len=*) | parameter | Count the occurrences (repeatable, no value). |
+| `ACTION_APPEND` | character(len=*) | parameter | Collect one value per occurrence (repeatable). |
 | `ARGS_SEP` | character(len=*) | parameter | Arguments separator for multiple valued (list) CLA. |
 | `ERROR_OPTIONAL_NO_DEF` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Optional CLA without default value. |
 | `ERROR_REQUIRED_M_EXCLUDE` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Required CLA cannot exclude others. |
@@ -95,6 +128,22 @@ graph LR
 | `ERROR_ACTION_UNKNOWN` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Unknown CLA (switch name). |
 | `ERROR_DUPLICATED_CLAS` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Duplicated CLAs passed, passed multiple instance of the same CLA. |
 | `ERROR_MISSING_REQUIRED_VAL` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Missing required value of CLA. |
+| `ERROR_INLINE_VALUE_NOT_ALLOWED` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Inline value (NAME=VALUE) for a CLA that takes no value. |
+| `ERROR_INLINE_VALUE_NARGS` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Inline value (NAME=VALUE) for a list CLA. |
+| `ERROR_COUNT_INCONSISTENT` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Count CLA with positional, nargs, envvar or choices. |
+| `ERROR_APPEND_INCONSISTENT` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Append CLA with positional, nargs or envvar. |
+| `ERROR_APPEND_SCALAR_GET` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Scalar get of an append CLA (a list). |
+| `ERROR_POSITIONAL_NARGS` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Positional CLA with nargs (positionals are scalar). |
+| `ERROR_UNSUPPORTED_TYPE` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Value requested into a variable of an unsupported type. |
+| `ERROR_LIST_SIZE` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | List requested into a fixed-size array of another size. |
+| `ERROR_DEF_NARGS` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | List default whose count differs from an integer nargs. |
+| `ERROR_ENVVAR_CSV` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | List value of an environment variable: unterminated quote. |
+| `ERROR_PATH_NOT_FOUND` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Path value that does not exist (must_exist, readable). |
+| `ERROR_PATH_NOT_READABLE` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Path value that cannot be opened for reading (readable). |
+| `ERROR_PATH_NOT_WRITABLE` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Existing path value that cannot be opened for writing. |
+| `ERROR_PATH_INCONSISTENT` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Path checks on an option taking no value. |
+| `ERROR_DEPRECATED_REQUIRED` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | A required option cannot be deprecated. |
+| `ERROR_ALTERNATE_INCONSISTENT` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | An alternate action with an attribute of a value. |
 
 ## Derived Types
 
@@ -131,7 +180,7 @@ classDiagram
 | `error_message` | character(len=:) | allocatable | Meaningful error message to standard-error. |
 | `error_color` | character(len=:) | allocatable | ANSI color of error messages. |
 | `error_style` | character(len=:) | allocatable | ANSI style of error messages. |
-| `examples` | character(len=512) | allocatable | Examples of correct usage. |
+| `examples` | type([flap_string](/api/src/lib/flap_utils_m#flap-string)) | allocatable | Examples of correct usage (examples(i)%s). |
 | `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Error trapping flag. |
 | `usage_lun` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Output unit to print help/usage messages |
 | `version_lun` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Output unit to print version message |
@@ -150,11 +199,19 @@ classDiagram
 | `is_passed` | logical |  | Flag for checking if CLA has been passed to CLI. |
 | `is_hidden` | logical |  | Flag for hiding CLA, thus it does not compare into help. |
 | `is_val_required` | logical |  | Flag for set required value for not required (optional) CLA. |
+| `source` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Source of the value (SOURCE_*). |
+| `is_config` | logical |  | The CLA names the configuration file (act='config'). |
+| `must_exist` | logical |  | The value is a path that must exist. |
+| `readable` | logical |  | The value is a path that must be readable (and exist). |
+| `writable` | logical |  | The value is a path writable if it exists. |
+| `allow_dash` | logical |  | '-' passes the path checks (standard input/output). |
+| `deprecated` | character(len=:) | allocatable | Deprecation message; allocated means deprecated (F13). |
 
 #### Type-Bound Procedures
 
 | Name | Attributes | Description |
 |------|------------|-------------|
+| `error_prefix` | pass(self) | Prefix of error messages. |
 | `free_object` | pass(self) | Free dynamic memory. |
 | `print_version` | pass(self) | Print version. |
 | `print_error_message` | pass(self) | Print meaningful error message. |
@@ -163,6 +220,21 @@ classDiagram
 | `free` |  | Free dynamic memory. |
 | `check` |  | Check data consistency. |
 | `is_required_passed` |  | Check if required CLA is passed. |
+| `has_value` |  | Check if the value is given by the user (explicit source). |
+| `set_source_value` |  | Set a value read from the environment or a configuration file. |
+| `config_key` |  | Key of the CLA in a configuration file. |
+| `takes_config_value` |  | Check if the CLA takes a value from a configuration file. |
+| `value_text` |  | Resolved value as text (provenance report). |
+| `has_path_checks` |  | Check if the value is a path to check. |
+| `deprecation_note` |  | Marker of a deprecated CLA in the help. |
+| `check_paths` |  | Check the path value(s): existence and permissions. |
+| `match_token` |  | Check if a command line token names this CLA. |
+| `match_inline_token` |  | Check a token also as NAME=VALUE. |
+| `set_inline_value` |  | Set the value given inline (NAME=VALUE). |
+| `is_repeatable` |  | Check if the CLA may be passed more than once. |
+| `count_occurrences` |  | Count occurrences of a count CLA. |
+| `append_value` |  | Collect a value of an append CLA. |
+| `is_list` |  | Check if the CLA holds a list (nargs or append). |
 | `raise_error_m_exclude` |  | Raise error mutually exclusive CLAs passed. |
 | `raise_error_nargs_insufficient` |  | Raise error insufficient number of argument values passed. |
 | `raise_error_value_missing` |  | Raise error missing value. |
@@ -173,16 +245,25 @@ classDiagram
 | `has_choices` |  | Return true if CLA has defined choices. |
 | `sanitize_defaults` |  | Sanitize default values. |
 | `signature` |  | Get signature. |
+| `signature_usage` |  | Get the signature for the usage text. |
+| `completion_words` |  | Get the bash completion words (switches). |
+| `completion_values` |  | Get the bash completion of the value. |
 | `usage` |  | Get correct usage. |
 | `errored` |  | Trig error occurence and print meaningful message. |
+| `check_count_consistency` |  | Check data consistency for count CLA. |
+| `check_append_consistency` |  | Check data consistency for append CLA. |
 | `check_envvar_consistency` |  | Check data consistency for envvar CLA. |
 | `check_action_consistency` |  | Check CLA action consistency. |
 | `check_optional_consistency` |  | Check optional CLA consistency. |
+| `check_def_nargs_consistency` |  | Check the count of a list default against nargs. |
 | `check_m_exclude_consistency` |  | Check mutually exclusion consistency. |
+| `check_path_consistency` |  | Check that the path checks are on an option taking a value. |
+| `check_alternate_consistency` |  | Check that an alternate action has no attribute of a value. |
 | `check_named_consistency` |  | Check named CLA consistency. |
 | `check_positional_consistency` |  | Check positional CLA consistency. |
 | `check_choices` |  | Check if CLA value is in allowed choices. |
 | `check_list_size` |  | Check CLA multiple values list size consistency. |
+| `stored_list` |  | Stored list of values (parsed or default). |
 | `get_cla` |  | Get CLA (single) value. |
 | `get_cla_from_buffer` |  | Get CLA (single) value from a buffer. |
 | `get_cla_list` |  | Get CLA multiple values. |
@@ -196,8 +277,6 @@ classDiagram
 | `get_cla_list_varying_I1P` |  | Get CLA multiple values, varying size, I1P. |
 | `get_cla_list_varying_logical` |  | Get CLA multiple values, varying size, bool. |
 | `get_cla_list_varying_char` |  | Get CLA multiple values, varying size, char. |
-| `cla_assign_cla` |  | Assignment operator. |
-| `assignment(=)` |  | Assignment operator overloading. |
 
 ## Subroutines
 
@@ -247,14 +326,202 @@ flowchart TD
   add["add"] --> check["check"]
   add["add"] --> check["check"]
   check["check"] --> check["check"]
-  parse["parse"] --> check["check"]
+  parse_core["parse_core"] --> check["check"]
   check["check"] --> check_action_consistency["check_action_consistency"]
+  check["check"] --> check_alternate_consistency["check_alternate_consistency"]
+  check["check"] --> check_append_consistency["check_append_consistency"]
+  check["check"] --> check_count_consistency["check_count_consistency"]
+  check["check"] --> check_def_nargs_consistency["check_def_nargs_consistency"]
   check["check"] --> check_envvar_consistency["check_envvar_consistency"]
   check["check"] --> check_m_exclude_consistency["check_m_exclude_consistency"]
   check["check"] --> check_named_consistency["check_named_consistency"]
   check["check"] --> check_optional_consistency["check_optional_consistency"]
+  check["check"] --> check_path_consistency["check_path_consistency"]
   check["check"] --> check_positional_consistency["check_positional_consistency"]
+  check["check"] --> errored["errored"]
   style check fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### set_source_value
+
+Set a value read from the environment variable (F07 of #125) or from a configuration file (F08), with its source.
+
+ A flag (store_true/store_false) takes it as its value: 1/0, true/false, t/f, yes/no, y/n, on/off, in any case (click's
+ set); anything else is kept, so that get reports ERROR_CASTING_LOGICAL. A list (nargs) reads an environment variable
+ as one CSV record (F22: an unterminated quote is ERROR_ENVVAR_CSV), a configuration value as blank separated values
+ (as def).
+
+```fortran
+subroutine set_source_value(self, value, source)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `value` | character(len=*) | in |  | Value. |
+| `source` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in |  | SOURCE_ENVIRONMENT or SOURCE_CONFIG. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  resolve_values["resolve_values"] --> set_source_value["set_source_value"]
+  set_source_value["set_source_value"] --> csv_split["csv_split"]
+  set_source_value["set_source_value"] --> errored["errored"]
+  set_source_value["set_source_value"] --> is_list["is_list"]
+  set_source_value["set_source_value"] --> list_push["list_push"]
+  set_source_value["set_source_value"] --> replace_all["replace_all"]
+  set_source_value["set_source_value"] --> unique["unique"]
+  set_source_value["set_source_value"] --> upper_case["upper_case"]
+  set_source_value["set_source_value"] --> wstrip["wstrip"]
+  style set_source_value fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### check_paths
+
+Check the path value(s), whatever their source (F09 of #125): every item of a list; an empty value, and '-' with
+ allow_dash, are not checked. Standard Fortran only: inquire for existence, an open for reading (readable) or for
+ appending, writing nothing (writable, only if the file exists); the message carries the reason of the processor.
+ Directories are not told apart: a directory exists and opens for reading.
+
+```fortran
+subroutine check_paths(self, pref)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  resolve_values["resolve_values"] --> check_paths["check_paths"]
+  check_paths["check_paths"] --> errored["errored"]
+  check_paths["check_paths"] --> has_path_checks["has_path_checks"]
+  check_paths["check_paths"] --> is_list["is_list"]
+  check_paths["check_paths"] --> list_items["list_items"]
+  check_paths["check_paths"] --> stored_list["stored_list"]
+  style check_paths fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### match_inline_token
+
+Check if a command line token names this CLA by rule 1 (match_token) or rule 2 of decision D1: NAME=VALUE, split at
+ the first '=', with NAME matching by rule 1 (inline values, F01).
+
+**Attributes**: pure
+
+```fortran
+subroutine match_inline_token(self, token, match, inline_val, has_inline)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+| `token` | character(len=*) | in |  | Command line token. |
+| `match` | logical | out |  | Check result. |
+| `inline_val` | character(len=:) | out | allocatable | VALUE of NAME=VALUE ('' otherwise). |
+| `has_inline` | logical | out |  | The token is NAME=VALUE. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  is_switch_token["is_switch_token"] --> match_inline_token["match_inline_token"]
+  parse["parse"] --> match_inline_token["match_inline_token"]
+  match_inline_token["match_inline_token"] --> match_token["match_token"]
+  style match_inline_token fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### append_value
+
+Collect one value of an append CLA; the first occurrence replaces the default (D9 of #125). An empty value is an
+ empty item (D17, reversed in step 2.11).
+
+```fortran
+subroutine append_value(self, value, first, pref)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `value` | character(len=*) | in |  | Value. |
+| `first` | logical | in |  | First occurrence on the command line. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  parse["parse"] --> append_value["append_value"]
+  set_inline_value["set_inline_value"] --> append_value["append_value"]
+  append_value["append_value"] --> list_push["list_push"]
+  style append_value fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### count_occurrences
+
+Add n occurrences to a count CLA; the first occurrence starts from 0 (the default applies only when not passed).
+
+```fortran
+subroutine count_occurrences(self, n, first)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `n` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in |  | Occurrences to add. |
+| `first` | logical | in |  | First occurrence on the command line. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  parse["parse"] --> count_occurrences["count_occurrences"]
+  count_occurrences["count_occurrences"] --> cton["cton"]
+  count_occurrences["count_occurrences"] --> str["str"]
+  style count_occurrences fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### set_inline_value
+
+Set the value given inline (NAME=VALUE, F01): only a scalar store takes one; the next argument is not consumed.
+
+ An empty value (NAME=) is the empty string, as a separate empty value (D17 of #125, reversed in step 2.11).
+
+```fortran
+subroutine set_inline_value(self, value, pref, first)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `value` | character(len=*) | in |  | Inline value. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+| `first` | logical | in | optional | First occurrence on the command line (append, default .true.). |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  parse["parse"] --> set_inline_value["set_inline_value"]
+  set_inline_value["set_inline_value"] --> append_value["append_value"]
+  set_inline_value["set_inline_value"] --> errored["errored"]
+  style set_inline_value fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### raise_error_m_exclude
@@ -401,8 +668,9 @@ subroutine sanitize_defaults(self)
 ```mermaid
 flowchart TD
   parse["parse"] --> sanitize_defaults["sanitize_defaults"]
-  parse["parse"] --> sanitize_defaults["sanitize_defaults"]
+  parse_core["parse_core"] --> sanitize_defaults["sanitize_defaults"]
   sanitize_defaults["sanitize_defaults"] --> sanitize_defaults["sanitize_defaults"]
+  sanitize_defaults["sanitize_defaults"] --> is_list["is_list"]
   sanitize_defaults["sanitize_defaults"] --> replace_all["replace_all"]
   sanitize_defaults["sanitize_defaults"] --> unique["unique"]
   sanitize_defaults["sanitize_defaults"] --> wstrip["wstrip"]
@@ -432,15 +700,26 @@ subroutine errored(self, error, pref, switch, val_str, log_value)
 
 ```mermaid
 flowchart TD
+  add_exclusive_set["add_exclusive_set"] --> errored["errored"]
+  check["check"] --> errored["errored"]
   check["check"] --> errored["errored"]
   check_action_consistency["check_action_consistency"] --> errored["errored"]
+  check_alternate_consistency["check_alternate_consistency"] --> errored["errored"]
+  check_append_consistency["check_append_consistency"] --> errored["errored"]
   check_choices["check_choices"] --> errored["errored"]
+  check_count_consistency["check_count_consistency"] --> errored["errored"]
+  check_def_nargs_consistency["check_def_nargs_consistency"] --> errored["errored"]
   check_envvar_consistency["check_envvar_consistency"] --> errored["errored"]
+  check_exclusive_sets["check_exclusive_sets"] --> errored["errored"]
   check_list_size["check_list_size"] --> errored["errored"]
   check_m_exclude_consistency["check_m_exclude_consistency"] --> errored["errored"]
   check_named_consistency["check_named_consistency"] --> errored["errored"]
   check_optional_consistency["check_optional_consistency"] --> errored["errored"]
+  check_path_consistency["check_path_consistency"] --> errored["errored"]
+  check_paths["check_paths"] --> errored["errored"]
+  check_position_gaps["check_position_gaps"] --> errored["errored"]
   check_positional_consistency["check_positional_consistency"] --> errored["errored"]
+  get_args_from_invocation["get_args_from_invocation"] --> errored["errored"]
   get_cla["get_cla"] --> errored["errored"]
   get_cla["get_cla"] --> errored["errored"]
   get_cla_from_buffer["get_cla_from_buffer"] --> errored["errored"]
@@ -465,6 +744,7 @@ flowchart TD
   get_cla_list_varying_char["get_cla_list_varying_char"] --> errored["errored"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> errored["errored"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> errored["errored"]
+  get_source["get_source"] --> errored["errored"]
   is_required_passed["is_required_passed"] --> errored["errored"]
   is_required_val_passed["is_required_val_passed"] --> errored["errored"]
   raise_error_duplicated_clas["raise_error_duplicated_clas"] --> errored["errored"]
@@ -473,10 +753,60 @@ flowchart TD
   raise_error_nargs_insufficient["raise_error_nargs_insufficient"] --> errored["errored"]
   raise_error_switch_unknown["raise_error_switch_unknown"] --> errored["errored"]
   raise_error_value_missing["raise_error_value_missing"] --> errored["errored"]
-  errored["errored"] --> colorize["colorize"]
+  set_inline_value["set_inline_value"] --> errored["errored"]
+  set_source_value["set_source_value"] --> errored["errored"]
+  errored["errored"] --> error_prefix["error_prefix"]
   errored["errored"] --> print_error_message["print_error_message"]
   errored["errored"] --> str["str"]
   style errored fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### check_count_consistency
+
+Check count CLA consistency: a named flag without nargs, envvar or choices (F02 of #125).
+
+```fortran
+subroutine check_count_consistency(self, pref)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  check["check"] --> check_count_consistency["check_count_consistency"]
+  check_count_consistency["check_count_consistency"] --> errored["errored"]
+  style check_count_consistency fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### check_append_consistency
+
+Check append CLA consistency: a named option collecting one value per occurrence, without nargs or envvar (F02).
+
+```fortran
+subroutine check_append_consistency(self, pref)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  check["check"] --> check_append_consistency["check_append_consistency"]
+  check_append_consistency["check_append_consistency"] --> errored["errored"]
+  style check_append_consistency fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### check_envvar_consistency
@@ -527,6 +857,32 @@ flowchart TD
   style check_action_consistency fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
+### check_def_nargs_consistency
+
+Check that a list default has as many values as an integer nargs (B28 of #125); '+' and '*' take any count.
+
+```fortran
+subroutine check_def_nargs_consistency(self, pref)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  check["check"] --> check_def_nargs_consistency["check_def_nargs_consistency"]
+  check_def_nargs_consistency["check_def_nargs_consistency"] --> errored["errored"]
+  check_def_nargs_consistency["check_def_nargs_consistency"] --> list_count["list_count"]
+  check_def_nargs_consistency["check_def_nargs_consistency"] --> str["str"]
+  style check_def_nargs_consistency fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
 ### check_optional_consistency
 
 Check optional CLA consistency.
@@ -549,6 +905,56 @@ flowchart TD
   check["check"] --> check_optional_consistency["check_optional_consistency"]
   check_optional_consistency["check_optional_consistency"] --> errored["errored"]
   style check_optional_consistency fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### check_alternate_consistency
+
+Check that an alternate action (F16 of #125) is a plain flag: no nargs, envvar, positional, choices, required, exclude.
+
+```fortran
+subroutine check_alternate_consistency(self, pref)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  check["check"] --> check_alternate_consistency["check_alternate_consistency"]
+  check_alternate_consistency["check_alternate_consistency"] --> errored["errored"]
+  style check_alternate_consistency fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### check_path_consistency
+
+Check that the path checks (must_exist, readable, writable, allow_dash) are on an option taking a value: store,
+ store* or append (F09 of #125).
+
+```fortran
+subroutine check_path_consistency(self, pref)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  check["check"] --> check_path_consistency["check_path_consistency"]
+  check_path_consistency["check_path_consistency"] --> errored["errored"]
+  check_path_consistency["check_path_consistency"] --> has_path_checks["has_path_checks"]
+  style check_path_consistency fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### check_m_exclude_consistency
@@ -646,7 +1052,16 @@ subroutine check_choices(self, val, pref)
 ```mermaid
 flowchart TD
   get_cla["get_cla"] --> check_choices["check_choices"]
+  get_cla_list_character["get_cla_list_character"] --> check_choices["check_choices"]
   get_cla_list_from_buffer["get_cla_list_from_buffer"] --> check_choices["check_choices"]
+  get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> check_choices["check_choices"]
+  get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> check_choices["check_choices"]
+  get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> check_choices["check_choices"]
+  get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> check_choices["check_choices"]
+  get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> check_choices["check_choices"]
+  get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> check_choices["check_choices"]
+  get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> check_choices["check_choices"]
+  get_cla_list_varying_char["get_cla_list_varying_char"] --> check_choices["check_choices"]
   check_choices["check_choices"] --> cton["cton"]
   check_choices["check_choices"] --> errored["errored"]
   check_choices["check_choices"] --> str["str"]
@@ -677,7 +1092,9 @@ flowchart TD
   get_cla["get_cla"] --> check_choices["check_choices"]
   get_cla["get_cla"] --> errored["errored"]
   get_cla["get_cla"] --> get_cla_from_buffer["get_cla_from_buffer"]
+  get_cla["get_cla"] --> has_value["has_value"]
   get_cla["get_cla"] --> is_required_passed["is_required_passed"]
+  get_cla["get_cla"] --> stored_list["stored_list"]
   style get_cla fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -730,8 +1147,9 @@ subroutine get_cla_list(self, pref, val)
 flowchart TD
   get_cla_list["get_cla_list"] --> errored["errored"]
   get_cla_list["get_cla_list"] --> get_cla_list_from_buffer["get_cla_list_from_buffer"]
+  get_cla_list["get_cla_list"] --> is_list["is_list"]
   get_cla_list["get_cla_list"] --> is_required_passed["is_required_passed"]
-  get_cla_list["get_cla_list"] --> tokenize["tokenize"]
+  get_cla_list["get_cla_list"] --> stored_list["stored_list"]
   style get_cla_list fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -760,8 +1178,36 @@ flowchart TD
   get_cla_list_from_buffer["get_cla_list_from_buffer"] --> check_choices["check_choices"]
   get_cla_list_from_buffer["get_cla_list_from_buffer"] --> cton["cton"]
   get_cla_list_from_buffer["get_cla_list_from_buffer"] --> errored["errored"]
-  get_cla_list_from_buffer["get_cla_list_from_buffer"] --> tokenize["tokenize"]
+  get_cla_list_from_buffer["get_cla_list_from_buffer"] --> get_cla_list_character["get_cla_list_character"]
+  get_cla_list_from_buffer["get_cla_list_from_buffer"] --> list_items["list_items"]
+  get_cla_list_from_buffer["get_cla_list_from_buffer"] --> str["str"]
   style get_cla_list_from_buffer fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### get_cla_list_character
+
+Get CLA multiple values into a character array, checking the choices of each value.
+
+```fortran
+subroutine get_cla_list_character(self, val, vals, pref)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `val` | character(len=*) | inout |  | CLA values. |
+| `vals` | character(len=*) | in |  | Values to store. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  get_cla_list_from_buffer["get_cla_list_from_buffer"] --> get_cla_list_character["get_cla_list_character"]
+  get_cla_list_character["get_cla_list_character"] --> check_choices["check_choices"]
+  style get_cla_list_character fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### get_cla_list_varying_R16P
@@ -784,11 +1230,14 @@ subroutine get_cla_list_varying_R16P(self, val, pref)
 
 ```mermaid
 flowchart TD
+  get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> check_choices["check_choices"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> check_list_size["check_list_size"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> cton["cton"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> errored["errored"]
+  get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> is_list["is_list"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> is_required_passed["is_required_passed"]
-  get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> tokenize["tokenize"]
+  get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> list_items["list_items"]
+  get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> stored_list["stored_list"]
   style get_cla_list_varying_R16P fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -812,11 +1261,14 @@ subroutine get_cla_list_varying_R8P(self, val, pref)
 
 ```mermaid
 flowchart TD
+  get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> check_choices["check_choices"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> check_list_size["check_list_size"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> cton["cton"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> errored["errored"]
+  get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> is_list["is_list"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> is_required_passed["is_required_passed"]
-  get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> tokenize["tokenize"]
+  get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> list_items["list_items"]
+  get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> stored_list["stored_list"]
   style get_cla_list_varying_R8P fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -840,11 +1292,14 @@ subroutine get_cla_list_varying_R4P(self, val, pref)
 
 ```mermaid
 flowchart TD
+  get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> check_choices["check_choices"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> check_list_size["check_list_size"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> cton["cton"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> errored["errored"]
+  get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> is_list["is_list"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> is_required_passed["is_required_passed"]
-  get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> tokenize["tokenize"]
+  get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> list_items["list_items"]
+  get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> stored_list["stored_list"]
   style get_cla_list_varying_R4P fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -868,11 +1323,14 @@ subroutine get_cla_list_varying_I8P(self, val, pref)
 
 ```mermaid
 flowchart TD
+  get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> check_choices["check_choices"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> check_list_size["check_list_size"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> cton["cton"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> errored["errored"]
+  get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> is_list["is_list"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> is_required_passed["is_required_passed"]
-  get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> tokenize["tokenize"]
+  get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> list_items["list_items"]
+  get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> stored_list["stored_list"]
   style get_cla_list_varying_I8P fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -896,11 +1354,14 @@ subroutine get_cla_list_varying_I4P(self, val, pref)
 
 ```mermaid
 flowchart TD
+  get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> check_choices["check_choices"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> check_list_size["check_list_size"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> cton["cton"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> errored["errored"]
+  get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> is_list["is_list"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> is_required_passed["is_required_passed"]
-  get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> tokenize["tokenize"]
+  get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> list_items["list_items"]
+  get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> stored_list["stored_list"]
   style get_cla_list_varying_I4P fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -924,11 +1385,14 @@ subroutine get_cla_list_varying_I2P(self, val, pref)
 
 ```mermaid
 flowchart TD
+  get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> check_choices["check_choices"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> check_list_size["check_list_size"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> cton["cton"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> errored["errored"]
+  get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> is_list["is_list"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> is_required_passed["is_required_passed"]
-  get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> tokenize["tokenize"]
+  get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> list_items["list_items"]
+  get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> stored_list["stored_list"]
   style get_cla_list_varying_I2P fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -952,11 +1416,14 @@ subroutine get_cla_list_varying_I1P(self, val, pref)
 
 ```mermaid
 flowchart TD
+  get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> check_choices["check_choices"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> check_list_size["check_list_size"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> cton["cton"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> errored["errored"]
+  get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> is_list["is_list"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> is_required_passed["is_required_passed"]
-  get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> tokenize["tokenize"]
+  get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> list_items["list_items"]
+  get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> stored_list["stored_list"]
   style get_cla_list_varying_I1P fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -982,8 +1449,10 @@ subroutine get_cla_list_varying_logical(self, val, pref)
 flowchart TD
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> check_list_size["check_list_size"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> errored["errored"]
+  get_cla_list_varying_logical["get_cla_list_varying_logical"] --> is_list["is_list"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> is_required_passed["is_required_passed"]
-  get_cla_list_varying_logical["get_cla_list_varying_logical"] --> tokenize["tokenize"]
+  get_cla_list_varying_logical["get_cla_list_varying_logical"] --> list_items["list_items"]
+  get_cla_list_varying_logical["get_cla_list_varying_logical"] --> stored_list["stored_list"]
   style get_cla_list_varying_logical fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -1007,36 +1476,14 @@ subroutine get_cla_list_varying_char(self, val, pref)
 
 ```mermaid
 flowchart TD
+  get_cla_list_varying_char["get_cla_list_varying_char"] --> check_choices["check_choices"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> check_list_size["check_list_size"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> errored["errored"]
+  get_cla_list_varying_char["get_cla_list_varying_char"] --> is_list["is_list"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> is_required_passed["is_required_passed"]
-  get_cla_list_varying_char["get_cla_list_varying_char"] --> tokenize["tokenize"]
+  get_cla_list_varying_char["get_cla_list_varying_char"] --> list_items["list_items"]
+  get_cla_list_varying_char["get_cla_list_varying_char"] --> stored_list["stored_list"]
   style get_cla_list_varying_char fill:#3e63dd,stroke:#99b,stroke-width:2px
-```
-
-### cla_assign_cla
-
-Assignment operator.
-
-**Attributes**: elemental
-
-```fortran
-subroutine cla_assign_cla(lhs, rhs)
-```
-
-**Arguments**
-
-| Name | Type | Intent | Attributes | Description |
-|------|------|--------|------------|-------------|
-| `lhs` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | Left hand side. |
-| `rhs` | type([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | Rigth hand side. |
-
-**Call graph**
-
-```mermaid
-flowchart TD
-  cla_assign_cla["cla_assign_cla"] --> assign_object["assign_object"]
-  style cla_assign_cla fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### finalize
@@ -1059,7 +1506,7 @@ subroutine finalize(self)
 
 ### is_required_passed
 
-Check if required CLA is passed.
+Check if required CLA is passed: a required CLA, or one without default, needs a value from an explicit source (D2).
 
 **Returns**: `logical`
 
@@ -1090,9 +1537,277 @@ flowchart TD
   get_cla_list_varying_char["get_cla_list_varying_char"] --> is_required_passed["is_required_passed"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> is_required_passed["is_required_passed"]
   is_required_passed["is_required_passed"] --> is_required_passed["is_required_passed"]
-  parse["parse"] --> is_required_passed["is_required_passed"]
+  parse_core["parse_core"] --> is_required_passed["is_required_passed"]
   is_required_passed["is_required_passed"] --> errored["errored"]
+  is_required_passed["is_required_passed"] --> has_value["has_value"]
   style is_required_passed fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### has_value
+
+Check if the value is given by the user, from an explicit source (command line, environment, config): not the default.
+
+ The getters read `val` when this is true and `def` otherwise; `is_passed` keeps its meaning, "seen on the command line".
+
+**Attributes**: elemental
+
+**Returns**: `logical`
+
+```fortran
+function has_value(self)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  check_exclusive_sets["check_exclusive_sets"] --> has_value["has_value"]
+  get_cla["get_cla"] --> has_value["has_value"]
+  is_required_passed["is_required_passed"] --> has_value["has_value"]
+  resolve_values["resolve_values"] --> has_value["has_value"]
+  stored_list["stored_list"] --> has_value["has_value"]
+  style has_value fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### config_key
+
+Return the key of the CLA in a configuration file: its switch without the leading dashes ('' for a positional).
+
+**Attributes**: pure
+
+**Returns**: `character(len=:)`
+
+```fortran
+function config_key(self) result(key)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  config_key_index["config_key_index"] --> config_key["config_key"]
+  resolve_values["resolve_values"] --> config_key["config_key"]
+  style config_key fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### value_text
+
+Return the resolved value as text, for the provenance report: a list blank separated, a flag passed on the command
+ line as .true./.false., otherwise the value from its source (or the default).
+
+**Returns**: `character(len=:)`
+
+```fortran
+function value_text(self) result(text)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  provenance["provenance"] --> value_text["value_text"]
+  value_text["value_text"] --> is_list["is_list"]
+  value_text["value_text"] --> list_join["list_join"]
+  value_text["value_text"] --> stored_list["stored_list"]
+  style value_text fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### deprecation_note
+
+Return the marker of a deprecated CLA in the help: ' (DEPRECATED: message)', ' (DEPRECATED)', or '' (F13 of #125).
+
+**Attributes**: pure
+
+**Returns**: `character(len=:)`
+
+```fortran
+function deprecation_note(self) result(note)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  usage["usage"] --> deprecation_note["deprecation_note"]
+  style deprecation_note fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### has_path_checks
+
+Check if the value is a path to check (must_exist, readable or writable).
+
+**Attributes**: elemental
+
+**Returns**: `logical`
+
+```fortran
+function has_path_checks(self) result(checks)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  check_path_consistency["check_path_consistency"] --> has_path_checks["has_path_checks"]
+  check_paths["check_paths"] --> has_path_checks["has_path_checks"]
+  style has_path_checks fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### takes_config_value
+
+Check if the CLA takes a value from a configuration file: a named store (lists included), store_true or store_false.
+
+**Attributes**: pure
+
+**Returns**: `logical`
+
+```fortran
+function takes_config_value(self) result(takes)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  load_config["load_config"] --> takes_config_value["takes_config_value"]
+  resolve_values["resolve_values"] --> takes_config_value["takes_config_value"]
+  style takes_config_value fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### match_token
+
+Check if a command line token names this CLA: the one matcher of switch names (decision D1 of #125).
+
+ Rule 1: the token is the switch or its abbreviation; blanks around both are not significant. A positional never matches.
+ Rule 2 (NAME=VALUE) is match_inline_token, built on this one.
+
+**Attributes**: pure
+
+**Returns**: `logical`
+
+```fortran
+function match_token(self, token) result(match)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+| `token` | character(len=*) | in |  | Command line token. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  check["check"] --> match_token["match_token"]
+  exclusive_set_of["exclusive_set_of"] --> match_token["match_token"]
+  is_defined["is_defined"] --> match_token["match_token"]
+  is_passed["is_passed"] --> match_token["match_token"]
+  match_inline_token["match_inline_token"] --> match_token["match_token"]
+  value_arity["value_arity"] --> match_token["match_token"]
+  style match_token fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### is_repeatable
+
+Check if the CLA may be passed more than once (count).
+
+**Attributes**: pure
+
+**Returns**: `logical`
+
+```fortran
+function is_repeatable(self) result(repeatable)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  parse["parse"] --> is_repeatable["is_repeatable"]
+  style is_repeatable fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### is_list
+
+Check if the CLA holds a list: nargs, or the append action.
+
+**Attributes**: pure
+
+**Returns**: `logical`
+
+```fortran
+function is_list(self) result(list)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  check_paths["check_paths"] --> is_list["is_list"]
+  get_cla_list["get_cla_list"] --> is_list["is_list"]
+  get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> is_list["is_list"]
+  get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> is_list["is_list"]
+  get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> is_list["is_list"]
+  get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> is_list["is_list"]
+  get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> is_list["is_list"]
+  get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> is_list["is_list"]
+  get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> is_list["is_list"]
+  get_cla_list_varying_char["get_cla_list_varying_char"] --> is_list["is_list"]
+  get_cla_list_varying_logical["get_cla_list_varying_logical"] --> is_list["is_list"]
+  sanitize_defaults["sanitize_defaults"] --> is_list["is_list"]
+  set_source_value["set_source_value"] --> is_list["is_list"]
+  value_text["value_text"] --> is_list["is_list"]
+  style is_list fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### is_required_val_passed
@@ -1142,23 +1857,29 @@ function usage(self, pref, markdown)
 
 ```mermaid
 flowchart TD
+  check_exclusive_sets["check_exclusive_sets"] --> usage["usage"]
+  dispatch_status["dispatch_status"] --> usage["usage"]
   is_required_passed["is_required_passed"] --> usage["usage"]
-  parse["parse"] --> usage["usage"]
+  no_args_help["no_args_help"] --> usage["usage"]
   print_usage["print_usage"] --> usage["usage"]
-  save_man_page["save_man_page"] --> usage["usage"]
-  save_usage_to_markdown["save_usage_to_markdown"] --> usage["usage"]
+  raise_error["raise_error"] --> usage["usage"]
+  save_man_page_core["save_man_page_core"] --> usage["usage"]
+  save_usage_to_markdown_core["save_usage_to_markdown_core"] --> usage["usage"]
   usage["usage"] --> usage["usage"]
-  usage["usage"] --> usage["usage"]
+  usage_core["usage_core"] --> usage["usage"]
   usage["usage"] --> colorize["colorize"]
   usage["usage"] --> cton["cton"]
-  usage["usage"] --> replace_all["replace_all"]
+  usage["usage"] --> deprecation_note["deprecation_note"]
+  usage["usage"] --> list_join["list_join"]
   usage["usage"] --> str["str"]
   style usage fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### signature
 
-Get signature.
+Get signature: dispatch to the renderer of the requested output.
+
+ Usage text: signature_usage; bash completion: completion_words (plain) or completion_values.
 
 **Returns**: `character(len=:)`
 
@@ -1178,18 +1899,99 @@ function signature(self, bash_completion, plain)
 
 ```mermaid
 flowchart TD
-  save_bash_completion["save_bash_completion"] --> signature["signature"]
-  save_man_page["save_man_page"] --> signature["signature"]
-  save_usage_to_markdown["save_usage_to_markdown"] --> signature["signature"]
-  signature["signature"] --> signature["signature"]
-  signature["signature"] --> signature["signature"]
+  save_bash_completion_core["save_bash_completion_core"] --> signature["signature"]
+  save_man_page_core["save_man_page_core"] --> signature["signature"]
+  save_usage_to_markdown_core["save_usage_to_markdown_core"] --> signature["signature"]
+  signature_core["signature_core"] --> signature["signature"]
   usage["usage"] --> signature["signature"]
-  usage["usage"] --> signature["signature"]
-  signature["signature"] --> choices["choices"]
-  signature["signature"] --> cton["cton"]
-  signature["signature"] --> has_choices["has_choices"]
-  signature["signature"] --> str["str"]
+  usage_core["usage_core"] --> signature["signature"]
+  signature["signature"] --> completion_values["completion_values"]
+  signature["signature"] --> completion_words["completion_words"]
+  signature["signature"] --> signature_usage["signature_usage"]
   style signature fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### signature_usage
+
+Get the signature for the usage text (human readable): the only place for rendering changes such as metavars.
+
+ A bare signature has no optional brackets, as a member of a mutually exclusive set, where the set is bracketed.
+
+**Returns**: `character(len=:)`
+
+```fortran
+function signature_usage(self, bare) result(signature)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+| `bare` | logical | in | optional | Render without optional brackets. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  exclusive_set_signature["exclusive_set_signature"] --> signature_usage["signature_usage"]
+  signature["signature"] --> signature_usage["signature_usage"]
+  signature["signature"] --> signature_usage["signature_usage"]
+  signature_usage["signature_usage"] --> cton["cton"]
+  signature_usage["signature_usage"] --> str["str"]
+  style signature_usage fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### completion_words
+
+Get the bash completion words of a named CLA: its switches, blank separated (none for positional or hidden CLAs).
+
+**Returns**: `character(len=:)`
+
+```fortran
+function completion_words(self) result(words)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  signature["signature"] --> completion_words["completion_words"]
+  signature["signature"] --> completion_words["completion_words"]
+  style completion_words fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### completion_values
+
+Get the bash completion of the value following a named CLA: a `prev` test offering its choices, or nothing for a value.
+
+**Returns**: `character(len=:)`
+
+```fortran
+function completion_values(self) result(values)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  signature["signature"] --> completion_values["completion_values"]
+  signature["signature"] --> completion_values["completion_values"]
+  completion_values["completion_values"] --> choices["choices"]
+  completion_values["completion_values"] --> has_choices["has_choices"]
+  style completion_values fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### has_choices
@@ -1214,18 +2016,18 @@ function has_choices(self)
 
 ```mermaid
 flowchart TD
-  signature["signature"] --> has_choices["has_choices"]
+  completion_values["completion_values"] --> has_choices["has_choices"]
   style has_choices fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### check_list_size
 
-Check CLA multiple values list size consistency.
+Check CLA multiple values list size consistency: a list without values (or with a single blank one) is empty.
 
 **Returns**: `logical`
 
 ```fortran
-function check_list_size(self, Nv, val, pref) result(is_ok)
+function check_list_size(self, vals, pref) result(is_ok)
 ```
 
 **Arguments**
@@ -1233,8 +2035,7 @@ function check_list_size(self, Nv, val, pref) result(is_ok)
 | Name | Type | Intent | Attributes | Description |
 |------|------|--------|------------|-------------|
 | `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
-| `Nv` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in |  | Number of values. |
-| `val` | character(len=*) | in |  | First value. |
+| `vals` | character(len=*) | in |  | Stored values. |
 | `pref` | character(len=*) | in | optional | Prefixing string. |
 
 **Call graph**
@@ -1252,4 +2053,41 @@ flowchart TD
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> check_list_size["check_list_size"]
   check_list_size["check_list_size"] --> errored["errored"]
   style check_list_size fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### stored_list
+
+Return the stored list of values: the resolved one if given by the user (has_value), the default one otherwise.
+
+**Returns**: `character(len=:)`
+
+```fortran
+function stored_list(self) result(list)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  check_paths["check_paths"] --> stored_list["stored_list"]
+  get_cla["get_cla"] --> stored_list["stored_list"]
+  get_cla_list["get_cla_list"] --> stored_list["stored_list"]
+  get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> stored_list["stored_list"]
+  get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> stored_list["stored_list"]
+  get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> stored_list["stored_list"]
+  get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> stored_list["stored_list"]
+  get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> stored_list["stored_list"]
+  get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> stored_list["stored_list"]
+  get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> stored_list["stored_list"]
+  get_cla_list_varying_char["get_cla_list_varying_char"] --> stored_list["stored_list"]
+  get_cla_list_varying_logical["get_cla_list_varying_logical"] --> stored_list["stored_list"]
+  value_text["value_text"] --> stored_list["stored_list"]
+  stored_list["stored_list"] --> has_value["has_value"]
+  style stored_list fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```

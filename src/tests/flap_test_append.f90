@@ -27,6 +27,7 @@ call check('-o this -o that',   ['this', 'that'],  '-o this -o that')           
 call check('--out=a -o b',      ['a', 'b'],        '--out=a -o b: inline and separate')               ! B-T12
 call check('-o a --out b -o c', ['a', 'b', 'c'],   'switch and abbreviation collect together')
 call check('-o init',           ['init'],          'a value equal to a command name stays a value')
+call check("-o a -o ''",        [character(1) :: 'a', ''],         'an empty occurrence is an empty item (D17 reversed, step 2.11)')
 
 ! B-T13: the next token is a switch, so the value is missing
 call define('-o -x', expected=ERROR_VALUE_MISSING)

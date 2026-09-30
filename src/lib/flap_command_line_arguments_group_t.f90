@@ -787,13 +787,8 @@ contains
                              call self%cla(a)%raise_error_value_missing(pref=pref)
                              self%error = self%cla(a)%error
                              return
-                          elseif (len_trim(args(arg+1)) == 0) then
-                             ! an empty argument is not a value (decision D17 of #125: --opt "" is rejected)
-                             call self%cla(a)%raise_error_value_missing(pref=pref)
-                             self%error = self%cla(a)%error
-                             return
                           else
-                             ! value found
+                             ! value found: an explicitly empty argument is the empty string (D17 of #125, reversed in 2.11)
                              arg = arg + 1
                              self%cla(a)%val = trim(adjustl(args(arg)))
                              found_val = .true.

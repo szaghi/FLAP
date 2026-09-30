@@ -146,8 +146,10 @@ contains
   call assert_equal(sval, 'tab', 'a tab separates arguments')
   call run('-s "unterminated', sval, error)
   call assert_equal(sval, 'unterminated', 'an unterminated quote extends to the end of the string')
+  ! D17 reversed (#125 step 2.11): an explicitly empty argument is the empty string, like -s "" on the command line
   call run("-s ''", sval, error)
-  call assert_equal(error, ERROR_VALUE_MISSING, '-s '''': an empty argument, like -s "" on the command line')
+  call assert_equal(error, 0_I4P, '-s '''': an empty argument is a value')
+  call assert_equal(sval, '', '-s '''': the empty string')
   call capture_close(lun)
   endsubroutine self_test
 

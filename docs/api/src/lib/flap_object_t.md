@@ -12,6 +12,8 @@ title: flap_object_t
 
 ```mermaid
 graph LR
+  flap_object_t["flap_object_t"] --> face["face"]
+  flap_object_t["flap_object_t"] --> flap_utils_m["flap_utils_m"]
   flap_object_t["flap_object_t"] --> iso_fortran_env["iso_fortran_env"]
   flap_object_t["flap_object_t"] --> penf["penf"]
 ```
@@ -24,6 +26,7 @@ graph LR
 - [print_error_message](#print-error-message)
 - [set_examples](#set-examples)
 - [assign_object](#assign-object)
+- [error_prefix](#error-prefix)
 
 ## Derived Types
 
@@ -60,7 +63,7 @@ classDiagram
 | `error_message` | character(len=:) | allocatable | Meaningful error message to standard-error. |
 | `error_color` | character(len=:) | allocatable | ANSI color of error messages. |
 | `error_style` | character(len=:) | allocatable | ANSI style of error messages. |
-| `examples` | character(len=512) | allocatable | Examples of correct usage. |
+| `examples` | type([flap_string](/api/src/lib/flap_utils_m#flap-string)) | allocatable | Examples of correct usage (examples(i)%s). |
 | `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Error trapping flag. |
 | `usage_lun` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Output unit to print help/usage messages |
 | `version_lun` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Output unit to print version message |
@@ -70,6 +73,7 @@ classDiagram
 
 | Name | Attributes | Description |
 |------|------------|-------------|
+| `error_prefix` | pass(self) | Prefix of error messages. |
 | `free_object` | pass(self) | Free dynamic memory. |
 | `print_version` | pass(self) | Print version. |
 | `print_error_message` | pass(self) | Print meaningful error message. |
@@ -123,7 +127,7 @@ subroutine print_version(self, pref)
 
 ```mermaid
 flowchart TD
-  parse["parse"] --> print_version["print_version"]
+  dispatch_status["dispatch_status"] --> print_version["print_version"]
   style print_version fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -148,12 +152,13 @@ flowchart TD
   errored["errored"] --> print_error_message["print_error_message"]
   errored["errored"] --> print_error_message["print_error_message"]
   errored["errored"] --> print_error_message["print_error_message"]
+  raise_error["raise_error"] --> print_error_message["print_error_message"]
   style print_error_message fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### set_examples
 
-Set examples of correct usage.
+Set the examples of correct usage: exactly the given ones, or none.
 
 ```fortran
 subroutine set_examples(self, examples)
@@ -198,10 +203,38 @@ subroutine assign_object(lhs, rhs)
 flowchart TD
   add["add"] --> assign_object["assign_object"]
   add_group["add_group"] --> assign_object["assign_object"]
-  cla_assign_cla["cla_assign_cla"] --> assign_object["assign_object"]
-  clasg_assign_clasg["clasg_assign_clasg"] --> assign_object["assign_object"]
-  cli_assign_cli["cli_assign_cli"] --> assign_object["assign_object"]
   init["init"] --> assign_object["assign_object"]
   parse["parse"] --> assign_object["assign_object"]
   style assign_object fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+## Functions
+
+### error_prefix
+
+Return the prefix of every error message: the prefixing string, the program name and a (colorized) "error".
+
+**Returns**: `character(len=:)`
+
+```fortran
+function error_prefix(self, pref) result(prefd)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([object](/api/src/lib/flap_object_t#object)) | in |  | Object data. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  errored["errored"] --> error_prefix["error_prefix"]
+  errored["errored"] --> error_prefix["error_prefix"]
+  errored["errored"] --> error_prefix["error_prefix"]
+  raise_error["raise_error"] --> error_prefix["error_prefix"]
+  error_prefix["error_prefix"] --> colorize["colorize"]
+  style error_prefix fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```

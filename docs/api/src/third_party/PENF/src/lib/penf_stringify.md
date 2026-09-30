@@ -66,14 +66,12 @@ graph LR
 - [ctoi_I4P](#ctoi-i4p)
 - [ctoi_I2P](#ctoi-i2p)
 - [ctoi_I1P](#ctoi-i1p)
-- [bstr_R16P](#bstr-r16p)
 - [bstr_R8P](#bstr-r8p)
 - [bstr_R4P](#bstr-r4p)
 - [bstr_I8P](#bstr-i8p)
 - [bstr_I4P](#bstr-i4p)
 - [bstr_I2P](#bstr-i2p)
 - [bstr_I1P](#bstr-i1p)
-- [bctor_R16P](#bctor-r16p)
 - [bctor_R8P](#bctor-r8p)
 - [bctor_R4P](#bctor-r4p)
 - [bctoi_I8P](#bctoi-i8p)
@@ -1461,33 +1459,6 @@ function ctoi_I1P(str, knd, pref, error) result(n)
 | `pref` | character(len=*) | in | optional | Prefixing string. |
 | `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | optional | Error trapping flag: 0 no errors, >0 error occurs. |
 
-### bstr_R16P
-
-Convert real to string of bits.
-
- @note It is assumed that R16P is represented by means of 128 bits, but this is not ensured in all architectures.
-
-```fortran
- use penf
- character(128) :: b
- b = bstr(n=1._R16P)
- print "(A)", b(17:)
-```
-
-**Attributes**: elemental
-
-**Returns**: `character(len=128)`
-
-```fortran
-function bstr_R16P(n) result(bstr)
-```
-
-**Arguments**
-
-| Name | Type | Intent | Attributes | Description |
-|------|------|--------|------------|-------------|
-| `n` | real(kind=[R16P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in |  | Real to be converted. |
-
 ### bstr_R8P
 
 Convert real to string of bits.
@@ -1637,31 +1608,6 @@ function bstr_I1P(n) result(bstr)
 | Name | Type | Intent | Attributes | Description |
 |------|------|--------|------------|-------------|
 | `n` | integer(kind=[I1P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in |  | Real to be converted. |
-
-### bctor_R16P
-
-Convert bit-string to real.
-
-```fortran
- use penf
- print FR16P, bcton('00000000000000000000000000000000000000000000000000000000000000000000000000000'//&
-                    '000000000000000000000000000000000001111111100111111', knd=1._R16P)
-```
-
-**Attributes**: elemental
-
-**Returns**: real(kind=[R16P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables))
-
-```fortran
-function bctor_R16P(bstr, knd) result(n)
-```
-
-**Arguments**
-
-| Name | Type | Intent | Attributes | Description |
-|------|------|--------|------------|-------------|
-| `bstr` | character(len=*) | in |  | String containing input number. |
-| `knd` | real(kind=[R16P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in |  | Number kind. |
 
 ### bctor_R8P
 

@@ -44,10 +44,12 @@ call define('--out="don''t"') ; call get_str('--out', "don't", '--out="don''t"')
 call define('--out=x pos') ; call get_str('--out', 'x', '--out=x pos')
 call cli%get(position=1_I4P, val=val, error=error)
 call assert_equal(val, 'pos', '--out=x pos: the next argument is the positional')
-! A-T4, D17 (#125 step 2.11 accepts it): an empty inline value is rejected as "--out ''" is, for a required value
-call define('--out=', expected=ERROR_VALUE_MISSING)
-! ... and is the empty string for an optional value, as "--opt ''" is
+! A-T4, D17 reversed (#125 step 2.11): an explicitly empty inline value is the empty string, as "--out ''" is
+call define('--out=') ; call get_str('--out', '', '--out=')
 call define('--opt=') ; call get_str('--opt', '', '--opt=')
+! ... and a numeric option then fails its cast in get
+call define('--speed=')
+call assert(int_error('--speed') /= 0, '--speed=: an empty integer fails its cast')
 ! A-T7: a flag does not take a value
 call define('--flag=yes', expected=ERROR_INLINE_VALUE_NOT_ALLOWED)
 ! A-T8: a list does not take an inline value
@@ -100,6 +102,15 @@ contains
   call cli%parse(args=args, error=error)
   call assert_equal(error, expected_, 'parse "'//args//'": error')
   endsubroutine define
+
+  function int_error(switch) result(e)
+  !< Error of the get of an integer (one get call site: nvfortran, B33).
+  character(*), intent(in) :: switch !< Switch.
+  integer(I4P)             :: e      !< Error.
+  integer(I4P)             :: i      !< Value.
+
+  call cli%get(switch=switch, val=i, error=e)
+  endfunction int_error
 
   subroutine get_int(switch, expected, message)
   !< Get an integer and check it.

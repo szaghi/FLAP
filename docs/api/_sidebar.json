@@ -20,12 +20,26 @@
         "link": "/api/src/lib/flap_command_line_interface_t"
       },
       {
+        "text": "flap_config_m",
+        "link": "/api/src/lib/flap_config_m"
+      },
+      {
         "text": "flap_object_t",
         "link": "/api/src/lib/flap_object_t"
       },
       {
         "text": "flap_utils_m",
         "link": "/api/src/lib/flap_utils_m"
+      }
+    ]
+  },
+  {
+    "text": "src/tests",
+    "collapsed": true,
+    "items": [
+      {
+        "text": "flap_test_utils",
+        "link": "/api/src/tests/flap_test_utils"
       }
     ]
   },
@@ -62,16 +76,6 @@
       {
         "text": "penf_stringify",
         "link": "/api/src/third_party/PENF/src/lib/penf_stringify"
-      }
-    ]
-  },
-  {
-    "text": "src/third_party/fortran_tester/src",
-    "collapsed": true,
-    "items": [
-      {
-        "text": "tester",
-        "link": "/api/src/third_party/fortran_tester/src/tester"
       }
     ]
   }

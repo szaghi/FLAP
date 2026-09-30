@@ -12,8 +12,13 @@ Auto-generated from Fortran source doc comments using [FORMAL](https://github.co
 - [flap_command_line_argument_t](/api/src/lib/flap_command_line_argument_t)
 - [flap_command_line_arguments_group_t](/api/src/lib/flap_command_line_arguments_group_t)
 - [flap_command_line_interface_t](/api/src/lib/flap_command_line_interface_t)
+- [flap_config_m](/api/src/lib/flap_config_m)
 - [flap_object_t](/api/src/lib/flap_object_t)
 - [flap_utils_m](/api/src/lib/flap_utils_m)
+
+## src/tests
+
+- [flap_test_utils](/api/src/tests/flap_test_utils)
 
 ## src/third_party/FACE/src/lib
 
@@ -26,7 +31,3 @@ Auto-generated from Fortran source doc comments using [FORMAL](https://github.co
 - [penf_b_size](/api/src/third_party/PENF/src/lib/penf_b_size)
 - [penf_global_parameters_variables](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)
 - [penf_stringify](/api/src/third_party/PENF/src/lib/penf_stringify)
-
-## src/third_party/fortran_tester/src
-
-- [tester](/api/src/third_party/fortran_tester/src/tester)

@@ -538,17 +538,13 @@ contains
   endfunction is_list
 
   subroutine append_value(self, value, first, pref)
-  !< Collect one value of an append CLA; the first occurrence replaces the default (D9 of #125). An empty value is a
-  !< missing value (D17).
+  !< Collect one value of an append CLA; the first occurrence replaces the default (D9 of #125). An empty value is an
+  !< empty item (D17, reversed in step 2.11).
   class(command_line_argument), intent(inout) :: self  !< CLA data.
   character(*),                 intent(in)    :: value !< Value.
   logical,                      intent(in)    :: first !< First occurrence on the command line.
   character(*), optional,       intent(in)    :: pref  !< Prefixing string.
 
-  if (len_trim(value) == 0) then
-    call self%raise_error_value_missing(pref=pref)
-    return
-  endif
   if (first.and.allocated(self%val)) deallocate(self%val)
   call list_push(self%val, trim(adjustl(value)))
   endsubroutine append_value
@@ -568,7 +564,7 @@ contains
   subroutine set_inline_value(self, value, pref, first)
   !< Set the value given inline (NAME=VALUE, F01): only a scalar store takes one; the next argument is not consumed.
   !<
-  !< An empty value follows the rule of a separate empty value (D17 of #125): rejected when the value is required.
+  !< An empty value (NAME=) is the empty string, as a separate empty value (D17 of #125, reversed in step 2.11).
   class(command_line_argument), intent(inout) :: self  !< CLA data.
   character(*),                 intent(in)    :: value !< Inline value.
   character(*), optional,       intent(in)    :: pref  !< Prefixing string.
@@ -581,11 +577,7 @@ contains
   elseif (self%act==action_append) then
     call self%append_value(value=value, first=first_, pref=pref)
   elseif (self%act==action_store.or.self%act==action_store_star) then
-    if (self%act==action_store.and.self%is_val_required.and.len_trim(value)==0) then
-      call self%raise_error_value_missing(pref=pref)
-    else
-      self%val = trim(adjustl(value))
-    endif
+    self%val = trim(adjustl(value)) ! an empty value is the empty string (D17 of #125, reversed in 2.11)
   else
     call self%errored(pref=pref, error=ERROR_INLINE_VALUE_NOT_ALLOWED)
   endif

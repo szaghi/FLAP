@@ -62,8 +62,8 @@ The argument is split at the **first** `=` (`--out=a=b` gives `a=b`), and only w
 the command being parsed: `a=b` stays a positional value and `--unknown=3` an unknown switch. The next argument is not
 consumed, and an inline value wins over the environment variable of the option. Only options storing a single value
 take one: `--flag=yes` is `ERROR_INLINE_VALUE_NOT_ALLOWED`, and a list (`nargs`) is `ERROR_INLINE_VALUE_NARGS` (pass its
-values after the switch). An empty inline value (`--out=`) follows the rule of `--out ""`: it is rejected when the value
-is required.
+values after the switch). An empty inline value (`--out=`) is the empty string, as `--out ""` is; a numeric option then
+fails its cast in `get`.
 
 ### Parsing more than once
 
