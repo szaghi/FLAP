@@ -2917,8 +2917,10 @@ contains
         commands = commands//' '//self%clasg(g)%names(' ')
       enddo
       commands = commands//'" -- $cur ) )'
-      c = index(signature(2:), new_line('a')) ! end of the first line (the one setting COMPREPLY), 0 if it is the last
-      if (c > 0) then
+      ! right after the line setting COMPREPLY (the words not yet typed, B37), before the value completions
+      c = index(signature, 'COMPREPLY=( $( compgen -W "$words" -- $cur ) )')
+      if (c > 0) c = c + len('COMPREPLY=( $( compgen -W "$words" -- $cur ) )') - 1
+      if (c > 0 .and. c < len(signature)) then
         signature = signature(1:c)//commands//signature(c+1:)
       else
         signature = signature//commands
@@ -2950,6 +2952,8 @@ contains
   class(command_line_interface), intent(in) :: self   !< CLI data.
   logical,                       intent(in) :: zsh    !< The zsh script.
   character(len=:), allocatable             :: script !< Script text.
+  character(len=:), allocatable             :: skips  !< Case lines skipping the values of the switches, per group.
+  character(len=:), allocatable             :: lines  !< Case lines of a group.
   integer(I4P)                              :: g      !< CLAs groups counter.
 
   if (zsh) then
@@ -2962,21 +2966,46 @@ contains
   endif
   script = script//new_line('a')//'_completion()'
   script = script//new_line('a')//'{'
-  script = script//new_line('a')//'  local cur prev group w'
+  script = script//new_line('a')//'  local cur prev group w i start skip used words'
   script = script//new_line('a')//'  cur=${COMP_WORDS[COMP_CWORD]}'
   script = script//new_line('a')//'  prev=${COMP_WORDS[COMP_CWORD - 1]}'
+  script = script//new_line('a')//'  start=1'
   if (size(self%clasg,dim=1)>1) then
-    ! the command is the first word typed so far that is a command name, found again at every call (#125, B21)
+    ! the command is the last word typed so far that is a command name, found again at every call (#125, B21); the fixed
+    ! values of the switches of the group so far are skipped, as the parser does, so a value is never a command (B37)
     script = script//new_line('a')//'  group=""'
-    script = script//new_line('a')//'  for w in "${COMP_WORDS[@]:1:$((COMP_CWORD - 1))}"; do'
+    script = script//new_line('a')//'  skip=0'
+    script = script//new_line('a')//'  for ((i=1; i<COMP_CWORD; i++)); do'
+    script = script//new_line('a')//'    w=${COMP_WORDS[i]}'
+    script = script//new_line('a')//'    if [ $skip -gt 0 ] ; then'
+    script = script//new_line('a')//'      skip=$((skip - 1))'
+    script = script//new_line('a')//'      continue'
+    script = script//new_line('a')//'    fi'
     script = script//new_line('a')//'    case "$w" in'
     script = script//new_line('a')//'      '//self%clasg(1)%names('|')
     do g=2,size(self%clasg,dim=1)-1
       script = script//'|'//self%clasg(g)%names('|')
     enddo
-    script = script//') group="$w" ; break ;;'
+    script = script//') group="$w" ; start=$((i + 1)) ; continue ;;'
     script = script//new_line('a')//'    esac'
+    skips = ''
+    do g=0,size(self%clasg,dim=1)-1
+      lines = self%clasg(g)%completion_skips()
+      if (lines == '') cycle
+      if (g == 0) then
+        skips = skips//new_line('a')//"      '')"
+      else
+        skips = skips//new_line('a')//'      '//self%clasg(g)%names('|')//')'
+      endif
+      skips = skips//new_line('a')//'        case "$w" in'//lines//new_line('a')//'        esac ;;'
+    enddo
+    if (skips /= '') then
+      script = script//new_line('a')//'    case "$group" in'//skips
+      script = script//new_line('a')//'    esac'
+    endif
     script = script//new_line('a')//'  done'
+    ! the words of the group so far: an option typed is not offered again (B37)
+    script = script//new_line('a')//'  used="${COMP_WORDS[*]:$start:$((COMP_CWORD - start))}"'
     script = script//new_line('a')//'  if [ "$group" == "'//self%clasg(1)%names('" ] || [ "$group" == "')//'" ] ; then'
     script = script//self%clasg(1)%signature(bash_completion=.true.)
     do g=2,size(self%clasg,dim=1)-1
@@ -2987,6 +3016,7 @@ contains
     script = script//self%signature(bash_completion=.true.)
     script = script//new_line('a')//'  fi'
   else
+    script = script//new_line('a')//'  used="${COMP_WORDS[*]:$start:$((COMP_CWORD - start))}"'
     script = script//self%signature(bash_completion=.true.)
   endif
   script = script//new_line('a')//'  return 0'

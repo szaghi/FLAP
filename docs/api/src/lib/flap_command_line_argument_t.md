@@ -97,6 +97,7 @@ graph LR
 - [signature](#signature)
 - [signature_usage](#signature-usage)
 - [completion_words](#completion-words)
+- [completion_offer](#completion-offer)
 - [completion_fish](#completion-fish)
 - [completion_powershell](#completion-powershell)
 - [completion_values](#completion-values)
@@ -306,6 +307,7 @@ classDiagram
 | `signature` |  | Get signature. |
 | `signature_usage` |  | Get the signature for the usage text. |
 | `completion_words` |  | Get the bash completion words (switches). |
+| `completion_offer` |  | Get the bash lines offering the words not yet typed. |
 | `completion_values` |  | Get the bash completion of the value. |
 | `completion_fish` |  | Get the fish completion lines. |
 | `completion_powershell` |  | Get the PowerShell completion entries. |
@@ -2394,6 +2396,7 @@ function is_repeatable(self) result(repeatable)
 
 ```mermaid
 flowchart TD
+  completion_offer["completion_offer"] --> is_repeatable["is_repeatable"]
   parse["parse"] --> is_repeatable["is_repeatable"]
   style is_repeatable fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -2624,9 +2627,39 @@ function completion_words(self) result(words)
 
 ```mermaid
 flowchart TD
+  completion_offer["completion_offer"] --> completion_words["completion_words"]
   signature["signature"] --> completion_words["completion_words"]
   signature["signature"] --> completion_words["completion_words"]
   style completion_words fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### completion_offer
+
+Get the bash lines adding the completion words of a named CLA to `words` (B37 of #125): unless repeatable (append,
+ count), a spelling already typed (`used`: the words of its group so far, `--x` or `--x=value`) is not offered again;
+ the switch and its abbreviation are one spelling, a negation is another (D5). None for positional or hidden CLAs.
+
+**Returns**: `character(len=:)`
+
+```fortran
+function completion_offer(self) result(lines)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  signature["signature"] --> completion_offer["completion_offer"]
+  completion_offer["completion_offer"] --> completion_words["completion_words"]
+  completion_offer["completion_offer"] --> is_repeatable["is_repeatable"]
+  completion_offer["completion_offer"] --> offer["offer"]
+  style completion_offer fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### completion_fish

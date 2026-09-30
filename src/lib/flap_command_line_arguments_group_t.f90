@@ -98,6 +98,7 @@ type, extends(object) :: command_line_arguments_group
     procedure, public :: parse                 !< Parse CLAsG arguments.
     procedure, public :: usage                 !< Get correct CLAsG usage.
     procedure, public :: signature             !< Get CLAsG signature.
+    procedure, public :: completion_skips      !< Get the bash lines skipping the values of the switches (B37).
     procedure, public :: sanitize_defaults     !< Sanitize default values.
     ! private methods
     procedure, private :: errored                             !< Trig error occurrence and print meaningful message.
@@ -1184,6 +1185,28 @@ contains
   endif
   endfunction usage
 
+  function completion_skips(self) result(lines)
+  !< Get the bash case lines skipping the fixed values of the switches of the group (`value_arity`, as the parser does),
+  !< so that a value is never taken for a command name by the bash script (B37 of #125); '' if none.
+  class(command_line_arguments_group), intent(in) :: self  !< CLAsG data.
+  character(len=:), allocatable                   :: lines !< Case lines.
+  character(len=:), allocatable                   :: names !< Switch names of a CLA, bash pattern.
+  integer(I4P)                                    :: a     !< Counter.
+  integer(I4P)                                    :: n     !< Fixed values of a switch.
+
+  lines = ''
+  do a=1, self%Na
+    if (self%cla(a)%is_hidden .or. self%cla(a)%is_positional .or. .not.allocated(self%cla(a)%switch)) cycle
+    n = self%value_arity(switch=trim(adjustl(self%cla(a)%switch)))
+    if (n <= 0) cycle
+    names = trim(adjustl(self%cla(a)%switch))
+    if (allocated(self%cla(a)%switch_ab)) then
+      if (trim(adjustl(self%cla(a)%switch_ab)) /= names) names = names//'|'//trim(adjustl(self%cla(a)%switch_ab))
+    endif
+    lines = lines//new_line('a')//'          '//names//') skip='//trim(str(n, .true.))//' ;;'
+  enddo
+  endfunction completion_skips
+
   function signature(self, bash_completion, plain)
   !< Get CLAsG signature: the usage text, or the bash completion (a COMPREPLY line with the switches, then the value tests).
   class(command_line_arguments_group), intent(in) :: self             !< CLAsG data.
@@ -1199,10 +1222,19 @@ contains
   bash_completion_ = .false. ; if (present(bash_completion)) bash_completion_ = bash_completion
   plain_ = .false. ; if (present(plain)) plain_ = plain
   if (bash_completion_) then
-    do a=1, self%Na
-      signature = signature//self%cla(a)%completion_words()
-    enddo
-    signature = new_line('a')//'    COMPREPLY=( $( compgen -W "'//signature//'" -- $cur ) )'
+    if (plain_) then
+      do a=1, self%Na
+        signature = signature//self%cla(a)%completion_words()
+      enddo
+      signature = new_line('a')//'    COMPREPLY=( $( compgen -W "'//signature//'" -- $cur ) )'
+    else
+      ! the words not yet typed (B37), built when completing
+      signature = new_line('a')//'    words=""'
+      do a=1, self%Na
+        signature = signature//self%cla(a)%completion_offer()
+      enddo
+      signature = signature//new_line('a')//'    COMPREPLY=( $( compgen -W "$words" -- $cur ) )'
+    endif
     do a=1, self%Na
       if (plain_) then
         signature = signature//self%cla(a)%completion_words()

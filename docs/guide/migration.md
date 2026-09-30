@@ -14,6 +14,8 @@ programs keep their behaviour. The plan behind them is issue [#125](https://gith
 - `init(man_option=.true.)` adds a `--man` switch saving the man page, like `--markdown` (new status
   `STATUS_PRINT_MAN`, −8); `init(man_file=, markdown_file=)` name the files of both (issue #99).
 - `cli%provenance()` no longer lists the completion builtins, and `copy_options` no longer copies them.
+- **The bash and zsh completion scripts change**: an option already typed is no longer offered again (unless
+  repeatable), and the options offered are those of the last command typed; regenerate the scripts.
 
 ## v2.3.1 (fix)
 

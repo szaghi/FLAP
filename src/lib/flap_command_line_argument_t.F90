@@ -184,6 +184,7 @@ type, extends(object) :: command_line_argument
     procedure, public :: signature                       !< Get signature.
     procedure, public :: signature_usage                 !< Get the signature for the usage text.
     procedure, public :: completion_words                !< Get the bash completion words (switches).
+    procedure, public :: completion_offer                !< Get the bash lines offering the words not yet typed.
     procedure, public :: completion_values               !< Get the bash completion of the value.
     procedure, public :: completion_fish                 !< Get the fish completion lines.
     procedure, public :: completion_powershell           !< Get the PowerShell completion entries.
@@ -1161,6 +1162,40 @@ contains
   endif
   if (allocated(self%switch_neg)) words = words//' '//trim(adjustl(self%switch_neg))
   endfunction completion_words
+
+  function completion_offer(self) result(lines)
+  !< Get the bash lines adding the completion words of a named CLA to `words` (B37 of #125): unless repeatable (append,
+  !< count), a spelling already typed (`used`: the words of its group so far, `--x` or `--x=value`) is not offered again;
+  !< the switch and its abbreviation are one spelling, a negation is another (D5). None for positional or hidden CLAs.
+  class(command_line_argument), intent(in) :: self  !< CLA data.
+  character(len=:), allocatable            :: lines !< Bash lines.
+
+  lines = ''
+  if (self%is_hidden.or.self%is_positional) return
+  if (self%is_repeatable()) then
+    lines = new_line('a')//'    words="$words'//self%completion_words()//'"'
+    return
+  endif
+  if (trim(adjustl(self%switch))/=trim(adjustl(self%switch_ab))) then
+    lines = offer(trim(adjustl(self%switch)), trim(adjustl(self%switch_ab)))
+  else
+    lines = offer(trim(adjustl(self%switch)))
+  endif
+  if (allocated(self%switch_neg)) lines = lines//offer(trim(adjustl(self%switch_neg)))
+  contains
+    function offer(name, name_ab) result(line)
+    !< The case line offering a spelling (a name, and its abbreviation) unless typed.
+    character(*), intent(in)           :: name    !< Name.
+    character(*), intent(in), optional :: name_ab !< Abbreviation.
+    character(len=:), allocatable      :: line    !< Case line.
+
+    line = new_line('a')//'    case " $used " in *" '//name//' "*|*" '//name//'="*'
+    if (present(name_ab)) line = line//'|*" '//name_ab//' "*|*" '//name_ab//'="*'
+    line = line//') ;; *) words="$words '//name
+    if (present(name_ab)) line = line//' '//name_ab
+    line = line//'" ;; esac'
+    endfunction offer
+  endfunction completion_offer
 
   function completion_fish(self, head) result(lines)
   !< Get the fish completion lines of a named CLA (F15 of #125): each starts with a new line and head (`complete -c prog`

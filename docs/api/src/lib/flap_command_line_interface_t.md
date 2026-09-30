@@ -2737,6 +2737,7 @@ function bash_script(self, zsh) result(script)
 ```mermaid
 flowchart TD
   completion_script_core["completion_script_core"] --> bash_script["bash_script"]
+  bash_script["bash_script"] --> completion_skips["completion_skips"]
   bash_script["bash_script"] --> names["names"]
   bash_script["bash_script"] --> program_basename["program_basename"]
   bash_script["bash_script"] --> signature["signature"]

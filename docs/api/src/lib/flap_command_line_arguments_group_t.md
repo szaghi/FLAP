@@ -58,6 +58,7 @@ graph LR
 - [is_action_passed](#is-action-passed)
 - [is_switch_token](#is-switch-token)
 - [usage](#usage)
+- [completion_skips](#completion-skips)
 - [signature](#signature)
 - [exclusive_set_of](#exclusive-set-of)
 - [exclusive_set_signature](#exclusive-set-signature)
@@ -187,6 +188,7 @@ classDiagram
 | `parse` |  | Parse CLAsG arguments. |
 | `usage` |  | Get correct CLAsG usage. |
 | `signature` |  | Get CLAsG signature. |
+| `completion_skips` |  | Get the bash lines skipping the values of the switches (B37). |
 | `sanitize_defaults` |  | Sanitize default values. |
 | `errored` |  | Trig error occurrence and print meaningful message. |
 | `check_m_exclusive` |  | Check if two mutually exclusive CLAs have been passed. |
@@ -1166,6 +1168,7 @@ function value_arity(self, switch) result(n)
 
 ```mermaid
 flowchart TD
+  completion_skips["completion_skips"] --> value_arity["value_arity"]
   get_clasg_indexes["get_clasg_indexes"] --> value_arity["value_arity"]
   value_arity["value_arity"] --> match_token["match_token"]
   style value_arity fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -1314,6 +1317,33 @@ flowchart TD
   style usage fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
+### completion_skips
+
+Get the bash case lines skipping the fixed values of the switches of the group (`value_arity`, as the parser does),
+ so that a value is never taken for a command name by the bash script (B37 of #125); '' if none.
+
+**Returns**: `character(len=:)`
+
+```fortran
+function completion_skips(self) result(lines)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_arguments_group](/api/src/lib/flap_command_line_arguments_group_t#command-line-arguments-group)) | in |  | CLAsG data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  bash_script["bash_script"] --> completion_skips["completion_skips"]
+  completion_skips["completion_skips"] --> str["str"]
+  completion_skips["completion_skips"] --> value_arity["value_arity"]
+  style completion_skips fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
 ### signature
 
 Get CLAsG signature: the usage text, or the bash completion (a COMPREPLY line with the switches, then the value tests).
@@ -1342,6 +1372,7 @@ flowchart TD
   signature_core["signature_core"] --> signature["signature"]
   usage["usage"] --> signature["signature"]
   usage_core["usage_core"] --> signature["signature"]
+  signature["signature"] --> completion_offer["completion_offer"]
   signature["signature"] --> completion_values["completion_values"]
   signature["signature"] --> completion_words["completion_words"]
   signature["signature"] --> exclusive_set_of["exclusive_set_of"]

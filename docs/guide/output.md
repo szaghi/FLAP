@@ -98,7 +98,10 @@ call cli%save_bash_completion(bash_file='myapp.bash', error=error)
 ```
 
 The script completes switches, command names and `choices`. It is registered with `complete -o default`: where it has
-nothing to offer (a free value such as `--mesh <TAB>`), bash completes file names.
+nothing to offer (a free value such as `--mesh <TAB>`), bash completes file names. An option already typed is not
+offered again, unless it can be repeated (`append`, `count`); with several commands on the line, the options offered
+are those of the last one (the values of the options are skipped, so `commit -m tag` stays in `commit`). The zsh
+script is the same.
 
 To activate it in the current shell:
 

@@ -44,6 +44,23 @@ call assert_equal(completed('bash', bash, 'prog --me', 1), '[--mesh]', 'bash: a 
 call assert_equal(completed('bash', bash, 'prog compile --o', 2), '[--opt]', 'bash: a switch of a command')
 call assert_equal(completed('bash', bash, 'prog --mesh ""', 2), '[]', 'bash: a free value, nothing (then file names)')
 call assert_equal(completed('bash', bash, 'prog --scheme ""', 2), '[weno5 muscl]', 'bash: choices')
+! B37 (#125, step 6.6): an option already typed is not offered again (any spelling, inline value included); a repeatable
+! one (append, count) is; a negation is its own spelling
+call assert_equal(completed('bash', bash, 'prog --mesh a --me', 3), '[]', 'bash: --mesh typed')
+call assert_equal(completed('bash', bash, 'prog -m a --me', 3), '[]', 'bash: -m typed')
+call assert_equal(completed('bash', bash, 'prog --mesh=a --me', 2), '[]', 'bash: --mesh=a typed')
+call assert_equal(completed('bash', bash, 'prog --scheme weno5 --s', 3), '[]', 'bash: a choice option typed')
+call assert_equal(completed('bash', bash, 'prog --restart --re', 2), '[]', 'bash: a flag typed')
+call assert_equal(completed('bash', bash, 'prog --restart --no', 2), '[--no-restart]', 'bash: the negation still')
+call assert_equal(completed('bash', bash, 'prog --inc a --in', 3), '[--inc]', 'bash: append, repeatable')
+call assert_equal(completed('bash', bash, 'prog --verbose --verb', 2), '[--verbose]', 'bash: count, repeatable')
+call assert_equal(completed('bash', bash, 'prog --mesh a --sc', 3), '[--scheme]', 'bash: the others offered')
+! the options of the command typed last; the value of an option is never taken for a command
+call assert_equal(completed('bash', bash, 'prog compile link --l', 3), '[--lib]', 'bash: the last command')
+call assert_equal(completed('bash', bash, 'prog co --o', 2), '[--opt]', 'bash: a command by its alias')
+call assert_equal(completed('bash', bash, 'prog --mesh compile --sc', 3), '[--scheme]', 'bash: a value named as a command')
+call assert_equal(completed('bash', bash, 'prog compile -O 2 --o', 4), '[]', 'bash: a command option typed')
+call assert_equal(completed('bash', bash, 'prog --jobs 2 compile --o', 4), '[--opt]', 'bash: a top-level value skipped')
 ! T12.2: zsh, the bash script behind bashcompinit
 call cli%save_zsh_completion(zsh_file=zsh, error=error)
 call assert_equal(error, 0_I4P, 'zsh script saved')
@@ -60,6 +77,8 @@ if (index(out, 'yes') > 0) then
   ! zsh's compgen does not filter by the current word: compadd does, in the real completion (_bash_complete)
   call assert_contains(completed('zsh', zsh, 'prog --me', 1), '--mesh', 'zsh: a switch among the candidates')
   call assert_equal(completed('zsh', zsh, 'prog --scheme ""', 2), '[weno5 muscl]', 'zsh: choices')
+  call assert(index(completed('zsh', zsh, 'prog --mesh a --me', 3), '--mesh') == 0, 'zsh: an option typed, not offered')
+  call assert_contains(completed('zsh', zsh, 'prog compile link --l', 3), '--lib', 'zsh: the last command')
 endif
 ! T12.3: fish, native
 call cli%save_fish_completion(fish_file=fish, error=error)
@@ -133,6 +152,10 @@ contains
   call cli%add_group(group='compile', aliases='co', description='compile', error=error)
   call cli%add(group='compile', switch='--opt', switch_ab='-O', help='optimization', required=.false., act='store', &
                def='0', error=error)
+  call cli%add(switch='--inc', help='include', required=.false., act='append', def='', error=error)
+  call cli%add(switch='--verbose', help='verbose', required=.false., act='count', error=error)
+  call cli%add_group(group='link', description='link', error=error)
+  call cli%add(group='link', switch='--lib', help='library', required=.false., act='store', def='', error=error)
   call assert_equal(error, 0_I4P, 'add the options')
   endsubroutine define
 
