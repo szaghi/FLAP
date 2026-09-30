@@ -103,6 +103,7 @@ positive values are **errors**. Existing values never change.
 | `1011` | `ERROR_COMPLETION_INSTALL` | Completion not installed | `$HOME` unset, or the script or the rc file cannot be written (the message carries the I/O error; for fish, `~/.config/fish` must exist) |
 | `1012` | `ERROR_ARGUMENT_RETRIEVAL` | A command line argument cannot be read | `get_command_argument` failed (processor error; not expected in practice) |
 | `1013` | `ERROR_COMMAND_REPEATED` | A command passed more than once | `prog commit -m x commit`, or a command and one of its aliases; reported before `--help` |
+| `1014` | `ERROR_USAGE_ON_ERROR` | Invalid `usage_on_error` | `init(usage_on_error=...)` other than `full`, `usage`, `none` (any case); reported by `parse` |
 | `2001` | `ERROR_MENU_INVALID` | Invalid menu answer | Not one of the numbers shown, an empty field, or unreadable (see [Interactive Menus](./menu#errors)) |
 | `2002` | `ERROR_MENU_TOO_MANY` | Too many menu answers | Several answers to a single-choice menu |
 | `2003` | `ERROR_MENU_DUPLICATE` | Duplicate menu answer | The same option chosen twice with multiple selection |
@@ -174,6 +175,28 @@ Try 'solver --help' for help.
 It is printed once, as the last line, only when there is a `--help` to suggest (not with `disable_hv=.true.`), and
 never for statuses, ignored unknown arguments or errors raised later by `get`. Disable it with
 `init(error_hint=.false.)`.
+
+## Output after an error
+
+A missing required option (and a required mutually exclusive set with no member given) prints the whole help of its
+group (command) after the error message. `init(usage_on_error=...)` chooses what is printed instead:
+
+| Value | Printed after the error message |
+|---|---|
+| `'full'` (default) | the whole help of the group, as before |
+| `'usage'` | the usage line only, the first line of `--help` |
+| `'none'` | nothing |
+
+```text
+$ solver                       # init(progname='solver', usage_on_error='usage')
+solver: error: named option "--mesh" is required!
+
+usage: solver  --mesh value [--cfl value] [--help] [--markdown] [--version]
+Try 'solver --help' for help.
+```
+
+The error message and the hint line are always printed, and `--help` always prints the whole help. Any other value is
+`ERROR_USAGE_ON_ERROR` (1014), returned by `parse`.
 
 ## Did you mean
 

@@ -40,6 +40,7 @@ graph LR
 - [print_error_hint](#print-error-hint)
 - [parse_core](#parse-core)
 - [install_completion](#install-completion)
+- [print_usage_line](#print-usage-line)
 - [get_clasg_indexes](#get-clasg-indexes)
 - [get_args_from_string](#get-args-from-string)
 - [get_args_from_invocation](#get-args-from-invocation)
@@ -84,6 +85,7 @@ graph LR
 - [no_args_help](#no-args-help)
 - [dispatch_status](#dispatch-status)
 - [completion_shell](#completion-shell)
+- [usage_on_error_is](#usage-on-error-is)
 - [is_fatal](#is-fatal)
 - [map_cla](#map-cla)
 - [builtins_missing](#builtins-missing)
@@ -116,6 +118,7 @@ graph LR
 | `ERROR_COMPLETION_INSTALL` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | The completion script cannot be installed. |
 | `ERROR_ARGUMENT_RETRIEVAL` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | A command line argument cannot be retrieved. |
 | `ERROR_COMMAND_REPEATED` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | A command passed more than once (B36). |
+| `ERROR_USAGE_ON_ERROR` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | init(usage_on_error=) not full, usage or none (F27). |
 
 ## Derived Types
 
@@ -167,6 +170,7 @@ classDiagram
 | `ignore_env` | logical |  | Turn every environment lookup off. |
 | `completion_options` | logical |  | --show/--install-completion (F24). |
 | `auto_envvar_prefix` | character(len=:) | allocatable | Prefix of the generated envvar names. |
+| `usage_on_error` | character(len=:) | allocatable | After an error: full, usage, none (F27). |
 | `config_path` | character(len=:) | allocatable | Configuration file (F08). |
 | `config_required` | logical |  | The configuration file must exist. |
 | `config_used` | character(len=:) | allocatable | Configuration file read by parse. |
@@ -238,6 +242,8 @@ classDiagram
 | `load_config` |  | Load and check the configuration file. |
 | `warn_deprecated` |  | Warn about the deprecated options and commands used. |
 | `get_clasg_indexes` |  | Get CLAs groups indexes. |
+| `print_usage_line` |  | After an error: the usage line (F27). |
+| `usage_on_error_is` |  | Check init(usage_on_error=) (F27). |
 | `get_args` |  | Get CLAs. |
 | `get_args_from_string` |  | Get CLAs from string. |
 | `get_args_from_invocation` |  | Get CLAs from CLI invocation. |
@@ -285,7 +291,7 @@ flowchart TD
 Initialize CLI.
 
 ```fortran
-subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone, error_hint, no_args_is_help, ignore_env, auto_envvar_prefix, case_insensitive, completion_options)
+subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone, error_hint, no_args_is_help, ignore_env, auto_envvar_prefix, case_insensitive, completion_options, usage_on_error)
 ```
 
 **Arguments**
@@ -315,6 +321,7 @@ subroutine init(self, progname, version, help, description, license, authors, ex
 | `auto_envvar_prefix` | character(len=*) | in | optional | Generate the envvar of the options without one: |
 | `case_insensitive` | logical | in | optional | Match switches and command names in any case (F14); |
 | `completion_options` | logical | in | optional | Add --show-completion and --install-completion |
+| `usage_on_error` | character(len=*) | in | optional | What an error prints after its message (F27): |
 
 **Call graph**
 
@@ -607,7 +614,9 @@ flowchart TD
   parse_core["parse_core"] --> check["check"]
   check["check"] --> check["check"]
   check["check"] --> check_position_gaps["check_position_gaps"]
+  check["check"] --> errored["errored"]
   check["check"] --> is_defined_group["is_defined_group"]
+  check["check"] --> upper_case["upper_case"]
   style check fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -768,9 +777,11 @@ flowchart TD
   parse_core["parse_core"] --> name_of["name_of"]
   parse_core["parse_core"] --> no_args_help["no_args_help"]
   parse_core["parse_core"] --> parse["parse"]
+  parse_core["parse_core"] --> print_usage_line["print_usage_line"]
   parse_core["parse_core"] --> resolve_values["resolve_values"]
   parse_core["parse_core"] --> sanitize_defaults["sanitize_defaults"]
   parse_core["parse_core"] --> to_characters["to_characters"]
+  parse_core["parse_core"] --> usage_on_error_is["usage_on_error_is"]
   parse_core["parse_core"] --> warn_deprecated["warn_deprecated"]
   style parse_core fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -807,6 +818,33 @@ flowchart TD
   install_completion["install_completion"] --> write_script["write_script"]
   install_completion["install_completion"] --> write_text["write_text"]
   style install_completion fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### print_usage_line
+
+After an error of group g, with init(usage_on_error='usage') (F27): the usage line of its help, as --help shows it.
+
+```fortran
+subroutine print_usage_line(self, pref, g)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | in |  | CLI data. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+| `g` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in |  | Group of the error. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  parse_core["parse_core"] --> print_usage_line["print_usage_line"]
+  print_usage_line["print_usage_line"] --> usage["usage"]
+  print_usage_line["print_usage_line"] --> usage_on_error_is["usage_on_error_is"]
+  print_usage_line["print_usage_line"] --> write_text["write_text"]
+  style print_usage_line fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### get_clasg_indexes
@@ -1717,6 +1755,7 @@ flowchart TD
   add_exclusive_set["add_exclusive_set"] --> errored["errored"]
   check["check"] --> errored["errored"]
   check["check"] --> errored["errored"]
+  check["check"] --> errored["errored"]
   check_action_consistency["check_action_consistency"] --> errored["errored"]
   check_alternate_consistency["check_alternate_consistency"] --> errored["errored"]
   check_append_consistency["check_append_consistency"] --> errored["errored"]
@@ -2293,6 +2332,33 @@ flowchart TD
   style completion_shell fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
+### usage_on_error_is
+
+Check init(usage_on_error=) (F27; any case, 'full' when unset).
+
+**Returns**: `logical`
+
+```fortran
+function usage_on_error_is(self, mode) result(is)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | in |  | CLI data. |
+| `mode` | character(len=*) | in |  | 'FULL', 'USAGE' or 'NONE'. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  parse_core["parse_core"] --> usage_on_error_is["usage_on_error_is"]
+  print_usage_line["print_usage_line"] --> usage_on_error_is["usage_on_error_is"]
+  usage_on_error_is["usage_on_error_is"] --> upper_case["upper_case"]
+  style usage_on_error_is fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
 ### is_fatal
 
 Check if the current error stops parsing: any error but an unknown argument that is ignored (then recorded as such).
@@ -2413,6 +2479,7 @@ flowchart TD
   is_required_passed["is_required_passed"] --> usage["usage"]
   no_args_help["no_args_help"] --> usage["usage"]
   print_usage["print_usage"] --> usage["usage"]
+  print_usage_line["print_usage_line"] --> usage["usage"]
   raise_error["raise_error"] --> usage["usage"]
   save_man_page_core["save_man_page_core"] --> usage["usage"]
   save_usage_to_markdown_core["save_usage_to_markdown_core"] --> usage["usage"]

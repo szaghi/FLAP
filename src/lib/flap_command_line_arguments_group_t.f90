@@ -367,17 +367,21 @@ contains
   enddo
   endsubroutine check_position_gaps
 
-  subroutine is_required_passed(self, pref)
-  !< Check if required CLAs are passed.
-  class(command_line_arguments_group), intent(inout) :: self  !< CLAsG data.
-  character(*), optional,              intent(in)    :: pref  !< Prefixing string.
-  integer(I4P)                                       :: a     !< Counter.
+  subroutine is_required_passed(self, pref, print_usage)
+  !< Check if required CLAs are passed; a missing one prints the group help after its message, unless print_usage is false
+  !< (the CLI prints the usage line, or nothing: init(usage_on_error=), F27).
+  class(command_line_arguments_group), intent(inout) :: self        !< CLAsG data.
+  character(*), optional,              intent(in)    :: pref        !< Prefixing string.
+  logical,      optional,              intent(in)    :: print_usage !< Print the group help after the error (default).
+  integer(I4P)                                       :: a           !< Counter.
+  logical                                            :: print_usage_ !< Print the group help, local variable.
 
+  print_usage_ = .true. ; if (present(print_usage)) print_usage_ = print_usage
   if (self%is_called) then
     do a=1, self%Na
       if (.not.self%cla(a)%is_required_passed(pref=pref)) then
         self%error = self%cla(a)%error
-        call write_text(self%usage_lun, self%usage(pref=pref))
+        if (print_usage_) call write_text(self%usage_lun, self%usage(pref=pref))
         return
       endif
     enddo
@@ -443,7 +447,7 @@ contains
   endif
   endsubroutine add_exclusive_set
 
-  subroutine check_exclusive_sets(self, pref)
+  subroutine check_exclusive_sets(self, pref, print_usage)
   !< Check the mutually exclusive sets of a called group: at most one member given, exactly one for a required set.
   !<
   !< Explicit sources count (command line, environment, configuration file; D2, E3 of #125), a default does not. When a
@@ -452,6 +456,7 @@ contains
   !< the statuses (help, version, markdown) and the value resolution, like the required check (E4 of #125).
   class(command_line_arguments_group), intent(inout) :: self     !< CLAsG data.
   character(*), optional,              intent(in)    :: pref     !< Prefixing string.
+  logical,      optional,              intent(in)    :: print_usage !< Print the group help after an error (default).
   character(len=:), allocatable                      :: items(:) !< Members.
   character(len=:), allocatable                      :: given    !< Given members, quoted.
   integer(I4P)                                       :: n        !< Number of members.
@@ -460,7 +465,9 @@ contains
   integer(I4P)                                       :: i        !< Counter.
   integer(I4P)                                       :: a        !< CLA of a member.
   logical                                            :: cl       !< A member is on the command line.
+  logical                                            :: print_usage_ !< Print the group help, local variable.
 
+  print_usage_ = .true. ; if (present(print_usage)) print_usage_ = print_usage
   if (.not.self%is_called .or. .not.allocated(self%m_sets)) return
   do s=1, size(self%m_sets, dim=1)
     call list_items(self%m_sets(s)%switches, items, n)
@@ -494,7 +501,7 @@ contains
         given = given//', "'//trim(items(i))//'"'
       enddo
       call self%errored(pref=pref, error=ERROR_M_EXCLUDE_SET_REQUIRED, members=given(3:))
-      call write_text(self%usage_lun, self%usage(pref=pref))
+      if (print_usage_) call write_text(self%usage_lun, self%usage(pref=pref))
       return
     endif
   enddo

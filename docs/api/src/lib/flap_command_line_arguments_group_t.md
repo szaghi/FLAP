@@ -300,10 +300,11 @@ flowchart TD
 
 ### is_required_passed
 
-Check if required CLAs are passed.
+Check if required CLAs are passed; a missing one prints the group help after its message, unless print_usage is false
+ (the CLI prints the usage line, or nothing: init(usage_on_error=), F27).
 
 ```fortran
-subroutine is_required_passed(self, pref)
+subroutine is_required_passed(self, pref, print_usage)
 ```
 
 **Arguments**
@@ -312,6 +313,7 @@ subroutine is_required_passed(self, pref)
 |------|------|--------|------------|-------------|
 | `self` | class([command_line_arguments_group](/api/src/lib/flap_command_line_arguments_group_t#command-line-arguments-group)) | inout |  | CLAsG data. |
 | `pref` | character(len=*) | in | optional | Prefixing string. |
+| `print_usage` | logical | in | optional | Print the group help after the error (default). |
 
 **Call graph**
 
@@ -380,7 +382,7 @@ Check the mutually exclusive sets of a called group: at most one member given, e
  the statuses (help, version, markdown) and the value resolution, like the required check (E4 of #125).
 
 ```fortran
-subroutine check_exclusive_sets(self, pref)
+subroutine check_exclusive_sets(self, pref, print_usage)
 ```
 
 **Arguments**
@@ -389,6 +391,7 @@ subroutine check_exclusive_sets(self, pref)
 |------|------|--------|------------|-------------|
 | `self` | class([command_line_arguments_group](/api/src/lib/flap_command_line_arguments_group_t#command-line-arguments-group)) | inout |  | CLAsG data. |
 | `pref` | character(len=*) | in | optional | Prefixing string. |
+| `print_usage` | logical | in | optional | Print the group help after an error (default). |
 
 **Call graph**
 
@@ -638,6 +641,7 @@ subroutine errored(self, error, pref, a1, a2, position, members, reason)
 ```mermaid
 flowchart TD
   add_exclusive_set["add_exclusive_set"] --> errored["errored"]
+  check["check"] --> errored["errored"]
   check["check"] --> errored["errored"]
   check["check"] --> errored["errored"]
   check_action_consistency["check_action_consistency"] --> errored["errored"]
@@ -1298,6 +1302,7 @@ flowchart TD
   is_required_passed["is_required_passed"] --> usage["usage"]
   no_args_help["no_args_help"] --> usage["usage"]
   print_usage["print_usage"] --> usage["usage"]
+  print_usage_line["print_usage_line"] --> usage["usage"]
   raise_error["raise_error"] --> usage["usage"]
   save_man_page_core["save_man_page_core"] --> usage["usage"]
   save_usage_to_markdown_core["save_usage_to_markdown_core"] --> usage["usage"]

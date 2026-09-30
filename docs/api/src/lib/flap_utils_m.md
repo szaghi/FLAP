@@ -290,6 +290,7 @@ flowchart TD
   is_required_passed["is_required_passed"] --> write_text["write_text"]
   no_args_help["no_args_help"] --> write_text["write_text"]
   print_usage["print_usage"] --> write_text["write_text"]
+  print_usage_line["print_usage_line"] --> write_text["write_text"]
   raise_error["raise_error"] --> write_text["write_text"]
   style write_text fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -543,12 +544,14 @@ function upper_case(string)
 ```mermaid
 flowchart TD
   add["add"] --> upper_case["upper_case"]
+  check["check"] --> upper_case["upper_case"]
   check_choices["check_choices"] --> upper_case["upper_case"]
   envvar_name["envvar_name"] --> upper_case["upper_case"]
   evaluate_yes_no["evaluate_yes_no"] --> upper_case["upper_case"]
   same["same"] --> upper_case["upper_case"]
   same_name["same_name"] --> upper_case["upper_case"]
   set_source_value["set_source_value"] --> upper_case["upper_case"]
+  usage_on_error_is["usage_on_error_is"] --> upper_case["upper_case"]
   yes_no["yes_no"] --> upper_case["upper_case"]
   style upper_case fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```

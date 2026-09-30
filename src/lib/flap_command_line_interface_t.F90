@@ -34,6 +34,7 @@ type, extends(object), public :: command_line_interface
   logical                                         :: ignore_env=.false.          !< Turn every environment lookup off.
   logical                                         :: completion_options=.false.  !< --show/--install-completion (F24).
   character(len=:), allocatable                   :: auto_envvar_prefix          !< Prefix of the generated envvar names.
+  character(len=:), allocatable                   :: usage_on_error              !< After an error: full, usage, none (F27).
   character(len=:), allocatable                   :: config_path                 !< Configuration file (F08).
   logical                                         :: config_required=.false.     !< The configuration file must exist.
   character(len=:), allocatable                   :: config_used                 !< Configuration file read by parse.
@@ -110,6 +111,8 @@ type, extends(object), public :: command_line_interface
     procedure, private :: load_config                     !< Load and check the configuration file.
     procedure, private :: warn_deprecated                 !< Warn about the deprecated options and commands used.
     procedure, private :: get_clasg_indexes               !< Get CLAs groups indexes.
+    procedure, private :: print_usage_line                !< After an error: the usage line (F27).
+    procedure, private :: usage_on_error_is               !< Check init(usage_on_error=) (F27).
     generic,   private :: get_args =>           &
                           get_args_from_string, &
                           get_args_from_invocation        !< Get CLAs.
@@ -145,6 +148,7 @@ integer(I4P), parameter, public :: ERROR_COMPLETION_SHELL      = 1010 !< Unknown
 integer(I4P), parameter, public :: ERROR_COMPLETION_INSTALL    = 1011 !< The completion script cannot be installed.
 integer(I4P), parameter, public :: ERROR_ARGUMENT_RETRIEVAL    = 1012 !< A command line argument cannot be retrieved.
 integer(I4P), parameter, public :: ERROR_COMMAND_REPEATED      = 1013 !< A command passed more than once (B36).
+integer(I4P), parameter, public :: ERROR_USAGE_ON_ERROR        = 1014 !< init(usage_on_error=) not full, usage or none (F27).
 
 contains
   ! public methods
@@ -173,6 +177,7 @@ contains
   self%no_args_is_help     = .false.
   self%ignore_env          = .false.
   self%completion_options  = .false.
+  if (allocated(self%usage_on_error)) deallocate(self%usage_on_error)
   if (allocated(self%auto_envvar_prefix)) deallocate(self%auto_envvar_prefix)
   if (allocated(self%config_path)) deallocate(self%config_path)
   if (allocated(self%config_used)) deallocate(self%config_used)
@@ -181,7 +186,8 @@ contains
 
   subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, &
                   usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone, &
-                  error_hint, no_args_is_help, ignore_env, auto_envvar_prefix, case_insensitive, completion_options)
+                  error_hint, no_args_is_help, ignore_env, auto_envvar_prefix, case_insensitive, completion_options, &
+                  usage_on_error)
   !< Initialize CLI.
   class(command_line_interface), intent(inout) :: self                !< CLI data.
   character(*), optional,        intent(in)    :: progname            !< Program name.
@@ -213,6 +219,9 @@ contains
                                                                       !< values and choices keep theirs.
   logical,      optional,        intent(in)    :: completion_options  !< Add --show-completion and --install-completion
                                                                       !< to the top level (F24).
+  character(*), optional,        intent(in)    :: usage_on_error      !< What an error prints after its message (F27):
+                                                                      !< 'full' (the group help, default), 'usage' (the
+                                                                      !< usage line), 'none'; any case.
   character(len=:), allocatable                :: prog_invocation     !< Complete program invocation.
   integer(I4P)                                 :: invocation_length   !< Length of invocation.
   integer(I4P)                                 :: retrieval_status    !< Retrieval status.
@@ -252,6 +261,7 @@ contains
                           if (present(case_insensitive))    self%case_insensitive    = case_insensitive   ! default set by self%free
                           if (present(completion_options))  self%completion_options  = completion_options ! default set by self%free
   self%auto_envvar_prefix = '' ; if (present(auto_envvar_prefix)) self%auto_envvar_prefix = trim(adjustl(auto_envvar_prefix))
+  self%usage_on_error = 'full' ; if (present(usage_on_error)) self%usage_on_error = trim(adjustl(usage_on_error))
   ! initialize only the first default group
   allocate(self%clasg(0:0))
   call self%clasg(0)%assign_object(self)
@@ -880,6 +890,16 @@ contains
   integer(I4P)                                 :: g     !< Counter.
   integer(I4P)                                 :: gg    !< Counter.
 
+  ! init(usage_on_error=) (F27): reported by parse, as the other definition errors
+  if (allocated(self%usage_on_error)) then
+    select case(upper_case(self%usage_on_error))
+    case('FULL', 'USAGE', 'NONE')
+    case default
+      call self%errored(pref=pref, error=ERROR_USAGE_ON_ERROR, switch=self%usage_on_error)
+      if (present(error)) error = self%error
+      return
+    endselect
+  endif
   do g=0,size(self%clasg,dim=1)-1
     ! check group consistency
     call self%clasg(g)%check(pref=pref)
@@ -1215,11 +1235,14 @@ contains
 
   ! check if all required CLAs have been passed
   do g=0, size(ai,dim=1)-1
-    call self%clasg(g)%is_required_passed(pref=pref)
+    call self%clasg(g)%is_required_passed(pref=pref, print_usage=self%usage_on_error_is('FULL'))
     self%error = self%clasg(g)%error
     if (self%is_fatal()) exit
   enddo
-  if (self%is_fatal()) return
+  if (self%is_fatal()) then
+    call self%print_usage_line(pref=pref, g=g)
+    return
+  endif
 
   ! check the KEY=VALUE pairs of the maps (F18), whatever their source: the top level, the commands called
   do g=0, size(ai,dim=1)-1
@@ -1232,11 +1255,14 @@ contains
 
   ! check the mutually exclusive sets of switches: after the statuses and the values (E4 of #125)
   do g=0, size(ai,dim=1)-1
-    call self%clasg(g)%check_exclusive_sets(pref=pref)
+    call self%clasg(g)%check_exclusive_sets(pref=pref, print_usage=self%usage_on_error_is('FULL'))
     self%error = self%clasg(g)%error
     if (self%is_fatal()) exit
   enddo
-  if (self%is_fatal()) return
+  if (self%is_fatal()) then
+    call self%print_usage_line(pref=pref, g=g)
+    return
+  endif
 
   ! check the pairwise exclusions (exclude=) of the called groups, then the exclusive groups (commands)
   do g=0, size(ai,dim=1)-1
@@ -1484,6 +1510,32 @@ contains
     call self%print_error_message
     endsubroutine install_error
   endsubroutine install_completion
+
+  function usage_on_error_is(self, mode) result(is)
+  !< Check init(usage_on_error=) (F27; any case, 'full' when unset).
+  class(command_line_interface), intent(in) :: self !< CLI data.
+  character(*),                  intent(in) :: mode !< 'FULL', 'USAGE' or 'NONE'.
+  logical                                   :: is   !< Check result.
+
+  if (allocated(self%usage_on_error)) then
+    is = upper_case(self%usage_on_error) == mode
+  else
+    is = mode == 'FULL'
+  endif
+  endfunction usage_on_error_is
+
+  subroutine print_usage_line(self, pref, g)
+  !< After an error of group g, with init(usage_on_error='usage') (F27): the usage line of its help, as --help shows it.
+  class(command_line_interface), intent(in) :: self !< CLI data.
+  character(*), optional,        intent(in) :: pref !< Prefixing string.
+  integer(I4P),                  intent(in) :: g    !< Group of the error.
+  character(len=:), allocatable             :: help !< Help of the group.
+
+  if (.not.self%usage_on_error_is('USAGE')) return
+  help = self%usage(pref=pref, g=g)
+  if (index(help, new_line('a')) > 0) help = help(:index(help, new_line('a'))-1)
+  call write_text(self%usage_lun, help)
+  endsubroutine print_usage_line
 
   function is_fatal(self)
   !< Check if the current error stops parsing: any error but an unknown argument that is ignored (then recorded as such).
@@ -3041,6 +3093,8 @@ contains
                            'options only!'
     case(ERROR_ARGUMENT_RETRIEVAL)
       self%error_message = prefd//': the command line argument number '//trim(str(position, .true.))//' cannot be retrieved!'
+    case(ERROR_USAGE_ON_ERROR)
+      self%error_message = prefd//': usage_on_error is "full", "usage" or "none", not "'//switch//'"!'
     case(ERROR_COMMAND_REPEATED)
       ! switch: the spelling met the second time, named when it is an alias
       if (switch == group) then

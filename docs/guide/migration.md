@@ -7,6 +7,11 @@ title: Upgrading
 Every change you can observe when moving to a new release, newest first. Additive releases only add API: existing
 programs keep their behaviour. The plan behind them is issue [#125](https://github.com/szaghi/FLAP/issues/125).
 
+## v2.4.0 (additive)
+
+- `init(usage_on_error='usage')` (or `'none'`) prints the usage line (or nothing) after a missing required option,
+  instead of the whole help; the default `'full'` keeps the old output (issue #102). New error 1014.
+
 ## v2.3.1 (fix)
 
 - A command passed more than once (`prog commit -m x commit`, or the command and one of its aliases) is now

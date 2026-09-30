@@ -323,6 +323,11 @@ source-dir = "src/tests"
 main = "flap_test_unsupported_type.f90"
 
 [[test]]
+name = "flap_test_usage_on_error"
+source-dir = "src/tests"
+main = "flap_test_usage_on_error.f90"
+
+[[test]]
 name = "flap_test_utils_m"
 source-dir = "src/tests"
 main = "flap_test_utils_m.f90"
