@@ -63,6 +63,8 @@ use flap_command_line_arguments_group_t, only : command_line_arguments_group,   
                                                 STATUS_PRINT_M,                               &
                                                 STATUS_NO_ARGS,                               &
                                                 STATUS_ALTERNATE,                             &
+                                                STATUS_SHOW_COMPLETION,                       &
+                                                STATUS_INSTALL_COMPLETION,                    &
                                                 ERROR_GROUP_CONSISTENCY => ERROR_CONSISTENCY, &
                                                 ERROR_GROUP_M_EXCLUDE => ERROR_M_EXCLUDE,     &
                                                 ERROR_POSITION_DUPLICATE,                     &
@@ -81,7 +83,9 @@ use flap_command_line_interface_t, only : command_line_interface,      &
                                          ERROR_CONFIG_NOT_FOUND,      &
                                          ERROR_CONFIG_UNKNOWN_KEY,    &
                                          ERROR_GROUP_ALIAS,           &
-                                         ERROR_COPY_POSITIONAL
+                                         ERROR_COPY_POSITIONAL,       &
+                                         ERROR_COMPLETION_SHELL,      &
+                                         ERROR_COMPLETION_INSTALL
 
 implicit none
 private
@@ -96,6 +100,8 @@ public :: STATUS_PRINT_H
 public :: STATUS_PRINT_M
 public :: STATUS_NO_ARGS
 public :: STATUS_ALTERNATE
+public :: STATUS_SHOW_COMPLETION
+public :: STATUS_INSTALL_COMPLETION
 ! errors 1-99: command line argument
 public :: SOURCE_COMMANDLINE
 public :: SOURCE_ENVIRONMENT
@@ -171,4 +177,6 @@ public :: ERROR_CONFIG_NOT_FOUND
 public :: ERROR_CONFIG_UNKNOWN_KEY
 public :: ERROR_GROUP_ALIAS
 public :: ERROR_COPY_POSITIONAL
+public :: ERROR_COMPLETION_SHELL
+public :: ERROR_COMPLETION_INSTALL
 endmodule flap

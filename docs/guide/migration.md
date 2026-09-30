@@ -113,6 +113,8 @@ values still takes the default: both change in v2.0.0 (see below).
 - **The bash completion script changes**: it is registered with `complete -o default`, so a free value falls back to file
   names; regenerate it. `cli%save_zsh_completion(zsh_file)`, `cli%save_fish_completion(fish_file)` and
   `cli%save_powershell_completion(powershell_file)` write zsh, fish and PowerShell scripts (F15).
+- `init(completion_options=.true.)` adds `--show-completion [SHELL]` and `--install-completion [SHELL]` (F24); new
+  statuses −6, −7 and errors 1010, 1011; `cli%completion_script(shell)` returns a script as a string.
 
 ## v2.1.0 (additive)
 

@@ -2,7 +2,8 @@
 program flap_test_constants
 !< Pin the public codes registry exported by the flap module (issue #125, section 5): existing values never change.
 use flap, only : command_line_interface,                                                                                          &
-                 STATUS_PRINT_V, STATUS_PRINT_H, STATUS_PRINT_M, STATUS_NO_ARGS, STATUS_ALTERNATE,                                &
+                 STATUS_PRINT_V, STATUS_PRINT_H, STATUS_PRINT_M, STATUS_NO_ARGS, STATUS_ALTERNATE, STATUS_SHOW_COMPLETION,        &
+                 STATUS_INSTALL_COMPLETION, ERROR_COMPLETION_SHELL, ERROR_COMPLETION_INSTALL,                                     &
                  SOURCE_COMMANDLINE, SOURCE_ENVIRONMENT, SOURCE_CONFIG, SOURCE_DEFAULT, SOURCE_NONE,                              &
                  ERROR_OPTIONAL_NO_DEF, ERROR_REQUIRED_M_EXCLUDE, ERROR_POSITIONAL_M_EXCLUDE, ERROR_NAMED_NO_NAME,                &
                  ERROR_POSITIONAL_NO_POSITION, ERROR_POSITIONAL_NO_STORE, ERROR_NOT_IN_CHOICES, ERROR_MISSING_REQUIRED,           &
@@ -80,6 +81,8 @@ contains
   call assert_equal(ERROR_PATH_NOT_WRITABLE,      35_I4P,   'ERROR_PATH_NOT_WRITABLE')
   call assert_equal(ERROR_PATH_INCONSISTENT,      49_I4P,   'ERROR_PATH_INCONSISTENT')
   call assert_equal(STATUS_ALTERNATE,             -4_I4P,   'STATUS_ALTERNATE')
+  call assert_equal(STATUS_SHOW_COMPLETION,       -6_I4P,   'STATUS_SHOW_COMPLETION')
+  call assert_equal(STATUS_INSTALL_COMPLETION,    -7_I4P,   'STATUS_INSTALL_COMPLETION')
   call assert_equal(ERROR_ALTERNATE_INCONSISTENT, 37_I4P,   'ERROR_ALTERNATE_INCONSISTENT')
   call assert_equal(ERROR_SWITCH_NEG_INCONSISTENT, 36_I4P,  'ERROR_SWITCH_NEG_INCONSISTENT')
   call assert_equal(ERROR_MAP_FORMAT,             38_I4P,   'ERROR_MAP_FORMAT')
@@ -110,6 +113,8 @@ contains
   call assert_equal(ERROR_CONFIG_UNKNOWN_KEY,   1007_I4P,   'ERROR_CONFIG_UNKNOWN_KEY')
   call assert_equal(ERROR_GROUP_ALIAS,          1008_I4P,   'ERROR_GROUP_ALIAS')
   call assert_equal(ERROR_COPY_POSITIONAL,      1009_I4P,   'ERROR_COPY_POSITIONAL')
+  call assert_equal(ERROR_COMPLETION_SHELL,     1010_I4P,   'ERROR_COMPLETION_SHELL')
+  call assert_equal(ERROR_COMPLETION_INSTALL,   1011_I4P,   'ERROR_COMPLETION_INSTALL')
   call assert_equal(ERROR_ARGUMENT_RETRIEVAL,   1012_I4P,   'ERROR_ARGUMENT_RETRIEVAL')
   endsubroutine check_values
 

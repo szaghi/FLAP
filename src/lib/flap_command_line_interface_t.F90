@@ -5,10 +5,12 @@ module flap_command_line_interface_t
 use face, only : colorize
 use flap_command_line_argument_t, only : command_line_argument, ACTION_ALTERNATE, ACTION_CONFIG, ACTION_COUNT, ACTION_PRINT_HELP, &
                                          ACTION_PRINT_MARK, ACTION_PRINT_VERS, ACTION_STORE, ACTION_STORE_FALSE, &
-                                         ACTION_STORE_TRUE, ERROR_UNKNOWN, SOURCE_COMMANDLINE, SOURCE_CONFIG, &
+                                         ACTION_STORE_TRUE, ACTION_SHOW_COMPLETION, ACTION_INSTALL_COMPLETION, &
+                                         ERROR_UNKNOWN, SOURCE_COMMANDLINE, SOURCE_CONFIG, &
                                          SOURCE_DEFAULT, SOURCE_ENVIRONMENT, SOURCE_NONE
 use flap_command_line_arguments_group_t, only : command_line_arguments_group, STATUS_ALTERNATE, STATUS_NO_ARGS, STATUS_PRINT_H, &
-                                                STATUS_PRINT_M, STATUS_PRINT_V
+                                                STATUS_PRINT_M, STATUS_PRINT_V, STATUS_SHOW_COMPLETION, &
+                                                STATUS_INSTALL_COMPLETION
 use flap_config_m, only : config_file
 use flap_object_t, only : object
 use flap_utils_m
@@ -30,6 +32,7 @@ type, extends(object), public :: command_line_interface
   logical                                         :: error_hint=.true.           !< Print a hint after a failed parse.
   logical                                         :: no_args_is_help=.false.     !< Print the help when no arguments are passed.
   logical                                         :: ignore_env=.false.          !< Turn every environment lookup off.
+  logical                                         :: completion_options=.false.  !< --show/--install-completion (F24).
   character(len=:), allocatable                   :: auto_envvar_prefix          !< Prefix of the generated envvar names.
   character(len=:), allocatable                   :: config_path                 !< Configuration file (F08).
   logical                                         :: config_required=.false.     !< The configuration file must exist.
@@ -86,7 +89,13 @@ type, extends(object), public :: command_line_interface
     procedure, private :: builtins_missing                !< Check if the builtin CLAs still have to be added.
     procedure, private :: usage_core                      !< Get CLI usage (builtins already present).
     procedure, private :: signature_core                  !< Get CLI signature (builtins already present).
-    procedure, private :: save_bash_completion_core       !< Save bash completion script (builtins already present).
+    procedure, public  :: completion_script                !< Completion script of a shell.
+    procedure, private :: completion_script_core           !< Completion script of a shell (builtins already present).
+    procedure, private :: completion_shell                 !< Shell of a completion builtin.
+    procedure, private :: install_completion               !< Install the completion script of a shell.
+    procedure, private :: bash_script                      !< Bash (or zsh) completion script.
+    procedure, private :: fish_script                      !< Fish completion script.
+    procedure, private :: powershell_script                !< PowerShell completion script.
     procedure, private :: save_man_page_core              !< Save CLI usage as man page (builtins already present).
     procedure, private :: save_usage_to_markdown_core     !< Save CLI usage as markdown (builtins already present).
     procedure, private :: parse_core                      !< Parse the command line (body of parse).
@@ -132,6 +141,8 @@ integer(I4P), parameter, public :: ERROR_CONFIG_NOT_FOUND      = 1006 !< Require
 integer(I4P), parameter, public :: ERROR_CONFIG_UNKNOWN_KEY    = 1007 !< Configuration file: unknown key or malformed line.
 integer(I4P), parameter, public :: ERROR_GROUP_ALIAS           = 1008 !< Alias of a command equal to a command or an alias.
 integer(I4P), parameter, public :: ERROR_COPY_POSITIONAL       = 1009 !< copy_options asked to copy a positional CLA.
+integer(I4P), parameter, public :: ERROR_COMPLETION_SHELL      = 1010 !< Unknown (or unset) shell of the completion builtins.
+integer(I4P), parameter, public :: ERROR_COMPLETION_INSTALL    = 1011 !< The completion script cannot be installed.
 integer(I4P), parameter, public :: ERROR_ARGUMENT_RETRIEVAL    = 1012 !< A command line argument cannot be retrieved.
 
 contains
@@ -160,6 +171,7 @@ contains
   self%error_hint          = .true.
   self%no_args_is_help     = .false.
   self%ignore_env          = .false.
+  self%completion_options  = .false.
   if (allocated(self%auto_envvar_prefix)) deallocate(self%auto_envvar_prefix)
   if (allocated(self%config_path)) deallocate(self%config_path)
   if (allocated(self%config_used)) deallocate(self%config_used)
@@ -168,7 +180,7 @@ contains
 
   subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, &
                   usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone, &
-                  error_hint, no_args_is_help, ignore_env, auto_envvar_prefix, case_insensitive)
+                  error_hint, no_args_is_help, ignore_env, auto_envvar_prefix, case_insensitive, completion_options)
   !< Initialize CLI.
   class(command_line_interface), intent(inout) :: self                !< CLI data.
   character(*), optional,        intent(in)    :: progname            !< Program name.
@@ -198,6 +210,8 @@ contains
                                                                       !< PREFIX[_GROUP]_NAME (F07).
   logical,      optional,        intent(in)    :: case_insensitive    !< Match switches and command names in any case (F14);
                                                                       !< values and choices keep theirs.
+  logical,      optional,        intent(in)    :: completion_options  !< Add --show-completion and --install-completion
+                                                                      !< to the top level (F24).
   character(len=:), allocatable                :: prog_invocation     !< Complete program invocation.
   integer(I4P)                                 :: invocation_length   !< Length of invocation.
   integer(I4P)                                 :: retrieval_status    !< Retrieval status.
@@ -235,6 +249,7 @@ contains
                           if (present(no_args_is_help))     self%no_args_is_help     = no_args_is_help    ! default set by self%free
                           if (present(ignore_env))          self%ignore_env          = ignore_env         ! default set by self%free
                           if (present(case_insensitive))    self%case_insensitive    = case_insensitive   ! default set by self%free
+                          if (present(completion_options))  self%completion_options  = completion_options ! default set by self%free
   self%auto_envvar_prefix = '' ; if (present(auto_envvar_prefix)) self%auto_envvar_prefix = trim(adjustl(auto_envvar_prefix))
   ! initialize only the first default group
   allocate(self%clasg(0:0))
@@ -1275,6 +1290,7 @@ contains
   character(*), optional,        intent(in)    :: pref       !< Prefixing string.
   logical                                      :: dispatched !< A status has been dispatched.
   integer(I4P)                                 :: g          !< Counter for CLAs group.
+  character(len=:), allocatable                :: shell      !< Shell of a completion builtin.
 
   dispatched = .true.
   do g=0, size(self%clasg, dim=1)-1
@@ -1301,8 +1317,165 @@ contains
       return
     endif
   enddo
+  ! the completion builtins (F24): top level only; an unknown shell or a failed install is an error, returned
+  if (self%clasg(0)%is_action_passed(ACTION_SHOW_COMPLETION)) then
+    shell = self%completion_shell(ACTION_SHOW_COMPLETION, pref=pref)
+    if (shell == '') return
+    self%error = STATUS_SHOW_COMPLETION
+    call write_text(self%version_lun, self%completion_script(shell))
+    if (self%standalone) call quiet_stop(0_I4P)
+    return
+  endif
+  if (self%clasg(0)%is_action_passed(ACTION_INSTALL_COMPLETION)) then
+    shell = self%completion_shell(ACTION_INSTALL_COMPLETION, pref=pref)
+    if (shell == '') return
+    call self%install_completion(shell=shell, pref=pref)
+    if (self%error == STATUS_INSTALL_COMPLETION .and. self%standalone) call quiet_stop(0_I4P)
+    return
+  endif
   dispatched = .false.
   endfunction dispatch_status
+
+  function completion_shell(self, act, pref) result(shell)
+  !< Return the shell of a completion builtin (F24 of #125): its value, else the basename of $SHELL; pwsh is powershell.
+  !< An unknown or unset shell is ERROR_COMPLETION_SHELL (printed), and '' is returned.
+  class(command_line_interface), intent(inout) :: self  !< CLI data.
+  character(*),                  intent(in)    :: act   !< Action of the builtin.
+  character(*), optional,        intent(in)    :: pref  !< Prefixing string.
+  character(len=:), allocatable                :: shell !< Shell.
+  character(len=:), allocatable                :: value !< Value of the builtin, or of $SHELL.
+  logical                                      :: found !< $SHELL is set.
+  integer(I4P)                                 :: a     !< Counter.
+
+  shell = ''
+  value = ''
+  do a=1, self%clasg(0)%Na
+    if (self%clasg(0)%cla(a)%act /= act) cycle
+    if (allocated(self%clasg(0)%cla(a)%val)) value = trim(adjustl(self%clasg(0)%cla(a)%val))
+    exit
+  enddo
+  if (value == '') then
+    call read_env('SHELL', value, found, ignore=self%ignore_env)
+    value = program_basename(value)
+  endif
+  if (value == 'pwsh') value = 'powershell'
+  select case(value)
+  case('bash', 'zsh', 'fish', 'powershell')
+    shell = value
+  case('')
+    call completion_error(ERROR_COMPLETION_SHELL, ': no shell given and $SHELL is not set (supported: bash, zsh, fish, '//&
+                          'powershell); try --show-completion bash!')
+  case default
+    call completion_error(ERROR_COMPLETION_SHELL, ': unknown shell "'//value//'" (supported: bash, zsh, fish, '//&
+                          'powershell); try --show-completion bash!')
+  endselect
+  contains
+    subroutine completion_error(error, message)
+    !< Report an error of the completion builtins.
+    integer(I4P), intent(in) :: error   !< Error code.
+    character(*), intent(in) :: message !< Message, after the prefix.
+
+    self%error = error
+    self%error_message = self%error_prefix(pref)//message
+    call self%print_error_message
+    endsubroutine completion_error
+  endfunction completion_shell
+
+  subroutine install_completion(self, shell, pref)
+  !< Install the completion script of a shell (F24 of #125): write it to $HOME/.<prog>-completion.<shell>, then append a
+  !< line sourcing it, marked '# FLAP completion: <prog>', to the shell's rc file ($HOME/.bashrc, $HOME/.zshrc,
+  !< $HOME/.config/fish/config.fish), only if the marker is absent: the rc file is never rewritten, no directory is created.
+  !< Success is STATUS_INSTALL_COMPLETION (and a report on the version unit); a failure ERROR_COMPLETION_INSTALL (printed,
+  !< with the I/O message); PowerShell is not installed (ERROR_COMPLETION_SHELL, with instructions).
+  class(command_line_interface), intent(inout) :: self    !< CLI data.
+  character(*),                  intent(in)    :: shell   !< Shell: bash, zsh, fish or powershell.
+  character(*), optional,        intent(in)    :: pref    !< Prefixing string.
+  character(len=:), allocatable                :: home    !< $HOME.
+  character(len=:), allocatable                :: prog    !< Program name, without its path.
+  character(len=:), allocatable                :: file    !< Script file.
+  character(len=:), allocatable                :: rc      !< Rc file.
+  character(len=:), allocatable                :: marker  !< Marker of the source line.
+  character(len=:), allocatable                :: content !< Content of the rc file.
+  character(len=:), allocatable                :: iomsg   !< Message of an I/O failure.
+  character(len=256)                           :: msg     !< Message of an I/O failure, local variable.
+  logical                                      :: found   !< $HOME is set, or the rc file exists.
+  integer(I4P)                                 :: ios     !< I/O status.
+  integer(I4P)                                 :: size_   !< Size of the rc file.
+  integer(I4P)                                 :: u       !< Unit.
+
+  prog = program_basename(self%progname)
+  if (shell == 'powershell') then
+    call install_error(ERROR_COMPLETION_SHELL, ': PowerShell completion is not installed automatically: save it with "'// &
+                       prog//' --show-completion powershell > '//prog//'.ps1" and dot-source that file from your $PROFILE!')
+    return
+  endif
+  call read_env('HOME', home, found, ignore=self%ignore_env)
+  if (len_trim(home) == 0) then
+    call install_error(ERROR_COMPLETION_INSTALL, ': $HOME is not set: cannot install the completion script!')
+    return
+  endif
+  file = trim(home)//'/.'//prog//'-completion.'//shell
+  call write_script(file=file, script=self%completion_script(shell), error=ios, iomsg=iomsg)
+  if (ios /= 0) then
+    call install_error(ERROR_COMPLETION_INSTALL, ': cannot write "'//file//'": '//iomsg//'!')
+    return
+  endif
+  select case(shell)
+  case('bash')
+    rc = trim(home)//'/.bashrc'
+  case('zsh')
+    rc = trim(home)//'/.zshrc'
+  case default
+    rc = trim(home)//'/.config/fish/config.fish'
+  endselect
+  marker = '# FLAP completion: '//prog
+  ! the rc file, read whole: the source line is appended only if the marker is absent
+  content = ''
+  inquire(file=rc, exist=found, size=size_)
+  if (found .and. size_ > 0) then
+    content = repeat(' ', size_)
+    open(newunit=u, file=rc, access='stream', form='unformatted', action='read', iostat=ios, iomsg=msg)
+    if (ios == 0) read(u, iostat=ios, iomsg=msg) content
+    if (ios == 0) close(u)
+    if (ios /= 0) then
+      call install_error(ERROR_COMPLETION_INSTALL, ': cannot read "'//rc//'": '//trim(msg)//'!')
+      return
+    endif
+  endif
+  if (index(content, marker) == 0) then
+    open(newunit=u, file=rc, action='write', status='unknown', position='append', iostat=ios, iomsg=msg)
+    if (ios == 0) then
+      if (len(content) > 0) then
+        if (content(len(content):len(content)) /= new_line('a')) write(u, '(A)', iostat=ios, iomsg=msg) ''
+      endif
+      if (ios == 0) write(u, '(A)', iostat=ios, iomsg=msg) 'source "'//file//'"  '//marker
+      close(u)
+    endif
+    if (ios /= 0) then
+      if (shell == 'fish') then
+        call install_error(ERROR_COMPLETION_INSTALL, ': cannot write "'//rc//'": '//trim(msg)//&
+                           ' (run fish once to create its configuration directory)!')
+      else
+        call install_error(ERROR_COMPLETION_INSTALL, ': cannot write "'//rc//'": '//trim(msg)//'!')
+      endif
+      return
+    endif
+    call write_text(self%version_lun, 'completion script installed in "'//file//'", loaded by "'//rc//'"')
+  else
+    call write_text(self%version_lun, 'completion script updated in "'//file//'", already loaded by "'//rc//'"')
+  endif
+  self%error = STATUS_INSTALL_COMPLETION
+  contains
+    subroutine install_error(error, message)
+    !< Report an error of the completion install.
+    integer(I4P), intent(in) :: error   !< Error code.
+    character(*), intent(in) :: message !< Message, after the prefix.
+
+    self%error = error
+    self%error_message = self%error_prefix(pref)//message
+    call self%print_error_message
+    endsubroutine install_error
+  endsubroutine install_completion
 
   function is_fatal(self)
   !< Check if the current error stops parsing: any error but an unknown argument that is ignored (then recorded as such).
@@ -2255,6 +2428,18 @@ contains
     enddo
   endif
 
+  ! add the completion builtins to the top level, if asked (F24)
+  if (self%completion_options) then
+    if (.not.self%is_defined(group='', switch='--show-completion')) &
+      call self%add(pref=pref, group_index=0, switch='--show-completion', required=.false., def='', &
+                    help='Print the completion script of SHELL (default: $SHELL)', act='show_completion', &
+                    choices='bash,zsh,fish,powershell', metavar='SHELL')
+    if (.not.self%is_defined(group='', switch='--install-completion')) &
+      call self%add(pref=pref, group_index=0, switch='--install-completion', required=.false., def='', &
+                    help='Install the completion script of SHELL (default: $SHELL) in $HOME', act='install_completion', &
+                    choices='bash,zsh,fish,powershell', metavar='SHELL')
+  endif
+
   ! add hidden CLA '--' for getting the rid of eventual trailing CLAs garbage
   do g=0,size(self%clasg,dim=1)-1
     if (.not.self%is_defined(group=self%clasg(g)%group, switch='--')) &
@@ -2346,15 +2531,8 @@ contains
   class(command_line_interface), intent(in)  :: self      !< CLI data.
   character(*),                  intent(in)  :: bash_file !< Output file name of bash completion script.
   integer(I4P), optional,        intent(out) :: error     !< Error trapping flag.
-  type(command_line_interface)               :: cli       !< Copy of the CLI with the builtins.
 
-  if (self%builtins_missing()) then
-    cli = self
-    call cli%ensure_builtins
-    call cli%save_bash_completion_core(bash_file=bash_file, error=error)
-  else
-    call self%save_bash_completion_core(bash_file=bash_file, error=error)
-  endif
+  call write_script(file=bash_file, script=self%completion_script('bash'), error=error)
   endsubroutine save_bash_completion
 
   subroutine save_zsh_completion(self, zsh_file, error)
@@ -2363,15 +2541,8 @@ contains
   class(command_line_interface), intent(in)  :: self     !< CLI data.
   character(*),                  intent(in)  :: zsh_file !< Output file name of zsh completion script.
   integer(I4P), optional,        intent(out) :: error    !< Error trapping flag.
-  type(command_line_interface)               :: cli      !< Copy of the CLI with the builtins.
 
-  if (self%builtins_missing()) then
-    cli = self
-    call cli%ensure_builtins
-    call cli%save_bash_completion_core(bash_file=zsh_file, error=error, zsh=.true.)
-  else
-    call self%save_bash_completion_core(bash_file=zsh_file, error=error, zsh=.true.)
-  endif
+  call write_script(file=zsh_file, script=self%completion_script('zsh'), error=error)
   endsubroutine save_zsh_completion
 
   subroutine save_fish_completion(self, fish_file, error)
@@ -2380,66 +2551,94 @@ contains
   class(command_line_interface), intent(in)  :: self      !< CLI data.
   character(*),                  intent(in)  :: fish_file !< Output file name of fish completion script.
   integer(I4P), optional,        intent(out) :: error     !< Error trapping flag.
-  type(command_line_interface)               :: cli       !< Copy of the CLI with the builtins.
-  character(len=:), allocatable              :: script    !< Script text.
-  character(len=:), allocatable              :: prog      !< Program name, without its path.
-  integer(I4P)                               :: g         !< Counter.
-  integer(I4P)                               :: p         !< Position of the last path separator.
-  integer(I4P)                               :: u         !< Unit file handler.
 
-  cli = self
-  if (cli%builtins_missing()) call cli%ensure_builtins
-  prog = trim(adjustl(cli%progname))
-  p = max(index(prog, '/', back=.true.), index(prog, achar(92), back=.true.)) ! achar(92): a backslash
-  prog = prog(p+1:)
-  script = '# fish completion of '//prog//': install as ~/.config/fish/completions/'//prog//'.fish'
-  do g=0, size(cli%clasg, dim=1) - 1
-    script = script//cli%clasg(g)%completion_fish(prog=prog, commands=size(cli%clasg, dim=1) > 1)
-  enddo
-  if (present(error)) then
-    open(newunit=u, file=trim(adjustl(fish_file)), action='write', status='replace', iostat=error)
-    if (error /= 0) return
-    write(u, "(A)", iostat=error) script
-  else
-    open(newunit=u, file=trim(adjustl(fish_file)), action='write', status='replace')
-    write(u, "(A)") script
-  endif
-  close(u)
+  call write_script(file=fish_file, script=self%completion_script('fish'), error=error)
   endsubroutine save_fish_completion
 
   subroutine save_powershell_completion(self, powershell_file, error)
-  !< Save PowerShell completion script (F15 of #125): a native argument completer with the tables of the commands (names
-  !< and aliases) and of the options of each group; it completes the choices after an option, nothing after another option
-  !< taking a value (PowerShell then completes paths), otherwise the options and, at the top level, the commands. Builtins
+  !< Save PowerShell completion script (F15 of #125): a native argument completer (see powershell_script); builtins
   !< included whether or not parse has been called. Dot-source it, e.g. from $PROFILE.
   class(command_line_interface), intent(in)  :: self            !< CLI data.
   character(*),                  intent(in)  :: powershell_file !< Output file name of PowerShell completion script.
   integer(I4P), optional,        intent(out) :: error           !< Error trapping flag.
-  type(command_line_interface)               :: cli             !< Copy of the CLI with the builtins.
-  character(len=:), allocatable              :: script          !< Script text.
-  character(len=:), allocatable              :: prog            !< Program name, without its path.
-  character(len=:), allocatable              :: nl              !< New line.
-  integer(I4P)                               :: g               !< Counter.
-  integer(I4P)                               :: p               !< Position of the last path separator.
-  integer(I4P)                               :: u               !< Unit file handler.
 
-  cli = self
-  if (cli%builtins_missing()) call cli%ensure_builtins
-  prog = trim(adjustl(cli%progname))
-  p = max(index(prog, '/', back=.true.), index(prog, achar(92), back=.true.)) ! achar(92): a backslash
-  prog = prog(p+1:)
+  call write_script(file=powershell_file, script=self%completion_script('powershell'), error=error)
+  endsubroutine save_powershell_completion
+
+  function completion_script(self, shell) result(script)
+  !< Return the completion script of a shell (bash, zsh, fish, powershell; '' for another), builtins included whether or
+  !< not parse has been called (F15, F24 of #125).
+  class(command_line_interface), intent(in) :: self   !< CLI data.
+  character(*),                  intent(in) :: shell  !< Shell.
+  character(len=:), allocatable             :: script !< Script.
+  type(command_line_interface)              :: cli    !< Copy of the CLI with the builtins.
+
+  if (self%builtins_missing()) then
+    cli = self
+    call cli%ensure_builtins
+    script = cli%completion_script_core(shell)
+  else
+    script = self%completion_script_core(shell)
+  endif
+  endfunction completion_script
+
+  function completion_script_core(self, shell) result(script)
+  !< Return the completion script of a shell (builtins already present).
+  class(command_line_interface), intent(in) :: self   !< CLI data.
+  character(*),                  intent(in) :: shell  !< Shell.
+  character(len=:), allocatable             :: script !< Script.
+
+  select case(trim(adjustl(shell)))
+  case('bash')
+    script = self%bash_script(zsh=.false.)
+  case('zsh')
+    script = self%bash_script(zsh=.true.)
+  case('fish')
+    script = self%fish_script()
+  case('powershell')
+    script = self%powershell_script()
+  case default
+    script = ''
+  endselect
+  endfunction completion_script_core
+
+  function fish_script(self) result(script)
+  !< Return the fish completion script (F15 of #125): one complete line per option, commands and aliases first.
+  class(command_line_interface), intent(in) :: self   !< CLI data.
+  character(len=:), allocatable             :: script !< Script text.
+  character(len=:), allocatable             :: prog   !< Program name, without its path.
+  integer(I4P)                              :: g      !< Counter.
+
+  prog = program_basename(self%progname)
+  script = '# fish completion of '//prog//': install as ~/.config/fish/completions/'//prog//'.fish'
+  do g=0, size(self%clasg, dim=1) - 1
+    script = script//self%clasg(g)%completion_fish(prog=prog, commands=size(self%clasg, dim=1) > 1)
+  enddo
+  endfunction fish_script
+
+  function powershell_script(self) result(script)
+  !< Return the PowerShell completion script (F15 of #125): a native argument completer with the tables of the commands
+  !< (names and aliases) and of the options of each group; it completes the choices after an option, nothing after another
+  !< option taking a value (PowerShell then completes paths), otherwise the options and, at the top level, the commands.
+  class(command_line_interface), intent(in) :: self   !< CLI data.
+  character(len=:), allocatable             :: script !< Script text.
+  character(len=:), allocatable             :: prog   !< Program name, without its path.
+  character(len=:), allocatable             :: nl     !< New line.
+  integer(I4P)                              :: g      !< Counter.
+
+  prog = program_basename(self%progname)
   nl = new_line('a')
   script = '# PowerShell completion of '//prog//': dot-source this file (. ./'//prog//'.ps1), e.g. from your $PROFILE'
   script = script//nl//"Register-ArgumentCompleter -Native -CommandName '"//ps_escape(prog)//"' -ScriptBlock {"
   script = script//nl//'  param($wordToComplete, $commandAst, $cursorPosition)'
   script = script//nl//'  $commands = @{'
-  do g=1, size(cli%clasg, dim=1) - 1
-    script = script//cli%clasg(g)%completion_powershell(commands=.true.)
+  do g=1, size(self%clasg, dim=1) - 1
+    script = script//self%clasg(g)%completion_powershell(commands=.true.)
   enddo
   script = script//nl//'  }'
   script = script//nl//'  $options = @{'
-  do g=0, size(cli%clasg, dim=1) - 1
-    script = script//cli%clasg(g)%completion_powershell(commands=.false.)
+  do g=0, size(self%clasg, dim=1) - 1
+    script = script//self%clasg(g)%completion_powershell(commands=.false.)
   enddo
   script = script//nl//'  }'
   script = script//nl//'  # the words before the one completed; the command is the first of them that is a command name'
@@ -2470,16 +2669,7 @@ contains
                     "[System.Management.Automation.CompletionResult]::new($_, $_, 'Command', $commands[$_]) }"
   script = script//nl//'  }'
   script = script//nl//'}'
-  if (present(error)) then
-    open(newunit=u, file=trim(adjustl(powershell_file)), action='write', status='replace', iostat=error)
-    if (error /= 0) return
-    write(u, "(A)", iostat=error) script
-  else
-    open(newunit=u, file=trim(adjustl(powershell_file)), action='write', status='replace')
-    write(u, "(A)") script
-  endif
-  close(u)
-  endsubroutine save_powershell_completion
+  endfunction powershell_script
 
   subroutine save_man_page(self, man_file, error)
   !< Save CLI usage as man page, builtins included whether or not parse has been called.
@@ -2641,22 +2831,17 @@ contains
   call write_text(self%usage_lun, self%usage(pref=pref, g=0))
   endsubroutine print_usage
 
-  subroutine save_bash_completion_core(self, bash_file, error, zsh)
-  !< Save bash completion script (for named CLAs only), registered with `complete -o default` (an empty completion falls
-  !< back to file names, F15 of #125); with zsh, the same script behind zsh's bashcompinit.
-  class(command_line_interface), intent(in)  :: self      !< CLI data.
-  character(*),                  intent(in)  :: bash_file !< Output file name of bash completion script.
-  integer(I4P), optional,        intent(out) :: error     !< Error trapping flag.
-  logical,      optional,        intent(in)  :: zsh       !< Write the zsh script (default .false.).
-  character(len=:), allocatable              :: script    !< Script text.
-  integer(I4P)                               :: g         !< CLAs groups counter.
-  integer(I4P)                               :: u         !< Unit file handler.
-  logical                                    :: zsh_      !< Write the zsh script, local variable.
+  function bash_script(self, zsh) result(script)
+  !< Return the bash completion script (for named CLAs only), registered with `complete -o default` (an empty completion
+  !< falls back to file names, F15 of #125); with zsh, the same script behind zsh's bashcompinit.
+  class(command_line_interface), intent(in) :: self   !< CLI data.
+  logical,                       intent(in) :: zsh    !< The zsh script.
+  character(len=:), allocatable             :: script !< Script text.
+  integer(I4P)                              :: g      !< CLAs groups counter.
 
-  zsh_ = .false. ; if (present(zsh)) zsh_ = zsh
-  if (zsh_) then
+  if (zsh) then
     ! zsh runs the bash function through bashcompinit (which needs compinit), -o default included
-    script = '# zsh completion of '//basename(self%progname)//': source this file'
+    script = '# zsh completion of '//program_basename(self%progname)//': source this file'
     script = script//new_line('a')//'autoload -U +X compinit && compinit'
     script = script//new_line('a')//'autoload -U +X bashcompinit && bashcompinit'
   else
@@ -2693,34 +2878,8 @@ contains
   endif
   script = script//new_line('a')//'  return 0'
   script = script//new_line('a')//'}'
-  script = script//new_line('a')//'complete -o default -F _completion '//basename(self%progname)
-  if (present(error)) then
-    ! failures are reported through error
-    open(newunit=u, file=trim(adjustl(bash_file)), action='write', status='replace', iostat=error)
-    if (error /= 0) return
-    write(u, "(A)", iostat=error)script
-  else
-    ! without error, a failure stops the program as for any unchecked Fortran I/O
-    open(newunit=u, file=trim(adjustl(bash_file)), action='write', status='replace')
-    write(u, "(A)")script
-  endif
-  close(u)
-  contains
-    pure function basename(progname)
-      character(len=*), intent(in)  :: progname !< Program name.
-      character(len=:), allocatable :: basename !< Program name without full PATH.
-      integer(I4P)                  :: pos      !< Counter.
-
-      basename = progname
-      pos = index(basename, '/', back=.true.)
-      if (pos>0) then
-        basename = basename(pos+1:)
-      else
-        pos = index(basename, achar(92), back=.true.) ! achar(92): a backslash (a literal is an escape for nvfortran)
-        if (pos>0) basename = basename(pos+1:)
-      endif
-      endfunction basename
-  endsubroutine save_bash_completion_core
+  script = script//new_line('a')//'complete -o default -F _completion '//program_basename(self%progname)
+  endfunction bash_script
 
   subroutine save_man_page_core(self, man_file, error)
   !< Save CLI usage as man page.
@@ -2891,4 +3050,42 @@ contains
   stop code, quiet=.true.
 #endif
   endsubroutine quiet_stop
+  ! non type-bound procedures
+  pure function program_basename(progname) result(basename)
+  !< Return the program name without its path (separated by '/' or a backslash).
+  character(*), intent(in)      :: progname !< Program name.
+  character(len=:), allocatable :: basename !< Program name without its path.
+  integer(I4P)                  :: pos      !< Position of the last separator.
+
+  basename = trim(adjustl(progname))
+  pos = max(index(basename, '/', back=.true.), index(basename, achar(92), back=.true.)) ! achar(92): a backslash
+  basename = basename(pos+1:)
+  endfunction program_basename
+
+  subroutine write_script(file, script, error, iomsg)
+  !< Write a script (or any text) to a file. With error, a failure is reported (and its message in iomsg); without, it
+  !< stops the program as any unchecked Fortran I/O.
+  character(*),                            intent(in)  :: file   !< File name.
+  character(*),                            intent(in)  :: script !< Text.
+  integer(I4P),                  optional, intent(out) :: error  !< Error trapping flag.
+  character(len=:), allocatable, optional, intent(out) :: iomsg  !< Message of a failure.
+  character(len=256)                                   :: msg    !< Message of a failure, local variable.
+  integer(I4P)                                         :: u      !< Unit.
+  integer(I4P)                                         :: ios    !< I/O status.
+
+  msg = ''
+  if (present(error)) then
+    open(newunit=u, file=trim(adjustl(file)), action='write', status='replace', iostat=ios, iomsg=msg)
+    if (ios == 0) then
+      write(u, "(A)", iostat=ios, iomsg=msg) script
+      close(u)
+    endif
+    error = ios
+  else
+    open(newunit=u, file=trim(adjustl(file)), action='write', status='replace')
+    write(u, "(A)") script
+    close(u)
+  endif
+  if (present(iomsg)) iomsg = trim(msg)
+  endsubroutine write_script
 endmodule flap_command_line_interface_t

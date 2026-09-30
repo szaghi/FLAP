@@ -120,6 +120,8 @@ graph LR
 | `ACTION_STORE_FALSE` | character(len=*) | parameter | Store .false. without the necessity of a value. |
 | `ACTION_PRINT_HELP` | character(len=*) | parameter | Print help message. |
 | `ACTION_PRINT_MARK` | character(len=*) | parameter | Print help to Markdown file. |
+| `ACTION_SHOW_COMPLETION` | character(len=*) | parameter | Print the completion script (F24). |
+| `ACTION_INSTALL_COMPLETION` | character(len=*) | parameter | Install the completion script (F24). |
 | `ACTION_PRINT_VERS` | character(len=*) | parameter | Print version. |
 | `ACTION_COUNT` | character(len=*) | parameter | Count the occurrences (repeatable, no value). |
 | `ACTION_APPEND` | character(len=*) | parameter | Collect one value per occurrence (repeatable). |
@@ -2302,8 +2304,8 @@ function names(self) result(list)
 
 ```mermaid
 flowchart TD
+  bash_script["bash_script"] --> names["names"]
   completion_fish["completion_fish"] --> names["names"]
-  save_bash_completion_core["save_bash_completion_core"] --> names["names"]
   signature_core["signature_core"] --> names["names"]
   usage_core["usage_core"] --> names["names"]
   style names fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -2524,7 +2526,7 @@ function signature(self, bash_completion, plain)
 
 ```mermaid
 flowchart TD
-  save_bash_completion_core["save_bash_completion_core"] --> signature["signature"]
+  bash_script["bash_script"] --> signature["signature"]
   save_man_page_core["save_man_page_core"] --> signature["signature"]
   save_usage_to_markdown_core["save_usage_to_markdown_core"] --> signature["signature"]
   signature_core["signature_core"] --> signature["signature"]
@@ -2618,7 +2620,7 @@ function completion_fish(self, head) result(lines)
 ```mermaid
 flowchart TD
   completion_fish["completion_fish"] --> completion_fish["completion_fish"]
-  save_fish_completion["save_fish_completion"] --> completion_fish["completion_fish"]
+  fish_script["fish_script"] --> completion_fish["completion_fish"]
   completion_fish["completion_fish"] --> fish_escape["fish_escape"]
   completion_fish["completion_fish"] --> fish_name["fish_name"]
   completion_fish["completion_fish"] --> has_choices["has_choices"]
@@ -2649,7 +2651,7 @@ function completion_powershell(self) result(entries)
 ```mermaid
 flowchart TD
   completion_powershell["completion_powershell"] --> completion_powershell["completion_powershell"]
-  save_powershell_completion["save_powershell_completion"] --> completion_powershell["completion_powershell"]
+  powershell_script["powershell_script"] --> completion_powershell["completion_powershell"]
   completion_powershell["completion_powershell"] --> has_choices["has_choices"]
   completion_powershell["completion_powershell"] --> ps_escape["ps_escape"]
   completion_powershell["completion_powershell"] --> replace_all["replace_all"]

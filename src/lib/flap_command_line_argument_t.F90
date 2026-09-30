@@ -14,6 +14,8 @@ public :: command_line_argument
 public :: ACTION_STORE
 public :: ACTION_STORE_STAR
 public :: ACTION_STORE_TRUE
+public :: ACTION_SHOW_COMPLETION
+public :: ACTION_INSTALL_COMPLETION
 public :: ACTION_STORE_FALSE
 public :: ACTION_PRINT_HELP
 public :: ACTION_PRINT_MARK
@@ -230,6 +232,8 @@ character(len=*), parameter :: ACTION_STORE_TRUE  = 'STORE_TRUE'    !< Store .tr
 character(len=*), parameter :: ACTION_STORE_FALSE = 'STORE_FALSE'   !< Store .false. without the necessity of a value.
 character(len=*), parameter :: ACTION_PRINT_HELP  = 'PRINT_HELP'    !< Print help message.
 character(len=*), parameter :: ACTION_PRINT_MARK  = 'PRINT_MARKDOWN'!< Print help to Markdown file.
+character(len=*), parameter :: ACTION_SHOW_COMPLETION    = 'SHOW_COMPLETION'    !< Print the completion script (F24).
+character(len=*), parameter :: ACTION_INSTALL_COMPLETION = 'INSTALL_COMPLETION' !< Install the completion script (F24).
 character(len=*), parameter :: ACTION_PRINT_VERS  = 'PRINT_VERSION' !< Print version.
 character(len=*), parameter :: ACTION_COUNT       = 'COUNT'         !< Count the occurrences (repeatable, no value).
 character(len=*), parameter :: ACTION_APPEND      = 'APPEND'        !< Collect one value per occurrence (repeatable).
@@ -937,6 +941,14 @@ contains
       if (allocated(self%choices)) then
         usage = usage//', value in: ('//self%choices//')'
       endif
+    elseif (self%act==ACTION_SHOW_COMPLETION .or. self%act==ACTION_INSTALL_COMPLETION) then
+      ! an optional value, the shell (F24)
+      if (markdownd) then
+        usage = new_line('a')//'* `'//trim(adjustl(self%switch))//' ['//ph//']`  '
+      else
+        usage = '   '//switch_//' ['//ph//']'
+      endif
+      if (allocated(self%choices)) usage = usage//', value in: `'//self%choices//'`'
     else
       if (trim(adjustl(self%switch))/=trim(adjustl(self%switch_ab))) then
         if (markdownd) then
@@ -1092,6 +1104,9 @@ contains
     endif
   elseif (self%act==action_store_star) then
     signature = ' ['//ph//']'
+  elseif (self%act==ACTION_SHOW_COMPLETION .or. self%act==ACTION_INSTALL_COMPLETION) then
+    ! an optional value, the shell (F24)
+    signature = ' ['//trim(adjustl(self%switch))//' ['//ph//']]'
   elseif (self%act==action_append) then
     ! repeatable, docopt-style
     if (required) then
@@ -1152,7 +1167,8 @@ contains
   endif
   if (names == '') return
   value = ''
-  if (self%act == ACTION_STORE .or. self%act == ACTION_APPEND .or. self%act == ACTION_STORE_STAR) then
+  if (self%act == ACTION_STORE .or. self%act == ACTION_APPEND .or. self%act == ACTION_STORE_STAR .or. &
+      self%act == ACTION_SHOW_COMPLETION .or. self%act == ACTION_INSTALL_COMPLETION) then
     if (self%has_choices()) then
       value = " -x -a '"//fish_escape(replace_all(string=self%choices, substring=',', restring=' '))//"'"
     elseif (self%is_map) then
@@ -1201,7 +1217,8 @@ contains
 
   entries = ''
   if (self%is_hidden .or. self%is_positional .or. .not.allocated(self%switch)) return
-  value = self%act == ACTION_STORE .or. self%act == ACTION_APPEND .or. self%act == ACTION_STORE_STAR
+  value = self%act == ACTION_STORE .or. self%act == ACTION_APPEND .or. self%act == ACTION_STORE_STAR .or. &
+          self%act == ACTION_SHOW_COMPLETION .or. self%act == ACTION_INSTALL_COMPLETION
   if (value .and. self%has_choices()) then
     rest = "; c = @('"//replace_all(string=ps_escape(self%choices), substring=',', restring="', '")//"'); v = $true }"
   elseif (value) then
@@ -1523,6 +1540,8 @@ contains
         self%act/=ACTION_PRINT_VERS.and. &
         self%act/=ACTION_COUNT.and.      &
         self%act/=ACTION_ALTERNATE.and.  &
+        self%act/=ACTION_SHOW_COMPLETION.and.    &
+        self%act/=ACTION_INSTALL_COMPLETION.and. &
         self%act/=ACTION_APPEND) then
       call self%errored(pref=pref, error=ERROR_ACTION_UNKNOWN)
       return

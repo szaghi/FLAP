@@ -68,6 +68,11 @@ source-dir = "src/tests"
 main = "flap_test_choices_logical.f90"
 
 [[test]]
+name = "flap_test_completion_options"
+source-dir = "src/tests"
+main = "flap_test_completion_options.f90"
+
+[[test]]
 name = "flap_test_config"
 source-dir = "src/tests"
 main = "flap_test_config.f90"

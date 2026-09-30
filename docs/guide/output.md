@@ -149,6 +149,28 @@ and, at the top level, the commands. Dot-source it, for example from your `$PROF
 . /path/to/myapp.ps1
 ```
 
+## Shell completion from the program
+
+With `init(completion_options=.true.)` the program itself offers its completion, as Typer does:
+
+```console
+$ myapp --show-completion bash > myapp.bash     # print the script of a shell
+$ myapp --install-completion                    # install it for $SHELL
+completion script installed in "/home/me/.myapp-completion.bash", loaded by "/home/me/.bashrc"
+```
+
+- The shell is optional (`bash`, `zsh`, `fish`, `powershell`); without it, the basename of `$SHELL`. An unknown or unset
+  shell is `ERROR_COMPLETION_SHELL` (1010).
+- `--show-completion` writes the script to the version unit (standard output by default), `--install-completion` writes it
+  to `$HOME/.<prog>-completion.<shell>` and appends one line sourcing it, marked `# FLAP completion: <prog>`, to
+  `~/.bashrc`, `~/.zshrc` or `~/.config/fish/config.fish`, only if that marker is absent: the rc file is never
+  rewritten, and running it again refreshes the script. No directory is created: fish must have been run once. PowerShell
+  is not installed automatically (its profile path needs `pwsh`): save `--show-completion powershell` and dot-source it
+  from your `$PROFILE`. A failure is `ERROR_COMPLETION_INSTALL` (1011), with the I/O error.
+- In standalone mode the program then ends (exit status 0), as for `--help`; otherwise `parse` returns
+  `STATUS_SHOW_COMPLETION` (−6) or `STATUS_INSTALL_COMPLETION` (−7).
+- `cli%completion_script(shell)` returns the script of a shell as a string ('' for an unknown one).
+
 ## Markdown usage export — `cli%save_usage_to_markdown`
 
 Export the usage message as a Markdown file, suitable for embedding in documentation

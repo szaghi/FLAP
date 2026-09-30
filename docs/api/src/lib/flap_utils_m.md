@@ -165,6 +165,8 @@ subroutine read_env(name, value, found, ignore)
 
 ```mermaid
 flowchart TD
+  completion_shell["completion_shell"] --> read_env["read_env"]
+  install_completion["install_completion"] --> read_env["read_env"]
   parse["parse"] --> read_env["read_env"]
   resolve_values["resolve_values"] --> read_env["read_env"]
   style read_env fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -255,6 +257,7 @@ subroutine write_text(lun, text)
 flowchart TD
   check_exclusive_sets["check_exclusive_sets"] --> write_text["write_text"]
   dispatch_status["dispatch_status"] --> write_text["write_text"]
+  install_completion["install_completion"] --> write_text["write_text"]
   is_required_passed["is_required_passed"] --> write_text["write_text"]
   no_args_help["no_args_help"] --> write_text["write_text"]
   print_usage["print_usage"] --> write_text["write_text"]
@@ -571,7 +574,7 @@ function ps_escape(text) result(escaped)
 flowchart TD
   completion_powershell["completion_powershell"] --> ps_escape["ps_escape"]
   completion_powershell["completion_powershell"] --> ps_escape["ps_escape"]
-  save_powershell_completion["save_powershell_completion"] --> ps_escape["ps_escape"]
+  powershell_script["powershell_script"] --> ps_escape["ps_escape"]
   style ps_escape fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 

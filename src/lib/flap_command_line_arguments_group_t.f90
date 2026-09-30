@@ -5,6 +5,7 @@ module flap_command_line_arguments_group_t
 use face, only : colorize
 use flap_command_line_argument_t, only : command_line_argument, &
                                          ACTION_PRINT_HELP,     &
+                                         ACTION_SHOW_COMPLETION, ACTION_INSTALL_COMPLETION, &
                                          ACTION_PRINT_MARK,     &
                                          ACTION_PRINT_VERS,     &
                                          ACTION_APPEND,         &
@@ -31,6 +32,8 @@ public :: STATUS_PRINT_H
 public :: STATUS_PRINT_M
 public :: STATUS_NO_ARGS
 public :: STATUS_ALTERNATE
+public :: STATUS_SHOW_COMPLETION
+public :: STATUS_INSTALL_COMPLETION
 public :: ERROR_CONSISTENCY
 public :: ERROR_M_EXCLUDE
 public :: ERROR_M_EXCLUDE_SET
@@ -108,6 +111,8 @@ integer(I4P), parameter :: STATUS_PRINT_H = -2 !< Print help status.
 integer(I4P), parameter :: STATUS_PRINT_M = -3 !< Print help status to Markdown file.
 integer(I4P), parameter :: STATUS_NO_ARGS = -5 !< No arguments passed, help printed (no_args_is_help).
 integer(I4P), parameter :: STATUS_ALTERNATE = -4 !< An alternate action passed: value validation bypassed (F16).
+integer(I4P), parameter :: STATUS_SHOW_COMPLETION = -6    !< --show-completion passed (F24).
+integer(I4P), parameter :: STATUS_INSTALL_COMPLETION = -7 !< --install-completion passed (F24).
 
 ! errors codes
 integer(I4P), parameter :: ERROR_CONSISTENCY = 100 !< CLAs group consistency error.
@@ -982,7 +987,9 @@ contains
                        endif
                     endif
 
-                 elseif (self%cla(a)%act==action_store_star) then
+                 elseif (self%cla(a)%act==action_store_star.or.self%cla(a)%act==ACTION_SHOW_COMPLETION.or. &
+                         self%cla(a)%act==ACTION_INSTALL_COMPLETION) then
+                    ! an optional value (the shell of the completion builtins, F24)
                     if (arg + 1 <= size(args, dim=1)) then ! verify if the value has been passed directly to cli
                        ! there are still other arguments to check
                        if (.not.self%is_switch_token(args(arg+1))) then

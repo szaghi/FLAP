@@ -39,6 +39,7 @@ graph LR
 - [parse](#parse)
 - [print_error_hint](#print-error-hint)
 - [parse_core](#parse-core)
+- [install_completion](#install-completion)
 - [get_clasg_indexes](#get-clasg-indexes)
 - [get_args_from_string](#get-args-from-string)
 - [get_args_from_invocation](#get-args-from-invocation)
@@ -64,12 +65,12 @@ graph LR
 - [save_man_page](#save-man-page)
 - [save_usage_to_markdown](#save-usage-to-markdown)
 - [print_usage](#print-usage)
-- [save_bash_completion_core](#save-bash-completion-core)
 - [save_man_page_core](#save-man-page-core)
 - [save_usage_to_markdown_core](#save-usage-to-markdown-core)
 - [errored](#errored)
 - [finalize](#finalize)
 - [quiet_stop](#quiet-stop)
+- [write_script](#write-script)
 - [get_source](#get-source)
 - [provenance](#provenance)
 - [envvar_name](#envvar-name)
@@ -82,13 +83,20 @@ graph LR
 - [is_parsed](#is-parsed)
 - [no_args_help](#no-args-help)
 - [dispatch_status](#dispatch-status)
+- [completion_shell](#completion-shell)
 - [is_fatal](#is-fatal)
 - [map_cla](#map-cla)
 - [builtins_missing](#builtins-missing)
 - [usage](#usage)
 - [signature](#signature)
+- [completion_script](#completion-script)
+- [completion_script_core](#completion-script-core)
+- [fish_script](#fish-script)
+- [powershell_script](#powershell-script)
 - [usage_core](#usage-core)
 - [signature_core](#signature-core)
+- [bash_script](#bash-script)
+- [program_basename](#program-basename)
 
 ## Variables
 
@@ -104,6 +112,8 @@ graph LR
 | `ERROR_CONFIG_UNKNOWN_KEY` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Configuration file: unknown key or malformed line. |
 | `ERROR_GROUP_ALIAS` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Alias of a command equal to a command or an alias. |
 | `ERROR_COPY_POSITIONAL` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | copy_options asked to copy a positional CLA. |
+| `ERROR_COMPLETION_SHELL` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Unknown (or unset) shell of the completion builtins. |
+| `ERROR_COMPLETION_INSTALL` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | The completion script cannot be installed. |
 | `ERROR_ARGUMENT_RETRIEVAL` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | A command line argument cannot be retrieved. |
 
 ## Derived Types
@@ -154,6 +164,7 @@ classDiagram
 | `error_hint` | logical |  | Print a hint after a failed parse. |
 | `no_args_is_help` | logical |  | Print the help when no arguments are passed. |
 | `ignore_env` | logical |  | Turn every environment lookup off. |
+| `completion_options` | logical |  | --show/--install-completion (F24). |
 | `auto_envvar_prefix` | character(len=:) | allocatable | Prefix of the generated envvar names. |
 | `config_path` | character(len=:) | allocatable | Configuration file (F08). |
 | `config_required` | logical |  | The configuration file must exist. |
@@ -205,7 +216,13 @@ classDiagram
 | `builtins_missing` |  | Check if the builtin CLAs still have to be added. |
 | `usage_core` |  | Get CLI usage (builtins already present). |
 | `signature_core` |  | Get CLI signature (builtins already present). |
-| `save_bash_completion_core` |  | Save bash completion script (builtins already present). |
+| `completion_script` |  | Completion script of a shell. |
+| `completion_script_core` |  | Completion script of a shell (builtins already present). |
+| `completion_shell` |  | Shell of a completion builtin. |
+| `install_completion` |  | Install the completion script of a shell. |
+| `bash_script` |  | Bash (or zsh) completion script. |
+| `fish_script` |  | Fish completion script. |
+| `powershell_script` |  | PowerShell completion script. |
 | `save_man_page_core` |  | Save CLI usage as man page (builtins already present). |
 | `save_usage_to_markdown_core` |  | Save CLI usage as markdown (builtins already present). |
 | `parse_core` |  | Parse the command line (body of parse). |
@@ -267,7 +284,7 @@ flowchart TD
 Initialize CLI.
 
 ```fortran
-subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone, error_hint, no_args_is_help, ignore_env, auto_envvar_prefix, case_insensitive)
+subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone, error_hint, no_args_is_help, ignore_env, auto_envvar_prefix, case_insensitive, completion_options)
 ```
 
 **Arguments**
@@ -296,6 +313,7 @@ subroutine init(self, progname, version, help, description, license, authors, ex
 | `ignore_env` | logical | in | optional | Turn every environment lookup off (F20): envvar |
 | `auto_envvar_prefix` | character(len=*) | in | optional | Generate the envvar of the options without one: |
 | `case_insensitive` | logical | in | optional | Match switches and command names in any case (F14); |
+| `completion_options` | logical | in | optional | Add --show-completion and --install-completion |
 
 **Call graph**
 
@@ -753,6 +771,40 @@ flowchart TD
   parse_core["parse_core"] --> to_characters["to_characters"]
   parse_core["parse_core"] --> warn_deprecated["warn_deprecated"]
   style parse_core fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### install_completion
+
+Install the completion script of a shell (F24 of #125): write it to $HOME/.<prog>-completion.<shell>, then append a
+ line sourcing it, marked '# FLAP completion: <prog>', to the shell's rc file ($HOME/.bashrc, $HOME/.zshrc,
+ $HOME/.config/fish/config.fish), only if the marker is absent: the rc file is never rewritten, no directory is created.
+ Success is STATUS_INSTALL_COMPLETION (and a report on the version unit); a failure ERROR_COMPLETION_INSTALL (printed,
+ with the I/O message); PowerShell is not installed (ERROR_COMPLETION_SHELL, with instructions).
+
+```fortran
+subroutine install_completion(self, shell, pref)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | inout |  | CLI data. |
+| `shell` | character(len=*) | in |  | Shell: bash, zsh, fish or powershell. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  dispatch_status["dispatch_status"] --> install_completion["install_completion"]
+  install_completion["install_completion"] --> completion_script["completion_script"]
+  install_completion["install_completion"] --> install_error["install_error"]
+  install_completion["install_completion"] --> program_basename["program_basename"]
+  install_completion["install_completion"] --> read_env["read_env"]
+  install_completion["install_completion"] --> write_script["write_script"]
+  install_completion["install_completion"] --> write_text["write_text"]
+  style install_completion fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### get_clasg_indexes
@@ -1387,13 +1439,10 @@ subroutine ensure_builtins(self, pref)
 
 ```mermaid
 flowchart TD
+  completion_script["completion_script"] --> ensure_builtins["ensure_builtins"]
   parse_core["parse_core"] --> ensure_builtins["ensure_builtins"]
-  save_bash_completion["save_bash_completion"] --> ensure_builtins["ensure_builtins"]
-  save_fish_completion["save_fish_completion"] --> ensure_builtins["ensure_builtins"]
   save_man_page["save_man_page"] --> ensure_builtins["ensure_builtins"]
-  save_powershell_completion["save_powershell_completion"] --> ensure_builtins["ensure_builtins"]
   save_usage_to_markdown["save_usage_to_markdown"] --> ensure_builtins["ensure_builtins"]
-  save_zsh_completion["save_zsh_completion"] --> ensure_builtins["ensure_builtins"]
   signature["signature"] --> ensure_builtins["ensure_builtins"]
   usage["usage"] --> ensure_builtins["ensure_builtins"]
   ensure_builtins["ensure_builtins"] --> add["add"]
@@ -1422,9 +1471,8 @@ subroutine save_bash_completion(self, bash_file, error)
 
 ```mermaid
 flowchart TD
-  save_bash_completion["save_bash_completion"] --> builtins_missing["builtins_missing"]
-  save_bash_completion["save_bash_completion"] --> ensure_builtins["ensure_builtins"]
-  save_bash_completion["save_bash_completion"] --> save_bash_completion_core["save_bash_completion_core"]
+  save_bash_completion["save_bash_completion"] --> completion_script["completion_script"]
+  save_bash_completion["save_bash_completion"] --> write_script["write_script"]
   style save_bash_completion fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -1449,9 +1497,8 @@ subroutine save_zsh_completion(self, zsh_file, error)
 
 ```mermaid
 flowchart TD
-  save_zsh_completion["save_zsh_completion"] --> builtins_missing["builtins_missing"]
-  save_zsh_completion["save_zsh_completion"] --> ensure_builtins["ensure_builtins"]
-  save_zsh_completion["save_zsh_completion"] --> save_bash_completion_core["save_bash_completion_core"]
+  save_zsh_completion["save_zsh_completion"] --> completion_script["completion_script"]
+  save_zsh_completion["save_zsh_completion"] --> write_script["write_script"]
   style save_zsh_completion fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -1476,17 +1523,14 @@ subroutine save_fish_completion(self, fish_file, error)
 
 ```mermaid
 flowchart TD
-  save_fish_completion["save_fish_completion"] --> builtins_missing["builtins_missing"]
-  save_fish_completion["save_fish_completion"] --> completion_fish["completion_fish"]
-  save_fish_completion["save_fish_completion"] --> ensure_builtins["ensure_builtins"]
+  save_fish_completion["save_fish_completion"] --> completion_script["completion_script"]
+  save_fish_completion["save_fish_completion"] --> write_script["write_script"]
   style save_fish_completion fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### save_powershell_completion
 
-Save PowerShell completion script (F15 of #125): a native argument completer with the tables of the commands (names
- and aliases) and of the options of each group; it completes the choices after an option, nothing after another option
- taking a value (PowerShell then completes paths), otherwise the options and, at the top level, the commands. Builtins
+Save PowerShell completion script (F15 of #125): a native argument completer (see powershell_script); builtins
  included whether or not parse has been called. Dot-source it, e.g. from $PROFILE.
 
 ```fortran
@@ -1505,10 +1549,8 @@ subroutine save_powershell_completion(self, powershell_file, error)
 
 ```mermaid
 flowchart TD
-  save_powershell_completion["save_powershell_completion"] --> builtins_missing["builtins_missing"]
-  save_powershell_completion["save_powershell_completion"] --> completion_powershell["completion_powershell"]
-  save_powershell_completion["save_powershell_completion"] --> ensure_builtins["ensure_builtins"]
-  save_powershell_completion["save_powershell_completion"] --> ps_escape["ps_escape"]
+  save_powershell_completion["save_powershell_completion"] --> completion_script["completion_script"]
+  save_powershell_completion["save_powershell_completion"] --> write_script["write_script"]
   style save_powershell_completion fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -1587,36 +1629,6 @@ flowchart TD
   print_usage["print_usage"] --> usage["usage"]
   print_usage["print_usage"] --> write_text["write_text"]
   style print_usage fill:#3e63dd,stroke:#99b,stroke-width:2px
-```
-
-### save_bash_completion_core
-
-Save bash completion script (for named CLAs only), registered with `complete -o default` (an empty completion falls
- back to file names, F15 of #125); with zsh, the same script behind zsh's bashcompinit.
-
-```fortran
-subroutine save_bash_completion_core(self, bash_file, error, zsh)
-```
-
-**Arguments**
-
-| Name | Type | Intent | Attributes | Description |
-|------|------|--------|------------|-------------|
-| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | in |  | CLI data. |
-| `bash_file` | character(len=*) | in |  | Output file name of bash completion script. |
-| `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | optional | Error trapping flag. |
-| `zsh` | logical | in | optional | Write the zsh script (default .false.). |
-
-**Call graph**
-
-```mermaid
-flowchart TD
-  save_bash_completion["save_bash_completion"] --> save_bash_completion_core["save_bash_completion_core"]
-  save_zsh_completion["save_zsh_completion"] --> save_bash_completion_core["save_bash_completion_core"]
-  save_bash_completion_core["save_bash_completion_core"] --> basename["basename"]
-  save_bash_completion_core["save_bash_completion_core"] --> names["names"]
-  save_bash_completion_core["save_bash_completion_core"] --> signature["signature"]
-  style save_bash_completion_core fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### save_man_page_core
@@ -1806,6 +1818,36 @@ flowchart TD
   dispatch_status["dispatch_status"] --> quiet_stop["quiet_stop"]
   no_args_help["no_args_help"] --> quiet_stop["quiet_stop"]
   style quiet_stop fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### write_script
+
+Write a script (or any text) to a file. With error, a failure is reported (and its message in iomsg); without, it
+ stops the program as any unchecked Fortran I/O.
+
+```fortran
+subroutine write_script(file, script, error, iomsg)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `file` | character(len=*) | in |  | File name. |
+| `script` | character(len=*) | in |  | Text. |
+| `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | optional | Error trapping flag. |
+| `iomsg` | character(len=:) | out | allocatable, optional | Message of a failure. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  install_completion["install_completion"] --> write_script["write_script"]
+  save_bash_completion["save_bash_completion"] --> write_script["write_script"]
+  save_fish_completion["save_fish_completion"] --> write_script["write_script"]
+  save_powershell_completion["save_powershell_completion"] --> write_script["write_script"]
+  save_zsh_completion["save_zsh_completion"] --> write_script["write_script"]
+  style write_script fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ## Functions
@@ -2202,6 +2244,9 @@ function dispatch_status(self, pref) result(dispatched)
 ```mermaid
 flowchart TD
   parse_core["parse_core"] --> dispatch_status["dispatch_status"]
+  dispatch_status["dispatch_status"] --> completion_script["completion_script"]
+  dispatch_status["dispatch_status"] --> completion_shell["completion_shell"]
+  dispatch_status["dispatch_status"] --> install_completion["install_completion"]
   dispatch_status["dispatch_status"] --> is_action_passed["is_action_passed"]
   dispatch_status["dispatch_status"] --> print_version["print_version"]
   dispatch_status["dispatch_status"] --> quiet_stop["quiet_stop"]
@@ -2209,6 +2254,36 @@ flowchart TD
   dispatch_status["dispatch_status"] --> usage["usage"]
   dispatch_status["dispatch_status"] --> write_text["write_text"]
   style dispatch_status fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### completion_shell
+
+Return the shell of a completion builtin (F24 of #125): its value, else the basename of $SHELL; pwsh is powershell.
+ An unknown or unset shell is ERROR_COMPLETION_SHELL (printed), and '' is returned.
+
+**Returns**: `character(len=:)`
+
+```fortran
+function completion_shell(self, act, pref) result(shell)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | inout |  | CLI data. |
+| `act` | character(len=*) | in |  | Action of the builtin. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  dispatch_status["dispatch_status"] --> completion_shell["completion_shell"]
+  completion_shell["completion_shell"] --> completion_error["completion_error"]
+  completion_shell["completion_shell"] --> program_basename["program_basename"]
+  completion_shell["completion_shell"] --> read_env["read_env"]
+  style completion_shell fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### is_fatal
@@ -2291,12 +2366,9 @@ function builtins_missing(self) result(missing)
 
 ```mermaid
 flowchart TD
-  save_bash_completion["save_bash_completion"] --> builtins_missing["builtins_missing"]
-  save_fish_completion["save_fish_completion"] --> builtins_missing["builtins_missing"]
+  completion_script["completion_script"] --> builtins_missing["builtins_missing"]
   save_man_page["save_man_page"] --> builtins_missing["builtins_missing"]
-  save_powershell_completion["save_powershell_completion"] --> builtins_missing["builtins_missing"]
   save_usage_to_markdown["save_usage_to_markdown"] --> builtins_missing["builtins_missing"]
-  save_zsh_completion["save_zsh_completion"] --> builtins_missing["builtins_missing"]
   signature["signature"] --> builtins_missing["builtins_missing"]
   usage["usage"] --> builtins_missing["builtins_missing"]
   builtins_missing["builtins_missing"] --> is_defined["is_defined"]
@@ -2366,7 +2438,7 @@ function signature(self, bash_completion)
 
 ```mermaid
 flowchart TD
-  save_bash_completion_core["save_bash_completion_core"] --> signature["signature"]
+  bash_script["bash_script"] --> signature["signature"]
   save_man_page_core["save_man_page_core"] --> signature["signature"]
   save_usage_to_markdown_core["save_usage_to_markdown_core"] --> signature["signature"]
   signature_core["signature_core"] --> signature["signature"]
@@ -2376,6 +2448,123 @@ flowchart TD
   signature["signature"] --> ensure_builtins["ensure_builtins"]
   signature["signature"] --> signature_core["signature_core"]
   style signature fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### completion_script
+
+Return the completion script of a shell (bash, zsh, fish, powershell; '' for another), builtins included whether or
+ not parse has been called (F15, F24 of #125).
+
+**Returns**: `character(len=:)`
+
+```fortran
+function completion_script(self, shell) result(script)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | in |  | CLI data. |
+| `shell` | character(len=*) | in |  | Shell. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  dispatch_status["dispatch_status"] --> completion_script["completion_script"]
+  install_completion["install_completion"] --> completion_script["completion_script"]
+  save_bash_completion["save_bash_completion"] --> completion_script["completion_script"]
+  save_fish_completion["save_fish_completion"] --> completion_script["completion_script"]
+  save_powershell_completion["save_powershell_completion"] --> completion_script["completion_script"]
+  save_zsh_completion["save_zsh_completion"] --> completion_script["completion_script"]
+  completion_script["completion_script"] --> builtins_missing["builtins_missing"]
+  completion_script["completion_script"] --> completion_script_core["completion_script_core"]
+  completion_script["completion_script"] --> ensure_builtins["ensure_builtins"]
+  style completion_script fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### completion_script_core
+
+Return the completion script of a shell (builtins already present).
+
+**Returns**: `character(len=:)`
+
+```fortran
+function completion_script_core(self, shell) result(script)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | in |  | CLI data. |
+| `shell` | character(len=*) | in |  | Shell. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  completion_script["completion_script"] --> completion_script_core["completion_script_core"]
+  completion_script_core["completion_script_core"] --> bash_script["bash_script"]
+  completion_script_core["completion_script_core"] --> fish_script["fish_script"]
+  completion_script_core["completion_script_core"] --> powershell_script["powershell_script"]
+  style completion_script_core fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### fish_script
+
+Return the fish completion script (F15 of #125): one complete line per option, commands and aliases first.
+
+**Returns**: `character(len=:)`
+
+```fortran
+function fish_script(self) result(script)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | in |  | CLI data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  completion_script_core["completion_script_core"] --> fish_script["fish_script"]
+  fish_script["fish_script"] --> completion_fish["completion_fish"]
+  fish_script["fish_script"] --> program_basename["program_basename"]
+  style fish_script fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### powershell_script
+
+Return the PowerShell completion script (F15 of #125): a native argument completer with the tables of the commands
+ (names and aliases) and of the options of each group; it completes the choices after an option, nothing after another
+ option taking a value (PowerShell then completes paths), otherwise the options and, at the top level, the commands.
+
+**Returns**: `character(len=:)`
+
+```fortran
+function powershell_script(self) result(script)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | in |  | CLI data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  completion_script_core["completion_script_core"] --> powershell_script["powershell_script"]
+  powershell_script["powershell_script"] --> completion_powershell["completion_powershell"]
+  powershell_script["powershell_script"] --> program_basename["program_basename"]
+  powershell_script["powershell_script"] --> ps_escape["ps_escape"]
+  style powershell_script fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### usage_core
@@ -2439,4 +2628,63 @@ flowchart TD
   signature_core["signature_core"] --> names["names"]
   signature_core["signature_core"] --> signature["signature"]
   style signature_core fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### bash_script
+
+Return the bash completion script (for named CLAs only), registered with `complete -o default` (an empty completion
+ falls back to file names, F15 of #125); with zsh, the same script behind zsh's bashcompinit.
+
+**Returns**: `character(len=:)`
+
+```fortran
+function bash_script(self, zsh) result(script)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | in |  | CLI data. |
+| `zsh` | logical | in |  | The zsh script. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  completion_script_core["completion_script_core"] --> bash_script["bash_script"]
+  bash_script["bash_script"] --> names["names"]
+  bash_script["bash_script"] --> program_basename["program_basename"]
+  bash_script["bash_script"] --> signature["signature"]
+  style bash_script fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### program_basename
+
+Return the program name without its path (separated by '/' or a backslash).
+
+**Attributes**: pure
+
+**Returns**: `character(len=:)`
+
+```fortran
+function program_basename(progname) result(basename)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `progname` | character(len=*) | in |  | Program name. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  bash_script["bash_script"] --> program_basename["program_basename"]
+  completion_shell["completion_shell"] --> program_basename["program_basename"]
+  fish_script["fish_script"] --> program_basename["program_basename"]
+  install_completion["install_completion"] --> program_basename["program_basename"]
+  powershell_script["powershell_script"] --> program_basename["program_basename"]
+  style program_basename fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```

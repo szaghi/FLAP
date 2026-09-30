@@ -26,6 +26,7 @@ customise the help and version messages.
 | `standalone` | `logical` | `.true.` | Stop after printing help/version/Markdown; `.false.` makes `parse` return `STATUS_PRINT_H`/`V`/`M` instead (see [Error Codes](./errors#handling-status-codes)) |
 | `error_hint` | `logical` | `.true.` | After a failed `parse`, print `Try 'prog --help' for help.` (see [Error Codes](./errors#error-hint)) |
 | `no_args_is_help` | `logical` | `.false.` | With no arguments, print the help instead of parsing (`STATUS_NO_ARGS`; exit status 2 in standalone mode) |
+| `completion_options` | `logical` | `.false.` | Add `--show-completion [SHELL]` and `--install-completion [SHELL]` to the top level (see [Output](./output#shell-completion-from-the-program)) |
 | `case_insensitive` | `logical` | `.false.` | Match switches (abbreviations and negations included) and command names in any case: `--MESH` is `--mesh`, `COMPILE` is `compile`. Values and choices keep their case; two switches differing only by case are a consistency error (100). Call `init` before `add` |
 
 > **Note on `examples`:** Fortran requires all elements of a character array to have the

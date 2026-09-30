@@ -25,6 +25,8 @@ positive values are **errors**. Existing values never change.
 
 | Code | Constant | Meaning | Typical cause |
 |---:|---|---|---|
+| `-7` | `STATUS_INSTALL_COMPLETION` | Completion script installed | `--install-completion` was passed (`init(completion_options=.true.)`); in standalone mode the program ends with exit status 0 |
+| `-6` | `STATUS_SHOW_COMPLETION` | Completion script printed | `--show-completion` was passed; in standalone mode the program ends with exit status 0 |
 | `-5` | `STATUS_NO_ARGS` | Help printed, no arguments | `init(no_args_is_help=.true.)` and no argument passed (or a command with `no_args_is_help` invoked alone); in standalone mode the program ends with exit status 2 |
 | `-4` | `STATUS_ALTERNATE` | An alternate action was passed | An option with `act='alternate'` (e.g. `--list-models`): value validation skipped, dispatch on `is_passed`; returned also in standalone mode |
 | `-3` | `STATUS_PRINT_M` | Help written as Markdown | `--markdown` was passed; not a real error |
@@ -97,6 +99,8 @@ positive values are **errors**. Existing values never change.
 | `1007` | `ERROR_CONFIG_UNKNOWN_KEY` | Configuration file: unknown key | An unknown key or section, a key of an option taking no value, or a malformed line (the message names the line) |
 | `1008` | `ERROR_GROUP_ALIAS` | Invalid command alias | `add_group(aliases=...)` with an alias equal to a command name or another alias, repeated, blank or equal to its command, or a command name equal to an alias; `parse` then fails too |
 | `1009` | `ERROR_COPY_POSITIONAL` | Positional in `copy_options` | `copy_options(switches=...)` names a positional argument: only named options are copied |
+| `1010` | `ERROR_COMPLETION_SHELL` | Unknown completion shell | `--show-completion`/`--install-completion` with a shell other than bash, zsh, fish, powershell, or none given and `$SHELL` unset; `--install-completion powershell` (install it by hand) |
+| `1011` | `ERROR_COMPLETION_INSTALL` | Completion not installed | `$HOME` unset, or the script or the rc file cannot be written (the message carries the I/O error; for fish, `~/.config/fish` must exist) |
 | `1012` | `ERROR_ARGUMENT_RETRIEVAL` | A command line argument cannot be read | `get_command_argument` failed (processor error; not expected in practice) |
 
 The first two group codes are named `ERROR_GROUP_*` in the `flap` module; inside the group module they are
