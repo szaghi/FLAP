@@ -92,6 +92,11 @@ ctest
 
 > **NVFortran note:** pass `-Mbackslash` to work around a quoted-string issue:
 > `cmake -D CMAKE_Fortran_FLAGS="-Mbackslash" FLAP`
+>
+> nvfortran 26.5 miscompiles a variable passed to `get` (or any `class(*)` argument) from **more than one call site**
+> of the same scope, including an internal procedure using it by host association: a call executed before the first
+> one in the source may leave the variable unassigned, or crash. In code built with nvfortran, give each `get` call
+> its own variable (a local in each helper procedure).
 
 ## Quick Start
 

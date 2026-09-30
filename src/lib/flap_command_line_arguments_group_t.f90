@@ -562,13 +562,14 @@ contains
   call self%check(pref=pref)
   endsubroutine add
 
-  subroutine parse(self, args, ignore_unknown_clas, pref, error_unknown_clas)
+  subroutine parse(self, args, ignore_unknown_clas, pref, error_unknown_clas, ignore_env)
   !< Parse CLAsG arguments.
   class(command_line_arguments_group), intent(inout) :: self                !< CLAsG data.
   character(*),                        intent(in)    :: args(:)             !< Command line arguments.
   logical,                             intent(in)    :: ignore_unknown_clas !< Disable errors-raising for passed unknown CLAs.
   character(*), optional,              intent(in)    :: pref                !< Prefixing string.
   integer(I4P),                        intent(out)   :: error_unknown_clas  !< Error flag for passed unknown CLAs.
+  logical,      optional,              intent(in)    :: ignore_env          !< Turn every environment lookup off.
   type(command_line_argument)                        :: cla                 !< CLA data.
   character(:), allocatable                          :: envvar              !< Value of an environment variable.
   integer(I4P)                                       :: arg                 !< Argument counter.
@@ -638,7 +639,7 @@ contains
                        endif
                        if (.not.found_val) then
                           ! value not found, try to take val from environment
-                          call read_env(name=self%cla(a)%envvar, value=envvar, found=found_val)
+                          call read_env(name=self%cla(a)%envvar, value=envvar, found=found_val, ignore=ignore_env)
                           if (found_val) then
                              self%cla(a)%val = trim(adjustl(envvar))
                              self%cla(a)%source = SOURCE_ENVIRONMENT

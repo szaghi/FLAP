@@ -26,6 +26,7 @@ type, extends(object), public :: command_line_interface
   logical                                         :: standalone=.true.           !< Stop after help/version/markdown.
   logical                                         :: error_hint=.true.           !< Print a hint after a failed parse.
   logical                                         :: no_args_is_help=.false.     !< Print the help when no arguments are passed.
+  logical                                         :: ignore_env=.false.          !< Turn every environment lookup off.
   integer(I4P)                                    :: error_unknown_clas=0_I4P    !< Error trapping flag for unknown CLAs.
   contains
     ! public methods
@@ -135,11 +136,12 @@ contains
   self%standalone          = .true.
   self%error_hint          = .true.
   self%no_args_is_help     = .false.
+  self%ignore_env          = .false.
   endsubroutine free
 
   subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, &
                   usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone, &
-                  error_hint, no_args_is_help)
+                  error_hint, no_args_is_help, ignore_env)
   !< Initialize CLI.
   class(command_line_interface), intent(inout) :: self                !< CLI data.
   character(*), optional,        intent(in)    :: progname            !< Program name.
@@ -163,6 +165,8 @@ contains
                                                                       !< parse (default).
   logical,      optional,        intent(in)    :: no_args_is_help     !< Print the help (STATUS_NO_ARGS) when no arguments
                                                                       !< are passed.
+  logical,      optional,        intent(in)    :: ignore_env          !< Turn every environment lookup off (F20): envvar
+                                                                      !< names are still shown in the help.
   character(len=:), allocatable                :: prog_invocation     !< Complete program invocation.
   integer(I4P)                                 :: invocation_length   !< Length of invocation.
   integer(I4P)                                 :: retrieval_status    !< Retrieval status.
@@ -198,6 +202,7 @@ contains
                           if (present(standalone))          self%standalone          = standalone         ! default set by self%free
                           if (present(error_hint))          self%error_hint          = error_hint         ! default set by self%free
                           if (present(no_args_is_help))     self%no_args_is_help     = no_args_is_help    ! default set by self%free
+                          if (present(ignore_env))          self%ignore_env          = ignore_env         ! default set by self%free
   ! initialize only the first default group
   allocate(self%clasg(0:0))
   call self%clasg(0)%assign_object(self)
@@ -631,7 +636,7 @@ contains
       ! starting at the first element of the whole array, not of the section
       gargs = to_characters(self%args(ai(g,1):ai(g,2)))
       call self%clasg(g)%parse(args=gargs, ignore_unknown_clas=self%ignore_unknown_clas, &
-                               pref=pref, error_unknown_clas=unknown)
+                               pref=pref, error_unknown_clas=unknown, ignore_env=self%ignore_env)
       ! keep the mark of an ignored unknown argument: a later group must not erase it (B30 of #125)
       if (unknown /= 0 .and. self%error_unknown_clas /= ERROR_UNKNOWN_CLAS_IGNORED) self%error_unknown_clas = unknown
     else

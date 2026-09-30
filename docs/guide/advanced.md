@@ -61,6 +61,21 @@ call cli%add(switch='--api-url', switch_ab='-u',               &
 This pattern is useful for configuration that belongs in CI secrets or shell profiles
 rather than command line flags.
 
+### Ignoring the environment — `init(ignore_env=.true.)`
+
+For reproducible runs (a batch job whose environment must not leak in, tests, CI sandboxes),
+`ignore_env=.true.` turns every environment lookup off. The `envvar` definitions are unchanged
+and still shown in the help; a switch that would read its variable behaves as if it were unset:
+
+```fortran
+call cli%init(progname='solver', ignore_env=.true.)
+call cli%add(switch='--threads', help='Threads', required=.false., act='store', def='1', envvar='OMP_NUM_THREADS')
+```
+
+```shell
+$ OMP_NUM_THREADS=64 ./solver --threads    # error: "--threads" needs a value (the environment is ignored)
+```
+
 ---
 
 ## Mutually exclusive argument pairs

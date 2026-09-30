@@ -126,17 +126,22 @@ contains
   list = list//item//LIST_SEP
   endsubroutine list_push
 
-  subroutine read_env(name, value, found)
+  subroutine read_env(name, value, found, ignore)
   !< Read an environment variable, whatever the length of its value: the only environment lookup of the library.
   !<
-  !< Every lookup goes through here (step 0.D.2 of #125), so that options such as `ignore_env` apply to all of them.
+  !< Every lookup goes through here (step 0.D.2 of #125), so that `ignore_env` (F20) applies to all of them.
   character(*),              intent(in)  :: name   !< Name of the variable.
   character(:), allocatable, intent(out) :: value  !< Value; empty when the variable is not set.
   logical,                   intent(out) :: found  !< True if the variable is set (maybe to an empty value).
+  logical, optional,         intent(in)  :: ignore !< Ignore the environment: never found (ignore_env).
   integer(I4P)                           :: length !< Length of the value.
   integer(I4P)                           :: status !< Retrieval status.
 
   value = ''
+  found = .false.
+  if (present(ignore)) then
+    if (ignore) return
+  endif
   call get_environment_variable(name=name, length=length, status=status)
   found = status == 0
   if (.not.found .or. length == 0) return

@@ -12,6 +12,7 @@ use penf, only : I4P
 implicit none
 type(command_line_interface) :: cli      !< Command Line Interface (CLI).
 character(99)                :: val      !< Value.
+character(99)                :: cval     !< Value read by the child (one get call site per variable: B33).
 character(:), allocatable    :: out      !< Output of the child.
 character(:), allocatable    :: err      !< Standard error of the child.
 integer(I4P)                 :: ival     !< Integer value.
@@ -24,8 +25,8 @@ if (child_case() == 1) then
   call cli%init(progname='flap_test_inline')
   call cli%add(switch='--env', help='from env', required=.false., act='store', def='0', envvar='FLAP_TEST_INLINE', error=error)
   call cli%parse(args='--env=1', error=error)
-  call cli%get(switch='--env', val=val, error=error)
-  print '(A)', 'error='//trim(adjustl(str_i(error)))//' val=['//trim(val)//']'
+  call cli%get(switch='--env', val=cval, error=error)
+  print '(A)', 'error='//trim(adjustl(str_i(error)))//' val=['//trim(cval)//']'
   stop
 endif
 
@@ -116,11 +117,12 @@ contains
   character(*), intent(in) :: switch   !< Switch.
   character(*), intent(in) :: expected !< Expected value.
   character(*), intent(in) :: message  !< Description of the check.
+  character(99)            :: sval     !< Value: a local, not the host val (one get call site per variable: B33).
 
-  val = 'unset'
-  call cli%get(switch=switch, val=val, error=error)
+  sval = 'unset'
+  call cli%get(switch=switch, val=sval, error=error)
   call assert_equal(error, 0_I4P, message//': get error')
-  call assert_equal(val, expected, message//': value')
+  call assert_equal(sval, expected, message//': value')
   endsubroutine get_str
 
   function str_i(i) result(s)

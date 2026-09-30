@@ -88,5 +88,6 @@ values still takes the default: both change in v2.0.0 (see below).
   with a source below `SOURCE_DEFAULT` is given by the user. `get` reads such a value, the default otherwise, and a
   required option is satisfied by any of these explicit sources. `is_passed` keeps its meaning: seen on the command
   line.
+- `init(ignore_env=.true.)` turns every environment lookup off, for reproducible runs; `envvar` names stay in the help.
 - Environment variables become a value source for every option (with precedence rules), and more: see issue
   [#125](https://github.com/szaghi/FLAP/issues/125).
