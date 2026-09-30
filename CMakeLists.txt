@@ -9,7 +9,7 @@
 # the config file is generatet in the build and install directories
 
 cmake_minimum_required(VERSION 3.10...3.13)
-project(FLAP VERSION 2.3.0 LANGUAGES Fortran)
+project(FLAP VERSION 2.3.1 LANGUAGES Fortran)
 
 # seach path for additional cmake modules
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake/Modules)

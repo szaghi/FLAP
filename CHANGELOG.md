@@ -4,6 +4,15 @@ All notable changes to this project are documented here.
 Versions follow [Semantic Versioning](https://semver.org/).
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.3.1] — 2026-09-30
+### Documentation
+- Colours section, current build commands, upgrade page
+
+
+### Fixed
+- **parse**: A repeated command is an error
+
+
 ## [2.3.0] — 2026-09-30
 ### Added
 - **menu**: Flap_menu_t, interactive single-choice menus
