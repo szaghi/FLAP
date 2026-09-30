@@ -19,6 +19,7 @@ public :: ACTION_INSTALL_COMPLETION
 public :: ACTION_STORE_FALSE
 public :: ACTION_PRINT_HELP
 public :: ACTION_PRINT_MARK
+public :: ACTION_PRINT_MAN
 public :: ACTION_PRINT_VERS
 public :: ACTION_COUNT
 public :: ACTION_APPEND
@@ -157,6 +158,7 @@ type, extends(object) :: command_line_argument
     procedure, public :: count_occurrences              !< Count occurrences of a count CLA.
     procedure, public :: append_value                   !< Collect a value of an append CLA.
     procedure, public :: is_list                        !< Check if the CLA holds a list (nargs or append).
+    procedure, public :: is_builtin                     !< Check if the CLA is a builtin (help, version, man, ...).
     procedure, public :: raise_error_m_exclude          !< Raise error mutually exclusive CLAs passed.
     procedure, public :: raise_error_nargs_insufficient !< Raise error insufficient number of argument values passed.
     procedure, public :: raise_error_value_missing      !< Raise error missing value.
@@ -232,6 +234,7 @@ character(len=*), parameter :: ACTION_STORE_TRUE  = 'STORE_TRUE'    !< Store .tr
 character(len=*), parameter :: ACTION_STORE_FALSE = 'STORE_FALSE'   !< Store .false. without the necessity of a value.
 character(len=*), parameter :: ACTION_PRINT_HELP  = 'PRINT_HELP'    !< Print help message.
 character(len=*), parameter :: ACTION_PRINT_MARK  = 'PRINT_MARKDOWN'!< Print help to Markdown file.
+character(len=*), parameter :: ACTION_PRINT_MAN   = 'PRINT_MAN'     !< Save the man page (F29).
 character(len=*), parameter :: ACTION_SHOW_COMPLETION    = 'SHOW_COMPLETION'    !< Print the completion script (F24).
 character(len=*), parameter :: ACTION_INSTALL_COMPLETION = 'INSTALL_COMPLETION' !< Install the completion script (F24).
 character(len=*), parameter :: ACTION_PRINT_VERS  = 'PRINT_VERSION' !< Print version.
@@ -712,6 +715,18 @@ contains
   repeatable = .false.
   if (allocated(self%act)) repeatable = self%act==ACTION_COUNT.or.self%act==ACTION_APPEND
   endfunction is_repeatable
+
+  pure function is_builtin(self) result(builtin)
+  !< Check if the CLA is a builtin added by FLAP: --help, --version, --markdown, --man and the completion options (the
+  !< hidden -- is recognised by its switch). Builtins are neither reported by provenance nor copied by copy_options.
+  class(command_line_argument), intent(in) :: self    !< CLA data.
+  logical                                  :: builtin !< Check result.
+
+  builtin = .false.
+  if (.not.allocated(self%act)) return
+  builtin = self%act == ACTION_PRINT_HELP .or. self%act == ACTION_PRINT_VERS .or. self%act == ACTION_PRINT_MARK .or. &
+            self%act == ACTION_PRINT_MAN .or. self%act == ACTION_SHOW_COMPLETION .or. self%act == ACTION_INSTALL_COMPLETION
+  endfunction is_builtin
 
   pure function is_list(self) result(list)
   !< Check if the CLA holds a list: nargs, or the append action.
@@ -1537,6 +1552,7 @@ contains
         self%act/=ACTION_STORE_FALSE.and.&
         self%act/=ACTION_PRINT_HELP.and. &
         self%act/=ACTION_PRINT_MARK.and. &
+        self%act/=ACTION_PRINT_MAN.and.  &
         self%act/=ACTION_PRINT_VERS.and. &
         self%act/=ACTION_COUNT.and.      &
         self%act/=ACTION_ALTERNATE.and.  &

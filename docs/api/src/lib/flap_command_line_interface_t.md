@@ -171,6 +171,9 @@ classDiagram
 | `completion_options` | logical |  | --show/--install-completion (F24). |
 | `auto_envvar_prefix` | character(len=:) | allocatable | Prefix of the generated envvar names. |
 | `usage_on_error` | character(len=:) | allocatable | After an error: full, usage, none (F27). |
+| `man_option` | logical |  | --man builtin (F29). |
+| `man_file` | character(len=:) | allocatable | File of --man ('': .1). |
+| `markdown_file` | character(len=:) | allocatable | File of --markdown ('': .md). |
 | `config_path` | character(len=:) | allocatable | Configuration file (F08). |
 | `config_required` | logical |  | The configuration file must exist. |
 | `config_used` | character(len=:) | allocatable | Configuration file read by parse. |
@@ -291,7 +294,7 @@ flowchart TD
 Initialize CLI.
 
 ```fortran
-subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone, error_hint, no_args_is_help, ignore_env, auto_envvar_prefix, case_insensitive, completion_options, usage_on_error)
+subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone, error_hint, no_args_is_help, ignore_env, auto_envvar_prefix, case_insensitive, completion_options, usage_on_error, man_option, man_file, markdown_file)
 ```
 
 **Arguments**
@@ -322,6 +325,9 @@ subroutine init(self, progname, version, help, description, license, authors, ex
 | `case_insensitive` | logical | in | optional | Match switches and command names in any case (F14); |
 | `completion_options` | logical | in | optional | Add --show-completion and --install-completion |
 | `usage_on_error` | character(len=*) | in | optional | What an error prints after its message (F27): |
+| `man_option` | logical | in | optional | Add --man to the top level (F29). |
+| `man_file` | character(len=*) | in | optional | File of --man (default .1). |
+| `markdown_file` | character(len=*) | in | optional | File of --markdown (default .md). |
 
 **Call graph**
 
@@ -1618,6 +1624,7 @@ subroutine save_man_page(self, man_file, error)
 
 ```mermaid
 flowchart TD
+  dispatch_status["dispatch_status"] --> save_man_page["save_man_page"]
   save_man_page["save_man_page"] --> builtins_missing["builtins_missing"]
   save_man_page["save_man_page"] --> ensure_builtins["ensure_builtins"]
   save_man_page["save_man_page"] --> save_man_page_core["save_man_page_core"]
@@ -1957,6 +1964,7 @@ function provenance(self, pref) result(report)
 
 ```mermaid
 flowchart TD
+  provenance["provenance"] --> is_builtin["is_builtin"]
   provenance["provenance"] --> parse["parse"]
   provenance["provenance"] --> str["str"]
   provenance["provenance"] --> value_text["value_text"]
@@ -2294,8 +2302,10 @@ flowchart TD
   dispatch_status["dispatch_status"] --> completion_shell["completion_shell"]
   dispatch_status["dispatch_status"] --> install_completion["install_completion"]
   dispatch_status["dispatch_status"] --> is_action_passed["is_action_passed"]
+  dispatch_status["dispatch_status"] --> output_file["output_file"]
   dispatch_status["dispatch_status"] --> print_version["print_version"]
   dispatch_status["dispatch_status"] --> quiet_stop["quiet_stop"]
+  dispatch_status["dispatch_status"] --> save_man_page["save_man_page"]
   dispatch_status["dispatch_status"] --> save_usage_to_markdown["save_usage_to_markdown"]
   dispatch_status["dispatch_status"] --> usage["usage"]
   dispatch_status["dispatch_status"] --> write_text["write_text"]

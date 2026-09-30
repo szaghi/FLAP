@@ -4,13 +4,14 @@ module flap_command_line_interface_t
 
 use face, only : colorize
 use flap_command_line_argument_t, only : command_line_argument, ACTION_ALTERNATE, ACTION_CONFIG, ACTION_COUNT, ACTION_PRINT_HELP, &
-                                         ACTION_PRINT_MARK, ACTION_PRINT_VERS, ACTION_STORE, ACTION_STORE_FALSE, &
+                                         ACTION_PRINT_MARK, ACTION_PRINT_MAN, ACTION_PRINT_VERS, ACTION_STORE, &
+                                         ACTION_STORE_FALSE, &
                                          ACTION_STORE_TRUE, ACTION_SHOW_COMPLETION, ACTION_INSTALL_COMPLETION, &
                                          ERROR_UNKNOWN, SOURCE_COMMANDLINE, SOURCE_CONFIG, &
                                          SOURCE_DEFAULT, SOURCE_ENVIRONMENT, SOURCE_NONE
 use flap_command_line_arguments_group_t, only : command_line_arguments_group, STATUS_ALTERNATE, STATUS_NO_ARGS, STATUS_PRINT_H, &
                                                 STATUS_PRINT_M, STATUS_PRINT_V, STATUS_SHOW_COMPLETION, &
-                                                STATUS_INSTALL_COMPLETION
+                                                STATUS_INSTALL_COMPLETION, STATUS_PRINT_MAN
 use flap_config_m, only : config_file
 use flap_object_t, only : object
 use flap_utils_m
@@ -35,6 +36,9 @@ type, extends(object), public :: command_line_interface
   logical                                         :: completion_options=.false.  !< --show/--install-completion (F24).
   character(len=:), allocatable                   :: auto_envvar_prefix          !< Prefix of the generated envvar names.
   character(len=:), allocatable                   :: usage_on_error              !< After an error: full, usage, none (F27).
+  logical                                         :: man_option=.false.          !< --man builtin (F29).
+  character(len=:), allocatable                   :: man_file                    !< File of --man ('': <progname>.1).
+  character(len=:), allocatable                   :: markdown_file               !< File of --markdown ('': <progname>.md).
   character(len=:), allocatable                   :: config_path                 !< Configuration file (F08).
   logical                                         :: config_required=.false.     !< The configuration file must exist.
   character(len=:), allocatable                   :: config_used                 !< Configuration file read by parse.
@@ -178,6 +182,9 @@ contains
   self%ignore_env          = .false.
   self%completion_options  = .false.
   if (allocated(self%usage_on_error)) deallocate(self%usage_on_error)
+  self%man_option = .false.
+  if (allocated(self%man_file)) deallocate(self%man_file)
+  if (allocated(self%markdown_file)) deallocate(self%markdown_file)
   if (allocated(self%auto_envvar_prefix)) deallocate(self%auto_envvar_prefix)
   if (allocated(self%config_path)) deallocate(self%config_path)
   if (allocated(self%config_used)) deallocate(self%config_used)
@@ -187,7 +194,7 @@ contains
   subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, &
                   usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone, &
                   error_hint, no_args_is_help, ignore_env, auto_envvar_prefix, case_insensitive, completion_options, &
-                  usage_on_error)
+                  usage_on_error, man_option, man_file, markdown_file)
   !< Initialize CLI.
   class(command_line_interface), intent(inout) :: self                !< CLI data.
   character(*), optional,        intent(in)    :: progname            !< Program name.
@@ -222,6 +229,9 @@ contains
   character(*), optional,        intent(in)    :: usage_on_error      !< What an error prints after its message (F27):
                                                                       !< 'full' (the group help, default), 'usage' (the
                                                                       !< usage line), 'none'; any case.
+  logical,      optional,        intent(in)    :: man_option          !< Add --man to the top level (F29).
+  character(*), optional,        intent(in)    :: man_file            !< File of --man (default <progname>.1).
+  character(*), optional,        intent(in)    :: markdown_file       !< File of --markdown (default <progname>.md).
   character(len=:), allocatable                :: prog_invocation     !< Complete program invocation.
   integer(I4P)                                 :: invocation_length   !< Length of invocation.
   integer(I4P)                                 :: retrieval_status    !< Retrieval status.
@@ -262,6 +272,9 @@ contains
                           if (present(completion_options))  self%completion_options  = completion_options ! default set by self%free
   self%auto_envvar_prefix = '' ; if (present(auto_envvar_prefix)) self%auto_envvar_prefix = trim(adjustl(auto_envvar_prefix))
   self%usage_on_error = 'full' ; if (present(usage_on_error)) self%usage_on_error = trim(adjustl(usage_on_error))
+  if (present(man_option)) self%man_option = man_option
+  self%man_file = '' ; if (present(man_file)) self%man_file = trim(adjustl(man_file))
+  self%markdown_file = '' ; if (present(markdown_file)) self%markdown_file = trim(adjustl(markdown_file))
   ! initialize only the first default group
   allocate(self%clasg(0:0))
   call self%clasg(0)%assign_object(self)
@@ -650,7 +663,7 @@ contains
     do a=1, self%clasg(g)%Na
       associate(cla => self%clasg(g)%cla(a))
         if (cla%is_hidden) cycle
-        if (cla%act == ACTION_PRINT_HELP .or. cla%act == ACTION_PRINT_MARK .or. cla%act == ACTION_PRINT_VERS) cycle
+        if (cla%is_builtin()) cycle
         n = n + 1
         if (cla%is_positional) then
           names(n)%s = 'position '//trim(str(cla%position, .true.))
@@ -1346,11 +1359,18 @@ contains
   do g=0, size(self%clasg, dim=1)-1
     if (self%clasg(g)%is_action_passed(ACTION_PRINT_MARK)) then
       self%error = STATUS_PRINT_M
-      call self%save_usage_to_markdown(trim(self%progname)//'.md')
+      call self%save_usage_to_markdown(output_file(self%markdown_file, '.md'))
       if (self%standalone) call quiet_stop(0_I4P)
       return
     endif
   enddo
+  ! the man page builtin (F29): top level only, after the Markdown
+  if (self%clasg(0)%is_action_passed(ACTION_PRINT_MAN)) then
+    self%error = STATUS_PRINT_MAN
+    call self%save_man_page(output_file(self%man_file, '.1'))
+    if (self%standalone) call quiet_stop(0_I4P)
+    return
+  endif
   ! the completion builtins (F24): top level only; an unknown shell or a failed install is an error, returned
   if (self%clasg(0)%is_action_passed(ACTION_SHOW_COMPLETION)) then
     shell = self%completion_shell(ACTION_SHOW_COMPLETION, pref=pref)
@@ -1368,6 +1388,19 @@ contains
     return
   endif
   dispatched = .false.
+
+  contains
+    function output_file(file, extension) result(name)
+    !< The file of a builtin: the one given to init, else <progname> with the extension.
+    character(len=:), allocatable, intent(in) :: file      !< File given to init ('' or unallocated: none).
+    character(*),                  intent(in) :: extension !< Extension of the default name.
+    character(len=:), allocatable             :: name      !< File name.
+
+    name = trim(self%progname)//extension
+    if (allocated(file)) then
+      if (file /= '') name = file
+    endif
+    endfunction output_file
   endfunction dispatch_status
 
   function completion_shell(self, act, pref) result(shell)
@@ -2338,12 +2371,12 @@ contains
     endfunction is_positional_name
 
     function is_builtin(i) result(builtin)
-    !< Check if a CLA of the source group is a builtin (--help, --version, --markdown, the hidden --).
+    !< Check if a CLA of the source group is a builtin (help, version, markdown, man, completion, the hidden --).
     integer(I4P), intent(in) :: i       !< Index of the CLA.
     logical                  :: builtin !< Check result.
 
     associate(x => self%clasg(gf)%cla(i))
-      builtin = x%act == ACTION_PRINT_HELP .or. x%act == ACTION_PRINT_VERS .or. x%act == ACTION_PRINT_MARK
+      builtin = x%is_builtin()
       if (.not.builtin .and. allocated(x%switch)) builtin = trim(adjustl(x%switch)) == '--'
     endassociate
     endfunction is_builtin
@@ -2499,6 +2532,13 @@ contains
       call add_builtin(g, '--markdown', '-md', 'Save this help message in a Markdown file', 'print_markdown')
       call add_builtin(g, '--version',  '-v',  'Print version',                             'print_version')
     enddo
+  endif
+
+  ! add the man page builtin to the top level, if asked (F29)
+  if (self%man_option) then
+    if (.not.self%is_defined(group='', switch='--man')) &
+      call self%add(pref=pref, group_index=0, switch='--man', required=.false., def='', &
+                    help='Save this help message as a man page', act='print_man')
   endif
 
   ! add the completion builtins to the top level, if asked (F24)

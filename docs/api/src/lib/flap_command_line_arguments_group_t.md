@@ -74,6 +74,7 @@ graph LR
 | `STATUS_ALTERNATE` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | An alternate action passed: value validation bypassed (F16). |
 | `STATUS_SHOW_COMPLETION` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | --show-completion passed (F24). |
 | `STATUS_INSTALL_COMPLETION` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | --install-completion passed (F24). |
+| `STATUS_PRINT_MAN` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | --man passed: the man page saved (F29). |
 | `ERROR_CONSISTENCY` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | CLAs group consistency error. |
 | `ERROR_M_EXCLUDE` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Two mutually exclusive CLAs group have been called. |
 | `ERROR_M_EXCLUDE_SET` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Two members of a mutually exclusive set have been passed. |

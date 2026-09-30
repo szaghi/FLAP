@@ -27,6 +27,9 @@ customise the help and version messages.
 | `error_hint` | `logical` | `.true.` | After a failed `parse`, print `Try 'prog --help' for help.` (see [Error Codes](./errors#error-hint)) |
 | `no_args_is_help` | `logical` | `.false.` | With no arguments, print the help instead of parsing (`STATUS_NO_ARGS`; exit status 2 in standalone mode) |
 | `completion_options` | `logical` | `.false.` | Add `--show-completion [SHELL]` and `--install-completion [SHELL]` to the top level (see [Output](./output#shell-completion-from-the-program)) |
+| `man_option` | `logical` | `.false.` | Add `--man` to the top level: save the man page and stop (see [Output](./output#from-the-command-line-man)) |
+| `man_file` | `character` | `<progname>.1` | File written by `--man` |
+| `markdown_file` | `character` | `<progname>.md` | File written by `--markdown` |
 | `usage_on_error` | `character` | `'full'` | What a missing required option prints after its message: the whole help (`'full'`), the usage line (`'usage'`) or nothing (`'none'`); see [Errors](./errors#output-after-an-error) |
 | `case_insensitive` | `logical` | `.false.` | Match switches (abbreviations and negations included) and command names in any case: `--MESH` is `--mesh`, `COMPILE` is `compile`. Values and choices keep their case; two switches differing only by case are a consistency error (100). Call `init` before `add` |
 

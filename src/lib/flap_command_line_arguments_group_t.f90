@@ -7,6 +7,7 @@ use flap_command_line_argument_t, only : command_line_argument, &
                                          ACTION_PRINT_HELP,     &
                                          ACTION_SHOW_COMPLETION, ACTION_INSTALL_COMPLETION, &
                                          ACTION_PRINT_MARK,     &
+                                         ACTION_PRINT_MAN,      &
                                          ACTION_PRINT_VERS,     &
                                          ACTION_APPEND,         &
                                          ACTION_COUNT,          &
@@ -34,6 +35,7 @@ public :: STATUS_NO_ARGS
 public :: STATUS_ALTERNATE
 public :: STATUS_SHOW_COMPLETION
 public :: STATUS_INSTALL_COMPLETION
+public :: STATUS_PRINT_MAN
 public :: ERROR_CONSISTENCY
 public :: ERROR_M_EXCLUDE
 public :: ERROR_M_EXCLUDE_SET
@@ -113,6 +115,7 @@ integer(I4P), parameter :: STATUS_NO_ARGS = -5 !< No arguments passed, help prin
 integer(I4P), parameter :: STATUS_ALTERNATE = -4 !< An alternate action passed: value validation bypassed (F16).
 integer(I4P), parameter :: STATUS_SHOW_COMPLETION = -6    !< --show-completion passed (F24).
 integer(I4P), parameter :: STATUS_INSTALL_COMPLETION = -7 !< --install-completion passed (F24).
+integer(I4P), parameter :: STATUS_PRINT_MAN = -8          !< --man passed: the man page saved (F29).
 
 ! errors codes
 integer(I4P), parameter :: ERROR_CONSISTENCY = 100 !< CLAs group consistency error.
@@ -1031,6 +1034,8 @@ contains
                     self%error = STATUS_PRINT_H
                  elseif (self%cla(a)%act==action_print_mark) then
                     self%error = STATUS_PRINT_M
+                 elseif (self%cla(a)%act==ACTION_PRINT_MAN) then
+                    self%error = STATUS_PRINT_MAN
                  elseif (self%cla(a)%act==action_print_vers) then
                     self%error = STATUS_PRINT_V
                  endif

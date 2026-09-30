@@ -3,7 +3,7 @@ program flap_test_constants
 !< Pin the public codes registry exported by the flap module (issue #125, section 5): existing values never change.
 use flap, only : command_line_interface,                                                                                          &
                  STATUS_PRINT_V, STATUS_PRINT_H, STATUS_PRINT_M, STATUS_NO_ARGS, STATUS_ALTERNATE, STATUS_SHOW_COMPLETION,        &
-                 STATUS_INSTALL_COMPLETION, ERROR_COMPLETION_SHELL, ERROR_COMPLETION_INSTALL,                                     &
+                 STATUS_INSTALL_COMPLETION, ERROR_COMPLETION_SHELL, ERROR_COMPLETION_INSTALL, STATUS_PRINT_MAN,                   &
                  SOURCE_COMMANDLINE, SOURCE_ENVIRONMENT, SOURCE_CONFIG, SOURCE_DEFAULT, SOURCE_NONE,                              &
                  ERROR_OPTIONAL_NO_DEF, ERROR_REQUIRED_M_EXCLUDE, ERROR_POSITIONAL_M_EXCLUDE, ERROR_NAMED_NO_NAME,                &
                  ERROR_POSITIONAL_NO_POSITION, ERROR_POSITIONAL_NO_STORE, ERROR_NOT_IN_CHOICES, ERROR_MISSING_REQUIRED,           &
@@ -86,6 +86,7 @@ contains
   call assert_equal(STATUS_ALTERNATE,             -4_I4P,   'STATUS_ALTERNATE')
   call assert_equal(STATUS_SHOW_COMPLETION,       -6_I4P,   'STATUS_SHOW_COMPLETION')
   call assert_equal(STATUS_INSTALL_COMPLETION,    -7_I4P,   'STATUS_INSTALL_COMPLETION')
+  call assert_equal(STATUS_PRINT_MAN,             -8_I4P,   'STATUS_PRINT_MAN')
   call assert_equal(ERROR_ALTERNATE_INCONSISTENT, 37_I4P,   'ERROR_ALTERNATE_INCONSISTENT')
   call assert_equal(ERROR_SWITCH_NEG_INCONSISTENT, 36_I4P,  'ERROR_SWITCH_NEG_INCONSISTENT')
   call assert_equal(ERROR_MAP_FORMAT,             38_I4P,   'ERROR_MAP_FORMAT')

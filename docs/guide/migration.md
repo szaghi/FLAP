@@ -11,6 +11,9 @@ programs keep their behaviour. The plan behind them is issue [#125](https://gith
 
 - `init(usage_on_error='usage')` (or `'none'`) prints the usage line (or nothing) after a missing required option,
   instead of the whole help; the default `'full'` keeps the old output (issue #102). New error 1014.
+- `init(man_option=.true.)` adds a `--man` switch saving the man page, like `--markdown` (new status
+  `STATUS_PRINT_MAN`, −8); `init(man_file=, markdown_file=)` name the files of both (issue #99).
+- `cli%provenance()` no longer lists the completion builtins, and `copy_options` no longer copies them.
 
 ## v2.3.1 (fix)
 

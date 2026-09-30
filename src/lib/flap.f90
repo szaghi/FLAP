@@ -65,6 +65,7 @@ use flap_command_line_arguments_group_t, only : command_line_arguments_group,   
                                                 STATUS_ALTERNATE,                             &
                                                 STATUS_SHOW_COMPLETION,                       &
                                                 STATUS_INSTALL_COMPLETION,                    &
+                                                STATUS_PRINT_MAN,                             &
                                                 ERROR_GROUP_CONSISTENCY => ERROR_CONSISTENCY, &
                                                 ERROR_GROUP_M_EXCLUDE => ERROR_M_EXCLUDE,     &
                                                 ERROR_POSITION_DUPLICATE,                     &
@@ -112,6 +113,7 @@ public :: STATUS_NO_ARGS
 public :: STATUS_ALTERNATE
 public :: STATUS_SHOW_COMPLETION
 public :: STATUS_INSTALL_COMPLETION
+public :: STATUS_PRINT_MAN
 ! errors 1-99: command line argument
 public :: SOURCE_COMMANDLINE
 public :: SOURCE_ENVIRONMENT

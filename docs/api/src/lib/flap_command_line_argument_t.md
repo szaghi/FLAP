@@ -90,6 +90,7 @@ graph LR
 - [placeholder](#placeholder)
 - [flag_value](#flag-value)
 - [is_repeatable](#is-repeatable)
+- [is_builtin](#is-builtin)
 - [is_list](#is-list)
 - [is_required_val_passed](#is-required-val-passed)
 - [usage](#usage)
@@ -120,6 +121,7 @@ graph LR
 | `ACTION_STORE_FALSE` | character(len=*) | parameter | Store .false. without the necessity of a value. |
 | `ACTION_PRINT_HELP` | character(len=*) | parameter | Print help message. |
 | `ACTION_PRINT_MARK` | character(len=*) | parameter | Print help to Markdown file. |
+| `ACTION_PRINT_MAN` | character(len=*) | parameter | Save the man page (F29). |
 | `ACTION_SHOW_COMPLETION` | character(len=*) | parameter | Print the completion script (F24). |
 | `ACTION_INSTALL_COMPLETION` | character(len=*) | parameter | Install the completion script (F24). |
 | `ACTION_PRINT_VERS` | character(len=*) | parameter | Print version. |
@@ -291,6 +293,7 @@ classDiagram
 | `count_occurrences` |  | Count occurrences of a count CLA. |
 | `append_value` |  | Collect a value of an append CLA. |
 | `is_list` |  | Check if the CLA holds a list (nargs or append). |
+| `is_builtin` |  | Check if the CLA is a builtin (help, version, man, ...). |
 | `raise_error_m_exclude` |  | Raise error mutually exclusive CLAs passed. |
 | `raise_error_nargs_insufficient` |  | Raise error insufficient number of argument values passed. |
 | `raise_error_value_missing` |  | Raise error missing value. |
@@ -2393,6 +2396,34 @@ function is_repeatable(self) result(repeatable)
 flowchart TD
   parse["parse"] --> is_repeatable["is_repeatable"]
   style is_repeatable fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### is_builtin
+
+Check if the CLA is a builtin added by FLAP: --help, --version, --markdown, --man and the completion options (the
+ hidden -- is recognised by its switch). Builtins are neither reported by provenance nor copied by copy_options.
+
+**Attributes**: pure
+
+**Returns**: `logical`
+
+```fortran
+function is_builtin(self) result(builtin)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  copy_options["copy_options"] --> is_builtin["is_builtin"]
+  provenance["provenance"] --> is_builtin["is_builtin"]
+  style is_builtin fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### is_list

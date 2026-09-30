@@ -82,6 +82,13 @@ Install and view:
 man ./myapp.1
 ```
 
+### From the command line (`--man`)
+
+`init(man_option=.true.)` adds a top-level `--man` switch that saves the man page and ends the program (exit status 0,
+like `--help`), without checking the other arguments: `myapp --man` writes `myapp.1`. In non-standalone mode `parse`
+returns `STATUS_PRINT_MAN` (−8) instead. `init(man_file='share/man/man1/myapp.1')` names the file; the built-in
+`--markdown` switch has its own `init(markdown_file=...)` (default `<progname>.md`).
+
 ## Bash completion — `cli%save_bash_completion`
 
 Generate a bash completion script so users get tab-completion for your program:
@@ -182,6 +189,9 @@ call cli%save_usage_to_markdown(markdown_file='usage.md', error=error)
 
 The output is formatted Markdown with code blocks for the usage line and argument
 tables.
+
+The built-in `--markdown` (`-md`) switch does the same from the command line, writing `<progname>.md`, or the file
+named by `init(markdown_file=...)`.
 
 ## Printing usage programmatically — `cli%print_usage`
 
