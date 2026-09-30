@@ -7,8 +7,10 @@ module flap_menu_t
 !< with multiple selection); the caller dispatches with `select case`. The units are the caller's: the menu never opens nor
 !< closes them. At the end of the input (standard input redirected from /dev/null or closed, as in a batch job) `run`
 !< returns `ERROR_MENU_EOF` at once: standard Fortran cannot tell whether the input is a terminal, the end of file is the
-!< portable signal. `yes_no` asks the question alone (no options) and returns a logical.
+!< portable signal. `yes_no` asks the question alone (no options) and returns a logical. Colours and styles (FACE names,
+!< none by default) apply to the option lines, the question and the word "error" of the messages.
 use, intrinsic :: iso_fortran_env, only : stdin => input_unit, stdout => output_unit, stderr => error_unit
+use face, only : colorize
 use flap_utils_m, only : flap_string, read_line, upper_case
 use penf
 
@@ -49,6 +51,12 @@ type, public :: menu
   integer(I4P)                   :: tries=3            !< Attempts in total with loop_on_invalid.
   logical                        :: multiple=.false.   !< Several options can be chosen.
   character(len=:),  allocatable :: separator          !< Separator of the answers (blank: runs of blanks).
+  character(len=:),  allocatable :: option_color       !< ANSI colour of the option lines (FACE names).
+  character(len=:),  allocatable :: option_style       !< ANSI style of the option lines.
+  character(len=:),  allocatable :: question_color     !< ANSI colour of the question.
+  character(len=:),  allocatable :: question_style     !< ANSI style of the question.
+  character(len=:),  allocatable :: error_color        !< ANSI colour of the word "error" of the messages.
+  character(len=:),  allocatable :: error_style        !< ANSI style of the word "error" of the messages.
   contains
     ! public methods
     procedure, pass(self) :: add_option        !< Append an option.
@@ -70,7 +78,7 @@ endtype menu
 contains
   ! public methods
   subroutine init(self, question, multiple, separator, loop_on_invalid, tries, default_icon, input_unit, output_unit, &
-                  error_unit, error)
+                  error_unit, option_color, option_style, question_color, question_style, error_color, error_style, error)
   !< Initialize the menu: every previous setting and option is dropped.
   class(menu),  intent(inout)         :: self            !< Menu.
   character(*), intent(in)            :: question        !< Question asked after the options.
@@ -82,12 +90,24 @@ contains
   integer(I4P), intent(in),  optional :: input_unit      !< Unit of the answers (default: standard input).
   integer(I4P), intent(in),  optional :: output_unit     !< Unit of the options and the question (default: standard output).
   integer(I4P), intent(in),  optional :: error_unit      !< Unit of the error messages (default: standard error).
+  character(*), intent(in),  optional :: option_color    !< ANSI colour of the option lines (FACE names; default: none).
+  character(*), intent(in),  optional :: option_style    !< ANSI style of the option lines.
+  character(*), intent(in),  optional :: question_color  !< ANSI colour of the question.
+  character(*), intent(in),  optional :: question_style  !< ANSI style of the question.
+  character(*), intent(in),  optional :: error_color     !< ANSI colour of the word "error" of the messages.
+  character(*), intent(in),  optional :: error_style     !< ANSI style of the word "error" of the messages.
   integer(I4P), intent(out), optional :: error           !< Error trapping flag.
   integer(I4P)                        :: error_          !< Error trapping flag, local variable.
 
   call self%free
   error_ = 0
   self%question = question
+  self%option_color   = '' ; if (present(option_color))   self%option_color   = option_color
+  self%option_style   = '' ; if (present(option_style))   self%option_style   = option_style
+  self%question_color = '' ; if (present(question_color)) self%question_color = question_color
+  self%question_style = '' ; if (present(question_style)) self%question_style = question_style
+  self%error_color    = '' ; if (present(error_color))    self%error_color    = error_color
+  self%error_style    = '' ; if (present(error_style))    self%error_style    = error_style
   if (present(multiple)) self%multiple = multiple
   self%separator = ' '
   if (present(separator)) then
@@ -152,6 +172,12 @@ contains
   if (allocated(self%question)) deallocate(self%question)
   if (allocated(self%default_icon)) deallocate(self%default_icon)
   if (allocated(self%separator)) deallocate(self%separator)
+  if (allocated(self%option_color)) deallocate(self%option_color)
+  if (allocated(self%option_style)) deallocate(self%option_style)
+  if (allocated(self%question_color)) deallocate(self%question_color)
+  if (allocated(self%question_style)) deallocate(self%question_style)
+  if (allocated(self%error_color)) deallocate(self%error_color)
+  if (allocated(self%error_style)) deallocate(self%error_style)
   if (allocated(self%options)) deallocate(self%options)
   self%input_unit = stdin
   self%output_unit = stdout
@@ -184,6 +210,10 @@ contains
   if (.not.allocated(self%question)) self%question = ''
   if (.not.allocated(self%default_icon)) self%default_icon = '*'
   if (.not.allocated(self%separator)) self%separator = ' '
+  if (.not.allocated(self%option_color)) self%option_color = ''
+  if (.not.allocated(self%option_style)) self%option_style = ''
+  if (.not.allocated(self%question_color)) self%question_color = ''
+  if (.not.allocated(self%question_style)) self%question_style = ''
   if (.not.present(yes_no)) then
     if (.not.allocated(self%options)) then
       error = self%raise(ERROR_MENU_DEFINITION, 'the menu has no options')
@@ -264,20 +294,24 @@ contains
   character(*), intent(in), optional :: suffix !< Suffix of the question, the options not shown.
   integer(I4P)                       :: i      !< Counter.
 
+  ! the prompt must be visible before the read: no line end, then flush
   if (present(suffix)) then
-    write(self%output_unit, '(A)', advance='no') self%question//' '//suffix//' '
+    write(self%output_unit, '(A)', advance='no') &
+      colorize(self%question//' '//suffix, color_fg=self%question_color, style=self%question_style)//' '
     flush(self%output_unit)
     return
   endif
   do i=1, size(self%options, dim=1)
     if (self%options(i)%is_default) then
-      write(self%output_unit, '(A)') trim(str(i, .true.))//') '//self%default_icon//self%options(i)%text
+      write(self%output_unit, '(A)') colorize(trim(str(i, .true.))//') '//self%default_icon//self%options(i)%text, &
+                                              color_fg=self%option_color, style=self%option_style)
     else
-      write(self%output_unit, '(A)') trim(str(i, .true.))//') '//self%options(i)%text
+      write(self%output_unit, '(A)') colorize(trim(str(i, .true.))//') '//self%options(i)%text, &
+                                              color_fg=self%option_color, style=self%option_style)
     endif
   enddo
-  ! the prompt must be visible before the read: no line end, then flush
-  write(self%output_unit, '(A)', advance='no') self%question//' '
+  write(self%output_unit, '(A)', advance='no') &
+    colorize(self%question, color_fg=self%question_color, style=self%question_style)//' '
   flush(self%output_unit)
   endsubroutine show
 
@@ -384,7 +418,11 @@ contains
   character(*), intent(in) :: message !< Error message.
   integer(I4P)             :: error   !< Error code.
 
-  write(self%error_unit, '(A)') 'error: '//message
+  if (allocated(self%error_color) .and. allocated(self%error_style)) then
+    write(self%error_unit, '(A)') colorize('error', color_fg=self%error_color, style=self%error_style)//': '//message
+  else
+    write(self%error_unit, '(A)') 'error: '//message
+  endif
   error = code
   endfunction raise
 

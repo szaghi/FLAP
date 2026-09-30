@@ -43,7 +43,7 @@ returned in `error` and a message such as `error: invalid response: 7` is writte
 
 | Procedure | Purpose |
 |---|---|
-| `init(question, multiple, separator, loop_on_invalid, tries, default_icon, input_unit, output_unit, error_unit, error)` | Start a new menu: drops the options and settings of a previous one. Every argument except `question` is optional. |
+| `init(question, multiple, separator, loop_on_invalid, tries, default_icon, input_unit, output_unit, error_unit, option_color, option_style, question_color, question_style, error_color, error_style, error)` | Start a new menu: drops the options and settings of a previous one. Every argument except `question` is optional. |
 | `add_option(text, is_default, error)` | Append an option; its number is its position. An empty text, or a second default, is an error and is not added. |
 | `run(choice, error)` | Show the menu and read one answer; `choice` is the index of the chosen option. A menu can be run several times. |
 | `run(choices, error)` | The same, `choices` an allocatable array: the chosen indexes (see [Multiple selection](#multiple-selection)). |
@@ -144,6 +144,18 @@ What is your favorite food? 2
 
 Every error kind is retried except the end of the input (see below). `tries` below 1 is `ERROR_MENU_DEFINITION` (returned by `init`,
 which keeps the default 3).
+
+## Colours
+
+`init` takes a colour and a style for the option lines, the question and the word `error` of the messages, with the
+names of FLAP's other colour settings (FACE: `red`, `blue`, ..., `bold_on`, `italics_on`, ...):
+
+```fortran
+call m%init(question='What is your favorite food?', option_color='blue', question_style='bold_on', error_color='red')
+```
+
+Without them the output has no escape sequences. The user's answer is echoed by the terminal, not by the program, so it
+has no colour of its own.
 
 ## Units
 

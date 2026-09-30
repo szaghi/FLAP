@@ -11,7 +11,8 @@ title: flap_menu_t
  with multiple selection); the caller dispatches with `select case`. The units are the caller's: the menu never opens nor
  closes them. At the end of the input (standard input redirected from /dev/null or closed, as in a batch job) `run`
  returns `ERROR_MENU_EOF` at once: standard Fortran cannot tell whether the input is a terminal, the end of file is the
- portable signal. `yes_no` asks the question alone (no options) and returns a logical.
+ portable signal. `yes_no` asks the question alone (no options) and returns a logical. Colours and styles (FACE names,
+ none by default) apply to the option lines, the question and the word "error" of the messages.
 
 **Source**: `src/lib/flap_menu_t.F90`
 
@@ -19,6 +20,7 @@ title: flap_menu_t
 
 ```mermaid
 graph LR
+  flap_menu_t["flap_menu_t"] --> face["face"]
   flap_menu_t["flap_menu_t"] --> flap_utils_m["flap_utils_m"]
   flap_menu_t["flap_menu_t"] --> iso_fortran_env["iso_fortran_env"]
   flap_menu_t["flap_menu_t"] --> penf["penf"]
@@ -86,6 +88,12 @@ Interactive menu: numbered options, a question, one answer line.
 | `tries` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Attempts in total with loop_on_invalid. |
 | `multiple` | logical |  | Several options can be chosen. |
 | `separator` | character(len=:) | allocatable | Separator of the answers (blank: runs of blanks). |
+| `option_color` | character(len=:) | allocatable | ANSI colour of the option lines (FACE names). |
+| `option_style` | character(len=:) | allocatable | ANSI style of the option lines. |
+| `question_color` | character(len=:) | allocatable | ANSI colour of the question. |
+| `question_style` | character(len=:) | allocatable | ANSI style of the question. |
+| `error_color` | character(len=:) | allocatable | ANSI colour of the word "error" of the messages. |
+| `error_style` | character(len=:) | allocatable | ANSI style of the word "error" of the messages. |
 
 #### Type-Bound Procedures
 
@@ -111,7 +119,7 @@ Interactive menu: numbered options, a question, one answer line.
 Initialize the menu: every previous setting and option is dropped.
 
 ```fortran
-subroutine init(self, question, multiple, separator, loop_on_invalid, tries, default_icon, input_unit, output_unit, error_unit, error)
+subroutine init(self, question, multiple, separator, loop_on_invalid, tries, default_icon, input_unit, output_unit, error_unit, option_color, option_style, question_color, question_style, error_color, error_style, error)
 ```
 
 **Arguments**
@@ -128,6 +136,12 @@ subroutine init(self, question, multiple, separator, loop_on_invalid, tries, def
 | `input_unit` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in | optional | Unit of the answers (default: standard input). |
 | `output_unit` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in | optional | Unit of the options and the question (default: standard output). |
 | `error_unit` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in | optional | Unit of the error messages (default: standard error). |
+| `option_color` | character(len=*) | in | optional | ANSI colour of the option lines (FACE names; default: none). |
+| `option_style` | character(len=*) | in | optional | ANSI style of the option lines. |
+| `question_color` | character(len=*) | in | optional | ANSI colour of the question. |
+| `question_style` | character(len=*) | in | optional | ANSI style of the question. |
+| `error_color` | character(len=*) | in | optional | ANSI colour of the word "error" of the messages. |
+| `error_style` | character(len=*) | in | optional | ANSI style of the word "error" of the messages. |
 | `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | optional | Error trapping flag. |
 
 **Call graph**
@@ -289,6 +303,7 @@ subroutine show(self, suffix)
 ```mermaid
 flowchart TD
   ask["ask"] --> show["show"]
+  show["show"] --> colorize["colorize"]
   show["show"] --> str["str"]
   style show fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -482,6 +497,7 @@ flowchart TD
   init["init"] --> raise["raise"]
   run_single["run_single"] --> raise["raise"]
   yes_no["yes_no"] --> raise["raise"]
+  raise["raise"] --> colorize["colorize"]
   style raise fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 

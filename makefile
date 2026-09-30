@@ -111,7 +111,8 @@ $(DOBJ)flap_config_m.o: src/lib/flap_config_m.f90 \
 
 $(DOBJ)flap_menu_t.o: src/lib/flap_menu_t.F90 \
 	$(DOBJ)flap_utils_m.o \
-	$(DOBJ)penf.o
+	$(DOBJ)penf.o \
+	$(DOBJ)face.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 

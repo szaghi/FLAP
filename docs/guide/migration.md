@@ -112,8 +112,8 @@ values still takes the default: both change in v2.0.0 (see below).
 - A new, optional module for interactive menus (F23): `type(menu)` with `init`, `add_option` and `run`, exported by
   `flap`; a default option answers an empty line (`add_option(is_default=)`, `init(default_icon=)`); invalid answers
   can be asked again (`init(loop_on_invalid=, tries=)`); several options can be chosen (`init(multiple=, separator=)`,
-  `run(choices)`); `yes_no` asks a yes/no question; errors 2001–2006 (see [Interactive Menus](./menu)). The parser
-  does not use it: nothing changes for existing programs.
+  `run(choices)`); `yes_no` asks a yes/no question; colours via `init(option_color=, question_color=, error_color=, ...)`;
+  errors 2001–2006 (see [Interactive Menus](./menu)). The parser does not use it: nothing changes for existing programs.
 
 ## v2.2.0 (additive)
 

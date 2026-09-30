@@ -45,7 +45,7 @@ Reference compilers: gfortran 13 and 14; the suite also passes with gfortran 15 
 
 ```
 flap.f90                                         ← public interface (use this in consuming code)
-├── flap_menu_t.F90                              ← interactive menus (opt-in; the parser never uses it)
+├── flap_menu_t.F90                              ← interactive menus (opt-in; the parser never uses it; utils, PENF, FACE)
 └── flap_command_line_interface_t.F90            ← main CLI type
     └── flap_command_line_arguments_group_t.f90  ← groups / subcommands
         ├── flap_config_m.f90                    ← INI configuration file reader (set_config)

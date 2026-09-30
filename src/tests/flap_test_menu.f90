@@ -1,8 +1,10 @@
-!< Interactive menus: flap_menu_t, single choice on custom units, defaults, retries, multiple selection, yes/no (issue #125,
-!< steps 5.1-5.6; #78 1.1, 6.1, 2.1, 3.1, 5.1, 4.1: T0.1, T1.1-T1.8, T6.1-T6.4, T2.1-T2.7, T3.1-T3.7, T5.1-T5.8, T4.1-T4.9).
+!< Interactive menus: flap_menu_t, single choice on custom units, defaults, retries, multiple selection, yes/no, colours
+!< (issue #125, steps 5.1-5.7; the whole #78 plan: T0.1, T1.1-T1.8, T2.1-T2.7, T3.1-T3.7, T4.1-T4.9, T5.1-T5.8, T6.1-T6.4,
+!< T7.1-T7.4).
 program flap_test_menu
-!< Interactive menus: flap_menu_t, single choice on custom units, defaults, retries, multiple selection, yes/no (issue #125,
-!< steps 5.1-5.6; #78 1.1, 6.1, 2.1, 3.1, 5.1, 4.1: T0.1, T1.1-T1.8, T6.1-T6.4, T2.1-T2.7, T3.1-T3.7, T5.1-T5.8, T4.1-T4.9).
+!< Interactive menus: flap_menu_t, single choice on custom units, defaults, retries, multiple selection, yes/no, colours
+!< (issue #125, steps 5.1-5.7; the whole #78 plan: T0.1, T1.1-T1.8, T2.1-T2.7, T3.1-T3.7, T4.1-T4.9, T5.1-T5.8, T6.1-T6.4,
+!< T7.1-T7.4).
 !<
 !< The menu prints its numbered options and the question, reads one answer line and returns the chosen index. Every case
 !< runs in-process on custom units (the answers in a scratch file, output and errors read back from capture units); the
@@ -11,6 +13,7 @@ use flap, only : menu, ERROR_MENU_DEFINITION, ERROR_MENU_DUPLICATE, ERROR_MENU_E
                  ERROR_MENU_NO_RESPONSE, ERROR_MENU_TOO_MANY
 use flap_test_utils, only : assert, assert_contains, assert_equal, capture_close, capture_open, child_case, read_back, &
                             reinvoke, run_command, scratch_file
+use face, only : colorize
 use penf, only : I4P, str
 
 implicit none
@@ -28,6 +31,7 @@ integer(I4P)              :: error    !< Error trapping flag.
 integer(I4P)              :: exitstat !< Exit status of a child.
 integer(I4P)              :: status   !< Retrieval status.
 logical                   :: opened   !< Unit still connected.
+logical                   :: yes_answer !< Answer to a yes/no question.
 
 if (child_case() == 1) then
   ! the default units: the answer from the real standard input, the menu on stdout, the errors on stderr
@@ -426,6 +430,45 @@ call assert_contains(read_back(elun), 'invalid response: what (1 tries left)', '
 call check_yes_no('', ERROR_MENU_EOF, .false., 'T4.9 end of input', line_end=.false.)
 call check_yes_no('maybe', ERROR_MENU_EOF, .false., 'T4.9 end of input while retrying', tries=3_I4P, line_end=.false.)
 out = read_back(lun)
+out = read_back(elun)
+
+! T7.x: colours (#78 7.1)
+! T7.1: no colours, no escape sequence (every output above too)
+call ask_default('9', choice, error)
+out = read_back(lun)
+err = read_back(elun)
+call assert(index(out, achar(27)) == 0 .and. index(err, achar(27)) == 0, 'T7.1 no escape sequence')
+! T7.2, T7.3, T7.4: option lines, the question, the word error, each in its colour and style
+call answers('9', in)
+call m%init(question='Pick', option_color='red', question_color='blue', question_style='bold_on', error_color='yellow', &
+            input_unit=in, output_unit=lun, error_unit=elun)
+call m%add_option(text='a', is_default=.true.)
+call m%add_option(text='b')
+call m%run(choice, error)
+close(in, status='delete')
+call assert_equal(read_back(lun), colorize('1) *a', color_fg='red')//new_line('a')//colorize('2) b', color_fg='red')// &
+                  new_line('a')//colorize('Pick', color_fg='blue', style='bold_on')//' '//new_line('a'), 'T7.2 T7.3 output')
+call assert_equal(read_back(elun), colorize('error', color_fg='yellow')//': invalid response: 9'//new_line('a'), &
+                  'T7.4 the word error')
+call assert(colorize('x', color_fg='red') /= 'x', 'FACE colours (the checks above are not vacuous)')
+! a style alone; the yes/no prompt in the question colour
+call answers('maybe', in)
+call m%init(question='Sure?', option_style='italics_on', question_color='green', error_style='bold_on', input_unit=in, &
+            output_unit=lun, error_unit=elun)
+call m%yes_no(yes_answer, default='y', error=error)
+close(in, status='delete')
+call assert_equal(read_back(lun), colorize('Sure? (Y/n)', color_fg='green')//' '//new_line('a'), 'yes/no prompt coloured')
+call assert_equal(read_back(elun), colorize('error', style='bold_on')//': invalid response: maybe'//new_line('a'), &
+                  'error style alone')
+! free drops the colours
+call answers('9', in)
+call m%init(question='Pick', option_color='red', input_unit=in, output_unit=lun, error_unit=elun)
+call m%free
+call m%init(question='Pick', input_unit=in, output_unit=lun, error_unit=elun)
+call m%add_option(text='a')
+call m%run(choice, error)
+close(in, status='delete')
+call assert(index(read_back(lun), achar(27)) == 0, 'init after free: no colour')
 out = read_back(elun)
 
 ! T0.1: the parser never uses the menu module
