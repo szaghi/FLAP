@@ -138,6 +138,11 @@ source-dir = "src/tests"
 main = "flap_test_group_examples.f90"
 
 [[test]]
+name = "flap_test_group_alias"
+source-dir = "src/tests"
+main = "flap_test_group_alias.f90"
+
+[[test]]
 name = "flap_test_group"
 source-dir = "src/tests"
 main = "flap_test_group.f90"

@@ -115,5 +115,7 @@ values still takes the default: both change in v2.0.0 (see below).
   (see [Flag pairs](./arguments#flag-pairs-switch-neg)). New error `ERROR_SWITCH_NEG_INCONSISTENT` (36).
 - `init(case_insensitive=.true.)` matches switches and command names in any case; `add(case_sensitive=.false.)` matches
   character choices in any case, returning the declared spelling.
+- `add_group(..., aliases='co,ck')` gives a command aliases, resolved everywhere (F19); new error `ERROR_GROUP_ALIAS`
+  (1008). `add_group` gains `error=`, and, as `add`, reports only its own definition.
 - With real quad precision (`-D_R16P`), `get` into `real(R16P)` now converts in quad precision (it converted in single
   precision, B35 of #125).

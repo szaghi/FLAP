@@ -90,6 +90,7 @@ positive values are **errors**. Existing values never change.
 | `1005` | `ERROR_USER` | Application error | Returned by `cli%raise_error` (see below) |
 | `1006` | `ERROR_CONFIG_NOT_FOUND` | Configuration file not found | `set_config(file=..., required=.true.)` and the file is missing (or cannot be read) |
 | `1007` | `ERROR_CONFIG_UNKNOWN_KEY` | Configuration file: unknown key | An unknown key or section, a key of an option taking no value, or a malformed line (the message names the line) |
+| `1008` | `ERROR_GROUP_ALIAS` | Invalid command alias | `add_group(aliases=...)` with an alias equal to a command name or another alias, repeated, blank or equal to its command, or a command name equal to an alias; `parse` then fails too |
 | `1012` | `ERROR_ARGUMENT_RETRIEVAL` | A command line argument cannot be read | `get_command_argument` failed (processor error; not expected in practice) |
 
 The first two group codes are named `ERROR_GROUP_*` in the `flap` module; inside the group module they are

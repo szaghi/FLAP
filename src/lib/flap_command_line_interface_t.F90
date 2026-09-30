@@ -123,6 +123,7 @@ integer(I4P), parameter, public :: ERROR_UNKNOWN_CLAS_IGNORED  = 1004 !< Unknown
 integer(I4P), parameter, public :: ERROR_USER                  = 1005 !< Application error reported by raise_error.
 integer(I4P), parameter, public :: ERROR_CONFIG_NOT_FOUND      = 1006 !< Required configuration file not found.
 integer(I4P), parameter, public :: ERROR_CONFIG_UNKNOWN_KEY    = 1007 !< Configuration file: unknown key or malformed line.
+integer(I4P), parameter, public :: ERROR_GROUP_ALIAS           = 1008 !< Alias of a command equal to a command or an alias.
 integer(I4P), parameter, public :: ERROR_ARGUMENT_RETRIEVAL    = 1012 !< A command line argument cannot be retrieved.
 
 contains
@@ -233,8 +234,12 @@ contains
   self%clasg(0)%group = ''
   endsubroutine init
 
-  subroutine add_group(self, help, description, exclude, examples, group, no_args_is_help, deprecated)
+  subroutine add_group(self, help, description, exclude, examples, group, no_args_is_help, deprecated, aliases, error)
   !< Add CLAs group to CLI.
+  !<
+  !< The aliases (F19 of #125) are comma separated: invoking an alias is invoking the command. An alias equal to a command
+  !< name, to another alias, to the command itself, or blank, and a command name equal to an alias, are ERROR_GROUP_ALIAS:
+  !< printed, returned, and kept on the command, so that parse fails too (as an invalid exclusive set).
   class(command_line_interface), intent(inout)    :: self              !< CLI data.
   character(*), optional,        intent(in)       :: help              !< Help message.
   character(*), optional,        intent(in)       :: description       !< Detailed description.
@@ -243,13 +248,28 @@ contains
   character(*),                  intent(in)       :: group             !< Name of the grouped CLAs.
   logical, optional,             intent(in)       :: no_args_is_help   !< Print the help of the group when invoked alone.
   character(*), optional,        intent(in)       :: deprecated        !< Deprecation message ('' for none): warn when called.
+  character(*), optional,        intent(in)       :: aliases           !< Aliases of the command, comma separated (F19).
+  integer(I4P), optional,        intent(out)      :: error             !< Error trapping flag.
   type(command_line_arguments_group), allocatable :: clasg_list_new(:) !< New (extended) CLAs group list.
+  type(flap_string), allocatable                  :: alias_list(:)     !< Valid aliases.
+  character(len=:), allocatable                   :: clash             !< Message of an invalid alias ('' for none).
   character(len=:), allocatable                   :: helpd             !< Help message.
   character(len=:), allocatable                   :: descriptiond      !< Detailed description.
   character(len=:), allocatable                   :: excluded          !< Group name of the mutually exclusive group.
   integer(I4P)                                    :: Ng                !< Number of groups.
   integer(I4P)                                    :: gi                !< Group index
 
+  ! each add_group reports only its own definition (as add, B34)
+  self%error = 0
+  if (present(error)) error = 0
+  gi = self%group_index(group)
+  if (gi >= 0) then
+    ! already defined: nothing to add, unless the name is an alias of another command
+    if (self%clasg(gi)%has_alias(group)) call alias_error(gi, ': command "'//trim(group)//'" is already an alias of "'//&
+                                                          self%clasg(gi)%group//'"!')
+    return
+  endif
+  call parse_aliases
   if (.not.self%is_defined_group(group=group)) then
     helpd        = 'usage: ' ; if (present(help       )) helpd        = help
     descriptiond = ''        ; if (present(description)) descriptiond = description
@@ -261,6 +281,7 @@ contains
       clasg_list_new(gi) = self%clasg(gi)
     enddo
     call clasg_list_new(Ng)%assign_object(self)
+    clasg_list_new(Ng)%error       = 0
     clasg_list_new(Ng)%help        = helpd
     clasg_list_new(Ng)%description = descriptiond
     clasg_list_new(Ng)%group       = group
@@ -268,10 +289,75 @@ contains
     call clasg_list_new(Ng)%set_examples(examples)
     if (present(no_args_is_help)) clasg_list_new(Ng)%no_args_is_help = no_args_is_help
     if (present(deprecated)) clasg_list_new(Ng)%deprecated = deprecated
+    if (clash == '' .and. size(alias_list, dim=1) > 0) clasg_list_new(Ng)%aliases = alias_list
     if (allocated(self%clasg)) deallocate(self%clasg)
     allocate(self%clasg(lbound(clasg_list_new,1):ubound(clasg_list_new,1)), source=clasg_list_new)
     deallocate(clasg_list_new)
+    if (clash /= '') call alias_error(Ng, clash)
   endif
+  contains
+    subroutine parse_aliases
+    !< Split the aliases at the commas and check them, setting clash for the first invalid one.
+    character(len=:), allocatable :: rest  !< Aliases not yet split.
+    character(len=:), allocatable :: alias !< Current alias.
+    integer(I4P)                  :: c     !< Position of the next comma.
+    integer(I4P)                  :: i     !< Counter.
+
+    clash = ''
+    allocate(alias_list(0))
+    if (.not.present(aliases)) return
+    if (len_trim(aliases) == 0) return
+    rest = aliases
+    do
+      c = index(rest, ',')
+      if (c > 0) then
+        alias = trim(adjustl(rest(:c-1)))
+        rest = rest(c+1:)
+      else
+        alias = trim(adjustl(rest))
+      endif
+      if (len(alias) == 0) then
+        clash = ': command "'//trim(group)//'": blank alias!'
+      elseif (self%group_index(alias) >= 0) then
+        clash = ': alias "'//alias//'" of command "'//trim(group)//'" is already a command name or alias!'
+      elseif (same_name(alias, group)) then
+        clash = ': alias "'//alias//'" of command "'//trim(group)//'" is the command itself!'
+      else
+        do i=1, size(alias_list, dim=1)
+          if (same_name(alias, alias_list(i)%s)) clash = ': alias "'//alias//'" of command "'//trim(group)//'" is repeated!'
+        enddo
+      endif
+      if (clash /= '') return
+      alias_list = [alias_list, flap_string(alias)]
+      if (c == 0) exit
+    enddo
+    endsubroutine parse_aliases
+
+    pure function same_name(a, b) result(same)
+    !< Compare two command names with the case rule of the CLI (F14).
+    character(*), intent(in) :: a    !< First name.
+    character(*), intent(in) :: b    !< Second name.
+    logical                  :: same !< Check result.
+
+    if (self%case_insensitive) then
+      same = upper_case(trim(a)) == upper_case(trim(b))
+    else
+      same = trim(a) == trim(b)
+    endif
+    endfunction same_name
+
+    subroutine alias_error(g, message)
+    !< Report an invalid alias and keep the error on the command g, so that parse fails too.
+    integer(I4P), intent(in) :: g       !< Index of the command.
+    character(*), intent(in) :: message !< Message, after the prefix.
+
+    self%error = ERROR_GROUP_ALIAS
+    self%error_message = self%error_prefix()//message
+    call self%print_error_message
+    self%clasg(g)%error = self%error
+    self%clasg(g)%error_message = self%error_message
+    if (present(error)) error = self%error
+    endsubroutine alias_error
   endsubroutine add_group
 
   subroutine set_mutually_exclusive_groups(self, group1, group2)
@@ -283,8 +369,8 @@ contains
   integer(I4P)                                 :: g2     !< Counter.
 
   if (self%is_defined_group(group=group1, g=g1).and.self%is_defined_group(group=group2, g=g2)) then
-    self%clasg(g1)%m_exclude = group2
-    self%clasg(g2)%m_exclude = group1
+    self%clasg(g1)%m_exclude = self%clasg(g2)%group ! the canonical names, also when given by an alias (F19)
+    self%clasg(g2)%m_exclude = self%clasg(g1)%group
   endif
   endsubroutine set_mutually_exclusive_groups
 
@@ -766,7 +852,10 @@ contains
     ! check mutually exclusive interaction
     if (g>0) then
       if (self%clasg(g)%m_exclude/='') then
-        if (self%is_defined_group(group=self%clasg(g)%m_exclude, g=gg)) self%clasg(gg)%m_exclude = self%clasg(g)%group
+        if (self%is_defined_group(group=self%clasg(g)%m_exclude, g=gg)) then
+          self%clasg(g)%m_exclude = self%clasg(gg)%group ! the canonical name, also when given by an alias (F19)
+          self%clasg(gg)%m_exclude = self%clasg(g)%group
+        endif
       endif
     endif
   enddo
@@ -835,8 +924,8 @@ contains
   pure function group_index(self, name) result(g)
   !< Return the index of the group (command) with a name, -1 if there is none: the one resolver of group names.
   !<
-  !< The top level is the group 0, named ''. Trailing blanks are not significant; the match is case sensitive, in any case
-  !< with case_insensitive (F14).
+  !< The top level is the group 0, named ''. A command matches by its name or an alias (F19); trailing blanks are not
+  !< significant; the match is case sensitive, in any case with case_insensitive (F14).
   class(command_line_interface), intent(in) :: self !< CLI data.
   character(*),                  intent(in) :: name !< Name of group (command).
   integer(I4P)                              :: g    !< Index of group, -1 if not defined.
@@ -844,11 +933,7 @@ contains
   if (allocated(self%clasg)) then
     do g=0, ubound(self%clasg, dim=1)
       if (allocated(self%clasg(g)%group)) then
-        if (self%case_insensitive) then
-          if (upper_case(self%clasg(g)%group) == upper_case(name)) return
-        elseif (self%clasg(g)%group == name) then
-          return
-        endif
+        if (self%clasg(g)%is_named(name)) return
       endif
     enddo
   endif
@@ -2089,7 +2174,7 @@ contains
     if (size(self%clasg,dim=1)>1) then
       usaged = usaged//new_line('a')//new_line('a')//prefd//'Commands:'
       do gi=1, size(self%clasg,dim=1)-1
-        usaged = usaged//new_line('a')//prefd//'  '//self%clasg(gi)%group
+        usaged = usaged//new_line('a')//prefd//'  '//self%clasg(gi)%names(', ')
         usaged = usaged//new_line('a')//prefd//repeat(' ',10)//self%clasg(gi)%description
         if (allocated(self%clasg(gi)%deprecated)) then
           if (len_trim(self%clasg(gi)%deprecated) > 0) then
@@ -2143,9 +2228,9 @@ contains
     ! COMPREPLY line); the command names come before the value completions, so that they are offered after a flag too
     signature = self%clasg(0)%signature(bash_completion=.true.)
     if (size(self%clasg,dim=1)>1) then
-      commands = new_line('a')//'    COMPREPLY+=( $( compgen -W "'//self%clasg(1)%group
+      commands = new_line('a')//'    COMPREPLY+=( $( compgen -W "'//self%clasg(1)%names(' ')
       do g=2,size(self%clasg,dim=1)-1
-        commands = commands//' '//self%clasg(g)%group
+        commands = commands//' '//self%clasg(g)%names(' ')
       enddo
       commands = commands//'" -- $cur ) )'
       c = index(signature(2:), new_line('a')) ! end of the first line (the one setting COMPREPLY), 0 if it is the last
@@ -2195,17 +2280,17 @@ contains
     script = script//new_line('a')//'  group=""'
     script = script//new_line('a')//'  for w in "${COMP_WORDS[@]:1:$((COMP_CWORD - 1))}"; do'
     script = script//new_line('a')//'    case "$w" in'
-    script = script//new_line('a')//'      '//self%clasg(1)%group
+    script = script//new_line('a')//'      '//self%clasg(1)%names('|')
     do g=2,size(self%clasg,dim=1)-1
-      script = script//'|'//self%clasg(g)%group
+      script = script//'|'//self%clasg(g)%names('|')
     enddo
     script = script//') group="$w" ; break ;;'
     script = script//new_line('a')//'    esac'
     script = script//new_line('a')//'  done'
-    script = script//new_line('a')//'  if [ "$group" == "'//self%clasg(1)%group//'" ] ; then'
+    script = script//new_line('a')//'  if [ "$group" == "'//self%clasg(1)%names('" ] || [ "$group" == "')//'" ] ; then'
     script = script//self%clasg(1)%signature(bash_completion=.true.)
     do g=2,size(self%clasg,dim=1)-1
-      script = script//new_line('a')//'  elif [ "$group" == "'//self%clasg(g)%group//'" ] ; then'
+      script = script//new_line('a')//'  elif [ "$group" == "'//self%clasg(g)%names('" ] || [ "$group" == "')//'" ] ; then'
       script = script//self%clasg(g)%signature(bash_completion=.true.)
     enddo
     script = script//new_line('a')//'  else'

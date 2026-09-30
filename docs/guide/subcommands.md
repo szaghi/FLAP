@@ -16,7 +16,7 @@ Command Line Arguments (CLAs).
 ## Adding a group — `cli%add_group`
 
 ```fortran
-call cli%add_group(group, description, help, exclude, examples, no_args_is_help, deprecated)
+call cli%add_group(group, description, help, exclude, examples, no_args_is_help, deprecated, aliases, error)
 ```
 
 | Argument | Type | Purpose |
@@ -25,12 +25,30 @@ call cli%add_group(group, description, help, exclude, examples, no_args_is_help,
 | `description` | `character(*)`, optional | Short description shown in top-level help |
 | `help` | `character(*)`, optional | Extended help for per-command help |
 | `no_args_is_help` | `logical`, optional | `prog <group>` alone prints the help of the command (`STATUS_NO_ARGS`) |
+| `aliases` | `character(*)`, optional | Other names of the command, comma separated (see [Aliases](#aliases)) |
+| `error` | `integer`, optional | Error code on return (0 = success) |
 
 ```fortran
 call cli%add_group(group='init',   description='Initialise a new repository')
 call cli%add_group(group='commit', description='Record changes to the repository')
 call cli%add_group(group='tag',    description='Create, list or delete tags')
 ```
+
+### Aliases
+
+```fortran
+call cli%add_group(group='checkout', aliases='co, ck', description='Switch branches', error=error)
+```
+
+Invoking an alias is invoking the command: `prog co -t main` is `prog checkout -t main`. Every query accepts an alias
+too: `run_command('checkout')` and `run_command('co')` are both true, `get(group='co', ...)` reads the `checkout`
+options, and mutually exclusive commands can be declared through an alias. The help lists `checkout, co, ck` under
+`Commands:`, and the bash completion offers the aliases. With `init(case_insensitive=.true.)` aliases match in any case,
+as command names do.
+
+An alias equal to a command name or to another alias, repeated, blank, or equal to its own command, and a command name
+equal to an existing alias, are `ERROR_GROUP_ALIAS` (1008): printed, returned by `error=`, and kept on the command, so
+that `parse` fails too.
 
 ## Adding arguments to a group
 

@@ -95,6 +95,7 @@ graph LR
 | `ERROR_USER` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Application error reported by raise_error. |
 | `ERROR_CONFIG_NOT_FOUND` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Required configuration file not found. |
 | `ERROR_CONFIG_UNKNOWN_KEY` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Configuration file: unknown key or malformed line. |
+| `ERROR_GROUP_ALIAS` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Alias of a command equal to a command or an alias. |
 | `ERROR_ARGUMENT_RETRIEVAL` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | A command line argument cannot be retrieved. |
 
 ## Derived Types
@@ -294,8 +295,12 @@ flowchart TD
 
 Add CLAs group to CLI.
 
+ The aliases (F19 of #125) are comma separated: invoking an alias is invoking the command. An alias equal to a command
+ name, to another alias, to the command itself, or blank, and a command name equal to an alias, are ERROR_GROUP_ALIAS:
+ printed, returned, and kept on the command, so that parse fails too (as an invalid exclusive set).
+
 ```fortran
-subroutine add_group(self, help, description, exclude, examples, group, no_args_is_help, deprecated)
+subroutine add_group(self, help, description, exclude, examples, group, no_args_is_help, deprecated, aliases, error)
 ```
 
 **Arguments**
@@ -310,14 +315,20 @@ subroutine add_group(self, help, description, exclude, examples, group, no_args_
 | `group` | character(len=*) | in |  | Name of the grouped CLAs. |
 | `no_args_is_help` | logical | in | optional | Print the help of the group when invoked alone. |
 | `deprecated` | character(len=*) | in | optional | Deprecation message ('' for none): warn when called. |
+| `aliases` | character(len=*) | in | optional | Aliases of the command, comma separated (F19). |
+| `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | optional | Error trapping flag. |
 
 **Call graph**
 
 ```mermaid
 flowchart TD
   add["add"] --> add_group["add_group"]
+  add_group["add_group"] --> alias_error["alias_error"]
   add_group["add_group"] --> assign_object["assign_object"]
+  add_group["add_group"] --> group_index["group_index"]
+  add_group["add_group"] --> has_alias["has_alias"]
   add_group["add_group"] --> is_defined_group["is_defined_group"]
+  add_group["add_group"] --> parse_aliases["parse_aliases"]
   add_group["add_group"] --> set_examples["set_examples"]
   style add_group fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -1389,6 +1400,7 @@ subroutine save_bash_completion_core(self, bash_file, error)
 flowchart TD
   save_bash_completion["save_bash_completion"] --> save_bash_completion_core["save_bash_completion_core"]
   save_bash_completion_core["save_bash_completion_core"] --> basename["basename"]
+  save_bash_completion_core["save_bash_completion_core"] --> names["names"]
   save_bash_completion_core["save_bash_completion_core"] --> signature["signature"]
   style save_bash_completion_core fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -1755,8 +1767,8 @@ flowchart TD
 
 Return the index of the group (command) with a name, -1 if there is none: the one resolver of group names.
 
- The top level is the group 0, named ''. Trailing blanks are not significant; the match is case sensitive, in any case
- with case_insensitive (F14).
+ The top level is the group 0, named ''. A command matches by its name or an alias (F19); trailing blanks are not
+ significant; the match is case sensitive, in any case with case_insensitive (F14).
 
 **Attributes**: pure
 
@@ -1777,10 +1789,11 @@ function group_index(self, name) result(g)
 
 ```mermaid
 flowchart TD
+  add_group["add_group"] --> group_index["group_index"]
   is_defined_group["is_defined_group"] --> group_index["group_index"]
   load_config["load_config"] --> group_index["group_index"]
   set_mutually_exclusive_switches["set_mutually_exclusive_switches"] --> group_index["group_index"]
-  group_index["group_index"] --> upper_case["upper_case"]
+  group_index["group_index"] --> is_named["is_named"]
   style group_index fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -2128,6 +2141,7 @@ function usage_core(self, g, pref, no_header, no_examples, no_epilog, markdown) 
 ```mermaid
 flowchart TD
   usage["usage"] --> usage_core["usage_core"]
+  usage_core["usage_core"] --> names["names"]
   usage_core["usage_core"] --> print_examples["print_examples"]
   usage_core["usage_core"] --> signature["signature"]
   usage_core["usage_core"] --> usage["usage"]
@@ -2156,6 +2170,7 @@ function signature_core(self, bash_completion) result(signature)
 ```mermaid
 flowchart TD
   signature["signature"] --> signature_core["signature_core"]
+  signature_core["signature_core"] --> names["names"]
   signature_core["signature_core"] --> signature["signature"]
   style signature_core fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```

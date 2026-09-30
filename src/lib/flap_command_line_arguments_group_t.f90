@@ -18,7 +18,7 @@ use flap_command_line_argument_t, only : command_line_argument, &
                                          SOURCE_NONE
 use flap_config_m, only : config_file
 use flap_object_t, only : object
-use flap_utils_m, only : list_count, list_items, list_push, read_env, tokenize, write_text
+use flap_utils_m, only : flap_string, list_count, list_items, list_push, read_env, tokenize, upper_case, write_text
 use penf
 
 implicit none
@@ -58,9 +58,13 @@ type, extends(object) :: command_line_arguments_group
   logical,                                  public :: no_args_is_help=.false. !< Print the help when invoked with no arguments.
   type(exclusive_set), allocatable                 :: m_sets(:)         !< Mutually exclusive sets of switches.
   character(len=:), allocatable,            public :: deprecated        !< Deprecation message of the command (F13).
+  type(flap_string), allocatable,           public :: aliases(:)        !< Aliases of the command (F19), aliases(i)%s.
   contains
     ! public methods
     procedure, public :: free                  !< Free dynamic memory.
+    procedure, public :: is_named              !< Check if a name is the name of the group (command) or an alias.
+    procedure, public :: has_alias             !< Check if a name is an alias of the group (command).
+    procedure, public :: names                 !< Name and aliases of the group (command), separated.
     procedure, public :: check                 !< Check data consistency.
     procedure, public :: check_position_gaps   !< Check that the declared positions have no gap.
     procedure, public :: is_required_passed    !< Check if required CLAs are passed.
@@ -127,7 +131,50 @@ contains
   self%no_args_is_help = .false.
   if (allocated(self%m_sets)) deallocate(self%m_sets)
   if (allocated(self%deprecated)) deallocate(self%deprecated)
+  if (allocated(self%aliases)) deallocate(self%aliases)
   endsubroutine free
+
+  pure function is_named(self, name) result(named)
+  !< Check if a name is the name of the group (command) or one of its aliases (F19 of #125). Trailing blanks are not
+  !< significant; the case is, unless case_insensitive (F14).
+  class(command_line_arguments_group), intent(in) :: self  !< CLAsG data.
+  character(*),                        intent(in) :: name  !< Name.
+  logical                                         :: named !< Check result.
+
+  named = .false.
+  if (.not.allocated(self%group)) return
+  named = same(self%group, name, self%case_insensitive)
+  if (.not.named) named = self%has_alias(name)
+  endfunction is_named
+
+  pure function has_alias(self, name) result(alias)
+  !< Check if a name is an alias of the group (command) (F19 of #125), with the case rule of is_named.
+  class(command_line_arguments_group), intent(in) :: self  !< CLAsG data.
+  character(*),                        intent(in) :: name  !< Name.
+  logical                                         :: alias !< Check result.
+  integer(I4P)                                    :: i     !< Counter.
+
+  alias = .false.
+  if (.not.allocated(self%aliases)) return
+  do i=1, size(self%aliases, dim=1)
+    alias = same(self%aliases(i)%s, name, self%case_insensitive)
+    if (alias) return
+  enddo
+  endfunction has_alias
+
+  pure function names(self, sep) result(list)
+  !< Return the name of the group (command) followed by its aliases, separated by sep (help listing, completion).
+  class(command_line_arguments_group), intent(in) :: self !< CLAsG data.
+  character(*),                        intent(in) :: sep  !< Separator.
+  character(len=:), allocatable                   :: list !< Name and aliases.
+  integer(I4P)                                    :: i    !< Counter.
+
+  list = self%group
+  if (.not.allocated(self%aliases)) return
+  do i=1, size(self%aliases, dim=1)
+    list = list//sep//self%aliases(i)%s
+  enddo
+  endfunction names
 
   subroutine check(self, pref)
   !< Check data consistency.
@@ -1156,4 +1203,18 @@ contains
 
   call self%free
   endsubroutine finalize
+  ! non type-bound procedures
+  pure function same(a, b, case_insensitive) result(equal)
+  !< Compare two names, trailing blanks not significant, in any case with case_insensitive (F14).
+  character(*), intent(in) :: a                !< First name.
+  character(*), intent(in) :: b                !< Second name.
+  logical,      intent(in) :: case_insensitive !< Compare in any case.
+  logical                  :: equal            !< Check result.
+
+  if (case_insensitive) then
+    equal = upper_case(a) == upper_case(b)
+  else
+    equal = a == b
+  endif
+  endfunction same
 endmodule flap_command_line_arguments_group_t

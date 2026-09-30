@@ -74,7 +74,8 @@ use flap_command_line_interface_t, only : command_line_interface,      &
                                           ERROR_ARGUMENT_RETRIEVAL,    &
                                           ERROR_USER,                  &
                                          ERROR_CONFIG_NOT_FOUND,      &
-                                         ERROR_CONFIG_UNKNOWN_KEY
+                                         ERROR_CONFIG_UNKNOWN_KEY,    &
+                                         ERROR_GROUP_ALIAS
 
 implicit none
 private
@@ -157,4 +158,5 @@ public :: ERROR_ARGUMENT_RETRIEVAL
 public :: ERROR_USER
 public :: ERROR_CONFIG_NOT_FOUND
 public :: ERROR_CONFIG_UNKNOWN_KEY
+public :: ERROR_GROUP_ALIAS
 endmodule flap

@@ -40,6 +40,9 @@ graph LR
 - [check_m_exclusive](#check-m-exclusive)
 - [sanitize_defaults](#sanitize-defaults)
 - [finalize](#finalize)
+- [is_named](#is-named)
+- [has_alias](#has-alias)
+- [names](#names)
 - [is_passed](#is-passed)
 - [positional_index](#positional-index)
 - [config_key_index](#config-key-index)
@@ -51,6 +54,7 @@ graph LR
 - [signature](#signature)
 - [exclusive_set_of](#exclusive-set-of)
 - [exclusive_set_signature](#exclusive-set-signature)
+- [same](#same)
 
 ## Variables
 
@@ -130,6 +134,7 @@ classDiagram
 | `no_args_is_help` | logical |  | Print the help when invoked with no arguments. |
 | `m_sets` | type([exclusive_set](/api/src/lib/flap_command_line_arguments_group_t#exclusive-set)) | allocatable | Mutually exclusive sets of switches. |
 | `deprecated` | character(len=:) | allocatable | Deprecation message of the command (F13). |
+| `aliases` | type([flap_string](/api/src/lib/flap_utils_m#flap-string)) | allocatable | Aliases of the command (F19), aliases(i)%s. |
 
 #### Type-Bound Procedures
 
@@ -142,6 +147,9 @@ classDiagram
 | `set_examples` | pass(self) | Set examples of correct usage. |
 | `assign_object` | pass(lhs ) | Assignment overloading. |
 | `free` |  | Free dynamic memory. |
+| `is_named` |  | Check if a name is the name of the group (command) or an alias. |
+| `has_alias` |  | Check if a name is an alias of the group (command). |
+| `names` |  | Name and aliases of the group (command), separated. |
 | `check` |  | Check data consistency. |
 | `check_position_gaps` |  | Check that the declared positions have no gap. |
 | `is_required_passed` |  | Check if required CLAs are passed. |
@@ -719,6 +727,94 @@ subroutine finalize(self)
 
 ## Functions
 
+### is_named
+
+Check if a name is the name of the group (command) or one of its aliases (F19 of #125). Trailing blanks are not
+ significant; the case is, unless case_insensitive (F14).
+
+**Attributes**: pure
+
+**Returns**: `logical`
+
+```fortran
+function is_named(self, name) result(named)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_arguments_group](/api/src/lib/flap_command_line_arguments_group_t#command-line-arguments-group)) | in |  | CLAsG data. |
+| `name` | character(len=*) | in |  | Name. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  group_index["group_index"] --> is_named["is_named"]
+  is_named["is_named"] --> has_alias["has_alias"]
+  is_named["is_named"] --> same["same"]
+  style is_named fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### has_alias
+
+Check if a name is an alias of the group (command) (F19 of #125), with the case rule of is_named.
+
+**Attributes**: pure
+
+**Returns**: `logical`
+
+```fortran
+function has_alias(self, name) result(alias)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_arguments_group](/api/src/lib/flap_command_line_arguments_group_t#command-line-arguments-group)) | in |  | CLAsG data. |
+| `name` | character(len=*) | in |  | Name. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  add_group["add_group"] --> has_alias["has_alias"]
+  is_named["is_named"] --> has_alias["has_alias"]
+  has_alias["has_alias"] --> same["same"]
+  style has_alias fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### names
+
+Return the name of the group (command) followed by its aliases, separated by sep (help listing, completion).
+
+**Attributes**: pure
+
+**Returns**: `character(len=:)`
+
+```fortran
+function names(self, sep) result(list)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_arguments_group](/api/src/lib/flap_command_line_arguments_group_t#command-line-arguments-group)) | in |  | CLAsG data. |
+| `sep` | character(len=*) | in |  | Separator. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  save_bash_completion_core["save_bash_completion_core"] --> names["names"]
+  signature_core["signature_core"] --> names["names"]
+  usage_core["usage_core"] --> names["names"]
+  style names fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
 ### is_passed
 
 Check if a CLA has been passed.
@@ -1081,4 +1177,34 @@ flowchart TD
   exclusive_set_signature["exclusive_set_signature"] --> list_items["list_items"]
   exclusive_set_signature["exclusive_set_signature"] --> signature_usage["signature_usage"]
   style exclusive_set_signature fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### same
+
+Compare two names, trailing blanks not significant, in any case with case_insensitive (F14).
+
+**Attributes**: pure
+
+**Returns**: `logical`
+
+```fortran
+function same(a, b, case_insensitive) result(equal)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `a` | character(len=*) | in |  | First name. |
+| `b` | character(len=*) | in |  | Second name. |
+| `case_insensitive` | logical | in |  | Compare in any case. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  has_alias["has_alias"] --> same["same"]
+  is_named["is_named"] --> same["same"]
+  same["same"] --> upper_case["upper_case"]
+  style same fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
