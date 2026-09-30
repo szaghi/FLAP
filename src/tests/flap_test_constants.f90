@@ -3,6 +3,7 @@ program flap_test_constants
 !< Pin the public codes registry exported by the flap module (issue #125, section 5): existing values never change.
 use flap, only : command_line_interface,                                                                                          &
                  STATUS_PRINT_V, STATUS_PRINT_H, STATUS_PRINT_M, STATUS_NO_ARGS,                                                  &
+                 SOURCE_COMMANDLINE, SOURCE_ENVIRONMENT, SOURCE_CONFIG, SOURCE_DEFAULT, SOURCE_NONE,                              &
                  ERROR_OPTIONAL_NO_DEF, ERROR_REQUIRED_M_EXCLUDE, ERROR_POSITIONAL_M_EXCLUDE, ERROR_NAMED_NO_NAME,                &
                  ERROR_POSITIONAL_NO_POSITION, ERROR_POSITIONAL_NO_STORE, ERROR_NOT_IN_CHOICES, ERROR_MISSING_REQUIRED,           &
                  ERROR_M_EXCLUDE, ERROR_CASTING_LOGICAL, ERROR_CHOICES_LOGICAL, ERROR_NO_LIST, ERROR_NARGS_INSUFFICIENT,          &
@@ -28,6 +29,11 @@ contains
   subroutine check_values()
   !< Every exported constant keeps its registered value.
 
+  call assert_equal(SOURCE_COMMANDLINE,            1_I4P,   'SOURCE_COMMANDLINE')
+  call assert_equal(SOURCE_ENVIRONMENT,            2_I4P,   'SOURCE_ENVIRONMENT')
+  call assert_equal(SOURCE_CONFIG,                 3_I4P,   'SOURCE_CONFIG')
+  call assert_equal(SOURCE_DEFAULT,                4_I4P,   'SOURCE_DEFAULT')
+  call assert_equal(SOURCE_NONE,                   5_I4P,   'SOURCE_NONE')
   call assert_equal(STATUS_PRINT_V,               -1_I4P,   'STATUS_PRINT_V')
   call assert_equal(STATUS_PRINT_H,               -2_I4P,   'STATUS_PRINT_H')
   call assert_equal(STATUS_PRINT_M,               -3_I4P,   'STATUS_PRINT_M')

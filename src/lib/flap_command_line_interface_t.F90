@@ -645,6 +645,11 @@ contains
   ! dispatch the statuses (D3): help, then version, then markdown
   if (self%dispatch_status(pref=pref)) return
 
+  ! settle the source of the values not given on the command line (R chain, F06)
+  do g=0, size(self%clasg,dim=1)-1
+    call self%clasg(g)%resolve_values
+  enddo
+
   ! check if all required CLAs have been passed
   do g=0, size(ai,dim=1)-1
     call self%clasg(g)%is_required_passed(pref=pref)

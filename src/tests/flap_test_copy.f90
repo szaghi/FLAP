@@ -4,7 +4,7 @@ program flap_test_copy
 !<
 !< FLAP relies on intrinsic (deep) assignment for whole-object copies. The one explicit copy left is object%assign_object: a
 !< component added to the base object must be added there too, or this test fails.
-use flap, only : command_line_argument, command_line_arguments_group, command_line_interface
+use flap, only : command_line_argument, command_line_arguments_group, command_line_interface, SOURCE_ENVIRONMENT
 use flap_test_utils, only : assert, assert_equal
 use penf, only : I4P
 
@@ -27,7 +27,7 @@ a%error = 7 ; a%usage_lun = 11 ; a%version_lun = 12 ; a%error_lun = 13
 ! argument components
 a%switch = '--sw' ; a%switch_ab = '-s' ; a%act = 'STORE' ; a%def = '1' ; a%nargs = '2' ; a%choices = '1,2' ; a%val = '2'
 a%envvar = 'ENV' ; a%is_required = .true. ; a%is_positional = .true. ; a%position = 3 ; a%is_passed = .true.
-a%is_hidden = .true. ; a%is_val_required = .false.
+a%is_hidden = .true. ; a%is_val_required = .false. ; a%source = SOURCE_ENVIRONMENT
 
 b = a
 call check_object(b, 'intrinsic copy of an argument')
@@ -42,6 +42,7 @@ call assert_equal(b%envvar, 'ENV', 'argument copy: envvar')
 call assert(b%is_required .and. b%is_positional .and. b%is_passed .and. b%is_hidden .and. (.not.b%is_val_required), &
             'argument copy: logical components')
 call assert_equal(b%position, 3_I4P, 'argument copy: position')
+call assert_equal(b%source, SOURCE_ENVIRONMENT, 'argument copy: source')
 
 call c%assign_object(a)
 call check_object(c, 'assign_object')

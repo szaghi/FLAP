@@ -83,5 +83,10 @@ values still takes the default: both change in v2.0.0 (see below).
 - The `examples` component of the CLI, its groups and arguments holds `flap_string` elements: read an example as
   `cli%examples(i)%s` (it was `cli%examples(i)`). Examples are still set with `init(examples=...)` and
   `add_group(examples=...)`, unchanged. FLAP now builds and runs with nvfortran.
+- Every value records its source, one of the new constants `SOURCE_COMMANDLINE` (1), `SOURCE_ENVIRONMENT` (2),
+  `SOURCE_CONFIG` (3), `SOURCE_DEFAULT` (4), `SOURCE_NONE` (5), ordered from the most to the least explicit: a value
+  with a source below `SOURCE_DEFAULT` is given by the user. `get` reads such a value, the default otherwise, and a
+  required option is satisfied by any of these explicit sources. `is_passed` keeps its meaning: seen on the command
+  line.
 - Environment variables become a value source for every option (with precedence rules), and more: see issue
   [#125](https://github.com/szaghi/FLAP/issues/125).

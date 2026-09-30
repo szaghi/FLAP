@@ -21,6 +21,11 @@ public :: ACTION_PRINT_VERS
 public :: ACTION_COUNT
 public :: ACTION_APPEND
 public :: ARGS_SEP
+public :: SOURCE_COMMANDLINE
+public :: SOURCE_ENVIRONMENT
+public :: SOURCE_CONFIG
+public :: SOURCE_DEFAULT
+public :: SOURCE_NONE
 public :: ERROR_OPTIONAL_NO_DEF
 public :: ERROR_REQUIRED_M_EXCLUDE
 public :: ERROR_POSITIONAL_M_EXCLUDE
@@ -55,6 +60,13 @@ public :: ERROR_COUNT_INCONSISTENT
 public :: ERROR_APPEND_INCONSISTENT
 public :: ERROR_APPEND_SCALAR_GET
 
+! value sources (F06 of #125), from the most to the least explicit: source < SOURCE_DEFAULT means "given by the user"
+integer(I4P), parameter :: SOURCE_COMMANDLINE = 1 !< Value passed on the command line.
+integer(I4P), parameter :: SOURCE_ENVIRONMENT = 2 !< Value read from the environment variable.
+integer(I4P), parameter :: SOURCE_CONFIG      = 3 !< Value read from a configuration file.
+integer(I4P), parameter :: SOURCE_DEFAULT     = 4 !< Default value.
+integer(I4P), parameter :: SOURCE_NONE        = 5 !< No value.
+
 type, extends(object) :: command_line_argument
   !< Command Line Argument (CLA) class.
   !<
@@ -74,11 +86,13 @@ type, extends(object) :: command_line_argument
   logical,                       public :: is_passed=.false.      !< Flag for checking if CLA has been passed to CLI.
   logical,                       public :: is_hidden=.false.      !< Flag for hiding CLA, thus it does not compare into help.
   logical,                       public :: is_val_required=.true. !< Flag for set required value for not required (optional) CLA.
+  integer(I4P),                  public :: source=SOURCE_NONE     !< Source of the value (SOURCE_*).
   contains
     ! public methods
     procedure, public :: free                           !< Free dynamic memory.
     procedure, public :: check                          !< Check data consistency.
     procedure, public :: is_required_passed             !< Check if required CLA is passed.
+    procedure, public :: has_value                      !< Check if the value is given by the user (explicit source).
     procedure, public :: match_token                    !< Check if a command line token names this CLA.
     procedure, public :: match_inline_token             !< Check a token also as NAME=VALUE.
     procedure, public :: set_inline_value               !< Set the value given inline (NAME=VALUE).
@@ -213,6 +227,7 @@ contains
   self%is_passed       = .false.
   self%is_hidden       = .false.
   self%is_val_required = .true.
+  self%source          = SOURCE_NONE
   endsubroutine free
 
   subroutine check(self, pref)
@@ -232,17 +247,27 @@ contains
   endsubroutine check
 
   function is_required_passed(self, pref) result(is_ok)
-  !< Check if required CLA is passed.
+  !< Check if required CLA is passed: a required CLA, or one without default, needs a value from an explicit source (D2).
   class(command_line_argument), intent(inout) :: self  !< CLA data.
   character(*), optional,       intent(in)    :: pref  !< Prefixing string.
   logical                                     :: is_ok !< Check result.
 
   is_ok = .true.
-  if (((.not.self%is_passed).and.self%is_required).or.((.not.self%is_passed).and.(.not.allocated(self%def)))) then
+  if ((.not.self%has_value()).and.(self%is_required.or.(.not.allocated(self%def)))) then
     call self%errored(pref=pref, error=ERROR_MISSING_REQUIRED)
     is_ok = .false.
   endif
   endfunction is_required_passed
+
+  elemental function has_value(self)
+  !< Check if the value is given by the user, from an explicit source (command line, environment, config): not the default.
+  !<
+  !< The getters read `val` when this is true and `def` otherwise; `is_passed` keeps its meaning, "seen on the command line".
+  class(command_line_argument), intent(in) :: self      !< CLA data.
+  logical                                  :: has_value !< Check result.
+
+  has_value = self%source < SOURCE_DEFAULT
+  endfunction has_value
 
   pure function match_token(self, token) result(match)
   !< Check if a command line token names this CLA: the one matcher of switch names (decision D1 of #125).
@@ -1097,12 +1122,12 @@ contains
   endfunction check_list_size
 
   function stored_list(self) result(list)
-  !< Return the stored list of values: the parsed one if the CLA has been passed, the default one otherwise.
+  !< Return the stored list of values: the resolved one if given by the user (has_value), the default one otherwise.
   class(command_line_argument), intent(in) :: self !< CLA data.
   character(:), allocatable                :: list !< Stored list.
 
   list = ''
-  if (self%is_passed.and.allocated(self%val)) then
+  if (self%has_value().and.allocated(self%val)) then
     list = self%val
   elseif (allocated(self%def)) then
     list = self%def
@@ -1118,7 +1143,7 @@ contains
 
   if (.not.self%is_required_passed(pref=pref)) return
   if (self%act==action_store.or.self%act==action_store_star) then
-    if (self%is_passed.and.allocated(self%val)) then
+    if (self%has_value().and.allocated(self%val)) then
       call self%get_cla_from_buffer(buffer=self%val, val=val, pref=pref)
     elseif (allocated(self%def)) then ! using default value
       call self%get_cla_from_buffer(buffer=self%def, val=val, pref=pref)
@@ -1130,7 +1155,7 @@ contains
     ! the number of occurrences, or the default when not passed
     call self%get_cla_from_buffer(buffer=self%stored_list(), val=val, pref=pref)
   elseif (self%act==action_store_true) then
-    if (self%is_passed) then
+    if (self%has_value()) then
       select type(val)
       type is(logical)
         val = .true.
@@ -1147,7 +1172,7 @@ contains
       endselect
     endif
   elseif (self%act==action_store_false) then
-    if (self%is_passed) then
+    if (self%has_value()) then
       select type(val)
       type is(logical)
         val = .false.
@@ -1215,7 +1240,7 @@ contains
   if (self%act==action_store.or.self%act==action_append) then
     call self%get_cla_list_from_buffer(buffer=self%stored_list(), val=val, pref=pref)
   elseif (self%act==action_store_true) then
-    if (self%is_passed) then
+    if (self%has_value()) then
       select type(val)
       type is(logical)
         val = .true.
@@ -1231,7 +1256,7 @@ contains
       endselect
     endif
   elseif (self%act==action_store_false) then
-    if (self%is_passed) then
+    if (self%has_value()) then
       select type(val)
       type is(logical)
         val = .false.
@@ -1573,7 +1598,7 @@ contains
       call list_items('', vals, Nv)
     endif
     allocate(logical:: val(1:Nv))
-    if (self%is_passed) then
+    if (self%has_value()) then
       val = self%act==action_store_true
     else
       do v=1, Nv

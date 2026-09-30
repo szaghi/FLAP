@@ -3,6 +3,11 @@ module flap
 !< FLAP, Fortran command Line Arguments Parser for poor people
 !<{!README-FLAP.md!}
 use flap_command_line_argument_t, only : command_line_argument,        &
+                                         SOURCE_COMMANDLINE,           &
+                                         SOURCE_ENVIRONMENT,           &
+                                         SOURCE_CONFIG,                &
+                                         SOURCE_DEFAULT,               &
+                                         SOURCE_NONE,                  &
                                          ERROR_OPTIONAL_NO_DEF,        &
                                          ERROR_REQUIRED_M_EXCLUDE,     &
                                          ERROR_POSITIONAL_M_EXCLUDE,   &
@@ -70,6 +75,11 @@ public :: STATUS_PRINT_H
 public :: STATUS_PRINT_M
 public :: STATUS_NO_ARGS
 ! errors 1-99: command line argument
+public :: SOURCE_COMMANDLINE
+public :: SOURCE_ENVIRONMENT
+public :: SOURCE_CONFIG
+public :: SOURCE_DEFAULT
+public :: SOURCE_NONE
 public :: ERROR_OPTIONAL_NO_DEF
 public :: ERROR_REQUIRED_M_EXCLUDE
 public :: ERROR_POSITIONAL_M_EXCLUDE

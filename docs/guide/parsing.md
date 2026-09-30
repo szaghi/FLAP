@@ -198,6 +198,9 @@ else
 end if
 ```
 
+`is_passed` means "seen on the command line". A value can also come from an explicit source other than the command line
+(today the environment variable of a bare `envvar` switch): `get` returns it, and it satisfies a required option.
+
 ---
 
 ## Checking whether an argument is defined — `cli%is_defined`

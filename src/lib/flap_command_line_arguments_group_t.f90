@@ -10,7 +10,11 @@ use flap_command_line_argument_t, only : command_line_argument, &
                                          ACTION_APPEND,         &
                                          ACTION_COUNT,          &
                                          ACTION_STORE,          &
-                                         ACTION_STORE_STAR
+                                         ACTION_STORE_STAR,     &
+                                         SOURCE_COMMANDLINE,    &
+                                         SOURCE_DEFAULT,        &
+                                         SOURCE_ENVIRONMENT,    &
+                                         SOURCE_NONE
 use flap_object_t, only : object
 use flap_utils_m, only : list_count, list_items, list_push, read_env, tokenize
 use penf
@@ -66,6 +70,7 @@ type, extends(object) :: command_line_arguments_group
     procedure, public :: positional_index      !< Index of the positional CLA declared at a position.
     procedure, public :: value_arity           !< Number of fixed value slots following a switch.
     procedure, public :: reset_parse           !< Forget the result of a parse, keeping the definitions.
+    procedure, public :: resolve_values        !< Settle the source of the values not given on the command line.
     procedure, public :: raise_error_m_exclude !< Raise error mutually exclusive CLAs passed.
     procedure, public :: add                   !< Add CLA to CLAsG.
     procedure, public :: parse                 !< Parse CLAsG arguments.
@@ -353,8 +358,28 @@ contains
     self%cla(a)%is_passed = .false.
     if (allocated(self%cla(a)%val)) deallocate(self%cla(a)%val)
     self%cla(a)%error = 0
+    self%cla(a)%source = SOURCE_NONE
   enddo
   endsubroutine reset_parse
+
+  subroutine resolve_values(self)
+  !< Settle the source of the values not given on the command line (the value-resolution chain R, F06 of #125).
+  !<
+  !< Called after all groups are parsed, before the required check. The source of a parsed value (command line, or the
+  !< environment for a bare switch with envvar) is recorded while parsing, so that it survives a parse stopped by an error;
+  !< the others get the default, or nothing.
+  class(command_line_arguments_group), intent(inout) :: self !< CLAsG data.
+  integer(I4P)                                       :: a    !< Counter.
+
+  do a=1, self%Na
+    if (self%cla(a)%has_value()) cycle
+    if (allocated(self%cla(a)%def)) then
+      self%cla(a)%source = SOURCE_DEFAULT
+    else
+      self%cla(a)%source = SOURCE_NONE
+    endif
+  enddo
+  endsubroutine resolve_values
 
   function value_arity(self, switch) result(n)
   !< Return the number of values that always follow a switch of this group, 0 if not fixed or not a switch.
@@ -580,6 +605,7 @@ contains
                     return
                  else
                     self%cla(a)%is_passed = .true.
+                    self%cla(a)%source = SOURCE_COMMANDLINE
                     found = .true.
                  endif
                  found_val = .false.
@@ -615,6 +641,7 @@ contains
                           call read_env(name=self%cla(a)%envvar, value=envvar, found=found_val)
                           if (found_val) then
                              self%cla(a)%val = trim(adjustl(envvar))
+                             self%cla(a)%source = SOURCE_ENVIRONMENT
                           else
                              ! no found, raise value missing error
                              call self%cla(a)%raise_error_value_missing(pref=pref)
@@ -757,6 +784,7 @@ contains
            if (a > 0) then
               first = .not.self%cla(a)%is_passed
               self%cla(a)%is_passed = .true.
+              self%cla(a)%source = SOURCE_COMMANDLINE
               call self%cla(a)%count_occurrences(n=n, first=first)
               cycle
            endif
@@ -770,6 +798,7 @@ contains
               ! positional CLA always stores a value
               self%cla(a)%val = trim(adjustl(args(arg)))
               self%cla(a)%is_passed = .true.
+              self%cla(a)%source = SOURCE_COMMANDLINE
            else
               ! neither a named option nor a further positional: unknown argument, reported on a scratch CLA
               call cla%assign_object(self)
