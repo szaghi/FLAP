@@ -4,6 +4,21 @@ All notable changes to this project are documented here.
 Versions follow [Semantic Versioning](https://semver.org/).
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.3.0] — 2026-09-30
+### Added
+- **menu**: Flap_menu_t, interactive single-choice menus
+
+- **menu**: Default options and default icon
+
+- **menu**: Retries, error kinds and end-of-input handling
+
+- **menu**: Multiple selection with separator
+
+- **menu**: Yes/no questions
+
+- **menu**: Option, question and error colours via FACE
+
+
 ## [2.2.0] — 2026-09-30
 ### Added
 - **cla**: Metavar, the placeholder of a value in the help
