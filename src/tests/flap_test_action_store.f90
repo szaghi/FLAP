@@ -372,9 +372,9 @@ contains
   call check_scalar(cli, '-i', 'default.i', 'required CLA passed without its optional value: default')
   call check_scalar(cli, '-w', 'default.w', 'optional CLA not passed: default')
   call check_scalar(cli, '-o', 'default.o', 'optional CLA not passed: default')
-  call check_list(cli, '-mrrs', [character(12) :: 'default.rss1', 'default.rss2', 'default.rss3'], &
-                   "nargs='*' passed alone: default")
-  call check_list(cli, '-mros', [character(12) :: 'default.ros1', 'default.ros2'], "nargs='*' passed alone: default")
+  ! D21 (#125, step 2.12): nargs='*' passed alone is an empty list, the default applies only when absent
+  call check_list(cli, '-mrrs', [character(12) ::], "nargs='*' passed alone: empty list")
+  call check_list(cli, '-mros', [character(12) ::], "nargs='*' passed alone: empty list")
   call check_list(cli, '-moos', [character(12) :: 'default.oos1', 'default.oos2', 'default.oos3'], "nargs='*' not passed: default")
   call check_list(cli, '-mrrp', [character(12) :: 'baz'], "nargs='+' value")
   call check_list(cli, '-mrop', [character(12) :: 'default.rop1', 'default.rop2'], "nargs='+' with optional values alone: default")

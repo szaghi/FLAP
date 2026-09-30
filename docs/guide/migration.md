@@ -76,7 +76,9 @@ values still takes the default: both change in v2.0.0 (see below).
 - An explicitly empty value (`--opt ""`, `--opt=`, an empty `append` occurrence) is accepted as the empty string (it
   was `ERROR_VALUE_MISSING`, 14); a numeric option then fails its cast in `get`. An empty environment variable or
   configuration value still counts as unset.
-- `nargs='*'` passed with no values gives an empty list; the default applies only when the option is absent.
+- `nargs='*'` passed with no values gives an empty list (`get_varying` returns a size-0 array); the default applies only
+  when the option is absent. An empty list (for instance a `def=''` default) is returned as a size-0 array, not left
+  unallocated.
 - `init(standalone=.false.)` makes `parse` return the help/version/Markdown status instead of stopping; with several
   of them passed, a syntax error anywhere on the command line wins, then help, version, Markdown (`--help compile --bogus`
   reports the unknown switch instead of printing the help).

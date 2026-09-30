@@ -305,7 +305,8 @@ contains
   call assert(vlistChar(1) == 'foo' .and. vlistChar(2) == 'bar' .and. vlistChar(3) == 'baz', 'default: -vlChar')
   call cli%get_varying(switch='--', val=garbage, error=error)
   call assert_equal(error, 0_I4P, 'no trailing values: error')
-  call assert(.not.allocated(garbage), 'no trailing values: nothing returned')
+  call assert(allocated(garbage), 'no trailing values: an allocated list')
+  call assert_equal(size(garbage), 0, 'no trailing values: empty (step 2.12)')
 
   ! passed values
   call parse('-s hello -i 3 -r 33.0 -b -bv .false. -il 10 -3 87 -vlI4P 5 6 -vlBool F T -vlChar x y', cli)
@@ -332,10 +333,16 @@ contains
   call assert_equal(int(ilist, I4P), [1_I4P, 2_I4P, 3_I4P], "nargs='3' followed by a positional: list")
   call cli%get(position=1_I4P, val=prval, error=error) ; call assert_equal(prval, 44._R8P, "nargs='3' followed by a positional")
 
-  ! nargs='*' without values keeps the default list (current behaviour); nargs='+' requires at least one value
+  ! nargs='*' without values is an empty list (D21 of #125, step 2.12, v2.0.0); absent, the default applies;
+  ! nargs='+' requires at least one value
   call parse('-s hello -vlI4P', cli)
   call cli%get_varying(switch='-vlI4P', val=vlistI4P, error=error)
-  call assert_equal(vlistI4P, [1_I4P, 2_I4P, 3_I4P, 4_I4P], "nargs='*' without values: default")
+  call assert_equal(error, 0_I4P, "nargs='*' without values: no error")
+  call assert(allocated(vlistI4P), "nargs='*' without values: allocated")
+  call assert_equal(int(size(vlistI4P), I4P), 0_I4P, "nargs='*' without values: empty list")
+  call parse('-s hello', cli)
+  call cli%get_varying(switch='-vlI4P', val=vlistI4P, error=error)
+  call assert_equal(size(vlistI4P), 4, "nargs='*' absent: the default list")
   call parse('-s hello -vlI1P', cli, error)
   call assert_equal(error, ERROR_NARGS_INSUFFICIENT, "nargs='+' without values: error")
 

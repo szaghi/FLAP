@@ -1630,7 +1630,10 @@ contains
   endif
   if (self%act==action_store.or.self%act==action_append) then
     call list_items(self%stored_list(), vals, Nv)
-    if (.not.self%check_list_size(vals=vals, pref=pref)) return
+    if (.not.self%check_list_size(vals=vals, pref=pref)) then
+      if (self%error /= 0) return
+      Nv = 0 ! an empty list (nargs='*' passed without values, D21): a size-0 array
+    endif
     allocate(real(R16P):: val(1:Nv))
     do v=1, Nv
       val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1._R16P)
@@ -1658,7 +1661,10 @@ contains
   endif
   if (self%act==action_store.or.self%act==action_append) then
     call list_items(self%stored_list(), vals, Nv)
-    if (.not.self%check_list_size(vals=vals, pref=pref)) return
+    if (.not.self%check_list_size(vals=vals, pref=pref)) then
+      if (self%error /= 0) return
+      Nv = 0 ! an empty list (nargs='*' passed without values, D21): a size-0 array
+    endif
     allocate(real(R8P):: val(1:Nv))
     do v=1, Nv
       val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1._R8P)
@@ -1686,7 +1692,10 @@ contains
   endif
   if (self%act==action_store.or.self%act==action_append) then
     call list_items(self%stored_list(), vals, Nv)
-    if (.not.self%check_list_size(vals=vals, pref=pref)) return
+    if (.not.self%check_list_size(vals=vals, pref=pref)) then
+      if (self%error /= 0) return
+      Nv = 0 ! an empty list (nargs='*' passed without values, D21): a size-0 array
+    endif
     allocate(real(R4P):: val(1:Nv))
     do v=1, Nv
       val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1._R4P)
@@ -1714,7 +1723,10 @@ contains
   endif
   if (self%act==action_store.or.self%act==action_append) then
     call list_items(self%stored_list(), vals, Nv)
-    if (.not.self%check_list_size(vals=vals, pref=pref)) return
+    if (.not.self%check_list_size(vals=vals, pref=pref)) then
+      if (self%error /= 0) return
+      Nv = 0 ! an empty list (nargs='*' passed without values, D21): a size-0 array
+    endif
     allocate(integer(I8P):: val(1:Nv))
     do v=1, Nv
       val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1_I8P)
@@ -1742,7 +1754,10 @@ contains
   endif
   if (self%act==action_store.or.self%act==action_append) then
     call list_items(self%stored_list(), vals, Nv)
-    if (.not.self%check_list_size(vals=vals, pref=pref)) return
+    if (.not.self%check_list_size(vals=vals, pref=pref)) then
+      if (self%error /= 0) return
+      Nv = 0 ! an empty list (nargs='*' passed without values, D21): a size-0 array
+    endif
     allocate(integer(I4P):: val(1:Nv))
     do v=1, Nv
       val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1_I4P)
@@ -1770,7 +1785,10 @@ contains
   endif
   if (self%act==action_store.or.self%act==action_append) then
     call list_items(self%stored_list(), vals, Nv)
-    if (.not.self%check_list_size(vals=vals, pref=pref)) return
+    if (.not.self%check_list_size(vals=vals, pref=pref)) then
+      if (self%error /= 0) return
+      Nv = 0 ! an empty list (nargs='*' passed without values, D21): a size-0 array
+    endif
     allocate(integer(I2P):: val(1:Nv))
     do v=1, Nv
       val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1_I2P)
@@ -1798,7 +1816,10 @@ contains
   endif
   if (self%act==action_store.or.self%act==action_append) then
     call list_items(self%stored_list(), vals, Nv)
-    if (.not.self%check_list_size(vals=vals, pref=pref)) return
+    if (.not.self%check_list_size(vals=vals, pref=pref)) then
+      if (self%error /= 0) return
+      Nv = 0 ! an empty list (nargs='*' passed without values, D21): a size-0 array
+    endif
     allocate(integer(I1P):: val(1:Nv))
     do v=1, Nv
       val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1_I1P)
@@ -1826,7 +1847,10 @@ contains
   endif
   if (self%act==action_store.or.self%act==action_append) then
     call list_items(self%stored_list(), vals, Nv)
-    if (.not.self%check_list_size(vals=vals, pref=pref)) return
+    if (.not.self%check_list_size(vals=vals, pref=pref)) then
+      if (self%error /= 0) return
+      Nv = 0 ! an empty list (nargs='*' passed without values, D21): a size-0 array
+    endif
     allocate(logical:: val(1:Nv))
     do v=1, Nv
       read(vals(v), *, iostat=self%error)val(v)
@@ -1873,7 +1897,10 @@ contains
   endif
   if (self%act==action_store.or.self%act==action_append) then
     call list_items(self%stored_list(), vals, Nv)
-    if (.not.self%check_list_size(vals=vals, pref=pref)) return
+    if (.not.self%check_list_size(vals=vals, pref=pref)) then
+      if (self%error /= 0) return
+      Nv = 0 ! an empty list (nargs='*' passed without values, D21): a size-0 array
+    endif
     allocate(val(1:Nv))
     do v=1, Nv
       val(v) = trim(adjustl(vals(v)))

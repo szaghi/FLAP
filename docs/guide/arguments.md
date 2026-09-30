@@ -169,7 +169,7 @@ Use `nargs` to consume multiple values from a single switch.
 |---|---|---|
 | `'N'` (positive integer) | Exactly N values, fixed at compile time: the switch takes the next N values, and a further value is the next argument (a positional, or an unknown argument) | `cli%get` with an allocated array |
 | `'+'` | One or more values, length known at runtime | `cli%get_varying` |
-| `'*'` | Zero or more values, length known at runtime | `cli%get_varying` |
+| `'*'` | Zero or more values, length known at runtime: the switch alone is an empty list, the default applies only when the switch is absent | `cli%get_varying` |
 
 ```fortran
 ! exactly 3 integers

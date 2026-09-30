@@ -747,9 +747,10 @@ contains
                              return
                           endif
                        case('*')
+                          ! the values that follow; none is an empty list, the default applies only when absent (D21)
                           aaa = n_next_undef_args(args=args, arg=arg)
+                          self%cla(a)%val = ''
                           if (aaa>=arg+1) then
-                             self%cla(a)%val = ''
                              do aa=arg + 1, aaa
                                 call list_push(self%cla(a)%val, trim(adjustl(args(aa))))
                                 found_val = .true.
