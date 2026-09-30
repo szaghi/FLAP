@@ -3,12 +3,12 @@ module flap_command_line_interface_t
 !< Command Line Interface (CLI) class.
 
 use face, only : colorize
-use flap_command_line_argument_t, only : command_line_argument, ACTION_CONFIG, ACTION_COUNT, ACTION_PRINT_HELP, &
+use flap_command_line_argument_t, only : command_line_argument, ACTION_ALTERNATE, ACTION_CONFIG, ACTION_COUNT, ACTION_PRINT_HELP, &
                                          ACTION_PRINT_MARK, ACTION_PRINT_VERS, ACTION_STORE, ACTION_STORE_FALSE, &
                                          ACTION_STORE_TRUE, ERROR_UNKNOWN, SOURCE_COMMANDLINE, SOURCE_CONFIG, &
                                          SOURCE_DEFAULT, SOURCE_ENVIRONMENT, SOURCE_NONE
-use flap_command_line_arguments_group_t, only : command_line_arguments_group, STATUS_NO_ARGS, STATUS_PRINT_H, STATUS_PRINT_M, &
-                                                STATUS_PRINT_V
+use flap_command_line_arguments_group_t, only : command_line_arguments_group, STATUS_ALTERNATE, STATUS_NO_ARGS, STATUS_PRINT_H, &
+                                                STATUS_PRINT_M, STATUS_PRINT_V
 use flap_config_m, only : config_file
 use flap_object_t, only : object
 use flap_utils_m
@@ -342,7 +342,7 @@ contains
     endfunction because
   endsubroutine warn_deprecated
 
-  subroutine load_config(self, config, pref)
+  subroutine load_config(self, config, pref, check)
   !< Load the configuration file, if any, and check it: every key must name an option taking a value (D18 of #125).
   !<
   !< The file is named by the top-level act='config' option when given on the command line or in its environment variable
@@ -351,6 +351,8 @@ contains
   class(command_line_interface), intent(inout) :: self     !< CLI data.
   type(config_file),             intent(inout) :: config   !< Configuration file.
   character(*), optional,        intent(in)    :: pref     !< Prefixing string.
+  logical,      optional,        intent(in)    :: check    !< Report a missing or invalid file (default .true.; off for an
+                                                           !< alternate action, D4).
   character(len=:), allocatable                :: path     !< Configuration file.
   character(len=:), allocatable                :: iomsg    !< I/O message.
   character(len=:), allocatable                :: where    !< File and line of an error.
@@ -364,6 +366,12 @@ contains
   call config_file_name(path, required)
   if (path == '') return
   call config%load(file=path, found=found, iostat=iostat, iomsg=iomsg)
+  if (present(check)) then
+    if (.not.check) then
+      if (found .and. iostat == 0) self%config_used = path
+      return
+    endif
+  endif
   if (.not.found) then
     if (required) call report(ERROR_CONFIG_NOT_FOUND, ': configuration file "'//path//'" not found!')
     return
@@ -642,6 +650,11 @@ contains
                                                   if (present(allow_dash   )) cla%allow_dash      = allow_dash
                                                   if (present(deprecated   )) cla%deprecated      = deprecated
   cla%act             = action_store            ; if (present(act          )) cla%act             = trim(adjustl(Upper_Case(act)))
+  if (cla%act == ACTION_ALTERNATE .and. .not.present(def)) then
+    ! an alternate action is a flag (F16)
+    cla%def = '.false.'
+    cla%val = '.false.'
+  endif
   if (cla%act == ACTION_CONFIG) then
     ! the configuration file option (F08): a store CLA whose value names the file
     cla%act = ACTION_STORE
@@ -950,6 +963,7 @@ contains
   character(len=:), allocatable                :: gargs(:)!< Arguments of a group.
   integer(I4P)                                 :: unknown !< Unknown argument error of a group.
   type(config_file)                            :: config  !< Configuration file.
+  logical                                      :: alternate !< An alternate action has been passed.
 
   call self%ensure_builtins(pref=pref)
 
@@ -989,15 +1003,22 @@ contains
   ! dispatch the statuses (D3): help, then version, then markdown
   if (self%dispatch_status(pref=pref)) return
 
+  ! an alternate action (F16, after the statuses in the D3 order) bypasses the value validation (D4)
+  alternate = .false.
+  do g=0, size(self%clasg,dim=1)-1
+    if (self%clasg(g)%is_called .and. self%clasg(g)%is_action_passed(ACTION_ALTERNATE)) alternate = .true.
+  enddo
+
   ! the configuration file (F08): after the statuses, so that a broken file never blocks the help
-  call self%load_config(config=config, pref=pref)
+  call self%load_config(config=config, pref=pref, check=.not.alternate)
   if (self%is_fatal()) return
 
   ! settle the source of the values not given on the command line (R chain, F06)
   do g=0, size(self%clasg,dim=1)-1
     ! the path values of the top level and of the called commands are checked (F09)
     call self%clasg(g)%resolve_values(ignore_env=self%ignore_env, config=config, &
-                                      check_paths=(g == 0 .or. self%clasg(g)%is_called))
+                                      check_paths=(g == 0 .or. self%clasg(g)%is_called).and.(.not.alternate), &
+                                      lenient=alternate)
     self%error = self%clasg(g)%error
     if (self%is_fatal()) exit
   enddo
@@ -1005,6 +1026,12 @@ contains
 
   ! warn about the deprecated options and commands used, once their sources are known (F13)
   call self%warn_deprecated(pref=pref)
+
+  if (alternate) then
+    self%error = STATUS_ALTERNATE
+    self%is_parsed_ = .true.
+    return
+  endif
 
   ! check if all required CLAs have been passed
   do g=0, size(ai,dim=1)-1
@@ -1022,7 +1049,13 @@ contains
   enddo
   if (self%is_fatal()) return
 
-  ! check mutually exclusive interaction
+  ! check the pairwise exclusions (exclude=) of the called groups, then the exclusive groups (commands)
+  do g=0, size(ai,dim=1)-1
+    call self%clasg(g)%check_m_exclusive(pref=pref)
+    self%error = self%clasg(g)%error
+    if (self%is_fatal()) exit
+  enddo
+  if (self%is_fatal()) return
   call self%check_m_exclusive(pref=pref)
 
   self%is_parsed_ = .true.

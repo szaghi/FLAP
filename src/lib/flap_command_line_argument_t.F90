@@ -21,6 +21,7 @@ public :: ACTION_PRINT_VERS
 public :: ACTION_COUNT
 public :: ACTION_APPEND
 public :: ACTION_CONFIG
+public :: ACTION_ALTERNATE
 public :: ARGS_SEP
 public :: SOURCE_COMMANDLINE
 public :: SOURCE_ENVIRONMENT
@@ -61,6 +62,7 @@ public :: ERROR_PATH_NOT_READABLE
 public :: ERROR_PATH_NOT_WRITABLE
 public :: ERROR_PATH_INCONSISTENT
 public :: ERROR_DEPRECATED_REQUIRED
+public :: ERROR_ALTERNATE_INCONSISTENT
 public :: ERROR_INLINE_VALUE_NOT_ALLOWED
 public :: ERROR_INLINE_VALUE_NARGS
 public :: ERROR_COUNT_INCONSISTENT
@@ -157,6 +159,7 @@ type, extends(object) :: command_line_argument
     procedure, private :: check_def_nargs_consistency     !< Check the count of a list default against nargs.
     procedure, private :: check_m_exclude_consistency     !< Check mutually exclusion consistency.
     procedure, private :: check_path_consistency          !< Check that the path checks are on an option taking a value.
+    procedure, private :: check_alternate_consistency     !< Check that an alternate action has no attribute of a value.
     procedure, private :: check_named_consistency         !< Check named CLA consistency.
     procedure, private :: check_positional_consistency    !< Check positional CLA consistency.
     procedure, private :: check_choices                   !< Check if CLA value is in allowed choices.
@@ -181,6 +184,7 @@ endtype command_line_argument
 ! parameters
 character(len=*), parameter :: ACTION_STORE       = 'STORE'         !< Store value (if invoked a value must be passed).
 character(len=*), parameter :: ACTION_CONFIG      = 'CONFIG'        !< Name the configuration file (stored as a store CLA).
+character(len=*), parameter :: ACTION_ALTERNATE   = 'ALTERNATE'     !< Alternate action: bypass the value validation (F16).
 character(len=*), parameter :: ACTION_STORE_STAR  = 'STORE*'        !< Store value or revert on default if invoked alone.
 character(len=*), parameter :: ACTION_STORE_TRUE  = 'STORE_TRUE'    !< Store .true. without the necessity of a value.
 character(len=*), parameter :: ACTION_STORE_FALSE = 'STORE_FALSE'   !< Store .false. without the necessity of a value.
@@ -231,6 +235,7 @@ integer(I4P), parameter :: ERROR_PATH_NOT_READABLE      = 34 !< Path value that 
 integer(I4P), parameter :: ERROR_PATH_NOT_WRITABLE      = 35 !< Existing path value that cannot be opened for writing.
 integer(I4P), parameter :: ERROR_PATH_INCONSISTENT      = 49 !< Path checks on an option taking no value.
 integer(I4P), parameter :: ERROR_DEPRECATED_REQUIRED    = 44 !< A required option cannot be deprecated.
+integer(I4P), parameter :: ERROR_ALTERNATE_INCONSISTENT = 37 !< An alternate action with an attribute of a value.
 
 contains
   ! public methods
@@ -269,6 +274,7 @@ contains
   class(command_line_argument), intent(inout) :: self  !< CLA data.
   character(*), optional,       intent(in)    :: pref  !< Prefixing string.
 
+  call self%check_alternate_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_count_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_append_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_envvar_consistency(pref=pref) ; if (self%error/=0) return
@@ -376,8 +382,9 @@ contains
   class(command_line_argument), intent(in) :: self !< CLA data.
   character(len=:), allocatable            :: text !< Value.
 
-  if ((self%act == ACTION_STORE_TRUE .or. self%act == ACTION_STORE_FALSE) .and. self%source == SOURCE_COMMANDLINE) then
-    text = merge('.true. ', '.false.', self%act == ACTION_STORE_TRUE)
+  if ((self%act == ACTION_STORE_TRUE .or. self%act == ACTION_STORE_FALSE .or. self%act == ACTION_ALTERNATE) .and. &
+      self%source == SOURCE_COMMANDLINE) then
+    text = merge('.true. ', '.false.', self%act /= ACTION_STORE_FALSE)
     text = trim(text)
   elseif (self%is_list()) then
     text = list_join(self%stored_list(), ' ')
@@ -1074,6 +1081,9 @@ contains
     case(ERROR_PATH_NOT_WRITABLE)
       self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'": path "'//trim(val_str)//&
                            '" is not writable: '//trim(log_value)//'!'
+    case(ERROR_ALTERNATE_INCONSISTENT)
+      self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" is an alternate action, a flag: it cannot '//&
+                           'be positional, required, nor have nargs, envvar, choices or exclude!'
     case(ERROR_DEPRECATED_REQUIRED)
       self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" is required: it cannot be deprecated!'
     case(ERROR_PATH_INCONSISTENT)
@@ -1162,6 +1172,7 @@ contains
         self%act/=ACTION_PRINT_MARK.and. &
         self%act/=ACTION_PRINT_VERS.and. &
         self%act/=ACTION_COUNT.and.      &
+        self%act/=ACTION_ALTERNATE.and.  &
         self%act/=ACTION_APPEND) then
       call self%errored(pref=pref, error=ERROR_ACTION_UNKNOWN)
       return
@@ -1209,6 +1220,17 @@ contains
   if (allocated(self%nargs)) is_inconsistent = ((.not.allocated(self%def)).and.(self%nargs=='*')).or.is_inconsistent
   if (is_inconsistent) call self%errored(pref=pref, error=ERROR_OPTIONAL_NO_DEF)
   endsubroutine check_optional_consistency
+
+  subroutine check_alternate_consistency(self, pref)
+  !< Check that an alternate action (F16 of #125) is a plain flag: no nargs, envvar, positional, choices, required, exclude.
+  class(command_line_argument), intent(inout) :: self !< CLA data.
+  character(*), optional,       intent(in)    :: pref !< Prefixing string.
+
+  if (.not.allocated(self%act)) return
+  if (self%act /= ACTION_ALTERNATE) return
+  if (allocated(self%nargs) .or. allocated(self%envvar) .or. self%is_positional .or. allocated(self%choices) .or. &
+      self%is_required .or. self%m_exclude /= '') call self%errored(pref=pref, error=ERROR_ALTERNATE_INCONSISTENT)
+  endsubroutine check_alternate_consistency
 
   subroutine check_path_consistency(self, pref)
   !< Check that the path checks (must_exist, readable, writable, allow_dash) are on an option taking a value: store,
@@ -1381,7 +1403,7 @@ contains
   elseif (self%act==action_count) then
     ! the number of occurrences, or the default when not passed
     call self%get_cla_from_buffer(buffer=self%stored_list(), val=val, pref=pref)
-  elseif (self%act==action_store_true) then
+  elseif (self%act==action_store_true.or.self%act==ACTION_ALTERNATE) then
     if (self%source == SOURCE_COMMANDLINE) then ! a flag passed on the command line
       select type(val)
       type is(logical)

@@ -29,6 +29,7 @@ public :: STATUS_PRINT_V
 public :: STATUS_PRINT_H
 public :: STATUS_PRINT_M
 public :: STATUS_NO_ARGS
+public :: STATUS_ALTERNATE
 public :: ERROR_CONSISTENCY
 public :: ERROR_M_EXCLUDE
 public :: ERROR_M_EXCLUDE_SET
@@ -83,7 +84,7 @@ type, extends(object) :: command_line_arguments_group
     procedure, public :: sanitize_defaults     !< Sanitize default values.
     ! private methods
     procedure, private :: errored                             !< Trig error occurrence and print meaningful message.
-    procedure, private :: check_m_exclusive                   !< Check if two mutually exclusive CLAs have been passed.
+    procedure, public  :: check_m_exclusive                   !< Check if two mutually exclusive CLAs have been passed.
     procedure, private :: exclusive_set_of                    !< Index of the mutually exclusive set of a CLA.
     procedure, private :: exclusive_set_signature             !< Usage signature of a mutually exclusive set.
     final              :: finalize                            !< Free dynamic memory when finalizing.
@@ -94,6 +95,7 @@ integer(I4P), parameter :: STATUS_PRINT_V = -1 !< Print version status.
 integer(I4P), parameter :: STATUS_PRINT_H = -2 !< Print help status.
 integer(I4P), parameter :: STATUS_PRINT_M = -3 !< Print help status to Markdown file.
 integer(I4P), parameter :: STATUS_NO_ARGS = -5 !< No arguments passed, help printed (no_args_is_help).
+integer(I4P), parameter :: STATUS_ALTERNATE = -4 !< An alternate action passed: value validation bypassed (F16).
 
 ! errors codes
 integer(I4P), parameter :: ERROR_CONSISTENCY = 100 !< CLAs group consistency error.
@@ -384,7 +386,7 @@ contains
   enddo
   endsubroutine reset_parse
 
-  subroutine resolve_values(self, ignore_env, config, check_paths)
+  subroutine resolve_values(self, ignore_env, config, check_paths, lenient)
   !< Settle the source of the values not given on the command line (the value-resolution chain R, F06 of #125).
   !<
   !< Called after all groups are parsed, before the required check. The source of a parsed value (command line, or the
@@ -395,6 +397,7 @@ contains
   logical, optional,                   intent(in)    :: ignore_env !< Turn every environment lookup off.
   type(config_file), optional,         intent(in)    :: config     !< Configuration file.
   logical, optional,                   intent(in)    :: check_paths !< Check the path values (F09).
+  logical, optional,                   intent(in)    :: lenient    !< Ignore invalid environment lists (alternate, F16).
   character(len=:), allocatable                      :: envvar     !< Value of an environment variable.
   character(len=:), allocatable                      :: cvalue     !< Value from the configuration file.
   logical                                            :: found      !< The variable is set.
@@ -406,11 +409,15 @@ contains
       call read_env(name=self%cla(a)%envvar, value=envvar, found=found, ignore=ignore_env)
       if (found.and.len_trim(envvar) > 0) then
         call self%cla(a)%set_source_value(value=envvar, source=SOURCE_ENVIRONMENT)
-        if (self%cla(a)%error /= 0) then
+        if (self%cla(a)%error == 0) cycle
+        if (.not.present(lenient)) then
+          self%error = self%cla(a)%error
+          return
+        elseif (.not.lenient) then
           self%error = self%cla(a)%error
           return
         endif
-        cycle
+        self%cla(a)%error = 0 ! lenient: the next sources
       endif
     endif
     if (present(config).and.self%cla(a)%takes_config_value()) then
@@ -881,7 +888,6 @@ contains
            endif
         endif
      enddo
-     call self%check_m_exclusive(pref=pref)
   endif
   contains
      pure function is_switch_like(token)

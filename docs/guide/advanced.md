@@ -320,6 +320,32 @@ solver: warning: option "--grid" is deprecated: use --mesh instead
 - The help marks them: `Old grid (DEPRECATED: use --mesh instead)`.
 - A required option cannot be deprecated: `ERROR_DEPRECATED_REQUIRED` (44).
 
+## Alternate actions
+
+An option with `act='alternate'` is an auxiliary action of the program (`--list-models`, `--dump-config`), not an input
+value: when it is passed, `parse` returns `STATUS_ALTERNATE` (also in standalone mode: FLAP never stops on it) and
+**skips the value validation**, so it works even without the required options. The program dispatches on `is_passed`:
+
+```fortran
+use flap, only : command_line_interface, STATUS_ALTERNATE
+call cli%add(switch='--mesh',        help='Mesh file',                       required=.true., act='store')
+call cli%add(switch='--list-models', help='List turbulence models and exit', act='alternate')
+call cli%parse(error=error)
+if (error == STATUS_ALTERNATE) then
+  if (cli%is_passed(switch='--list-models')) call print_models()
+  stop
+elseif (error /= 0) then
+  stop 1
+end if
+```
+
+- Skipped: required options, mutually exclusive sets, `exclude=` pairs, exclusive commands, path checks, unknown
+  configuration keys and invalid environment lists. Still reported: syntax errors (an unknown or repeated switch);
+  `--help`, `--version` and `--markdown` come first. Deprecation warnings are still printed.
+- `get` works as usual after it (a value out of `choices` is still reported by `get`).
+- An alternate is a flag: `nargs`, `envvar`, `choices`, `exclude`, `required` and `positional` are
+  `ERROR_ALTERNATE_INCONSISTENT` (37). The usage shows it as `[--list-models]`.
+
 ## Hidden arguments
 
 Hidden arguments participate in parsing normally but are invisible in help and usage:

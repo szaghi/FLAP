@@ -111,6 +111,7 @@ All arguments are optional except that either `switch` (for named arguments) or
 | `'store_true'` | Stores `.true.` when the switch appears (boolean flag) |
 | `'store_false'` | Stores `.false.` when the switch appears |
 | `'count'` | Counts the occurrences of the switch (repeatable, no value): `-v -v`, `-v --verbose` or the compact `-vv` give 2; read it into any integer. `def` defaults to `'0'` |
+| `'alternate'` | An auxiliary action of the program (`--list-models`), a flag: when passed, `parse` returns `STATUS_ALTERNATE` and skips the value validation (see [Advanced](./advanced#alternate-actions)) |
 | `'config'` | Names the configuration file: a value like `'store'`, resolved command line > environment > default, then the file is read (see [Advanced](./advanced#configuration-files)) |
 | `'append'` | Collects one value per occurrence (repeatable): `-I src -I lib` or `--include=src -I lib` give `[src, lib]`; read it with `get_varying` (or `get` into an array of the right size). Passed values **replace** the default (`def='a b'` is the list used only when the option is absent) |
 | `'print_help'` | Prints the help message and exits |

@@ -26,6 +26,7 @@ positive values are **errors**. Existing values never change.
 | Code | Constant | Meaning | Typical cause |
 |---:|---|---|---|
 | `-5` | `STATUS_NO_ARGS` | Help printed, no arguments | `init(no_args_is_help=.true.)` and no argument passed (or a command with `no_args_is_help` invoked alone); in standalone mode the program ends with exit status 2 |
+| `-4` | `STATUS_ALTERNATE` | An alternate action was passed | An option with `act='alternate'` (e.g. `--list-models`): value validation skipped, dispatch on `is_passed`; returned also in standalone mode |
 | `-3` | `STATUS_PRINT_M` | Help written as Markdown | `--markdown` was passed; not a real error |
 | `-2` | `STATUS_PRINT_H` | Help printed | `--help` / `-h` was passed; not a real error |
 | `-1` | `STATUS_PRINT_V` | Version printed | `--version` / `-v` was passed; not a real error |
@@ -62,6 +63,7 @@ positive values are **errors**. Existing values never change.
 | `33` | `ERROR_PATH_NOT_FOUND` | Path does not exist | `must_exist=`/`readable=` and the file is missing |
 | `34` | `ERROR_PATH_NOT_READABLE` | Path not readable | `readable=` and the file cannot be opened for reading (the message gives the reason) |
 | `35` | `ERROR_PATH_NOT_WRITABLE` | Path not writable | `writable=` and the existing file cannot be opened for writing |
+| `37` | `ERROR_ALTERNATE_INCONSISTENT` | Invalid alternate action | `act='alternate'` with `nargs`, `envvar`, `choices`, `exclude`, `required=.true.` or `positional` |
 | `43` | `ERROR_ENVVAR_CSV` | Unterminated quote in a list from the environment | `WORKERS='1,"99'` for an option with `nargs` and `envvar='WORKERS'` |
 | `44` | `ERROR_DEPRECATED_REQUIRED` | A required option cannot be deprecated | `deprecated=` combined with `required=.true.` |
 | `45` | `ERROR_POSITIONAL_NARGS` | `nargs` on a positional argument | Positionals take one value each: use a named list option |

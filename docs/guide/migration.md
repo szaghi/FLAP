@@ -100,3 +100,5 @@ values still takes the default: both change in v2.0.0 (see below).
 - `cli%get_source(switch=...)` tells where a value comes from; `cli%provenance()` reports every value with its source.
 - `add(..., must_exist=, readable=, writable=, allow_dash=)` checks file-name values at parse time.
 - `add(..., deprecated=)` and `add_group(..., deprecated=)` warn when a deprecated option or command is used.
+- `act='alternate'` declares an auxiliary action (`--list-models`): `parse` returns `STATUS_ALTERNATE` and skips the
+  value validation. The pairwise `exclude=` check now runs with the other value checks, after `--help`/`--version`.

@@ -42,6 +42,7 @@ use flap_command_line_argument_t, only : command_line_argument,        &
                                          ERROR_PATH_NOT_WRITABLE,      &
                                          ERROR_PATH_INCONSISTENT,      &
                                          ERROR_DEPRECATED_REQUIRED,    &
+                                         ERROR_ALTERNATE_INCONSISTENT, &
                                          ERROR_INLINE_VALUE_NOT_ALLOWED, &
                                          ERROR_INLINE_VALUE_NARGS,     &
                                          ERROR_COUNT_INCONSISTENT,     &
@@ -52,6 +53,7 @@ use flap_command_line_arguments_group_t, only : command_line_arguments_group,   
                                                 STATUS_PRINT_H,                               &
                                                 STATUS_PRINT_M,                               &
                                                 STATUS_NO_ARGS,                               &
+                                                STATUS_ALTERNATE,                             &
                                                 ERROR_GROUP_CONSISTENCY => ERROR_CONSISTENCY, &
                                                 ERROR_GROUP_M_EXCLUDE => ERROR_M_EXCLUDE,     &
                                                 ERROR_POSITION_DUPLICATE,                     &
@@ -82,6 +84,7 @@ public :: STATUS_PRINT_V
 public :: STATUS_PRINT_H
 public :: STATUS_PRINT_M
 public :: STATUS_NO_ARGS
+public :: STATUS_ALTERNATE
 ! errors 1-99: command line argument
 public :: SOURCE_COMMANDLINE
 public :: SOURCE_ENVIRONMENT
@@ -122,6 +125,7 @@ public :: ERROR_PATH_NOT_READABLE
 public :: ERROR_PATH_NOT_WRITABLE
 public :: ERROR_PATH_INCONSISTENT
 public :: ERROR_DEPRECATED_REQUIRED
+public :: ERROR_ALTERNATE_INCONSISTENT
 public :: ERROR_INLINE_VALUE_NOT_ALLOWED
 public :: ERROR_INLINE_VALUE_NARGS
 public :: ERROR_COUNT_INCONSISTENT
