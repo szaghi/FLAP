@@ -43,7 +43,7 @@ returned in `error` and a message such as `error: invalid response: 7` is writte
 
 | Procedure | Purpose |
 |---|---|
-| `init(question, default_icon, input_unit, output_unit, error_unit)` | Start a new menu: drops the options and settings of a previous one. Every argument except `question` is optional. |
+| `init(question, loop_on_invalid, tries, default_icon, input_unit, output_unit, error_unit, error)` | Start a new menu: drops the options and settings of a previous one. Every argument except `question` is optional. |
 | `add_option(text, is_default, error)` | Append an option; its number is its position. An empty text, or a second default, is an error and is not added. |
 | `run(choice, error)` | Show the menu and read one answer; `choice` is the index of the chosen option. A menu can be run several times. |
 | `free` | Release the memory (also done automatically). |
@@ -71,6 +71,31 @@ What is your favorite food?
 A single-choice menu has at most one default: a second one is `ERROR_MENU_DEFINITION` and is not added. Without a
 default, an empty answer is `ERROR_MENU_NO_RESPONSE`. An invalid answer is an error even when there is a default.
 
+## Asking again
+
+By default the first invalid answer is returned as an error. With `init(loop_on_invalid=.true.)` the menu reports it
+with the tries left and asks again, up to `tries` attempts in total (3 by default); when they are exhausted `run`
+returns the last error. An empty answer without a default counts as an invalid one.
+
+```fortran
+call m%init(question='What is your favorite food?', loop_on_invalid=.true., tries=3)
+```
+
+```text
+1) Pizza
+2) Ice Cream
+3) Tacos
+What is your favorite food? 7
+error: invalid response: 7 (2 tries left)
+1) Pizza
+2) Ice Cream
+3) Tacos
+What is your favorite food? 2
+```
+
+The end of the input is never retried (see below). `tries` below 1 is `ERROR_MENU_DEFINITION` (returned by `init`,
+which keeps the default 3).
+
 ## Units
 
 By default the menu reads standard input and writes to standard output and standard error. `init(input_unit=,
@@ -81,7 +106,7 @@ This is also how a menu is tested without a terminal: write the answers to a fil
 ## Batch and MPI jobs
 
 When there is no more input (standard input redirected from `/dev/null` or closed, as in most batch jobs) `run` returns
-`ERROR_MENU_EOF` at once instead of waiting. Standard Fortran cannot tell whether the input is a terminal, so the end of
+`ERROR_MENU_EOF` at once instead of waiting, even with `loop_on_invalid`. Standard Fortran cannot tell whether the input is a terminal, so the end of
 the input is the signal: check `error` and fall back to a default or stop.
 
 In an MPI program, run the menu on one rank only and broadcast the chosen index; the module performs no MPI calls and
@@ -94,4 +119,4 @@ never stops the program.
 | `2001` | `ERROR_MENU_INVALID` | The answer is not one of the numbers shown (not a number, out of range, several numbers), or it could not be read |
 | `2004` | `ERROR_MENU_NO_RESPONSE` | Empty answer, and no default option |
 | `2005` | `ERROR_MENU_EOF` | End of the input: no answer can come |
-| `2006` | `ERROR_MENU_DEFINITION` | `run` on a menu without options, `add_option` with an empty text or a second default |
+| `2006` | `ERROR_MENU_DEFINITION` | `run` on a menu without options, `add_option` with an empty text or a second default, `init` with `tries` below 1 |

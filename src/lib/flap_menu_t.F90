@@ -40,6 +40,8 @@ type, public :: menu
   integer(I4P)                   :: input_unit=stdin   !< Unit of the answers.
   integer(I4P)                   :: output_unit=stdout !< Unit of the options and the question.
   integer(I4P)                   :: error_unit=stderr  !< Unit of the error messages.
+  logical                        :: loop_on_invalid=.false. !< Ask again after an invalid answer.
+  integer(I4P)                   :: tries=3            !< Attempts in total with loop_on_invalid.
   contains
     ! public methods
     procedure, pass(self) :: add_option        !< Append an option.
@@ -50,26 +52,42 @@ type, public :: menu
     procedure, pass(self), private :: default_index !< Index of the default option.
     procedure, pass(self), private :: raise         !< Write an error message and return its code.
     procedure, pass(self), private :: run_single    !< Show the menu and read one choice.
+    procedure, pass(self), private :: show          !< Write the options and the question.
     final                          :: finalize      !< Free dynamic memory when finalizing.
 endtype menu
 
 contains
   ! public methods
-  subroutine init(self, question, default_icon, input_unit, output_unit, error_unit)
+  subroutine init(self, question, loop_on_invalid, tries, default_icon, input_unit, output_unit, error_unit, error)
   !< Initialize the menu: every previous setting and option is dropped.
-  class(menu),  intent(inout)        :: self         !< Menu.
-  character(*), intent(in)           :: question     !< Question asked after the options.
-  character(*), intent(in), optional :: default_icon !< Mark of the default options (default: '*').
-  integer(I4P), intent(in), optional :: input_unit   !< Unit of the answers (default: standard input).
-  integer(I4P), intent(in), optional :: output_unit  !< Unit of the options and the question (default: standard output).
-  integer(I4P), intent(in), optional :: error_unit   !< Unit of the error messages (default: standard error).
+  class(menu),  intent(inout)         :: self            !< Menu.
+  character(*), intent(in)            :: question        !< Question asked after the options.
+  logical,      intent(in),  optional :: loop_on_invalid !< Ask again after an invalid answer (default: no).
+  integer(I4P), intent(in),  optional :: tries           !< Attempts in total with loop_on_invalid (default: 3).
+  character(*), intent(in),  optional :: default_icon    !< Mark of the default options (default: '*').
+  integer(I4P), intent(in),  optional :: input_unit      !< Unit of the answers (default: standard input).
+  integer(I4P), intent(in),  optional :: output_unit     !< Unit of the options and the question (default: standard output).
+  integer(I4P), intent(in),  optional :: error_unit      !< Unit of the error messages (default: standard error).
+  integer(I4P), intent(out), optional :: error           !< Error trapping flag.
+  integer(I4P)                        :: error_          !< Error trapping flag, local variable.
 
   call self%free
+  error_ = 0
   self%question = question
+  if (present(loop_on_invalid)) self%loop_on_invalid = loop_on_invalid
   self%default_icon = '*' ; if (present(default_icon)) self%default_icon = default_icon
   if (present(input_unit))  self%input_unit  = input_unit
   if (present(output_unit)) self%output_unit = output_unit
   if (present(error_unit))  self%error_unit  = error_unit
+  if (present(tries)) then
+    if (tries < 1) then
+      error_ = self%raise(ERROR_MENU_DEFINITION, 'tries must be at least 1, not '//trim(str(tries, .true.))// &
+                                                 ': the default 3 is used')
+    else
+      self%tries = tries
+    endif
+  endif
+  if (present(error)) error = error_
   endsubroutine init
 
   subroutine add_option(self, text, is_default, error)
@@ -114,20 +132,27 @@ contains
   self%input_unit = stdin
   self%output_unit = stdout
   self%error_unit = stderr
+  self%loop_on_invalid = .false.
+  self%tries = 3
   endsubroutine free
 
   ! private methods
   subroutine run_single(self, choice, error)
   !< Show the menu and read one choice: the index of the chosen option, 0 on error.
-  class(menu),  intent(inout)         :: self   !< Menu.
-  integer(I4P), intent(out)           :: choice !< Chosen index (0 on error).
-  integer(I4P), intent(out), optional :: error  !< Error trapping flag.
-  character(len=:), allocatable       :: answer !< Answer line.
-  character(256)                      :: iomsg  !< I/O message.
-  integer(I4P)                        :: iostat !< I/O status.
-  integer(I4P)                        :: n      !< Number of options.
-  integer(I4P)                        :: i      !< Counter.
-  integer(I4P)                        :: error_ !< Error trapping flag, local variable.
+  !<
+  !< With loop_on_invalid an invalid (or empty) answer is reported with the tries left and the menu is asked again, up to
+  !< `tries` attempts; the last error is returned. The end of the input and a read error are never retried.
+  class(menu),  intent(inout)         :: self     !< Menu.
+  integer(I4P), intent(out)           :: choice   !< Chosen index (0 on error).
+  integer(I4P), intent(out), optional :: error    !< Error trapping flag.
+  character(len=:), allocatable       :: answer   !< Answer line.
+  character(len=:), allocatable       :: message  !< Error message.
+  character(256)                      :: iomsg    !< I/O message.
+  integer(I4P)                        :: iostat   !< I/O status.
+  integer(I4P)                        :: n        !< Number of options.
+  integer(I4P)                        :: attempts !< Attempts allowed.
+  integer(I4P)                        :: attempt  !< Current attempt.
+  integer(I4P)                        :: error_   !< Error trapping flag, local variable.
 
   choice = 0
   ! a menu used without init: no question, the default icon
@@ -136,36 +161,58 @@ contains
   n = 0 ; if (allocated(self%options)) n = size(self%options, dim=1)
   if (n == 0) then
     error_ = self%raise(ERROR_MENU_DEFINITION, 'the menu has no options')
-  else
-    do i=1, n
-      if (self%options(i)%is_default) then
-        write(self%output_unit, '(A)') trim(str(i, .true.))//') '//self%default_icon//self%options(i)%text
-      else
-        write(self%output_unit, '(A)') trim(str(i, .true.))//') '//self%options(i)%text
-      endif
-    enddo
-    ! the prompt must be visible before the read: no line end, then flush
-    write(self%output_unit, '(A)', advance='no') self%question//' '
-    flush(self%output_unit)
+    if (present(error)) error = error_
+    return
+  endif
+  attempts = 1 ; if (self%loop_on_invalid) attempts = self%tries
+  do attempt=1, attempts
+    call self%show
     call read_line(self%input_unit, answer, iostat, iomsg)
     if (is_iostat_end(iostat)) then
       error_ = self%raise(ERROR_MENU_EOF, 'end of input, no response')
+      exit
     elseif (iostat /= 0) then
       error_ = self%raise(ERROR_MENU_INVALID, 'invalid response: '//trim(iomsg))
+      exit
+    endif
+    answer = trim(adjustl(answer))
+    error_ = 0
+    if (len(answer) == 0) then
+      choice = self%default_index()
+      if (choice == 0) then
+        error_ = ERROR_MENU_NO_RESPONSE
+        message = 'no response'
+      endif
     else
-      error_ = 0
-      answer = trim(adjustl(answer))
-      if (len(answer) == 0) then
-        choice = self%default_index()
-        if (choice == 0) error_ = self%raise(ERROR_MENU_NO_RESPONSE, 'no response')
-      else
-        choice = option_index(answer, n)
-        if (choice == 0) error_ = self%raise(ERROR_MENU_INVALID, 'invalid response: '//answer)
+      choice = option_index(answer, n)
+      if (choice == 0) then
+        error_ = ERROR_MENU_INVALID
+        message = 'invalid response: '//answer
       endif
     endif
-  endif
+    if (error_ == 0) exit
+    if (self%loop_on_invalid) message = message//' ('//trim(str(attempts - attempt, .true.))//' tries left)'
+    error_ = self%raise(error_, message)
+  enddo
   if (present(error)) error = error_
   endsubroutine run_single
+
+  subroutine show(self)
+  !< Write the numbered options, then the question on the line of the answer.
+  class(menu), intent(in) :: self !< Menu.
+  integer(I4P)            :: i    !< Counter.
+
+  do i=1, size(self%options, dim=1)
+    if (self%options(i)%is_default) then
+      write(self%output_unit, '(A)') trim(str(i, .true.))//') '//self%default_icon//self%options(i)%text
+    else
+      write(self%output_unit, '(A)') trim(str(i, .true.))//') '//self%options(i)%text
+    endif
+  enddo
+  ! the prompt must be visible before the read: no line end, then flush
+  write(self%output_unit, '(A)', advance='no') self%question//' '
+  flush(self%output_unit)
+  endsubroutine show
 
   pure function default_index(self) result(i)
   !< Index of the default option, 0 if none.

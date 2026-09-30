@@ -31,6 +31,7 @@ graph LR
 - [add_option](#add-option)
 - [free](#free)
 - [run_single](#run-single)
+- [show](#show)
 - [finalize](#finalize)
 - [default_index](#default-index)
 - [raise](#raise)
@@ -72,6 +73,8 @@ Interactive menu: numbered options, a question, one answer line.
 | `input_unit` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Unit of the answers. |
 | `output_unit` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Unit of the options and the question. |
 | `error_unit` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Unit of the error messages. |
+| `loop_on_invalid` | logical |  | Ask again after an invalid answer. |
+| `tries` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Attempts in total with loop_on_invalid. |
 
 #### Type-Bound Procedures
 
@@ -84,6 +87,7 @@ Interactive menu: numbered options, a question, one answer line.
 | `default_index` | pass(self) | Index of the default option. |
 | `raise` | pass(self) | Write an error message and return its code. |
 | `run_single` | pass(self) | Show the menu and read one choice. |
+| `show` | pass(self) | Write the options and the question. |
 
 ## Subroutines
 
@@ -92,7 +96,7 @@ Interactive menu: numbered options, a question, one answer line.
 Initialize the menu: every previous setting and option is dropped.
 
 ```fortran
-subroutine init(self, question, default_icon, input_unit, output_unit, error_unit)
+subroutine init(self, question, loop_on_invalid, tries, default_icon, input_unit, output_unit, error_unit, error)
 ```
 
 **Arguments**
@@ -101,10 +105,22 @@ subroutine init(self, question, default_icon, input_unit, output_unit, error_uni
 |------|------|--------|------------|-------------|
 | `self` | class([menu](/api/src/lib/flap_menu_t#menu)) | inout |  | Menu. |
 | `question` | character(len=*) | in |  | Question asked after the options. |
+| `loop_on_invalid` | logical | in | optional | Ask again after an invalid answer (default: no). |
+| `tries` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in | optional | Attempts in total with loop_on_invalid (default: 3). |
 | `default_icon` | character(len=*) | in | optional | Mark of the default options (default: '*'). |
 | `input_unit` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in | optional | Unit of the answers (default: standard input). |
 | `output_unit` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in | optional | Unit of the options and the question (default: standard output). |
 | `error_unit` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in | optional | Unit of the error messages (default: standard error). |
+| `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | optional | Error trapping flag. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  init["init"] --> raise["raise"]
+  init["init"] --> str["str"]
+  style init fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
 
 ### add_option
 
@@ -152,6 +168,9 @@ subroutine free(self)
 
 Show the menu and read one choice: the index of the chosen option, 0 on error.
 
+ With loop_on_invalid an invalid (or empty) answer is reported with the tries left and the menu is asked again, up to
+ `tries` attempts; the last error is returned. The end of the input and a read error are never retried.
+
 ```fortran
 subroutine run_single(self, choice, error)
 ```
@@ -172,8 +191,32 @@ flowchart TD
   run_single["run_single"] --> option_index["option_index"]
   run_single["run_single"] --> raise["raise"]
   run_single["run_single"] --> read_line["read_line"]
+  run_single["run_single"] --> show["show"]
   run_single["run_single"] --> str["str"]
   style run_single fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### show
+
+Write the numbered options, then the question on the line of the answer.
+
+```fortran
+subroutine show(self)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([menu](/api/src/lib/flap_menu_t#menu)) | in |  | Menu. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  run_single["run_single"] --> show["show"]
+  show["show"] --> str["str"]
+  style show fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### finalize
@@ -244,6 +287,7 @@ function raise(self, code, message) result(error)
 ```mermaid
 flowchart TD
   add_option["add_option"] --> raise["raise"]
+  init["init"] --> raise["raise"]
   run_single["run_single"] --> raise["raise"]
   style raise fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```

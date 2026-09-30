@@ -1,8 +1,8 @@
-!< Interactive menus: flap_menu_t, single choice on custom units, defaults (issue #125, steps 5.1-5.3; #78 1.1, 6.1, 2.1:
-!< T0.1, T1.1-T1.8, T6.1-T6.4, T2.1-T2.7; T2.5, several defaults, comes with the multiple selection).
+!< Interactive menus: flap_menu_t, single choice on custom units, defaults, retries (issue #125, steps 5.1-5.4; #78 1.1,
+!< 6.1, 2.1, 3.1: T0.1, T1.1-T1.8, T6.1-T6.4, T2.1-T2.7, T3.1-T3.7; T2.5, several defaults, comes with multiple selection).
 program flap_test_menu
-!< Interactive menus: flap_menu_t, single choice on custom units, defaults (issue #125, steps 5.1-5.3; #78 1.1, 6.1, 2.1:
-!< T0.1, T1.1-T1.8, T6.1-T6.4, T2.1-T2.7; T2.5, several defaults, comes with the multiple selection).
+!< Interactive menus: flap_menu_t, single choice on custom units, defaults, retries (issue #125, steps 5.1-5.4; #78 1.1,
+!< 6.1, 2.1, 3.1: T0.1, T1.1-T1.8, T6.1-T6.4, T2.1-T2.7, T3.1-T3.7; T2.5, several defaults, comes with multiple selection).
 !<
 !< The menu prints its numbered options and the question, reads one answer line and returns the chosen index. Every case
 !< runs in-process on custom units (the answers in a scratch file, output and errors read back from capture units); the
@@ -212,6 +212,94 @@ close(in, status='delete')
 out = read_back(elun)
 out = read_back(lun)
 
+! T3.x: retries (#78 3.1)
+! T3.1: by default the first invalid answer is returned, the next line is not read
+call answers('7'//new_line('a')//'2', in)
+call food(in)
+call m%run(choice, error)
+call assert_equal(error, ERROR_MENU_INVALID, 'T3.1 no retry by default')
+call assert_equal(read_back(elun), 'error: invalid response: 7'//new_line('a'), 'T3.1 message without tries')
+call m%run(choice, error)
+call assert_equal(choice, 2_I4P, 'T3.1 the next line is left for the next run')
+close(in, status='delete')
+out = read_back(lun)
+! T3.2, T3.6, T3.7: loop_on_invalid, tries=3: two invalid answers, then a valid one; the menu shown at each attempt
+call answers('7'//new_line('a')//'x'//new_line('a')//'2', in)
+call retry_menu(in, tries=3_I4P)
+call m%run(choice, error)
+call assert_equal(error, 0_I4P, 'T3.2 error')
+call assert_equal(choice, 2_I4P, 'T3.2 the valid answer')
+call assert_equal(read_back(elun), 'error: invalid response: 7 (2 tries left)'//new_line('a')// &
+                                   'error: invalid response: x (1 tries left)'//new_line('a'), 'T3.6 messages')
+call assert_equal(count_of(read_back(lun), '1) Pizza'), 3_I4P, 'T3.7 the menu at each attempt')
+close(in, status='delete')
+! T3.3: tries=2, three invalid answers: the last error after two attempts, the third line left
+call answers('7'//new_line('a')//'8'//new_line('a')//'3', in)
+call retry_menu(in, tries=2_I4P)
+call m%run(choice, error)
+call assert_equal(error, ERROR_MENU_INVALID, 'T3.3 the tries exhausted')
+call assert_equal(choice, 0_I4P, 'T3.3 choice 0')
+call assert_contains(read_back(elun), 'invalid response: 8 (0 tries left)', 'T3.3 the last message')
+call m%run(choice, error)
+call assert_equal(choice, 3_I4P, 'T3.3 the third line not read')
+close(in, status='delete')
+out = read_back(lun)
+out = read_back(elun)
+! an empty answer without a default is retried too; the last error is the last one
+call answers(new_line('a')//'9', in)
+call retry_menu(in, tries=2_I4P)
+call m%run(choice, error)
+call assert_equal(error, ERROR_MENU_INVALID, 'the last error is returned')
+call assert_contains(read_back(elun), 'no response (1 tries left)', 'no response retried')
+close(in, status='delete')
+call answers('9', in)
+call retry_menu(in, tries=2_I4P)
+call m%run(choice, error)
+call assert_equal(error, ERROR_MENU_EOF, 'T3.5 an invalid answer, then the end of input')
+close(in, status='delete')
+out = read_back(elun)
+! T3.5: the end of input is never retried
+call answers('9', in)
+call retry_menu(in, tries=5_I4P)
+call m%run(choice, error)
+call assert_equal(error, ERROR_MENU_EOF, 'T3.5 end of input, not a retry loop')
+err = read_back(elun)
+call assert_contains(err, 'invalid response: 9 (4 tries left)', 'T3.5 the invalid answer')
+call assert_contains(err, 'end of input', 'T3.5 then the end of input')
+call assert_equal(count_of(err, 'error:'), 2_I4P, 'T3.5 two messages only')
+close(in, status='delete')
+out = read_back(lun)
+! T3.4: an empty input with retries: the end of input at once
+call answers('', in, line_end=.false.)
+call retry_menu(in, tries=3_I4P)
+call m%run(choice, error)
+call assert_equal(error, ERROR_MENU_EOF, 'T3.4 empty input')
+call assert_equal(count_of(read_back(lun), '1) Pizza'), 1_I4P, 'T3.4 the menu shown once')
+close(in, status='delete')
+out = read_back(elun)
+! tries without loop_on_invalid: no retry; tries below 1: a definition error, the default (3) kept
+call answers('7'//new_line('a')//'2', in)
+call m%init(question='Pick', tries=5_I4P, input_unit=in, output_unit=lun, error_unit=elun)
+call m%add_option(text='a')
+call m%add_option(text='b')
+call m%run(choice, error)
+call assert_equal(error, ERROR_MENU_INVALID, 'tries alone: no retry')
+close(in, status='delete')
+call answers('7'//new_line('a')//'8'//new_line('a')//'9'//new_line('a')//'2', in)
+call m%init(question='Pick', loop_on_invalid=.true., tries=0_I4P, input_unit=in, output_unit=lun, error_unit=elun, &
+            error=error)
+call assert_equal(error, ERROR_MENU_DEFINITION, 'tries=0: definition error')
+call assert_contains(read_back(elun), 'tries', 'tries=0: message')
+call m%add_option(text='a')
+call m%add_option(text='b')
+call m%run(choice, error)
+call assert_equal(error, ERROR_MENU_INVALID, 'tries=0: the default 3 tries')
+call m%run(choice, error)
+call assert_equal(choice, 2_I4P, 'tries=0: three lines read')
+close(in, status='delete')
+out = read_back(lun)
+out = read_back(elun)
+
 ! T0.1: the parser never uses the menu module
 lib_dir = 'src/lib'
 call get_environment_variable('FLAP_TEST_LIB_DIR', value=buffer, status=status)
@@ -235,6 +323,38 @@ contains
   call m%add_option(text='Ice Cream', error=e)
   call m%add_option(text='Tacos', error=e)
   endsubroutine food
+
+  subroutine retry_menu(input_unit, tries)
+  !< The food menu, retrying invalid answers.
+  integer(I4P), intent(in) :: input_unit !< Input unit.
+  integer(I4P), intent(in) :: tries      !< Attempts in total.
+  integer(I4P)             :: e          !< Error trapping flag.
+
+  call m%init(question='What is your favorite food?', loop_on_invalid=.true., tries=tries, input_unit=input_unit, &
+              output_unit=lun, error_unit=elun, error=e)
+  call assert_equal(e, 0_I4P, 'init with retries')
+  call m%add_option(text='Pizza')
+  call m%add_option(text='Ice Cream')
+  call m%add_option(text='Tacos')
+  endsubroutine retry_menu
+
+  function count_of(text, what) result(n)
+  !< Number of occurrences of a substring.
+  character(*), intent(in) :: text !< Text.
+  character(*), intent(in) :: what !< Substring.
+  integer(I4P)             :: n    !< Occurrences.
+  integer(I4P)             :: p    !< Position.
+  integer(I4P)             :: i    !< Found position.
+
+  n = 0
+  p = 1
+  do
+    i = index(text(p:), what)
+    if (i == 0) exit
+    n = n + 1
+    p = p + i + len(what) - 1
+  enddo
+  endfunction count_of
 
   subroutine ask_default(answer, choice, error, icon)
   !< Run the food menu, Ice Cream the default, on one answer.

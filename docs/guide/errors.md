@@ -105,7 +105,7 @@ positive values are **errors**. Existing values never change.
 | `2001` | `ERROR_MENU_INVALID` | Invalid menu answer | Not one of the numbers shown, or unreadable (see [Interactive Menus](./menu#errors)) |
 | `2004` | `ERROR_MENU_NO_RESPONSE` | Empty menu answer | The user just pressed Enter, and the menu has no default option |
 | `2005` | `ERROR_MENU_EOF` | End of input in a menu | Standard input at its end (`/dev/null`, a batch job): no answer can come |
-| `2006` | `ERROR_MENU_DEFINITION` | Invalid menu | `run` on a menu without options, `add_option` with an empty text or a second default |
+| `2006` | `ERROR_MENU_DEFINITION` | Invalid menu | `run` on a menu without options, `add_option` with an empty text or a second default, `init(tries=)` below 1 |
 
 The first two group codes are named `ERROR_GROUP_*` in the `flap` module; inside the group module they are
 `ERROR_CONSISTENCY` and `ERROR_M_EXCLUDE`, which would clash with the argument-level `ERROR_M_EXCLUDE` (`9`).
