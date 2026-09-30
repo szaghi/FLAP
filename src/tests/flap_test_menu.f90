@@ -1,13 +1,14 @@
-!< Interactive menus: flap_menu_t, single choice on custom units, defaults, retries (issue #125, steps 5.1-5.4; #78 1.1,
-!< 6.1, 2.1, 3.1: T0.1, T1.1-T1.8, T6.1-T6.4, T2.1-T2.7, T3.1-T3.7; T2.5, several defaults, comes with multiple selection).
+!< Interactive menus: flap_menu_t, single choice on custom units, defaults, retries, multiple selection (issue #125, steps
+!< 5.1-5.5; #78 1.1, 6.1, 2.1, 3.1, 5.1: T0.1, T1.1-T1.8, T6.1-T6.4, T2.1-T2.7, T3.1-T3.7, T5.1-T5.8).
 program flap_test_menu
-!< Interactive menus: flap_menu_t, single choice on custom units, defaults, retries (issue #125, steps 5.1-5.4; #78 1.1,
-!< 6.1, 2.1, 3.1: T0.1, T1.1-T1.8, T6.1-T6.4, T2.1-T2.7, T3.1-T3.7; T2.5, several defaults, comes with multiple selection).
+!< Interactive menus: flap_menu_t, single choice on custom units, defaults, retries, multiple selection (issue #125, steps
+!< 5.1-5.5; #78 1.1, 6.1, 2.1, 3.1, 5.1: T0.1, T1.1-T1.8, T6.1-T6.4, T2.1-T2.7, T3.1-T3.7, T5.1-T5.8).
 !<
 !< The menu prints its numbered options and the question, reads one answer line and returns the chosen index. Every case
 !< runs in-process on custom units (the answers in a scratch file, output and errors read back from capture units); the
 !< default units (stdin, stdout, stderr) are checked in children re-invoked with a real standard input.
-use flap, only : menu, ERROR_MENU_DEFINITION, ERROR_MENU_EOF, ERROR_MENU_INVALID, ERROR_MENU_NO_RESPONSE
+use flap, only : menu, ERROR_MENU_DEFINITION, ERROR_MENU_DUPLICATE, ERROR_MENU_EOF, ERROR_MENU_INVALID, &
+                 ERROR_MENU_NO_RESPONSE, ERROR_MENU_TOO_MANY
 use flap_test_utils, only : assert, assert_contains, assert_equal, capture_close, capture_open, child_case, read_back, &
                             reinvoke, run_command, scratch_file
 use penf, only : I4P, str
@@ -22,6 +23,7 @@ integer(I4P)              :: in       !< Input unit (the answers).
 integer(I4P)              :: lun      !< Output unit.
 integer(I4P)              :: elun     !< Error unit.
 integer(I4P)              :: choice   !< Chosen index.
+integer(I4P), allocatable :: choices(:) !< Chosen indexes.
 integer(I4P)              :: error    !< Error trapping flag.
 integer(I4P)              :: exitstat !< Exit status of a child.
 integer(I4P)              :: status   !< Retrieval status.
@@ -70,7 +72,15 @@ call check_invalid('4', 'T1.3 4')
 call check_invalid('2a', 'T1.4 2a')
 call check_invalid('-1', 'T1.4 -1')
 call check_invalid('1.0', 'T1.4 1.0')
-call check_invalid('1 2', 'several answers')
+! T5.5: several answers in single-choice mode: too many (checked before the numbers)
+call ask('1 2', choice, error)
+call assert_equal(error, ERROR_MENU_TOO_MANY, 'T5.5 1 2: too many')
+call assert_equal(choice, 0_I4P, 'T5.5 choice 0')
+call assert_contains(read_back(elun), 'too many responses: 1 2', 'T5.5 message')
+call ask('x y', choice, error)
+call assert_equal(error, ERROR_MENU_TOO_MANY, 'T5.5 x y: too many before invalid')
+out = read_back(elun)
+out = read_back(lun)
 call check_invalid('99999999999999999999', 'too large for an integer')
 ! T1.8: a long answer is read whole (then rejected)
 call check_invalid(repeat('1', 1999)//'x', 'T1.8 2000 characters')
@@ -300,6 +310,76 @@ close(in, status='delete')
 out = read_back(lun)
 out = read_back(elun)
 
+! T5.x: multiple selection (#78 5.1)
+! (each case checks its choices inside check_multiple, on a local: nvfortran 26.5 loses the reallocation of an array passed
+! back through several call sites, as the class(*) caller bug of CLAUDE.md)
+! T5.1, T5.2, T5.8: blank separated, runs of blanks as one, in the order typed
+call check_multiple('1 3', 0_I4P, [1_I4P, 3_I4P], 'T5.1 1 3')
+call check_multiple('  1   3  ', 0_I4P, [1_I4P, 3_I4P], 'T5.2 runs of blanks')
+call check_multiple('3 1', 0_I4P, [3_I4P, 1_I4P], 'T5.8 order kept')
+call check_multiple('2', 0_I4P, [2_I4P], 'one answer')
+! T5.3: another separator splits exactly, fields trimmed; an empty field is invalid
+call check_multiple('1,3', 0_I4P, [1_I4P, 3_I4P], 'T5.3 1,3', separator=',')
+call check_multiple(' 1 , 3 ', 0_I4P, [1_I4P, 3_I4P], 'T5.3 1 , 3', separator=',')
+call check_multiple('1,,3', ERROR_MENU_INVALID, what='T5.3 1,,3', separator=',')
+call check_multiple('1,3,', ERROR_MENU_INVALID, what='T5.3 a trailing separator', separator=',')
+call check_multiple('1 3', ERROR_MENU_INVALID, what='T5.3 blanks are not the separator', separator=',')
+call check_multiple('1;;3', 0_I4P, [1_I4P, 3_I4P], 'a separator of two characters', separator=';;')
+out = read_back(elun)
+call check_multiple('1 4', ERROR_MENU_INVALID, what='an invalid field')
+call assert_contains(read_back(elun), 'invalid response: 1 4', 'the whole answer in the message')
+! T5.4: a repeated index
+call check_multiple('2 2', ERROR_MENU_DUPLICATE, what='T5.4 duplicate')
+call assert_contains(read_back(elun), 'duplicate response: 2 2', 'T5.4 message')
+call check_multiple('2 02', ERROR_MENU_DUPLICATE, what='T5.4 the same number written twice')
+out = read_back(lun)
+! T2.5: several defaults in multiple mode, all returned by an empty answer
+call check_multiple('', 0_I4P, [1_I4P, 3_I4P], 'T2.5 the defaults', defaults=.true.)
+call assert_contains(read_back(lun), '1) *Pizza'//new_line('a')//'2) Ice Cream'//new_line('a')//'3) *Tacos', 'T2.5 icons')
+call check_multiple('2', 0_I4P, [2_I4P], 'T2.5 an explicit answer wins', defaults=.true.)
+call check_multiple('', ERROR_MENU_NO_RESPONSE, what='multiple, no default: no response')
+out = read_back(elun)
+! T5.6: the scalar run on a multiple menu
+call answers('1', in)
+call m%init(question='Pick', multiple=.true., input_unit=in, output_unit=lun, error_unit=elun)
+call m%add_option(text='a')
+call m%run(choice, error)
+call assert_equal(error, ERROR_MENU_DEFINITION, 'T5.6 scalar run on a multiple menu')
+call assert_contains(read_back(elun), 'run(choices)', 'T5.6 message')
+call m%run(choices, error)
+call assert_equal(choices, [1_I4P], 'T5.6 the line was not read')
+close(in, status='delete')
+! T5.7: the array run on a single-choice menu: one element; several are too many
+call answers('2'//new_line('a')//'1 2', in)
+call food(in)
+call m%run(choices, error)
+call assert_equal(error, 0_I4P, 'T5.7 error')
+call assert_equal(choices, [2_I4P], 'T5.7 size 1')
+call m%run(choices, error)
+call assert_equal(error, ERROR_MENU_TOO_MANY, 'T5.7 too many')
+close(in, status='delete')
+! an empty separator is a definition error, the blank kept
+call answers('1 2', in)
+call m%init(question='Pick', multiple=.true., separator='', input_unit=in, output_unit=lun, error_unit=elun, error=error)
+call assert_equal(error, ERROR_MENU_DEFINITION, 'empty separator')
+call m%add_option(text='a')
+call m%add_option(text='b')
+call m%run(choices, error)
+call assert_equal(choices, [1_I4P, 2_I4P], 'empty separator: the blank kept')
+close(in, status='delete')
+! retries cover the new errors
+call answers('2 2'//new_line('a')//'1 3', in)
+call m%init(question='Pick', multiple=.true., loop_on_invalid=.true., input_unit=in, output_unit=lun, error_unit=elun)
+call m%add_option(text='a')
+call m%add_option(text='b')
+call m%add_option(text='c')
+call m%run(choices, error)
+call assert_equal(choices, [1_I4P, 3_I4P], 'a duplicate retried')
+call assert_contains(read_back(elun), 'duplicate response: 2 2 (2 tries left)', 'a duplicate retried: message')
+close(in, status='delete')
+out = read_back(lun)
+out = read_back(elun)
+
 ! T0.1: the parser never uses the menu module
 lib_dir = 'src/lib'
 call get_environment_variable('FLAP_TEST_LIB_DIR', value=buffer, status=status)
@@ -323,6 +403,44 @@ contains
   call m%add_option(text='Ice Cream', error=e)
   call m%add_option(text='Tacos', error=e)
   endsubroutine food
+
+  subroutine check_multiple(answer, expected_error, expected, what, separator, defaults)
+  !< Run the food menu with multiple selection on one answer and check the error and the choices (absent: none, as on
+  !< error); with defaults, Pizza and Tacos are the defaults.
+  character(*), intent(in)           :: answer         !< Answer line.
+  integer(I4P), intent(in)           :: expected_error !< Expected error.
+  integer(I4P), intent(in), optional :: expected(:)    !< Expected choices (default: none).
+  character(*), intent(in)           :: what           !< Case.
+  character(*), intent(in), optional :: separator      !< Separator.
+  logical,      intent(in), optional :: defaults       !< Pizza and Tacos are defaults.
+  integer(I4P), allocatable          :: got(:)         !< Chosen indexes.
+  integer(I4P)                       :: u              !< Input unit.
+  integer(I4P)                       :: e              !< Error trapping flag.
+  logical                            :: d              !< Defaults, local variable.
+
+  d = .false. ; if (present(defaults)) d = defaults
+  call answers(answer, u)
+  if (present(separator)) then
+    call m%init(question='What do you like?', multiple=.true., separator=separator, input_unit=u, output_unit=lun, &
+                error_unit=elun, error=e)
+  else
+    call m%init(question='What do you like?', multiple=.true., input_unit=u, output_unit=lun, error_unit=elun, error=e)
+  endif
+  call assert_equal(e, 0_I4P, what//': init')
+  call m%add_option(text='Pizza', is_default=d, error=e)
+  call m%add_option(text='Ice Cream', error=e)
+  call m%add_option(text='Tacos', is_default=d, error=e)
+  call assert_equal(e, 0_I4P, what//': a second default')
+  call m%run(got, e)
+  close(u, status='delete')
+  call assert_equal(e, expected_error, what//': error')
+  call assert(allocated(got), what//': choices allocated')
+  if (present(expected)) then
+    call assert_equal(got, expected, what//': choices')
+  else
+    call assert_equal(size(got, dim=1), 0_I4P, what//': no choices')
+  endif
+  endsubroutine check_multiple
 
   subroutine retry_menu(input_unit, tries)
   !< The food menu, retrying invalid answers.

@@ -3,27 +3,32 @@ module flap_menu_t
 !< Interactive menus for terminal programs (F23 of #125, the wmenu plan of #78): numbered options, one answer line.
 !<
 !< Opt-in: the argument parser never uses this module, so parsing stays non-interactive and safe in batch and MPI jobs. A menu
-!< prints its options numbered from 1, then the question, reads one answer line and returns the chosen index; the caller
-!< dispatches with `select case`. The units are the caller's: the menu never opens nor closes them. At the end of the input
-!< (standard input redirected from /dev/null or closed, as in a batch job) `run` returns `ERROR_MENU_EOF` at once: standard
-!< Fortran cannot tell whether the input is a terminal, the end of file is the portable signal.
+!< prints its options numbered from 1, then the question, reads one answer line and returns the chosen index (the indexes,
+!< with multiple selection); the caller dispatches with `select case`. The units are the caller's: the menu never opens nor
+!< closes them. At the end of the input (standard input redirected from /dev/null or closed, as in a batch job) `run`
+!< returns `ERROR_MENU_EOF` at once: standard Fortran cannot tell whether the input is a terminal, the end of file is the
+!< portable signal.
 use, intrinsic :: iso_fortran_env, only : stdin => input_unit, stdout => output_unit, stderr => error_unit
-use flap_utils_m, only : read_line
+use flap_utils_m, only : flap_string, read_line
 use penf
 
 implicit none
 private
 save
 public :: ERROR_MENU_INVALID
+public :: ERROR_MENU_TOO_MANY
+public :: ERROR_MENU_DUPLICATE
 public :: ERROR_MENU_NO_RESPONSE
 public :: ERROR_MENU_EOF
 public :: ERROR_MENU_DEFINITION
 
 ! errors 2000-2099: menu
-integer(I4P), parameter :: ERROR_MENU_INVALID     = 2001 !< Not a number, or out of range.
+integer(I4P), parameter :: ERROR_MENU_INVALID     = 2001 !< Not a number, out of range, or an empty field.
+integer(I4P), parameter :: ERROR_MENU_TOO_MANY    = 2002 !< Several answers to a single choice.
+integer(I4P), parameter :: ERROR_MENU_DUPLICATE   = 2003 !< The same option chosen twice.
 integer(I4P), parameter :: ERROR_MENU_NO_RESPONSE = 2004 !< Empty answer, and no default option.
 integer(I4P), parameter :: ERROR_MENU_EOF         = 2005 !< End of input: no answer can come.
-integer(I4P), parameter :: ERROR_MENU_DEFINITION  = 2006 !< Invalid menu: no options, empty option text, second default.
+integer(I4P), parameter :: ERROR_MENU_DEFINITION  = 2006 !< Invalid menu or use (no options, empty text, ...).
 
 type :: menu_option
   !< An option of a menu.
@@ -42,15 +47,20 @@ type, public :: menu
   integer(I4P)                   :: error_unit=stderr  !< Unit of the error messages.
   logical                        :: loop_on_invalid=.false. !< Ask again after an invalid answer.
   integer(I4P)                   :: tries=3            !< Attempts in total with loop_on_invalid.
+  logical                        :: multiple=.false.   !< Several options can be chosen.
+  character(len=:),  allocatable :: separator          !< Separator of the answers (blank: runs of blanks).
   contains
     ! public methods
     procedure, pass(self) :: add_option        !< Append an option.
     procedure, pass(self) :: free              !< Free dynamic memory.
     procedure, pass(self) :: init              !< Initialize the menu.
-    generic               :: run => run_single !< Show the menu and read the answer.
+    generic               :: run => run_single, run_multiple !< Show the menu and read the answer.
     ! private methods
-    procedure, pass(self), private :: default_index !< Index of the default option.
+    procedure, pass(self), private :: ask           !< Show the menu and read the chosen indexes.
+    procedure, pass(self), private :: default_index !< Index of the (first) default option.
+    procedure, pass(self), private :: evaluate      !< The indexes of an answer.
     procedure, pass(self), private :: raise         !< Write an error message and return its code.
+    procedure, pass(self), private :: run_multiple  !< Show the menu and read the choices.
     procedure, pass(self), private :: run_single    !< Show the menu and read one choice.
     procedure, pass(self), private :: show          !< Write the options and the question.
     final                          :: finalize      !< Free dynamic memory when finalizing.
@@ -58,10 +68,13 @@ endtype menu
 
 contains
   ! public methods
-  subroutine init(self, question, loop_on_invalid, tries, default_icon, input_unit, output_unit, error_unit, error)
+  subroutine init(self, question, multiple, separator, loop_on_invalid, tries, default_icon, input_unit, output_unit, &
+                  error_unit, error)
   !< Initialize the menu: every previous setting and option is dropped.
   class(menu),  intent(inout)         :: self            !< Menu.
   character(*), intent(in)            :: question        !< Question asked after the options.
+  logical,      intent(in),  optional :: multiple        !< Several options can be chosen (default: no).
+  character(*), intent(in),  optional :: separator       !< Separator of the answers (default: blank, runs of blanks).
   logical,      intent(in),  optional :: loop_on_invalid !< Ask again after an invalid answer (default: no).
   integer(I4P), intent(in),  optional :: tries           !< Attempts in total with loop_on_invalid (default: 3).
   character(*), intent(in),  optional :: default_icon    !< Mark of the default options (default: '*').
@@ -74,6 +87,15 @@ contains
   call self%free
   error_ = 0
   self%question = question
+  if (present(multiple)) self%multiple = multiple
+  self%separator = ' '
+  if (present(separator)) then
+    if (len(separator) == 0) then
+      error_ = self%raise(ERROR_MENU_DEFINITION, 'empty separator: the blank is used')
+    else
+      self%separator = separator
+    endif
+  endif
   if (present(loop_on_invalid)) self%loop_on_invalid = loop_on_invalid
   self%default_icon = '*' ; if (present(default_icon)) self%default_icon = default_icon
   if (present(input_unit))  self%input_unit  = input_unit
@@ -106,7 +128,7 @@ contains
   is_default_ = .false. ; if (present(is_default)) is_default_ = is_default
   if (len_trim(text) == 0) then
     error_ = self%raise(ERROR_MENU_DEFINITION, 'empty option text')
-  elseif (is_default_ .and. self%default_index() > 0) then
+  elseif (is_default_ .and. (.not.self%multiple) .and. self%default_index() > 0) then
     error_ = self%raise(ERROR_MENU_DEFINITION, 'a second default option "'//text//'": one choice has one default')
   else
     n = 0 ; if (allocated(self%options)) n = size(self%options, dim=1)
@@ -128,40 +150,42 @@ contains
 
   if (allocated(self%question)) deallocate(self%question)
   if (allocated(self%default_icon)) deallocate(self%default_icon)
+  if (allocated(self%separator)) deallocate(self%separator)
   if (allocated(self%options)) deallocate(self%options)
   self%input_unit = stdin
   self%output_unit = stdout
   self%error_unit = stderr
   self%loop_on_invalid = .false.
   self%tries = 3
+  self%multiple = .false.
   endsubroutine free
 
   ! private methods
-  subroutine run_single(self, choice, error)
-  !< Show the menu and read one choice: the index of the chosen option, 0 on error.
+  subroutine ask(self, choices, error)
+  !< Show the menu and read the chosen indexes (one without multiple selection); none on error.
   !<
   !< With loop_on_invalid an invalid (or empty) answer is reported with the tries left and the menu is asked again, up to
   !< `tries` attempts; the last error is returned. The end of the input and a read error are never retried.
-  class(menu),  intent(inout)         :: self     !< Menu.
-  integer(I4P), intent(out)           :: choice   !< Chosen index (0 on error).
-  integer(I4P), intent(out), optional :: error    !< Error trapping flag.
-  character(len=:), allocatable       :: answer   !< Answer line.
-  character(len=:), allocatable       :: message  !< Error message.
-  character(256)                      :: iomsg    !< I/O message.
-  integer(I4P)                        :: iostat   !< I/O status.
-  integer(I4P)                        :: n        !< Number of options.
-  integer(I4P)                        :: attempts !< Attempts allowed.
-  integer(I4P)                        :: attempt  !< Current attempt.
-  integer(I4P)                        :: error_   !< Error trapping flag, local variable.
+  class(menu),               intent(inout) :: self       !< Menu.
+  integer(I4P), allocatable, intent(out)   :: choices(:) !< Chosen indexes (none on error).
+  integer(I4P),              intent(out)   :: error      !< Error trapping flag.
+  character(len=:), allocatable            :: answer     !< Answer line.
+  character(len=:), allocatable            :: message    !< Error message.
+  character(256)                           :: iomsg      !< I/O message.
+  integer(I4P)                             :: iostat     !< I/O status.
+  integer(I4P)                             :: attempts   !< Attempts allowed.
+  integer(I4P)                             :: attempt    !< Current attempt.
 
-  choice = 0
-  ! a menu used without init: no question, the default icon
+  allocate(choices(0))
+  ! a menu used without init: no question, the default icon and separator
   if (.not.allocated(self%question)) self%question = ''
   if (.not.allocated(self%default_icon)) self%default_icon = '*'
-  n = 0 ; if (allocated(self%options)) n = size(self%options, dim=1)
-  if (n == 0) then
-    error_ = self%raise(ERROR_MENU_DEFINITION, 'the menu has no options')
-    if (present(error)) error = error_
+  if (.not.allocated(self%separator)) self%separator = ' '
+  if (.not.allocated(self%options)) then
+    error = self%raise(ERROR_MENU_DEFINITION, 'the menu has no options')
+    return
+  elseif (size(self%options, dim=1) == 0) then
+    error = self%raise(ERROR_MENU_DEFINITION, 'the menu has no options')
     return
   endif
   attempts = 1 ; if (self%loop_on_invalid) attempts = self%tries
@@ -169,31 +193,47 @@ contains
     call self%show
     call read_line(self%input_unit, answer, iostat, iomsg)
     if (is_iostat_end(iostat)) then
-      error_ = self%raise(ERROR_MENU_EOF, 'end of input, no response')
+      error = self%raise(ERROR_MENU_EOF, 'end of input, no response')
       exit
     elseif (iostat /= 0) then
-      error_ = self%raise(ERROR_MENU_INVALID, 'invalid response: '//trim(iomsg))
+      error = self%raise(ERROR_MENU_INVALID, 'invalid response: '//trim(iomsg))
       exit
     endif
-    answer = trim(adjustl(answer))
-    error_ = 0
-    if (len(answer) == 0) then
-      choice = self%default_index()
-      if (choice == 0) then
-        error_ = ERROR_MENU_NO_RESPONSE
-        message = 'no response'
-      endif
-    else
-      choice = option_index(answer, n)
-      if (choice == 0) then
-        error_ = ERROR_MENU_INVALID
-        message = 'invalid response: '//answer
-      endif
-    endif
-    if (error_ == 0) exit
+    call self%evaluate(trim(adjustl(answer)), choices, error, message)
+    if (error == 0) exit
     if (self%loop_on_invalid) message = message//' ('//trim(str(attempts - attempt, .true.))//' tries left)'
-    error_ = self%raise(error_, message)
+    error = self%raise(error, message)
   enddo
+  endsubroutine ask
+
+  subroutine run_multiple(self, choices, error)
+  !< Show the menu and read the choices: the indexes of the chosen options in the order typed, none on error.
+  !<
+  !< On a single-choice menu it returns one index (several answers are `ERROR_MENU_TOO_MANY`).
+  class(menu),               intent(inout)         :: self       !< Menu.
+  integer(I4P), allocatable, intent(out)           :: choices(:) !< Chosen indexes (none on error).
+  integer(I4P),              intent(out), optional :: error      !< Error trapping flag.
+  integer(I4P)                                     :: error_     !< Error trapping flag, local variable.
+
+  call self%ask(choices, error_)
+  if (present(error)) error = error_
+  endsubroutine run_multiple
+
+  subroutine run_single(self, choice, error)
+  !< Show the menu and read one choice: the index of the chosen option, 0 on error.
+  class(menu),  intent(inout)         :: self       !< Menu.
+  integer(I4P), intent(out)           :: choice     !< Chosen index (0 on error).
+  integer(I4P), intent(out), optional :: error      !< Error trapping flag.
+  integer(I4P), allocatable           :: choices(:) !< Chosen indexes.
+  integer(I4P)                        :: error_     !< Error trapping flag, local variable.
+
+  choice = 0
+  if (self%multiple) then
+    error_ = self%raise(ERROR_MENU_DEFINITION, 'run(choice) on a menu with multiple selection: use run(choices)')
+  else
+    call self%ask(choices, error_)
+    if (error_ == 0) choice = choices(1)
+  endif
   if (present(error)) error = error_
   endsubroutine run_single
 
@@ -214,8 +254,62 @@ contains
   flush(self%output_unit)
   endsubroutine show
 
+  pure subroutine evaluate(self, answer, choices, error, message)
+  !< The indexes of an answer (no blanks around): the defaults for an empty one; none on error, with its message.
+  !<
+  !< Checked in order: several fields without multiple selection (too many), each field a number shown (invalid, also an
+  !< empty field), an index repeated (duplicate).
+  class(menu),                   intent(in)  :: self       !< Menu.
+  character(*),                  intent(in)  :: answer     !< Answer.
+  integer(I4P), allocatable,     intent(out) :: choices(:) !< Chosen indexes.
+  integer(I4P),                  intent(out) :: error      !< Error code.
+  character(len=:), allocatable, intent(out) :: message    !< Error message.
+  type(flap_string), allocatable             :: fields(:)  !< Fields of the answer.
+  integer(I4P)                               :: n          !< Number of options.
+  integer(I4P)                               :: i          !< Counter.
+
+  error = 0
+  message = ''
+  n = size(self%options, dim=1)
+  if (len(answer) == 0) then
+    allocate(choices(count(self%options(:)%is_default)))
+    choices = pack([(i, i=1, n)], self%options(:)%is_default)
+    if (size(choices, dim=1) == 0) then
+      error = ERROR_MENU_NO_RESPONSE
+      message = 'no response'
+    endif
+    return
+  endif
+  call split_fields(answer, self%separator, fields)
+  allocate(choices(size(fields, dim=1)))
+  if (size(fields, dim=1) > 1 .and. .not.self%multiple) then
+    error = ERROR_MENU_TOO_MANY
+    message = 'too many responses: '//answer
+  else
+    do i=1, size(fields, dim=1)
+      choices(i) = option_index(fields(i)%s, n)
+    enddo
+    if (any(choices == 0)) then
+      error = ERROR_MENU_INVALID
+      message = 'invalid response: '//answer
+    else
+      do i=2, size(choices, dim=1)
+        if (any(choices(:i-1) == choices(i))) then
+          error = ERROR_MENU_DUPLICATE
+          message = 'duplicate response: '//answer
+          exit
+        endif
+      enddo
+    endif
+  endif
+  if (error /= 0) then
+    deallocate(choices)
+    allocate(choices(0))
+  endif
+  endsubroutine evaluate
+
   pure function default_index(self) result(i)
-  !< Index of the default option, 0 if none.
+  !< Index of the (first) default option, 0 if none.
   class(menu), intent(in) :: self !< Menu.
   integer(I4P)            :: i    !< Index.
 
@@ -246,6 +340,57 @@ contains
   endsubroutine finalize
 
   ! non type-bound procedures
+  pure subroutine split_fields(answer, separator, fields)
+  !< Split an answer into fields: a blank separator splits at runs of blanks; any other exactly, each field trimmed (so
+  !< `1,,3` has an empty field). Not `tokenize`, whose trailing-token behaviour belongs to the parser.
+  character(*),                   intent(in)  :: answer    !< Answer (no blanks around, not empty).
+  character(*),                   intent(in)  :: separator !< Separator.
+  type(flap_string), allocatable, intent(out) :: fields(:) !< Fields.
+  integer(I4P)                                :: nf        !< Number of fields.
+  integer(I4P)                                :: p         !< Position.
+  integer(I4P)                                :: q         !< Position of the next separator.
+  integer(I4P)                                :: i         !< Counter.
+  integer(I4P)                                :: pass_     !< Pass: 1 counts, 2 fills (sized first, see add_option).
+
+  do pass_=1, 2
+    nf = 0
+    if (len_trim(separator) == 0) then
+      p = 1
+      do while (p <= len(answer))
+        if (answer(p:p) == ' ') then
+          p = p + 1
+          cycle
+        endif
+        q = scan(answer(p:), ' ')
+        if (q == 0) then
+          q = len(answer) + 1
+        else
+          q = p + q - 1
+        endif
+        nf = nf + 1
+        if (pass_ == 2) fields(nf)%s = answer(p:q-1)
+        p = q
+      enddo
+    else
+      p = 1
+      do
+        q = index(answer(p:), separator)
+        nf = nf + 1
+        if (q == 0) then
+          if (pass_ == 2) fields(nf)%s = trim(adjustl(answer(p:)))
+          exit
+        endif
+        if (pass_ == 2) fields(nf)%s = trim(adjustl(answer(p:p+q-2)))
+        p = p + q - 1 + len(separator)
+      enddo
+    endif
+    if (pass_ == 1) allocate(fields(nf))
+  enddo
+  do i=1, nf
+    if (.not.allocated(fields(i)%s)) fields(i)%s = ''
+  enddo
+  endsubroutine split_fields
+
   pure function option_index(field, n) result(choice)
   !< The option number written in a field: digits only, in 1..n; 0 otherwise.
   character(*), intent(in) :: field  !< Field (no blanks around).

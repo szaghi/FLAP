@@ -23,7 +23,8 @@ use flap, only : command_line_interface,                                        
                  ERROR_MISSING_CLA, ERROR_MISSING_GROUP, ERROR_MISSING_SELECTION_CLA, ERROR_TOO_FEW_CLAS,                         &
                  ERROR_UNKNOWN_CLAS_IGNORED, ERROR_ARGUMENT_RETRIEVAL, ERROR_USER, ERROR_CONFIG_NOT_FOUND,                        &
                  ERROR_CONFIG_UNKNOWN_KEY, ERROR_GROUP_ALIAS, ERROR_COPY_POSITIONAL,                                              &
-                 ERROR_MENU_INVALID, ERROR_MENU_NO_RESPONSE, ERROR_MENU_EOF, ERROR_MENU_DEFINITION
+                 ERROR_MENU_INVALID, ERROR_MENU_TOO_MANY, ERROR_MENU_DUPLICATE, ERROR_MENU_NO_RESPONSE, ERROR_MENU_EOF,         &
+                 ERROR_MENU_DEFINITION
 use flap_test_utils, only : assert_equal, capture_close, capture_open
 use penf, only : I4P
 
@@ -118,6 +119,8 @@ contains
   call assert_equal(ERROR_COMPLETION_INSTALL,   1011_I4P,   'ERROR_COMPLETION_INSTALL')
   call assert_equal(ERROR_ARGUMENT_RETRIEVAL,   1012_I4P,   'ERROR_ARGUMENT_RETRIEVAL')
   call assert_equal(ERROR_MENU_INVALID,         2001_I4P,   'ERROR_MENU_INVALID')
+  call assert_equal(ERROR_MENU_TOO_MANY,        2002_I4P,   'ERROR_MENU_TOO_MANY')
+  call assert_equal(ERROR_MENU_DUPLICATE,       2003_I4P,   'ERROR_MENU_DUPLICATE')
   call assert_equal(ERROR_MENU_NO_RESPONSE,     2004_I4P,   'ERROR_MENU_NO_RESPONSE')
   call assert_equal(ERROR_MENU_EOF,             2005_I4P,   'ERROR_MENU_EOF')
   call assert_equal(ERROR_MENU_DEFINITION,      2006_I4P,   'ERROR_MENU_DEFINITION')

@@ -88,6 +88,8 @@ use flap_command_line_interface_t, only : command_line_interface,      &
                                          ERROR_COMPLETION_INSTALL
 use flap_menu_t, only : menu,                   &
                         ERROR_MENU_INVALID,     &
+                        ERROR_MENU_TOO_MANY,    &
+                        ERROR_MENU_DUPLICATE,   &
                         ERROR_MENU_NO_RESPONSE, &
                         ERROR_MENU_EOF,         &
                         ERROR_MENU_DEFINITION
@@ -187,6 +189,8 @@ public :: ERROR_COMPLETION_SHELL
 public :: ERROR_COMPLETION_INSTALL
 ! errors 2000-2099: menu (flap_menu_t, never used by the parser)
 public :: ERROR_MENU_INVALID
+public :: ERROR_MENU_TOO_MANY
+public :: ERROR_MENU_DUPLICATE
 public :: ERROR_MENU_NO_RESPONSE
 public :: ERROR_MENU_EOF
 public :: ERROR_MENU_DEFINITION

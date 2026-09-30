@@ -43,9 +43,10 @@ returned in `error` and a message such as `error: invalid response: 7` is writte
 
 | Procedure | Purpose |
 |---|---|
-| `init(question, loop_on_invalid, tries, default_icon, input_unit, output_unit, error_unit, error)` | Start a new menu: drops the options and settings of a previous one. Every argument except `question` is optional. |
+| `init(question, multiple, separator, loop_on_invalid, tries, default_icon, input_unit, output_unit, error_unit, error)` | Start a new menu: drops the options and settings of a previous one. Every argument except `question` is optional. |
 | `add_option(text, is_default, error)` | Append an option; its number is its position. An empty text, or a second default, is an error and is not added. |
 | `run(choice, error)` | Show the menu and read one answer; `choice` is the index of the chosen option. A menu can be run several times. |
+| `run(choices, error)` | The same, `choices` an allocatable array: the chosen indexes (see [Multiple selection](#multiple-selection)). |
 | `free` | Release the memory (also done automatically). |
 
 ## A default option
@@ -68,8 +69,34 @@ call m%run(choice, error) ! Enter alone: choice = 2
 What is your favorite food?
 ```
 
-A single-choice menu has at most one default: a second one is `ERROR_MENU_DEFINITION` and is not added. Without a
+A single-choice menu has at most one default: a second one is `ERROR_MENU_DEFINITION` and is not added (a menu with
+multiple selection can have several). Without a
 default, an empty answer is `ERROR_MENU_NO_RESPONSE`. An invalid answer is an error even when there is a default.
+
+## Multiple selection
+
+With `init(multiple=.true.)` the user can choose several options in one answer, and `run` fills an allocatable array
+with their indexes, in the order typed:
+
+```fortran
+integer(I4P), allocatable :: choices(:)
+
+call m%init(question='Which toppings?', multiple=.true.)
+call m%add_option(text='Cheese', is_default=.true.)
+call m%add_option(text='Mushrooms')
+call m%add_option(text='Olives', is_default=.true.)
+call m%run(choices, error) ! "3 1" gives [3, 1]; an empty answer the defaults, [1, 3]
+```
+
+- By default the answers are separated by blanks, and several blanks count as one (`1   3`).
+- `init(separator=',')` sets another separator: the answer is split at each one and the blanks around each field are
+  ignored (`1, 3`); an empty field (`1,,3`) is invalid. An empty separator is `ERROR_MENU_DEFINITION` (the blank is kept).
+- The same option twice (`2 2`) is `ERROR_MENU_DUPLICATE`.
+- An empty answer gives all the default options.
+
+On any error `choices` is allocated with no elements. `run(choices)` also works on a single-choice menu (one element);
+there, and with the scalar `run(choice)`, several answers are `ERROR_MENU_TOO_MANY`. The scalar `run(choice)` on a menu
+with multiple selection is `ERROR_MENU_DEFINITION`: use the array.
 
 ## Asking again
 
@@ -93,7 +120,7 @@ error: invalid response: 7 (2 tries left)
 What is your favorite food? 2
 ```
 
-The end of the input is never retried (see below). `tries` below 1 is `ERROR_MENU_DEFINITION` (returned by `init`,
+Every error kind is retried except the end of the input (see below). `tries` below 1 is `ERROR_MENU_DEFINITION` (returned by `init`,
 which keeps the default 3).
 
 ## Units
@@ -116,7 +143,9 @@ never stops the program.
 
 | Code | Name | Cause |
 |---|---|---|
-| `2001` | `ERROR_MENU_INVALID` | The answer is not one of the numbers shown (not a number, out of range, several numbers), or it could not be read |
+| `2001` | `ERROR_MENU_INVALID` | The answer is not one of the numbers shown (not a number, out of range, an empty field), or it could not be read |
+| `2002` | `ERROR_MENU_TOO_MANY` | Several answers to a single choice |
+| `2003` | `ERROR_MENU_DUPLICATE` | The same option chosen twice |
 | `2004` | `ERROR_MENU_NO_RESPONSE` | Empty answer, and no default option |
 | `2005` | `ERROR_MENU_EOF` | End of the input: no answer can come |
-| `2006` | `ERROR_MENU_DEFINITION` | `run` on a menu without options, `add_option` with an empty text or a second default, `init` with `tries` below 1 |
+| `2006` | `ERROR_MENU_DEFINITION` | `run` on a menu without options, `add_option` with an empty text or a second default (single choice), `init` with `tries` below 1 or an empty separator, the scalar `run(choice)` with multiple selection |

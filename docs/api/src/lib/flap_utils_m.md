@@ -196,8 +196,8 @@ subroutine read_line(lun, line, iostat, iomsg)
 
 ```mermaid
 flowchart TD
+  ask["ask"] --> read_line["read_line"]
   load["load"] --> read_line["read_line"]
-  run_single["run_single"] --> read_line["read_line"]
   style read_line fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
