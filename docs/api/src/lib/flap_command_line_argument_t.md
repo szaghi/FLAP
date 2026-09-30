@@ -42,6 +42,8 @@ graph LR
 - [check_action_consistency](#check-action-consistency)
 - [check_def_nargs_consistency](#check-def-nargs-consistency)
 - [check_optional_consistency](#check-optional-consistency)
+- [check_range_consistency](#check-range-consistency)
+- [check_range](#check-range)
 - [check_alternate_consistency](#check-alternate-consistency)
 - [check_path_consistency](#check-path-consistency)
 - [check_m_exclude_consistency](#check-m-exclude-consistency)
@@ -63,11 +65,15 @@ graph LR
 - [get_cla_list_varying_logical](#get-cla-list-varying-logical)
 - [get_cla_list_varying_char](#get-cla-list-varying-char)
 - [finalize](#finalize)
+- [read_real](#read-real)
+- [read_integer](#read-integer)
 - [is_required_passed](#is-required-passed)
 - [has_value](#has-value)
 - [config_key](#config-key)
 - [value_text](#value-text)
 - [deprecation_note](#deprecation-note)
+- [has_range](#has-range)
+- [range_text](#range-text)
 - [has_path_checks](#has-path-checks)
 - [takes_config_value](#takes-config-value)
 - [match_token](#match-token)
@@ -144,6 +150,9 @@ graph LR
 | `ERROR_PATH_INCONSISTENT` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Path checks on an option taking no value. |
 | `ERROR_DEPRECATED_REQUIRED` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | A required option cannot be deprecated. |
 | `ERROR_ALTERNATE_INCONSISTENT` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | An alternate action with an attribute of a value. |
+| `ERROR_RANGE_DEFINITION` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Invalid range (bounds, clamp to an open real bound). |
+| `ERROR_OUT_OF_RANGE` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Value out of its range. |
+| `ERROR_RANGE_TYPE` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Range with a character or logical get. |
 
 ## Derived Types
 
@@ -206,6 +215,11 @@ classDiagram
 | `writable` | logical |  | The value is a path writable if it exists. |
 | `allow_dash` | logical |  | '-' passes the path checks (standard input/output). |
 | `deprecated` | character(len=:) | allocatable | Deprecation message; allocated means deprecated (F13). |
+| `range_min` | character(len=:) | allocatable | Minimum of the value (F05), as given. |
+| `range_max` | character(len=:) | allocatable | Maximum of the value (F05), as given. |
+| `min_open` | logical |  | The minimum is excluded. |
+| `max_open` | logical |  | The maximum is excluded. |
+| `clamp` | logical |  | An out-of-range value becomes the bound. |
 
 #### Type-Bound Procedures
 
@@ -227,6 +241,8 @@ classDiagram
 | `value_text` |  | Resolved value as text (provenance report). |
 | `has_path_checks` |  | Check if the value is a path to check. |
 | `deprecation_note` |  | Marker of a deprecated CLA in the help. |
+| `has_range` |  | Check if the value has a range. |
+| `range_text` |  | Range as text, e.g. (0, 1]. |
 | `check_paths` |  | Check the path value(s): existence and permissions. |
 | `match_token` |  | Check if a command line token names this CLA. |
 | `match_inline_token` |  | Check a token also as NAME=VALUE. |
@@ -259,6 +275,8 @@ classDiagram
 | `check_m_exclude_consistency` |  | Check mutually exclusion consistency. |
 | `check_path_consistency` |  | Check that the path checks are on an option taking a value. |
 | `check_alternate_consistency` |  | Check that an alternate action has no attribute of a value. |
+| `check_range_consistency` |  | Check the range definition. |
+| `check_range` |  | Check (or clamp) a value against the range. |
 | `check_named_consistency` |  | Check named CLA consistency. |
 | `check_positional_consistency` |  | Check positional CLA consistency. |
 | `check_choices` |  | Check if CLA value is in allowed choices. |
@@ -338,6 +356,7 @@ flowchart TD
   check["check"] --> check_optional_consistency["check_optional_consistency"]
   check["check"] --> check_path_consistency["check_path_consistency"]
   check["check"] --> check_positional_consistency["check_positional_consistency"]
+  check["check"] --> check_range_consistency["check_range_consistency"]
   check["check"] --> errored["errored"]
   style check fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -719,6 +738,8 @@ flowchart TD
   check_paths["check_paths"] --> errored["errored"]
   check_position_gaps["check_position_gaps"] --> errored["errored"]
   check_positional_consistency["check_positional_consistency"] --> errored["errored"]
+  check_range["check_range"] --> errored["errored"]
+  check_range_consistency["check_range_consistency"] --> errored["errored"]
   get_args_from_invocation["get_args_from_invocation"] --> errored["errored"]
   get_cla["get_cla"] --> errored["errored"]
   get_cla["get_cla"] --> errored["errored"]
@@ -757,6 +778,7 @@ flowchart TD
   set_source_value["set_source_value"] --> errored["errored"]
   errored["errored"] --> error_prefix["error_prefix"]
   errored["errored"] --> print_error_message["print_error_message"]
+  errored["errored"] --> range_text["range_text"]
   errored["errored"] --> str["str"]
   style errored fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -905,6 +927,74 @@ flowchart TD
   check["check"] --> check_optional_consistency["check_optional_consistency"]
   check_optional_consistency["check_optional_consistency"] --> errored["errored"]
   style check_optional_consistency fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### check_range_consistency
+
+Check the range (F05 of #125): an option taking a value (store, store*, append, count), numeric bounds, min <= max
+ (min < max when a bound is open).
+
+```fortran
+subroutine check_range_consistency(self, pref)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  check["check"] --> check_range_consistency["check_range_consistency"]
+  check_range_consistency["check_range_consistency"] --> errored["errored"]
+  check_range_consistency["check_range_consistency"] --> has_range["has_range"]
+  check_range_consistency["check_range_consistency"] --> range_text["range_text"]
+  check_range_consistency["check_range_consistency"] --> read_real["read_real"]
+  style check_range_consistency fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### check_range
+
+Check a value against the range (F05 of #125), in its kind: out of range is ERROR_OUT_OF_RANGE, or, with clamp, the
+ value becomes the bound (an open integer bound: bound +/- 1; a real cannot clamp to an open bound, ERROR_RANGE_DEFINITION).
+ A character or logical get is ERROR_RANGE_TYPE.
+
+```fortran
+subroutine check_range(self, val, text, pref)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `val` | class(*) | inout |  | Value. |
+| `text` | character(len=*) | in |  | Value as given, for the messages. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  get_cla["get_cla"] --> check_range["check_range"]
+  get_cla_list_character["get_cla_list_character"] --> check_range["check_range"]
+  get_cla_list_from_buffer["get_cla_list_from_buffer"] --> check_range["check_range"]
+  get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> check_range["check_range"]
+  get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> check_range["check_range"]
+  get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> check_range["check_range"]
+  get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> check_range["check_range"]
+  get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> check_range["check_range"]
+  get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> check_range["check_range"]
+  get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> check_range["check_range"]
+  get_cla_list_varying_char["get_cla_list_varying_char"] --> check_range["check_range"]
+  check_range["check_range"] --> errored["errored"]
+  check_range["check_range"] --> integer_range["integer_range"]
+  check_range["check_range"] --> real_range["real_range"]
+  style check_range fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### check_alternate_consistency
@@ -1090,8 +1180,10 @@ subroutine get_cla(self, val, pref)
 ```mermaid
 flowchart TD
   get_cla["get_cla"] --> check_choices["check_choices"]
+  get_cla["get_cla"] --> check_range["check_range"]
   get_cla["get_cla"] --> errored["errored"]
   get_cla["get_cla"] --> get_cla_from_buffer["get_cla_from_buffer"]
+  get_cla["get_cla"] --> has_range["has_range"]
   get_cla["get_cla"] --> has_value["has_value"]
   get_cla["get_cla"] --> is_required_passed["is_required_passed"]
   get_cla["get_cla"] --> stored_list["stored_list"]
@@ -1176,9 +1268,11 @@ subroutine get_cla_list_from_buffer(self, buffer, val, pref)
 flowchart TD
   get_cla_list["get_cla_list"] --> get_cla_list_from_buffer["get_cla_list_from_buffer"]
   get_cla_list_from_buffer["get_cla_list_from_buffer"] --> check_choices["check_choices"]
+  get_cla_list_from_buffer["get_cla_list_from_buffer"] --> check_range["check_range"]
   get_cla_list_from_buffer["get_cla_list_from_buffer"] --> cton["cton"]
   get_cla_list_from_buffer["get_cla_list_from_buffer"] --> errored["errored"]
   get_cla_list_from_buffer["get_cla_list_from_buffer"] --> get_cla_list_character["get_cla_list_character"]
+  get_cla_list_from_buffer["get_cla_list_from_buffer"] --> has_range["has_range"]
   get_cla_list_from_buffer["get_cla_list_from_buffer"] --> list_items["list_items"]
   get_cla_list_from_buffer["get_cla_list_from_buffer"] --> str["str"]
   style get_cla_list_from_buffer fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -1207,6 +1301,8 @@ subroutine get_cla_list_character(self, val, vals, pref)
 flowchart TD
   get_cla_list_from_buffer["get_cla_list_from_buffer"] --> get_cla_list_character["get_cla_list_character"]
   get_cla_list_character["get_cla_list_character"] --> check_choices["check_choices"]
+  get_cla_list_character["get_cla_list_character"] --> check_range["check_range"]
+  get_cla_list_character["get_cla_list_character"] --> has_range["has_range"]
   style get_cla_list_character fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -1232,8 +1328,10 @@ subroutine get_cla_list_varying_R16P(self, val, pref)
 flowchart TD
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> check_choices["check_choices"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> check_list_size["check_list_size"]
+  get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> check_range["check_range"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> cton["cton"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> errored["errored"]
+  get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> has_range["has_range"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> is_list["is_list"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> is_required_passed["is_required_passed"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> list_items["list_items"]
@@ -1263,8 +1361,10 @@ subroutine get_cla_list_varying_R8P(self, val, pref)
 flowchart TD
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> check_choices["check_choices"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> check_list_size["check_list_size"]
+  get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> check_range["check_range"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> cton["cton"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> errored["errored"]
+  get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> has_range["has_range"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> is_list["is_list"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> is_required_passed["is_required_passed"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> list_items["list_items"]
@@ -1294,8 +1394,10 @@ subroutine get_cla_list_varying_R4P(self, val, pref)
 flowchart TD
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> check_choices["check_choices"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> check_list_size["check_list_size"]
+  get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> check_range["check_range"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> cton["cton"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> errored["errored"]
+  get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> has_range["has_range"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> is_list["is_list"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> is_required_passed["is_required_passed"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> list_items["list_items"]
@@ -1325,8 +1427,10 @@ subroutine get_cla_list_varying_I8P(self, val, pref)
 flowchart TD
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> check_choices["check_choices"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> check_list_size["check_list_size"]
+  get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> check_range["check_range"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> cton["cton"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> errored["errored"]
+  get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> has_range["has_range"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> is_list["is_list"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> is_required_passed["is_required_passed"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> list_items["list_items"]
@@ -1356,8 +1460,10 @@ subroutine get_cla_list_varying_I4P(self, val, pref)
 flowchart TD
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> check_choices["check_choices"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> check_list_size["check_list_size"]
+  get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> check_range["check_range"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> cton["cton"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> errored["errored"]
+  get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> has_range["has_range"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> is_list["is_list"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> is_required_passed["is_required_passed"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> list_items["list_items"]
@@ -1387,8 +1493,10 @@ subroutine get_cla_list_varying_I2P(self, val, pref)
 flowchart TD
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> check_choices["check_choices"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> check_list_size["check_list_size"]
+  get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> check_range["check_range"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> cton["cton"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> errored["errored"]
+  get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> has_range["has_range"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> is_list["is_list"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> is_required_passed["is_required_passed"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> list_items["list_items"]
@@ -1418,8 +1526,10 @@ subroutine get_cla_list_varying_I1P(self, val, pref)
 flowchart TD
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> check_choices["check_choices"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> check_list_size["check_list_size"]
+  get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> check_range["check_range"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> cton["cton"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> errored["errored"]
+  get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> has_range["has_range"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> is_list["is_list"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> is_required_passed["is_required_passed"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> list_items["list_items"]
@@ -1478,7 +1588,9 @@ subroutine get_cla_list_varying_char(self, val, pref)
 flowchart TD
   get_cla_list_varying_char["get_cla_list_varying_char"] --> check_choices["check_choices"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> check_list_size["check_list_size"]
+  get_cla_list_varying_char["get_cla_list_varying_char"] --> check_range["check_range"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> errored["errored"]
+  get_cla_list_varying_char["get_cla_list_varying_char"] --> has_range["has_range"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> is_list["is_list"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> is_required_passed["is_required_passed"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> list_items["list_items"]
@@ -1501,6 +1613,46 @@ subroutine finalize(self)
 | Name | Type | Intent | Attributes | Description |
 |------|------|--------|------------|-------------|
 | `self` | type([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+
+### read_real
+
+Read a real from a string, quietly (cton prints an error message).
+
+```fortran
+subroutine read_real(string, x, ok)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `string` | character(len=*) | in |  | String. |
+| `x` | real(kind=[R8P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out |  | Value. |
+| `ok` | logical | out |  | The string is a number. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  check_range_consistency["check_range_consistency"] --> read_real["read_real"]
+  style read_real fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### read_integer
+
+Read an integer from a string, quietly.
+
+```fortran
+subroutine read_integer(string, i, ok)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `string` | character(len=*) | in |  | String. |
+| `i` | integer(kind=[I8P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out |  | Value. |
+| `ok` | logical | out |  | The string is an integer. |
 
 ## Functions
 
@@ -1654,6 +1806,72 @@ function deprecation_note(self) result(note)
 flowchart TD
   usage["usage"] --> deprecation_note["deprecation_note"]
   style deprecation_note fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### has_range
+
+Check if the value has a range (min or max).
+
+**Attributes**: elemental
+
+**Returns**: `logical`
+
+```fortran
+function has_range(self) result(ranged)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  check_range_consistency["check_range_consistency"] --> has_range["has_range"]
+  get_cla["get_cla"] --> has_range["has_range"]
+  get_cla_list_character["get_cla_list_character"] --> has_range["has_range"]
+  get_cla_list_from_buffer["get_cla_list_from_buffer"] --> has_range["has_range"]
+  get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> has_range["has_range"]
+  get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> has_range["has_range"]
+  get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> has_range["has_range"]
+  get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> has_range["has_range"]
+  get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> has_range["has_range"]
+  get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> has_range["has_range"]
+  get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> has_range["has_range"]
+  get_cla_list_varying_char["get_cla_list_varying_char"] --> has_range["has_range"]
+  usage["usage"] --> has_range["has_range"]
+  style has_range fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### range_text
+
+Return the range as text: (0, 1], [1, +inf), ...
+
+**Attributes**: pure
+
+**Returns**: `character(len=:)`
+
+```fortran
+function range_text(self) result(text)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  check_range_consistency["check_range_consistency"] --> range_text["range_text"]
+  errored["errored"] --> range_text["range_text"]
+  usage["usage"] --> range_text["range_text"]
+  style range_text fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### has_path_checks
@@ -1870,7 +2088,9 @@ flowchart TD
   usage["usage"] --> colorize["colorize"]
   usage["usage"] --> cton["cton"]
   usage["usage"] --> deprecation_note["deprecation_note"]
+  usage["usage"] --> has_range["has_range"]
   usage["usage"] --> list_join["list_join"]
+  usage["usage"] --> range_text["range_text"]
   usage["usage"] --> str["str"]
   style usage fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```

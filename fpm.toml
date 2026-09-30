@@ -208,6 +208,11 @@ source-dir = "src/tests"
 main = "flap_test_positional.f90"
 
 [[test]]
+name = "flap_test_range"
+source-dir = "src/tests"
+main = "flap_test_range.f90"
+
+[[test]]
 name = "flap_test_raise_error"
 source-dir = "src/tests"
 main = "flap_test_raise_error.f90"

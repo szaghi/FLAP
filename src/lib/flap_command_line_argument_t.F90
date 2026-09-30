@@ -63,6 +63,9 @@ public :: ERROR_PATH_NOT_WRITABLE
 public :: ERROR_PATH_INCONSISTENT
 public :: ERROR_DEPRECATED_REQUIRED
 public :: ERROR_ALTERNATE_INCONSISTENT
+public :: ERROR_RANGE_DEFINITION
+public :: ERROR_OUT_OF_RANGE
+public :: ERROR_RANGE_TYPE
 public :: ERROR_INLINE_VALUE_NOT_ALLOWED
 public :: ERROR_INLINE_VALUE_NARGS
 public :: ERROR_COUNT_INCONSISTENT
@@ -102,6 +105,11 @@ type, extends(object) :: command_line_argument
   logical,                       public :: writable=.false.       !< The value is a path writable if it exists.
   logical,                       public :: allow_dash=.false.     !< '-' passes the path checks (standard input/output).
   character(len=:), allocatable, public :: deprecated             !< Deprecation message; allocated means deprecated (F13).
+  character(len=:), allocatable, public :: range_min              !< Minimum of the value (F05), as given.
+  character(len=:), allocatable, public :: range_max              !< Maximum of the value (F05), as given.
+  logical,                       public :: min_open=.false.       !< The minimum is excluded.
+  logical,                       public :: max_open=.false.       !< The maximum is excluded.
+  logical,                       public :: clamp=.false.          !< An out-of-range value becomes the bound.
   contains
     ! public methods
     procedure, public :: free                           !< Free dynamic memory.
@@ -114,6 +122,8 @@ type, extends(object) :: command_line_argument
     procedure, public :: value_text                     !< Resolved value as text (provenance report).
     procedure, public :: has_path_checks                !< Check if the value is a path to check.
     procedure, public :: deprecation_note               !< Marker of a deprecated CLA in the help.
+    procedure, public :: has_range                      !< Check if the value has a range.
+    procedure, public :: range_text                     !< Range as text, e.g. (0, 1].
     procedure, public :: check_paths                    !< Check the path value(s): existence and permissions.
     procedure, public :: match_token                    !< Check if a command line token names this CLA.
     procedure, public :: match_inline_token             !< Check a token also as NAME=VALUE.
@@ -160,6 +170,8 @@ type, extends(object) :: command_line_argument
     procedure, private :: check_m_exclude_consistency     !< Check mutually exclusion consistency.
     procedure, private :: check_path_consistency          !< Check that the path checks are on an option taking a value.
     procedure, private :: check_alternate_consistency     !< Check that an alternate action has no attribute of a value.
+    procedure, private :: check_range_consistency         !< Check the range definition.
+    procedure, private :: check_range                     !< Check (or clamp) a value against the range.
     procedure, private :: check_named_consistency         !< Check named CLA consistency.
     procedure, private :: check_positional_consistency    !< Check positional CLA consistency.
     procedure, private :: check_choices                   !< Check if CLA value is in allowed choices.
@@ -236,6 +248,9 @@ integer(I4P), parameter :: ERROR_PATH_NOT_WRITABLE      = 35 !< Existing path va
 integer(I4P), parameter :: ERROR_PATH_INCONSISTENT      = 49 !< Path checks on an option taking no value.
 integer(I4P), parameter :: ERROR_DEPRECATED_REQUIRED    = 44 !< A required option cannot be deprecated.
 integer(I4P), parameter :: ERROR_ALTERNATE_INCONSISTENT = 37 !< An alternate action with an attribute of a value.
+integer(I4P), parameter :: ERROR_RANGE_DEFINITION       = 30 !< Invalid range (bounds, clamp to an open real bound).
+integer(I4P), parameter :: ERROR_OUT_OF_RANGE           = 31 !< Value out of its range.
+integer(I4P), parameter :: ERROR_RANGE_TYPE             = 32 !< Range with a character or logical get.
 
 contains
   ! public methods
@@ -267,6 +282,11 @@ contains
   self%writable        = .false.
   self%allow_dash      = .false.
   if (allocated(self%deprecated)) deallocate(self%deprecated)
+  if (allocated(self%range_min)) deallocate(self%range_min)
+  if (allocated(self%range_max)) deallocate(self%range_max)
+  self%min_open        = .false.
+  self%max_open        = .false.
+  self%clamp           = .false.
   endsubroutine free
 
   subroutine check(self, pref)
@@ -275,6 +295,7 @@ contains
   character(*), optional,       intent(in)    :: pref  !< Prefixing string.
 
   call self%check_alternate_consistency(pref=pref) ; if (self%error/=0) return
+  call self%check_range_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_count_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_append_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_envvar_consistency(pref=pref) ; if (self%error/=0) return
@@ -406,6 +427,32 @@ contains
     note = ' (DEPRECATED)'
   endif
   endfunction deprecation_note
+
+  elemental function has_range(self) result(ranged)
+  !< Check if the value has a range (min or max).
+  class(command_line_argument), intent(in) :: self   !< CLA data.
+  logical                                  :: ranged !< Check result.
+
+  ranged = allocated(self%range_min) .or. allocated(self%range_max)
+  endfunction has_range
+
+  pure function range_text(self) result(text)
+  !< Return the range as text: (0, 1], [1, +inf), ...
+  class(command_line_argument), intent(in) :: self !< CLA data.
+  character(len=:), allocatable            :: text !< Range.
+
+  text = merge('(', '[', self%min_open)
+  if (allocated(self%range_min)) then
+    text = text//trim(adjustl(self%range_min))
+  else
+    text = '(-inf'
+  endif
+  if (allocated(self%range_max)) then
+    text = text//', '//trim(adjustl(self%range_max))//merge(')', ']', self%max_open)
+  else
+    text = text//', +inf)'
+  endif
+  endfunction range_text
 
   elemental function has_path_checks(self) result(checks)
   !< Check if the value is a path to check (must_exist, readable or writable).
@@ -762,6 +809,13 @@ contains
         usage = usage//new_line('a')//prefd//repeat(' ',10)//'environment variable name "'//trim(adjustl(self%envvar))//'"'
       endif
     endif
+    if (self%has_range()) then
+      if (markdownd) then
+        usage = usage//'  '//new_line('a')//prefd//repeat(' ', 4)//'range '//self%range_text()
+      else
+        usage = usage//new_line('a')//prefd//repeat(' ', indent)//'range '//self%range_text()
+      endif
+    endif
     if (.not.self%is_required) then
       if (self%def /= '') then
         if (markdownd) then
@@ -1073,6 +1127,14 @@ contains
     case(ERROR_PATH_NOT_WRITABLE)
       self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'": path "'//trim(val_str)//&
                            '" is not writable: '//trim(log_value)//'!'
+    case(ERROR_RANGE_DEFINITION)
+      self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'": invalid range: '//trim(val_str)//'!'
+    case(ERROR_OUT_OF_RANGE)
+      self%error_message = prefd//': value "'//trim(val_str)//'" of "'//trim(adjustl(self%switch))//&
+                           '" is out of range '//self%range_text()//'!'
+    case(ERROR_RANGE_TYPE)
+      self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" has a range: get it into a number, not a '//&
+                           'character or a logical!'
     case(ERROR_ALTERNATE_INCONSISTENT)
       self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" is an alternate action, a flag: it cannot '//&
                            'be positional, required, nor have nargs, envvar, choices or exclude!'
@@ -1213,6 +1275,208 @@ contains
   if (is_inconsistent) call self%errored(pref=pref, error=ERROR_OPTIONAL_NO_DEF)
   endsubroutine check_optional_consistency
 
+  subroutine check_range_consistency(self, pref)
+  !< Check the range (F05 of #125): an option taking a value (store, store*, append, count), numeric bounds, min <= max
+  !< (min < max when a bound is open).
+  class(command_line_argument), intent(inout) :: self !< CLA data.
+  character(*), optional,       intent(in)    :: pref !< Prefixing string.
+  real(R8P)                                   :: lo   !< Minimum.
+  real(R8P)                                   :: hi   !< Maximum.
+  logical                                     :: ok   !< Conversion status.
+
+  if (.not.self%has_range()) return
+  if (self%act /= ACTION_STORE .and. self%act /= ACTION_STORE_STAR .and. self%act /= ACTION_APPEND .and. &
+      self%act /= ACTION_COUNT) then
+    call self%errored(pref=pref, error=ERROR_RANGE_DEFINITION, val_str='a range needs an option taking a value')
+    return
+  endif
+  if (allocated(self%range_min)) then
+    call read_real(self%range_min, lo, ok)
+    if (.not.ok) then
+      call self%errored(pref=pref, error=ERROR_RANGE_DEFINITION, val_str='min "'//self%range_min//'" is not a number')
+      return
+    endif
+  endif
+  if (allocated(self%range_max)) then
+    call read_real(self%range_max, hi, ok)
+    if (.not.ok) then
+      call self%errored(pref=pref, error=ERROR_RANGE_DEFINITION, val_str='max "'//self%range_max//'" is not a number')
+      return
+    endif
+  endif
+  if (allocated(self%range_min) .and. allocated(self%range_max)) then
+    if (lo > hi .or. (lo == hi .and. (self%min_open .or. self%max_open))) &
+      call self%errored(pref=pref, error=ERROR_RANGE_DEFINITION, val_str='the range '//self%range_text()//' is empty')
+  endif
+  endsubroutine check_range_consistency
+
+  subroutine check_range(self, val, text, pref)
+  !< Check a value against the range (F05 of #125), in its kind: out of range is ERROR_OUT_OF_RANGE, or, with clamp, the
+  !< value becomes the bound (an open integer bound: bound +/- 1; a real cannot clamp to an open bound, ERROR_RANGE_DEFINITION).
+  !< A character or logical get is ERROR_RANGE_TYPE.
+  class(command_line_argument), intent(inout) :: self !< CLA data.
+  class(*),                     intent(inout) :: val  !< Value.
+  character(*),                 intent(in)    :: text !< Value as given, for the messages.
+  character(*), optional,       intent(in)    :: pref !< Prefixing string.
+  integer(I8P)                                :: iv   !< Integer value.
+  real(R8P)                                   :: rv   !< Real value.
+
+  select type(val)
+  type is(integer(I8P))
+    iv = val ; call integer_range(iv) ; val = iv
+  type is(integer(I4P))
+    iv = int(val, I8P) ; call integer_range(iv) ; if (self%error == 0) val = int(iv, I4P)
+  type is(integer(I2P))
+    iv = int(val, I8P) ; call integer_range(iv) ; if (self%error == 0) val = int(iv, I2P)
+  type is(integer(I1P))
+    iv = int(val, I8P) ; call integer_range(iv) ; if (self%error == 0) val = int(iv, I1P)
+  type is(real(R8P))
+    rv = val ; call real_range(rv, single=.false.) ; val = rv
+  type is(real(R4P))
+    rv = real(val, R8P) ; call real_range(rv, single=.true.) ; if (self%error == 0) val = real(rv, R4P)
+#if defined _R16P
+  type is(real(R16P))
+    call real16_range(val)
+#endif
+  class default
+    call self%errored(pref=pref, error=ERROR_RANGE_TYPE)
+  endselect
+  contains
+    subroutine integer_range(v)
+    !< Check (or clamp) an integer value.
+    integer(I8P), intent(inout) :: v   !< Value.
+    integer(I8P)                :: b   !< Bound.
+    logical                     :: ok  !< Conversion status.
+
+    if (allocated(self%range_min)) then
+      call read_integer(self%range_min, b, ok)
+      if (.not.ok) then
+        call self%errored(pref=pref, error=ERROR_RANGE_DEFINITION, val_str='min "'//self%range_min//'" is not an integer')
+        return
+      endif
+      if (v < b .or. (self%min_open .and. v == b)) then
+        if (.not.self%clamp) then
+          call out_of_range
+          return
+        endif
+        v = b ; if (self%min_open) v = b + 1
+      endif
+    endif
+    if (allocated(self%range_max)) then
+      call read_integer(self%range_max, b, ok)
+      if (.not.ok) then
+        call self%errored(pref=pref, error=ERROR_RANGE_DEFINITION, val_str='max "'//self%range_max//'" is not an integer')
+        return
+      endif
+      if (v > b .or. (self%max_open .and. v == b)) then
+        if (.not.self%clamp) then
+          call out_of_range
+          return
+        endif
+        v = b ; if (self%max_open) v = b - 1
+      endif
+    endif
+    endsubroutine integer_range
+
+    subroutine real_range(v, single)
+    !< Check (or clamp) a real value; the bounds are read in the kind of the value (single: R4P).
+    real(R8P), intent(inout) :: v      !< Value.
+    logical,   intent(in)    :: single !< The value is real(R4P).
+    real(R8P)                :: b      !< Bound.
+
+    if (allocated(self%range_min)) then
+      b = bound(self%range_min, single)
+      if (v < b .or. (self%min_open .and. v == b)) then
+        if (.not.self%clamp) then
+          call out_of_range
+          return
+        elseif (self%min_open) then
+          call cannot_clamp
+          return
+        endif
+        v = b
+      endif
+    endif
+    if (allocated(self%range_max)) then
+      b = bound(self%range_max, single)
+      if (v > b .or. (self%max_open .and. v == b)) then
+        if (.not.self%clamp) then
+          call out_of_range
+          return
+        elseif (self%max_open) then
+          call cannot_clamp
+          return
+        endif
+        v = b
+      endif
+    endif
+    endsubroutine real_range
+
+    function bound(string, single) result(b)
+    !< Bound read in the kind of the value (validated at definition).
+    character(*), intent(in) :: string !< Bound as given.
+    logical,      intent(in) :: single !< Read as real(R4P).
+    real(R8P)                :: b      !< Bound.
+    real(R4P)                :: b4     !< Bound, real(R4P).
+    logical                  :: ok     !< Conversion status.
+
+    if (single) then
+      read(string, *, iostat=self%error) b4
+      b = real(b4, R8P)
+      self%error = 0
+    else
+      call read_real(string, b, ok)
+    endif
+    endfunction bound
+
+#if defined _R16P
+    subroutine real16_range(v)
+    !< Check (or clamp) a real(R16P) value.
+    real(R16P), intent(inout) :: v   !< Value.
+    real(R16P)                :: b   !< Bound.
+    integer(I4P)              :: ios !< I/O status.
+
+    if (allocated(self%range_min)) then
+      read(self%range_min, *, iostat=ios) b
+      if (v < b .or. (self%min_open .and. v == b)) then
+        if (.not.self%clamp) then
+          call out_of_range
+          return
+        elseif (self%min_open) then
+          call cannot_clamp
+          return
+        endif
+        v = b
+      endif
+    endif
+    if (allocated(self%range_max)) then
+      read(self%range_max, *, iostat=ios) b
+      if (v > b .or. (self%max_open .and. v == b)) then
+        if (.not.self%clamp) then
+          call out_of_range
+          return
+        elseif (self%max_open) then
+          call cannot_clamp
+          return
+        endif
+        v = b
+      endif
+    endif
+    endsubroutine real16_range
+#endif
+
+    subroutine out_of_range
+    !< Report the value out of range.
+    call self%errored(pref=pref, error=ERROR_OUT_OF_RANGE, val_str=trim(adjustl(text)))
+    endsubroutine out_of_range
+
+    subroutine cannot_clamp
+    !< Report a real that cannot be clamped to an open bound.
+    call self%errored(pref=pref, error=ERROR_RANGE_DEFINITION, &
+                      val_str='a real value cannot be clamped to the open bound of '//self%range_text())
+    endsubroutine cannot_clamp
+  endsubroutine check_range
+
   subroutine check_alternate_consistency(self, pref)
   !< Check that an alternate action (F16 of #125) is a plain flag: no nargs, envvar, positional, choices, required, exclude.
   class(command_line_argument), intent(inout) :: self !< CLA data.
@@ -1296,7 +1560,7 @@ contains
   type is(real(R16P))
     val_str = str(n=val)
     do c=1, Nc
-      if (val==cton(str=trim(adjustl(toks(c))), knd=1._R16P)) val_in = .true.
+      if (val==cton(str=trim(adjustl(toks(c))), knd=real(1, R16P))) val_in = .true.
     enddo
 #endif
   type is(real(R8P))
@@ -1390,11 +1654,13 @@ contains
       call self%get_cla_from_buffer(buffer=self%def, val=val, pref=pref)
     endif
     if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val, pref=pref)
+    if (self%has_range().and.self%error==0) call self%check_range(val=val, text=self%stored_list(), pref=pref)
   elseif (self%act==action_append) then
     call self%errored(pref=pref, error=ERROR_APPEND_SCALAR_GET)
   elseif (self%act==action_count) then
     ! the number of occurrences, or the default when not passed
     call self%get_cla_from_buffer(buffer=self%stored_list(), val=val, pref=pref)
+    if (self%has_range().and.self%error==0) call self%check_range(val=val, text=self%stored_list(), pref=pref)
   elseif (self%act==action_store_true.or.self%act==ACTION_ALTERNATE) then
     if (self%source == SOURCE_COMMANDLINE) then ! a flag passed on the command line
       select type(val)
@@ -1447,7 +1713,7 @@ contains
   select type(val)
 #if defined _R16P
   type is(real(R16P))
-    val = cton(pref=pref, error=self%error, str=trim(adjustl(buffer)), knd=1._R16P)
+    val = cton(pref=pref, error=self%error, str=trim(adjustl(buffer)), knd=real(1, R16P))
 #endif
   type is(real(R8P))
     val = cton(pref=pref, error=self%error, str=trim(adjustl(buffer)), knd=1._R8P)
@@ -1541,8 +1807,9 @@ contains
 #if defined _R16P
   type is(real(R16P))
     do v=1, Nv
-      val(v) = cton(pref=pref,error=self%error,str=trim(adjustl(vals(v))),knd=1._R16P)
+      val(v) = cton(pref=pref,error=self%error,str=trim(adjustl(vals(v))),knd=real(1, R16P))
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref)
+      if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
 #endif
@@ -1550,36 +1817,42 @@ contains
     do v=1, Nv
       val(v) = cton(pref=pref,error=self%error,str=trim(adjustl(vals(v))),knd=1._R8P)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref)
+      if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
   type is(real(R4P))
     do v=1, Nv
       val(v) = cton(pref=pref,error=self%error,str=trim(adjustl(vals(v))),knd=1._R4P)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref)
+      if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
   type is(integer(I8P))
     do v=1, Nv
       val(v) = cton(pref=pref,error=self%error,str=trim(adjustl(vals(v))),knd=1_I8P)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref)
+      if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
   type is(integer(I4P))
     do v=1, Nv
       val(v) = cton(pref=pref,error=self%error,str=trim(adjustl(vals(v))),knd=1_I4P)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref)
+      if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
   type is(integer(I2P))
     do v=1, Nv
       val(v) = cton(pref=pref,error=self%error,str=trim(adjustl(vals(v))),knd=1_I2P)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref)
+      if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
   type is(integer(I1P))
     do v=1, Nv
       val(v) = cton(pref=pref,error=self%error,str=trim(adjustl(vals(v))),knd=1_I1P)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref)
+      if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
   type is(logical)
@@ -1610,6 +1883,7 @@ contains
   do v=1, size(vals, dim=1)
     val(v) = vals(v)
     if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+    if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
     if (self%error/=0) exit
   enddo
   endsubroutine get_cla_list_character
@@ -1636,8 +1910,9 @@ contains
     endif
     allocate(real(R16P):: val(1:Nv))
     do v=1, Nv
-      val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1._R16P)
+      val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=real(1, R16P))
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+      if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
   elseif (self%act==action_store_true.or.self%act==action_store_false) then
@@ -1669,6 +1944,7 @@ contains
     do v=1, Nv
       val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1._R8P)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+      if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
   elseif (self%act==action_store_true.or.self%act==action_store_false) then
@@ -1700,6 +1976,7 @@ contains
     do v=1, Nv
       val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1._R4P)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+      if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
   elseif (self%act==action_store_true.or.self%act==action_store_false) then
@@ -1731,6 +2008,7 @@ contains
     do v=1, Nv
       val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1_I8P)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+      if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
   elseif (self%act==action_store_true.or.self%act==action_store_false) then
@@ -1762,6 +2040,7 @@ contains
     do v=1, Nv
       val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1_I4P)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+      if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
   elseif (self%act==action_store_true.or.self%act==action_store_false) then
@@ -1793,6 +2072,7 @@ contains
     do v=1, Nv
       val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1_I2P)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+      if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
   elseif (self%act==action_store_true.or.self%act==action_store_false) then
@@ -1824,6 +2104,7 @@ contains
     do v=1, Nv
       val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1_I1P)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+      if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
   elseif (self%act==action_store_true.or.self%act==action_store_false) then
@@ -1905,6 +2186,7 @@ contains
     do v=1, Nv
       val(v) = trim(adjustl(vals(v)))
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+      if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
   elseif (self%act==action_store_true.or.self%act==action_store_false) then
@@ -1919,4 +2201,28 @@ contains
 
   call self%free
   endsubroutine finalize
+  ! non type-bound procedures
+  subroutine read_real(string, x, ok)
+  !< Read a real from a string, quietly (cton prints an error message).
+  character(*), intent(in)  :: string !< String.
+  real(R8P),    intent(out) :: x      !< Value.
+  logical,      intent(out) :: ok     !< The string is a number.
+  integer(I4P)              :: ios    !< I/O status.
+
+  x = 0._R8P
+  read(string, *, iostat=ios) x
+  ok = ios == 0 .and. len_trim(string) > 0
+  endsubroutine read_real
+
+  subroutine read_integer(string, i, ok)
+  !< Read an integer from a string, quietly.
+  character(*), intent(in)  :: string !< String.
+  integer(I8P), intent(out) :: i      !< Value.
+  logical,      intent(out) :: ok     !< The string is an integer.
+  integer(I4P)              :: ios    !< I/O status.
+
+  i = 0_I8P
+  read(string, *, iostat=ios) i
+  ok = ios == 0 .and. len_trim(string) > 0
+  endsubroutine read_integer
 endmodule flap_command_line_argument_t

@@ -472,7 +472,7 @@ Add CLA to CLI.
  @note If CLA belongs to a not yet present group it is created on the fly.
 
 ```fortran
-subroutine add(self, pref, group, group_index, switch, switch_ab, help, help_markdown, help_color, help_style, required, val_required, positional, position, hidden, act, def, nargs, choices, exclude, envvar, must_exist, readable, writable, allow_dash, deprecated, error)
+subroutine add(self, pref, group, group_index, switch, switch_ab, help, help_markdown, help_color, help_style, required, val_required, positional, position, hidden, act, def, nargs, choices, exclude, envvar, must_exist, readable, writable, allow_dash, deprecated, min, max, min_open, max_open, clamp, error)
 ```
 
 **Arguments**
@@ -505,6 +505,11 @@ subroutine add(self, pref, group, group_index, switch, switch_ab, help, help_mar
 | `writable` | logical | in | optional | The value is a path writable if it exists. |
 | `allow_dash` | logical | in | optional | '-' passes the path checks (standard input/output). |
 | `deprecated` | character(len=*) | in | optional | Deprecation message ('' for none): warn when used (F13). |
+| `min` | character(len=*) | in | optional | Minimum of the value (F05), checked by get. |
+| `max` | character(len=*) | in | optional | Maximum of the value (F05), checked by get. |
+| `min_open` | logical | in | optional | The minimum is excluded (default .false.). |
+| `max_open` | logical | in | optional | The maximum is excluded (default .false.). |
+| `clamp` | logical | in | optional | An out-of-range value becomes the bound (default .false.). |
 | `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | optional | Error trapping flag. |
 
 **Call graph**
@@ -1480,6 +1485,8 @@ flowchart TD
   check_paths["check_paths"] --> errored["errored"]
   check_position_gaps["check_position_gaps"] --> errored["errored"]
   check_positional_consistency["check_positional_consistency"] --> errored["errored"]
+  check_range["check_range"] --> errored["errored"]
+  check_range_consistency["check_range_consistency"] --> errored["errored"]
   get_args_from_invocation["get_args_from_invocation"] --> errored["errored"]
   get_cla["get_cla"] --> errored["errored"]
   get_cla["get_cla"] --> errored["errored"]

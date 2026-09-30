@@ -584,7 +584,7 @@ contains
 
   subroutine add(self, pref, group, group_index, switch, switch_ab, help, help_markdown, help_color, help_style, &
                  required, val_required, positional, position, hidden, act, def, nargs, choices, exclude, envvar, &
-                 must_exist, readable, writable, allow_dash, deprecated, error)
+                 must_exist, readable, writable, allow_dash, deprecated, min, max, min_open, max_open, clamp, error)
   !< Add CLA to CLI.
   !<
   !< @note If not otherwise declared the action on CLA value is set to "store" a value that must be passed after the switch name
@@ -613,6 +613,11 @@ contains
   logical,      optional,        intent(in)    :: writable      !< The value is a path writable if it exists.
   logical,      optional,        intent(in)    :: allow_dash    !< '-' passes the path checks (standard input/output).
   character(*), optional,        intent(in)    :: deprecated    !< Deprecation message ('' for none): warn when used (F13).
+  character(*), optional,        intent(in)    :: min           !< Minimum of the value (F05), checked by get.
+  character(*), optional,        intent(in)    :: max           !< Maximum of the value (F05), checked by get.
+  logical,      optional,        intent(in)    :: min_open      !< The minimum is excluded (default .false.).
+  logical,      optional,        intent(in)    :: max_open      !< The maximum is excluded (default .false.).
+  logical,      optional,        intent(in)    :: clamp         !< An out-of-range value becomes the bound (default .false.).
   character(*), optional,        intent(in)    :: act           !< CLA value action.
   character(*), optional,        intent(in)    :: def           !< Default value.
   character(*), optional,        intent(in)    :: nargs         !< Number of arguments consumed by CLA.
@@ -651,6 +656,11 @@ contains
                                                   if (present(writable     )) cla%writable        = writable
                                                   if (present(allow_dash   )) cla%allow_dash      = allow_dash
                                                   if (present(deprecated   )) cla%deprecated      = deprecated
+                                                  if (present(min          )) cla%range_min       = trim(adjustl(min))
+                                                  if (present(max          )) cla%range_max       = trim(adjustl(max))
+                                                  if (present(min_open     )) cla%min_open        = min_open
+                                                  if (present(max_open     )) cla%max_open        = max_open
+                                                  if (present(clamp        )) cla%clamp           = clamp
   cla%act             = action_store            ; if (present(act          )) cla%act             = trim(adjustl(Upper_Case(act)))
   if (cla%act == ACTION_ALTERNATE .and. .not.present(def)) then
     ! an alternate action is a flag (F16)

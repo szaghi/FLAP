@@ -71,7 +71,7 @@ values still takes the default: both change in v2.0.0 (see below).
   around. The suite passes with gfortran 13, 14, 15 and 16, and with FoBiS, CMake, fpm and make.
 - The fpm manifest pins FACE and PENF to the same commits as `fobos.lock`.
 
-## Coming in v2.0.0 (breaking)
+## v2.0.0 (breaking)
 
 - An explicitly empty value (`--opt ""`, `--opt=`, an empty `append` occurrence) is accepted as the empty string (it
   was `ERROR_VALUE_MISSING`, 14); a numeric option then fails its cast in `get`. An empty environment variable or
@@ -106,3 +106,10 @@ values still takes the default: both change in v2.0.0 (see below).
 - `add(..., deprecated=)` and `add_group(..., deprecated=)` warn when a deprecated option or command is used.
 - `act='alternate'` declares an auxiliary action (`--list-models`): `parse` returns `STATUS_ALTERNATE` and skips the
   value validation. The pairwise `exclude=` check now runs with the other value checks, after `--help`/`--version`.
+
+## v2.1.0 (additive)
+
+- `add(..., min=, max=, min_open=, max_open=, clamp=)` gives a numeric option a range, checked by `get` (see
+  [Advanced](./advanced#numeric-ranges)).
+- With real quad precision (`-D_R16P`), `get` into `real(R16P)` now converts in quad precision (it converted in single
+  precision, B35 of #125).

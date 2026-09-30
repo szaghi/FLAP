@@ -601,6 +601,8 @@ flowchart TD
   check_paths["check_paths"] --> errored["errored"]
   check_position_gaps["check_position_gaps"] --> errored["errored"]
   check_positional_consistency["check_positional_consistency"] --> errored["errored"]
+  check_range["check_range"] --> errored["errored"]
+  check_range_consistency["check_range_consistency"] --> errored["errored"]
   get_args_from_invocation["get_args_from_invocation"] --> errored["errored"]
   get_cla["get_cla"] --> errored["errored"]
   get_cla["get_cla"] --> errored["errored"]

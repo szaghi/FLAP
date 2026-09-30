@@ -60,6 +60,9 @@ positive values are **errors**. Existing values never change.
 | `27` | `ERROR_COUNT_INCONSISTENT` | Invalid count | A `count` option that is positional or has `nargs`, `envvar` or `choices` |
 | `28` | `ERROR_APPEND_INCONSISTENT` | Invalid append | An `append` option that is positional or has `nargs` or `envvar` |
 | `29` | `ERROR_APPEND_SCALAR_GET` | Scalar get of an append | An `append` option holds a list: read it with `get_varying` or into an array |
+| `30` | `ERROR_RANGE_DEFINITION` | Invalid range | A non-numeric bound, `min > max`, an empty open interval, a range on a flag; or `get` of a real that would clamp to an open bound |
+| `31` | `ERROR_OUT_OF_RANGE` | Value out of range | `get` of a value outside `min`/`max` (without `clamp`) |
+| `32` | `ERROR_RANGE_TYPE` | Range on a non-numeric get | `get` into a `character` or `logical` of an option with a range |
 | `33` | `ERROR_PATH_NOT_FOUND` | Path does not exist | `must_exist=`/`readable=` and the file is missing |
 | `34` | `ERROR_PATH_NOT_READABLE` | Path not readable | `readable=` and the file cannot be opened for reading (the message gives the reason) |
 | `35` | `ERROR_PATH_NOT_WRITABLE` | Path not writable | `writable=` and the existing file cannot be opened for writing |

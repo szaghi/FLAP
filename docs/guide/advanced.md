@@ -299,6 +299,31 @@ $ ./solver --mesh secret.grd    # error: option "--mesh": path "secret.grd" is n
 - **nvfortran 26.5:** opening a read-only file for writing succeeds (the error comes at the first write), so `writable`
   does not detect a read-only file with that compiler.
 
+## Numeric ranges
+
+`min=` and `max=` (strings, like `def=`) give a numeric option a range; `min_open=.true.`/`max_open=.true.` exclude the
+bound, `clamp=.true.` replaces an out-of-range value with the bound instead of failing:
+
+```fortran
+call cli%add(switch='--cfl', help='CFL number', required=.false., act='store', def='0.8', &
+             min='0', min_open=.true., max='1')                    ! (0, 1]
+call cli%add(switch='--threads', help='OpenMP threads', required=.false., act='store', def='1', &
+             min='1', max='256', clamp=.true.)
+```
+
+```shell
+$ ./solver --cfl 1.5      # get: value "1.5" of "--cfl" is out of range (0, 1]!  (ERROR_OUT_OF_RANGE, 31)
+$ ./solver --threads 999  # threads = 256 (clamped)
+```
+
+- The value is checked by `get`, after its conversion, in the kind of your variable, whatever its source (command line,
+  environment, configuration file, default); every element of a list is checked.
+- With `clamp`, an open integer bound clamps to the next integer inside (`bound + 1` / `bound - 1`); a real cannot be
+  clamped to an open bound: `get` reports `ERROR_RANGE_DEFINITION` (30) when it would have to.
+- An invalid range (a bound that is not a number, `min > max`, an empty open interval, a range on a flag) is
+  `ERROR_RANGE_DEFINITION` (30) at `add`; `get` into a `character` or `logical` is `ERROR_RANGE_TYPE` (32).
+- The help shows it: `range (0, 1]`.
+
 ## Deprecated options and commands — `deprecated`
 
 `add(..., deprecated='message')` and `add_group(..., deprecated='message')` mark an option or a command as deprecated
