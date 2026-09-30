@@ -121,5 +121,7 @@ values still takes the default: both change in v2.0.0 (see below).
   the hint).
 - `add(..., map=.true., map_keys=)` declares a `KEY=VALUE` option, read with `get_map` and `get_map_value` (F18); new
   errors 38–42. See [Key=value options](./arguments#key-value-options-map).
+- `cli%copy_options(to_group, from_group, switches)` copies option definitions between commands (F21); new error
+  `ERROR_COPY_POSITIONAL` (1009).
 - With real quad precision (`-D_R16P`), `get` into `real(R16P)` now converts in quad precision (it converted in single
   precision, B35 of #125).

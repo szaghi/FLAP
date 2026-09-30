@@ -55,6 +55,7 @@ type, extends(object), public :: command_line_interface
     procedure, public :: parse                           !< Parse Command Line Interfaces.
     procedure, public :: reset_parse                     !< Forget the result of a parse, keeping the definitions.
     procedure, public :: get_map                         !< Get the keys and values of a map option (F18).
+    procedure, public :: copy_options                    !< Copy the named options of a group into another (F21).
     procedure, public :: get_map_value                   !< Get the value of a key of a map option (F18).
     generic,   public :: get =>   &
                          get_cla, &
@@ -127,6 +128,7 @@ integer(I4P), parameter, public :: ERROR_USER                  = 1005 !< Applica
 integer(I4P), parameter, public :: ERROR_CONFIG_NOT_FOUND      = 1006 !< Required configuration file not found.
 integer(I4P), parameter, public :: ERROR_CONFIG_UNKNOWN_KEY    = 1007 !< Configuration file: unknown key or malformed line.
 integer(I4P), parameter, public :: ERROR_GROUP_ALIAS           = 1008 !< Alias of a command equal to a command or an alias.
+integer(I4P), parameter, public :: ERROR_COPY_POSITIONAL       = 1009 !< copy_options asked to copy a positional CLA.
 integer(I4P), parameter, public :: ERROR_ARGUMENT_RETRIEVAL    = 1012 !< A command line argument cannot be retrieved.
 
 contains
@@ -829,6 +831,7 @@ contains
       if (group_index >= 0 .and. group_index <= size(self%clasg, dim=1) - 1) gname = self%clasg(group_index)%group
     endif
     cla%envvar = envvar_name(prefix=self%auto_envvar_prefix, group=gname, switch=cla%switch)
+    cla%is_auto_envvar = .true.
     endsubroutine set_auto_envvar
   endsubroutine add
 
@@ -1972,6 +1975,129 @@ contains
   if (present(error)) error = self%error
   endsubroutine get_cla_list_varying_logical
 
+  subroutine copy_options(self, to_group, from_group, switches, pref, error)
+  !< Copy named options of a group (default the top level) into another group (F21 of #125): by value, every definition and
+  !< none of the runtime state, so each copy has its own value. Without switches, every named option but the builtins;
+  !< with switches (comma separated), those, all checked before any copy. A generated envvar (auto_envvar_prefix) is
+  !< generated again for the target group, an explicit one is copied verbatim. Errors: ERROR_MISSING_GROUP,
+  !< ERROR_MISSING_CLA, ERROR_COPY_POSITIONAL, and the consistency error of the target group (a switch it defines).
+  class(command_line_interface), intent(inout) :: self       !< CLI data.
+  character(*),                  intent(in)    :: to_group   !< Target group (command).
+  character(*), optional,        intent(in)    :: from_group !< Source group (command), default the top level.
+  character(*), optional,        intent(in)    :: switches   !< Switches to copy, comma separated (default all).
+  character(*), optional,        intent(in)    :: pref       !< Prefixing string.
+  integer(I4P), optional,        intent(out)   :: error      !< Error trapping flag.
+  integer(I4P), allocatable                    :: pick(:)    !< CLAs of the source to copy.
+  character(len=:), allocatable                :: rest       !< Switches not yet split.
+  character(len=:), allocatable                :: name       !< Current switch.
+  type(command_line_argument)                  :: cla        !< Copy.
+  integer(I4P)                                 :: gt         !< Target group.
+  integer(I4P)                                 :: gf         !< Source group.
+  integer(I4P)                                 :: a          !< Counter.
+  integer(I4P)                                 :: n          !< Number of CLAs to copy.
+  integer(I4P)                                 :: c          !< Position of the next comma.
+
+  self%error = 0
+  if (present(error)) error = 0
+  gt = self%group_index(to_group)
+  if (gt < 0) then
+    call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=to_group)
+    if (present(error)) error = self%error
+    return
+  endif
+  gf = 0
+  if (present(from_group)) then
+    gf = self%group_index(from_group)
+    if (gf < 0) then
+      call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=from_group)
+      if (present(error)) error = self%error
+      return
+    endif
+  endif
+  ! the CLAs to copy, all checked before any copy
+  n = self%clasg(gf)%Na
+  if (present(switches)) n = max(n, count(transfer(switches, 'a', len(switches)) == ',') + 1)
+  allocate(pick(n))
+  n = 0
+  if (present(switches)) then
+    rest = switches
+    do
+      c = index(rest, ',')
+      if (c > 0) then
+        name = trim(adjustl(rest(:c-1)))
+        rest = rest(c+1:)
+      else
+        name = trim(adjustl(rest))
+      endif
+      if (len(name) > 0) then
+        if (self%clasg(gf)%is_defined(switch=name, pos=a)) then
+          n = n + 1
+          pick(n) = a
+        else
+          if (is_positional_name(name)) then
+            call self%errored(pref=pref, error=ERROR_COPY_POSITIONAL, switch=name)
+          else
+            call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch=name)
+          endif
+          if (present(error)) error = self%error
+          return
+        endif
+      endif
+      if (c == 0) exit
+    enddo
+  else
+    do a=1, self%clasg(gf)%Na
+      if (self%clasg(gf)%cla(a)%is_positional) cycle
+      if (is_builtin(a)) cycle
+      n = n + 1
+      pick(n) = a
+    enddo
+  endif
+  ! copy by value (intrinsic assignment, E1), without the runtime state
+  do a=1, n
+    cla = self%clasg(gf)%cla(pick(a))
+    cla%is_passed = .false.
+    cla%source = SOURCE_NONE
+    cla%is_negated = .false.
+    cla%pair_passed = .false.
+    cla%error = 0
+    if (allocated(cla%val)) deallocate(cla%val)
+    if (allocated(cla%def)) cla%val = cla%def
+    if (cla%is_auto_envvar) cla%envvar = envvar_name(prefix=self%auto_envvar_prefix, group=self%clasg(gt)%group, &
+                                                     switch=cla%switch)
+    call self%clasg(gt)%add(pref=pref, cla=cla)
+    self%error = self%clasg(gt)%error
+    if (self%error /= 0) exit
+  enddo
+  if (present(error)) error = self%error
+  contains
+    function is_positional_name(name) result(positional)
+    !< Check if a name is the switch of a positional CLA of the source group (a positional is never matched by name).
+    character(*), intent(in) :: name       !< Name.
+    logical                  :: positional !< Check result.
+    integer(I4P)             :: p          !< Counter.
+
+    positional = .false.
+    do p=1, self%clasg(gf)%Na
+      if (.not.self%clasg(gf)%cla(p)%is_positional) cycle
+      if (.not.allocated(self%clasg(gf)%cla(p)%switch)) cycle
+      positional = trim(adjustl(self%clasg(gf)%cla(p)%switch)) == name
+      if (positional) return
+    enddo
+    endfunction is_positional_name
+
+    function is_builtin(i) result(builtin)
+    !< Check if a CLA of the source group is a builtin (--help, --version, --markdown, the hidden --).
+    integer(I4P), intent(in) :: i       !< Index of the CLA.
+    logical                  :: builtin !< Check result.
+
+    associate(x => self%clasg(gf)%cla(i))
+      builtin = x%act == ACTION_PRINT_HELP .or. x%act == ACTION_PRINT_VERS .or. x%act == ACTION_PRINT_MARK
+      if (.not.builtin .and. allocated(x%switch)) builtin = trim(adjustl(x%switch)) == '--'
+    endassociate
+    endfunction is_builtin
+  endsubroutine copy_options
+
   subroutine get_map(self, switch, keys, values, group, pref, args, error)
   !< Get the keys and values of a map option (F18 of #125), in the order given; passed pairs replace the default ones.
   class(command_line_interface), intent(inout) :: self      !< CLI data.
@@ -2284,8 +2410,9 @@ contains
   grouped_examples = .false.
   if (g>0) then ! usage of a specific command
     usaged = self%clasg(g)%usage(pref=prefd,no_header=no_headerd,markdown=markdownd)
-    if(allocated(self%clasg(g)%examples).and.(.not.no_examplesd)) then
-      usaged = usaged//print_examples(prefd, self%clasg(g)%examples)
+    ! the examples through the group methods: the gfortran 16 trunk miscompiles a read of them here
+    if(self%clasg(g)%has_examples().and.(.not.no_examplesd)) then
+      usaged = usaged//self%clasg(g)%examples_text(prefd)
       grouped_examples = .true.
     endif
   else ! usage of whole CLI
@@ -2589,6 +2716,9 @@ contains
       self%error_message = prefd//': to get an option value one of switch "name" or "position" must be provided!'
     case(ERROR_MISSING_GROUP)
       self%error_message = prefd//': ther is no group (command) named "'//trim(adjustl(group))//'"!'
+    case(ERROR_COPY_POSITIONAL)
+      self%error_message = prefd//': "'//trim(adjustl(switch))//'" is a positional argument: copy_options copies named '//&
+                           'options only!'
     case(ERROR_ARGUMENT_RETRIEVAL)
       self%error_message = prefd//': the command line argument number '//trim(str(position, .true.))//' cannot be retrieved!'
     case(ERROR_TOO_FEW_CLAS)

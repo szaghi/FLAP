@@ -21,7 +21,7 @@ use flap, only : command_line_interface,                                        
                  ERROR_M_EXCLUDE_SET, ERROR_M_EXCLUDE_SET_REQUIRED, ERROR_M_EXCLUDE_SET_DEFINITION,                               &
                  ERROR_MISSING_CLA, ERROR_MISSING_GROUP, ERROR_MISSING_SELECTION_CLA, ERROR_TOO_FEW_CLAS,                         &
                  ERROR_UNKNOWN_CLAS_IGNORED, ERROR_ARGUMENT_RETRIEVAL, ERROR_USER, ERROR_CONFIG_NOT_FOUND,                        &
-                 ERROR_CONFIG_UNKNOWN_KEY, ERROR_GROUP_ALIAS
+                 ERROR_CONFIG_UNKNOWN_KEY, ERROR_GROUP_ALIAS, ERROR_COPY_POSITIONAL
 use flap_test_utils, only : assert_equal, capture_close, capture_open
 use penf, only : I4P
 
@@ -109,6 +109,7 @@ contains
   call assert_equal(ERROR_CONFIG_NOT_FOUND,     1006_I4P,   'ERROR_CONFIG_NOT_FOUND')
   call assert_equal(ERROR_CONFIG_UNKNOWN_KEY,   1007_I4P,   'ERROR_CONFIG_UNKNOWN_KEY')
   call assert_equal(ERROR_GROUP_ALIAS,          1008_I4P,   'ERROR_GROUP_ALIAS')
+  call assert_equal(ERROR_COPY_POSITIONAL,      1009_I4P,   'ERROR_COPY_POSITIONAL')
   call assert_equal(ERROR_ARGUMENT_RETRIEVAL,   1012_I4P,   'ERROR_ARGUMENT_RETRIEVAL')
   endsubroutine check_values
 

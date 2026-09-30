@@ -80,7 +80,8 @@ use flap_command_line_interface_t, only : command_line_interface,      &
                                           ERROR_USER,                  &
                                          ERROR_CONFIG_NOT_FOUND,      &
                                          ERROR_CONFIG_UNKNOWN_KEY,    &
-                                         ERROR_GROUP_ALIAS
+                                         ERROR_GROUP_ALIAS,           &
+                                         ERROR_COPY_POSITIONAL
 
 implicit none
 private
@@ -169,4 +170,5 @@ public :: ERROR_USER
 public :: ERROR_CONFIG_NOT_FOUND
 public :: ERROR_CONFIG_UNKNOWN_KEY
 public :: ERROR_GROUP_ALIAS
+public :: ERROR_COPY_POSITIONAL
 endmodule flap

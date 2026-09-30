@@ -52,6 +52,7 @@ graph LR
 - [get_cla_list_varying_I2P](#get-cla-list-varying-i2p)
 - [get_cla_list_varying_I1P](#get-cla-list-varying-i1p)
 - [get_cla_list_varying_logical](#get-cla-list-varying-logical)
+- [copy_options](#copy-options)
 - [get_map](#get-map)
 - [get_map_value](#get-map-value)
 - [get_cla_list_varying_char](#get-cla-list-varying-char)
@@ -99,6 +100,7 @@ graph LR
 | `ERROR_CONFIG_NOT_FOUND` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Required configuration file not found. |
 | `ERROR_CONFIG_UNKNOWN_KEY` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Configuration file: unknown key or malformed line. |
 | `ERROR_GROUP_ALIAS` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Alias of a command equal to a command or an alias. |
+| `ERROR_COPY_POSITIONAL` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | copy_options asked to copy a positional CLA. |
 | `ERROR_ARGUMENT_RETRIEVAL` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | A command line argument cannot be retrieved. |
 
 ## Derived Types
@@ -183,6 +185,7 @@ classDiagram
 | `parse` |  | Parse Command Line Interfaces. |
 | `reset_parse` |  | Forget the result of a parse, keeping the definitions. |
 | `get_map` |  | Get the keys and values of a map option (F18). |
+| `copy_options` |  | Copy the named options of a group into another (F21). |
 | `get_map_value` |  | Get the value of a key of a map option (F18). |
 | `get` |  | Get CLA value(s) from CLAs list parsed. |
 | `get_varying` |  | Get CLA value(s) from CLAs list parsed, varying size list. |
@@ -540,6 +543,7 @@ subroutine add(self, pref, group, group_index, switch, switch_ab, switch_neg, he
 ```mermaid
 flowchart TD
   add["add"] --> add["add"]
+  copy_options["copy_options"] --> add["add"]
   ensure_builtins["ensure_builtins"] --> add["add"]
   add["add"] --> add["add"]
   add["add"] --> add_group["add_group"]
@@ -1213,6 +1217,43 @@ flowchart TD
   style get_cla_list_varying_logical fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
+### copy_options
+
+Copy named options of a group (default the top level) into another group (F21 of #125): by value, every definition and
+ none of the runtime state, so each copy has its own value. Without switches, every named option but the builtins;
+ with switches (comma separated), those, all checked before any copy. A generated envvar (auto_envvar_prefix) is
+ generated again for the target group, an explicit one is copied verbatim. Errors: ERROR_MISSING_GROUP,
+ ERROR_MISSING_CLA, ERROR_COPY_POSITIONAL, and the consistency error of the target group (a switch it defines).
+
+```fortran
+subroutine copy_options(self, to_group, from_group, switches, pref, error)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | inout |  | CLI data. |
+| `to_group` | character(len=*) | in |  | Target group (command). |
+| `from_group` | character(len=*) | in | optional | Source group (command), default the top level. |
+| `switches` | character(len=*) | in | optional | Switches to copy, comma separated (default all). |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+| `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | optional | Error trapping flag. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  copy_options["copy_options"] --> add["add"]
+  copy_options["copy_options"] --> envvar_name["envvar_name"]
+  copy_options["copy_options"] --> errored["errored"]
+  copy_options["copy_options"] --> group_index["group_index"]
+  copy_options["copy_options"] --> is_builtin["is_builtin"]
+  copy_options["copy_options"] --> is_defined["is_defined"]
+  copy_options["copy_options"] --> is_positional_name["is_positional_name"]
+  style copy_options fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
 ### get_map
 
 Get the keys and values of a map option (F18 of #125), in the order given; passed pairs replace the default ones.
@@ -1582,6 +1623,7 @@ flowchart TD
   check_range["check_range"] --> errored["errored"]
   check_range_consistency["check_range_consistency"] --> errored["errored"]
   check_switch_neg_consistency["check_switch_neg_consistency"] --> errored["errored"]
+  copy_options["copy_options"] --> errored["errored"]
   get_args_from_invocation["get_args_from_invocation"] --> errored["errored"]
   get_cla["get_cla"] --> errored["errored"]
   get_cla["get_cla"] --> errored["errored"]
@@ -1761,6 +1803,7 @@ function envvar_name(prefix, group, switch) result(name)
 
 ```mermaid
 flowchart TD
+  copy_options["copy_options"] --> envvar_name["envvar_name"]
   envvar_name["envvar_name"] --> replace_all["replace_all"]
   envvar_name["envvar_name"] --> upper_case["upper_case"]
   style envvar_name fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -1872,6 +1915,7 @@ function group_index(self, name) result(g)
 ```mermaid
 flowchart TD
   add_group["add_group"] --> group_index["group_index"]
+  copy_options["copy_options"] --> group_index["group_index"]
   is_defined_group["is_defined_group"] --> group_index["group_index"]
   load_config["load_config"] --> group_index["group_index"]
   set_mutually_exclusive_switches["set_mutually_exclusive_switches"] --> group_index["group_index"]
@@ -1965,6 +2009,7 @@ flowchart TD
   builtins_missing["builtins_missing"] --> is_defined["is_defined"]
   check["check"] --> is_defined["is_defined"]
   check_exclusive_sets["check_exclusive_sets"] --> is_defined["is_defined"]
+  copy_options["copy_options"] --> is_defined["is_defined"]
   ensure_builtins["ensure_builtins"] --> is_defined["is_defined"]
   exclusive_set_signature["exclusive_set_signature"] --> is_defined["is_defined"]
   get_cla["get_cla"] --> is_defined["is_defined"]
@@ -2260,6 +2305,8 @@ function usage_core(self, g, pref, no_header, no_examples, no_epilog, markdown) 
 ```mermaid
 flowchart TD
   usage["usage"] --> usage_core["usage_core"]
+  usage_core["usage_core"] --> examples_text["examples_text"]
+  usage_core["usage_core"] --> has_examples["has_examples"]
   usage_core["usage_core"] --> names["names"]
   usage_core["usage_core"] --> print_examples["print_examples"]
   usage_core["usage_core"] --> signature["signature"]

@@ -43,6 +43,8 @@ graph LR
 - [finalize](#finalize)
 - [is_named](#is-named)
 - [has_alias](#has-alias)
+- [has_examples](#has-examples)
+- [examples_text](#examples-text)
 - [name_count](#name-count)
 - [name_of](#name-of)
 - [names](#names)
@@ -154,6 +156,8 @@ classDiagram
 | `has_alias` |  | Check if a name is an alias of the group (command). |
 | `names` |  | Name and aliases of the group (command), separated. |
 | `name_count` |  | Number of names of the group (command): 1 + aliases. |
+| `has_examples` |  | Check if the group (command) has examples. |
+| `examples_text` |  | Examples of the group (command), for its help. |
 | `name_of` |  | Name (1) or alias (2, ...) of the group (command). |
 | `check` |  | Check data consistency. |
 | `check_position_gaps` |  | Check that the declared positions have no gap. |
@@ -532,6 +536,7 @@ subroutine add(self, pref, cla)
 ```mermaid
 flowchart TD
   add["add"] --> add["add"]
+  copy_options["copy_options"] --> add["add"]
   ensure_builtins["ensure_builtins"] --> add["add"]
   add["add"] --> check["check"]
   style add fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -650,6 +655,7 @@ flowchart TD
   check_range["check_range"] --> errored["errored"]
   check_range_consistency["check_range_consistency"] --> errored["errored"]
   check_switch_neg_consistency["check_switch_neg_consistency"] --> errored["errored"]
+  copy_options["copy_options"] --> errored["errored"]
   get_args_from_invocation["get_args_from_invocation"] --> errored["errored"]
   get_cla["get_cla"] --> errored["errored"]
   get_cla["get_cla"] --> errored["errored"]
@@ -822,6 +828,59 @@ flowchart TD
   is_named["is_named"] --> has_alias["has_alias"]
   has_alias["has_alias"] --> same["same"]
   style has_alias fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### has_examples
+
+Check if the group (command) has examples.
+
+**Attributes**: pure
+
+**Returns**: `logical`
+
+```fortran
+function has_examples(self) result(has)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_arguments_group](/api/src/lib/flap_command_line_arguments_group_t#command-line-arguments-group)) | in |  | CLAsG data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  usage_core["usage_core"] --> has_examples["has_examples"]
+  style has_examples fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### examples_text
+
+Return the examples of the group (command) for its help: a blank line, 'Examples:', one example per line.
+
+**Attributes**: pure
+
+**Returns**: `character(len=:)`
+
+```fortran
+function examples_text(self, prefd) result(text)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_arguments_group](/api/src/lib/flap_command_line_arguments_group_t#command-line-arguments-group)) | in |  | CLAsG data. |
+| `prefd` | character(len=*) | in |  | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  usage_core["usage_core"] --> examples_text["examples_text"]
+  style examples_text fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### name_count
@@ -1061,6 +1120,7 @@ flowchart TD
   builtins_missing["builtins_missing"] --> is_defined["is_defined"]
   check["check"] --> is_defined["is_defined"]
   check_exclusive_sets["check_exclusive_sets"] --> is_defined["is_defined"]
+  copy_options["copy_options"] --> is_defined["is_defined"]
   ensure_builtins["ensure_builtins"] --> is_defined["is_defined"]
   exclusive_set_signature["exclusive_set_signature"] --> is_defined["is_defined"]
   get_cla["get_cla"] --> is_defined["is_defined"]

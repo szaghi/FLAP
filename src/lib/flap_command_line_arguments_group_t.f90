@@ -67,6 +67,8 @@ type, extends(object) :: command_line_arguments_group
     procedure, public :: has_alias             !< Check if a name is an alias of the group (command).
     procedure, public :: names                 !< Name and aliases of the group (command), separated.
     procedure, public :: name_count            !< Number of names of the group (command): 1 + aliases.
+    procedure, public :: has_examples          !< Check if the group (command) has examples.
+    procedure, public :: examples_text         !< Examples of the group (command), for its help.
     procedure, public :: name_of               !< Name (1) or alias (2, ...) of the group (command).
     procedure, public :: check                 !< Check data consistency.
     procedure, public :: check_position_gaps   !< Check that the declared positions have no gap.
@@ -181,6 +183,28 @@ contains
     endif
   enddo
   endsubroutine check_maps
+
+  pure function has_examples(self) result(has)
+  !< Check if the group (command) has examples.
+  class(command_line_arguments_group), intent(in) :: self !< CLAsG data.
+  logical                                         :: has  !< Check result.
+
+  has = allocated(self%examples)
+  endfunction has_examples
+
+  pure function examples_text(self, prefd) result(text)
+  !< Return the examples of the group (command) for its help: a blank line, 'Examples:', one example per line.
+  class(command_line_arguments_group), intent(in) :: self  !< CLAsG data.
+  character(*),                        intent(in) :: prefd !< Prefixing string.
+  character(len=:), allocatable                   :: text  !< Examples.
+  integer(I4P)                                    :: e     !< Counter.
+
+  text = new_line('a')//new_line('a')//prefd//'Examples:'
+  if (.not.allocated(self%examples)) return
+  do e=1, size(self%examples, dim=1)
+    text = text//new_line('a')//prefd//'   '//trim(self%examples(e)%s)
+  enddo
+  endfunction examples_text
 
   pure function name_count(self) result(n)
   !< Return the number of names of the group (command): its name and its aliases (F19).
