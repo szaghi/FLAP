@@ -55,16 +55,16 @@ and use it to clone and build in one step:
 ```bash
 git clone https://github.com/szaghi/FLAP
 cd FLAP
-git submodule update --init
+fobis fetch            # PENF and FACE into src/third_party (pinned by fobos.lock)
 
 # static library (release)
-FoBiS.py build -mode static-gnu
+fobis build --mode static-gnu
 
 # shared library (release)
-FoBiS.py build -mode shared-gnu
+fobis build --mode shared-gnu
 
 # debug variants
-FoBiS.py build -mode static-gnu-debug
+fobis build --mode static-gnu-debug
 ```
 
 ## Option 4 — GNU Make
@@ -90,8 +90,8 @@ cmake --build .
 ctest
 ```
 
-> **NVFortran note:** pass `-Mbackslash` to work around a quoted-string issue:
-> `cmake -D CMAKE_Fortran_FLAGS="-Mbackslash" FLAP`
+> **NVFortran note:** FLAP builds with nvfortran as is (since v2.2.0 `-Mbackslash` is no longer needed; passing it is
+> harmless).
 >
 > nvfortran 26.5 miscompiles a variable passed to `get` (or any `class(*)` argument) from **more than one call site**
 > of the same scope, including an internal procedure using it by host association: a call executed before the first

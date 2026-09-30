@@ -70,8 +70,8 @@ See [`src/tests/`](src/tests/) for more examples including nested subcommands, m
 
 ```bash
 git clone https://github.com/szaghi/FLAP && cd FLAP
-FoBiS.py fetch                        # fetch PENF, FACE
-FoBiS.py build -mode static-gnu       # build static library
+fobis fetch                           # fetch PENF, FACE
+fobis build --mode static-gnu         # build static library
 ```
 
 **As a project dependency** — declare FLAP in your `fobos` and run `fetch`:
@@ -83,8 +83,8 @@ FLAP = https://github.com/szaghi/FLAP
 ```
 
 ```bash
-FoBiS.py fetch           # fetch and build
-FoBiS.py fetch --update  # re-fetch and rebuild
+fobis fetch              # fetch and build
+fobis fetch --update     # re-fetch and rebuild
 ```
 
 ### fpm

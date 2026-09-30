@@ -20,7 +20,8 @@ is welcome. The project follows a KISS (Keep It Simple and Stupid) philosophy.
    ```bash
    git checkout -b fix/master/my_contribution master
    ```
-3. Test your changes with `FoBiS.py build -f src/tests/fobos && bash scripts/run_tests.sh`
+3. Test your changes with `fobis build --mode tests-gnu-debug && bash scripts/run_tests.sh` (run `fobis fetch` once
+   first)
 4. Check for unnecessary whitespace: `git diff --check`
 5. Submit a pull request with a clear commit message
 

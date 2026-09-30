@@ -194,6 +194,27 @@ call cli%print_usage()
 This is equivalent to the user passing `--help`, but it does not trigger program exit —
 you control the flow.
 
+## Colours
+
+Help and error messages can be coloured with ANSI escape sequences (through the FACE library). Nothing is coloured
+unless you ask:
+
+```fortran
+call cli%init(description='my program', error_color='red', error_style='bold_on')
+call cli%add(switch='--input', switch_ab='-i', help='input file', required=.true., act='store', &
+             help_color='blue', help_style='italics_on')
+```
+
+| Keyword | Of | Colours |
+|---|---|---|
+| `error_color`, `error_style` | `cli%init` | the `error` label of every error message and the `warning` label of the warnings |
+| `help_color`, `help_style` | `cli%add` | the switch names of that option in the usage line and in the help |
+
+Colours are FACE names (`red`, `green`, `blue`, `yellow`, `cyan`, `magenta`, `white`, `black`, and their `_intense`
+variants); styles are `bold_on`, `italics_on`, `underline_on`, `inverse_on`, `strikethrough_on` and more (see the
+FACE documentation). An unknown name is ignored. The interactive menus take their own colours (see
+[Interactive Menus](./menu#colours)).
+
 ## Summary of export methods
 
 | Method | Output | Typical filename |
