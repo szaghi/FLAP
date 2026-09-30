@@ -109,6 +109,12 @@ $(DOBJ)flap_config_m.o: src/lib/flap_config_m.f90 \
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 
+$(DOBJ)flap_menu_t.o: src/lib/flap_menu_t.F90 \
+	$(DOBJ)flap_utils_m.o \
+	$(DOBJ)penf.o
+	@echo $(COTEXT)
+	@$(FC) $(OPTSC)  $< -o $@
+
 $(DOBJ)flap_utils_m.o: src/lib/flap_utils_m.f90 \
 	$(DOBJ)penf.o
 	@echo $(COTEXT)
@@ -132,7 +138,8 @@ $(DOBJ)flap_object_t.o: src/lib/flap_object_t.F90 \
 $(DOBJ)flap.o: src/lib/flap.f90 \
 	$(DOBJ)flap_command_line_argument_t.o \
 	$(DOBJ)flap_command_line_arguments_group_t.o \
-	$(DOBJ)flap_command_line_interface_t.o
+	$(DOBJ)flap_command_line_interface_t.o \
+	$(DOBJ)flap_menu_t.o
 	@echo $(COTEXT)
 	@$(FC) $(OPTSC)  $< -o $@
 

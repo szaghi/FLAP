@@ -22,6 +22,7 @@ graph LR
 - [list_items](#list-items)
 - [list_push](#list-push)
 - [read_env](#read-env)
+- [read_line](#read-line)
 - [tokenize](#tokenize)
 - [split_command_line](#split-command-line)
 - [write_text](#write-text)
@@ -170,6 +171,34 @@ flowchart TD
   parse["parse"] --> read_env["read_env"]
   resolve_values["resolve_values"] --> read_env["read_env"]
   style read_env fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### read_line
+
+Read a whole line of any length (non-advancing reads); a last line without line end is a line.
+
+ `iostat` is 0 for a line, an end-of-file code (`is_iostat_end`) at the end of the input, positive for a read error.
+
+```fortran
+subroutine read_line(lun, line, iostat, iomsg)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `lun` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in |  | Unit. |
+| `line` | character(len=:) | out | allocatable | Line. |
+| `iostat` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out |  | I/O status: 0, end of file, or an error. |
+| `iomsg` | character(len=*) | out | optional | I/O message of an error. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  load["load"] --> read_line["read_line"]
+  run_single["run_single"] --> read_line["read_line"]
+  style read_line fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### tokenize

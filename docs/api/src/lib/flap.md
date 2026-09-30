@@ -16,4 +16,5 @@ graph LR
   flap["flap"] --> flap_command_line_argument_t["flap_command_line_argument_t"]
   flap["flap"] --> flap_command_line_arguments_group_t["flap_command_line_arguments_group_t"]
   flap["flap"] --> flap_command_line_interface_t["flap_command_line_interface_t"]
+  flap["flap"] --> flap_menu_t["flap_menu_t"]
 ```

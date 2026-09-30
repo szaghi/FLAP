@@ -6,7 +6,7 @@ module flap_config_m
 !< the top level, section ''); blank lines and lines starting with '#' or ';' are comments; an inline comment starts at a
 !< '#' or ';' preceded by a blank; one pair of quotes (' or ") around a value is stripped, and a quoted value keeps its '#'
 !< and ';'. Lines have any length. Any other line is malformed: its number is recorded.
-use flap_utils_m, only : flap_string
+use flap_utils_m, only : flap_string, read_line
 use penf
 
 implicit none
@@ -164,28 +164,6 @@ contains
     endif
   enddo
   endsubroutine lookup
-
-  subroutine read_line(lun, line, iostat)
-  !< Read a whole line of any length (non-advancing reads); a last line without line end is a line.
-  integer(I4P),                  intent(in)  :: lun    !< Unit.
-  character(len=:), allocatable, intent(out) :: line   !< Line.
-  integer(I4P),                  intent(out) :: iostat !< I/O status: 0, or end of file.
-  character(256)                             :: chunk  !< Chunk.
-  integer(I4P)                               :: size_  !< Characters read.
-
-  line = ''
-  do
-    read(lun, '(A)', advance='no', iostat=iostat, size=size_) chunk
-    line = line//chunk(1:size_)
-    if (is_iostat_eor(iostat)) then
-      iostat = 0
-      return
-    elseif (iostat /= 0) then
-      if (is_iostat_end(iostat) .and. len(line) > 0) iostat = 0
-      return
-    endif
-  enddo
-  endsubroutine read_line
 
   pure function tabs_to_blanks(string) result(blanked)
   !< Return a string with its tabs replaced by blanks.

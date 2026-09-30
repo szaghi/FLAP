@@ -47,6 +47,11 @@ FLAP can export your CLI definition in several formats with a single call:
 | `cli%save_powershell_completion(powershell_file)` | PowerShell tab-completion script |
 | `cli%save_usage_to_markdown(markdown_file)` | Markdown usage documentation |
 
+## Interactive Menus
+
+An optional `menu` type asks the user to pick one of several numbered options and returns its index; it reads any unit,
+so it also works on answers from a file, and it never blocks a batch job (see [Interactive Menus](./menu)).
+
 ## The Four-Step Pattern
 
 Every FLAP program follows the same four steps:
@@ -80,6 +85,7 @@ if (error /= 0) stop
 
 ```
 flap.f90                               ← public interface (use this in consuming code)
+├── flap_menu_t.F90                    ← interactive menus (optional; the parser never uses it)
 └── flap_command_line_interface_t.F90  ← main CLI type
     ├── flap_command_line_arguments_group_t.f90  ← groups / subcommands
     │   └── flap_command_line_argument_t.F90     ← individual argument

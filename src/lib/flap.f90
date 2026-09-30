@@ -86,6 +86,11 @@ use flap_command_line_interface_t, only : command_line_interface,      &
                                          ERROR_COPY_POSITIONAL,       &
                                          ERROR_COMPLETION_SHELL,      &
                                          ERROR_COMPLETION_INSTALL
+use flap_menu_t, only : menu,                   &
+                        ERROR_MENU_INVALID,     &
+                        ERROR_MENU_NO_RESPONSE, &
+                        ERROR_MENU_EOF,         &
+                        ERROR_MENU_DEFINITION
 
 implicit none
 private
@@ -93,6 +98,7 @@ private
 public :: command_line_argument
 public :: command_line_arguments_group
 public :: command_line_interface
+public :: menu
 ! constants: the single public surface of the codes registry (issue #125, section 5)
 ! statuses (negative): returned by parse, never errors
 public :: STATUS_PRINT_V
@@ -179,4 +185,9 @@ public :: ERROR_GROUP_ALIAS
 public :: ERROR_COPY_POSITIONAL
 public :: ERROR_COMPLETION_SHELL
 public :: ERROR_COMPLETION_INSTALL
+! errors 2000-2099: menu (flap_menu_t, never used by the parser)
+public :: ERROR_MENU_INVALID
+public :: ERROR_MENU_NO_RESPONSE
+public :: ERROR_MENU_EOF
+public :: ERROR_MENU_DEFINITION
 endmodule flap

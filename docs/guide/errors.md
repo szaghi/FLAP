@@ -102,6 +102,10 @@ positive values are **errors**. Existing values never change.
 | `1010` | `ERROR_COMPLETION_SHELL` | Unknown completion shell | `--show-completion`/`--install-completion` with a shell other than bash, zsh, fish, powershell, or none given and `$SHELL` unset; `--install-completion powershell` (install it by hand) |
 | `1011` | `ERROR_COMPLETION_INSTALL` | Completion not installed | `$HOME` unset, or the script or the rc file cannot be written (the message carries the I/O error; for fish, `~/.config/fish` must exist) |
 | `1012` | `ERROR_ARGUMENT_RETRIEVAL` | A command line argument cannot be read | `get_command_argument` failed (processor error; not expected in practice) |
+| `2001` | `ERROR_MENU_INVALID` | Invalid menu answer | Not one of the numbers shown, or unreadable (see [Interactive Menus](./menu#errors)) |
+| `2004` | `ERROR_MENU_NO_RESPONSE` | Empty menu answer | The user just pressed Enter |
+| `2005` | `ERROR_MENU_EOF` | End of input in a menu | Standard input at its end (`/dev/null`, a batch job): no answer can come |
+| `2006` | `ERROR_MENU_DEFINITION` | Invalid menu | `run` on a menu without options, `add_option` with an empty text |
 
 The first two group codes are named `ERROR_GROUP_*` in the `flap` module; inside the group module they are
 `ERROR_CONSISTENCY` and `ERROR_M_EXCLUDE`, which would clash with the argument-level `ERROR_M_EXCLUDE` (`9`).

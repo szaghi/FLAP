@@ -18,6 +18,7 @@ public :: list_items
 public :: list_join
 public :: list_push
 public :: read_env
+public :: read_line
 public :: replace
 public :: replace_all
 public :: split_command_line
@@ -157,6 +158,35 @@ contains
   found = status == 0
   if (.not.found) value = ''
   endsubroutine read_env
+
+  subroutine read_line(lun, line, iostat, iomsg)
+  !< Read a whole line of any length (non-advancing reads); a last line without line end is a line.
+  !<
+  !< `iostat` is 0 for a line, an end-of-file code (`is_iostat_end`) at the end of the input, positive for a read error.
+  integer(I4P),                  intent(in)            :: lun    !< Unit.
+  character(len=:), allocatable, intent(out)           :: line   !< Line.
+  integer(I4P),                  intent(out)           :: iostat !< I/O status: 0, end of file, or an error.
+  character(*),                  intent(out), optional :: iomsg  !< I/O message of an error.
+  character(256)                                       :: chunk  !< Chunk.
+  character(256)                                       :: msg    !< I/O message.
+  integer(I4P)                                         :: size_  !< Characters read.
+
+  line = ''
+  msg = ''
+  if (present(iomsg)) iomsg = ''
+  do
+    read(lun, '(A)', advance='no', iostat=iostat, iomsg=msg, size=size_) chunk
+    line = line//chunk(1:size_)
+    if (is_iostat_eor(iostat)) then
+      iostat = 0
+      return
+    elseif (iostat /= 0) then
+      if (is_iostat_end(iostat) .and. len(line) > 0) iostat = 0
+      if (iostat > 0 .and. present(iomsg)) iomsg = trim(msg)
+      return
+    endif
+  enddo
+  endsubroutine read_line
 
   pure function replace(string, substring, restring) result(newstring)
   !< Replace substring (only first occurrence) into a string.

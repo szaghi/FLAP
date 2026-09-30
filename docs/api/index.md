@@ -13,6 +13,7 @@ Auto-generated from Fortran source doc comments using [FORMAL](https://github.co
 - [flap_command_line_arguments_group_t](/api/src/lib/flap_command_line_arguments_group_t)
 - [flap_command_line_interface_t](/api/src/lib/flap_command_line_interface_t)
 - [flap_config_m](/api/src/lib/flap_config_m)
+- [flap_menu_t](/api/src/lib/flap_menu_t)
 - [flap_object_t](/api/src/lib/flap_object_t)
 - [flap_utils_m](/api/src/lib/flap_utils_m)
 

@@ -24,6 +24,10 @@
         "link": "/api/src/lib/flap_config_m"
       },
       {
+        "text": "flap_menu_t",
+        "link": "/api/src/lib/flap_menu_t"
+      },
+      {
         "text": "flap_object_t",
         "link": "/api/src/lib/flap_object_t"
       },

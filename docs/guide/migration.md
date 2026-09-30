@@ -107,6 +107,12 @@ values still takes the default: both change in v2.0.0 (see below).
 - `act='alternate'` declares an auxiliary action (`--list-models`): `parse` returns `STATUS_ALTERNATE` and skips the
   value validation. The pairwise `exclude=` check now runs with the other value checks, after `--help`/`--version`.
 
+## v2.3.0 (additive)
+
+- A new, optional module for interactive menus (F23): `type(menu)` with `init`, `add_option` and `run`, exported by
+  `flap`; errors 2001, 2004, 2005, 2006 (see [Interactive Menus](./menu)). The parser does not use it: nothing changes
+  for existing programs.
+
 ## v2.2.0 (additive)
 
 - `add(..., metavar='FILE')` names the value in the usage, help, man page and Markdown (F12); the default stays `value`.

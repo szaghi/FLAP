@@ -26,7 +26,6 @@ graph LR
 - [config_file](#config-file)
 - [load](#load)
 - [lookup](#lookup)
-- [read_line](#read-line)
 - [tabs_to_blanks](#tabs-to-blanks)
 
 ## Derived Types
@@ -109,30 +108,6 @@ subroutine lookup(self, section, key, value, found)
 flowchart TD
   resolve_values["resolve_values"] --> lookup["lookup"]
   style lookup fill:#3e63dd,stroke:#99b,stroke-width:2px
-```
-
-### read_line
-
-Read a whole line of any length (non-advancing reads); a last line without line end is a line.
-
-```fortran
-subroutine read_line(lun, line, iostat)
-```
-
-**Arguments**
-
-| Name | Type | Intent | Attributes | Description |
-|------|------|--------|------------|-------------|
-| `lun` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in |  | Unit. |
-| `line` | character(len=:) | out | allocatable | Line. |
-| `iostat` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out |  | I/O status: 0, or end of file. |
-
-**Call graph**
-
-```mermaid
-flowchart TD
-  load["load"] --> read_line["read_line"]
-  style read_line fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ## Functions
