@@ -93,6 +93,7 @@ type, extends(object) :: command_line_argument
     procedure, public :: check                          !< Check data consistency.
     procedure, public :: is_required_passed             !< Check if required CLA is passed.
     procedure, public :: has_value                      !< Check if the value is given by the user (explicit source).
+    procedure, public :: set_env_value                  !< Set the value read from the environment variable.
     procedure, public :: match_token                    !< Check if a command line token names this CLA.
     procedure, public :: match_inline_token             !< Check a token also as NAME=VALUE.
     procedure, public :: set_inline_value               !< Set the value given inline (NAME=VALUE).
@@ -268,6 +269,26 @@ contains
 
   has_value = self%source < SOURCE_DEFAULT
   endfunction has_value
+
+  subroutine set_env_value(self, value)
+  !< Set the value read from the environment variable (source SOURCE_ENVIRONMENT, F07 of #125).
+  !<
+  !< A flag (store_true/store_false) takes the variable as its value: 1/0, true/false, t/f, yes/no, y/n, on/off, in any
+  !< case (click's set); anything else is kept, so that get reports ERROR_CASTING_LOGICAL.
+  class(command_line_argument), intent(inout) :: self  !< CLA data.
+  character(*),                 intent(in)    :: value !< Value of the variable.
+
+  self%val = trim(adjustl(value))
+  if (self%act == ACTION_STORE_TRUE .or. self%act == ACTION_STORE_FALSE) then
+    select case(upper_case(self%val))
+    case('1', 'TRUE', 'T', 'YES', 'Y', 'ON')
+      self%val = '.true.'
+    case('0', 'FALSE', 'F', 'NO', 'N', 'OFF')
+      self%val = '.false.'
+    endselect
+  endif
+  self%source = SOURCE_ENVIRONMENT
+  endsubroutine set_env_value
 
   pure function match_token(self, token) result(match)
   !< Check if a command line token names this CLA: the one matcher of switch names (decision D1 of #125).
@@ -820,7 +841,8 @@ contains
                            'has "envvar" value that is not allowed for positional option!'
     case(ERROR_ENVVAR_NOT_STORE)
       self%error_message = prefd//': named option "'//trim(adjustl(self%switch))//&
-                           '" is an envvar with action different from "'//action_store//'" that is not allowed!'
+                           '" is an envvar with action different from "'//action_store//'", "'//action_store_true//'" and "'//&
+                           action_store_false//'" that is not allowed!'
     case(ERROR_ENVVAR_NARGS)
       self%error_message = prefd//': named option "'//trim(adjustl(self%switch))//&
                            '" is an envvar that is not allowed for list valued option!'
@@ -905,7 +927,7 @@ contains
       call self%errored(pref=pref, error=ERROR_ENVVAR_NOT_STORE)
       return
     else
-      if (self%act/=action_store) then
+      if (self%act/=action_store.and.self%act/=action_store_true.and.self%act/=action_store_false) then
         call self%errored(pref=pref, error=ERROR_ENVVAR_NOT_STORE)
         return
       endif
@@ -1140,6 +1162,7 @@ contains
   class(command_line_argument), intent(inout) :: self  !< CLA data.
   class(*),                     intent(inout) :: val   !< CLA value.
   character(*), optional,       intent(in)    :: pref  !< Prefixing string.
+  character(len=:), allocatable               :: buffer !< Stored value of a flag.
 
   if (.not.self%is_required_passed(pref=pref)) return
   if (self%act==action_store.or.self%act==action_store_star) then
@@ -1155,35 +1178,39 @@ contains
     ! the number of occurrences, or the default when not passed
     call self%get_cla_from_buffer(buffer=self%stored_list(), val=val, pref=pref)
   elseif (self%act==action_store_true) then
-    if (self%has_value()) then
+    if (self%source == SOURCE_COMMANDLINE) then ! a flag passed on the command line
       select type(val)
       type is(logical)
         val = .true.
       class default
         call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
       endselect
-    elseif (allocated(self%def)) then
+    elseif (self%has_value().or.allocated(self%def)) then
+      ! from the environment (normalized by set_env_value) or the default
       select type(val)
       type is(logical)
-        read(self%def, *, iostat=self%error)val
-        if (self%error/=0) call self%errored(pref=pref, error=ERROR_CASTING_LOGICAL, log_value=self%def)
+        buffer = self%stored_list()
+        read(buffer, *, iostat=self%error)val
+        if (self%error/=0) call self%errored(pref=pref, error=ERROR_CASTING_LOGICAL, log_value=buffer)
       class default
         call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
       endselect
     endif
   elseif (self%act==action_store_false) then
-    if (self%has_value()) then
+    if (self%source == SOURCE_COMMANDLINE) then ! a flag passed on the command line
       select type(val)
       type is(logical)
         val = .false.
       class default
         call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
       endselect
-    elseif (allocated(self%def)) then
+    elseif (self%has_value().or.allocated(self%def)) then
+      ! from the environment (normalized by set_env_value) or the default
       select type(val)
       type is(logical)
-        read(self%def, *, iostat=self%error)val
-        if (self%error/=0) call self%errored(pref=pref, error=ERROR_CASTING_LOGICAL, log_value=self%def)
+        buffer = self%stored_list()
+        read(buffer, *, iostat=self%error)val
+        if (self%error/=0) call self%errored(pref=pref, error=ERROR_CASTING_LOGICAL, log_value=buffer)
       class default
         call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
       endselect
@@ -1240,7 +1267,7 @@ contains
   if (self%act==action_store.or.self%act==action_append) then
     call self%get_cla_list_from_buffer(buffer=self%stored_list(), val=val, pref=pref)
   elseif (self%act==action_store_true) then
-    if (self%has_value()) then
+    if (self%source == SOURCE_COMMANDLINE) then ! a flag passed on the command line
       select type(val)
       type is(logical)
         val = .true.
@@ -1256,7 +1283,7 @@ contains
       endselect
     endif
   elseif (self%act==action_store_false) then
-    if (self%has_value()) then
+    if (self%source == SOURCE_COMMANDLINE) then ! a flag passed on the command line
       select type(val)
       type is(logical)
         val = .false.
@@ -1598,7 +1625,7 @@ contains
       call list_items('', vals, Nv)
     endif
     allocate(logical:: val(1:Nv))
-    if (self%has_value()) then
+    if (self%source == SOURCE_COMMANDLINE) then ! a flag passed on the command line
       val = self%act==action_store_true
     else
       do v=1, Nv

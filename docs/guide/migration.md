@@ -89,5 +89,8 @@ values still takes the default: both change in v2.0.0 (see below).
   required option is satisfied by any of these explicit sources. `is_passed` keeps its meaning: seen on the command
   line.
 - `init(ignore_env=.true.)` turns every environment lookup off, for reproducible runs; `envvar` names stay in the help.
-- Environment variables become a value source for every option (with precedence rules), and more: see issue
-  [#125](https://github.com/szaghi/FLAP/issues/125).
+- **The environment is a value source when the switch is absent**: with `envvar='X'`, `X` set and not blank gives
+  the value (it used to be read only by the bare switch, an absent switch giving the default). The command line still
+  wins, a blank variable counts as unset, and the value satisfies a required option. Flags (`store_true`/`store_false`)
+  accept an `envvar` too, reading `1/0`, `true/false`, `yes/no`, `on/off`, ... More (generated variable names, lists
+  from the environment, configuration files): see issue [#125](https://github.com/szaghi/FLAP/issues/125).

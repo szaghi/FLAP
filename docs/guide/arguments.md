@@ -213,10 +213,14 @@ call cli%add(switch='--token', switch_ab='-t',          &
 
 Resolution order (highest priority first):
 1. Value passed directly on the command line
-2. Value of the environment variable `MY_TOKEN`
+2. Value of the environment variable `MY_TOKEN`, when it is set and not blank (also read by the bare switch `-t`)
 3. Default value
 
-Restrictions: `envvar` is only valid for named, non-list, `act='store'` arguments.
+A value from the environment satisfies a required argument. `is_passed` stays `.false.`: it means "on the command line".
+
+Restrictions: `envvar` is valid for named `act='store'`, `store_true` and `store_false` arguments; not for positionals,
+`store*` and lists (`nargs`). A flag reads its value from the variable: `1/0`, `true/false`, `t/f`, `yes/no`, `y/n`,
+`on/off`, in any case; anything else makes `get` fail with `ERROR_CASTING_LOGICAL`.
 
 ### Hidden arguments (`hidden`)
 

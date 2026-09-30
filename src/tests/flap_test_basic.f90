@@ -362,12 +362,14 @@ contains
   call cli%get_varying(switch='-vlI4P', val=vlistI4P, error=error)
   call assert_equal(error, 0_I4P, 'varying get after a failed get: error')
 
-  ! environment variable: read only when the bare switch is passed (current semantics, #11 feature 3 changes it)
+  ! environment variable: a value source when the switch is absent, and read by the bare switch (F07 of #125)
   call reinvoke(1_I4P, exitstat, out, err, args='-s hello -e', env='FLAP_NUM_INT=7')
   call assert_equal(exitstat, 0_I4P, 'env with bare -e: exit status (stderr: '//err//')')
   call assert_contains(out, 'Environment integer input = +7', 'env with bare -e: value from FLAP_NUM_INT')
   call reinvoke(1_I4P, exitstat, out, err, args='-s hello', env='FLAP_NUM_INT=7')
-  call assert_contains(out, 'Environment integer input = -1', 'env without -e: default, the variable is ignored')
+  call assert_contains(out, 'Environment integer input = +7', 'env without -e: value from FLAP_NUM_INT (F07)')
+  call reinvoke(1_I4P, exitstat, out, err, args='-s hello', env='-u FLAP_NUM_INT')
+  call assert_contains(out, 'Environment integer input = -1', 'no env, no -e: default')
 
   call capture_close(lun)
   endsubroutine self_test

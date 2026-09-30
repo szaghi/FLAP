@@ -46,7 +46,7 @@ positive values are **errors**. Existing values never change.
 | `14` | `ERROR_VALUE_MISSING` | Missing value | A named argument was passed but no value followed |
 | `15` | `ERROR_UNKNOWN` | Unknown switch | An unrecognised switch was passed on the command line |
 | `16` | `ERROR_ENVVAR_POSITIONAL` | `envvar` not allowed for positional | `envvar=` combined with `positional=.true.` |
-| `17` | `ERROR_ENVVAR_NOT_STORE` | `envvar` requires `act='store'` | Environment variable used with an incompatible action |
+| `17` | `ERROR_ENVVAR_NOT_STORE` | `envvar` requires `act='store'`, `store_true` or `store_false` | Environment variable used with an incompatible action (`store*`, `count`, `append`, ...) |
 | `18` | `ERROR_ENVVAR_NARGS` | `envvar` not allowed for list-valued | `envvar=` combined with `nargs=` |
 | `19` | `ERROR_STORE_STAR_POSITIONAL` | `act='store*'` not allowed for positional | Incompatible combination |
 | `20` | `ERROR_STORE_STAR_NARGS` | `act='store*'` not allowed for list-valued | Incompatible combination |

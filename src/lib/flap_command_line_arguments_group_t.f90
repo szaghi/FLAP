@@ -362,17 +362,27 @@ contains
   enddo
   endsubroutine reset_parse
 
-  subroutine resolve_values(self)
+  subroutine resolve_values(self, ignore_env)
   !< Settle the source of the values not given on the command line (the value-resolution chain R, F06 of #125).
   !<
   !< Called after all groups are parsed, before the required check. The source of a parsed value (command line, or the
-  !< environment for a bare switch with envvar) is recorded while parsing, so that it survives a parse stopped by an error;
-  !< the others get the default, or nothing.
-  class(command_line_arguments_group), intent(inout) :: self !< CLAsG data.
-  integer(I4P)                                       :: a    !< Counter.
+  !< environment for a bare switch with envvar) is recorded while parsing, so that it survives a parse stopped by an error.
+  !< The others take, in order, the environment variable if set and not blank (F07), the default, or nothing.
+  class(command_line_arguments_group), intent(inout) :: self       !< CLAsG data.
+  logical, optional,                   intent(in)    :: ignore_env !< Turn every environment lookup off.
+  character(len=:), allocatable                      :: envvar     !< Value of an environment variable.
+  logical                                            :: found      !< The variable is set.
+  integer(I4P)                                       :: a          !< Counter.
 
   do a=1, self%Na
     if (self%cla(a)%has_value()) cycle
+    if (allocated(self%cla(a)%envvar).and.(.not.self%cla(a)%is_positional)) then
+      call read_env(name=self%cla(a)%envvar, value=envvar, found=found, ignore=ignore_env)
+      if (found.and.len_trim(envvar) > 0) then
+        call self%cla(a)%set_env_value(value=envvar)
+        cycle
+      endif
+    endif
     if (allocated(self%cla(a)%def)) then
       self%cla(a)%source = SOURCE_DEFAULT
     else

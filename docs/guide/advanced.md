@@ -43,7 +43,8 @@ other than `store`.
 
 ## Environment variable fallback
 
-Any named, non-list, `act='store'` argument can fall back to an environment variable:
+Any named `act='store'`, `store_true` or `store_false` argument (not a list) can take its value from an environment
+variable:
 
 ```fortran
 call cli%add(switch='--api-url', switch_ab='-u',               &
@@ -55,8 +56,14 @@ call cli%add(switch='--api-url', switch_ab='-u',               &
 **Resolution order (highest priority first):**
 
 1. Value supplied explicitly on the command line
-2. Value of the named environment variable
+2. Value of the named environment variable, when it is set and not blank; the bare switch (`-u` alone) reads it too
 3. Default value (`def=`)
+
+A value from the environment satisfies a required argument. A flag (`store_true`/`store_false`) takes the variable as
+its value: `1/0`, `true/false`, `t/f`, `yes/no`, `y/n`, `on/off`, in any case.
+
+> **Changed in v2.0.0:** the environment is read also when the switch is absent. Before, an absent switch always gave
+> its default and only the bare switch read the variable.
 
 This pattern is useful for configuration that belongs in CI secrets or shell profiles
 rather than command line flags.

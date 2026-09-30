@@ -652,7 +652,7 @@ contains
 
   ! settle the source of the values not given on the command line (R chain, F06)
   do g=0, size(self%clasg,dim=1)-1
-    call self%clasg(g)%resolve_values
+    call self%clasg(g)%resolve_values(ignore_env=self%ignore_env)
   enddo
 
   ! check if all required CLAs have been passed
