@@ -56,6 +56,7 @@ graph LR
 - [check_named_consistency](#check-named-consistency)
 - [check_positional_consistency](#check-positional-consistency)
 - [check_choices](#check-choices)
+- [check_choices_text](#check-choices-text)
 - [get_cla](#get-cla)
 - [get_cla_from_buffer](#get-cla-from-buffer)
 - [get_cla_list](#get-cla-list)
@@ -330,6 +331,7 @@ classDiagram
 | `check_named_consistency` |  | Check named CLA consistency. |
 | `check_positional_consistency` |  | Check positional CLA consistency. |
 | `check_choices` |  | Check if CLA value is in allowed choices. |
+| `check_choices_text` |  | Check the choices of a whole character value, then store it. |
 | `check_list_size` |  | Check CLA multiple values list size consistency. |
 | `stored_list` |  | Stored list of values (parsed or default). |
 | `get_cla` |  | Get CLA (single) value. |
@@ -1374,8 +1376,8 @@ subroutine check_choices(self, val, pref)
 
 ```mermaid
 flowchart TD
+  check_choices_text["check_choices_text"] --> check_choices["check_choices"]
   get_cla["get_cla"] --> check_choices["check_choices"]
-  get_cla_list_character["get_cla_list_character"] --> check_choices["check_choices"]
   get_cla_list_from_buffer["get_cla_list_from_buffer"] --> check_choices["check_choices"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> check_choices["check_choices"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> check_choices["check_choices"]
@@ -1384,13 +1386,43 @@ flowchart TD
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> check_choices["check_choices"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> check_choices["check_choices"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> check_choices["check_choices"]
-  get_cla_list_varying_char["get_cla_list_varying_char"] --> check_choices["check_choices"]
   check_choices["check_choices"] --> cton["cton"]
   check_choices["check_choices"] --> errored["errored"]
   check_choices["check_choices"] --> str["str"]
   check_choices["check_choices"] --> tokenize["tokenize"]
   check_choices["check_choices"] --> upper_case["upper_case"]
   style check_choices fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### check_choices_text
+
+Check the choices of a character value on the whole value, then store it into the caller's variable (B38 of #126).
+
+ A variable shorter than the value holds it truncated (`fex` in a `character(2)` is `fe`, a choice): the check must
+ come first. With `case_sensitive=.false.` the variable receives the declared spelling of the choice.
+
+```fortran
+subroutine check_choices_text(self, text, val, pref)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `text` | character(len=*) | in |  | Whole value. |
+| `val` | character(len=*) | inout |  | Caller's variable. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  get_cla["get_cla"] --> check_choices_text["check_choices_text"]
+  get_cla_list_character["get_cla_list_character"] --> check_choices_text["check_choices_text"]
+  get_cla_list_varying_char["get_cla_list_varying_char"] --> check_choices_text["check_choices_text"]
+  check_choices_text["check_choices_text"] --> check_choices["check_choices"]
+  style check_choices_text fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### get_cla
@@ -1414,6 +1446,7 @@ subroutine get_cla(self, val, pref)
 ```mermaid
 flowchart TD
   get_cla["get_cla"] --> check_choices["check_choices"]
+  get_cla["get_cla"] --> check_choices_text["check_choices_text"]
   get_cla["get_cla"] --> check_range["check_range"]
   get_cla["get_cla"] --> errored["errored"]
   get_cla["get_cla"] --> flag_value["flag_value"]
@@ -1536,7 +1569,7 @@ subroutine get_cla_list_character(self, val, vals, pref)
 ```mermaid
 flowchart TD
   get_cla_list_from_buffer["get_cla_list_from_buffer"] --> get_cla_list_character["get_cla_list_character"]
-  get_cla_list_character["get_cla_list_character"] --> check_choices["check_choices"]
+  get_cla_list_character["get_cla_list_character"] --> check_choices_text["check_choices_text"]
   get_cla_list_character["get_cla_list_character"] --> check_range["check_range"]
   get_cla_list_character["get_cla_list_character"] --> has_range["has_range"]
   style get_cla_list_character fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -1822,7 +1855,7 @@ subroutine get_cla_list_varying_char(self, val, pref)
 
 ```mermaid
 flowchart TD
-  get_cla_list_varying_char["get_cla_list_varying_char"] --> check_choices["check_choices"]
+  get_cla_list_varying_char["get_cla_list_varying_char"] --> check_choices_text["check_choices_text"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> check_list_size["check_list_size"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> check_range["check_range"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> errored["errored"]

@@ -208,6 +208,7 @@ type, extends(object) :: command_line_argument
     procedure, private :: check_named_consistency         !< Check named CLA consistency.
     procedure, private :: check_positional_consistency    !< Check positional CLA consistency.
     procedure, private :: check_choices                   !< Check if CLA value is in allowed choices.
+    procedure, private :: check_choices_text              !< Check the choices of a whole character value, then store it.
     procedure, private :: check_list_size                 !< Check CLA multiple values list size consistency.
     procedure, private :: stored_list                     !< Stored list of values (parsed or default).
     procedure, private :: get_cla                         !< Get CLA (single) value.
@@ -2168,6 +2169,22 @@ contains
   endif
   endsubroutine check_choices
 
+  subroutine check_choices_text(self, text, val, pref)
+  !< Check the choices of a character value on the whole value, then store it into the caller's variable (B38 of #126).
+  !<
+  !< A variable shorter than the value holds it truncated (`fex` in a `character(2)` is `fe`, a choice): the check must
+  !< come first. With `case_sensitive=.false.` the variable receives the declared spelling of the choice.
+  class(command_line_argument), intent(inout) :: self  !< CLA data.
+  character(*),                 intent(in)    :: text  !< Whole value.
+  character(*),                 intent(inout) :: val   !< Caller's variable.
+  character(*), optional,       intent(in)    :: pref  !< Prefixing string.
+  character(len=:), allocatable               :: whole !< Whole value (the declared spelling after the check).
+
+  whole = text
+  call self%check_choices(val=whole, pref=pref)
+  if (self%error == 0) val = whole
+  endsubroutine check_choices_text
+
   function check_list_size(self, vals, pref) result(is_ok)
   !< Check CLA multiple values list size consistency: a list without values (or with a single blank one) is empty.
   class(command_line_argument), intent(inout) :: self    !< CLA data.
@@ -2213,7 +2230,15 @@ contains
     elseif (allocated(self%def)) then ! using default value
       call self%get_cla_from_buffer(buffer=self%def, val=val, pref=pref)
     endif
-    if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val, pref=pref)
+    if (allocated(self%choices).and.self%error==0) then
+      select type(val)
+      type is(character(*))
+        ! the whole value, not the one truncated to the variable (B38 of #126)
+        call self%check_choices_text(text=self%stored_list(), val=val, pref=pref)
+      class default
+        call self%check_choices(val=val, pref=pref)
+      endselect
+    endif
     if (self%has_range().and.self%error==0) call self%check_range(val=val, text=self%stored_list(), pref=pref)
   elseif (self%act==action_append) then
     call self%errored(pref=pref, error=ERROR_APPEND_SCALAR_GET)
@@ -2441,8 +2466,11 @@ contains
   integer(I4P)                                :: v       !< Values counter.
 
   do v=1, size(vals, dim=1)
-    val(v) = vals(v)
-    if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+    if (allocated(self%choices)) then
+      call self%check_choices_text(text=vals(v), val=val(v), pref=pref) ! the whole value (B38 of #126)
+    else
+      val(v) = vals(v)
+    endif
     if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
     if (self%error/=0) exit
   enddo
@@ -2744,8 +2772,11 @@ contains
     endif
     allocate(val(1:Nv))
     do v=1, Nv
-      val(v) = trim(adjustl(vals(v)))
-      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+      if (allocated(self%choices)) then
+        call self%check_choices_text(text=trim(adjustl(vals(v))), val=val(v), pref=pref) ! the whole value (B38 of #126)
+      else
+        val(v) = trim(adjustl(vals(v)))
+      endif
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
