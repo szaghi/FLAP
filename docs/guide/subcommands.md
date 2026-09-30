@@ -16,7 +16,7 @@ Command Line Arguments (CLAs).
 ## Adding a group — `cli%add_group`
 
 ```fortran
-call cli%add_group(group, description, help, exclude, examples, no_args_is_help)
+call cli%add_group(group, description, help, exclude, examples, no_args_is_help, deprecated)
 ```
 
 | Argument | Type | Purpose |

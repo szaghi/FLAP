@@ -80,6 +80,7 @@ call cli%add(switch, switch_ab, help, required, act, def, &
              nargs, choices, exclude, envvar,             &
              positional, position, hidden,                &
              must_exist, readable, writable, allow_dash,  &
+             deprecated,                                  &
              group, group_index, pref, error)
 ```
 

@@ -296,6 +296,27 @@ $ ./solver --mesh secret.grd    # error: option "--mesh": path "secret.grd" is n
 - **nvfortran 26.5:** opening a read-only file for writing succeeds (the error comes at the first write), so `writable`
   does not detect a read-only file with that compiler.
 
+## Deprecated options and commands — `deprecated`
+
+`add(..., deprecated='message')` and `add_group(..., deprecated='message')` mark an option or a command as deprecated
+(`deprecated=''`: without a message). Using it is **not** an error: `parse` prints a warning on the error unit and goes on.
+
+```fortran
+call cli%add(switch='--grid', help='Old grid', required=.false., act='store', def='g.grd', &
+             deprecated='use --mesh instead')
+call cli%add_group(group='legacy', description='the old run', deprecated='use run')
+```
+
+```shell
+$ ./solver --grid w.grd
+solver: warning: option "--grid" is deprecated: use --mesh instead
+```
+
+- An option warns when its value comes from the command line or from its environment variable, not when it comes from
+  a configuration file or its default (as in click); a command warns when it is called.
+- The help marks them: `Old grid (DEPRECATED: use --mesh instead)`.
+- A required option cannot be deprecated: `ERROR_DEPRECATED_REQUIRED` (44).
+
 ## Hidden arguments
 
 Hidden arguments participate in parsing normally but are invisible in help and usage:

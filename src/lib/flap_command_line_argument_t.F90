@@ -60,6 +60,7 @@ public :: ERROR_PATH_NOT_FOUND
 public :: ERROR_PATH_NOT_READABLE
 public :: ERROR_PATH_NOT_WRITABLE
 public :: ERROR_PATH_INCONSISTENT
+public :: ERROR_DEPRECATED_REQUIRED
 public :: ERROR_INLINE_VALUE_NOT_ALLOWED
 public :: ERROR_INLINE_VALUE_NARGS
 public :: ERROR_COUNT_INCONSISTENT
@@ -98,6 +99,7 @@ type, extends(object) :: command_line_argument
   logical,                       public :: readable=.false.       !< The value is a path that must be readable (and exist).
   logical,                       public :: writable=.false.       !< The value is a path writable if it exists.
   logical,                       public :: allow_dash=.false.     !< '-' passes the path checks (standard input/output).
+  character(len=:), allocatable, public :: deprecated             !< Deprecation message; allocated means deprecated (F13).
   contains
     ! public methods
     procedure, public :: free                           !< Free dynamic memory.
@@ -109,6 +111,7 @@ type, extends(object) :: command_line_argument
     procedure, public :: takes_config_value             !< Check if the CLA takes a value from a configuration file.
     procedure, public :: value_text                     !< Resolved value as text (provenance report).
     procedure, public :: has_path_checks                !< Check if the value is a path to check.
+    procedure, public :: deprecation_note               !< Marker of a deprecated CLA in the help.
     procedure, public :: check_paths                    !< Check the path value(s): existence and permissions.
     procedure, public :: match_token                    !< Check if a command line token names this CLA.
     procedure, public :: match_inline_token             !< Check a token also as NAME=VALUE.
@@ -227,6 +230,7 @@ integer(I4P), parameter :: ERROR_PATH_NOT_FOUND         = 33 !< Path value that 
 integer(I4P), parameter :: ERROR_PATH_NOT_READABLE      = 34 !< Path value that cannot be opened for reading (readable).
 integer(I4P), parameter :: ERROR_PATH_NOT_WRITABLE      = 35 !< Existing path value that cannot be opened for writing.
 integer(I4P), parameter :: ERROR_PATH_INCONSISTENT      = 49 !< Path checks on an option taking no value.
+integer(I4P), parameter :: ERROR_DEPRECATED_REQUIRED    = 44 !< A required option cannot be deprecated.
 
 contains
   ! public methods
@@ -257,6 +261,7 @@ contains
   self%readable        = .false.
   self%writable        = .false.
   self%allow_dash      = .false.
+  if (allocated(self%deprecated)) deallocate(self%deprecated)
   endsubroutine free
 
   subroutine check(self, pref)
@@ -272,6 +277,10 @@ contains
   call self%check_def_nargs_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_m_exclude_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_path_consistency(pref=pref) ; if (self%error/=0) return
+  if (allocated(self%deprecated).and.self%is_required) then
+    call self%errored(pref=pref, error=ERROR_DEPRECATED_REQUIRED)
+    return
+  endif
   call self%check_named_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_positional_consistency(pref=pref)
   endsubroutine check
@@ -376,6 +385,20 @@ contains
     text = self%stored_list()
   endif
   endfunction value_text
+
+  pure function deprecation_note(self) result(note)
+  !< Return the marker of a deprecated CLA in the help: ' (DEPRECATED: message)', ' (DEPRECATED)', or '' (F13 of #125).
+  class(command_line_argument), intent(in) :: self !< CLA data.
+  character(len=:), allocatable            :: note !< Marker.
+
+  note = ''
+  if (.not.allocated(self%deprecated)) return
+  if (len_trim(self%deprecated) > 0) then
+    note = ' (DEPRECATED: '//trim(adjustl(self%deprecated))//')'
+  else
+    note = ' (DEPRECATED)'
+  endif
+  endfunction deprecation_note
 
   elemental function has_path_checks(self) result(checks)
   !< Check if the value is a path to check (must_exist, readable or writable).
@@ -752,12 +775,12 @@ contains
     endif
     if (self%m_exclude/='') usage = usage//new_line('a')//prefd//repeat(' ', indent)//'mutually exclude "'//self%m_exclude//'"'
     if (markdownd) then
-      usage = usage//'  '//new_line('a')//prefd//repeat(' ',4)//trim(adjustl(self%help))//'  '
+      usage = usage//'  '//new_line('a')//prefd//repeat(' ',4)//trim(adjustl(self%help))//self%deprecation_note()//'  '
       if (self%help_markdown/='') then
         usage = usage//trim(adjustl(self%help_markdown))//'  '
       endif
     else
-      usage = usage//new_line('a')//prefd//repeat(' ', indent)//trim(adjustl(self%help))
+      usage = usage//new_line('a')//prefd//repeat(' ', indent)//trim(adjustl(self%help))//self%deprecation_note()
     endif
   else
     usage = ''
@@ -1051,6 +1074,8 @@ contains
     case(ERROR_PATH_NOT_WRITABLE)
       self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'": path "'//trim(val_str)//&
                            '" is not writable: '//trim(log_value)//'!'
+    case(ERROR_DEPRECATED_REQUIRED)
+      self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" is required: it cannot be deprecated!'
     case(ERROR_PATH_INCONSISTENT)
       self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'": must_exist, readable, writable and '//&
                            'allow_dash need an option taking a value (store, store*, append)!'

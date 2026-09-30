@@ -93,6 +93,7 @@ type, extends(object), public :: command_line_interface
     procedure, private :: check                           !< Check data consistency.
     procedure, private :: check_m_exclusive               !< Check if two mutually exclusive CLAs group have been called.
     procedure, private :: load_config                     !< Load and check the configuration file.
+    procedure, private :: warn_deprecated                 !< Warn about the deprecated options and commands used.
     procedure, private :: get_clasg_indexes               !< Get CLAs groups indexes.
     generic,   private :: get_args =>           &
                           get_args_from_string, &
@@ -229,7 +230,7 @@ contains
   self%clasg(0)%group = ''
   endsubroutine init
 
-  subroutine add_group(self, help, description, exclude, examples, group, no_args_is_help)
+  subroutine add_group(self, help, description, exclude, examples, group, no_args_is_help, deprecated)
   !< Add CLAs group to CLI.
   class(command_line_interface), intent(inout)    :: self              !< CLI data.
   character(*), optional,        intent(in)       :: help              !< Help message.
@@ -238,6 +239,7 @@ contains
   character(*), optional,        intent(in)       :: examples(1:)      !< Examples of correct usage of the group.
   character(*),                  intent(in)       :: group             !< Name of the grouped CLAs.
   logical, optional,             intent(in)       :: no_args_is_help   !< Print the help of the group when invoked alone.
+  character(*), optional,        intent(in)       :: deprecated        !< Deprecation message ('' for none): warn when called.
   type(command_line_arguments_group), allocatable :: clasg_list_new(:) !< New (extended) CLAs group list.
   character(len=:), allocatable                   :: helpd             !< Help message.
   character(len=:), allocatable                   :: descriptiond      !< Detailed description.
@@ -262,6 +264,7 @@ contains
     clasg_list_new(Ng)%m_exclude   = excluded
     call clasg_list_new(Ng)%set_examples(examples)
     if (present(no_args_is_help)) clasg_list_new(Ng)%no_args_is_help = no_args_is_help
+    if (present(deprecated)) clasg_list_new(Ng)%deprecated = deprecated
     if (allocated(self%clasg)) deallocate(self%clasg)
     allocate(self%clasg(lbound(clasg_list_new,1):ubound(clasg_list_new,1)), source=clasg_list_new)
     deallocate(clasg_list_new)
@@ -297,6 +300,47 @@ contains
   self%config_required = .false. ; if (present(required)) self%config_required = required
   if (present(error)) error = 0
   endsubroutine set_config
+
+  subroutine warn_deprecated(self, pref)
+  !< Warn about the deprecated options and commands used (F13 of #125), on error_lun: a called command, an option whose
+  !< value comes from the command line or the environment (not from a configuration file or the default, as in click).
+  class(command_line_interface), intent(in) :: self    !< CLI data.
+  character(*), optional,        intent(in) :: pref    !< Prefixing string.
+  character(len=:), allocatable             :: prefix  !< Prefix of the warnings.
+  character(len=:), allocatable             :: name    !< Name of an option.
+  integer(I4P)                              :: g       !< Group index.
+  integer(I4P)                              :: a       !< CLA index.
+
+  prefix = '' ; if (present(pref)) prefix = pref
+  prefix = prefix//self%progname//': '//colorize('warning', color_fg=self%error_color, style=self%error_style)//': '
+  do g=0, size(self%clasg, dim=1) - 1
+    if (g > 0 .and. .not.self%clasg(g)%is_called) cycle
+    if (g > 0 .and. allocated(self%clasg(g)%deprecated)) &
+      write(self%error_lun, '(A)') prefix//'command "'//self%clasg(g)%group//'" is deprecated'//&
+                                   because(self%clasg(g)%deprecated)
+    do a=1, self%clasg(g)%Na
+      associate(cla => self%clasg(g)%cla(a))
+        if (.not.allocated(cla%deprecated)) cycle
+        if (cla%source /= SOURCE_COMMANDLINE .and. cla%source /= SOURCE_ENVIRONMENT) cycle
+        if (cla%is_positional) then
+          name = 'position '//trim(str(cla%position, .true.))
+        else
+          name = trim(adjustl(cla%switch))
+        endif
+        write(self%error_lun, '(A)') prefix//'option "'//name//'" is deprecated'//because(cla%deprecated)
+      endassociate
+    enddo
+  enddo
+  contains
+    pure function because(message) result(suffix)
+    !< Return ': message', or '' for an empty message.
+    character(*), intent(in)      :: message !< Deprecation message.
+    character(len=:), allocatable :: suffix  !< Suffix of the warning.
+
+    suffix = ''
+    if (len_trim(message) > 0) suffix = ': '//trim(adjustl(message))
+    endfunction because
+  endsubroutine warn_deprecated
 
   subroutine load_config(self, config, pref)
   !< Load the configuration file, if any, and check it: every key must name an option taking a value (D18 of #125).
@@ -532,7 +576,7 @@ contains
 
   subroutine add(self, pref, group, group_index, switch, switch_ab, help, help_markdown, help_color, help_style, &
                  required, val_required, positional, position, hidden, act, def, nargs, choices, exclude, envvar, &
-                 must_exist, readable, writable, allow_dash, error)
+                 must_exist, readable, writable, allow_dash, deprecated, error)
   !< Add CLA to CLI.
   !<
   !< @note If not otherwise declared the action on CLA value is set to "store" a value that must be passed after the switch name
@@ -560,6 +604,7 @@ contains
   logical,      optional,        intent(in)    :: readable      !< The value is a path that must be readable (and exist).
   logical,      optional,        intent(in)    :: writable      !< The value is a path writable if it exists.
   logical,      optional,        intent(in)    :: allow_dash    !< '-' passes the path checks (standard input/output).
+  character(*), optional,        intent(in)    :: deprecated    !< Deprecation message ('' for none): warn when used (F13).
   character(*), optional,        intent(in)    :: act           !< CLA value action.
   character(*), optional,        intent(in)    :: def           !< Default value.
   character(*), optional,        intent(in)    :: nargs         !< Number of arguments consumed by CLA.
@@ -595,6 +640,7 @@ contains
                                                   if (present(readable     )) cla%readable        = readable
                                                   if (present(writable     )) cla%writable        = writable
                                                   if (present(allow_dash   )) cla%allow_dash      = allow_dash
+                                                  if (present(deprecated   )) cla%deprecated      = deprecated
   cla%act             = action_store            ; if (present(act          )) cla%act             = trim(adjustl(Upper_Case(act)))
   if (cla%act == ACTION_CONFIG) then
     ! the configuration file option (F08): a store CLA whose value names the file
@@ -956,6 +1002,9 @@ contains
     if (self%is_fatal()) exit
   enddo
   if (self%is_fatal()) return
+
+  ! warn about the deprecated options and commands used, once their sources are known (F13)
+  call self%warn_deprecated(pref=pref)
 
   ! check if all required CLAs have been passed
   do g=0, size(ai,dim=1)-1
@@ -1983,6 +2032,13 @@ contains
       do gi=1, size(self%clasg,dim=1)-1
         usaged = usaged//new_line('a')//prefd//'  '//self%clasg(gi)%group
         usaged = usaged//new_line('a')//prefd//repeat(' ',10)//self%clasg(gi)%description
+        if (allocated(self%clasg(gi)%deprecated)) then
+          if (len_trim(self%clasg(gi)%deprecated) > 0) then
+            usaged = usaged//' (DEPRECATED: '//trim(adjustl(self%clasg(gi)%deprecated))//')'
+          else
+            usaged = usaged//' (DEPRECATED)'
+          endif
+        endif
       enddo
       usaged = usaged//new_line('a')//new_line('a')//prefd//'For more detailed commands help try:'
       do gi=1,size(self%clasg,dim=1)-1

@@ -14,6 +14,7 @@ use flap, only : command_line_interface,                                        
                  ERROR_APPEND_INCONSISTENT, ERROR_APPEND_SCALAR_GET,                                                              &
                  ERROR_LIST_SIZE, ERROR_DEF_NARGS, ERROR_ENVVAR_CSV,                                                              &
                  ERROR_PATH_NOT_FOUND, ERROR_PATH_NOT_READABLE, ERROR_PATH_NOT_WRITABLE, ERROR_PATH_INCONSISTENT,                 &
+                 ERROR_DEPRECATED_REQUIRED,                                                                                       &
                  ERROR_GROUP_CONSISTENCY, ERROR_GROUP_M_EXCLUDE, ERROR_POSITION_DUPLICATE, ERROR_POSITION_GAP,                    &
                  ERROR_M_EXCLUDE_SET, ERROR_M_EXCLUDE_SET_REQUIRED, ERROR_M_EXCLUDE_SET_DEFINITION,                               &
                  ERROR_MISSING_CLA, ERROR_MISSING_GROUP, ERROR_MISSING_SELECTION_CLA, ERROR_TOO_FEW_CLAS,                         &
@@ -76,6 +77,7 @@ contains
   call assert_equal(ERROR_PATH_NOT_READABLE,      34_I4P,   'ERROR_PATH_NOT_READABLE')
   call assert_equal(ERROR_PATH_NOT_WRITABLE,      35_I4P,   'ERROR_PATH_NOT_WRITABLE')
   call assert_equal(ERROR_PATH_INCONSISTENT,      49_I4P,   'ERROR_PATH_INCONSISTENT')
+  call assert_equal(ERROR_DEPRECATED_REQUIRED,    44_I4P,   'ERROR_DEPRECATED_REQUIRED')
   call assert_equal(ERROR_ENVVAR_CSV,             43_I4P,   'ERROR_ENVVAR_CSV')
   call assert_equal(ERROR_DEF_NARGS,              48_I4P,   'ERROR_DEF_NARGS')
   call assert_equal(ERROR_GROUP_CONSISTENCY,     100_I4P,   'ERROR_GROUP_CONSISTENCY')

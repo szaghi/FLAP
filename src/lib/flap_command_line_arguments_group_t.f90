@@ -56,6 +56,7 @@ type, extends(object) :: command_line_arguments_group
   logical,                                  public :: is_called=.false. !< Flag for checking if CLAs group has been passed to CLI.
   logical,                                  public :: no_args_is_help=.false. !< Print the help when invoked with no arguments.
   type(exclusive_set), allocatable                 :: m_sets(:)         !< Mutually exclusive sets of switches.
+  character(len=:), allocatable,            public :: deprecated        !< Deprecation message of the command (F13).
   contains
     ! public methods
     procedure, public :: free                  !< Free dynamic memory.
@@ -123,6 +124,7 @@ contains
   self%is_called   = .false.
   self%no_args_is_help = .false.
   if (allocated(self%m_sets)) deallocate(self%m_sets)
+  if (allocated(self%deprecated)) deallocate(self%deprecated)
   endsubroutine free
 
   subroutine check(self, pref)
