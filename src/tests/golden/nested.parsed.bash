@@ -69,4 +69,4 @@ _completion()
   fi
   return 0
 }
-complete -F _completion test_nested
+complete -o default -F _completion test_nested

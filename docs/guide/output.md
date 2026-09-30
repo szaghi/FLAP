@@ -87,8 +87,11 @@ man ./myapp.1
 Generate a bash completion script so users get tab-completion for your program:
 
 ```fortran
-call cli%save_bash_completion(completion_file='myapp.bash', error=error)
+call cli%save_bash_completion(bash_file='myapp.bash', error=error)
 ```
+
+The script completes switches, command names and `choices`. It is registered with `complete -o default`: where it has
+nothing to offer (a free value such as `--mesh <TAB>`), bash completes file names.
 
 To activate it in the current shell:
 
@@ -103,13 +106,26 @@ For permanent installation, place the file in `/etc/bash_completion.d/` or
 cp myapp.bash ~/.bash_completion.d/myapp
 ```
 
+## Zsh completion — `cli%save_zsh_completion`
+
+```fortran
+call cli%save_zsh_completion(zsh_file='myapp.zsh', error=error)
+```
+
+The zsh script is the bash one run through zsh's `bashcompinit` (it loads `compinit` and `bashcompinit` itself), with the
+same file-name fallback. Source it, for example from `~/.zshrc`:
+
+```zsh
+source /path/to/myapp.zsh
+```
+
 ## Markdown usage export — `cli%save_usage_to_markdown`
 
 Export the usage message as a Markdown file, suitable for embedding in documentation
 or wikis:
 
 ```fortran
-call cli%save_usage_to_markdown(md_file='usage.md', error=error)
+call cli%save_usage_to_markdown(markdown_file='usage.md', error=error)
 ```
 
 The output is formatted Markdown with code blocks for the usage line and argument
@@ -132,5 +148,6 @@ you control the flow.
 |---|---|---|
 | `cli%save_man_page` | Unix man page (troff format) | `myapp.1` |
 | `cli%save_bash_completion` | Bash completion script | `myapp.bash` |
+| `cli%save_zsh_completion` | Zsh completion script | `myapp.zsh` |
 | `cli%save_usage_to_markdown` | Markdown usage page | `usage.md` |
 | `cli%print_usage` | Prints help to `stdout` | — |

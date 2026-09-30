@@ -76,6 +76,7 @@ type, extends(object), public :: command_line_interface
     procedure, public :: signature                       !< Get CLI signature.
     procedure, public :: print_usage                     !< Print correct usage of CLI.
     procedure, public :: save_bash_completion            !< Save bash completion script (for named CLAs only).
+    procedure, public :: save_zsh_completion             !< Save zsh completion script (bash script via bashcompinit).
     procedure, public :: save_man_page                   !< Save CLI usage as man page.
     procedure, public :: save_usage_to_markdown          !< Save CLI usage as markdown.
     ! private methods
@@ -2354,6 +2355,23 @@ contains
   endif
   endsubroutine save_bash_completion
 
+  subroutine save_zsh_completion(self, zsh_file, error)
+  !< Save zsh completion script (F15 of #125): the bash script behind zsh's bashcompinit, to be sourced (e.g. from .zshrc);
+  !< builtins included whether or not parse has been called.
+  class(command_line_interface), intent(in)  :: self     !< CLI data.
+  character(*),                  intent(in)  :: zsh_file !< Output file name of zsh completion script.
+  integer(I4P), optional,        intent(out) :: error    !< Error trapping flag.
+  type(command_line_interface)               :: cli      !< Copy of the CLI with the builtins.
+
+  if (self%builtins_missing()) then
+    cli = self
+    call cli%ensure_builtins
+    call cli%save_bash_completion_core(bash_file=zsh_file, error=error, zsh=.true.)
+  else
+    call self%save_bash_completion_core(bash_file=zsh_file, error=error, zsh=.true.)
+  endif
+  endsubroutine save_zsh_completion
+
   subroutine save_man_page(self, man_file, error)
   !< Save CLI usage as man page, builtins included whether or not parse has been called.
   class(command_line_interface), intent(in)  :: self     !< CLI data.
@@ -2514,16 +2532,27 @@ contains
   call write_text(self%usage_lun, self%usage(pref=pref, g=0))
   endsubroutine print_usage
 
-  subroutine save_bash_completion_core(self, bash_file, error)
-  !< Save bash completion script (for named CLAs only).
+  subroutine save_bash_completion_core(self, bash_file, error, zsh)
+  !< Save bash completion script (for named CLAs only), registered with `complete -o default` (an empty completion falls
+  !< back to file names, F15 of #125); with zsh, the same script behind zsh's bashcompinit.
   class(command_line_interface), intent(in)  :: self      !< CLI data.
   character(*),                  intent(in)  :: bash_file !< Output file name of bash completion script.
   integer(I4P), optional,        intent(out) :: error     !< Error trapping flag.
+  logical,      optional,        intent(in)  :: zsh       !< Write the zsh script (default .false.).
   character(len=:), allocatable              :: script    !< Script text.
   integer(I4P)                               :: g         !< CLAs groups counter.
   integer(I4P)                               :: u         !< Unit file handler.
+  logical                                    :: zsh_      !< Write the zsh script, local variable.
 
-  script = '#!/usr/bin/env bash'
+  zsh_ = .false. ; if (present(zsh)) zsh_ = zsh
+  if (zsh_) then
+    ! zsh runs the bash function through bashcompinit (which needs compinit), -o default included
+    script = '# zsh completion of '//basename(self%progname)//': source this file'
+    script = script//new_line('a')//'autoload -U +X compinit && compinit'
+    script = script//new_line('a')//'autoload -U +X bashcompinit && bashcompinit'
+  else
+    script = '#!/usr/bin/env bash'
+  endif
   script = script//new_line('a')//'_completion()'
   script = script//new_line('a')//'{'
   script = script//new_line('a')//'  local cur prev group w'
@@ -2555,7 +2584,7 @@ contains
   endif
   script = script//new_line('a')//'  return 0'
   script = script//new_line('a')//'}'
-  script = script//new_line('a')//'complete -F _completion '//basename(self%progname)
+  script = script//new_line('a')//'complete -o default -F _completion '//basename(self%progname)
   if (present(error)) then
     ! failures are reported through error
     open(newunit=u, file=trim(adjustl(bash_file)), action='write', status='replace', iostat=error)

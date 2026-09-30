@@ -59,4 +59,4 @@ _completion()
   fi
   return 0
 }
-complete -F _completion flap_test_group_examples
+complete -o default -F _completion flap_test_group_examples

@@ -63,7 +63,8 @@ contains
   call cli%save_bash_completion(bash_file=script, error=error)
   call assert_equal(error, 0_I4P, 'save_bash_completion: error')
   text = read_file(script)
-  call assert_contains(text, 'complete -F _completion flap_test_save_bash_completion', 'script registers the function')
+  call assert_contains(text, 'complete -o default -F _completion flap_test_save_bash_completion', &
+                       'script registers the function, with the file-name fallback (F15)')
   call assert_equal(text(1:19), '#!/usr/bin/env bash', 'shebang (B12)')
 
   call run_command("bash -n '"//script//"'", exitstat, out)

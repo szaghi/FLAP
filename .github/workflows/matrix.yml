@@ -48,6 +48,10 @@ jobs:
     - name: Build
       run: fobis build --mode ${{ matrix.mode }}
 
+    - name: Install shells for the completion tests
+      # flap_test_shell_completion checks the zsh/fish scripts only where the shell exists (pwsh is preinstalled)
+      run: sudo apt-get update -q && sudo apt-get install -y -q zsh fish
+
     - name: Test
       run: bash scripts/run_tests.sh
 

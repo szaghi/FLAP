@@ -40,9 +40,10 @@ FLAP can export your CLI definition in several formats with a single call:
 | Method | Output |
 |--------|--------|
 | `cli%usage()` | Formatted help/usage string (printed automatically on error) |
-| `cli%save_man_page(unit)` | Unix man page (troff format) |
-| `cli%save_bash_completion(unit)` | Bash tab-completion script |
-| `cli%save_usage_to_markdown(unit)` | Markdown usage documentation |
+| `cli%save_man_page(man_file)` | Unix man page (troff format) |
+| `cli%save_bash_completion(bash_file)` | Bash tab-completion script |
+| `cli%save_zsh_completion(zsh_file)` | Zsh tab-completion script |
+| `cli%save_usage_to_markdown(markdown_file)` | Markdown usage documentation |
 
 ## The Four-Step Pattern
 
