@@ -4,7 +4,7 @@ module flap_command_line_interface_t
 
 use face, only : colorize
 use flap_command_line_argument_t, only : command_line_argument, ACTION_COUNT, ACTION_PRINT_HELP, ACTION_PRINT_MARK, &
-                                         ACTION_PRINT_VERS, ACTION_STORE, ERROR_UNKNOWN
+                                         ACTION_PRINT_VERS, ACTION_STORE, ACTION_STORE_FALSE, ACTION_STORE_TRUE, ERROR_UNKNOWN
 use flap_command_line_arguments_group_t, only : command_line_arguments_group, STATUS_NO_ARGS, STATUS_PRINT_H, STATUS_PRINT_M, &
                                                 STATUS_PRINT_V
 use flap_object_t, only : object
@@ -27,6 +27,7 @@ type, extends(object), public :: command_line_interface
   logical                                         :: error_hint=.true.           !< Print a hint after a failed parse.
   logical                                         :: no_args_is_help=.false.     !< Print the help when no arguments are passed.
   logical                                         :: ignore_env=.false.          !< Turn every environment lookup off.
+  character(len=:), allocatable                   :: auto_envvar_prefix          !< Prefix of the generated envvar names.
   integer(I4P)                                    :: error_unknown_clas=0_I4P    !< Error trapping flag for unknown CLAs.
   contains
     ! public methods
@@ -137,11 +138,12 @@ contains
   self%error_hint          = .true.
   self%no_args_is_help     = .false.
   self%ignore_env          = .false.
+  if (allocated(self%auto_envvar_prefix)) deallocate(self%auto_envvar_prefix)
   endsubroutine free
 
   subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, &
                   usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone, &
-                  error_hint, no_args_is_help, ignore_env)
+                  error_hint, no_args_is_help, ignore_env, auto_envvar_prefix)
   !< Initialize CLI.
   class(command_line_interface), intent(inout) :: self                !< CLI data.
   character(*), optional,        intent(in)    :: progname            !< Program name.
@@ -167,6 +169,8 @@ contains
                                                                       !< are passed.
   logical,      optional,        intent(in)    :: ignore_env          !< Turn every environment lookup off (F20): envvar
                                                                       !< names are still shown in the help.
+  character(*), optional,        intent(in)    :: auto_envvar_prefix  !< Generate the envvar of the options without one:
+                                                                      !< PREFIX[_GROUP]_NAME (F07).
   character(len=:), allocatable                :: prog_invocation     !< Complete program invocation.
   integer(I4P)                                 :: invocation_length   !< Length of invocation.
   integer(I4P)                                 :: retrieval_status    !< Retrieval status.
@@ -203,6 +207,7 @@ contains
                           if (present(error_hint))          self%error_hint          = error_hint         ! default set by self%free
                           if (present(no_args_is_help))     self%no_args_is_help     = no_args_is_help    ! default set by self%free
                           if (present(ignore_env))          self%ignore_env          = ignore_env         ! default set by self%free
+  self%auto_envvar_prefix = '' ; if (present(auto_envvar_prefix)) self%auto_envvar_prefix = trim(adjustl(auto_envvar_prefix))
   ! initialize only the first default group
   allocate(self%clasg(0:0))
   call self%clasg(0)%assign_object(self)
@@ -354,6 +359,7 @@ contains
                                                   if (present(choices      )) cla%choices         = choices
   cla%m_exclude     = ''                        ; if (present(exclude      )) cla%m_exclude       = exclude
                                                   if (present(envvar       )) cla%envvar          = envvar
+  if (.not.present(envvar)) call set_auto_envvar
   call cla%check(pref=pref) ; self%error = cla%error
   if (self%error/=0) then
     if (present(error)) error = self%error
@@ -375,7 +381,39 @@ contains
     endif
   endif
   if (present(error)) error = self%error
+  contains
+    subroutine set_auto_envvar
+    !< Generate the envvar of the CLA (auto_envvar_prefix, F07): named store/store_true/store_false options, not lists.
+    character(len=:), allocatable :: gname !< Name of the group of the CLA.
+
+    if (.not.allocated(self%auto_envvar_prefix)) return
+    if (self%auto_envvar_prefix == '' .or. cla%is_positional .or. allocated(cla%nargs) .or. .not.allocated(cla%switch)) return
+    if (cla%act /= ACTION_STORE .and. cla%act /= ACTION_STORE_TRUE .and. cla%act /= ACTION_STORE_FALSE) return
+    gname = ''
+    if (present(group)) then
+      gname = group
+    elseif (present(group_index)) then
+      if (group_index >= 0 .and. group_index <= size(self%clasg, dim=1) - 1) gname = self%clasg(group_index)%group
+    endif
+    cla%envvar = envvar_name(prefix=self%auto_envvar_prefix, group=gname, switch=cla%switch)
+    endsubroutine set_auto_envvar
   endsubroutine add
+
+  pure function envvar_name(prefix, group, switch) result(name)
+  !< Return the generated name of an environment variable: PREFIX[_GROUP]_NAME, upper case, NAME being the switch without its
+  !< leading dashes, '-' becoming '_' (auto_envvar_prefix, F07 of #125; click's rule).
+  character(*), intent(in)      :: prefix !< Prefix.
+  character(*), intent(in)      :: group  !< Group (command), '' for the top level.
+  character(*), intent(in)      :: switch !< Switch.
+  character(len=:), allocatable :: name   !< Name of the variable.
+  integer(I4P)                  :: c      !< First character after the dashes.
+
+  name = trim(adjustl(switch))
+  c = verify(name, '-')
+  if (c > 0) name = name(c:)
+  if (len_trim(group) > 0) name = trim(adjustl(group))//'_'//name
+  name = upper_case(replace_all(string=trim(prefix)//'_'//name, substring='-', restring='_'))
+  endfunction envvar_name
 
   subroutine check(self, pref, error)
   !< Check data consistency.

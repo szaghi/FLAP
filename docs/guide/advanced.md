@@ -68,6 +68,26 @@ its value: `1/0`, `true/false`, `t/f`, `yes/no`, `y/n`, `on/off`, in any case.
 This pattern is useful for configuration that belongs in CI secrets or shell profiles
 rather than command line flags.
 
+### Generated variable names — `init(auto_envvar_prefix=...)`
+
+With a prefix, every named `store`, `store_true` or `store_false` option added without an `envvar` gets one,
+`PREFIX[_COMMAND]_NAME` in upper case, NAME being the long switch without its dashes and `-` becoming `_`:
+
+```fortran
+call cli%init(progname='solver', auto_envvar_prefix='SOLVER')
+call cli%add(switch='--mesh-file', help='Mesh', required=.true., act='store')              ! SOLVER_MESH_FILE
+call cli%add(group='post', switch='--format', help='Format', required=.false., act='store', def='vtk')
+                                                                                          ! SOLVER_POST_FORMAT
+```
+
+```shell
+$ SOLVER_MESH_FILE=wing.grd ./solver                        # mesh = wing.grd (required satisfied)
+$ SOLVER_MESH_FILE=wing.grd ./solver --mesh-file body.grd   # the command line wins: body.grd
+```
+
+An explicit `envvar=` wins over the generated name. Positionals, `store*`, `count`, `append` and lists get no name.
+The help shows the generated names.
+
 ### Ignoring the environment — `init(ignore_env=.true.)`
 
 For reproducible runs (a batch job whose environment must not leak in, tests, CI sandboxes),
