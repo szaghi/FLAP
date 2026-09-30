@@ -99,6 +99,7 @@ type, extends(object) :: command_line_argument
     procedure, public :: set_source_value               !< Set a value read from the environment or a configuration file.
     procedure, public :: config_key                     !< Key of the CLA in a configuration file.
     procedure, public :: takes_config_value             !< Check if the CLA takes a value from a configuration file.
+    procedure, public :: value_text                     !< Resolved value as text (provenance report).
     procedure, public :: match_token                    !< Check if a command line token names this CLA.
     procedure, public :: match_inline_token             !< Check a token also as NAME=VALUE.
     procedure, public :: set_inline_value               !< Set the value given inline (NAME=VALUE).
@@ -339,6 +340,22 @@ contains
     key = ''
   endif
   endfunction config_key
+
+  function value_text(self) result(text)
+  !< Return the resolved value as text, for the provenance report: a list blank separated, a flag passed on the command
+  !< line as .true./.false., otherwise the value from its source (or the default).
+  class(command_line_argument), intent(in) :: self !< CLA data.
+  character(len=:), allocatable            :: text !< Value.
+
+  if ((self%act == ACTION_STORE_TRUE .or. self%act == ACTION_STORE_FALSE) .and. self%source == SOURCE_COMMANDLINE) then
+    text = merge('.true. ', '.false.', self%act == ACTION_STORE_TRUE)
+    text = trim(text)
+  elseif (self%is_list()) then
+    text = list_join(self%stored_list(), ' ')
+  else
+    text = self%stored_list()
+  endif
+  endfunction value_text
 
   pure function takes_config_value(self) result(takes)
   !< Check if the CLA takes a value from a configuration file: a named store (lists included), store_true or store_false.

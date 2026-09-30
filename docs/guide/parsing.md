@@ -203,6 +203,34 @@ end if
 
 ---
 
+## Where a value comes from — `cli%get_source`, `cli%provenance`
+
+`get_source` returns the source of a value, one of `SOURCE_COMMANDLINE`, `SOURCE_ENVIRONMENT`, `SOURCE_CONFIG`,
+`SOURCE_DEFAULT` or `SOURCE_NONE` (ordered from the most to the least explicit):
+
+```fortran
+if (cli%get_source(switch='--cfl') < SOURCE_DEFAULT) then
+  ! given by the user: command line, environment or configuration file
+end if
+```
+
+`provenance` returns one line per visible option of the top level and of the called commands, for a simulation's run
+log, where it matters for reproducibility:
+
+```fortran
+write(log_unit, '(A)') cli%provenance()
+```
+
+```
+--mesh-file = wing.grd [environment: SOLVER_MESH_FILE]
+--cfl       = 0.8      [config: solver.ini]
+--threads   = 32       [command line]
+post --format = vtk    [default]
+```
+
+Both parse first if `parse` has not been called; an undefined option makes `get_source` return `SOURCE_NONE` with
+`ERROR_MISSING_CLA`. Hidden options and the builtins (`--help`, `--version`, `--markdown`) are not reported.
+
 ## Checking whether an argument is defined — `cli%is_defined`
 
 Queries whether a switch has been **registered** in the CLI (not whether it was passed):

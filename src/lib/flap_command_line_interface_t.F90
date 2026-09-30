@@ -5,7 +5,8 @@ module flap_command_line_interface_t
 use face, only : colorize
 use flap_command_line_argument_t, only : command_line_argument, ACTION_CONFIG, ACTION_COUNT, ACTION_PRINT_HELP, &
                                          ACTION_PRINT_MARK, ACTION_PRINT_VERS, ACTION_STORE, ACTION_STORE_FALSE, &
-                                         ACTION_STORE_TRUE, ERROR_UNKNOWN, SOURCE_COMMANDLINE, SOURCE_ENVIRONMENT
+                                         ACTION_STORE_TRUE, ERROR_UNKNOWN, SOURCE_COMMANDLINE, SOURCE_CONFIG, &
+                                         SOURCE_DEFAULT, SOURCE_ENVIRONMENT, SOURCE_NONE
 use flap_command_line_arguments_group_t, only : command_line_arguments_group, STATUS_NO_ARGS, STATUS_PRINT_H, STATUS_PRINT_M, &
                                                 STATUS_PRINT_V
 use flap_config_m, only : config_file
@@ -32,6 +33,7 @@ type, extends(object), public :: command_line_interface
   character(len=:), allocatable                   :: auto_envvar_prefix          !< Prefix of the generated envvar names.
   character(len=:), allocatable                   :: config_path                 !< Configuration file (F08).
   logical                                         :: config_required=.false.     !< The configuration file must exist.
+  character(len=:), allocatable                   :: config_used                 !< Configuration file read by parse.
   integer(I4P)                                    :: error_unknown_clas=0_I4P    !< Error trapping flag for unknown CLAs.
   contains
     ! public methods
@@ -47,6 +49,8 @@ type, extends(object), public :: command_line_interface
     procedure, public :: set_mutually_exclusive_groups   !< Set two CLAs group as mutually exclusive.
     procedure, public :: set_mutually_exclusive_switches !< Set a mutually exclusive set of switches.
     procedure, public :: set_config                      !< Set the configuration file.
+    procedure, public :: get_source                      !< Source of the value of a CLA.
+    procedure, public :: provenance                      !< Report of every value with its source.
     procedure, public :: run_command => is_called_group  !< Check if a CLAs group has been run.
     procedure, public :: parse                           !< Parse Command Line Interfaces.
     procedure, public :: reset_parse                     !< Forget the result of a parse, keeping the definitions.
@@ -148,6 +152,7 @@ contains
   self%ignore_env          = .false.
   if (allocated(self%auto_envvar_prefix)) deallocate(self%auto_envvar_prefix)
   if (allocated(self%config_path)) deallocate(self%config_path)
+  if (allocated(self%config_used)) deallocate(self%config_used)
   self%config_required     = .false.
   endsubroutine free
 
@@ -323,6 +328,7 @@ contains
     call report(ERROR_CONFIG_NOT_FOUND, ': configuration file "'//path//'" cannot be read: '//iomsg//'!')
     return
   endif
+  self%config_used = path
   if (self%ignore_unknown_clas) return
   if (config%bad_line > 0) then
     call report(ERROR_CONFIG_UNKNOWN_KEY, ': configuration file "'//path//'", line '//&
@@ -393,6 +399,111 @@ contains
     call self%print_error_message
     endsubroutine report
   endsubroutine load_config
+
+  function get_source(self, group, switch, position, pref, error) result(source)
+  !< Return the source of the value of a CLA (SOURCE_COMMANDLINE, _ENVIRONMENT, _CONFIG, _DEFAULT, _NONE; F06 of #125).
+  !<
+  !< Like get, it parses first if parse has not been called; an undefined CLA or group returns SOURCE_NONE with the error.
+  class(command_line_interface), intent(inout) :: self     !< CLI data.
+  character(*), optional,        intent(in)    :: group    !< Name of group (command) of CLA.
+  character(*), optional,        intent(in)    :: switch   !< Switch name.
+  integer(I4P), optional,        intent(in)    :: position !< Position of positional CLA.
+  character(*), optional,        intent(in)    :: pref     !< Prefixing string.
+  integer(I4P), optional,        intent(out)   :: error    !< Error trapping flag.
+  integer(I4P)                                 :: source   !< Source of the value.
+  integer(I4P)                                 :: g        !< Group index.
+  integer(I4P)                                 :: a        !< CLA index.
+
+  source = SOURCE_NONE
+  if (.not.self%is_parsed_) call self%parse(pref=pref)
+  self%error = 0
+  g = 0
+  if (present(group)) then
+    if (.not.self%is_defined_group(group=group, g=g)) then
+      call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
+      if (present(error)) error = self%error
+      return
+    endif
+  endif
+  a = 0
+  if (present(switch)) then
+    if (.not.self%clasg(g)%is_defined(switch=switch, pos=a)) call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch=switch)
+  elseif (present(position)) then
+    a = self%clasg(g)%positional_index(position)
+    if (a == 0) call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch='position '//trim(str(position, .true.)))
+  else
+    call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
+  endif
+  if (a > 0) source = self%clasg(g)%cla(a)%source
+  if (present(error)) error = self%error
+  endfunction get_source
+
+  function provenance(self, pref) result(report)
+  !< Return a report of every value with its source, for a run log (F06 of #125): one line per visible option of the top
+  !< level and of the called commands, `name = value [source]`, the environment and configuration sources naming their
+  !< variable and file. Builtins and hidden options are left out; like get, it parses first if parse has not been called.
+  class(command_line_interface), intent(inout) :: self    !< CLI data.
+  character(*), optional,        intent(in)    :: pref    !< Prefixing string.
+  character(len=:), allocatable                :: report  !< Report.
+  type(flap_string), allocatable               :: names(:)   !< Names.
+  type(flap_string), allocatable               :: values(:)  !< Values.
+  type(flap_string), allocatable               :: sources(:) !< Sources.
+  integer(I4P)                                 :: n       !< Number of lines.
+  integer(I4P)                                 :: wn      !< Width of the names.
+  integer(I4P)                                 :: wv      !< Width of the values.
+  integer(I4P)                                 :: g       !< Group index.
+  integer(I4P)                                 :: a       !< CLA index.
+  integer(I4P)                                 :: l       !< Line index.
+
+  report = ''
+  if (.not.self%is_parsed_) call self%parse(pref=pref)
+  n = 0
+  do g=0, size(self%clasg, dim=1) - 1
+    n = n + self%clasg(g)%Na
+  enddo
+  allocate(names(n), values(n), sources(n))
+  n = 0
+  do g=0, size(self%clasg, dim=1) - 1
+    if (g > 0 .and. .not.self%clasg(g)%is_called) cycle
+    do a=1, self%clasg(g)%Na
+      associate(cla => self%clasg(g)%cla(a))
+        if (cla%is_hidden) cycle
+        if (cla%act == ACTION_PRINT_HELP .or. cla%act == ACTION_PRINT_MARK .or. cla%act == ACTION_PRINT_VERS) cycle
+        n = n + 1
+        if (cla%is_positional) then
+          names(n)%s = 'position '//trim(str(cla%position, .true.))
+        else
+          names(n)%s = trim(adjustl(cla%switch))
+        endif
+        if (g > 0) names(n)%s = self%clasg(g)%group//' '//names(n)%s
+        values(n)%s = cla%value_text()
+        select case(cla%source)
+        case(SOURCE_COMMANDLINE)
+          sources(n)%s = 'command line'
+        case(SOURCE_ENVIRONMENT)
+          sources(n)%s = 'environment: '//trim(adjustl(cla%envvar))
+        case(SOURCE_CONFIG)
+          sources(n)%s = 'config'
+          if (allocated(self%config_used)) sources(n)%s = 'config: '//self%config_used
+        case(SOURCE_DEFAULT)
+          sources(n)%s = 'default'
+        case default
+          sources(n)%s = 'none'
+        endselect
+      endassociate
+    enddo
+  enddo
+  wn = 0 ; wv = 0
+  do l=1, n
+    wn = max(wn, len(names(l)%s))
+    wv = max(wv, len(values(l)%s))
+  enddo
+  do l=1, n
+    if (l > 1) report = report//new_line('a')
+    report = report//names(l)%s//repeat(' ', wn - len(names(l)%s))//' = '//values(l)%s//&
+             repeat(' ', wv - len(values(l)%s))//' ['//sources(l)%s//']'
+  enddo
+  endfunction provenance
 
   subroutine set_mutually_exclusive_switches(self, switches, required, group, pref, error)
   !< Set a mutually exclusive set of switches (F03 of #125): at most one member may be passed, exactly one if required.
@@ -520,6 +631,7 @@ contains
 
     if (.not.allocated(self%auto_envvar_prefix)) return
     if (self%auto_envvar_prefix == '' .or. cla%is_positional .or. .not.allocated(cla%switch)) return
+    if (verify(cla%switch, '- ') == 0) return ! only dashes, as the builtin '--': no name
     if (cla%act /= ACTION_STORE .and. cla%act /= ACTION_STORE_TRUE .and. cla%act /= ACTION_STORE_FALSE) return
     gname = ''
     if (present(group)) then
@@ -728,6 +840,7 @@ contains
   self%error = 0
   self%error_unknown_clas = 0
   if (allocated(self%args)) deallocate(self%args)
+  if (allocated(self%config_used)) deallocate(self%config_used)
   do g=0, size(self%clasg, dim=1) - 1
     call self%clasg(g)%reset_parse
   enddo
