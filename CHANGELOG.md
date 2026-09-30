@@ -4,6 +4,19 @@ All notable changes to this project are documented here.
 Versions follow [Semantic Versioning](https://semver.org/).
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.2.0] — 2026-09-30
+### Added
+- **cla**: Metavar, the placeholder of a value in the help
+
+- **completion**: Bash file-name fallback and zsh completion
+
+- **completion**: Native fish completion script
+
+- **completion**: PowerShell completion script
+
+- **completion**: --show-completion and --install-completion
+
+
 ## [2.1.0] — 2026-09-30
 ### Added
 - **cla**: Numeric ranges min/max/open/clamp, checked by get
