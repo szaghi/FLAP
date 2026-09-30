@@ -18,8 +18,8 @@ use flap_command_line_argument_t, only : command_line_argument, &
                                          SOURCE_NONE
 use flap_config_m, only : config_file
 use flap_object_t, only : object
-use flap_utils_m, only : flap_string, list_count, list_items, list_push, read_env, suggestions, tokenize, upper_case, &
-                         write_text
+use flap_utils_m, only : fish_escape, flap_string, list_count, list_items, list_push, read_env, suggestions, tokenize, &
+                         upper_case, write_text
 use penf
 
 implicit none
@@ -68,6 +68,7 @@ type, extends(object) :: command_line_arguments_group
     procedure, public :: names                 !< Name and aliases of the group (command), separated.
     procedure, public :: name_count            !< Number of names of the group (command): 1 + aliases.
     procedure, public :: has_examples          !< Check if the group (command) has examples.
+    procedure, public :: completion_fish       !< Fish completion lines of the group (command) and its CLAs.
     procedure, public :: examples_text         !< Examples of the group (command), for its help.
     procedure, public :: name_of               !< Name (1) or alias (2, ...) of the group (command).
     procedure, public :: check                 !< Check data consistency.
@@ -183,6 +184,31 @@ contains
     endif
   enddo
   endsubroutine check_maps
+
+  function completion_fish(self, prog, commands) result(lines)
+  !< Get the fish completion lines of the group (F15 of #125): for a command, the line completing its names (while no
+  !< command is typed) and its CLAs (once it is); for the top level, its CLAs (while no command is typed, if any).
+  class(command_line_arguments_group), intent(in) :: self     !< CLAsG data.
+  character(*),                        intent(in) :: prog     !< Program name.
+  logical,                             intent(in) :: commands !< The CLI has commands.
+  character(len=:), allocatable                   :: lines    !< Completion lines.
+  character(len=:), allocatable                   :: head     !< Beginning of the lines of the CLAs.
+  integer(I4P)                                    :: a        !< Counter.
+
+  lines = ''
+  if (self%group /= '') then
+    lines = new_line('a')//"complete -c "//prog//" -n '__fish_use_subcommand' -f -a '"//fish_escape(self%names(' '))//&
+            "' -d '"//fish_escape(trim(adjustl(self%description)))//"'"
+    head = "complete -c "//prog//" -n '__fish_seen_subcommand_from "//fish_escape(self%names(' '))//"'"
+  elseif (commands) then
+    head = "complete -c "//prog//" -n '__fish_use_subcommand'"
+  else
+    head = "complete -c "//prog
+  endif
+  do a=1, self%Na
+    lines = lines//self%cla(a)%completion_fish(head)
+  enddo
+  endfunction completion_fish
 
   pure function has_examples(self) result(has)
   !< Check if the group (command) has examples.

@@ -96,6 +96,7 @@ graph LR
 - [signature](#signature)
 - [signature_usage](#signature-usage)
 - [completion_words](#completion-words)
+- [completion_fish](#completion-fish)
 - [completion_values](#completion-values)
 - [has_choices](#has-choices)
 - [check_list_size](#check-list-size)
@@ -300,6 +301,7 @@ classDiagram
 | `signature_usage` |  | Get the signature for the usage text. |
 | `completion_words` |  | Get the bash completion words (switches). |
 | `completion_values` |  | Get the bash completion of the value. |
+| `completion_fish` |  | Get the fish completion lines. |
 | `usage` |  | Get correct usage. |
 | `errored` |  | Trig error occurence and print meaningful message. |
 | `check_count_consistency` |  | Check data consistency for count CLA. |
@@ -2298,6 +2300,7 @@ function names(self) result(list)
 
 ```mermaid
 flowchart TD
+  completion_fish["completion_fish"] --> names["names"]
   save_bash_completion_core["save_bash_completion_core"] --> names["names"]
   signature_core["signature_core"] --> names["names"]
   usage_core["usage_core"] --> names["names"]
@@ -2588,6 +2591,39 @@ flowchart TD
   style completion_words fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
+### completion_fish
+
+Get the fish completion lines of a named CLA (F15 of #125): each starts with a new line and head (`complete -c prog`
+ and its condition). Long switches are -l, one-letter ones -s, multi-letter single-dash ones old-style -o; choices are
+ offered exclusively (-x -a), a free value completes file names (-r -F), a flag takes none; a negation has its own line.
+ None for positional or hidden CLAs.
+
+**Returns**: `character(len=:)`
+
+```fortran
+function completion_fish(self, head) result(lines)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+| `head` | character(len=*) | in |  | Beginning of each line. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  completion_fish["completion_fish"] --> completion_fish["completion_fish"]
+  save_fish_completion["save_fish_completion"] --> completion_fish["completion_fish"]
+  completion_fish["completion_fish"] --> fish_escape["fish_escape"]
+  completion_fish["completion_fish"] --> fish_name["fish_name"]
+  completion_fish["completion_fish"] --> has_choices["has_choices"]
+  completion_fish["completion_fish"] --> replace_all["replace_all"]
+  style completion_fish fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
 ### completion_values
 
 Get the bash completion of the value following a named CLA: a `prev` test offering its choices, or nothing for a value.
@@ -2637,6 +2673,7 @@ function has_choices(self)
 
 ```mermaid
 flowchart TD
+  completion_fish["completion_fish"] --> has_choices["has_choices"]
   completion_values["completion_values"] --> has_choices["has_choices"]
   style has_choices fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```

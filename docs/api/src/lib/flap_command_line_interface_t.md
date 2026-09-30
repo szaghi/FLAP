@@ -59,6 +59,7 @@ graph LR
 - [ensure_builtins](#ensure-builtins)
 - [save_bash_completion](#save-bash-completion)
 - [save_zsh_completion](#save-zsh-completion)
+- [save_fish_completion](#save-fish-completion)
 - [save_man_page](#save-man-page)
 - [save_usage_to_markdown](#save-usage-to-markdown)
 - [print_usage](#print-usage)
@@ -195,6 +196,7 @@ classDiagram
 | `print_usage` |  | Print correct usage of CLI. |
 | `save_bash_completion` |  | Save bash completion script (for named CLAs only). |
 | `save_zsh_completion` |  | Save zsh completion script (bash script via bashcompinit). |
+| `save_fish_completion` |  | Save fish completion script (native). |
 | `save_man_page` |  | Save CLI usage as man page. |
 | `save_usage_to_markdown` |  | Save CLI usage as markdown. |
 | `ensure_builtins` |  | Add the builtin CLAs (help, markdown, version, --) if missing. |
@@ -1385,6 +1387,7 @@ subroutine ensure_builtins(self, pref)
 flowchart TD
   parse_core["parse_core"] --> ensure_builtins["ensure_builtins"]
   save_bash_completion["save_bash_completion"] --> ensure_builtins["ensure_builtins"]
+  save_fish_completion["save_fish_completion"] --> ensure_builtins["ensure_builtins"]
   save_man_page["save_man_page"] --> ensure_builtins["ensure_builtins"]
   save_usage_to_markdown["save_usage_to_markdown"] --> ensure_builtins["ensure_builtins"]
   save_zsh_completion["save_zsh_completion"] --> ensure_builtins["ensure_builtins"]
@@ -1447,6 +1450,33 @@ flowchart TD
   save_zsh_completion["save_zsh_completion"] --> ensure_builtins["ensure_builtins"]
   save_zsh_completion["save_zsh_completion"] --> save_bash_completion_core["save_bash_completion_core"]
   style save_zsh_completion fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### save_fish_completion
+
+Save fish completion script (F15 of #125), native: switches, choices, file names for free values, commands and
+ aliases; builtins included whether or not parse has been called. Install it as ~/.config/fish/completions/prog.fish.
+
+```fortran
+subroutine save_fish_completion(self, fish_file, error)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | in |  | CLI data. |
+| `fish_file` | character(len=*) | in |  | Output file name of fish completion script. |
+| `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | optional | Error trapping flag. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  save_fish_completion["save_fish_completion"] --> builtins_missing["builtins_missing"]
+  save_fish_completion["save_fish_completion"] --> completion_fish["completion_fish"]
+  save_fish_completion["save_fish_completion"] --> ensure_builtins["ensure_builtins"]
+  style save_fish_completion fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### save_man_page
@@ -2229,6 +2259,7 @@ function builtins_missing(self) result(missing)
 ```mermaid
 flowchart TD
   save_bash_completion["save_bash_completion"] --> builtins_missing["builtins_missing"]
+  save_fish_completion["save_fish_completion"] --> builtins_missing["builtins_missing"]
   save_man_page["save_man_page"] --> builtins_missing["builtins_missing"]
   save_usage_to_markdown["save_usage_to_markdown"] --> builtins_missing["builtins_missing"]
   save_zsh_completion["save_zsh_completion"] --> builtins_missing["builtins_missing"]

@@ -77,6 +77,7 @@ type, extends(object), public :: command_line_interface
     procedure, public :: print_usage                     !< Print correct usage of CLI.
     procedure, public :: save_bash_completion            !< Save bash completion script (for named CLAs only).
     procedure, public :: save_zsh_completion             !< Save zsh completion script (bash script via bashcompinit).
+    procedure, public :: save_fish_completion            !< Save fish completion script (native).
     procedure, public :: save_man_page                   !< Save CLI usage as man page.
     procedure, public :: save_usage_to_markdown          !< Save CLI usage as markdown.
     ! private methods
@@ -2372,6 +2373,39 @@ contains
   endif
   endsubroutine save_zsh_completion
 
+  subroutine save_fish_completion(self, fish_file, error)
+  !< Save fish completion script (F15 of #125), native: switches, choices, file names for free values, commands and
+  !< aliases; builtins included whether or not parse has been called. Install it as ~/.config/fish/completions/prog.fish.
+  class(command_line_interface), intent(in)  :: self      !< CLI data.
+  character(*),                  intent(in)  :: fish_file !< Output file name of fish completion script.
+  integer(I4P), optional,        intent(out) :: error     !< Error trapping flag.
+  type(command_line_interface)               :: cli       !< Copy of the CLI with the builtins.
+  character(len=:), allocatable              :: script    !< Script text.
+  character(len=:), allocatable              :: prog      !< Program name, without its path.
+  integer(I4P)                               :: g         !< Counter.
+  integer(I4P)                               :: p         !< Position of the last path separator.
+  integer(I4P)                               :: u         !< Unit file handler.
+
+  cli = self
+  if (cli%builtins_missing()) call cli%ensure_builtins
+  prog = trim(adjustl(cli%progname))
+  p = max(index(prog, '/', back=.true.), index(prog, achar(92), back=.true.)) ! achar(92): a backslash
+  prog = prog(p+1:)
+  script = '# fish completion of '//prog//': install as ~/.config/fish/completions/'//prog//'.fish'
+  do g=0, size(cli%clasg, dim=1) - 1
+    script = script//cli%clasg(g)%completion_fish(prog=prog, commands=size(cli%clasg, dim=1) > 1)
+  enddo
+  if (present(error)) then
+    open(newunit=u, file=trim(adjustl(fish_file)), action='write', status='replace', iostat=error)
+    if (error /= 0) return
+    write(u, "(A)", iostat=error) script
+  else
+    open(newunit=u, file=trim(adjustl(fish_file)), action='write', status='replace')
+    write(u, "(A)") script
+  endif
+  close(u)
+  endsubroutine save_fish_completion
+
   subroutine save_man_page(self, man_file, error)
   !< Save CLI usage as man page, builtins included whether or not parse has been called.
   class(command_line_interface), intent(in)  :: self     !< CLI data.
@@ -2607,7 +2641,7 @@ contains
       if (pos>0) then
         basename = basename(pos+1:)
       else
-        pos = index(basename, '\', back=.true.)
+        pos = index(basename, achar(92), back=.true.) ! achar(92): a backslash (a literal is an escape for nvfortran)
         if (pos>0) basename = basename(pos+1:)
       endif
       endfunction basename

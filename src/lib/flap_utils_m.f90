@@ -7,6 +7,7 @@ implicit none
 private
 public :: count
 public :: csv_split
+public :: fish_escape
 public :: flap_string
 public :: levenshtein
 public :: to_characters
@@ -445,6 +446,28 @@ contains
     if (n2>0) upper_case(n1:n1) = upper_alphabet(n2:n2)
   enddo
   endfunction upper_case
+
+  pure function fish_escape(text) result(escaped)
+  !< Return a text for a fish single-quoted string (F15 of #125): a backslash and a quote are escaped, new lines become
+  !< blanks.
+  character(*), intent(in)      :: text    !< Text.
+  character(len=:), allocatable :: escaped !< Escaped text.
+  integer(I4P)                  :: c       !< Counter.
+
+  escaped = ''
+  do c=1, len(text)
+    select case(text(c:c))
+    case("'")
+      escaped = escaped//achar(92)//"'" ! achar(92): a backslash (not a literal, which some compilers read as an escape)
+    case(achar(92))
+      escaped = escaped//achar(92)//achar(92)
+    case(achar(10), achar(13))
+      escaped = escaped//' '
+    case default
+      escaped = escaped//text(c:c)
+    endselect
+  enddo
+  endfunction fish_escape
 
   pure function levenshtein(a, b) result(d)
   !< Return the Levenshtein (edit) distance of two strings: insertions, deletions and substitutions, two-row dynamic

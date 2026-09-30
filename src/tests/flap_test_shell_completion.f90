@@ -1,10 +1,12 @@
-!< Shell completion scripts: bash file-name fallback and zsh (issue #125, step 4.2; #11 12a-12b, T12.1-T12.2).
+!< Shell completion scripts: bash file-name fallback, zsh, fish (issue #125, step 4.2; #11 12a-12c, T12.1-T12.3).
 program flap_test_shell_completion
-!< Shell completion scripts: bash file-name fallback and zsh (issue #125, step 4.2; #11 12a-12b, T12.1-T12.2).
+!< Shell completion scripts: bash file-name fallback, zsh, fish (issue #125, step 4.2; #11 12a-12c, T12.1-T12.3).
 !<
 !< The bash script is registered with `complete -o default`, so an empty completion (a free value) falls back to file names.
 !< The zsh script is the bash one behind bashcompinit. The bash function is run for real (bash is always there), through a
-!< driver script; zsh is checked (syntax and a completion) only when it is installed.
+!< driver script; zsh and fish are checked (syntax and completions) only when installed. The fish script is native: long
+!< (-l), one-letter (-s) and multi-letter old-style (-o) switches, choices, file names for free values, commands and aliases.
+!< FLAP_TEST_FISH_FUNCTIONS, if set, is prepended to fish_function_path (a fish unpacked outside /usr).
 use flap, only : command_line_interface
 use flap_test_utils, only : assert, assert_contains, assert_equal, capture_close, capture_open, delete_file, read_back, &
                             read_file, run_command, scratch_file, write_file
@@ -16,6 +18,7 @@ character(:), allocatable    :: out      !< Output.
 character(:), allocatable    :: script   !< Script text.
 character(:), allocatable    :: bash     !< Bash script file.
 character(:), allocatable    :: zsh      !< Zsh script file.
+character(:), allocatable    :: fish     !< Fish script file.
 character(:), allocatable    :: driver   !< Driver script file.
 integer(I4P)                 :: lun      !< Capture unit.
 integer(I4P)                 :: error    !< Error trapping flag.
@@ -23,6 +26,7 @@ integer(I4P)                 :: exitstat !< Exit status of a command.
 
 bash = scratch_file('bash')
 zsh = scratch_file('zsh')
+fish = scratch_file('fish')
 driver = scratch_file('driver')
 call capture_open(lun)
 call define
@@ -53,8 +57,34 @@ if (index(out, 'yes') > 0) then
   call assert_contains(completed('zsh', zsh, 'prog --me', 1), '--mesh', 'zsh: a switch among the candidates')
   call assert_equal(completed('zsh', zsh, 'prog --scheme ""', 2), '[weno5 muscl]', 'zsh: choices')
 endif
+! T12.3: fish, native
+call cli%save_fish_completion(fish_file=fish, error=error)
+call assert_equal(error, 0_I4P, 'fish script saved')
+script = read_file(fish)
+call assert_contains(script, "complete -c flap_test_shell_completion -n '__fish_use_subcommand' -f -a 'compile co' "// &
+                     "-d 'compile'", 'fish: the command and its alias')
+call assert_contains(script, "-l mesh -s m -d 'mesh' -r -F", 'fish: a free value, file names')
+call assert_contains(script, "-l scheme -d 'scheme' -x -a 'weno5 muscl'", 'fish: choices')
+call assert_contains(script, "-n '__fish_seen_subcommand_from compile co' -l opt -s O -d 'optimization' -r -F", &
+                     'fish: an option of a command, one-letter short switch')
+call assert_contains(script, "-l jobs -o jn -d 'jobs' -r -F", 'fish: a multi-letter short switch, old-style -o')
+call assert_contains(script, "-l restart -d 'restart'", 'fish: a flag')
+call assert_contains(script, "-l no-restart -d 'restart'", 'fish: its negation')
+call assert_contains(script, "-d 'it"//achar(92)//"'s quoted'", 'fish: a quote escaped') ! achar(92): a backslash
+call assert(index(script, 'secret') == 0, 'fish: hidden excluded')
+call run_command('if command -v fish > /dev/null; then echo yes; else echo no; fi', exitstat, out)
+if (index(out, 'yes') > 0) then
+  call run_command('fish --no-execute '//fish, exitstat, out)
+  call assert_equal(exitstat, 0_I4P, 'fish: syntax')
+  call assert_equal(fish_completed(fish, 'flap_test_shell_completion --me'), '--mesh', 'fish: a switch')
+  call assert_equal(fish_completed(fish, 'flap_test_shell_completion --scheme '), 'muscl weno5', 'fish: choices')
+  call assert_equal(fish_completed(fish, 'flap_test_shell_completion compile --o'), '--opt', 'fish: a switch of a command')
+  call assert_equal(fish_completed(fish, 'flap_test_shell_completion c'), 'co compile', 'fish: commands and aliases')
+  call assert_equal(fish_completed(fish, 'flap_test_shell_completion --no-r'), '--no-restart', 'fish: a negation')
+endif
 call delete_file(bash)
 call delete_file(zsh)
+call delete_file(fish)
 call delete_file(driver)
 ! an unwritable file is reported
 call cli%save_zsh_completion(zsh_file='/nonexistent/dir/x.zsh', error=error)
@@ -67,11 +97,17 @@ contains
   !< Define the CLI.
 
   call cli%init(progname='flap_test_shell_completion', error_lun=lun, usage_lun=lun)
-  call cli%add(switch='--mesh', help='mesh', required=.false., act='store', def='', error=error)
+  call cli%add(switch='--mesh', switch_ab='-m', help='mesh', required=.false., act='store', def='', error=error)
   call cli%add(switch='--scheme', help='scheme', required=.false., act='store', def='muscl', choices='weno5,muscl', &
                error=error)
-  call cli%add_group(group='compile', description='compile', error=error)
-  call cli%add(group='compile', switch='--opt', help='optimization', required=.false., act='store', def='0', error=error)
+  call cli%add(switch='--restart', switch_neg='--no-restart', help='restart', required=.false., act='store_true', &
+               def='.false.', error=error)
+  call cli%add(switch='--quote', help="it's quoted", required=.false., act='store', def='', error=error)
+  call cli%add(switch='--jobs', switch_ab='-jn', help='jobs', required=.false., act='store', def='1', error=error)
+  call cli%add(switch='--secret', help='secret', required=.false., act='store', def='', hidden=.true., error=error)
+  call cli%add_group(group='compile', aliases='co', description='compile', error=error)
+  call cli%add(group='compile', switch='--opt', switch_ab='-O', help='optimization', required=.false., act='store', &
+               def='0', error=error)
   call assert_equal(error, 0_I4P, 'add the options')
   endsubroutine define
 
@@ -104,4 +140,23 @@ contains
   e = index(reply, new_line('a'))
   if (e > 0) reply = reply(:e-1)
   endfunction completed
+
+  function fish_completed(file, line) result(words)
+  !< Run fish's own completion of a command line (complete -C) with a script, and return the completed words, sorted and
+  !< blank separated (the descriptions dropped).
+  character(*), intent(in)      :: file   !< Completion script.
+  character(*), intent(in)      :: line   !< Command line.
+  character(len=:), allocatable :: words  !< Completed words.
+  character(len=:), allocatable :: output !< Output.
+  integer(I4P)                  :: stat   !< Exit status.
+
+  call write_file(driver, 'set -q FLAP_TEST_FISH_FUNCTIONS; and set -p fish_function_path $FLAP_TEST_FISH_FUNCTIONS'// &
+                  new_line('a')//'source '//file//new_line('a')// &
+                  "complete -C '"//line//"' | string replace -r '"//achar(92)//"t.*' '' | sort | string join ' '"// &
+                  new_line('a')//'exit 0'//new_line('a')) ! string join exits 1 with a single word
+  call run_command('fish '//driver, stat, output)
+  call assert_equal(stat, 0_I4P, 'fish: completion of "'//line//'" runs')
+  words = output
+  if (index(words, new_line('a')) > 0) words = words(:index(words, new_line('a'))-1)
+  endfunction fish_completed
 endprogram flap_test_shell_completion

@@ -119,6 +119,21 @@ same file-name fallback. Source it, for example from `~/.zshrc`:
 source /path/to/myapp.zsh
 ```
 
+## Fish completion — `cli%save_fish_completion`
+
+```fortran
+call cli%save_fish_completion(fish_file='myapp.fish', error=error)
+```
+
+A native fish script: one `complete` line per option, with its help as the description. Long switches (`--mesh`) map to
+`-l`, one-letter ones (`-m`) to `-s`, multi-letter single-dash ones (`-opt`) to fish's old-style `-o`. Choices are
+offered exclusively, a free value completes file names, and commands and their aliases are completed first, their
+options once one is typed. Hidden options are left out. Install it where fish looks for it:
+
+```bash
+cp myapp.fish ~/.config/fish/completions/myapp.fish
+```
+
 ## Markdown usage export — `cli%save_usage_to_markdown`
 
 Export the usage message as a Markdown file, suitable for embedding in documentation
@@ -149,5 +164,6 @@ you control the flow.
 | `cli%save_man_page` | Unix man page (troff format) | `myapp.1` |
 | `cli%save_bash_completion` | Bash completion script | `myapp.bash` |
 | `cli%save_zsh_completion` | Zsh completion script | `myapp.zsh` |
+| `cli%save_fish_completion` | Fish completion script | `myapp.fish` |
 | `cli%save_usage_to_markdown` | Markdown usage page | `usage.md` |
 | `cli%print_usage` | Prints help to `stdout` | — |

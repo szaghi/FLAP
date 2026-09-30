@@ -34,6 +34,7 @@ graph LR
 - [replace_all](#replace-all)
 - [unique](#unique)
 - [upper_case](#upper-case)
+- [fish_escape](#fish-escape)
 - [levenshtein](#levenshtein)
 - [suggestions](#suggestions)
 - [wstrip](#wstrip)
@@ -442,6 +443,7 @@ function replace_all(string, substring, restring) result(newstring)
 ```mermaid
 flowchart TD
   check_map_consistency["check_map_consistency"] --> replace_all["replace_all"]
+  completion_fish["completion_fish"] --> replace_all["replace_all"]
   envvar_name["envvar_name"] --> replace_all["replace_all"]
   list_join["list_join"] --> replace_all["replace_all"]
   sanitize_defaults["sanitize_defaults"] --> replace_all["replace_all"]
@@ -513,6 +515,34 @@ flowchart TD
   same_name["same_name"] --> upper_case["upper_case"]
   set_source_value["set_source_value"] --> upper_case["upper_case"]
   style upper_case fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### fish_escape
+
+Return a text for a fish single-quoted string (F15 of #125): a backslash and a quote are escaped, new lines become
+ blanks.
+
+**Attributes**: pure
+
+**Returns**: `character(len=:)`
+
+```fortran
+function fish_escape(text) result(escaped)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `text` | character(len=*) | in |  | Text. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  completion_fish["completion_fish"] --> fish_escape["fish_escape"]
+  completion_fish["completion_fish"] --> fish_escape["fish_escape"]
+  style fish_escape fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### levenshtein

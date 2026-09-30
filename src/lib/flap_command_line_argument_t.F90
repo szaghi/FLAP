@@ -181,6 +181,7 @@ type, extends(object) :: command_line_argument
     procedure, public :: signature_usage                 !< Get the signature for the usage text.
     procedure, public :: completion_words                !< Get the bash completion words (switches).
     procedure, public :: completion_values               !< Get the bash completion of the value.
+    procedure, public :: completion_fish                 !< Get the fish completion lines.
     procedure, public :: usage                           !< Get correct usage.
     ! private methods
     procedure, private :: errored                         !< Trig error occurence and print meaningful message.
@@ -1129,6 +1130,63 @@ contains
   endif
   if (allocated(self%switch_neg)) words = words//' '//trim(adjustl(self%switch_neg))
   endfunction completion_words
+
+  function completion_fish(self, head) result(lines)
+  !< Get the fish completion lines of a named CLA (F15 of #125): each starts with a new line and head (`complete -c prog`
+  !< and its condition). Long switches are -l, one-letter ones -s, multi-letter single-dash ones old-style -o; choices are
+  !< offered exclusively (-x -a), a free value completes file names (-r -F), a flag takes none; a negation has its own line.
+  !< None for positional or hidden CLAs.
+  class(command_line_argument), intent(in) :: self  !< CLA data.
+  character(*),                 intent(in) :: head  !< Beginning of each line.
+  character(len=:), allocatable            :: lines !< Completion lines.
+  character(len=:), allocatable            :: names !< Switch names, as fish options.
+  character(len=:), allocatable            :: value !< Value completion.
+  character(len=:), allocatable            :: desc  !< Description.
+
+  lines = ''
+  if (self%is_hidden .or. self%is_positional .or. .not.allocated(self%switch)) return
+  names = fish_name(self%switch)
+  if (allocated(self%switch_ab)) then
+    if (trim(adjustl(self%switch_ab)) /= trim(adjustl(self%switch))) names = names//fish_name(self%switch_ab)
+  endif
+  if (names == '') return
+  value = ''
+  if (self%act == ACTION_STORE .or. self%act == ACTION_APPEND .or. self%act == ACTION_STORE_STAR) then
+    if (self%has_choices()) then
+      value = " -x -a '"//fish_escape(replace_all(string=self%choices, substring=',', restring=' '))//"'"
+    elseif (self%is_map) then
+      value = ' -x'
+    elseif (self%act == ACTION_STORE_STAR) then
+      value = ' -F'
+    else
+      value = ' -r -F'
+    endif
+  endif
+  desc = " -d '"//fish_escape(trim(adjustl(self%help)))//"'"
+  lines = new_line('a')//head//names//desc//value
+  if (allocated(self%switch_neg)) then
+    if (fish_name(self%switch_neg) /= '') lines = lines//new_line('a')//head//fish_name(self%switch_neg)//desc
+  endif
+  contains
+    pure function fish_name(switch) result(option)
+    !< The fish option naming a switch: ' -l x' for --x, ' -s x' for -x, ' -o xy' for -xy ('' otherwise).
+    character(*), intent(in)      :: switch !< Switch.
+    character(len=:), allocatable :: option !< Fish option.
+    character(len=:), allocatable :: s      !< Switch without blanks.
+
+    s = trim(adjustl(switch))
+    option = ''
+    if (len(s) > 2) then
+      if (s(1:2) == '--') then
+        option = ' -l '//s(3:)
+      elseif (s(1:1) == '-') then
+        option = ' -o '//s(2:)
+      endif
+    elseif (len(s) == 2) then
+      if (s(1:1) == '-' .and. s(2:2) /= '-') option = ' -s '//s(2:2)
+    endif
+    endfunction fish_name
+  endfunction completion_fish
 
   function completion_values(self) result(values)
   !< Get the bash completion of the value following a named CLA: a `prev` test offering its choices, or nothing for a value.

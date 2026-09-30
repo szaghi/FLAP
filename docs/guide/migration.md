@@ -111,7 +111,8 @@ values still takes the default: both change in v2.0.0 (see below).
 
 - `add(..., metavar='FILE')` names the value in the usage, help, man page and Markdown (F12); the default stays `value`.
 - **The bash completion script changes**: it is registered with `complete -o default`, so a free value falls back to file
-  names; regenerate it. `cli%save_zsh_completion(zsh_file)` writes a zsh script (F15).
+  names; regenerate it. `cli%save_zsh_completion(zsh_file)` and `cli%save_fish_completion(fish_file)` write zsh and
+  fish scripts (F15).
 
 ## v2.1.0 (additive)
 

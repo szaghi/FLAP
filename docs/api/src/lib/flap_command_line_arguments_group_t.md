@@ -43,6 +43,7 @@ graph LR
 - [finalize](#finalize)
 - [is_named](#is-named)
 - [has_alias](#has-alias)
+- [completion_fish](#completion-fish)
 - [has_examples](#has-examples)
 - [examples_text](#examples-text)
 - [name_count](#name-count)
@@ -157,6 +158,7 @@ classDiagram
 | `names` |  | Name and aliases of the group (command), separated. |
 | `name_count` |  | Number of names of the group (command): 1 + aliases. |
 | `has_examples` |  | Check if the group (command) has examples. |
+| `completion_fish` |  | Fish completion lines of the group (command) and its CLAs. |
 | `examples_text` |  | Examples of the group (command), for its help. |
 | `name_of` |  | Name (1) or alias (2, ...) of the group (command). |
 | `check` |  | Check data consistency. |
@@ -830,6 +832,37 @@ flowchart TD
   style has_alias fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
+### completion_fish
+
+Get the fish completion lines of the group (F15 of #125): for a command, the line completing its names (while no
+ command is typed) and its CLAs (once it is); for the top level, its CLAs (while no command is typed, if any).
+
+**Returns**: `character(len=:)`
+
+```fortran
+function completion_fish(self, prog, commands) result(lines)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_arguments_group](/api/src/lib/flap_command_line_arguments_group_t#command-line-arguments-group)) | in |  | CLAsG data. |
+| `prog` | character(len=*) | in |  | Program name. |
+| `commands` | logical | in |  | The CLI has commands. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  completion_fish["completion_fish"] --> completion_fish["completion_fish"]
+  save_fish_completion["save_fish_completion"] --> completion_fish["completion_fish"]
+  completion_fish["completion_fish"] --> completion_fish["completion_fish"]
+  completion_fish["completion_fish"] --> fish_escape["fish_escape"]
+  completion_fish["completion_fish"] --> names["names"]
+  style completion_fish fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
 ### has_examples
 
 Check if the group (command) has examples.
@@ -959,6 +992,7 @@ function names(self, sep) result(list)
 
 ```mermaid
 flowchart TD
+  completion_fish["completion_fish"] --> names["names"]
   save_bash_completion_core["save_bash_completion_core"] --> names["names"]
   signature_core["signature_core"] --> names["names"]
   usage_core["usage_core"] --> names["names"]
