@@ -144,6 +144,7 @@ integer(I4P), parameter, public :: ERROR_COPY_POSITIONAL       = 1009 !< copy_op
 integer(I4P), parameter, public :: ERROR_COMPLETION_SHELL      = 1010 !< Unknown (or unset) shell of the completion builtins.
 integer(I4P), parameter, public :: ERROR_COMPLETION_INSTALL    = 1011 !< The completion script cannot be installed.
 integer(I4P), parameter, public :: ERROR_ARGUMENT_RETRIEVAL    = 1012 !< A command line argument cannot be retrieved.
+integer(I4P), parameter, public :: ERROR_COMMAND_REPEATED      = 1013 !< A command passed more than once (B36).
 
 contains
   ! public methods
@@ -1115,20 +1116,27 @@ contains
   type(flap_string), allocatable               :: commands(:) !< Names and aliases of the commands (suggestions, F10).
   integer(I4P)                                 :: c       !< Counter.
   integer(I4P)                                 :: n       !< Counter.
+  type(flap_string), allocatable               :: repeated(:) !< A command passed twice: [name, spelling] (B36).
 
   call self%ensure_builtins(pref=pref)
 
   ! parse passed CLAs grouping in indexes
   if (present(args)) then
-    call self%get_args(args=args, ai=ai)
+    call self%get_args(args=args, ai=ai, repeated=repeated)
   else
-    call self%get_args(ai=ai)
+    call self%get_args(ai=ai, repeated=repeated)
   endif
   if (self%error == ERROR_ARGUMENT_RETRIEVAL) return
 
   ! check CLI consistency
   call self%check(pref=pref)
   if (self%is_fatal()) return
+
+  ! a command passed twice: a syntax error, before the help and the other statuses (B36, D3)
+  if (allocated(repeated)) then
+    call self%errored(pref=pref, error=ERROR_COMMAND_REPEATED, group=repeated(1)%s, switch=repeated(2)%s)
+    return
+  endif
 
   ! no arguments at all, or a command invoked alone: its help, if asked for (F25, first in the D3 order)
   if (self%no_args_help(ai=ai, pref=pref)) return
@@ -1491,14 +1499,16 @@ contains
   endif
   endfunction is_fatal
 
-  subroutine get_clasg_indexes(self, ai)
+  subroutine get_clasg_indexes(self, ai, repeated)
   !< Get the argument indexes of each CLAs group (command): ai(g,1:2) is the slice of self%args belonging to group g.
   !<
   !< Arguments before the first command name belong to group 0; the arguments after a command name belong to that command.
   !< The fixed value slots of a switch (`value_arity`) are skipped before testing for a command name, so a value equal to a
-  !< command name stays a value (B04); a variadic list is ended by a command name.
-  class(command_line_interface), intent(inout) :: self   !< CLI data.
-  integer(I4P), allocatable,     intent(out)   :: ai(:,:)!< CLAs grouped indexes.
+  !< command name stays a value (B04); a variadic list is ended by a command name. A command met again (by its name or an
+  !< alias) is returned in `repeated` (its name and the spelling met), never restarted (B36: that dropped its values).
+  class(command_line_interface),  intent(inout) :: self        !< CLI data.
+  integer(I4P), allocatable,      intent(out)   :: ai(:,:)     !< CLAs grouped indexes.
+  type(flap_string), allocatable, intent(out)   :: repeated(:) !< The first command repeated, [name, spelling]; none if none.
   integer(I4P)                                 :: Na     !< Number of command line arguments passed.
   integer(I4P)                                 :: a      !< Counter for CLAs.
   integer(I4P)                                 :: g      !< Counter for CLAs group.
@@ -1518,7 +1528,16 @@ contains
         ! a switch of the current group and its values: never command names
         a = min(a + n, Na)
       elseif (self%is_defined_group(group=trim(self%args(a)%s), g=g)) then
-        if (g > 0) then
+        if (g > 0 .and. self%clasg(g)%is_called) then
+          ! the command again: an error (B36), reported by parse_core; the first repetition is kept
+          if (.not.allocated(repeated)) then
+            allocate(repeated(2))
+            repeated(1)%s = self%clasg(g)%group
+            repeated(2)%s = trim(self%args(a)%s)
+          endif
+          gc = g
+          cycle
+        elseif (g > 0) then
           ! a command: its arguments start after its name
           gc = g
           self%clasg(g)%is_called = .true.
@@ -1540,13 +1559,14 @@ contains
   endif
   endsubroutine get_clasg_indexes
 
-  subroutine get_args_from_string(self, args, ai)
+  subroutine get_args_from_string(self, args, ai, repeated)
   !< Get CLAs from string.
   !<
   !< The string is split as a shell would split a command line: see `split_command_line`.
   class(command_line_interface), intent(inout) :: self   !< CLI data.
   character(*),                  intent(in)    :: args   !< String containing command line arguments.
   integer(I4P), allocatable,     intent(out)   :: ai(:,:)!< CLAs grouped indexes.
+  type(flap_string), allocatable, intent(out)  :: repeated(:) !< The first command repeated (see get_clasg_indexes).
   character(len=len_trim(args)), allocatable   :: toks(:)!< Command line arguments.
   integer(I4P)                                 :: Na     !< Number of command line arguments passed.
   integer(I4P)                                 :: a      !< Counter for CLAs.
@@ -1563,15 +1583,16 @@ contains
     enddo get_args
   endif
 
-  call self%get_clasg_indexes(ai=ai)
+  call self%get_clasg_indexes(ai=ai, repeated=repeated)
   endsubroutine get_args_from_string
 
-  subroutine get_args_from_invocation(self, ai)
+  subroutine get_args_from_invocation(self, ai, repeated)
   !< Get CLAs from CLI invocation.
   !<
   !< Every argument is read whole: its length is queried first, and a failed retrieval raises ERROR_ARGUMENT_RETRIEVAL.
   class(command_line_interface), intent(inout) :: self    !< CLI data.
   integer(I4P), allocatable,     intent(out)   :: ai(:,:) !< CLAs grouped indexes.
+  type(flap_string), allocatable, intent(out)  :: repeated(:) !< The first command repeated (see get_clasg_indexes).
   character(len=:), allocatable                :: arg     !< Command line argument.
   integer(I4P)                                 :: Na      !< Number of command line arguments passed.
   integer(I4P)                                 :: l       !< Length of an argument.
@@ -1599,7 +1620,7 @@ contains
     enddo get_args
   endif
 
-  call self%get_clasg_indexes(ai=ai)
+  call self%get_clasg_indexes(ai=ai, repeated=repeated)
   endsubroutine get_args_from_invocation
 
   subroutine get_cla(self, val, pref, args, group, switch, position, error)
@@ -3020,6 +3041,13 @@ contains
                            'options only!'
     case(ERROR_ARGUMENT_RETRIEVAL)
       self%error_message = prefd//': the command line argument number '//trim(str(position, .true.))//' cannot be retrieved!'
+    case(ERROR_COMMAND_REPEATED)
+      ! switch: the spelling met the second time, named when it is an alias
+      if (switch == group) then
+        self%error_message = prefd//': the command "'//group//'" is passed more than once!'
+      else
+        self%error_message = prefd//': the command "'//group//'" (as "'//switch//'") is passed more than once!'
+      endif
     case(ERROR_TOO_FEW_CLAS)
       ! self%error_message = prefd//': too few arguments ('//trim(str(.true.,Na))//')'//&
                          ! ' respect the required ('//trim(str(.true.,self%Na_required))//')'

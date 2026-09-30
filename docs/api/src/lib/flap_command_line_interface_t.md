@@ -115,6 +115,7 @@ graph LR
 | `ERROR_COMPLETION_SHELL` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Unknown (or unset) shell of the completion builtins. |
 | `ERROR_COMPLETION_INSTALL` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | The completion script cannot be installed. |
 | `ERROR_ARGUMENT_RETRIEVAL` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | A command line argument cannot be retrieved. |
+| `ERROR_COMMAND_REPEATED` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | A command passed more than once (B36). |
 
 ## Derived Types
 
@@ -757,6 +758,7 @@ flowchart TD
   parse_core["parse_core"] --> check_maps["check_maps"]
   parse_core["parse_core"] --> dispatch_status["dispatch_status"]
   parse_core["parse_core"] --> ensure_builtins["ensure_builtins"]
+  parse_core["parse_core"] --> errored["errored"]
   parse_core["parse_core"] --> get_args["get_args"]
   parse_core["parse_core"] --> is_action_passed["is_action_passed"]
   parse_core["parse_core"] --> is_fatal["is_fatal"]
@@ -813,10 +815,11 @@ Get the argument indexes of each CLAs group (command): ai(g,1:2) is the slice of
 
  Arguments before the first command name belong to group 0; the arguments after a command name belong to that command.
  The fixed value slots of a switch (`value_arity`) are skipped before testing for a command name, so a value equal to a
- command name stays a value (B04); a variadic list is ended by a command name.
+ command name stays a value (B04); a variadic list is ended by a command name. A command met again (by its name or an
+ alias) is returned in `repeated` (its name and the spelling met), never restarted (B36: that dropped its values).
 
 ```fortran
-subroutine get_clasg_indexes(self, ai)
+subroutine get_clasg_indexes(self, ai, repeated)
 ```
 
 **Arguments**
@@ -825,6 +828,7 @@ subroutine get_clasg_indexes(self, ai)
 |------|------|--------|------------|-------------|
 | `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | inout |  | CLI data. |
 | `ai` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | allocatable | CLAs grouped indexes. |
+| `repeated` | type([flap_string](/api/src/lib/flap_utils_m#flap-string)) | out | allocatable | The first command repeated, [name, spelling]; none if none. |
 
 **Call graph**
 
@@ -844,7 +848,7 @@ Get CLAs from string.
  The string is split as a shell would split a command line: see `split_command_line`.
 
 ```fortran
-subroutine get_args_from_string(self, args, ai)
+subroutine get_args_from_string(self, args, ai, repeated)
 ```
 
 **Arguments**
@@ -854,6 +858,7 @@ subroutine get_args_from_string(self, args, ai)
 | `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | inout |  | CLI data. |
 | `args` | character(len=*) | in |  | String containing command line arguments. |
 | `ai` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | allocatable | CLAs grouped indexes. |
+| `repeated` | type([flap_string](/api/src/lib/flap_utils_m#flap-string)) | out | allocatable | The first command repeated (see get_clasg_indexes). |
 
 **Call graph**
 
@@ -871,7 +876,7 @@ Get CLAs from CLI invocation.
  Every argument is read whole: its length is queried first, and a failed retrieval raises ERROR_ARGUMENT_RETRIEVAL.
 
 ```fortran
-subroutine get_args_from_invocation(self, ai)
+subroutine get_args_from_invocation(self, ai, repeated)
 ```
 
 **Arguments**
@@ -880,6 +885,7 @@ subroutine get_args_from_invocation(self, ai)
 |------|------|--------|------------|-------------|
 | `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | inout |  | CLI data. |
 | `ai` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | allocatable | CLAs grouped indexes. |
+| `repeated` | type([flap_string](/api/src/lib/flap_utils_m#flap-string)) | out | allocatable | The first command repeated (see get_clasg_indexes). |
 
 **Call graph**
 
@@ -1764,6 +1770,7 @@ flowchart TD
   is_required_passed["is_required_passed"] --> errored["errored"]
   is_required_val_passed["is_required_val_passed"] --> errored["errored"]
   map_cla["map_cla"] --> errored["errored"]
+  parse_core["parse_core"] --> errored["errored"]
   raise_error_duplicated_clas["raise_error_duplicated_clas"] --> errored["errored"]
   raise_error_m_exclude["raise_error_m_exclude"] --> errored["errored"]
   raise_error_m_exclude["raise_error_m_exclude"] --> errored["errored"]

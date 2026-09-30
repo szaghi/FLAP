@@ -7,6 +7,12 @@ title: Upgrading
 Every change you can observe when moving to a new release, newest first. Additive releases only add API: existing
 programs keep their behaviour. The plan behind them is issue [#125](https://github.com/szaghi/FLAP/issues/125).
 
+## v2.3.1 (fix)
+
+- A command passed more than once (`prog commit -m x commit`, or the command and one of its aliases) is now
+  `ERROR_COMMAND_REPEATED` (1013). It used to restart the command's arguments silently, losing the values given before
+  it (issue #87).
+
 ## v2.3.0 (additive)
 
 - A new, optional module for interactive menus (F23): `type(menu)` with `init`, `add_option` and `run`, exported by

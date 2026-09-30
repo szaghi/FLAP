@@ -693,6 +693,7 @@ flowchart TD
   is_required_passed["is_required_passed"] --> errored["errored"]
   is_required_val_passed["is_required_val_passed"] --> errored["errored"]
   map_cla["map_cla"] --> errored["errored"]
+  parse_core["parse_core"] --> errored["errored"]
   raise_error_duplicated_clas["raise_error_duplicated_clas"] --> errored["errored"]
   raise_error_m_exclude["raise_error_m_exclude"] --> errored["errored"]
   raise_error_m_exclude["raise_error_m_exclude"] --> errored["errored"]

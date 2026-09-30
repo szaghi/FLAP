@@ -135,6 +135,10 @@ is not called, because `-m` takes exactly one value. This holds for every option
 value, or `nargs='N'`). A list with a variable number of values (`nargs='+'` or `nargs='*'`) ends at the first command
 name: in `prog --files a b init`, the list is `a b` and `init` is called.
 
+A command is passed at most once: `fake_git commit -m x commit` (or `commit -m x ci`, through an alias) is
+`ERROR_COMMAND_REPEATED` (1013), reported before `--help`. Before v2.3.1 the second occurrence silently restarted the
+command's arguments, losing the values given before it.
+
 ## Mutually exclusive groups — `cli%set_mutually_exclusive_groups`
 
 ```fortran

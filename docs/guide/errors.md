@@ -102,6 +102,7 @@ positive values are **errors**. Existing values never change.
 | `1010` | `ERROR_COMPLETION_SHELL` | Unknown completion shell | `--show-completion`/`--install-completion` with a shell other than bash, zsh, fish, powershell, or none given and `$SHELL` unset; `--install-completion powershell` (install it by hand) |
 | `1011` | `ERROR_COMPLETION_INSTALL` | Completion not installed | `$HOME` unset, or the script or the rc file cannot be written (the message carries the I/O error; for fish, `~/.config/fish` must exist) |
 | `1012` | `ERROR_ARGUMENT_RETRIEVAL` | A command line argument cannot be read | `get_command_argument` failed (processor error; not expected in practice) |
+| `1013` | `ERROR_COMMAND_REPEATED` | A command passed more than once | `prog commit -m x commit`, or a command and one of its aliases; reported before `--help` |
 | `2001` | `ERROR_MENU_INVALID` | Invalid menu answer | Not one of the numbers shown, an empty field, or unreadable (see [Interactive Menus](./menu#errors)) |
 | `2002` | `ERROR_MENU_TOO_MANY` | Too many menu answers | Several answers to a single-choice menu |
 | `2003` | `ERROR_MENU_DUPLICATE` | Duplicate menu answer | The same option chosen twice with multiple selection |
