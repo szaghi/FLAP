@@ -92,6 +92,7 @@ values still takes the default: both change in v2.0.0 (see below).
 - **The environment is a value source when the switch is absent**: with `envvar='X'`, `X` set and not blank gives
   the value (it used to be read only by the bare switch, an absent switch giving the default). The command line still
   wins, a blank variable counts as unset, and the value satisfies a required option. Flags (`store_true`/`store_false`)
-  accept an `envvar` too, reading `1/0`, `true/false`, `yes/no`, `on/off`, ... More (lists from the environment,
-  configuration files): see issue [#125](https://github.com/szaghi/FLAP/issues/125).
+  accept an `envvar` too, reading `1/0`, `true/false`, `yes/no`, `on/off`, ... Lists (`nargs`) accept an `envvar` too,
+  reading comma-separated values (`ERROR_ENVVAR_NARGS` is no longer raised). More (configuration files): see issue
+  [#125](https://github.com/szaghi/FLAP/issues/125).
 - `init(auto_envvar_prefix='APP')` gives every option without `envvar` the variable `APP[_COMMAND]_NAME`.

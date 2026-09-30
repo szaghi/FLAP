@@ -36,6 +36,7 @@ use flap_command_line_argument_t, only : command_line_argument,        &
                                          ERROR_POSITIONAL_NARGS,       &
                                          ERROR_LIST_SIZE,              &
                                          ERROR_DEF_NARGS,              &
+                                         ERROR_ENVVAR_CSV,             &
                                          ERROR_INLINE_VALUE_NOT_ALLOWED, &
                                          ERROR_INLINE_VALUE_NARGS,     &
                                          ERROR_COUNT_INCONSISTENT,     &
@@ -108,6 +109,7 @@ public :: ERROR_UNSUPPORTED_TYPE
 public :: ERROR_POSITIONAL_NARGS
 public :: ERROR_LIST_SIZE
 public :: ERROR_DEF_NARGS
+public :: ERROR_ENVVAR_CSV
 public :: ERROR_INLINE_VALUE_NOT_ALLOWED
 public :: ERROR_INLINE_VALUE_NARGS
 public :: ERROR_COUNT_INCONSISTENT

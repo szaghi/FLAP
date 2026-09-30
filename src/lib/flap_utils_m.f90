@@ -6,6 +6,7 @@ use penf
 implicit none
 private
 public :: count
+public :: csv_split
 public :: flap_string
 public :: to_characters
 public :: LIST_SEP
@@ -293,6 +294,94 @@ contains
     if (pass == 1) allocate(toks(1:Nt))
   enddo
   endsubroutine split_command_line
+
+  pure subroutine csv_split(record, fields, nf, error)
+  !< Split one CSV record (an RFC 4180 subset), the format of list values read from the environment (F22 of #125).
+  !<
+  !< The separator is ','; a field in "..." may hold commas, and "" in it is a literal "; blanks around an unquoted field
+  !< are trimmed, those inside quotes kept; a quote inside an unquoted field is kept; an empty or blank record has no field.
+  !< Not to be confused with tokenize, whose trailing-token behaviour the stored lists rely on.
+  character(*),                   intent(in)  :: record    !< CSV record.
+  type(flap_string), allocatable, intent(out) :: fields(:) !< Fields, with their exact length.
+  integer(I4P),                   intent(out) :: nf        !< Number of fields.
+  integer(I4P),                   intent(out) :: error     !< 0, or 1 for an unterminated quote.
+  type(flap_string), allocatable              :: found(:)  !< Fields found (at most one more than the commas).
+  character(len=:), allocatable               :: field     !< Current field.
+  integer(I4P)                                :: n         !< Length of the record.
+  integer(I4P)                                :: i         !< Cursor.
+  integer(I4P)                                :: c         !< Position of the next comma, relative to the cursor.
+  logical                                     :: closed    !< The quoted field is closed.
+
+  nf = 0
+  error = 0
+  n = len(record)
+  allocate(found(1:count(record, ',') + 1))
+  if (len_trim(record) > 0) then
+    i = 1
+    do
+      do while (i <= n)
+        if (record(i:i) /= ' ') exit
+        i = i + 1
+      enddo
+      field = ''
+      if (i <= n .and. record(min(i, n):min(i, n)) == '"') then
+        ! quoted: up to the closing quote, "" being a literal quote
+        i = i + 1
+        closed = .false.
+        do while (i <= n)
+          if (record(i:i) == '"') then
+            if (i < n) then
+              if (record(i+1:i+1) == '"') then
+                field = field//'"'
+                i = i + 2
+                cycle
+              endif
+            endif
+            closed = .true.
+            i = i + 1
+            exit
+          endif
+          field = field//record(i:i)
+          i = i + 1
+        enddo
+        if (.not.closed) then
+          error = 1
+          nf = 0
+          allocate(fields(0))
+          return
+        endif
+        ! anything between the closing quote and the comma is kept, blanks trimmed
+        c = index(record(i:), ',')
+        if (c == 0) then
+          field = field//trim(adjustl(record(i:)))
+        else
+          field = field//trim(adjustl(record(i:i+c-2)))
+        endif
+      else
+        c = index(record(i:), ',')
+        if (c == 0) then
+          field = trim(record(i:))
+        else
+          field = trim(record(i:i+c-2))
+        endif
+      endif
+      nf = nf + 1
+      found(nf)%s = field
+      if (c == 0) exit
+      i = i + c
+      if (i > n) then
+        ! a trailing comma: an empty last field
+        nf = nf + 1
+        found(nf)%s = ''
+        exit
+      endif
+    enddo
+  endif
+  allocate(fields(1:nf))
+  do i=1, nf
+    fields(i)%s = found(i)%s
+  enddo
+  endsubroutine csv_split
 
   elemental function unique(string, substring) result(uniq)
   !< Reduce to one (unique) multiple (sequential) occurrences of a characters substring into a string.

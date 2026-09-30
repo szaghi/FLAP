@@ -68,6 +68,22 @@ its value: `1/0`, `true/false`, `t/f`, `yes/no`, `y/n`, `on/off`, in any case.
 This pattern is useful for configuration that belongs in CI secrets or shell profiles
 rather than command line flags.
 
+### List values from the environment
+
+A list option (`nargs`) reads its variable as one line of **comma-separated values**, not blank-separated as on the
+command line and in `def=`: an environment value is a single shell word, where commas are the convention.
+
+| Variable | List |
+|---|---|
+| `WORKERS='1,99'` | `1`, `99` |
+| `WORKERS='1, 2 , 3'` | `1`, `2`, `3` (blanks around a value trimmed) |
+| `FILES='"my file.h5", other.h5'` | `my file.h5`, `other.h5` (a quoted value may hold commas and blanks) |
+| `TITLES='"say ""hi""",x'` | `say "hi"`, `x` (`""` inside quotes is a `"`) |
+| `WORKERS='1,,3'` | `1`, empty, `3` (a numeric `get` then fails its cast) |
+| `WORKERS='1,"99'` | error `ERROR_ENVVAR_CSV` (43): unterminated quote |
+
+A scalar option takes its variable verbatim, commas included. The number of values of `nargs='N'` is checked by `get`.
+
 ### Generated variable names — `init(auto_envvar_prefix=...)`
 
 With a prefix, every named `store`, `store_true` or `store_false` option added without an `envvar` gets one,
@@ -85,7 +101,7 @@ $ SOLVER_MESH_FILE=wing.grd ./solver                        # mesh = wing.grd (r
 $ SOLVER_MESH_FILE=wing.grd ./solver --mesh-file body.grd   # the command line wins: body.grd
 ```
 
-An explicit `envvar=` wins over the generated name. Positionals, `store*`, `count`, `append` and lists get no name.
+An explicit `envvar=` wins over the generated name. Positionals, `store*`, `count` and `append` get no name.
 The help shows the generated names.
 
 ### Ignoring the environment — `init(ignore_env=.true.)`

@@ -3,8 +3,8 @@ program flap_test_auto_envvar
 !< auto_envvar_prefix generates the variable of every option without envvar (issue #125, step 2.3; #11 3.3, T3.9-T3.10).
 !<
 !< The name is PREFIX[_GROUP]_NAME, upper case, NAME being the long switch without its dashes, '-' becoming '_'. Named
-!< store/store_true/store_false options get one; an explicit envvar wins; positionals, store*, count, append and lists do
-!< not (lists wait for the CSV split, F22). The child (case 1) parses its real command line and prints the values; every get
+!< store/store_true/store_false options, lists included, get one; an explicit envvar wins; positionals, store*, count and
+!< append do not. The child (case 1) parses its real command line and prints the values; every get
 !< has its own variable (nvfortran, B33).
 use flap, only : command_line_interface
 use flap_test_utils, only : assert, assert_contains, assert_equal, capture_close, capture_open, child_case, reinvoke
@@ -36,11 +36,11 @@ call assert_contains(usage, 'environment variable name "SOLVER_X"', 'generated: 
 ! T3.10: an explicit envvar wins
 call assert_contains(usage, 'environment variable name "MY_OUT"', 'explicit envvar kept')
 call assert(index(usage, 'SOLVER_OUT') == 0, 'explicit envvar: no generated name')
-! no name for positionals, store*, count, append, lists and the builtins
+! no name for positionals, store*, count, append and the builtins
 call assert(index(usage, 'SOLVER_STAR') == 0, 'no name for store*')
 call assert(index(usage, 'SOLVER_COUNT') == 0, 'no name for count')
 call assert(index(usage, 'SOLVER_APP') == 0, 'no name for append')
-call assert(index(usage, 'SOLVER_LIST') == 0, 'no name for a list')
+call assert_contains(usage, 'environment variable name "SOLVER_LIST"', 'generated: a list (F22)')
 call assert(index(usage, 'SOLVER_HELP') == 0 .and. index(usage, 'SOLVER_VERSION') == 0, 'no name for the builtins')
 ! without a prefix nothing is generated
 call define(prefix='')
@@ -80,7 +80,7 @@ contains
   call cli%add(switch='--app', help='append', required=.false., act='append', def='a', error=error)
   call assert_equal(error, 0_I4P, 'add an append: no generated name, no error')
   call cli%add(switch='--list', help='list', required=.false., act='store', nargs='+', def='1 2', error=error)
-  call assert_equal(error, 0_I4P, 'add a list: no generated name, no error')
+  call assert_equal(error, 0_I4P, 'add a list')
   call cli%add_group(group='post-proc', description='post processing')
   call cli%add(group='post-proc', switch='--format', help='format', required=.false., act='store', def='vtk', error=error)
   call assert_equal(error, 0_I4P, 'add post-proc --format')

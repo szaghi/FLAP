@@ -383,11 +383,11 @@ contains
   if (present(error)) error = self%error
   contains
     subroutine set_auto_envvar
-    !< Generate the envvar of the CLA (auto_envvar_prefix, F07): named store/store_true/store_false options, not lists.
+    !< Generate the envvar of the CLA (auto_envvar_prefix, F07): named store/store_true/store_false options, lists included.
     character(len=:), allocatable :: gname !< Name of the group of the CLA.
 
     if (.not.allocated(self%auto_envvar_prefix)) return
-    if (self%auto_envvar_prefix == '' .or. cla%is_positional .or. allocated(cla%nargs) .or. .not.allocated(cla%switch)) return
+    if (self%auto_envvar_prefix == '' .or. cla%is_positional .or. .not.allocated(cla%switch)) return
     if (cla%act /= ACTION_STORE .and. cla%act /= ACTION_STORE_TRUE .and. cla%act /= ACTION_STORE_FALSE) return
     gname = ''
     if (present(group)) then
@@ -691,7 +691,10 @@ contains
   ! settle the source of the values not given on the command line (R chain, F06)
   do g=0, size(self%clasg,dim=1)-1
     call self%clasg(g)%resolve_values(ignore_env=self%ignore_env)
+    self%error = self%clasg(g)%error
+    if (self%is_fatal()) exit
   enddo
+  if (self%is_fatal()) return
 
   ! check if all required CLAs have been passed
   do g=0, size(ai,dim=1)-1

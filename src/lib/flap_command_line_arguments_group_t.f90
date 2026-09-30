@@ -380,6 +380,10 @@ contains
       call read_env(name=self%cla(a)%envvar, value=envvar, found=found, ignore=ignore_env)
       if (found.and.len_trim(envvar) > 0) then
         call self%cla(a)%set_env_value(value=envvar)
+        if (self%cla(a)%error /= 0) then
+          self%error = self%cla(a)%error
+          return
+        endif
         cycle
       endif
     endif
@@ -635,8 +639,8 @@ contains
 
                     ! search for actual passed value if passed/required
 
-                    ! check for envvar
-                    if (allocated(self%cla(a)%envvar)) then
+                    ! check for envvar: the bare switch reads it, lists excepted (their values follow nargs)
+                    if (allocated(self%cla(a)%envvar).and.(.not.allocated(self%cla(a)%nargs))) then
                        ! verify if the value has been passed directly to cli
                        if (arg + 1 <= size(args,dim=1)) then
                           ! there are still other arguments to check

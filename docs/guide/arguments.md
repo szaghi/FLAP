@@ -218,8 +218,9 @@ Resolution order (highest priority first):
 
 A value from the environment satisfies a required argument. `is_passed` stays `.false.`: it means "on the command line".
 
-Restrictions: `envvar` is valid for named `act='store'`, `store_true` and `store_false` arguments; not for positionals,
-`store*` and lists (`nargs`). A flag reads its value from the variable: `1/0`, `true/false`, `t/f`, `yes/no`, `y/n`,
+Restrictions: `envvar` is valid for named `act='store'` (lists with `nargs` included), `store_true` and `store_false`
+arguments; not for positionals, `store*`, `count` and `append`. A list reads its variable as comma-separated values
+(see [Advanced](./advanced#list-values-from-the-environment)). A flag reads its value from the variable: `1/0`, `true/false`, `t/f`, `yes/no`, `y/n`,
 `on/off`, in any case; anything else makes `get` fail with `ERROR_CASTING_LOGICAL`.
 
 ### Hidden arguments (`hidden`)

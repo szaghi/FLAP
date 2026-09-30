@@ -12,7 +12,7 @@ use flap, only : command_line_interface,                                        
                  ERROR_DUPLICATED_CLAS, ERROR_MISSING_REQUIRED_VAL, ERROR_UNSUPPORTED_TYPE, ERROR_POSITIONAL_NARGS,               &
                  ERROR_INLINE_VALUE_NOT_ALLOWED, ERROR_INLINE_VALUE_NARGS, ERROR_COUNT_INCONSISTENT,                              &
                  ERROR_APPEND_INCONSISTENT, ERROR_APPEND_SCALAR_GET,                                                              &
-                 ERROR_LIST_SIZE, ERROR_DEF_NARGS,                                                                                &
+                 ERROR_LIST_SIZE, ERROR_DEF_NARGS, ERROR_ENVVAR_CSV,                                                              &
                  ERROR_GROUP_CONSISTENCY, ERROR_GROUP_M_EXCLUDE, ERROR_POSITION_DUPLICATE, ERROR_POSITION_GAP,                    &
                  ERROR_M_EXCLUDE_SET, ERROR_M_EXCLUDE_SET_REQUIRED, ERROR_M_EXCLUDE_SET_DEFINITION,                               &
                  ERROR_MISSING_CLA, ERROR_MISSING_GROUP, ERROR_MISSING_SELECTION_CLA, ERROR_TOO_FEW_CLAS,                         &
@@ -70,6 +70,7 @@ contains
   call assert_equal(ERROR_POSITIONAL_NARGS,       45_I4P,   'ERROR_POSITIONAL_NARGS')
   call assert_equal(ERROR_UNSUPPORTED_TYPE,       46_I4P,   'ERROR_UNSUPPORTED_TYPE')
   call assert_equal(ERROR_LIST_SIZE,              47_I4P,   'ERROR_LIST_SIZE')
+  call assert_equal(ERROR_ENVVAR_CSV,             43_I4P,   'ERROR_ENVVAR_CSV')
   call assert_equal(ERROR_DEF_NARGS,              48_I4P,   'ERROR_DEF_NARGS')
   call assert_equal(ERROR_GROUP_CONSISTENCY,     100_I4P,   'ERROR_GROUP_CONSISTENCY')
   call assert_equal(ERROR_GROUP_M_EXCLUDE,       101_I4P,   'ERROR_GROUP_M_EXCLUDE')

@@ -78,6 +78,11 @@ source-dir = "src/tests"
 main = "flap_test_exclusive_set.f90"
 
 [[test]]
+name = "flap_test_csv_split"
+source-dir = "src/tests"
+main = "flap_test_csv_split.f90"
+
+[[test]]
 name = "flap_test_duplicated_clas"
 source-dir = "src/tests"
 main = "flap_test_duplicated_clas.f90"

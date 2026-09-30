@@ -54,6 +54,7 @@ public :: ERROR_UNSUPPORTED_TYPE
 public :: ERROR_POSITIONAL_NARGS
 public :: ERROR_LIST_SIZE
 public :: ERROR_DEF_NARGS
+public :: ERROR_ENVVAR_CSV
 public :: ERROR_INLINE_VALUE_NOT_ALLOWED
 public :: ERROR_INLINE_VALUE_NARGS
 public :: ERROR_COUNT_INCONSISTENT
@@ -204,6 +205,7 @@ integer(I4P), parameter :: ERROR_POSITIONAL_NARGS       = 45 !< Positional CLA w
 integer(I4P), parameter :: ERROR_UNSUPPORTED_TYPE       = 46 !< Value requested into a variable of an unsupported type.
 integer(I4P), parameter :: ERROR_LIST_SIZE              = 47 !< List requested into a fixed-size array of another size.
 integer(I4P), parameter :: ERROR_DEF_NARGS              = 48 !< List default whose count differs from an integer nargs.
+integer(I4P), parameter :: ERROR_ENVVAR_CSV             = 43 !< List value of an environment variable: unterminated quote.
 
 contains
   ! public methods
@@ -274,10 +276,28 @@ contains
   !< Set the value read from the environment variable (source SOURCE_ENVIRONMENT, F07 of #125).
   !<
   !< A flag (store_true/store_false) takes the variable as its value: 1/0, true/false, t/f, yes/no, y/n, on/off, in any
-  !< case (click's set); anything else is kept, so that get reports ERROR_CASTING_LOGICAL.
-  class(command_line_argument), intent(inout) :: self  !< CLA data.
-  character(*),                 intent(in)    :: value !< Value of the variable.
+  !< case (click's set); anything else is kept, so that get reports ERROR_CASTING_LOGICAL. A list (nargs) reads it as one
+  !< CSV record (F22): an unterminated quote is ERROR_ENVVAR_CSV.
+  class(command_line_argument), intent(inout) :: self      !< CLA data.
+  character(*),                 intent(in)    :: value     !< Value of the variable.
+  type(flap_string), allocatable              :: fields(:) !< Fields of a list.
+  integer(I4P)                                :: nf        !< Number of fields.
+  integer(I4P)                                :: f         !< Counter.
+  integer(I4P)                                :: error     !< Split error.
 
+  if (self%is_list()) then
+    call csv_split(record=value, fields=fields, nf=nf, error=error)
+    if (error /= 0) then
+      call self%errored(error=ERROR_ENVVAR_CSV, val_str=value)
+      return
+    endif
+    self%val = ''
+    do f=1, nf
+      call list_push(self%val, fields(f)%s)
+    enddo
+    self%source = SOURCE_ENVIRONMENT
+    return
+  endif
   self%val = trim(adjustl(value))
   if (self%act == ACTION_STORE_TRUE .or. self%act == ACTION_STORE_FALSE) then
     select case(upper_case(self%val))
@@ -886,6 +906,9 @@ contains
                            ' values (nargs), but its default has '//trim(val_str)//'!'
     case(ERROR_LIST_SIZE)
       self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" has '//trim(val_str)//'!'
+    case(ERROR_ENVVAR_CSV)
+      self%error_message = prefd//': environment variable "'//trim(adjustl(self%envvar))//'" of option "'//&
+                           trim(adjustl(self%switch))//'": unterminated quote in the list "'//trim(val_str)//'"!'
     endselect
     call self%print_error_message
   endif
@@ -932,10 +955,7 @@ contains
         return
       endif
     endif
-    if (allocated(self%nargs)) then
-      call self%errored(pref=pref, error=ERROR_ENVVAR_NARGS)
-      return
-    endif
+    ! lists accept an envvar (F22): ERROR_ENVVAR_NARGS is no longer raised
   endif
   endsubroutine check_envvar_consistency
 

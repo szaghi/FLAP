@@ -47,7 +47,7 @@ positive values are **errors**. Existing values never change.
 | `15` | `ERROR_UNKNOWN` | Unknown switch | An unrecognised switch was passed on the command line |
 | `16` | `ERROR_ENVVAR_POSITIONAL` | `envvar` not allowed for positional | `envvar=` combined with `positional=.true.` |
 | `17` | `ERROR_ENVVAR_NOT_STORE` | `envvar` requires `act='store'`, `store_true` or `store_false` | Environment variable used with an incompatible action (`store*`, `count`, `append`, ...) |
-| `18` | `ERROR_ENVVAR_NARGS` | `envvar` not allowed for list-valued | `envvar=` combined with `nargs=` |
+| `18` | `ERROR_ENVVAR_NARGS` | `envvar` not allowed for list-valued | No longer raised: lists accept an `envvar` (comma-separated values) |
 | `19` | `ERROR_STORE_STAR_POSITIONAL` | `act='store*'` not allowed for positional | Incompatible combination |
 | `20` | `ERROR_STORE_STAR_NARGS` | `act='store*'` not allowed for list-valued | Incompatible combination |
 | `21` | `ERROR_STORE_STAR_ENVVAR` | `act='store*'` not allowed with `envvar` | Incompatible combination |
@@ -59,6 +59,7 @@ positive values are **errors**. Existing values never change.
 | `27` | `ERROR_COUNT_INCONSISTENT` | Invalid count | A `count` option that is positional or has `nargs`, `envvar` or `choices` |
 | `28` | `ERROR_APPEND_INCONSISTENT` | Invalid append | An `append` option that is positional or has `nargs` or `envvar` |
 | `29` | `ERROR_APPEND_SCALAR_GET` | Scalar get of an append | An `append` option holds a list: read it with `get_varying` or into an array |
+| `43` | `ERROR_ENVVAR_CSV` | Unterminated quote in a list from the environment | `WORKERS='1,"99'` for an option with `nargs` and `envvar='WORKERS'` |
 | `45` | `ERROR_POSITIONAL_NARGS` | `nargs` on a positional argument | Positionals take one value each: use a named list option |
 | `46` | `ERROR_UNSUPPORTED_TYPE` | Unsupported variable type | `get` into a type FLAP cannot fill (e.g. `complex`, or a non-logical for a flag) |
 | `47` | `ERROR_LIST_SIZE` | List size differs from the array size | `get` into a fixed-size array with more or fewer elements than the values: use an array of the right size, or `get_varying` |
