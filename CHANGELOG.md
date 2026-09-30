@@ -4,6 +4,65 @@ All notable changes to this project are documented here.
 Versions follow [Semantic Versioning](https://semver.org/).
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.0.0] — 2026-09-30
+### Added
+- **cli**: Standalone init option; parse returns the help/version/markdown status
+
+- **cli**: Print "Try 'prog --help' for help." after a failed parse
+
+- **cli**: Raise_error for application-level errors
+
+- **cli**: No_args_is_help at CLI and command level
+
+- **parse**: Accept --option=value inline values
+
+- **parse**: Count action, with the compact -vvv form
+
+- **parse**: Append action collecting one value per occurrence
+
+- **cli**: Mutually exclusive sets of switches, optionally required
+
+- **cli**: Ignore_env init option turning every environment lookup off
+
+- **envvar**: Environment as the value source of an absent option ⚠ BREAKING CHANGE
+
+- **cli**: Auto_envvar_prefix generating the envvar of every option
+
+- **envvar**: List options read their variable as comma-separated values
+
+- **config**: INI configuration files as a value source (set_config)
+
+- **cla**: Act='config' option naming the configuration file
+
+- **cli**: Get_source and provenance, where every value comes from
+
+- **cla**: Path checks must_exist, readable, writable, allow_dash
+
+- **cla**: Deprecated options and commands warn when used
+
+- **parse**: Exclusive sets count every explicit source, command line first
+
+- **parse**: Alternate actions returning STATUS_ALTERNATE
+
+- **parse**: An explicitly empty value is the empty string ⚠ BREAKING CHANGE
+
+- **parse**: Nargs='*' passed without values is an empty list ⚠ BREAKING CHANGE
+
+
+### Changed
+- **cla**: Record the source of every value, getters use has_value
+
+
+### Fixed
+- **release**: Push only the new tag, not every reachable one
+
+- **utils**: Let nvfortran compile wstrip
+
+- **cli**: Store strings arrays as flap_string elements, runnable with nvfortran ⚠ BREAKING CHANGE
+
+- **cli**: A failed add no longer leaks its error into the next ones
+
+
 ## [1.3.0] — 2026-09-29
 ### Added
 - **flap**: Re-export all error and status codes from the flap module
