@@ -273,39 +273,56 @@ contains
   endsubroutine add_exclusive_set
 
   subroutine check_exclusive_sets(self, pref)
-  !< Check the mutually exclusive sets of a called group: at most one member passed, exactly one for a required set.
+  !< Check the mutually exclusive sets of a called group: at most one member given, exactly one for a required set.
   !<
-  !< Only passed members count: a default neither satisfies nor violates a set. Called after the statuses (help, version,
-  !< markdown), like the required check (E4 of #125).
-  class(command_line_arguments_group), intent(inout) :: self    !< CLAsG data.
-  character(*), optional,              intent(in)    :: pref    !< Prefixing string.
-  character(len=:), allocatable                      :: items(:)!< Members.
-  character(len=:), allocatable                      :: passed  !< Passed members, quoted.
-  integer(I4P)                                       :: n       !< Number of members.
-  integer(I4P)                                       :: np      !< Number of passed members.
-  integer(I4P)                                       :: s       !< Counter.
-  integer(I4P)                                       :: i       !< Counter.
+  !< Explicit sources count (command line, environment, configuration file; D2, E3 of #125), a default does not. When a
+  !< member is on the command line, the environment and configuration values of the other members fall back to their
+  !< defaults first, so that a value set for a batch job never makes a command line alternative a violation. Called after
+  !< the statuses (help, version, markdown) and the value resolution, like the required check (E4 of #125).
+  class(command_line_arguments_group), intent(inout) :: self     !< CLAsG data.
+  character(*), optional,              intent(in)    :: pref     !< Prefixing string.
+  character(len=:), allocatable                      :: items(:) !< Members.
+  character(len=:), allocatable                      :: given    !< Given members, quoted.
+  integer(I4P)                                       :: n        !< Number of members.
+  integer(I4P)                                       :: ng       !< Number of given members.
+  integer(I4P)                                       :: s        !< Counter.
+  integer(I4P)                                       :: i        !< Counter.
+  integer(I4P)                                       :: a        !< CLA of a member.
+  logical                                            :: cl       !< A member is on the command line.
 
   if (.not.self%is_called .or. .not.allocated(self%m_sets)) return
   do s=1, size(self%m_sets, dim=1)
     call list_items(self%m_sets(s)%switches, items, n)
-    passed = ''
-    np = 0
+    cl = .false.
     do i=1, n
-      if (self%is_passed(switch=trim(items(i)))) then
-        np = np + 1
-        passed = passed//', "'//trim(items(i))//'"'
-      endif
+      if (self%is_defined(switch=trim(items(i)), pos=a)) cl = cl .or. self%cla(a)%source == SOURCE_COMMANDLINE
     enddo
-    if (np > 1) then
-      call self%errored(pref=pref, error=ERROR_M_EXCLUDE_SET, members=passed(3:))
+    given = ''
+    ng = 0
+    do i=1, n
+      if (.not.self%is_defined(switch=trim(items(i)), pos=a)) cycle
+      if (.not.self%cla(a)%has_value()) cycle
+      if (cl .and. self%cla(a)%source /= SOURCE_COMMANDLINE) then
+        ! the command line takes precedence: back to the default
+        if (allocated(self%cla(a)%def)) then
+          self%cla(a)%source = SOURCE_DEFAULT
+        else
+          self%cla(a)%source = SOURCE_NONE
+        endif
+        cycle
+      endif
+      ng = ng + 1
+      given = given//', "'//trim(items(i))//'"'
+    enddo
+    if (ng > 1) then
+      call self%errored(pref=pref, error=ERROR_M_EXCLUDE_SET, members=given(3:))
       return
-    elseif (np == 0 .and. self%m_sets(s)%is_required) then
-      passed = ''
+    elseif (ng == 0 .and. self%m_sets(s)%is_required) then
+      given = ''
       do i=1, n
-        passed = passed//', "'//trim(items(i))//'"'
+        given = given//', "'//trim(items(i))//'"'
       enddo
-      call self%errored(pref=pref, error=ERROR_M_EXCLUDE_SET_REQUIRED, members=passed(3:))
+      call self%errored(pref=pref, error=ERROR_M_EXCLUDE_SET_REQUIRED, members=given(3:))
       write(self%usage_lun, '(A)') self%usage(pref=pref)
       return
     endif

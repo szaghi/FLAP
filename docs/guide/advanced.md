@@ -234,7 +234,10 @@ Rules:
   to the group (pass `group=` for the options of a command); a set of a command is checked only
   when the command is called;
 - a member cannot be individually `required`, and a switch belongs to at most one set;
-- only **passed** members count: a default neither satisfies a required set nor violates a set;
+- every **explicit** value counts, from the command line, the environment or a configuration file; a default neither
+  satisfies a required set nor violates a set. When a member is on the command line, the environment and configuration
+  values of the other members fall back to their defaults: the command line wins (a variable set for a batch job never
+  makes a command line alternative a violation);
 - the sets are checked after help/version and after the required options, as the last validation;
 - an invalid set is not added: the call returns `ERROR_M_EXCLUDE_SET_DEFINITION` (`104`), and
   `parse` returns the same error, so a wrong definition cannot go unnoticed.
