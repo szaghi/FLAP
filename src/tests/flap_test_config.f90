@@ -1,11 +1,12 @@
-!< Configuration-file values: set_config and the INI reader (issue #125, step 2.5; #11 4.1-4.2, T4.1-T4.7, T4.10-T4.12; D18).
+!< Configuration-file values: set_config, act='config' and the INI reader (issue #125, step 2.5; #11 4.1-4.3; D18).
 program flap_test_config
-!< Configuration-file values: set_config and the INI reader (issue #125, step 2.5; #11 4.1-4.2, T4.1-T4.7, T4.10-T4.12; D18).
+!< Configuration-file values: set_config, act='config' and the INI reader (issue #125, step 2.5; #11 4.1-4.3; D18).
 !<
 !< Precedence: command line > environment > configuration file > default. Keys are long switches without the dashes; a
 !< section is a group (command); lists are blank separated, flags read yes/no, on/off, ... An unknown key is an error
 !< (ERROR_CONFIG_UNKNOWN_KEY) unless ignore_unknown_clas; a missing file is an error only when required. The files are
-!< written next to the executable. The child (case 1) parses with the file written by the parent and FLAP_TEST_CONFIG_E set.
+!< written next to the executable. The children parse with the file written by the parent: case 1 with FLAP_TEST_CONFIG_E
+!< set, case 2 with a --config option (act='config', default: a missing file) and FLAP_TEST_CONFIG_FILE naming the file.
 !< Every get has its own variable and call site (nvfortran, B33).
 use flap, only : command_line_interface, ERROR_CONFIG_NOT_FOUND, ERROR_CONFIG_UNKNOWN_KEY, ERROR_NOT_IN_CHOICES, &
                  STATUS_PRINT_H
@@ -29,6 +30,13 @@ if (child_case() == 1) then
   call define
   call cli%parse(args='--mesh-file m', error=error)
   print '(A)', 'error='//trim(str(error, .true.))//' e=['//str_of('--e')//']'
+  call capture_close(lun)
+  stop
+elseif (child_case() == 2) then
+  call capture_open(lun)
+  call define_option(def=ini//'.missing')
+  call cli%parse(args='--mesh-file m', error=error)
+  print '(A)', 'error='//trim(str(error, .true.))//' cfl=['//str_of('--cfl')//']'
   call capture_close(lun)
   stop
 endif
@@ -99,7 +107,48 @@ call run('', '--mesh-file w', write=.false.)
 call assert_equal(error, 0_I4P, 'missing optional file: skipped')
 call run('mesh-file = w'//NL//'cfl = 3', '')
 call assert_equal(str_of('--cfl'), '3', 'last line without line end')
+
+! #11 4.3: a --config option (act='config') names the file: command line > environment > default
+call write_file(ini, 'mesh-file = w'//NL//'cfl = 0.7'//NL)
+call define_option(def=ini//'.missing')
+call cli%parse(args='--config '//ini, error=error)
+call assert_equal(error, 0_I4P, '--config file: parse')
+call assert_equal(str_of('--cfl'), '0.7', '--config file: value from the file')
+call assert_equal(str_of('--config'), ini, '--config file: get returns the file name')
+call define_option(def=ini)
+call cli%parse(args='', error=error)
+call assert_equal(str_of('--cfl'), '0.7', 'act=config default: the default file is read')
+! T4.9: a missing default file is skipped; T4.8: a missing file named explicitly is an error
+call define_option(def=ini//'.missing')
+call cli%parse(args='--mesh-file m', error=error)
+call assert_equal(error, 0_I4P, 'act=config, missing default file: skipped')
+call define_option(def=ini)
+call cli%parse(args='--config '//ini//'.missing', error=error)
+out = read_back(lun)
+call assert_equal(error, ERROR_CONFIG_NOT_FOUND, '--config missing file: error')
+call assert_contains(out, ini//'.missing', '--config missing file: named in the message')
+! an explicit --config overrides set_config; the file cannot set --config itself
+call write_file(ini//'.other', 'mesh-file = w'//NL//'cfl = 0.1'//NL)
+call define_option(def=ini//'.missing', set_file=ini//'.other')
+call cli%parse(args='', error=error)
+call assert_equal(str_of('--cfl'), '0.1', 'act=config default, set_config: the set_config file is read')
+call define_option(def=ini//'.missing', set_file=ini//'.other')
+call cli%parse(args='--config '//ini, error=error)
+call assert_equal(str_of('--cfl'), '0.7', '--config over set_config')
+call write_file(ini, 'mesh-file = w'//NL//'config = x.ini'//NL)
+call define_option(def=ini)
+call cli%parse(args='', error=error)
+call assert_equal(error, ERROR_CONFIG_UNKNOWN_KEY, 'the key "config" in the file: error')
+call delete_file(ini//'.other')
 call capture_close(lun)
+
+! the environment names the file (#11 4.3); a missing file named there is an error (T4.8)
+call write_file(ini, 'mesh-file = w'//NL//'cfl = 0.7'//NL)
+call reinvoke(2_I4P, exitstat, out, err, env='FLAP_TEST_CONFIG_FILE='//ini)
+call assert_contains(out, 'error=0 cfl=[0.7]', 'environment names the file')
+call reinvoke(2_I4P, exitstat, out, err, env='FLAP_TEST_CONFIG_FILE='//ini//'.missing')
+call assert_contains(out, 'error='//trim(str(ERROR_CONFIG_NOT_FOUND, .true.))//' ', &
+                     'environment names a missing file: error')
 
 ! T4.2: the environment wins over the file, the file over the default
 call write_file(ini, 'e = cfg'//NL)
@@ -131,6 +180,20 @@ contains
   call cli%set_config(file=ini, required=required, error=error)
   call assert_equal(error, 0_I4P, 'set_config')
   endsubroutine define
+
+  subroutine define_option(def, set_file)
+  !< Define the CLI with a --config option (act='config', envvar FLAP_TEST_CONFIG_FILE) and, if given, set_config.
+  character(*), intent(in)           :: def      !< Default file.
+  character(*), intent(in), optional :: set_file !< File of set_config.
+
+  call cli%init(progname='flap_test_config', standalone=.false., error_lun=lun, usage_lun=lun, error_hint=.false.)
+  call cli%add(switch='--config', help='configuration file', required=.false., act='config', def=def, &
+               envvar='FLAP_TEST_CONFIG_FILE', error=error)
+  call assert_equal(error, 0_I4P, 'add --config')
+  call cli%add(switch='--mesh-file', help='mesh', required=.true., act='store', error=error)
+  call cli%add(switch='--cfl', help='cfl', required=.false., act='store', def='0.5', error=error)
+  if (present(set_file)) call cli%set_config(file=set_file)
+  endsubroutine define_option
 
   subroutine run(text, args, ignore_unknown, required, write)
   !< Write the configuration file (unless write=.false.), define the CLI and parse a command line.

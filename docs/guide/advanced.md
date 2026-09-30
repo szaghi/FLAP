@@ -104,9 +104,9 @@ $ SOLVER_MESH_FILE=wing.grd ./solver --mesh-file body.grd   # the command line w
 An explicit `envvar=` wins over the generated name. Positionals, `store*`, `count` and `append` get no name.
 The help shows the generated names.
 
-### Configuration files — `cli%set_config`
+### Configuration files
 
-An INI file supplies values below the environment and above the defaults, so the full order is
+`cli%set_config` names an INI file supplying values below the environment and above the defaults, so the full order is
 **command line > environment variable > configuration file > default**:
 
 ```fortran
@@ -137,6 +137,17 @@ format    = vtu
 - A missing file is skipped, unless `set_config(..., required=.true.)`: then `ERROR_CONFIG_NOT_FOUND` (1006).
 - The file is read by `parse` after `--help`/`--version`, so a broken file never blocks the help. A value from it
   satisfies a required option and is checked against `choices` by `get`.
+
+To let the user choose the file, add a top-level option with `act='config'`:
+
+```fortran
+call cli%add(switch='--config', help='Configuration file', required=.false., act='config', def='solver.ini', &
+             envvar='SOLVER_CONFIG')
+```
+
+The file is the one named on the command line (`--config my.ini`), else in the environment variable, else the one of
+`set_config`, else the default. A file named on the command line or in the environment must exist
+(`ERROR_CONFIG_NOT_FOUND`); a missing default file is skipped. `get` of the option returns the file name.
 
 ### Ignoring the environment — `init(ignore_env=.true.)`
 

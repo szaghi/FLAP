@@ -3,8 +3,9 @@ module flap_command_line_interface_t
 !< Command Line Interface (CLI) class.
 
 use face, only : colorize
-use flap_command_line_argument_t, only : command_line_argument, ACTION_COUNT, ACTION_PRINT_HELP, ACTION_PRINT_MARK, &
-                                         ACTION_PRINT_VERS, ACTION_STORE, ACTION_STORE_FALSE, ACTION_STORE_TRUE, ERROR_UNKNOWN
+use flap_command_line_argument_t, only : command_line_argument, ACTION_CONFIG, ACTION_COUNT, ACTION_PRINT_HELP, &
+                                         ACTION_PRINT_MARK, ACTION_PRINT_VERS, ACTION_STORE, ACTION_STORE_FALSE, &
+                                         ACTION_STORE_TRUE, ERROR_UNKNOWN, SOURCE_COMMANDLINE, SOURCE_ENVIRONMENT
 use flap_command_line_arguments_group_t, only : command_line_arguments_group, STATUS_NO_ARGS, STATUS_PRINT_H, STATUS_PRINT_M, &
                                                 STATUS_PRINT_V
 use flap_config_m, only : config_file
@@ -294,36 +295,42 @@ contains
 
   subroutine load_config(self, config, pref)
   !< Load the configuration file, if any, and check it: every key must name an option taking a value (D18 of #125).
-  class(command_line_interface), intent(inout) :: self    !< CLI data.
-  type(config_file),             intent(inout) :: config  !< Configuration file.
-  character(*), optional,        intent(in)    :: pref    !< Prefixing string.
-  character(len=:), allocatable                :: iomsg   !< I/O message.
-  character(len=:), allocatable                :: where   !< File and line of an error.
-  logical                                      :: found   !< The file exists.
-  integer(I4P)                                 :: iostat  !< I/O status.
-  integer(I4P)                                 :: i       !< Counter.
-  integer(I4P)                                 :: g       !< Group of an entry.
-  integer(I4P)                                 :: a       !< CLA of an entry.
+  !<
+  !< The file is named by the top-level act='config' option when given on the command line or in its environment variable
+  !< (then it must exist), else by set_config (which says if it must exist), else by the default of that option (skipped
+  !< when missing).
+  class(command_line_interface), intent(inout) :: self     !< CLI data.
+  type(config_file),             intent(inout) :: config   !< Configuration file.
+  character(*), optional,        intent(in)    :: pref     !< Prefixing string.
+  character(len=:), allocatable                :: path     !< Configuration file.
+  character(len=:), allocatable                :: iomsg    !< I/O message.
+  character(len=:), allocatable                :: where    !< File and line of an error.
+  logical                                      :: required !< The file must exist.
+  logical                                      :: found    !< The file exists.
+  integer(I4P)                                 :: iostat   !< I/O status.
+  integer(I4P)                                 :: i        !< Counter.
+  integer(I4P)                                 :: g        !< Group of an entry.
+  integer(I4P)                                 :: a        !< CLA of an entry, or the act='config' CLA.
 
-  if (.not.allocated(self%config_path)) return
-  if (self%config_path == '') return
-  call config%load(file=self%config_path, found=found, iostat=iostat, iomsg=iomsg)
+  call config_file_name(path, required)
+  if (path == '') return
+  call config%load(file=path, found=found, iostat=iostat, iomsg=iomsg)
   if (.not.found) then
-    if (self%config_required) call report(ERROR_CONFIG_NOT_FOUND, ': configuration file "'//self%config_path//'" not found!')
+    if (required) call report(ERROR_CONFIG_NOT_FOUND, ': configuration file "'//path//'" not found!')
     return
   endif
   if (iostat /= 0) then
-    call report(ERROR_CONFIG_NOT_FOUND, ': configuration file "'//self%config_path//'" cannot be read: '//iomsg//'!')
+    call report(ERROR_CONFIG_NOT_FOUND, ': configuration file "'//path//'" cannot be read: '//iomsg//'!')
     return
   endif
   if (self%ignore_unknown_clas) return
   if (config%bad_line > 0) then
-    call report(ERROR_CONFIG_UNKNOWN_KEY, ': configuration file "'//self%config_path//'", line '//&
+    call report(ERROR_CONFIG_UNKNOWN_KEY, ': configuration file "'//path//'", line '//&
                 trim(str(config%bad_line, .true.))//': not "key = value", "[section]" or a comment!')
     return
   endif
   do i=1, config%n
-    where = ': configuration file "'//self%config_path//'", line '//trim(str(config%line(i), .true.))//': '
+    where = ': configuration file "'//path//'", line '//trim(str(config%line(i), .true.))//': '
     g = self%group_index(config%section(i)%s)
     if (g < 0) then
       call report(ERROR_CONFIG_UNKNOWN_KEY, where//'section "'//config%section(i)%s//'" is not a command!')
@@ -339,6 +346,43 @@ contains
     endif
   enddo
   contains
+    subroutine config_file_name(path, required)
+    !< Name of the configuration file ('' if none) and whether it must exist.
+    character(len=:), allocatable, intent(out) :: path     !< File name.
+    logical,                       intent(out) :: required !< The file must exist.
+    character(len=:), allocatable              :: env      !< Value of the environment variable.
+    logical                                    :: set      !< The variable is set.
+
+    path = ''
+    required = .false.
+    a = 0
+    do i=1, self%clasg(0)%Na
+      if (self%clasg(0)%cla(i)%is_config) then
+        a = i
+        exit
+      endif
+    enddo
+    if (a > 0) then
+      associate(cla => self%clasg(0)%cla(a))
+        if ((cla%source == SOURCE_COMMANDLINE .or. cla%source == SOURCE_ENVIRONMENT) .and. allocated(cla%val)) then
+          path = trim(adjustl(cla%val))
+        elseif (allocated(cla%envvar)) then
+          call read_env(name=cla%envvar, value=env, found=set, ignore=self%ignore_env)
+          if (set) path = trim(adjustl(env))
+        endif
+      endassociate
+      required = path /= '' ! named explicitly
+    endif
+    if (path == '' .and. allocated(self%config_path)) then
+      path = self%config_path
+      required = self%config_required
+    endif
+    if (path == '' .and. a > 0) then
+      if (allocated(self%clasg(0)%cla(a)%def)) path = trim(adjustl(self%clasg(0)%cla(a)%def))
+      required = .false.
+    endif
+    endsubroutine config_file_name
+
     subroutine report(error, message)
     !< Report an error of the configuration file.
     integer(I4P), intent(in) :: error   !< Error code.
@@ -432,6 +476,11 @@ contains
   cla%position        = 0_I4P                   ; if (present(position     )) cla%position        = position
   cla%is_hidden       = .false.                 ; if (present(hidden       )) cla%is_hidden       = hidden
   cla%act             = action_store            ; if (present(act          )) cla%act             = trim(adjustl(Upper_Case(act)))
+  if (cla%act == ACTION_CONFIG) then
+    ! the configuration file option (F08): a store CLA whose value names the file
+    cla%act = ACTION_STORE
+    cla%is_config = .true.
+  endif
                                                   if (present(def          )) cla%def             = def
                                                   if (present(def          )) cla%val             = def
   if (cla%act==ACTION_COUNT.and.(.not.present(def))) then

@@ -20,6 +20,7 @@ public :: ACTION_PRINT_MARK
 public :: ACTION_PRINT_VERS
 public :: ACTION_COUNT
 public :: ACTION_APPEND
+public :: ACTION_CONFIG
 public :: ARGS_SEP
 public :: SOURCE_COMMANDLINE
 public :: SOURCE_ENVIRONMENT
@@ -88,6 +89,7 @@ type, extends(object) :: command_line_argument
   logical,                       public :: is_hidden=.false.      !< Flag for hiding CLA, thus it does not compare into help.
   logical,                       public :: is_val_required=.true. !< Flag for set required value for not required (optional) CLA.
   integer(I4P),                  public :: source=SOURCE_NONE     !< Source of the value (SOURCE_*).
+  logical,                       public :: is_config=.false.      !< The CLA names the configuration file (act='config').
   contains
     ! public methods
     procedure, public :: free                           !< Free dynamic memory.
@@ -163,6 +165,7 @@ endtype command_line_argument
 
 ! parameters
 character(len=*), parameter :: ACTION_STORE       = 'STORE'         !< Store value (if invoked a value must be passed).
+character(len=*), parameter :: ACTION_CONFIG      = 'CONFIG'        !< Name the configuration file (stored as a store CLA).
 character(len=*), parameter :: ACTION_STORE_STAR  = 'STORE*'        !< Store value or revert on default if invoked alone.
 character(len=*), parameter :: ACTION_STORE_TRUE  = 'STORE_TRUE'    !< Store .true. without the necessity of a value.
 character(len=*), parameter :: ACTION_STORE_FALSE = 'STORE_FALSE'   !< Store .false. without the necessity of a value.
@@ -233,6 +236,7 @@ contains
   self%is_hidden       = .false.
   self%is_val_required = .true.
   self%source          = SOURCE_NONE
+  self%is_config       = .false.
   endsubroutine free
 
   subroutine check(self, pref)
@@ -342,7 +346,7 @@ contains
   logical                                  :: takes !< Check result.
 
   takes = .false.
-  if (self%is_positional .or. .not.allocated(self%act)) return
+  if (self%is_positional .or. self%is_config .or. .not.allocated(self%act)) return
   takes = self%act == ACTION_STORE .or. self%act == ACTION_STORE_TRUE .or. self%act == ACTION_STORE_FALSE
   endfunction takes_config_value
 
