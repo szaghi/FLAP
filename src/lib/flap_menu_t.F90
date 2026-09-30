@@ -7,9 +7,9 @@ module flap_menu_t
 !< with multiple selection); the caller dispatches with `select case`. The units are the caller's: the menu never opens nor
 !< closes them. At the end of the input (standard input redirected from /dev/null or closed, as in a batch job) `run`
 !< returns `ERROR_MENU_EOF` at once: standard Fortran cannot tell whether the input is a terminal, the end of file is the
-!< portable signal.
+!< portable signal. `yes_no` asks the question alone (no options) and returns a logical.
 use, intrinsic :: iso_fortran_env, only : stdin => input_unit, stdout => output_unit, stderr => error_unit
-use flap_utils_m, only : flap_string, read_line
+use flap_utils_m, only : flap_string, read_line, upper_case
 use penf
 
 implicit none
@@ -55,6 +55,7 @@ type, public :: menu
     procedure, pass(self) :: free              !< Free dynamic memory.
     procedure, pass(self) :: init              !< Initialize the menu.
     generic               :: run => run_single, run_multiple !< Show the menu and read the answer.
+    procedure, pass(self) :: yes_no                          !< Ask the question as a yes/no one.
     ! private methods
     procedure, pass(self), private :: ask           !< Show the menu and read the chosen indexes.
     procedure, pass(self), private :: default_index !< Index of the (first) default option.
@@ -62,7 +63,7 @@ type, public :: menu
     procedure, pass(self), private :: raise         !< Write an error message and return its code.
     procedure, pass(self), private :: run_multiple  !< Show the menu and read the choices.
     procedure, pass(self), private :: run_single    !< Show the menu and read one choice.
-    procedure, pass(self), private :: show          !< Write the options and the question.
+    procedure, pass(self), private :: show          !< Write the options (unless yes/no) and the question.
     final                          :: finalize      !< Free dynamic memory when finalizing.
 endtype menu
 
@@ -161,14 +162,16 @@ contains
   endsubroutine free
 
   ! private methods
-  subroutine ask(self, choices, error)
+  subroutine ask(self, choices, error, yes_no)
   !< Show the menu and read the chosen indexes (one without multiple selection); none on error.
   !<
   !< With loop_on_invalid an invalid (or empty) answer is reported with the tries left and the menu is asked again, up to
-  !< `tries` attempts; the last error is returned. The end of the input and a read error are never retried.
-  class(menu),               intent(inout) :: self       !< Menu.
-  integer(I4P), allocatable, intent(out)   :: choices(:) !< Chosen indexes (none on error).
-  integer(I4P),              intent(out)   :: error      !< Error trapping flag.
+  !< `tries` attempts; the last error is returned. The end of the input and a read error are never retried. With yes_no
+  !< (its default: 'Y', 'N', or ' ' for none) the question is asked alone and the index is 1 for yes, 2 for no.
+  class(menu),               intent(inout)        :: self       !< Menu.
+  integer(I4P), allocatable, intent(out)          :: choices(:) !< Chosen indexes (none on error).
+  integer(I4P),              intent(out)          :: error      !< Error trapping flag.
+  character(1),              intent(in), optional :: yes_no     !< Yes/no question, with its default.
   character(len=:), allocatable            :: answer     !< Answer line.
   character(len=:), allocatable            :: message    !< Error message.
   character(256)                           :: iomsg      !< I/O message.
@@ -181,16 +184,30 @@ contains
   if (.not.allocated(self%question)) self%question = ''
   if (.not.allocated(self%default_icon)) self%default_icon = '*'
   if (.not.allocated(self%separator)) self%separator = ' '
-  if (.not.allocated(self%options)) then
-    error = self%raise(ERROR_MENU_DEFINITION, 'the menu has no options')
-    return
-  elseif (size(self%options, dim=1) == 0) then
-    error = self%raise(ERROR_MENU_DEFINITION, 'the menu has no options')
-    return
+  if (.not.present(yes_no)) then
+    if (.not.allocated(self%options)) then
+      error = self%raise(ERROR_MENU_DEFINITION, 'the menu has no options')
+      return
+    elseif (size(self%options, dim=1) == 0) then
+      error = self%raise(ERROR_MENU_DEFINITION, 'the menu has no options')
+      return
+    endif
   endif
   attempts = 1 ; if (self%loop_on_invalid) attempts = self%tries
   do attempt=1, attempts
-    call self%show
+    if (present(yes_no)) then
+      ! the suffix is built at each attempt, never appended to the question (wmenu repeats it)
+      select case(yes_no)
+      case('Y')
+        call self%show(suffix='(Y/n)')
+      case('N')
+        call self%show(suffix='(y/N)')
+      case default
+        call self%show(suffix='(y/n)')
+      endselect
+    else
+      call self%show
+    endif
     call read_line(self%input_unit, answer, iostat, iomsg)
     if (is_iostat_end(iostat)) then
       error = self%raise(ERROR_MENU_EOF, 'end of input, no response')
@@ -199,7 +216,11 @@ contains
       error = self%raise(ERROR_MENU_INVALID, 'invalid response: '//trim(iomsg))
       exit
     endif
-    call self%evaluate(trim(adjustl(answer)), choices, error, message)
+    if (present(yes_no)) then
+      call evaluate_yes_no(trim(adjustl(answer)), yes_no, choices, error, message)
+    else
+      call self%evaluate(trim(adjustl(answer)), choices, error, message)
+    endif
     if (error == 0) exit
     if (self%loop_on_invalid) message = message//' ('//trim(str(attempts - attempt, .true.))//' tries left)'
     error = self%raise(error, message)
@@ -237,11 +258,17 @@ contains
   if (present(error)) error = error_
   endsubroutine run_single
 
-  subroutine show(self)
-  !< Write the numbered options, then the question on the line of the answer.
-  class(menu), intent(in) :: self !< Menu.
-  integer(I4P)            :: i    !< Counter.
+  subroutine show(self, suffix)
+  !< Write the numbered options, then the question on the line of the answer; with a suffix (yes/no), the question alone.
+  class(menu),  intent(in)           :: self   !< Menu.
+  character(*), intent(in), optional :: suffix !< Suffix of the question, the options not shown.
+  integer(I4P)                       :: i      !< Counter.
 
+  if (present(suffix)) then
+    write(self%output_unit, '(A)', advance='no') self%question//' '//suffix//' '
+    flush(self%output_unit)
+    return
+  endif
   do i=1, size(self%options, dim=1)
     if (self%options(i)%is_default) then
       write(self%output_unit, '(A)') trim(str(i, .true.))//') '//self%default_icon//self%options(i)%text
@@ -253,6 +280,35 @@ contains
   write(self%output_unit, '(A)', advance='no') self%question//' '
   flush(self%output_unit)
   endsubroutine show
+
+  subroutine yes_no(self, answer, default, error)
+  !< Ask the question as a yes/no one, without the options: y, yes, n, no in any case; an empty answer is the default.
+  !<
+  !< The prompt ends with (Y/n), (y/N) or (y/n) (no default); retries and the end of the input as `run`.
+  class(menu),  intent(inout)         :: self       !< Menu.
+  logical,      intent(out)           :: answer     !< Answer (.false. on error).
+  character(*), intent(in),  optional :: default    !< Default answer: 'y' or 'n' (any case); none if absent.
+  integer(I4P), intent(out), optional :: error      !< Error trapping flag.
+  integer(I4P), allocatable           :: choices(:) !< 1 for yes, 2 for no.
+  character(1)                        :: default_   !< Default: 'Y', 'N' or ' ' (none).
+  integer(I4P)                        :: error_     !< Error trapping flag, local variable.
+
+  answer = .false.
+  default_ = ' '
+  error_ = 0
+  if (present(default)) then
+    if (upper_case(default) == 'Y' .or. upper_case(default) == 'N') then
+      default_ = upper_case(default)
+    else
+      error_ = self%raise(ERROR_MENU_DEFINITION, 'the default of a yes/no question is y or n, not "'//default//'"')
+    endif
+  endif
+  if (error_ == 0) then
+    call self%ask(choices, error_, yes_no=default_)
+    if (error_ == 0) answer = choices(1) == 1
+  endif
+  if (present(error)) error = error_
+  endsubroutine yes_no
 
   pure subroutine evaluate(self, answer, choices, error, message)
   !< The indexes of an answer (no blanks around): the defaults for an empty one; none on error, with its message.
@@ -340,6 +396,35 @@ contains
   endsubroutine finalize
 
   ! non type-bound procedures
+  pure subroutine evaluate_yes_no(answer, default, choices, error, message)
+  !< The index of a yes/no answer (no blanks around): 1 for y/yes, 2 for n/no (any case), the default if empty.
+  character(*),                  intent(in)  :: answer     !< Answer.
+  character(1),                  intent(in)  :: default    !< Default: 'Y', 'N' or ' ' (none).
+  integer(I4P), allocatable,     intent(out) :: choices(:) !< [1] for yes, [2] for no; none on error.
+  integer(I4P),                  intent(out) :: error      !< Error code.
+  character(len=:), allocatable, intent(out) :: message    !< Error message.
+  character(len=:), allocatable              :: word       !< Answer or default, upper case.
+
+  error = 0
+  message = ''
+  word = upper_case(answer)
+  if (len(word) == 0) word = trim(default)
+  select case(word)
+  case('Y', 'YES')
+    choices = [1_I4P]
+  case('N', 'NO')
+    choices = [2_I4P]
+  case('')
+    allocate(choices(0))
+    error = ERROR_MENU_NO_RESPONSE
+    message = 'no response'
+  case default
+    allocate(choices(0))
+    error = ERROR_MENU_INVALID
+    message = 'invalid response: '//answer
+  endselect
+  endsubroutine evaluate_yes_no
+
   pure subroutine split_fields(answer, separator, fields)
   !< Split an answer into fields: a blank separator splits at runs of blanks; any other exactly, each field trimmed (so
   !< `1,,3` has an empty field). Not `tokenize`, whose trailing-token behaviour belongs to the parser.

@@ -107,7 +107,7 @@ positive values are **errors**. Existing values never change.
 | `2003` | `ERROR_MENU_DUPLICATE` | Duplicate menu answer | The same option chosen twice with multiple selection |
 | `2004` | `ERROR_MENU_NO_RESPONSE` | Empty menu answer | The user just pressed Enter, and the menu has no default option |
 | `2005` | `ERROR_MENU_EOF` | End of input in a menu | Standard input at its end (`/dev/null`, a batch job): no answer can come |
-| `2006` | `ERROR_MENU_DEFINITION` | Invalid menu | `run` on a menu without options, `add_option` with an empty text or a second default (single choice), `init(tries=)` below 1 or `init(separator='')`, the scalar `run(choice)` on a menu with multiple selection |
+| `2006` | `ERROR_MENU_DEFINITION` | Invalid menu | `run` on a menu without options, `add_option` with an empty text or a second default (single choice), `init(tries=)` below 1 or `init(separator='')`, the scalar `run(choice)` on a menu with multiple selection, `yes_no(default=)` other than y or n |
 
 The first two group codes are named `ERROR_GROUP_*` in the `flap` module; inside the group module they are
 `ERROR_CONSISTENCY` and `ERROR_M_EXCLUDE`, which would clash with the argument-level `ERROR_M_EXCLUDE` (`9`).

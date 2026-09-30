@@ -47,6 +47,7 @@ returned in `error` and a message such as `error: invalid response: 7` is writte
 | `add_option(text, is_default, error)` | Append an option; its number is its position. An empty text, or a second default, is an error and is not added. |
 | `run(choice, error)` | Show the menu and read one answer; `choice` is the index of the chosen option. A menu can be run several times. |
 | `run(choices, error)` | The same, `choices` an allocatable array: the chosen indexes (see [Multiple selection](#multiple-selection)). |
+| `yes_no(answer, default, error)` | Ask the question as a yes/no one, without the options; `answer` is a logical (see [Yes/no questions](#yes-no-questions)). |
 | `free` | Release the memory (also done automatically). |
 
 ## A default option
@@ -98,6 +99,27 @@ On any error `choices` is allocated with no elements. `run(choices)` also works 
 there, and with the scalar `run(choice)`, several answers are `ERROR_MENU_TOO_MANY`. The scalar `run(choice)` on a menu
 with multiple selection is `ERROR_MENU_DEFINITION`: use the array.
 
+## Yes/no questions
+
+`yes_no` asks the menu's question alone, without listing the options, and returns a logical:
+
+```fortran
+logical :: overwrite
+
+call m%init(question='Overwrite the restart file?')
+call m%yes_no(overwrite, default='n', error=error)
+```
+
+```text
+Overwrite the restart file? (y/N) yes
+```
+
+- `y`, `yes`, `n`, `no` are accepted in any case (`yEs` too).
+- `default='y'` or `'n'` (any case) answers an empty line and sets the suffix: `(Y/n)`, `(y/N)`, or `(y/n)` without a
+  default, when an empty answer is `ERROR_MENU_NO_RESPONSE`. Any other default is `ERROR_MENU_DEFINITION`.
+- Anything else is `ERROR_MENU_INVALID`; retries and the end of the input work as for `run`, and the suffix is never
+  repeated on a retry. On any error `answer` is `.false.`.
+
 ## Asking again
 
 By default the first invalid answer is returned as an error. With `init(loop_on_invalid=.true.)` the menu reports it
@@ -148,4 +170,4 @@ never stops the program.
 | `2003` | `ERROR_MENU_DUPLICATE` | The same option chosen twice |
 | `2004` | `ERROR_MENU_NO_RESPONSE` | Empty answer, and no default option |
 | `2005` | `ERROR_MENU_EOF` | End of the input: no answer can come |
-| `2006` | `ERROR_MENU_DEFINITION` | `run` on a menu without options, `add_option` with an empty text or a second default (single choice), `init` with `tries` below 1 or an empty separator, the scalar `run(choice)` with multiple selection |
+| `2006` | `ERROR_MENU_DEFINITION` | `run` on a menu without options, `add_option` with an empty text or a second default (single choice), `init` with `tries` below 1 or an empty separator, the scalar `run(choice)` with multiple selection, `yes_no` with a default other than y or n |

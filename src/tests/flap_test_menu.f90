@@ -1,8 +1,8 @@
-!< Interactive menus: flap_menu_t, single choice on custom units, defaults, retries, multiple selection (issue #125, steps
-!< 5.1-5.5; #78 1.1, 6.1, 2.1, 3.1, 5.1: T0.1, T1.1-T1.8, T6.1-T6.4, T2.1-T2.7, T3.1-T3.7, T5.1-T5.8).
+!< Interactive menus: flap_menu_t, single choice on custom units, defaults, retries, multiple selection, yes/no (issue #125,
+!< steps 5.1-5.6; #78 1.1, 6.1, 2.1, 3.1, 5.1, 4.1: T0.1, T1.1-T1.8, T6.1-T6.4, T2.1-T2.7, T3.1-T3.7, T5.1-T5.8, T4.1-T4.9).
 program flap_test_menu
-!< Interactive menus: flap_menu_t, single choice on custom units, defaults, retries, multiple selection (issue #125, steps
-!< 5.1-5.5; #78 1.1, 6.1, 2.1, 3.1, 5.1: T0.1, T1.1-T1.8, T6.1-T6.4, T2.1-T2.7, T3.1-T3.7, T5.1-T5.8).
+!< Interactive menus: flap_menu_t, single choice on custom units, defaults, retries, multiple selection, yes/no (issue #125,
+!< steps 5.1-5.6; #78 1.1, 6.1, 2.1, 3.1, 5.1, 4.1: T0.1, T1.1-T1.8, T6.1-T6.4, T2.1-T2.7, T3.1-T3.7, T5.1-T5.8, T4.1-T4.9).
 !<
 !< The menu prints its numbered options and the question, reads one answer line and returns the chosen index. Every case
 !< runs in-process on custom units (the answers in a scratch file, output and errors read back from capture units); the
@@ -380,6 +380,54 @@ close(in, status='delete')
 out = read_back(lun)
 out = read_back(elun)
 
+! T4.x: yes/no questions (#78 4.1)
+! T4.1, T4.2: yes and no, in any case
+call check_yes_no('y', 0_I4P, .true., 'T4.1 y')
+call check_yes_no('Y', 0_I4P, .true., 'T4.1 Y')
+call check_yes_no('yes', 0_I4P, .true., 'T4.1 yes')
+call check_yes_no('YES', 0_I4P, .true., 'T4.1 YES')
+call check_yes_no('yEs', 0_I4P, .true., 'T4.1 yEs')
+call check_yes_no('  yes  ', 0_I4P, .true., 'blanks around')
+call check_yes_no('n', 0_I4P, .false., 'T4.2 n')
+call check_yes_no('No', 0_I4P, .false., 'T4.2 No')
+! T4.3, T4.4: an empty answer is the default; without one, no response
+call check_yes_no('', 0_I4P, .true., 'T4.3 default y', default='y')
+call check_yes_no('', 0_I4P, .false., 'T4.3 default n', default='n')
+call check_yes_no('   ', 0_I4P, .false., 'T4.3 blank, default N', default='N')
+call check_yes_no('y', 0_I4P, .true., 'an explicit answer wins', default='n')
+call check_yes_no('', ERROR_MENU_NO_RESPONSE, .false., 'T4.4 no default')
+call assert_contains(read_back(elun), 'no response', 'T4.4 message')
+! T4.5: anything else is invalid
+call check_yes_no('maybe', ERROR_MENU_INVALID, .false., 'T4.5 maybe')
+call check_yes_no('ye', ERROR_MENU_INVALID, .false., 'T4.5 ye')
+call check_yes_no('1', ERROR_MENU_INVALID, .false., 'T4.5 1')
+call assert_contains(read_back(elun), 'invalid response: maybe', 'T4.5 message')
+! T4.6: an invalid default
+call check_yes_no('y', ERROR_MENU_DEFINITION, .false., 'T4.6 default x', default='x')
+call check_yes_no('y', ERROR_MENU_DEFINITION, .false., 'T4.6 default yes', default='yes')
+call assert_contains(read_back(elun), 'default', 'T4.6 message')
+! T4.7: the prompt: the question and the suffix of the default, no options shown
+out = read_back(lun)
+call check_yes_no('y', 0_I4P, .true., 'T4.7 (Y/n)', default='y')
+call assert_equal(read_back(lun), 'Overwrite the restart file? (Y/n) '//new_line('a'), 'T4.7 (Y/n)')
+call check_yes_no('y', 0_I4P, .true., 'T4.7 (y/N)', default='n')
+call assert_equal(read_back(lun), 'Overwrite the restart file? (y/N) '//new_line('a'), 'T4.7 (y/N)')
+call check_yes_no('y', 0_I4P, .true., 'T4.7 (y/n)')
+call assert_equal(read_back(lun), 'Overwrite the restart file? (y/n) '//new_line('a'), 'T4.7 (y/n)')
+call check_yes_no('y', 0_I4P, .true., 'options are not shown', options=.true.)
+call assert(index(read_back(lun), 'Pizza') == 0, 'options are not shown')
+! T4.8: retries: the prompt asked again, its suffix never repeated
+call check_yes_no('maybe'//new_line('a')//'what'//new_line('a')//'no', 0_I4P, .false., 'T4.8 retries', tries=3_I4P)
+out = read_back(lun)
+call assert_equal(count_of(out, '(y/n)'), 3_I4P, 'T4.8 asked three times')
+call assert(index(out, '(y/n) (y/n)') == 0, 'T4.8 the suffix is not repeated')
+call assert_contains(read_back(elun), 'invalid response: what (1 tries left)', 'T4.8 messages')
+! T4.9: the end of the input
+call check_yes_no('', ERROR_MENU_EOF, .false., 'T4.9 end of input', line_end=.false.)
+call check_yes_no('maybe', ERROR_MENU_EOF, .false., 'T4.9 end of input while retrying', tries=3_I4P, line_end=.false.)
+out = read_back(lun)
+out = read_back(elun)
+
 ! T0.1: the parser never uses the menu module
 lib_dir = 'src/lib'
 call get_environment_variable('FLAP_TEST_LIB_DIR', value=buffer, status=status)
@@ -441,6 +489,40 @@ contains
     call assert_equal(size(got, dim=1), 0_I4P, what//': no choices')
   endif
   endsubroutine check_multiple
+
+  subroutine check_yes_no(answer, expected_error, expected, what, default, tries, options, line_end)
+  !< Ask a yes/no question on one answer and check the error and the answer (.false. on error).
+  character(*), intent(in)           :: answer         !< Answer lines.
+  integer(I4P), intent(in)           :: expected_error !< Expected error.
+  logical,      intent(in)           :: expected       !< Expected answer.
+  character(*), intent(in)           :: what           !< Case.
+  character(*), intent(in), optional :: default        !< Default answer.
+  integer(I4P), intent(in), optional :: tries          !< Attempts, with loop_on_invalid.
+  logical,      intent(in), optional :: options        !< Add options to the menu (never shown).
+  logical,      intent(in), optional :: line_end       !< End the last answer line (default).
+  logical                            :: yes            !< Answer.
+  integer(I4P)                       :: u              !< Input unit.
+  integer(I4P)                       :: e              !< Error trapping flag.
+
+  call answers(answer, u, line_end=line_end)
+  if (present(tries)) then
+    call m%init(question='Overwrite the restart file?', loop_on_invalid=.true., tries=tries, input_unit=u, &
+                output_unit=lun, error_unit=elun)
+  else
+    call m%init(question='Overwrite the restart file?', input_unit=u, output_unit=lun, error_unit=elun)
+  endif
+  if (present(options)) then
+    if (options) call m%add_option(text='Pizza')
+  endif
+  if (present(default)) then
+    call m%yes_no(yes, default=default, error=e)
+  else
+    call m%yes_no(yes, error=e)
+  endif
+  close(u, status='delete')
+  call assert_equal(e, expected_error, what//': error')
+  call assert_equal(yes, expected, what//': answer')
+  endsubroutine check_yes_no
 
   subroutine retry_menu(input_unit, tries)
   !< The food menu, retrying invalid answers.

@@ -11,7 +11,7 @@ title: flap_menu_t
  with multiple selection); the caller dispatches with `select case`. The units are the caller's: the menu never opens nor
  closes them. At the end of the input (standard input redirected from /dev/null or closed, as in a batch job) `run`
  returns `ERROR_MENU_EOF` at once: standard Fortran cannot tell whether the input is a terminal, the end of file is the
- portable signal.
+ portable signal. `yes_no` asks the question alone (no options) and returns a logical.
 
 **Source**: `src/lib/flap_menu_t.F90`
 
@@ -35,8 +35,10 @@ graph LR
 - [run_multiple](#run-multiple)
 - [run_single](#run-single)
 - [show](#show)
+- [yes_no](#yes-no)
 - [evaluate](#evaluate)
 - [finalize](#finalize)
+- [evaluate_yes_no](#evaluate-yes-no)
 - [split_fields](#split-fields)
 - [default_index](#default-index)
 - [raise](#raise)
@@ -93,13 +95,14 @@ Interactive menu: numbered options, a question, one answer line.
 | `free` | pass(self) | Free dynamic memory. |
 | `init` | pass(self) | Initialize the menu. |
 | `run` |  | Show the menu and read the answer. |
+| `yes_no` | pass(self) | Ask the question as a yes/no one. |
 | `ask` | pass(self) | Show the menu and read the chosen indexes. |
 | `default_index` | pass(self) | Index of the (first) default option. |
 | `evaluate` | pass(self) | The indexes of an answer. |
 | `raise` | pass(self) | Write an error message and return its code. |
 | `run_multiple` | pass(self) | Show the menu and read the choices. |
 | `run_single` | pass(self) | Show the menu and read one choice. |
-| `show` | pass(self) | Write the options and the question. |
+| `show` | pass(self) | Write the options (unless yes/no) and the question. |
 
 ## Subroutines
 
@@ -183,10 +186,11 @@ subroutine free(self)
 Show the menu and read the chosen indexes (one without multiple selection); none on error.
 
  With loop_on_invalid an invalid (or empty) answer is reported with the tries left and the menu is asked again, up to
- `tries` attempts; the last error is returned. The end of the input and a read error are never retried.
+ `tries` attempts; the last error is returned. The end of the input and a read error are never retried. With yes_no
+ (its default: 'Y', 'N', or ' ' for none) the question is asked alone and the index is 1 for yes, 2 for no.
 
 ```fortran
-subroutine ask(self, choices, error)
+subroutine ask(self, choices, error, yes_no)
 ```
 
 **Arguments**
@@ -196,6 +200,7 @@ subroutine ask(self, choices, error)
 | `self` | class([menu](/api/src/lib/flap_menu_t#menu)) | inout |  | Menu. |
 | `choices` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | allocatable | Chosen indexes (none on error). |
 | `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out |  | Error trapping flag. |
+| `yes_no` | character(len=1) | in | optional | Yes/no question, with its default. |
 
 **Call graph**
 
@@ -203,7 +208,9 @@ subroutine ask(self, choices, error)
 flowchart TD
   run_multiple["run_multiple"] --> ask["ask"]
   run_single["run_single"] --> ask["ask"]
+  yes_no["yes_no"] --> ask["ask"]
   ask["ask"] --> evaluate["evaluate"]
+  ask["ask"] --> evaluate_yes_no["evaluate_yes_no"]
   ask["ask"] --> raise["raise"]
   ask["ask"] --> read_line["read_line"]
   ask["ask"] --> show["show"]
@@ -264,10 +271,10 @@ flowchart TD
 
 ### show
 
-Write the numbered options, then the question on the line of the answer.
+Write the numbered options, then the question on the line of the answer; with a suffix (yes/no), the question alone.
 
 ```fortran
-subroutine show(self)
+subroutine show(self, suffix)
 ```
 
 **Arguments**
@@ -275,6 +282,7 @@ subroutine show(self)
 | Name | Type | Intent | Attributes | Description |
 |------|------|--------|------------|-------------|
 | `self` | class([menu](/api/src/lib/flap_menu_t#menu)) | in |  | Menu. |
+| `suffix` | character(len=*) | in | optional | Suffix of the question, the options not shown. |
 
 **Call graph**
 
@@ -283,6 +291,35 @@ flowchart TD
   ask["ask"] --> show["show"]
   show["show"] --> str["str"]
   style show fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### yes_no
+
+Ask the question as a yes/no one, without the options: y, yes, n, no in any case; an empty answer is the default.
+
+ The prompt ends with (Y/n), (y/N) or (y/n) (no default); retries and the end of the input as `run`.
+
+```fortran
+subroutine yes_no(self, answer, default, error)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([menu](/api/src/lib/flap_menu_t#menu)) | inout |  | Menu. |
+| `answer` | logical | out |  | Answer (.false. on error). |
+| `default` | character(len=*) | in | optional | Default answer: 'y' or 'n' (any case); none if absent. |
+| `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | optional | Error trapping flag. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  yes_no["yes_no"] --> ask["ask"]
+  yes_no["yes_no"] --> raise["raise"]
+  yes_no["yes_no"] --> upper_case["upper_case"]
+  style yes_no fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### evaluate
@@ -333,6 +370,35 @@ subroutine finalize(self)
 | Name | Type | Intent | Attributes | Description |
 |------|------|--------|------------|-------------|
 | `self` | type([menu](/api/src/lib/flap_menu_t#menu)) | inout |  | Menu. |
+
+### evaluate_yes_no
+
+The index of a yes/no answer (no blanks around): 1 for y/yes, 2 for n/no (any case), the default if empty.
+
+**Attributes**: pure
+
+```fortran
+subroutine evaluate_yes_no(answer, default, choices, error, message)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `answer` | character(len=*) | in |  | Answer. |
+| `default` | character(len=1) | in |  | Default: 'Y', 'N' or ' ' (none). |
+| `choices` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | allocatable | [1] for yes, [2] for no; none on error. |
+| `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out |  | Error code. |
+| `message` | character(len=:) | out | allocatable | Error message. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  ask["ask"] --> evaluate_yes_no["evaluate_yes_no"]
+  evaluate_yes_no["evaluate_yes_no"] --> upper_case["upper_case"]
+  style evaluate_yes_no fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
 
 ### split_fields
 
@@ -415,6 +481,7 @@ flowchart TD
   ask["ask"] --> raise["raise"]
   init["init"] --> raise["raise"]
   run_single["run_single"] --> raise["raise"]
+  yes_no["yes_no"] --> raise["raise"]
   style raise fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
