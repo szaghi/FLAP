@@ -143,9 +143,10 @@ contains
     if (.not.self%cla(a)%is_positional) then
       do aa=1, self%Na
         if ((a/=aa).and.(.not.self%cla(aa)%is_positional)) then
-          if (self%cla(aa)%match_token(self%cla(a)%switch).or.self%cla(aa)%match_token(self%cla(a)%switch_ab)) then
+          clash = self%cla(aa)%match_token(self%cla(a)%switch).or.self%cla(aa)%match_token(self%cla(a)%switch_ab)
+          if (allocated(self%cla(a)%switch_neg)) clash = clash.or.self%cla(aa)%match_token(self%cla(a)%switch_neg)
+          if (clash) then
             call self%errored(pref=pref, error=ERROR_CONSISTENCY, a1=a, a2=aa)
-            clash = .true.
             exit CLA_unique
           endif
         endif
@@ -383,6 +384,8 @@ contains
     if (allocated(self%cla(a)%val)) deallocate(self%cla(a)%val)
     self%cla(a)%error = 0
     self%cla(a)%source = SOURCE_NONE
+    self%cla(a)%is_negated = .false.
+    self%cla(a)%pair_passed = .false.
   enddo
   endsubroutine reset_parse
 
@@ -662,6 +665,7 @@ contains
   logical                                            :: has_inline          !< The argument is NAME=VALUE.
   logical                                            :: match               !< The argument names the CLA.
   logical                                            :: first               !< First occurrence of the CLA.
+  logical                                            :: negated             !< The argument is the negation of a flag.
   integer(I4P)                                       :: n                   !< Occurrences of a compact count.
 
   error_unknown_clas = 0
@@ -677,12 +681,17 @@ contains
               call self%cla(a)%match_inline_token(args(arg), match, inline_val, has_inline)
               if (match) then
                  first = .not.self%cla(a)%is_passed
-                 if (self%cla(a)%is_passed.and.(.not.self%cla(a)%is_repeatable())) then
+                 negated = self%cla(a)%match_negation(args(arg))
+                 if (self%cla(a)%is_passed.and.(.not.self%cla(a)%is_repeatable()).and. &
+                     (.not.self%cla(a)%is_pair_override(negated))) then
                     ! current CLA has been already passed: raise the error on it and stop parsing
                     call self%cla(a)%raise_error_duplicated_clas(pref=pref, switch=trim(adjustl(args(arg))))
                     self%error = self%cla(a)%error
                     return
                  else
+                    ! a flag pair (F11): the last spelling wins (D5), each spelling once
+                    if (self%cla(a)%is_passed.and.allocated(self%cla(a)%switch_neg)) self%cla(a)%pair_passed = .true.
+                    self%cla(a)%is_negated = negated
                     self%cla(a)%is_passed = .true.
                     self%cla(a)%source = SOURCE_COMMANDLINE
                     found = .true.

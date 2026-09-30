@@ -472,7 +472,7 @@ Add CLA to CLI.
  @note If CLA belongs to a not yet present group it is created on the fly.
 
 ```fortran
-subroutine add(self, pref, group, group_index, switch, switch_ab, help, help_markdown, help_color, help_style, required, val_required, positional, position, hidden, act, def, nargs, choices, exclude, envvar, must_exist, readable, writable, allow_dash, deprecated, min, max, min_open, max_open, clamp, error)
+subroutine add(self, pref, group, group_index, switch, switch_ab, switch_neg, help, help_markdown, help_color, help_style, required, val_required, positional, position, hidden, act, def, nargs, choices, exclude, envvar, must_exist, readable, writable, allow_dash, deprecated, min, max, min_open, max_open, clamp, error)
 ```
 
 **Arguments**
@@ -485,6 +485,7 @@ subroutine add(self, pref, group, group_index, switch, switch_ab, help, help_mar
 | `group_index` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in | optional | Index of the grouped CLAs. |
 | `switch` | character(len=*) | in | optional | Switch name. |
 | `switch_ab` | character(len=*) | in | optional | Abbreviated switch name. |
+| `switch_neg` | character(len=*) | in | optional | Negation of a flag, --no-x (F11): the opposite value. |
 | `help` | character(len=*) | in | optional | Help message describing the CLA. |
 | `help_markdown` | character(len=*) | in | optional | Longer help message, markdown formatted. |
 | `help_color` | character(len=*) | in | optional | ANSI color of help messages. |
@@ -1487,6 +1488,7 @@ flowchart TD
   check_positional_consistency["check_positional_consistency"] --> errored["errored"]
   check_range["check_range"] --> errored["errored"]
   check_range_consistency["check_range_consistency"] --> errored["errored"]
+  check_switch_neg_consistency["check_switch_neg_consistency"] --> errored["errored"]
   get_args_from_invocation["get_args_from_invocation"] --> errored["errored"]
   get_cla["get_cla"] --> errored["errored"]
   get_cla["get_cla"] --> errored["errored"]

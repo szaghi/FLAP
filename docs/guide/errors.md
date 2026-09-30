@@ -66,6 +66,7 @@ positive values are **errors**. Existing values never change.
 | `33` | `ERROR_PATH_NOT_FOUND` | Path does not exist | `must_exist=`/`readable=` and the file is missing |
 | `34` | `ERROR_PATH_NOT_READABLE` | Path not readable | `readable=` and the file cannot be opened for reading (the message gives the reason) |
 | `35` | `ERROR_PATH_NOT_WRITABLE` | Path not writable | `writable=` and the existing file cannot be opened for writing |
+| `36` | `ERROR_SWITCH_NEG_INCONSISTENT` | Invalid flag negation | `switch_neg=` on an argument that is not a named `store_true`/`store_false` flag without `nargs`, blank, or equal to its own switch names |
 | `37` | `ERROR_ALTERNATE_INCONSISTENT` | Invalid alternate action | `act='alternate'` with `nargs`, `envvar`, `choices`, `exclude`, `required=.true.` or `positional` |
 | `43` | `ERROR_ENVVAR_CSV` | Unterminated quote in a list from the environment | `WORKERS='1,"99'` for an option with `nargs` and `envvar='WORKERS'` |
 | `44` | `ERROR_DEPRECATED_REQUIRED` | A required option cannot be deprecated | `deprecated=` combined with `required=.true.` |

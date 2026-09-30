@@ -111,5 +111,7 @@ values still takes the default: both change in v2.0.0 (see below).
 
 - `add(..., min=, max=, min_open=, max_open=, clamp=)` gives a numeric option a range, checked by `get` (see
   [Advanced](./advanced#numeric-ranges)).
+- `add(..., switch_neg='--no-x')` gives a `store_true`/`store_false` flag a negation; the last of the two passed wins
+  (see [Flag pairs](./arguments#flag-pairs-switch-neg)). New error `ERROR_SWITCH_NEG_INCONSISTENT` (36).
 - With real quad precision (`-D_R16P`), `get` into `real(R16P)` now converts in quad precision (it converted in single
   precision, B35 of #125).

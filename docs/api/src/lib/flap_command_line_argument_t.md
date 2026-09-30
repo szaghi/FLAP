@@ -45,6 +45,7 @@ graph LR
 - [check_range_consistency](#check-range-consistency)
 - [check_range](#check-range)
 - [check_alternate_consistency](#check-alternate-consistency)
+- [check_switch_neg_consistency](#check-switch-neg-consistency)
 - [check_path_consistency](#check-path-consistency)
 - [check_m_exclude_consistency](#check-m-exclude-consistency)
 - [check_named_consistency](#check-named-consistency)
@@ -77,6 +78,9 @@ graph LR
 - [has_path_checks](#has-path-checks)
 - [takes_config_value](#takes-config-value)
 - [match_token](#match-token)
+- [match_negation](#match-negation)
+- [is_pair_override](#is-pair-override)
+- [flag_value](#flag-value)
 - [is_repeatable](#is-repeatable)
 - [is_list](#is-list)
 - [is_required_val_passed](#is-required-val-passed)
@@ -150,6 +154,7 @@ graph LR
 | `ERROR_PATH_INCONSISTENT` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Path checks on an option taking no value. |
 | `ERROR_DEPRECATED_REQUIRED` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | A required option cannot be deprecated. |
 | `ERROR_ALTERNATE_INCONSISTENT` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | An alternate action with an attribute of a value. |
+| `ERROR_SWITCH_NEG_INCONSISTENT` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | A negation (switch_neg) of a CLA that is not a named flag. |
 | `ERROR_RANGE_DEFINITION` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Invalid range (bounds, clamp to an open real bound). |
 | `ERROR_OUT_OF_RANGE` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Value out of its range. |
 | `ERROR_RANGE_TYPE` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Range with a character or logical get. |
@@ -196,6 +201,7 @@ classDiagram
 | `error_lun` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Error unit to print error messages |
 | `switch` | character(len=:) | allocatable | Switch name. |
 | `switch_ab` | character(len=:) | allocatable | Abbreviated switch name. |
+| `switch_neg` | character(len=:) | allocatable | Negation of a flag, --no-x (F11); allocated if any. |
 | `act` | character(len=:) | allocatable | CLA value action. |
 | `def` | character(len=:) | allocatable | Default value. |
 | `nargs` | character(len=:) | allocatable | Number of arguments consumed by CLA. |
@@ -220,6 +226,8 @@ classDiagram
 | `min_open` | logical |  | The minimum is excluded. |
 | `max_open` | logical |  | The maximum is excluded. |
 | `clamp` | logical |  | An out-of-range value becomes the bound. |
+| `is_negated` | logical |  | The last spelling of a flag pair passed is the negation. |
+| `pair_passed` | logical |  | Both spellings of a flag pair passed (D5: once each). |
 
 #### Type-Bound Procedures
 
@@ -245,6 +253,9 @@ classDiagram
 | `range_text` |  | Range as text, e.g. (0, 1]. |
 | `check_paths` |  | Check the path value(s): existence and permissions. |
 | `match_token` |  | Check if a command line token names this CLA. |
+| `match_negation` |  | Check if a command line token is the negation of this flag. |
+| `is_pair_override` |  | Check if a flag passed may be passed again by its other spelling. |
+| `flag_value` |  | Value of a flag passed on the command line. |
 | `match_inline_token` |  | Check a token also as NAME=VALUE. |
 | `set_inline_value` |  | Set the value given inline (NAME=VALUE). |
 | `is_repeatable` |  | Check if the CLA may be passed more than once. |
@@ -275,6 +286,7 @@ classDiagram
 | `check_m_exclude_consistency` |  | Check mutually exclusion consistency. |
 | `check_path_consistency` |  | Check that the path checks are on an option taking a value. |
 | `check_alternate_consistency` |  | Check that an alternate action has no attribute of a value. |
+| `check_switch_neg_consistency` |  | Check that a negation belongs to a named scalar flag. |
 | `check_range_consistency` |  | Check the range definition. |
 | `check_range` |  | Check (or clamp) a value against the range. |
 | `check_named_consistency` |  | Check named CLA consistency. |
@@ -357,6 +369,7 @@ flowchart TD
   check["check"] --> check_path_consistency["check_path_consistency"]
   check["check"] --> check_positional_consistency["check_positional_consistency"]
   check["check"] --> check_range_consistency["check_range_consistency"]
+  check["check"] --> check_switch_neg_consistency["check_switch_neg_consistency"]
   check["check"] --> errored["errored"]
   style check fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -740,6 +753,7 @@ flowchart TD
   check_positional_consistency["check_positional_consistency"] --> errored["errored"]
   check_range["check_range"] --> errored["errored"]
   check_range_consistency["check_range_consistency"] --> errored["errored"]
+  check_switch_neg_consistency["check_switch_neg_consistency"] --> errored["errored"]
   get_args_from_invocation["get_args_from_invocation"] --> errored["errored"]
   get_cla["get_cla"] --> errored["errored"]
   get_cla["get_cla"] --> errored["errored"]
@@ -1021,6 +1035,30 @@ flowchart TD
   style check_alternate_consistency fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
+### check_switch_neg_consistency
+
+Check that a negation (switch_neg, F11 of #125) belongs to a named scalar flag and differs from its own names.
+
+```fortran
+subroutine check_switch_neg_consistency(self, pref)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  check["check"] --> check_switch_neg_consistency["check_switch_neg_consistency"]
+  check_switch_neg_consistency["check_switch_neg_consistency"] --> errored["errored"]
+  style check_switch_neg_consistency fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
 ### check_path_consistency
 
 Check that the path checks (must_exist, readable, writable, allow_dash) are on an option taking a value: store,
@@ -1182,6 +1220,7 @@ flowchart TD
   get_cla["get_cla"] --> check_choices["check_choices"]
   get_cla["get_cla"] --> check_range["check_range"]
   get_cla["get_cla"] --> errored["errored"]
+  get_cla["get_cla"] --> flag_value["flag_value"]
   get_cla["get_cla"] --> get_cla_from_buffer["get_cla_from_buffer"]
   get_cla["get_cla"] --> has_range["has_range"]
   get_cla["get_cla"] --> has_value["has_value"]
@@ -1776,6 +1815,7 @@ function value_text(self) result(text)
 ```mermaid
 flowchart TD
   provenance["provenance"] --> value_text["value_text"]
+  value_text["value_text"] --> flag_value["flag_value"]
   value_text["value_text"] --> is_list["is_list"]
   value_text["value_text"] --> list_join["list_join"]
   value_text["value_text"] --> stored_list["stored_list"]
@@ -1932,8 +1972,8 @@ flowchart TD
 
 Check if a command line token names this CLA: the one matcher of switch names (decision D1 of #125).
 
- Rule 1: the token is the switch or its abbreviation; blanks around both are not significant. A positional never matches.
- Rule 2 (NAME=VALUE) is match_inline_token, built on this one.
+ Rule 1: the token is the switch, its abbreviation or its negation (F11); blanks around both are not significant. A
+ positional never matches. Rule 2 (NAME=VALUE) is match_inline_token, built on this one; match_negation tells which.
 
 **Attributes**: pure
 
@@ -1960,7 +2000,91 @@ flowchart TD
   is_passed["is_passed"] --> match_token["match_token"]
   match_inline_token["match_inline_token"] --> match_token["match_token"]
   value_arity["value_arity"] --> match_token["match_token"]
+  match_token["match_token"] --> match_negation["match_negation"]
   style match_token fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### match_negation
+
+Check if a command line token is the negation of this flag (switch_neg, F11 of #125), by rule 1 of match_token.
+
+**Attributes**: pure
+
+**Returns**: `logical`
+
+```fortran
+function match_negation(self, token) result(match)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+| `token` | character(len=*) | in |  | Command line token. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  match_token["match_token"] --> match_negation["match_negation"]
+  parse["parse"] --> match_negation["match_negation"]
+  style match_negation fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### is_pair_override
+
+Check if a flag already passed may be passed again: the other spelling of a flag pair, not yet passed (D5 of #125).
+
+**Attributes**: pure
+
+**Returns**: `logical`
+
+```fortran
+function is_pair_override(self, negated) result(override)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+| `negated` | logical | in |  | The token is the negation. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  parse["parse"] --> is_pair_override["is_pair_override"]
+  style is_pair_override fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### flag_value
+
+Return the value of a flag passed on the command line: .true. for store_true (.false. for store_false), the opposite
+ when the last spelling passed is the negation (F11 of #125).
+
+**Attributes**: pure
+
+**Returns**: `logical`
+
+```fortran
+function flag_value(self) result(val)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  get_cla["get_cla"] --> flag_value["flag_value"]
+  value_text["value_text"] --> flag_value["flag_value"]
+  style flag_value fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### is_repeatable

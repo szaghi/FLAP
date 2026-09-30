@@ -76,7 +76,7 @@ abbreviation (`-v` for verbosity), the builtin keeps just `--version`. The same 
 ## Adding arguments — `cli%add`
 
 ```fortran
-call cli%add(switch, switch_ab, help, required, act, def, &
+call cli%add(switch, switch_ab, switch_neg, help, required, act, def, &
              nargs, choices, exclude, envvar,             &
              positional, position, hidden,                &
              must_exist, readable, writable, allow_dash,  &
@@ -94,6 +94,7 @@ All arguments are optional except that either `switch` (for named arguments) or
 |---|---|---|---|
 | `switch` | `character(*)` | — | Long switch name, e.g. `'--output'` |
 | `switch_ab` | `character(*)` | same as `switch` | Abbreviated switch, e.g. `'-o'` |
+| `switch_neg` | `character(*)` | not set | Negation of a flag, e.g. `'--no-restart'` (see [Flag pairs](#flag-pairs-switch-neg)) |
 | `help` | `character(*)` | `'Undocumented argument'` | Description shown in help |
 | `required` | `logical` | `.false.` | If `.true.`, the argument must be supplied |
 | `act` | `character(*)` | `'store'` | Action (see below) |
@@ -141,6 +142,32 @@ call cli%add(switch='--format', &
              help='Output format (default: text)',      &
              required=.false., act='store*', def='text', error=error)
 ```
+
+### Flag pairs (`switch_neg`)
+
+A `store_true` or `store_false` flag can have a negation, which sets the opposite value:
+
+```fortran
+call cli%add(switch='--restart', switch_ab='-r', switch_neg='--no-restart', &
+             help='Restart from the checkpoint',                            &
+             required=.false., act='store_true', def='.true.', error=error)
+```
+
+| Command line | `restart` |
+|---|---|
+| (absent) | the default, or the environment or configuration value |
+| `--restart`, `-r` | `.true.` |
+| `--no-restart` | `.false.` |
+| `--restart --no-restart` | `.false.`: the last one wins |
+| `--no-restart --restart` | `.true.` |
+| `--restart --restart` | `ERROR_DUPLICATED_CLAS` (23) |
+
+The last spelling wins, as in click and GNU tools, so a preset can be overridden: with `alias run='solver --restart'`,
+`run --no-restart` does not restart. Each spelling may appear once. A `store_false` flag is the mirror image
+(`--no-color`/`--color`). The help shows the pair as `[--restart/--no-restart]`; the bash completion offers both names.
+`get` and `is_passed` accept either name. The negation belongs to a named scalar flag and differs from its switch names:
+otherwise `add` reports `ERROR_SWITCH_NEG_INCONSISTENT` (36); a negation equal to the switch of another argument is a
+group consistency error (100).
 
 ### Restricted choices (`choices`)
 

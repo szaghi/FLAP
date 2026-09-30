@@ -582,7 +582,7 @@ contains
   if (present(error)) error = self%error
   endsubroutine set_mutually_exclusive_switches
 
-  subroutine add(self, pref, group, group_index, switch, switch_ab, help, help_markdown, help_color, help_style, &
+  subroutine add(self, pref, group, group_index, switch, switch_ab, switch_neg, help, help_markdown, help_color, help_style, &
                  required, val_required, positional, position, hidden, act, def, nargs, choices, exclude, envvar, &
                  must_exist, readable, writable, allow_dash, deprecated, min, max, min_open, max_open, clamp, error)
   !< Add CLA to CLI.
@@ -599,6 +599,7 @@ contains
   integer(I4P), optional,        intent(in)    :: group_index   !< Index of the grouped CLAs.
   character(*), optional,        intent(in)    :: switch        !< Switch name.
   character(*), optional,        intent(in)    :: switch_ab     !< Abbreviated switch name.
+  character(*), optional,        intent(in)    :: switch_neg    !< Negation of a flag, --no-x (F11): the opposite value.
   character(*), optional,        intent(in)    :: help          !< Help message describing the CLA.
   character(*), optional,        intent(in)    :: help_color    !< ANSI color of help messages.
   character(*), optional,        intent(in)    :: help_style    !< ANSI style of help messages.
@@ -642,6 +643,7 @@ contains
     endif
   endif
                                                   if (present(switch_ab    )) cla%switch_ab       = switch_ab
+                                                  if (present(switch_neg   )) cla%switch_neg      = switch_neg
   cla%help            = 'Undocumented argument' ; if (present(help         )) cla%help            = help
   cla%help_color      = ''                      ; if (present(help_color   )) cla%help_color      = help_color
   cla%help_style      = ''                      ; if (present(help_style   )) cla%help_style      = help_style

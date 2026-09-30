@@ -63,6 +63,7 @@ public :: ERROR_PATH_NOT_WRITABLE
 public :: ERROR_PATH_INCONSISTENT
 public :: ERROR_DEPRECATED_REQUIRED
 public :: ERROR_ALTERNATE_INCONSISTENT
+public :: ERROR_SWITCH_NEG_INCONSISTENT
 public :: ERROR_RANGE_DEFINITION
 public :: ERROR_OUT_OF_RANGE
 public :: ERROR_RANGE_TYPE
@@ -86,6 +87,7 @@ type, extends(object) :: command_line_argument
   private
   character(len=:), allocatable, public :: switch                 !< Switch name.
   character(len=:), allocatable, public :: switch_ab              !< Abbreviated switch name.
+  character(len=:), allocatable, public :: switch_neg             !< Negation of a flag, --no-x (F11); allocated if any.
   character(len=:), allocatable, public :: act                    !< CLA value action.
   character(len=:), allocatable, public :: def                    !< Default value.
   character(len=:), allocatable, public :: nargs                  !< Number of arguments consumed by CLA.
@@ -110,6 +112,8 @@ type, extends(object) :: command_line_argument
   logical,                       public :: min_open=.false.       !< The minimum is excluded.
   logical,                       public :: max_open=.false.       !< The maximum is excluded.
   logical,                       public :: clamp=.false.          !< An out-of-range value becomes the bound.
+  logical,                       public :: is_negated=.false.     !< The last spelling of a flag pair passed is the negation.
+  logical,                       public :: pair_passed=.false.    !< Both spellings of a flag pair passed (D5: once each).
   contains
     ! public methods
     procedure, public :: free                           !< Free dynamic memory.
@@ -126,6 +130,9 @@ type, extends(object) :: command_line_argument
     procedure, public :: range_text                     !< Range as text, e.g. (0, 1].
     procedure, public :: check_paths                    !< Check the path value(s): existence and permissions.
     procedure, public :: match_token                    !< Check if a command line token names this CLA.
+    procedure, public :: match_negation                 !< Check if a command line token is the negation of this flag.
+    procedure, public :: is_pair_override               !< Check if a flag passed may be passed again by its other spelling.
+    procedure, public :: flag_value                     !< Value of a flag passed on the command line.
     procedure, public :: match_inline_token             !< Check a token also as NAME=VALUE.
     procedure, public :: set_inline_value               !< Set the value given inline (NAME=VALUE).
     procedure, public :: is_repeatable                  !< Check if the CLA may be passed more than once.
@@ -170,6 +177,7 @@ type, extends(object) :: command_line_argument
     procedure, private :: check_m_exclude_consistency     !< Check mutually exclusion consistency.
     procedure, private :: check_path_consistency          !< Check that the path checks are on an option taking a value.
     procedure, private :: check_alternate_consistency     !< Check that an alternate action has no attribute of a value.
+    procedure, private :: check_switch_neg_consistency    !< Check that a negation belongs to a named scalar flag.
     procedure, private :: check_range_consistency         !< Check the range definition.
     procedure, private :: check_range                     !< Check (or clamp) a value against the range.
     procedure, private :: check_named_consistency         !< Check named CLA consistency.
@@ -248,6 +256,7 @@ integer(I4P), parameter :: ERROR_PATH_NOT_WRITABLE      = 35 !< Existing path va
 integer(I4P), parameter :: ERROR_PATH_INCONSISTENT      = 49 !< Path checks on an option taking no value.
 integer(I4P), parameter :: ERROR_DEPRECATED_REQUIRED    = 44 !< A required option cannot be deprecated.
 integer(I4P), parameter :: ERROR_ALTERNATE_INCONSISTENT = 37 !< An alternate action with an attribute of a value.
+integer(I4P), parameter :: ERROR_SWITCH_NEG_INCONSISTENT = 36 !< A negation (switch_neg) of a CLA that is not a named flag.
 integer(I4P), parameter :: ERROR_RANGE_DEFINITION       = 30 !< Invalid range (bounds, clamp to an open real bound).
 integer(I4P), parameter :: ERROR_OUT_OF_RANGE           = 31 !< Value out of its range.
 integer(I4P), parameter :: ERROR_RANGE_TYPE             = 32 !< Range with a character or logical get.
@@ -263,6 +272,7 @@ contains
   ! other members
   if (allocated(self%switch   )) deallocate(self%switch   )
   if (allocated(self%switch_ab)) deallocate(self%switch_ab)
+  if (allocated(self%switch_neg)) deallocate(self%switch_neg)
   if (allocated(self%act      )) deallocate(self%act      )
   if (allocated(self%def      )) deallocate(self%def      )
   if (allocated(self%nargs    )) deallocate(self%nargs    )
@@ -287,6 +297,8 @@ contains
   self%min_open        = .false.
   self%max_open        = .false.
   self%clamp           = .false.
+  self%is_negated      = .false.
+  self%pair_passed     = .false.
   endsubroutine free
 
   subroutine check(self, pref)
@@ -295,6 +307,7 @@ contains
   character(*), optional,       intent(in)    :: pref  !< Prefixing string.
 
   call self%check_alternate_consistency(pref=pref) ; if (self%error/=0) return
+  call self%check_switch_neg_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_range_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_count_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_append_consistency(pref=pref) ; if (self%error/=0) return
@@ -405,7 +418,7 @@ contains
 
   if ((self%act == ACTION_STORE_TRUE .or. self%act == ACTION_STORE_FALSE .or. self%act == ACTION_ALTERNATE) .and. &
       self%source == SOURCE_COMMANDLINE) then
-    text = merge('.true. ', '.false.', self%act /= ACTION_STORE_FALSE)
+    text = merge('.true. ', '.false.', self%flag_value())
     text = trim(text)
   elseif (self%is_list()) then
     text = list_join(self%stored_list(), ' ')
@@ -527,8 +540,8 @@ contains
   pure function match_token(self, token) result(match)
   !< Check if a command line token names this CLA: the one matcher of switch names (decision D1 of #125).
   !<
-  !< Rule 1: the token is the switch or its abbreviation; blanks around both are not significant. A positional never matches.
-  !< Rule 2 (NAME=VALUE) is match_inline_token, built on this one.
+  !< Rule 1: the token is the switch, its abbreviation or its negation (F11); blanks around both are not significant. A
+  !< positional never matches. Rule 2 (NAME=VALUE) is match_inline_token, built on this one; match_negation tells which.
   class(command_line_argument), intent(in) :: self  !< CLA data.
   character(*),                 intent(in) :: token !< Command line token.
   logical                                  :: match !< Check result.
@@ -538,7 +551,39 @@ contains
   if (allocated(self%switch)) match = adjustl(self%switch) == adjustl(token)
   if (match) return
   if (allocated(self%switch_ab)) match = adjustl(self%switch_ab) == adjustl(token)
+  if (match) return
+  match = self%match_negation(token)
   endfunction match_token
+
+  pure function match_negation(self, token) result(match)
+  !< Check if a command line token is the negation of this flag (switch_neg, F11 of #125), by rule 1 of match_token.
+  class(command_line_argument), intent(in) :: self  !< CLA data.
+  character(*),                 intent(in) :: token !< Command line token.
+  logical                                  :: match !< Check result.
+
+  match = .false.
+  if (self%is_positional .or. len_trim(token) == 0 .or. .not.allocated(self%switch_neg)) return
+  match = adjustl(self%switch_neg) == adjustl(token)
+  endfunction match_negation
+
+  pure function is_pair_override(self, negated) result(override)
+  !< Check if a flag already passed may be passed again: the other spelling of a flag pair, not yet passed (D5 of #125).
+  class(command_line_argument), intent(in) :: self     !< CLA data.
+  logical,                      intent(in) :: negated  !< The token is the negation.
+  logical                                  :: override !< Check result.
+
+  override = allocated(self%switch_neg) .and. self%is_passed .and. (.not.self%pair_passed) .and. &
+             (negated .neqv. self%is_negated)
+  endfunction is_pair_override
+
+  pure function flag_value(self) result(val)
+  !< Return the value of a flag passed on the command line: .true. for store_true (.false. for store_false), the opposite
+  !< when the last spelling passed is the negation (F11 of #125).
+  class(command_line_argument), intent(in) :: self !< CLA data.
+  logical                                  :: val  !< Value.
+
+  val = (self%act /= ACTION_STORE_FALSE) .neqv. self%is_negated
+  endfunction flag_value
 
   pure subroutine match_inline_token(self, token, match, inline_val, has_inline)
   !< Check if a command line token names this CLA by rule 1 (match_token) or rule 2 of decision D1: NAME=VALUE, split at
@@ -713,13 +758,15 @@ contains
   character(len=:), allocatable            :: prefd      !< Prefixing string.
   character(len=:), allocatable            :: switch_    !< Switch name, local variable.
   character(len=:), allocatable            :: switch_ab_ !< Abbreviated switch name, local variable.
+  character(len=:), allocatable            :: neg_       !< Negation of a flag, '/--no-x' ('' for none).
   integer(I4P)                             :: a          !< Counter.
   logical                                  :: markdownd  !< Format for markdown
   integer                                  :: indent     !< how many spaces to indent
 
   markdownd = .false. ; if (present(markdown)) markdownd = markdown
   indent = 4
-  switch_ = colorize(trim(adjustl(self%switch)), color_fg=self%help_color, style=self%help_style)
+  neg_ = '' ; if (allocated(self%switch_neg)) neg_ = '/'//trim(adjustl(self%switch_neg))
+  switch_ = colorize(trim(adjustl(self%switch))//neg_, color_fg=self%help_color, style=self%help_style)
   switch_ab_ = colorize(trim(adjustl(self%switch_ab)), color_fg=self%help_color, style=self%help_style)
   if (.not.self%is_hidden) then
     if (self%act==action_store) then
@@ -782,13 +829,13 @@ contains
     else
       if (trim(adjustl(self%switch))/=trim(adjustl(self%switch_ab))) then
         if (markdownd) then
-          usage = new_line('a')//'* `'//trim(adjustl(self%switch))//'`, `'//trim(adjustl(self%switch_ab))//'`  '
+          usage = new_line('a')//'* `'//trim(adjustl(self%switch))//neg_//'`, `'//trim(adjustl(self%switch_ab))//'`  '
         else
           usage = '   '//switch_//', '//switch_ab_
         endif
       else
         if (markdownd) then
-          usage = new_line('a')//'* `'//trim(adjustl(self%switch))//'`  '
+          usage = new_line('a')//'* `'//trim(adjustl(self%switch))//neg_//'`  '
         else
           usage = '   '//switch_
         endif
@@ -924,10 +971,12 @@ contains
       signature = ' ['//trim(adjustl(self%switch))//']...'
     endif
   else
+    signature = trim(adjustl(self%switch))
+    if (allocated(self%switch_neg)) signature = signature//'/'//trim(adjustl(self%switch_neg)) ! a flag pair (F11)
     if (required) then
-      signature = ' '//trim(adjustl(self%switch))
+      signature = ' '//signature
     else
-      signature = ' ['//trim(adjustl(self%switch))//']'
+      signature = ' ['//signature//']'
     endif
   endif
   endfunction signature_usage
@@ -944,6 +993,7 @@ contains
   else
     words = ' '//trim(adjustl(self%switch))
   endif
+  if (allocated(self%switch_neg)) words = words//' '//trim(adjustl(self%switch_neg))
   endfunction completion_words
 
   function completion_values(self) result(values)
@@ -1135,6 +1185,9 @@ contains
     case(ERROR_RANGE_TYPE)
       self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" has a range: get it into a number, not a '//&
                            'character or a logical!'
+    case(ERROR_SWITCH_NEG_INCONSISTENT)
+      self%error_message = prefd//': negation "'//trim(adjustl(self%switch_neg))//'": only a named store_true/store_false '//&
+                           'flag without nargs has one, different from its switch names!'
     case(ERROR_ALTERNATE_INCONSISTENT)
       self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" is an alternate action, a flag: it cannot '//&
                            'be positional, required, nor have nargs, envvar, choices or exclude!'
@@ -1488,6 +1541,21 @@ contains
       self%is_required .or. self%m_exclude /= '') call self%errored(pref=pref, error=ERROR_ALTERNATE_INCONSISTENT)
   endsubroutine check_alternate_consistency
 
+  subroutine check_switch_neg_consistency(self, pref)
+  !< Check that a negation (switch_neg, F11 of #125) belongs to a named scalar flag and differs from its own names.
+  class(command_line_argument), intent(inout) :: self !< CLA data.
+  character(*), optional,       intent(in)    :: pref !< Prefixing string.
+  logical                                     :: ok   !< Consistency.
+
+  if (.not.allocated(self%switch_neg)) return
+  ok = .false.
+  if (allocated(self%act)) ok = self%act == ACTION_STORE_TRUE .or. self%act == ACTION_STORE_FALSE
+  ok = ok .and. (.not.self%is_positional) .and. (.not.allocated(self%nargs)) .and. len_trim(self%switch_neg) > 0
+  if (ok .and. allocated(self%switch)) ok = adjustl(self%switch) /= adjustl(self%switch_neg)
+  if (ok .and. allocated(self%switch_ab)) ok = adjustl(self%switch_ab) /= adjustl(self%switch_neg)
+  if (.not.ok) call self%errored(pref=pref, error=ERROR_SWITCH_NEG_INCONSISTENT)
+  endsubroutine check_switch_neg_consistency
+
   subroutine check_path_consistency(self, pref)
   !< Check that the path checks (must_exist, readable, writable, allow_dash) are on an option taking a value: store,
   !< store* or append (F09 of #125).
@@ -1662,10 +1730,10 @@ contains
     call self%get_cla_from_buffer(buffer=self%stored_list(), val=val, pref=pref)
     if (self%has_range().and.self%error==0) call self%check_range(val=val, text=self%stored_list(), pref=pref)
   elseif (self%act==action_store_true.or.self%act==ACTION_ALTERNATE) then
-    if (self%source == SOURCE_COMMANDLINE) then ! a flag passed on the command line
+    if (self%source == SOURCE_COMMANDLINE) then ! a flag passed on the command line, or its negation
       select type(val)
       type is(logical)
-        val = .true.
+        val = self%flag_value()
       class default
         call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
       endselect
@@ -1681,10 +1749,10 @@ contains
       endselect
     endif
   elseif (self%act==action_store_false) then
-    if (self%source == SOURCE_COMMANDLINE) then ! a flag passed on the command line
+    if (self%source == SOURCE_COMMANDLINE) then ! a flag passed on the command line, or its negation
       select type(val)
       type is(logical)
-        val = .false.
+        val = self%flag_value()
       class default
         call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
       endselect

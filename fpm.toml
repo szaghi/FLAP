@@ -118,6 +118,11 @@ source-dir = "src/tests"
 main = "flap_test_error_hint.f90"
 
 [[test]]
+name = "flap_test_flag_pair"
+source-dir = "src/tests"
+main = "flap_test_flag_pair.f90"
+
+[[test]]
 name = "flap_test_golden"
 source-dir = "src/tests"
 main = "flap_test_golden.f90"
