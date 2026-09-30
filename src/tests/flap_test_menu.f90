@@ -1,8 +1,8 @@
-!< Interactive menus: flap_menu_t, single choice on custom units (issue #125, step 5.1; #78 1.1 and 6.1, T0.1, T1.1-T1.8,
-!< T6.1-T6.4).
+!< Interactive menus: flap_menu_t, single choice on custom units, defaults (issue #125, steps 5.1-5.3; #78 1.1, 6.1, 2.1:
+!< T0.1, T1.1-T1.8, T6.1-T6.4, T2.1-T2.7; T2.5, several defaults, comes with the multiple selection).
 program flap_test_menu
-!< Interactive menus: flap_menu_t, single choice on custom units (issue #125, step 5.1; #78 1.1 and 6.1, T0.1, T1.1-T1.8,
-!< T6.1-T6.4).
+!< Interactive menus: flap_menu_t, single choice on custom units, defaults (issue #125, steps 5.1-5.3; #78 1.1, 6.1, 2.1:
+!< T0.1, T1.1-T1.8, T6.1-T6.4, T2.1-T2.7; T2.5, several defaults, comes with the multiple selection).
 !<
 !< The menu prints its numbered options and the question, reads one answer line and returns the chosen index. Every case
 !< runs in-process on custom units (the answers in a scratch file, output and errors read back from capture units); the
@@ -33,6 +33,13 @@ if (child_case() == 1) then
   call m%add_option(text='Pizza')
   call m%add_option(text='Ice Cream')
   call m%add_option(text='Tacos')
+  call m%run(choice, error)
+  print '(A)', new_line('a')//'choice='//trim(str(choice, .true.))//' error='//trim(str(error, .true.))
+  stop
+elseif (child_case() == 2) then
+  ! a menu used without init
+  call m%add_option(text='x', is_default=.true.)
+  call m%add_option(text='y')
   call m%run(choice, error)
   print '(A)', new_line('a')//'choice='//trim(str(choice, .true.))//' error='//trim(str(error, .true.))
   stop
@@ -153,6 +160,58 @@ call assert_contains(out, 'choice=2 error=0', 'T6.1 the answer read from stdin')
 call reinvoke(1_I4P, exitstat, out, err)
 call assert_contains(out, 'choice=0 error='//trim(str(ERROR_MENU_EOF, .true.)), 'no stdin: end of input')
 call assert_contains(err, 'end of input', 'no stdin: message on stderr')
+! T2.x: default options (#78 2.1)
+! T2.1, T2.6: an empty answer selects the default, marked by the icon ('*' by default)
+call ask_default('', choice, error)
+call assert_equal(error, 0_I4P, 'T2.1 error')
+call assert_equal(choice, 2_I4P, 'T2.1 the default')
+call assert_equal(read_back(elun), '', 'T2.1 no error message')
+call assert_equal(read_back(lun), '1) Pizza'//new_line('a')//'2) *Ice Cream'//new_line('a')//'3) Tacos'//new_line('a')// &
+                  'What is your favorite food? '//new_line('a'), 'T2.6 the default icon')
+! T2.2: a blank answer too
+call ask_default('   ', choice, error)
+call assert_equal(choice, 2_I4P, 'T2.2 blank answer: the default')
+! T2.7: an explicit answer wins
+call ask_default('3', choice, error)
+call assert_equal(choice, 3_I4P, 'T2.7 explicit answer')
+call ask_default('9', choice, error)
+call assert_equal(error, ERROR_MENU_INVALID, 'an invalid answer is not replaced by the default')
+out = read_back(elun)
+! T2.6: a custom icon, and no icon
+call ask_default('', choice, error, icon='>')
+call assert_contains(read_back(lun), '2) >Ice Cream', 'T2.6 custom icon')
+call ask_default('', choice, error, icon='')
+call assert_contains(read_back(lun), '2) Ice Cream', 'T2.6 empty icon')
+call assert_equal(choice, 2_I4P, 'T2.6 empty icon: still the default')
+! T2.4: a second default in single-choice mode is a definition error, and is not added
+call answers('2', in)
+call m%init(question='Pick', input_unit=in, output_unit=lun, error_unit=elun)
+call m%add_option(text='a', is_default=.true., error=error)
+call assert_equal(error, 0_I4P, 'T2.4 first default')
+call m%add_option(text='b', is_default=.true., error=error)
+call assert_equal(error, ERROR_MENU_DEFINITION, 'T2.4 second default')
+call assert_contains(read_back(elun), 'default', 'T2.4 message')
+call m%add_option(text='c', is_default=.false., error=error)
+call assert_equal(error, 0_I4P, 'T2.4 a non-default option after it')
+call m%run(choice, error)
+call assert_equal(choice, 2_I4P, 'T2.4 the second default was not added: 2 is c')
+call assert_contains(read_back(lun), '2) c', 'T2.4 c is the second option')
+close(in, status='delete')
+! a menu used without init: no question, the '*' icon, the default units
+call reinvoke(2_I4P, exitstat, out, err, stdin='')
+call assert_equal(exitstat, 0_I4P, 'without init: exit status')
+call assert_contains(out, '1) *x'//new_line('a')//'2) y'//new_line('a')//' ', 'without init: the menu')
+call assert_contains(out, 'choice=1 error=0', 'without init: the default')
+! init drops the default (and the icon)
+call answers('', in)
+call m%init(question='Pick', input_unit=in, output_unit=lun, error_unit=elun)
+call m%add_option(text='a', error=error)
+call m%run(choice, error)
+call assert_equal(error, ERROR_MENU_NO_RESPONSE, 'init drops the default')
+close(in, status='delete')
+out = read_back(elun)
+out = read_back(lun)
+
 ! T0.1: the parser never uses the menu module
 lib_dir = 'src/lib'
 call get_environment_variable('FLAP_TEST_LIB_DIR', value=buffer, status=status)
@@ -176,6 +235,29 @@ contains
   call m%add_option(text='Ice Cream', error=e)
   call m%add_option(text='Tacos', error=e)
   endsubroutine food
+
+  subroutine ask_default(answer, choice, error, icon)
+  !< Run the food menu, Ice Cream the default, on one answer.
+  character(*), intent(in)           :: answer !< Answer line.
+  integer(I4P), intent(out)          :: choice !< Chosen index.
+  integer(I4P), intent(out)          :: error  !< Error trapping flag.
+  character(*), intent(in), optional :: icon   !< Default icon.
+  integer(I4P)                       :: u      !< Input unit.
+  integer(I4P)                       :: e      !< Error trapping flag.
+
+  call answers(answer, u)
+  if (present(icon)) then
+    call m%init(question='What is your favorite food?', default_icon=icon, input_unit=u, output_unit=lun, error_unit=elun)
+  else
+    call m%init(question='What is your favorite food?', input_unit=u, output_unit=lun, error_unit=elun)
+  endif
+  call m%add_option(text='Pizza', error=e)
+  call m%add_option(text='Ice Cream', is_default=.true., error=e)
+  call assert_equal(e, 0_I4P, 'add the default')
+  call m%add_option(text='Tacos', error=e)
+  call m%run(choice, error)
+  close(u, status='delete')
+  endsubroutine ask_default
 
   subroutine answers(text, in, line_end)
   !< Write the answers to a scratch file and open it for reading; without line_end, the last line has no line end.

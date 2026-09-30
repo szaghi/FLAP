@@ -43,10 +43,33 @@ returned in `error` and a message such as `error: invalid response: 7` is writte
 
 | Procedure | Purpose |
 |---|---|
-| `init(question, input_unit, output_unit, error_unit)` | Start a new menu: drops the options and settings of a previous one. Every argument except `question` is optional. |
-| `add_option(text, error)` | Append an option; its number is its position. An empty text is an error and is not added. |
+| `init(question, default_icon, input_unit, output_unit, error_unit)` | Start a new menu: drops the options and settings of a previous one. Every argument except `question` is optional. |
+| `add_option(text, is_default, error)` | Append an option; its number is its position. An empty text, or a second default, is an error and is not added. |
 | `run(choice, error)` | Show the menu and read one answer; `choice` is the index of the chosen option. A menu can be run several times. |
 | `free` | Release the memory (also done automatically). |
+
+## A default option
+
+`add_option(..., is_default=.true.)` makes an option the answer to an empty (or blank) line. It is marked with the default
+icon, `*` unless `init(default_icon=...)` sets another one (`''` for none):
+
+```fortran
+call m%init(question='What is your favorite food?')
+call m%add_option(text='Pizza')
+call m%add_option(text='Ice Cream', is_default=.true.)
+call m%add_option(text='Tacos')
+call m%run(choice, error) ! Enter alone: choice = 2
+```
+
+```text
+1) Pizza
+2) *Ice Cream
+3) Tacos
+What is your favorite food?
+```
+
+A single-choice menu has at most one default: a second one is `ERROR_MENU_DEFINITION` and is not added. Without a
+default, an empty answer is `ERROR_MENU_NO_RESPONSE`. An invalid answer is an error even when there is a default.
 
 ## Units
 
@@ -69,6 +92,6 @@ never stops the program.
 | Code | Name | Cause |
 |---|---|---|
 | `2001` | `ERROR_MENU_INVALID` | The answer is not one of the numbers shown (not a number, out of range, several numbers), or it could not be read |
-| `2004` | `ERROR_MENU_NO_RESPONSE` | Empty answer |
+| `2004` | `ERROR_MENU_NO_RESPONSE` | Empty answer, and no default option |
 | `2005` | `ERROR_MENU_EOF` | End of the input: no answer can come |
-| `2006` | `ERROR_MENU_DEFINITION` | `run` on a menu without options, or `add_option` with an empty text |
+| `2006` | `ERROR_MENU_DEFINITION` | `run` on a menu without options, `add_option` with an empty text or a second default |

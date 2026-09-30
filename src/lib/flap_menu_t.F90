@@ -21,13 +21,14 @@ public :: ERROR_MENU_DEFINITION
 
 ! errors 2000-2099: menu
 integer(I4P), parameter :: ERROR_MENU_INVALID     = 2001 !< Not a number, or out of range.
-integer(I4P), parameter :: ERROR_MENU_NO_RESPONSE = 2004 !< Empty answer.
+integer(I4P), parameter :: ERROR_MENU_NO_RESPONSE = 2004 !< Empty answer, and no default option.
 integer(I4P), parameter :: ERROR_MENU_EOF         = 2005 !< End of input: no answer can come.
-integer(I4P), parameter :: ERROR_MENU_DEFINITION  = 2006 !< Invalid menu: no options, empty option text.
+integer(I4P), parameter :: ERROR_MENU_DEFINITION  = 2006 !< Invalid menu: no options, empty option text, second default.
 
 type :: menu_option
   !< An option of a menu.
-  character(len=:), allocatable :: text !< Text shown.
+  character(len=:), allocatable :: text              !< Text shown.
+  logical                       :: is_default=.false. !< Chosen by an empty answer.
 endtype menu_option
 
 type, public :: menu
@@ -35,6 +36,7 @@ type, public :: menu
   private
   character(len=:),  allocatable :: question           !< Question asked after the options.
   type(menu_option), allocatable :: options(:)         !< Options; the index is the number shown.
+  character(len=:),  allocatable :: default_icon       !< Mark of the default options.
   integer(I4P)                   :: input_unit=stdin   !< Unit of the answers.
   integer(I4P)                   :: output_unit=stdout !< Unit of the options and the question.
   integer(I4P)                   :: error_unit=stderr  !< Unit of the error messages.
@@ -45,41 +47,49 @@ type, public :: menu
     procedure, pass(self) :: init              !< Initialize the menu.
     generic               :: run => run_single !< Show the menu and read the answer.
     ! private methods
-    procedure, pass(self), private :: run_single !< Show the menu and read one choice.
-    procedure, pass(self), private :: raise      !< Write an error message and return its code.
-    final                          :: finalize   !< Free dynamic memory when finalizing.
+    procedure, pass(self), private :: default_index !< Index of the default option.
+    procedure, pass(self), private :: raise         !< Write an error message and return its code.
+    procedure, pass(self), private :: run_single    !< Show the menu and read one choice.
+    final                          :: finalize      !< Free dynamic memory when finalizing.
 endtype menu
 
 contains
   ! public methods
-  subroutine init(self, question, input_unit, output_unit, error_unit)
+  subroutine init(self, question, default_icon, input_unit, output_unit, error_unit)
   !< Initialize the menu: every previous setting and option is dropped.
-  class(menu),  intent(inout)        :: self        !< Menu.
-  character(*), intent(in)           :: question    !< Question asked after the options.
-  integer(I4P), intent(in), optional :: input_unit  !< Unit of the answers (default: standard input).
-  integer(I4P), intent(in), optional :: output_unit !< Unit of the options and the question (default: standard output).
-  integer(I4P), intent(in), optional :: error_unit  !< Unit of the error messages (default: standard error).
+  class(menu),  intent(inout)        :: self         !< Menu.
+  character(*), intent(in)           :: question     !< Question asked after the options.
+  character(*), intent(in), optional :: default_icon !< Mark of the default options (default: '*').
+  integer(I4P), intent(in), optional :: input_unit   !< Unit of the answers (default: standard input).
+  integer(I4P), intent(in), optional :: output_unit  !< Unit of the options and the question (default: standard output).
+  integer(I4P), intent(in), optional :: error_unit   !< Unit of the error messages (default: standard error).
 
   call self%free
   self%question = question
+  self%default_icon = '*' ; if (present(default_icon)) self%default_icon = default_icon
   if (present(input_unit))  self%input_unit  = input_unit
   if (present(output_unit)) self%output_unit = output_unit
   if (present(error_unit))  self%error_unit  = error_unit
   endsubroutine init
 
-  subroutine add_option(self, text, error)
-  !< Append an option: its index is the number shown. An empty (or blank) text is not added.
-  class(menu),  intent(inout)         :: self     !< Menu.
-  character(*), intent(in)            :: text     !< Text shown.
-  integer(I4P), intent(out), optional :: error    !< Error trapping flag.
-  type(menu_option), allocatable      :: grown(:) !< Options with the new one.
-  integer(I4P)                        :: n        !< Number of options.
-  integer(I4P)                        :: i        !< Counter.
-  integer(I4P)                        :: error_   !< Error trapping flag, local variable.
+  subroutine add_option(self, text, is_default, error)
+  !< Append an option: its index is the number shown. An empty (or blank) text, or a second default, is not added.
+  class(menu),  intent(inout)         :: self       !< Menu.
+  character(*), intent(in)            :: text       !< Text shown.
+  logical,      intent(in),  optional :: is_default !< Chosen by an empty answer (at most one option).
+  integer(I4P), intent(out), optional :: error      !< Error trapping flag.
+  type(menu_option), allocatable      :: grown(:)    !< Options with the new one.
+  integer(I4P)                        :: n           !< Number of options.
+  integer(I4P)                        :: i           !< Counter.
+  integer(I4P)                        :: error_      !< Error trapping flag, local variable.
+  logical                             :: is_default_ !< Chosen by an empty answer, local variable.
 
   error_ = 0
+  is_default_ = .false. ; if (present(is_default)) is_default_ = is_default
   if (len_trim(text) == 0) then
     error_ = self%raise(ERROR_MENU_DEFINITION, 'empty option text')
+  elseif (is_default_ .and. self%default_index() > 0) then
+    error_ = self%raise(ERROR_MENU_DEFINITION, 'a second default option "'//text//'": one choice has one default')
   else
     n = 0 ; if (allocated(self%options)) n = size(self%options, dim=1)
     ! sized first, filled by element: an array constructor growing it is miscompiled by gfortran 16 trunk (see CLAUDE.md)
@@ -88,6 +98,7 @@ contains
       grown(i) = self%options(i)
     enddo
     grown(n + 1)%text = text
+    grown(n + 1)%is_default = is_default_
     call move_alloc(grown, self%options)
   endif
   if (present(error)) error = error_
@@ -98,6 +109,7 @@ contains
   class(menu), intent(inout) :: self !< Menu.
 
   if (allocated(self%question)) deallocate(self%question)
+  if (allocated(self%default_icon)) deallocate(self%default_icon)
   if (allocated(self%options)) deallocate(self%options)
   self%input_unit = stdin
   self%output_unit = stdout
@@ -118,12 +130,19 @@ contains
   integer(I4P)                        :: error_ !< Error trapping flag, local variable.
 
   choice = 0
+  ! a menu used without init: no question, the default icon
+  if (.not.allocated(self%question)) self%question = ''
+  if (.not.allocated(self%default_icon)) self%default_icon = '*'
   n = 0 ; if (allocated(self%options)) n = size(self%options, dim=1)
   if (n == 0) then
     error_ = self%raise(ERROR_MENU_DEFINITION, 'the menu has no options')
   else
     do i=1, n
-      write(self%output_unit, '(A)') trim(str(i, .true.))//') '//self%options(i)%text
+      if (self%options(i)%is_default) then
+        write(self%output_unit, '(A)') trim(str(i, .true.))//') '//self%default_icon//self%options(i)%text
+      else
+        write(self%output_unit, '(A)') trim(str(i, .true.))//') '//self%options(i)%text
+      endif
     enddo
     ! the prompt must be visible before the read: no line end, then flush
     write(self%output_unit, '(A)', advance='no') self%question//' '
@@ -137,7 +156,8 @@ contains
       error_ = 0
       answer = trim(adjustl(answer))
       if (len(answer) == 0) then
-        error_ = self%raise(ERROR_MENU_NO_RESPONSE, 'no response')
+        choice = self%default_index()
+        if (choice == 0) error_ = self%raise(ERROR_MENU_NO_RESPONSE, 'no response')
       else
         choice = option_index(answer, n)
         if (choice == 0) error_ = self%raise(ERROR_MENU_INVALID, 'invalid response: '//answer)
@@ -146,6 +166,19 @@ contains
   endif
   if (present(error)) error = error_
   endsubroutine run_single
+
+  pure function default_index(self) result(i)
+  !< Index of the default option, 0 if none.
+  class(menu), intent(in) :: self !< Menu.
+  integer(I4P)            :: i    !< Index.
+
+  if (allocated(self%options)) then
+    do i=1, size(self%options, dim=1)
+      if (self%options(i)%is_default) return
+    enddo
+  endif
+  i = 0
+  endfunction default_index
 
   function raise(self, code, message) result(error)
   !< Write an error message on the error unit and return its code.

@@ -110,8 +110,8 @@ values still takes the default: both change in v2.0.0 (see below).
 ## v2.3.0 (additive)
 
 - A new, optional module for interactive menus (F23): `type(menu)` with `init`, `add_option` and `run`, exported by
-  `flap`; errors 2001, 2004, 2005, 2006 (see [Interactive Menus](./menu)). The parser does not use it: nothing changes
-  for existing programs.
+  `flap`; a default option answers an empty line (`add_option(is_default=)`, `init(default_icon=)`); errors 2001, 2004,
+  2005, 2006 (see [Interactive Menus](./menu)). The parser does not use it: nothing changes for existing programs.
 
 ## v2.2.0 (additive)
 
