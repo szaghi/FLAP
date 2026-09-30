@@ -1,0 +1,19 @@
+$ save_outputs && ls save_outputs.* && sed -n 1,12p save_outputs.bash
+save_outputs.1
+save_outputs.bash
+save_outputs.fish
+save_outputs.md
+save_outputs.ps1
+save_outputs.zsh
+#!/usr/bin/env bash
+_completion()
+{
+  local cur prev group w i start skip used words
+  cur=${COMP_WORDS[COMP_CWORD]}
+  prev=${COMP_WORDS[COMP_CWORD - 1]}
+  start=1
+  used="${COMP_WORDS[*]:$start:$((COMP_CWORD - start))}"
+    words=""
+    case " $used " in *" --mesh "*|*" --mesh="*|*" -m "*|*" -m="*) ;; *) words="$words --mesh -m" ;; esac
+    case " $used " in *" --scheme "*|*" --scheme="*) ;; *) words="$words --scheme" ;; esac
+    case " $used " in *" --help "*|*" --help="*|*" -h "*|*" -h="*) ;; *) words="$words --help -h" ;; esac

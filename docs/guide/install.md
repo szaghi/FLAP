@@ -6,149 +6,111 @@ title: Installation
 
 ## Requirements
 
-- A Fortran 2003+ compiler (GNU gfortran ≥ 4.9.2, Intel ifort ≥ 12.x, or Nvidia nvfortran)
-- One of the supported build tools (FPM, FoBiS.py, GNU Make, or CMake)
+- A **Fortran 2018** compiler. FLAP is tested on every push with gfortran 13, 14 and 15 (and the gfortran 16 trunk),
+  with FoBiS, fpm, CMake and make. It also builds and passes its tests with nvfortran 26.5 and Intel ifx 2025.3 (except
+  one processor-dependent case: ifx reports a directory as not existing, see [path checks](./advanced#path-checks)).
+  gfortran 12 compiles the library (not tested); gfortran 11 and older do not (`stop code, quiet=` is Fortran 2018).
+- Two small libraries by the same author, fetched automatically by every build system:
+  [PENF](https://github.com/szaghi/PENF) (portable numeric kinds) and [FACE](https://github.com/szaghi/FACE) (ANSI
+  colours).
 
-## Option 1 — fpm (recommended)
+## fpm
 
-With [Fortran Package Manager](https://fpm.fortran-lang.org) no manual setup is needed.
-
-Add FLAP as a dependency in your project's `fpm.toml`:
-
-```toml
-[dependencies]
-FLAP = { git = "https://github.com/szaghi/FLAP.git" }
-```
-
-To pin a specific version:
+Add FLAP as a dependency in your project's `fpm.toml`, pinned to a release:
 
 ```toml
 [dependencies]
-FLAP = { git = "https://github.com/szaghi/FLAP.git", rev = "11cb276228d678c1d9ce755badf0ce82094b0852" }
+FLAP = { git = "https://github.com/szaghi/FLAP", tag = "v2.4.0" }
 ```
 
-Then build and test:
+`fpm build` fetches FLAP, PENF and FACE. To build and test FLAP itself:
 
 ```bash
-fpm build --profile release
-fpm test  --profile release
+git clone https://github.com/szaghi/FLAP && cd FLAP
+fpm test
 ```
 
-## Option 2 — Install script
+## FoBiS
 
-Download `install.sh` from the [latest release](https://github.com/szaghi/FLAP/releases/latest)
-and use it to clone and build in one step:
+[FoBiS](https://github.com/szaghi/FoBiS) (3.8+) is the reference build system of FLAP.
+
+**As a dependency** of a FoBiS project, declare FLAP in your `fobos` and fetch it:
+
+```ini
+[dependencies]
+deps_dir = src/third_party
+FLAP     = https://github.com/szaghi/FLAP
+```
 
 ```bash
-# clone with git, build with GNU Make
-./install.sh --download git --build make
+fobis fetch            # fetch FLAP (and its dependencies)
+fobis fetch --update   # update them
+```
 
-# clone with wget, build with CMake
-./install.sh --download wget --build cmake
+**Standalone**:
 
-# clone with git, build with FoBiS.py
+```bash
+git clone https://github.com/szaghi/FLAP && cd FLAP
+fobis fetch                             # PENF and FACE into src/third_party (pinned by fobos.lock)
+fobis build --mode static-gnu           # static/libflap.a, modules in static/mod
+fobis build --mode shared-gnu           # shared/libflap.so
+fobis build --mode tests-gnu            # every test program into exe/
+bash scripts/run_tests.sh               # run them
+fobis build --lmodes                    # every mode (GNU, Intel, NVIDIA; debug variants; quad precision)
+```
+
+## CMake
+
+```bash
+git clone https://github.com/szaghi/FLAP && cd FLAP
+fobis fetch                             # PENF and FACE (or place them in src/third_party yourself)
+cmake -B build
+cmake --build build
+ctest --test-dir build                  # the tests are built by default in a standalone build
+```
+
+As a subproject (`add_subdirectory`), the tests are off unless `BUILD_TESTING_FLAP=ON`.
+
+## GNU Make
+
+```bash
+git clone https://github.com/szaghi/FLAP && cd FLAP
+fobis fetch
+make                  # the library and some tests, into exe/
+make STATIC=yes       # the static library only: exe/libflap.a
+```
+
+## Install script
+
+Every release ships an `install.sh`, which downloads FLAP and builds it with one of the tools above:
+
+```bash
 ./install.sh --download git --build fobis
+./install.sh --download wget --build cmake --tag v2.4.0
 ```
 
-## Option 3 — Manual clone + FoBiS.py
+## Compiler notes
+
+- **nvfortran:** FLAP builds as is (since v2.2.0 `-Mbackslash` is no longer needed; passing it is harmless). nvfortran
+  26.5 miscompiles a variable passed to `get` (or any `class(*)` argument) from **more than one call site** of the same
+  scope, including an internal procedure using it by host association: a call executed before the first one in the
+  source may leave the variable unassigned, or crash. In code built with nvfortran, give each `get` call its own
+  variable (a local in each helper procedure).
+- **Quad precision:** `get` into `real(R16P)` needs FLAP and PENF compiled with `-D_R16P` (FoBiS mode
+  `tests-gnu-r16p`); otherwise `R16P` is the same kind as `R8P`.
+
+## Quick start
+
+<<< @/examples/snippets/minimal.f90
+
+Build it against the library (here the FoBiS static build) and run it:
 
 ```bash
-git clone https://github.com/szaghi/FLAP
-cd FLAP
-fobis fetch            # PENF and FACE into src/third_party (pinned by fobos.lock)
-
-# static library (release)
-fobis build --mode static-gnu
-
-# shared library (release)
-fobis build --mode shared-gnu
-
-# debug variants
-fobis build --mode static-gnu-debug
+gfortran -I static/mod minimal.f90 static/libflap.a -o minimal
 ```
 
-## Option 4 — GNU Make
+<<< @/examples/output/minimal.ansi{ansi}
 
-```bash
-git clone https://github.com/szaghi/FLAP
-cd FLAP
-make -j 1            # builds all tests into exe/
-make -j 1 STATIC=yes # static library only
-```
+Without its required option, it prints the error, the help and a hint, and ends with exit status 1:
 
-## Option 5 — CMake
-
-```bash
-git clone https://github.com/szaghi/FLAP FLAP
-mkdir build && cd build
-cmake FLAP
-cmake --build .
-
-# with tests
-cmake -DFLAP_ENABLE_TESTS=ON FLAP
-cmake --build .
-ctest
-```
-
-> **NVFortran note:** FLAP builds with nvfortran as is (since v2.2.0 `-Mbackslash` is no longer needed; passing it is
-> harmless).
->
-> nvfortran 26.5 miscompiles a variable passed to `get` (or any `class(*)` argument) from **more than one call site**
-> of the same scope, including an internal procedure using it by host association: a call executed before the first
-> one in the source may leave the variable unassigned, or crash. In code built with nvfortran, give each `get` call
-> its own variable (a local in each helper procedure).
-
-## Quick Start
-
-Once installed, a minimal FLAP program looks like:
-
-```fortran
-program minimal
-  use flap
-  implicit none
-  type(command_line_interface) :: cli
-  character(99)                :: string
-  integer                      :: error
-
-  call cli%init(description='minimal FLAP example')
-  call cli%add(switch='--string', switch_ab='-s', &
-               help='a string input', required=.true., act='store', error=error)
-  if (error /= 0) stop
-
-  call cli%parse(error=error)
-  if (error /= 0) stop
-
-  call cli%get(switch='-s', val=string, error=error)
-  if (error /= 0) stop
-
-  print '(A)', 'String = ' // trim(string)
-end program minimal
-```
-
-Running without arguments triggers automatic error and help output:
-
-```shell
-$ ./minimal
-./minimal: error: named option "--string" is required!
-
-usage:  ./minimal --string value [--help] [--version]
-
-minimal FLAP example
-
-Required switches:
-   --string value, -s value
-    a string input
-
-Optional switches:
-   --help, -h
-    Print this help message
-   --version, -v
-    Print version
-```
-
-Running correctly:
-
-```shell
-$ ./minimal --string 'hello world'
-String = hello world
-```
+<<< @/examples/output/minimal-error.ansi{ansi}

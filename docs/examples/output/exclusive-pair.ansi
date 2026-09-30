@@ -1,0 +1,5 @@
+$ exclusive --mesh m.grd --json --csv
+exclusive: error: the options "--json" and "--csv" are mutually exclusive, but both have been passed!
+
+Try 'exclusive --help' for help.
+[exit status 1]

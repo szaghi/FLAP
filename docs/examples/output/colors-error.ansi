@@ -1,0 +1,5 @@
+$ colors --mehs x
+colors: [1m[31merror[0m[0m: switch "--mehs" is unknown! Did you mean "--mesh"?
+
+Try 'colors --help' for help.
+[exit status 1]

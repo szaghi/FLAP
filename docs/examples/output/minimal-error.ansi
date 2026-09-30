@@ -1,0 +1,20 @@
+$ minimal
+minimal: error: named option "--string" is required!
+
+usage:  minimal --string value [--help] [--markdown] [--version]
+
+minimal FLAP example
+
+Required switches:
+   --string value, -s value
+    a string
+
+Optional switches:
+   --help, -h
+    Print this help message
+   --markdown, -md
+    Save this help message in a Markdown file
+   --version, -v
+    Print version
+Try 'minimal --help' for help.
+[exit status 1]

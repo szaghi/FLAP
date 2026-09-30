@@ -1,0 +1,5 @@
+$ lists --mesh wing.grd --fields
+mesh    = wing.grd
+coords  = 0 0 0
+fields  = (0) 
+weights =  1.00

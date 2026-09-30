@@ -4,96 +4,59 @@ title: Features
 
 # Features
 
-## Argument Types
+## The four steps
 
-FLAP supports every argument style commonly found in Unix CLIs:
-
-| Type | Description |
-|------|-------------|
-| Optional switch | `--verbose` / `-v`; not required, has a default |
-| Required switch | `--output file`; error if missing |
-| Boolean flag | `store_true` / `store_false`; no value consumed |
-| Positional | unnamed, matched by position |
-| List-valued | fixed `nargs=N` or runtime `nargs='+'` / `nargs='*'` |
-| Choices-constrained | value must be one of a predefined set |
-| Environment-variable | falls back to an env var when the switch is absent |
-| Hidden | registered but not shown in help output |
-
-## Subcommands
-
-Build `git`-style interfaces by grouping arguments into named command groups.
-Each group has its own argument list and gets its own auto-generated help page:
+Every FLAP program follows the same four steps: initialise the CLI, define the arguments, parse, get the values.
 
 ```fortran
-call cli%add_group(group='commit', description='Record changes to the repository')
-call cli%add(group='commit', switch='--message', switch_ab='-m', ...)
-```
-
-Use `cli%run_command(group)` to discover which subcommand was selected at runtime.
-Entire groups can be declared mutually exclusive with `set_mutually_exclusive_groups`, and sets of
-switches (at most one, or exactly one, of them) with `set_mutually_exclusive_switches`.
-
-## Output Formats
-
-FLAP can export your CLI definition in several formats with a single call:
-
-| Method | Output |
-|--------|--------|
-| `cli%usage()` | Formatted help/usage string (printed automatically on error) |
-| `cli%save_man_page(man_file)` | Unix man page (troff format) |
-| `cli%save_bash_completion(bash_file)` | Bash tab-completion script |
-| `cli%save_zsh_completion(zsh_file)` | Zsh tab-completion script |
-| `cli%save_fish_completion(fish_file)` | Fish tab-completion script |
-| `cli%save_powershell_completion(powershell_file)` | PowerShell tab-completion script |
-| `cli%save_usage_to_markdown(markdown_file)` | Markdown usage documentation |
-
-## Interactive Menus
-
-An optional `menu` type asks the user to pick one of several numbered options and returns its index; it reads any unit,
-so it also works on answers from a file, and it never blocks a batch job (see [Interactive Menus](./menu)).
-
-## The Four-Step Pattern
-
-Every FLAP program follows the same four steps:
-
-```fortran
+program myprogram
 use flap
 implicit none
-
 type(command_line_interface) :: cli
+character(256)               :: outfile
 integer                      :: error
 
-! 1. Initialise the CLI
-call cli%init(progname='myprogram', description='Does something useful')
-
-! 2. Add argument definitions
-call cli%add(switch='--output', switch_ab='-o', &
-             help='Output file', required=.true., act='store', error=error)
-if (error /= 0) stop
-
-! 3. Parse the command line
-call cli%parse(error=error)
-if (error /= 0) stop
-
-! 4. Retrieve values
-character(256) :: outfile
-call cli%get(switch='-o', val=outfile, error=error)
-if (error /= 0) stop
+call cli%init(progname='myprogram', description='Does something useful')              ! 1. initialise
+call cli%add(switch='--output', switch_ab='-o', help='Output file', required=.true., &
+             act='store', error=error)                                                 ! 2. define
+call cli%parse(error=error)                                                            ! 3. parse
+if (error /= 0) stop 1, quiet=.true.
+call cli%get(switch='-o', val=outfile, error=error)                                    ! 4. get
+endprogram myprogram
 ```
 
-## Module Architecture
+## Feature map
 
-```
-flap.f90                               ← public interface (use this in consuming code)
-├── flap_menu_t.F90                    ← interactive menus (optional; the parser never uses it)
-└── flap_command_line_interface_t.F90  ← main CLI type
-    ├── flap_command_line_arguments_group_t.f90  ← groups / subcommands
-    │   └── flap_command_line_argument_t.F90     ← individual argument
-    │       ├── flap_object_t.F90                ← base class (error handling)
-    │       └── flap_utils_m.f90
-    └── (PENF — numeric precision kinds)
-    └── (FACE — ANSI terminal colours)
+| Area | Features | Where |
+|---|---|---|
+| **Arguments** | named switches with abbreviations; positionals; flags (`store_true`/`store_false`) and flag pairs `--x/--no-x`; counters (`-vvv`); repeatable options (`append`); optional values (`store*`); hidden arguments; value placeholders (`metavar`) | [Defining Arguments](./arguments) |
+| **Values** | typed `get` into any integer, real, logical or character kind; fixed-size lists (`nargs='N'`) and runtime-sized ones (`'+'`, `'*'`, `get_varying`); `KEY=VALUE` maps; inline values `--opt=value`; shell-like splitting of `parse(args=...)` | [Arguments](./arguments#list-valued-arguments-nargs), [Parsing](./parsing) |
+| **Sources** | environment variables (explicit or generated names, comma-separated lists, flag words); INI configuration files; the source of every value (`get_source`, `provenance`); `ignore_env` for reproducible runs | [Advanced](./advanced#value-sources) |
+| **Validation** | required options; choices (also case-insensitive); numeric ranges with open bounds or clamping; path checks (exist, readable, writable, `-`); mutually exclusive pairs, sets and commands; deprecated options and commands; application errors in FLAP's style (`raise_error`) | [Arguments](./arguments), [Advanced](./advanced), [Errors](./errors) |
+| **Commands** | git-style commands, each with its options and help; aliases; option sets copied between commands; several commands per command line | [Subcommands](./subcommands) |
+| **Help and errors** | help and usage generated from the definitions; "did you mean" suggestions; a hint line after an error; a shorter output after an error (`usage_on_error`); colours; case-insensitive switches and commands; alternate actions (`--list-models`) | [Output](./output), [Errors](./errors) |
+| **Generated files** | man page (`--man`), Markdown (`--markdown`), completion scripts for bash, zsh, fish and PowerShell, printed or installed by the program itself (`--show-completion`, `--install-completion`) | [Output Formats](./output) |
+| **Testing** | parse a string (`parse(args=...)`), parse again (`reset_parse`), statuses returned instead of stopping (`standalone=.false.`), output units of your choice | [Parsing](./parsing), [Errors](./errors#handling-status-codes) |
+| **Menus** | interactive numbered menus: single or multiple choice, defaults, yes/no questions, retries; safe in batch jobs | [Interactive Menus](./menu) |
+
+Every error and status has a named constant exported by the `flap` module (see [Error Codes](./errors)).
+
+## Module architecture
+
+```mermaid
+flowchart TD
+  flap["flap<br/><i>the public module: use flap</i>"] --> cli["flap_command_line_interface_t<br/>command_line_interface"]
+  flap --> menu["flap_menu_t<br/>menu (optional)"]
+  cli --> grp["flap_command_line_arguments_group_t<br/>groups: top level and commands"]
+  grp --> cfg["flap_config_m<br/>INI configuration files"]
+  grp --> cla["flap_command_line_argument_t<br/>one argument"]
+  cla --> obj["flap_object_t<br/>common data, errors"]
+  cla --> utl["flap_utils_m<br/>strings, lists, environment"]
+  menu --> utl
+  cla --> penf["PENF<br/>numeric kinds"]
+  cla --> face["FACE<br/>ANSI colours"]
 ```
 
-Any feature request is welcome — open an issue on
-[GitHub](https://github.com/szaghi/FLAP/issues).
+Use only the `flap` module: it exports the types, the error codes, the statuses and the source constants.
+
+Any feature request is welcome: open an issue on [GitHub](https://github.com/szaghi/FLAP/issues).

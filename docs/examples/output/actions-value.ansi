@@ -1,0 +1,5 @@
+$ actions --format=json -v --verbose
+verbosity = 2
+include   = .
+format    = json
+restart   = T

@@ -1,0 +1,3 @@
+$ fake_git init commit -m first
+Initialising versioning
+Committing with message: "first"

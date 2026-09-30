@@ -1,0 +1,6 @@
+$ exclusive --mesh m.grd --restart r.h5
+exclusive: error: switches "--mesh", "--restart" are mutually exclusive!
+
+usage: exclusive  [--json] [--csv] (--mesh value | --restart value) [--left | --right] [--help] [--markdown] [--version]
+Try 'exclusive --help' for help.
+[exit status 1]

@@ -1,0 +1,6 @@
+call cli%save_man_page(man_file='save_outputs.1', error=error)
+call cli%save_usage_to_markdown(markdown_file='save_outputs.md', error=error)
+call cli%save_bash_completion(bash_file='save_outputs.bash', error=error)
+call cli%save_zsh_completion(zsh_file='save_outputs.zsh', error=error)
+call cli%save_fish_completion(fish_file='save_outputs.fish', error=error)
+call cli%save_powershell_completion(powershell_file='save_outputs.ps1', error=error)

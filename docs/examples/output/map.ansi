@@ -1,0 +1,2 @@
+$ map --set cfl=0.5 nx=256
+cfl = 0.50, nx = 256

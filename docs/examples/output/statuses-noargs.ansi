@@ -1,0 +1,15 @@
+$ statuses
+usage: statuses  [--mesh value] [--help] [--markdown] [--version]
+
+
+Optional switches:
+   --mesh value
+    default value m.grd
+    Mesh file
+   --help, -h
+    Print this help message
+   --markdown, -md
+    Save this help message in a Markdown file
+   --version, -v
+    Print version
+[exit status 2]

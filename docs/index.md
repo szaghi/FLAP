@@ -4,7 +4,7 @@ layout: home
 hero:
   name: FLAP
   text: Fortran command Line Arguments Parser for poor people
-  tagline: A KISS pure Fortran 2003+ library for building powerful, elegant Command Line Interfaces — inspired by Python's argparse
+  tagline: A pure Fortran 2018 library for building powerful, elegant command line interfaces, inspired by Python's argparse
   actions:
     - theme: brand
       text: Guide
@@ -19,48 +19,33 @@ hero:
 features:
   - icon: 🖥️
     title: Argparse-style API
-    details: Define your CLI with a handful of method calls. FLAP automatically generates help, usage, and version messages — no boilerplate.
+    details: Define your CLI with a handful of calls; FLAP parses, checks the values, and prints the help, the version and clear errors with "did you mean" suggestions.
   - icon: ✅
-    title: Rich argument types
-    details: Optional, required, boolean, positional, list-valued (fixed or runtime-sized), choices-constrained, and environment-variable arguments.
+    title: Rich arguments
+    details: Options, positionals, flags and --x/--no-x pairs, counters, repeatable options, lists, KEY=VALUE maps, choices, numeric ranges, path checks.
   - icon: 🔀
-    title: Nested subcommands
-    details: Build git-style interfaces with named command groups, each with their own arguments and auto-generated per-command help.
-  - icon: 🔒
-    title: Mutually exclusive arguments
-    details: Declare argument pairs or entire command groups that cannot be used together — with automatic error reporting.
+    title: Commands
+    details: git-style commands with their own options and help, aliases, option sets shared between commands, mutually exclusive options and commands.
+  - icon: 🌱
+    title: Values from everywhere
+    details: Command line, environment variables and INI configuration files, in a fixed precedence, with the source of every value reported for reproducible runs.
   - icon: 📄
-    title: Multiple output formats
-    details: Export your CLI as a man page, bash completion script, or Markdown usage page with a single method call.
+    title: Generated outputs
+    details: Man page, Markdown, and completion scripts for bash, zsh, fish and PowerShell, which the program can also print or install itself.
   - icon: 🆓
     title: Free & Open Source
-    details: Multi-licensed — GPLv3 for FOSS projects, BSD 2/3-Clause or MIT for commercial use. Fortran 2003+ standard compliant.
+    details: Multi-licensed (GPLv3, BSD 2/3-Clause, MIT); tested with gfortran 13 to 16, nvfortran and Intel ifx; built with FoBiS, fpm, CMake or make.
 ---
 
 ## Quick start
 
-A minimal *plate*:
+<<< @/examples/snippets/minimal.f90
 
-```fortran
-program minimal
-type(command_line_interface) :: cli    ! Command Line Interface (CLI).
-character(99)                :: string ! String value.
-integer                      :: error  ! Error trapping flag.
+<<< @/examples/output/minimal.ansi{ansi}
 
-call cli%init(description = 'minimal FLAP example')
-call cli%add(switch='--string', &
-             switch_ab='-s',    &
-             help='a string',   &
-             required=.true.,   &
-             act='store',       &
-             error=error)
-if (error/=0) stop
-call cli%get(switch='-s', val=string, error=error)
-if (error/=0) stop
-print '(A)', cli%progname//' has been called with the following argument:'
-print '(A)', 'String = '//trim(adjustl(string))
-endprogram minimal
-```
+<<< @/examples/output/minimal-error.ansi{ansi}
+
+See the [Guide](/guide/) for everything else; upgrading from v1.x? Read [Upgrading](/guide/migration).
 
 ## Authors
 

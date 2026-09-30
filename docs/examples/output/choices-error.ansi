@@ -1,0 +1,4 @@
+$ choices --level 2
+choices: error: value of named option "--level" must be chosen in: (1,3,5) but "+2" has been passed!
+
+[exit status 1]

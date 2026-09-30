@@ -1,0 +1,4 @@
+$ deprecated --grid w.grd legacy
+deprecated: warning: option "--grid" is deprecated: use --mesh instead
+deprecated: warning: command "legacy" is deprecated: use run
+ok

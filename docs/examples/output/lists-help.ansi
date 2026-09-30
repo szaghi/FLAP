@@ -1,0 +1,24 @@
+$ lists --help
+usage: lists  --mesh FILE [--coords value#1 value#2 value#3 ] [--fields [NAME#1 NAME#2 NAME#3...]] [--weights value#1 [value#2 value#3...]] [--help] [--markdown] [--version]
+
+
+Required switches:
+   --mesh FILE
+    Mesh file
+
+Optional switches:
+   --coords value#1 value#2 value#3
+    default value 0 0 0
+    X Y Z of the probe
+   --fields [NAME#1 NAME#2...]
+    default value u
+    Fields to save
+   --weights value#1 [value#2...]
+    default value 1.0
+    Weights
+   --help, -h
+    Print this help message
+   --markdown, -md
+    Save this help message in a Markdown file
+   --version, -v
+    Print version

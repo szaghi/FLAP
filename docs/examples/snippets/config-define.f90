@@ -1,0 +1,6 @@
+call cli%init(progname='config', auto_envvar_prefix='SOLVER')
+call cli%add(switch='--mesh-file', help='Mesh', required=.true., act='store')
+call cli%add(switch='--cfl', help='CFL', required=.false., act='store', def='0.5')
+call cli%add(switch='--config', help='Configuration file', required=.false., act='config', def='solver.ini')
+call cli%add_group(group='post', description='Post processing')
+call cli%add(group='post', switch='--format', help='Format', required=.false., act='store', def='vtk')

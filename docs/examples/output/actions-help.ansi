@@ -1,0 +1,25 @@
+$ actions --help
+usage: actions  [--verbose]... [--include value]... [value] [--restart/--no-restart] [--help] [--markdown] [--version]
+
+The actions of FLAP
+
+
+Optional switches:
+   --verbose, -v
+    default value 0
+    Verbosity (repeatable)
+   --include, -I
+    default value .
+    Include directory (repeatable)
+  [value]
+    default value text
+    Output format
+   --restart/--no-restart
+    default value .true.
+    Restart from the checkpoint
+   --help, -h
+    Print this help message
+   --markdown, -md
+    Save this help message in a Markdown file
+   --version
+    Print version

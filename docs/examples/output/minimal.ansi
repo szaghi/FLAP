@@ -1,0 +1,2 @@
+$ minimal --string "hello world"
+String = hello world

@@ -1,0 +1,6 @@
+$ myapp -i a.dat -n 50 --verbose
+input   = a.dat
+output  = out.dat
+niter   = 50
+tol     =  1.0E-06
+verbose = T

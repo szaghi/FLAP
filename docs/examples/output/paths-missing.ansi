@@ -1,0 +1,5 @@
+$ paths --mesh wnig.grd
+paths: error: option "--mesh": path "wnig.grd" does not exist!
+
+Try 'paths --help' for help.
+[exit status 1]

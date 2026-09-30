@@ -1,0 +1,15 @@
+$ completion --show-completion fish
+# fish completion of completion: install as ~/.config/fish/completions/completion.fish
+complete -c completion -n '__fish_use_subcommand' -l mesh -s m -d 'Mesh file' -r -F
+complete -c completion -n '__fish_use_subcommand' -l scheme -d 'Space scheme' -x -a 'weno5 muscl'
+complete -c completion -n '__fish_use_subcommand' -l help -s h -d 'Print this help message'
+complete -c completion -n '__fish_use_subcommand' -l markdown -o md -d 'Save this help message in a Markdown file'
+complete -c completion -n '__fish_use_subcommand' -l version -s v -d 'Print version'
+complete -c completion -n '__fish_use_subcommand' -l man -d 'Save this help message as a man page'
+complete -c completion -n '__fish_use_subcommand' -l show-completion -d 'Print the completion script of SHELL (default: $SHELL)' -x -a 'bash zsh fish powershell'
+complete -c completion -n '__fish_use_subcommand' -l install-completion -d 'Install the completion script of SHELL (default: $SHELL) in $HOME' -x -a 'bash zsh fish powershell'
+complete -c completion -n '__fish_use_subcommand' -f -a 'post' -d 'Post processing'
+complete -c completion -n '__fish_seen_subcommand_from post' -l format -d 'Format' -x -a 'vtk vtu'
+complete -c completion -n '__fish_seen_subcommand_from post' -l help -s h -d 'Print this help message'
+complete -c completion -n '__fish_seen_subcommand_from post' -l markdown -o md -d 'Save this help message in a Markdown file'
+complete -c completion -n '__fish_seen_subcommand_from post' -l version -s v -d 'Print version'

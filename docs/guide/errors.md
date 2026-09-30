@@ -1,14 +1,11 @@
 # Error Codes
 
-Every FLAP method that can fail accepts an optional `error` integer argument.
-Check it after each call to detect problems early.
+Every FLAP method that can fail accepts an optional `error` integer argument, and prints its message on the error unit
+(standard error unless `init(error_lun=...)`). FLAP never stops the program on an error: the program decides.
 
 ```fortran
-call cli%add(switch='--output', ..., error=error)
-if (error /= 0) then
-  print '(A,I0)', 'CLI definition error: ', error
-  stop
-end if
+call cli%parse(error=error)
+if (error /= 0) stop 1, quiet=.true.   ! the message is already printed; nvfortran: call exit(1)
 ```
 
 ## Code table
@@ -117,31 +114,20 @@ The first two group codes are named `ERROR_GROUP_*` in the `flap` module; inside
 
 ## Handling status codes
 
-Negative codes mean that FLAP printed help, version or Markdown text. By default `parse` ends the
-program itself (`stop`, exit status 0) right after printing, so these statuses are not returned to your
-code. With `init(standalone=.false.)` `parse` prints and **returns** the status instead: the program can
-clean up first (close files, call `MPI_Finalize`), and help/version can be tested in-process.
+Negative codes mean that FLAP did what the user asked (printed the help, saved the man page, ...). By default `parse`
+ends the program itself right after, with exit status 0 (2 for `STATUS_NO_ARGS`), so these statuses are not returned
+to your code; `STATUS_ALTERNATE` is always returned. With `init(standalone=.false.)` `parse` **returns** every status
+instead: the program can clean up first (close files, call `MPI_Finalize`), and the help can be tested in-process.
 
-```fortran
-use flap, only : command_line_interface, STATUS_PRINT_H, STATUS_PRINT_M, STATUS_PRINT_V
-...
-call cli%init(progname='solver', version='v2.1.0', standalone=.false.)
-...
-call cli%parse(error=error)
-select case (error)
-  case (0)
-    ! normal execution
-  case (STATUS_PRINT_V, STATUS_PRINT_H, STATUS_PRINT_M)
-    stop  ! help, version or Markdown was printed: exit cleanly
-  case default
-    write(*,'(A,I0)') 'Parse error: ', error
-    stop 1
-end select
-```
+<<< @/examples/snippets/statuses-define.f90
 
-When several of them are passed, one wins, in this order: a syntax error anywhere on the command line
-(an unknown or duplicated switch, a missing value) is returned first, then help, then version, then
-Markdown. `--version --help` prints the help; `--help compile --bogus` reports the unknown switch.
+<<< @/examples/snippets/statuses-dispatch.f90
+
+<<< @/examples/output/statuses.ansi{ansi}
+
+When several of them are passed, one wins, in this order: a syntax error anywhere on the command line (an unknown or
+duplicated switch, a missing value, a repeated command) is returned first, then help, version, Markdown, man page and
+completion. `--version --help` prints the help; `--help compile --bogus` reports the unknown switch.
 
 ## Reporting application errors
 
@@ -154,28 +140,25 @@ if (mod(nx, 2) /= 0) error = cli%raise_error('must be even', switch='--nx')
 if (error /= 0) stop 1
 ```
 
-```text
-solver: error: switch "--nx": must be even
-usage: solver ...
-```
+<<< @/examples/snippets/raise_error-check.f90
 
-It returns `ERROR_USER` (and sets `cli%error`) and never stops: the program decides what to do. The usage follows the
-message unless `show_usage=.false.`; with `group='post'` it is the usage of that command (an undefined group returns
-`ERROR_MISSING_GROUP` and prints nothing). It works before or after `parse`.
+<<< @/examples/output/raise_error.ansi{ansi}
+
+It returns `ERROR_USER` (1005, and sets `cli%error`) and never stops: the program decides what to do. The help follows
+the message unless `show_usage=.false.` (the whole help: `init(usage_on_error=...)` does not apply to it); with
+`group='post'` it is the help of that command (an undefined group returns `ERROR_MISSING_GROUP` and prints nothing). It
+works before or after `parse`.
 
 ## Error hint
 
 After a failed `parse` FLAP prints one more line to the error unit, pointing to the help (the command is named when
 the error is inside one):
 
-```text
-solver: error: switch "--mehs" is unknown! Did you mean "--mesh"?
-Try 'solver --help' for help.
-```
+<<< @/examples/output/actions-typo.ansi{ansi}
 
 It is printed once, as the last line, only when there is a `--help` to suggest (not with `disable_hv=.true.`), and
-never for statuses, ignored unknown arguments or errors raised later by `get`. Disable it with
-`init(error_hint=.false.)`.
+never for statuses, ignored unknown arguments or errors raised later by `get` (a value out of its choices or range).
+Disable it with `init(error_hint=.false.)`.
 
 ## Output after an error
 
@@ -188,13 +171,13 @@ group (command) after the error message. `init(usage_on_error=...)` chooses what
 | `'usage'` | the usage line only, the first line of `--help` |
 | `'none'` | nothing |
 
-```text
-$ solver                       # init(progname='solver', usage_on_error='usage')
-solver: error: named option "--mesh" is required!
+<<< @/examples/snippets/usage_on_error-define.f90
 
-usage: solver  --mesh value [--cfl value] [--help] [--markdown] [--version]
-Try 'solver --help' for help.
-```
+<<< @/examples/output/usage_on_error.ansi{ansi}
+
+With the default `'full'` (the `minimal` program of the [Installation](./install#quick-start) page):
+
+<<< @/examples/output/minimal-error.ansi{ansi}
 
 The error message and the hint line are always printed, and `--help` always prints the whole help. Any other value is
 `ERROR_USAGE_ON_ERROR` (1014), returned by `parse`.
@@ -203,11 +186,11 @@ The error message and the hint line are always printed, and `--help` always prin
 
 An unknown argument gets up to three suggestions, most similar first, with click's wording:
 
-```text
-solver: error: switch "--verbse" is unknown! Did you mean "--verbose"?
-solver: error: switch "--mas" is unknown! (Did you mean one of: "--mass", "--mach"?)
-solver: error: switch "comit" is unknown! Did you mean "commit"?
-```
+<<< @/examples/output/actions-typo.ansi{ansi}
+
+<<< @/examples/output/fake_git-typo.ansi{ansi}
+
+With several candidates the message is `(Did you mean one of: "--mass", "--mach"?)`.
 
 The candidates are the visible switches, abbreviations and negations of the command being parsed (hidden switches never),
 and, at the top level, for an argument that is not a switch, the command names and aliases. A name is suggested when

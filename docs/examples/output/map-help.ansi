@@ -1,0 +1,15 @@
+$ map --help
+usage: map  [--set KEY=VALUE [KEY=VALUE...]] [--help] [--markdown] [--version]
+
+
+Optional switches:
+   --set KEY=VALUE [KEY=VALUE...], -s KEY=VALUE [KEY=VALUE...]
+    keys: cfl, nx, ny, t_end
+    default value cfl=0.8
+    Override input-deck parameters
+   --help, -h
+    Print this help message
+   --markdown, -md
+    Save this help message in a Markdown file
+   --version, -v
+    Print version

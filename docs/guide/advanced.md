@@ -1,77 +1,46 @@
 # Advanced Features
 
-This page covers the more specialised argument types and CLI features.
+Where values come from besides the command line (environment variables, configuration files), and the checks FLAP can
+run on them (exclusive sets, paths, ranges), plus deprecations, alternate actions and case-insensitive matching.
 
-## Positional arguments
+## Value sources
 
-Positional arguments are matched by their position on the command line rather than by
-a switch name. They are defined with `positional=.true.` and a `position` index.
+A value comes from the first source that has one, in this order:
 
-```fortran
-! first positional: required input file
-call cli%add(positional=.true., position=1,    &
-             help='Input data file',           &
-             required=.true., act='store', error=error)
-
-! second positional: optional scale factor
-call cli%add(positional=.true., position=2,    &
-             help='Scale factor',              &
-             required=.false., act='store', def='1.0', error=error)
+```mermaid
+flowchart LR
+  CL[command line] --> ENV[environment variable] --> CFG[configuration file] --> DEF[default]
 ```
 
-Retrieving positional values uses `position=` in `get`:
+The command line always wins; a value from any explicit source (command line, environment, configuration file)
+satisfies a required option. `cli%get_source` and `cli%provenance` tell where each value comes from (see
+[Parsing](./parsing#where-a-value-comes-from)).
 
-```fortran
-character(256) :: infile
-real           :: scale
+## Environment variables
 
-call cli%get(position=1, val=infile, error=error)
-call cli%get(position=2, val=scale,  error=error)
-```
+`envvar` names the variable of an option; `init(auto_envvar_prefix=...)` generates one for every option:
 
-Mixed usage (named + positional):
+<<< @/examples/snippets/environment-define.f90
 
-```shell
-$ ./myapp input.dat --output result.dat
-$ ./myapp 2.5 --output result.dat      ! positional scale factor first
-```
+<<< @/examples/output/environment-env.ansi{ansi}
 
-**Restrictions:** positional arguments cannot use `exclude`, `envvar`, or any action
-other than `store`.
+<<< @/examples/output/environment-both.ansi{ansi}
 
----
+- A variable counts when it is set and not blank; the bare switch (`--token` alone) reads it too.
+- `envvar` is valid for named `store` options (lists included), `store_true` and `store_false`; not for positionals,
+  `store*`, `count` and `append` (`ERROR_ENVVAR_NOT_STORE`, 17).
+- A flag reads `1/0`, `true/false`, `t/f`, `yes/no`, `y/n`, `on/off`, in any case; anything else makes `get` fail with
+  `ERROR_CASTING_LOGICAL` (10).
+- The help shows the name of the variable of each option.
 
-## Environment variable fallback
+<<< @/examples/output/environment-help.ansi{ansi}
 
-Any named `act='store'`, `store_true` or `store_false` argument (not a list) can take its value from an environment
-variable:
-
-```fortran
-call cli%add(switch='--api-url', switch_ab='-u',               &
-             help='API endpoint (or set MYAPP_URL env var)',    &
-             required=.false., act='store', def='http://localhost', &
-             envvar='MYAPP_URL', error=error)
-```
-
-**Resolution order (highest priority first):**
-
-1. Value supplied explicitly on the command line
-2. Value of the named environment variable, when it is set and not blank; the bare switch (`-u` alone) reads it too
-3. Default value (`def=`)
-
-A value from the environment satisfies a required argument. A flag (`store_true`/`store_false`) takes the variable as
-its value: `1/0`, `true/false`, `t/f`, `yes/no`, `y/n`, `on/off`, in any case.
-
-> **Changed in v2.0.0:** the environment is read also when the switch is absent. Before, an absent switch always gave
-> its default and only the bare switch read the variable.
-
-This pattern is useful for configuration that belongs in CI secrets or shell profiles
-rather than command line flags.
-
-### List values from the environment
+### Lists from the environment
 
 A list option (`nargs`) reads its variable as one line of **comma-separated values**, not blank-separated as on the
 command line and in `def=`: an environment value is a single shell word, where commas are the convention.
+
+<<< @/examples/output/environment-list.ansi{ansi}
 
 | Variable | List |
 |---|---|
@@ -84,206 +53,88 @@ command line and in `def=`: an environment value is a single shell word, where c
 
 A scalar option takes its variable verbatim, commas included. The number of values of `nargs='N'` is checked by `get`.
 
-### Generated variable names — `init(auto_envvar_prefix=...)`
+### Generated variable names
 
-With a prefix, every named `store`, `store_true` or `store_false` option added without an `envvar` gets one,
-`PREFIX[_COMMAND]_NAME` in upper case, NAME being the long switch without its dashes and `-` becoming `_`:
+With `init(auto_envvar_prefix='SOLVER')`, every named `store`, `store_true` or `store_false` option added without an
+`envvar` gets one, `PREFIX[_COMMAND]_NAME` in upper case, NAME being the long switch without its dashes and `-` becoming
+`_`: `--mesh-file` is `SOLVER_MESH_FILE`, the `--format` of the command `post` is `SOLVER_POST_FORMAT`. An explicit
+`envvar=` wins over the generated name; positionals, `store*`, `count` and `append` get none. `init` must come before
+the `add` calls.
 
-```fortran
-call cli%init(progname='solver', auto_envvar_prefix='SOLVER')
-call cli%add(switch='--mesh-file', help='Mesh', required=.true., act='store')              ! SOLVER_MESH_FILE
-call cli%add(group='post', switch='--format', help='Format', required=.false., act='store', def='vtk')
-                                                                                          ! SOLVER_POST_FORMAT
-```
+### Ignoring the environment
 
-```shell
-$ SOLVER_MESH_FILE=wing.grd ./solver                        # mesh = wing.grd (required satisfied)
-$ SOLVER_MESH_FILE=wing.grd ./solver --mesh-file body.grd   # the command line wins: body.grd
-```
+For reproducible runs (a batch job whose environment must not leak in, tests, CI sandboxes), `init(ignore_env=.true.)`
+turns every environment lookup off. The `envvar` definitions are unchanged and still shown in the help:
 
-An explicit `envvar=` wins over the generated name. Positionals, `store*`, `count` and `append` get no name.
-The help shows the generated names.
+<<< @/examples/snippets/ignore_env-define.f90
 
-### Configuration files
+<<< @/examples/output/ignore_env.ansi{ansi}
 
-`cli%set_config` names an INI file supplying values below the environment and above the defaults, so the full order is
-**command line > environment variable > configuration file > default**:
+## Configuration files
 
-```fortran
-call cli%init(progname='solver')
-call cli%add(switch='--mesh-file', help='Mesh', required=.true., act='store')
-call cli%add(switch='--cfl', help='CFL', required=.false., act='store', def='0.5')
-call cli%add_group(group='post', description='Post processing')
-call cli%add(group='post', switch='--format', help='Format', required=.false., act='store', def='vtk')
-call cli%set_config(file='solver.ini')              ! required=.true. makes a missing file an error
-call cli%parse(error=error)
-```
+`cli%set_config(file, required, error)` names an INI file supplying values below the environment and above the
+defaults; an option with `act='config'` lets the user choose the file:
 
-```ini
-# solver.ini
-mesh-file = wing.grd        ; keys are the long switches without the dashes
-cfl       = 0.8
-[post]                      # a section is a command
-format    = vtu
-```
+<<< @/examples/snippets/config-define.f90
 
-- Keys before any section belong to the top level; a `[section]` holds the options of that command.
+<<< @/examples/files/solver.ini{ini}
+
+<<< @/examples/output/config.ansi{ansi}
+
+<<< @/examples/output/config-override.ansi{ansi}
+
+- Keys are the long switches without the dashes; keys before any section belong to the top level, a `[section]` holds
+  the options of that command.
 - A value is the text after `=`, blanks trimmed; one pair of quotes (`'` or `"`) is stripped, and a quoted value keeps its
   `#` and `;`. An inline comment starts at a `#` or `;` preceded by a blank. An empty value counts as unset.
 - A list (`nargs`) is blank separated, as in `def=`; a flag reads `yes/no`, `on/off`, `1/0`, `true/false`, ...
 - An unknown key or section, a key naming an option that takes no value (`count`, `append`, `store*`), or a line that is
-  not `key = value`, `[section]` or a comment is an error, `ERROR_CONFIG_UNKNOWN_KEY` (1007), naming the line; with
+  not `key = value`, `[section]` or a comment is `ERROR_CONFIG_UNKNOWN_KEY` (1007), naming the line; with
   `init(ignore_unknown_clas=.true.)` such lines are ignored. The last of repeated keys wins.
-- A missing file is skipped, unless `set_config(..., required=.true.)`: then `ERROR_CONFIG_NOT_FOUND` (1006).
+- The file is the one named on the command line (`--config my.ini`), else in the environment variable of the `config`
+  option, else the one of `set_config`, else the default of the `config` option. A file named on the command line or in
+  the environment must exist (`ERROR_CONFIG_NOT_FOUND`, 1006); a missing default is skipped, unless
+  `set_config(..., required=.true.)`. `get` of the `config` option returns the file name.
 - The file is read by `parse` after `--help`/`--version`, so a broken file never blocks the help. A value from it
-  satisfies a required option and is checked against `choices` by `get`.
+  satisfies a required option and is checked against `choices` and ranges by `get`.
 
-To let the user choose the file, add a top-level option with `act='config'`:
-
-```fortran
-call cli%add(switch='--config', help='Configuration file', required=.false., act='config', def='solver.ini', &
-             envvar='SOLVER_CONFIG')
-```
-
-The file is the one named on the command line (`--config my.ini`), else in the environment variable, else the one of
-`set_config`, else the default. A file named on the command line or in the environment must exist
-(`ERROR_CONFIG_NOT_FOUND`); a missing default file is skipped. `get` of the option returns the file name.
-
-### Ignoring the environment — `init(ignore_env=.true.)`
-
-For reproducible runs (a batch job whose environment must not leak in, tests, CI sandboxes),
-`ignore_env=.true.` turns every environment lookup off. The `envvar` definitions are unchanged
-and still shown in the help; a switch that would read its variable behaves as if it were unset:
-
-```fortran
-call cli%init(progname='solver', ignore_env=.true.)
-call cli%add(switch='--threads', help='Threads', required=.false., act='store', def='1', envvar='OMP_NUM_THREADS')
-```
-
-```shell
-$ OMP_NUM_THREADS=64 ./solver --threads    # error: "--threads" needs a value (the environment is ignored)
-```
-
----
-
-## Mutually exclusive argument pairs
-
-Use `exclude` in `add` to declare two named arguments mutually exclusive. Either
-argument can name the other by its full or abbreviated switch:
-
-```fortran
-call cli%add(switch='--json',  switch_ab='-j', &
-             help='Output JSON format',        &
-             required=.false., act='store_true', def='.false.', &
-             exclude='--csv', error=error)
-
-call cli%add(switch='--csv',   switch_ab='-c', &
-             help='Output CSV format',         &
-             required=.false., act='store_true', def='.false.', &
-             exclude='--json', error=error)
-```
-
-If both are passed, FLAP prints an error before your code runs:
-
-```shell
-$ ./myapp --json --csv
-myapp: error: switches "--json" and "--csv" are mutually exclusive!
-```
-
-`exclude` is pairwise and cannot be combined with `required=.true.`: for more than two
-switches, or for "exactly one of", use a mutually exclusive set (below).
-
-For mutually exclusive **subcommands** (groups), use `set_mutually_exclusive_groups` —
-see the [Subcommands](./subcommands) page.
-
----
+<<< @/examples/output/config-missing.ansi{ansi}
 
 ## Mutually exclusive sets
 
-`cli%set_mutually_exclusive_switches` declares a set of switches of which **at most one** may be passed; with `required=.true.`,
-**exactly one** must be passed. This is argparse's `add_mutually_exclusive_group`, and
-the recommended mechanism over pairwise `exclude`:
+`cli%set_mutually_exclusive_switches(switches, required, group, pref, error)` declares a set of switches of which **at
+most one** may be given; with `required=.true.`, **exactly one**. This is argparse's `add_mutually_exclusive_group`, and
+the recommended mechanism over the pairwise `exclude`:
 
-```fortran
-call cli%add(switch='--mesh',    switch_ab='-m', help='Mesh file',    required=.false., act='store', def='')
-call cli%add(switch='--restart', switch_ab='-r', help='Restart file', required=.false., act='store', def='')
-call cli%add(switch='--left',  help='Go left',  required=.false., act='store_true', def='.false.')
-call cli%add(switch='--right', help='Go right', required=.false., act='store_true', def='.false.')
-call cli%set_mutually_exclusive_switches(switches='--mesh,--restart', required=.true., error=error)
-call cli%set_mutually_exclusive_switches(switches='--left,--right', error=error)
-```
+<<< @/examples/snippets/exclusive-sets.f90
 
-```shell
-$ ./solver -m m.grd                  # ok
-$ ./solver -m m.grd -r r.h5
-solver: error: switches "--mesh", "--restart" are mutually exclusive!
-$ ./solver
-solver: error: one of "--mesh", "--restart" is required!
-$ ./solver --help                    # the help is printed: a set never blocks --help/--version
-```
+<<< @/examples/output/exclusive.ansi{ansi}
 
-The usage shows the sets in docopt notation, `(a | b)` for a required set and `[a | b]` otherwise:
+<<< @/examples/output/exclusive-both.ansi{ansi}
 
-```
-usage: solver (--mesh value | --restart value) [--left | --right] [--help] [--markdown] [--version]
-```
+<<< @/examples/output/exclusive-none.ansi{ansi}
 
-Rules:
+The usage shows the sets in docopt notation, `(a | b)` for a required set and `[a | b]` otherwise. Rules:
 
-- the members are comma separated, named by switch or abbreviation, and must be **already added**
-  to the group (pass `group=` for the options of a command); a set of a command is checked only
-  when the command is called;
+- the members are comma separated, named by switch or abbreviation, and must be **already added** to the group (pass
+  `group=` for the options of a command); a set of a command is checked only when the command is called;
 - a member cannot be individually `required`, and a switch belongs to at most one set;
 - every **explicit** value counts, from the command line, the environment or a configuration file; a default neither
   satisfies a required set nor violates a set. When a member is on the command line, the environment and configuration
   values of the other members fall back to their defaults: the command line wins (a variable set for a batch job never
   makes a command line alternative a violation);
 - the sets are checked after help/version and after the required options, as the last validation;
-- an invalid set is not added: the call returns `ERROR_M_EXCLUDE_SET_DEFINITION` (`104`), and
-  `parse` returns the same error, so a wrong definition cannot go unnoticed.
+- an invalid set is not added: the call returns `ERROR_M_EXCLUDE_SET_DEFINITION` (104), and `parse` returns the same
+  error, so a wrong definition cannot go unnoticed.
 
----
+## Path checks
 
-## Optional-value arguments (`act='store*'`)
+`must_exist`, `readable`, `writable` and `allow_dash` make `parse` check a file name, whatever its source (command line,
+environment, configuration file or default):
 
-`store*` (note the asterisk) is a middle ground between `store` and `store_true`:
-the switch can appear with or without a value.
+<<< @/examples/snippets/paths-define.f90
 
-- Present **with** a value → stores that value
-- Present **without** a value → stores the default
-- **Absent** → stores the default
-
-```fortran
-call cli%add(switch='--format',                              &
-             help='Output format; omit value for "text"',   &
-             required=.false., act='store*', def='text', error=error)
-```
-
-```shell
-$ ./myapp --format json    ! stores 'json'
-$ ./myapp --format        ! stores 'text' (default)
-$ ./myapp                 ! stores 'text' (default)
-```
-
-**Restrictions:** `store*` cannot be used with `nargs`, `envvar`, or positional
-arguments. A default is mandatory.
-
----
-
-## Path checks — `must_exist`, `readable`, `writable`, `allow_dash`
-
-An option whose value is a file name can have it checked by `parse`, whatever its source (command line, environment,
-configuration file or default):
-
-```fortran
-call cli%add(switch='--mesh', help='Mesh file', required=.true.,  act='store', readable=.true.)
-call cli%add(switch='--log',  help='Log file',  required=.false., act='store', def='-', writable=.true., allow_dash=.true.)
-```
-
-```shell
-$ ./solver --mesh wnig.grd      # error: option "--mesh": path "wnig.grd" does not exist!
-$ ./solver --mesh secret.grd    # error: option "--mesh": path "secret.grd" is not readable: <reason>!
-```
+<<< @/examples/output/paths-missing.ansi{ansi}
 
 | Keyword | Check |
 |---|---|
@@ -294,8 +145,10 @@ $ ./solver --mesh secret.grd    # error: option "--mesh": path "secret.grd" is n
 
 - Every item of a list is checked; an empty value (`def=''`) is not checked. The options of a command are checked only
   when the command is called.
-- Only for options taking a value (`store`, `store*`, `append`): elsewhere the keywords are `ERROR_PATH_INCONSISTENT` (49).
-- Standard Fortran only, so **directories are not told apart**: a directory exists and opens for reading.
+- Only for options taking a value (`store`, `store*`, `append`): elsewhere the keywords are `ERROR_PATH_INCONSISTENT`
+  (49).
+- Standard Fortran leaves the existence of a **directory** to the compiler: with gfortran a directory exists and opens for
+  reading, with Intel ifx it does not exist.
 - **nvfortran 26.5:** opening a read-only file for writing succeeds (the error comes at the first write), so `writable`
   does not detect a read-only file with that compiler.
 
@@ -304,45 +157,33 @@ $ ./solver --mesh secret.grd    # error: option "--mesh": path "secret.grd" is n
 `min=` and `max=` (strings, like `def=`) give a numeric option a range; `min_open=.true.`/`max_open=.true.` exclude the
 bound, `clamp=.true.` replaces an out-of-range value with the bound instead of failing:
 
-```fortran
-call cli%add(switch='--cfl', help='CFL number', required=.false., act='store', def='0.8', &
-             min='0', min_open=.true., max='1')                    ! (0, 1]
-call cli%add(switch='--threads', help='OpenMP threads', required=.false., act='store', def='1', &
-             min='1', max='256', clamp=.true.)
-```
+<<< @/examples/snippets/ranges-define.f90
 
-```shell
-$ ./solver --cfl 1.5      # get: value "1.5" of "--cfl" is out of range (0, 1]!  (ERROR_OUT_OF_RANGE, 31)
-$ ./solver --threads 999  # threads = 256 (clamped)
-```
+<<< @/examples/output/ranges.ansi{ansi}
 
-- The value is checked by `get`, after its conversion, in the kind of your variable, whatever its source (command line,
-  environment, configuration file, default); every element of a list is checked.
+<<< @/examples/output/ranges-error.ansi{ansi}
+
+- The value is checked by `get`, after its conversion, in the kind of your variable, whatever its source; every element
+  of a list is checked. `ERROR_OUT_OF_RANGE` is 31.
 - With `clamp`, an open integer bound clamps to the next integer inside (`bound + 1` / `bound - 1`); a real cannot be
   clamped to an open bound: `get` reports `ERROR_RANGE_DEFINITION` (30) when it would have to.
 - An invalid range (a bound that is not a number, `min > max`, an empty open interval, a range on a flag) is
   `ERROR_RANGE_DEFINITION` (30) at `add`; `get` into a `character` or `logical` is `ERROR_RANGE_TYPE` (32).
 - The help shows it: `range (0, 1]`.
 
-## Deprecated options and commands — `deprecated`
+## Deprecated options and commands
 
 `add(..., deprecated='message')` and `add_group(..., deprecated='message')` mark an option or a command as deprecated
-(`deprecated=''`: without a message). Using it is **not** an error: `parse` prints a warning on the error unit and goes on.
+(`deprecated=''`: without a message). Using it is **not** an error: `parse` prints a warning on the error unit and goes
+on.
 
-```fortran
-call cli%add(switch='--grid', help='Old grid', required=.false., act='store', def='g.grd', &
-             deprecated='use --mesh instead')
-call cli%add_group(group='legacy', description='the old run', deprecated='use run')
-```
+<<< @/examples/snippets/deprecated-define.f90
 
-```shell
-$ ./solver --grid w.grd
-solver: warning: option "--grid" is deprecated: use --mesh instead
-```
+<<< @/examples/output/deprecated.ansi{ansi}
 
 - An option warns when its value comes from the command line or from its environment variable, not when it comes from
   a configuration file or its default (as in click); a command warns when it is called.
-- The help marks them: `Old grid (DEPRECATED: use --mesh instead)`.
+- The help marks them: `Grid file (DEPRECATED: use --mesh instead)`.
 - A required option cannot be deprecated: `ERROR_DEPRECATED_REQUIRED` (44).
 
 ## Alternate actions
@@ -351,18 +192,11 @@ An option with `act='alternate'` is an auxiliary action of the program (`--list-
 value: when it is passed, `parse` returns `STATUS_ALTERNATE` (also in standalone mode: FLAP never stops on it) and
 **skips the value validation**, so it works even without the required options. The program dispatches on `is_passed`:
 
-```fortran
-use flap, only : command_line_interface, STATUS_ALTERNATE
-call cli%add(switch='--mesh',        help='Mesh file',                       required=.true., act='store')
-call cli%add(switch='--list-models', help='List turbulence models and exit', act='alternate')
-call cli%parse(error=error)
-if (error == STATUS_ALTERNATE) then
-  if (cli%is_passed(switch='--list-models')) call print_models()
-  stop
-elseif (error /= 0) then
-  stop 1
-end if
-```
+<<< @/examples/snippets/alternate-define.f90
+
+<<< @/examples/snippets/alternate-dispatch.f90
+
+<<< @/examples/output/alternate.ansi{ansi}
 
 - Skipped: required options, mutually exclusive sets, `exclude=` pairs, exclusive commands, path checks, unknown
   configuration keys and invalid environment lists. Still reported: syntax errors (an unknown or repeated switch);
@@ -371,95 +205,15 @@ end if
 - An alternate is a flag: `nargs`, `envvar`, `choices`, `exclude`, `required` and `positional` are
   `ERROR_ALTERNATE_INCONSISTENT` (37). The usage shows it as `[--list-models]`.
 
-## Hidden arguments
+## Case-insensitive matching
 
-Hidden arguments participate in parsing normally but are invisible in help and usage:
+`init(case_insensitive=.true.)` matches switches (abbreviations and negations included) and command names in any case;
+values keep their case (for choices in any case, see `case_sensitive=.false.` in
+[Defining Arguments](./arguments#restricted-choices-choices)):
 
-```fortran
-call cli%add(switch='--dump-internals',                       &
-             help='Dump internal state to stderr (debug)',    &
-             required=.false., act='store_true', def='.false.', &
-             hidden=.true., error=error)
-```
+<<< @/examples/snippets/case_insensitive-define.f90
 
-This keeps expert or debugging flags out of user-visible help without disabling them.
+<<< @/examples/output/case_insensitive.ansi{ansi}
 
----
-
-## Choices constraint
-
-```fortran
-call cli%add(switch='--solver', switch_ab='-s',                   &
-             help='Linear solver',                                &
-             required=.false., act='store', def='cg',             &
-             choices='cg,gmres,bicgstab', error=error)
-```
-
-The check happens at `get` time:
-
-```shell
-$ ./myapp --solver lu
-myapp: error: the value "lu" is not in the choices list (cg,gmres,bicgstab)
-```
-
-> **Note:** `choices` is not supported for `get_varying` (runtime-sized lists).
-
----
-
-## Runtime-sized list arguments
-
-For lists whose length is not known at compile time, combine `nargs='+'` or `nargs='*'`
-with `get_varying`:
-
-```fortran
-! one or more input files
-call cli%add(switch='--inputs', switch_ab='-i',   &
-             help='One or more input files',       &
-             required=.false., act='store',        &
-             nargs='+', def='', error=error)
-
-! zero or more filter strings
-call cli%add(switch='--filters', switch_ab='-f',  &
-             help='Zero or more filters to apply', &
-             required=.false., act='store',        &
-             nargs='*', def='', error=error)
-```
-
-Retrieval:
-
-```fortran
-character(256), allocatable :: inputs(:), filters(:)
-
-call cli%get_varying(switch='--inputs',  val=inputs,  error=error)
-call cli%get_varying(switch='--filters', val=filters, error=error)
-
-do i = 1, size(inputs)
-  print '(A)', 'Processing: ' // trim(inputs(i))
-end do
-```
-
----
-
-## Disabling automatic `--help` / `--version`
-
-If your program already defines `-h` or `-v` for other purposes:
-
-```fortran
-call cli%init(disable_hv=.true., ...)
-```
-
-FLAP will not add its default help/version switches. You remain responsible for
-printing help and version information yourself.
-
----
-
-## Fake command-line input (`args`)
-
-Pass a string to `parse` or `get` to test your CLI without modifying `argv`:
-
-```fortran
-! simulate: ./myprogram --solver gmres --niter 200
-call cli%parse(args='--solver gmres --niter 200', error=error)
-```
-
-This is particularly useful in unit tests and doctests.
+Two switches of a group differing only by case are then a consistency error (100). The "did you mean" suggestions
+compare in any case too.

@@ -1,0 +1,4 @@
+$ ranges --cfl 1.5
+ranges: error: value "1.5" of "--cfl" is out of range (0, 1]!
+
+[exit status 1]

@@ -1,0 +1,5 @@
+$ lists --mesh wing.grd --coords 1 2 3 --fields u v p --weights 0.5 0.25
+mesh    = wing.grd
+coords  = 1 2 3
+fields  = (3) u v p
+weights =  0.50  0.25

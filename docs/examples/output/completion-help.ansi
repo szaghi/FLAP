@@ -1,0 +1,33 @@
+$ completion --help
+usage: completion  --mesh value [--scheme value] [--help] [--markdown] [--version] [--man] [--show-completion [SHELL]] [--install-completion [SHELL]] {post} ...
+
+A solver
+
+
+Required switches:
+   --mesh value, -m value
+    Mesh file
+
+Optional switches:
+   --scheme value, value in: `weno5,muscl`
+    default value weno5
+    Space scheme
+   --help, -h
+    Print this help message
+   --markdown, -md
+    Save this help message in a Markdown file
+   --version, -v
+    Print version
+   --man
+    Save this help message as a man page
+   --show-completion [SHELL], value in: `bash,zsh,fish,powershell`
+    Print the completion script of SHELL (default: $SHELL)
+   --install-completion [SHELL], value in: `bash,zsh,fish,powershell`
+    Install the completion script of SHELL (default: $SHELL) in $HOME
+
+Commands:
+  post
+          Post processing
+
+For more detailed commands help try:
+  completion post -h,--help

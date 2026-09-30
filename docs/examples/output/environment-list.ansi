@@ -1,0 +1,7 @@
+$ SOLVER_MESH_FILE=wing.grd SOLVER_WORKERS='1, 2 ,3' SOLVER_FAST=yes environment
+mesh = wing.grd, token = none, workers = 1,2,3
+fast = T
+--mesh-file = wing.grd [environment: SOLVER_MESH_FILE]
+--workers   = 1 2 3    [environment: SOLVER_WORKERS]
+--fast      = .true.   [environment: SOLVER_FAST]
+--token     = none     [default]

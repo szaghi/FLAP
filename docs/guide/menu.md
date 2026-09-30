@@ -170,6 +170,8 @@ When there is no more input (standard input redirected from `/dev/null` or close
 `ERROR_MENU_EOF` at once instead of waiting, even with `loop_on_invalid`. Standard Fortran cannot tell whether the input is a terminal, so the end of
 the input is the signal: check `error` and fall back to a default or stop.
 
+<<< @/examples/output/menus-eof.ansi{ansi}
+
 In an MPI program, run the menu on one rank only and broadcast the chosen index; the module performs no MPI calls and
 never stops the program.
 

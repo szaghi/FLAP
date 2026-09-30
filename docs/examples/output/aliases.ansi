@@ -1,0 +1,3 @@
+$ aliases co -j 4 link --verbose
+compile, jobs = 4
+link, verbose = T

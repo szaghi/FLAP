@@ -1,7 +1,6 @@
 # Parsing & Getting Values
 
-After defining arguments with `add`, the two remaining steps are parsing the command
-line and retrieving the values.
+After defining the arguments, a program parses the command line and reads the values into its variables.
 
 ## Parsing — `cli%parse`
 
@@ -11,29 +10,49 @@ call cli%parse(pref, args, error)
 
 | Argument | Type | Purpose |
 |---|---|---|
-| `pref` | `character(*)`, optional | Prefix string for error messages |
-| `args` | `character(*)`, optional | Parse from this string instead of the real command line |
-| `error` | `integer`, optional | Error code on return (0 = success) |
+| `pref` | `character(*)`, optional | Prefix of the error messages |
+| `args` | `character(*)`, optional | Parse this string instead of the real command line |
+| `error` | `integer`, optional | 0 on success, a positive error code, or a negative status (see [Error Codes](./errors)) |
 
 ```fortran
 call cli%parse(error=error)
-if (error /= 0) stop
+if (error /= 0) stop 1, quiet=.true.
 ```
 
-During parsing, FLAP:
-- reads the actual command line arguments (or `args` if supplied);
-- stores all values as strings (leading/trailing spaces stripped);
-- flushes default or environment values for arguments that were not passed.
+FLAP has already printed the message of an error: the program only has to end with a non-zero exit status.
+(`stop code, quiet=.true.` is Fortran 2018; nvfortran 26.5 rejects `quiet=`, use `call exit(1)` there.)
 
-### Explicit call is optional
+In standalone mode (the default), `--help`, `--version`, `--markdown`, `--man` and the completion builtins end the
+program inside `parse`, with exit status 0; with `init(standalone=.false.)` `parse` returns their status instead.
 
-The `parse` call is optional. The first time you call `get`, FLAP checks the parsed
-status and calls `parse` automatically if needed. An explicit call is recommended
-only when you want finer control over error handling.
+`parse` is optional: the first `get` parses the real command line if `parse` has not been called. An explicit call
+checks the whole command line at once, before any value is used.
+
+### What `parse` does, in order
+
+```mermaid
+flowchart TD
+  A[split the arguments by command] --> B{definitions consistent?<br/>a command repeated?}
+  B -- no --> E[error]
+  B -- yes --> C[parse the tokens of each command:<br/>unknown switches, values, duplicates]
+  C -- syntax error --> E
+  C --> D{a status?<br/>help, version, markdown, man, completion}
+  D -- yes --> S[print, then stop<br/>or return the status]
+  D -- no --> F[read the configuration file;<br/>settle each value: environment, file, default;<br/>check the paths]
+  F --> W[warn about deprecated options and commands]
+  W --> G{an alternate action?}
+  G -- yes --> AS[return STATUS_ALTERNATE]
+  G -- no --> H[required options, maps,<br/>exclusive sets, exclude pairs, exclusive commands]
+  H -- violated --> E
+  H --> OK[error = 0]
+```
+
+A syntax error anywhere on the command line wins over `--help`; `--help` wins over `--version`, which wins over
+`--markdown`, `--man` and the completion builtins. Choices and ranges are checked later, by `get`.
 
 ### Testing with a fake command line
 
-Pass `args` to parse a string instead of the real `argv`. This is useful for unit tests:
+`args` parses a string instead of the real command line, for tests and examples:
 
 ```fortran
 call cli%parse(args='--level 3 --verbose', error=error)
@@ -52,23 +71,27 @@ As with the real command line, blanks around each argument are removed.
 
 ### Inline values: `--option=value`
 
-A value can also be attached to its switch with `=`, in both forms of the switch:
+A value can be attached to its switch with `=`, in both forms of the switch (`--format=json`, `-f=json`). The argument is
+split at the **first** `=` (`--out=a=b` gives `a=b`), only when the part before it is a switch of the command being
+parsed: `a=b` stays a positional value and `--unknown=3` an unknown switch. Only options storing a single value take
+one: `--flag=yes` is `ERROR_INLINE_VALUE_NOT_ALLOWED` (25), a list (`nargs`) is `ERROR_INLINE_VALUE_NARGS` (26); a map
+takes one pair (`--set=cfl=0.5`). An empty inline value (`--out=`) is the empty string, as `--out ""` is.
 
-```console
-prog --speed=15 --output="run 1.dat" -s=15
-```
+### Values that start with a dash
 
-The argument is split at the **first** `=` (`--out=a=b` gives `a=b`), and only when the part before it is a switch of
-the command being parsed: `a=b` stays a positional value and `--unknown=3` an unknown switch. The next argument is not
-consumed, and an inline value wins over the environment variable of the option. Only options storing a single value
-take one: `--flag=yes` is `ERROR_INLINE_VALUE_NOT_ALLOWED`, and a list (`nargs`) is `ERROR_INLINE_VALUE_NARGS` (pass its
-values after the switch). An empty inline value (`--out=`) is the empty string, as `--out ""` is; a numeric option then
-fails its cast in `get`.
+An option taking a value takes the next argument unless it is a switch of the command being parsed: `--pattern -x`
+gives `-x`, `--shift -3.5` gives `-3.5`. A positional value is stricter: an argument starting with a dash followed by
+anything but a digit or a dot is never a positional value, so `-3.5` and `-` are values while `--bogus` is an unknown
+switch.
+
+After the hidden builtin `--`, the arguments are not parsed: they are collected, as they are, in the list of `--`
+itself, which the program can read with `cli%get_varying(switch='--', val=rest)` (to pass them to another program, for
+instance).
 
 ### Parsing more than once
 
-`parse` works once: after a successful parse, further calls return immediately (`error = 0`) and keep the first
-result. To parse another command line with the same definitions, call `reset_parse` first:
+`parse` works once: after a successful parse, further calls return at once (`error = 0`) and keep the first result. To
+parse another command line with the same definitions, call `reset_parse` first:
 
 ```fortran
 call cli%parse(args='--level 3', error=error)
@@ -78,7 +101,7 @@ call cli%parse(args='--level 5', error=error)   ! parsed again
 ```
 
 A parse that fails does not count as done: the next `get` parses again, and without `args` it parses the **real**
-command line. Call `reset_parse` before trying another string.
+command line. Call `reset_parse` before trying another string. `cli%is_parsed()` tells whether the CLI has been parsed.
 
 ---
 
@@ -90,89 +113,45 @@ call cli%get(val, switch, position, group, args, pref, error)
 
 | Argument | Type | Purpose |
 |---|---|---|
-| `val` | `class(*)` or `class(*), dimension(:)` | Variable to fill (type inferred automatically) |
-| `switch` | `character(*)`, optional | Switch name (long or abbreviated) |
-| `position` | `integer`, optional | Position for positional arguments |
-| `group` | `character(*)`, optional | Group (subcommand) name |
-| `args` | `character(*)`, optional | Parse from string (passed to `parse` if not yet called) |
-| `pref` | `character(*)`, optional | Prefix for error messages |
-| `error` | `integer`, optional | Error code on return |
+| `val` | scalar or array | The variable to fill, of any supported type |
+| `switch` | `character(*)`, optional | Switch name (long, abbreviated, or the negation of a flag) |
+| `position` | `integer`, optional | Position of a positional argument |
+| `group` | `character(*)`, optional | Command (name or alias) the argument belongs to |
+| `args` | `character(*)`, optional | Parsed first if the CLI has not been parsed yet |
+| `pref` | `character(*)`, optional | Prefix of the error messages |
+| `error` | `integer`, optional | Error code |
 
-`get` is a generic interface: the type of `val` is determined at the call site, so no
-explicit type casting is needed. Supported types: `integer` (any kind), `real` (any kind),
-`logical`, and `character`.
+`val` can be an `integer` of any PENF kind (`I1P`, `I2P`, `I4P`, `I8P`), a `real` (`R4P`, `R8P`, and `R16P` when built
+with `-D_R16P`), a `logical` or a `character`, scalar or a fixed-size array. The value is converted to the type of
+`val`; `choices` and numeric ranges are checked at this point. A type FLAP cannot fill (e.g. `complex`) is
+`ERROR_UNSUPPORTED_TYPE` (46).
 
-### Scalar values
+<<< @/examples/snippets/myapp-get.f90
 
-```fortran
-character(256) :: filename
-integer        :: count
-real(8)        :: threshold
-logical        :: verbose
+<<< @/examples/output/myapp.ansi{ansi}
 
-call cli%get(switch='--output',    val=filename,  error=error)
-call cli%get(switch='-n',          val=count,     error=error)
-call cli%get(switch='--threshold', val=threshold, error=error)
-call cli%get(switch='--verbose',   val=verbose,   error=error)
-```
-
-### Positional arguments
-
-```fortran
-real :: scale_factor
-
-call cli%get(position=1, val=scale_factor, error=error)
-```
-
-### Fixed-size list arguments (`nargs='N'`)
-
-Pass an allocated or automatic array:
-
-```fortran
-integer :: coords(3)
-
-call cli%get(switch='--coords', val=coords, error=error)
-```
-
-The array must have exactly as many elements as the values (passed or default): otherwise `get` returns
-`ERROR_LIST_SIZE` and leaves the array untouched. For lists of unknown length (`nargs='+'`/`'*'`) use `get_varying`.
-
-### Arguments belonging to a subcommand group
-
-```fortran
-character(256) :: commit_message
-
-call cli%get(group='commit', switch='-m', val=commit_message, error=error)
-```
+- A **fixed-size array** reads a list with `nargs='N'`: it must have exactly as many elements as the values (passed or
+  default), otherwise `get` returns `ERROR_LIST_SIZE` (47) and leaves the array untouched.
+- A `character` variable receives the value truncated or padded to its length.
+- A `count` option reads into an integer; a flag into a logical.
+- An option of a command is read with `group=`: `cli%get(group='commit', switch='-m', val=message)`.
 
 ---
 
 ## Runtime-sized lists — `cli%get_varying`
 
-When `nargs='+'` or `nargs='*'` was used in `add`, the list length is unknown at
-compile time. Use `get_varying` instead of `get`:
+`nargs='+'`, `nargs='*'` and `act='append'` give lists whose length is known only at run time: read them into an
+allocatable array, which `get_varying` allocates to the exact size (a size-0 array for an empty list):
 
 ```fortran
 call cli%get_varying(val, switch, position, group, args, pref, error)
 ```
 
-The key difference: `val` is **allocatable** with `intent(OUT)` — it is always
-deallocated on entry and reallocated to the exact list size.
+<<< @/examples/snippets/lists-get.f90
 
-```fortran
-character(256), allocatable :: files(:)
-integer,        allocatable :: ids(:)
+<<< @/examples/output/lists.ansi{ansi}
 
-call cli%get_varying(switch='--files', val=files, error=error)
-call cli%get_varying(switch='--ids',   val=ids,   error=error)
-
-! iterate over results
-do i = 1, size(files)
-  print '(A)', trim(files(i))
-end do
-```
-
-`choices` are checked on every value of the list, as by `get`.
+`choices` and ranges are checked on every value of the list.
 
 ---
 
@@ -182,31 +161,21 @@ end do
 logical :: was_passed
 
 was_passed = cli%is_passed(switch='--output')
-was_passed = cli%is_passed(switch='-o')           ! abbreviated form works too
-was_passed = cli%is_passed(position=1)            ! positional
-was_passed = cli%is_passed(group='commit', switch='-m')  ! in a group
+was_passed = cli%is_passed(switch='-o')                  ! abbreviated form
+was_passed = cli%is_passed(position=1)                   ! positional
+was_passed = cli%is_passed(group='commit', switch='-m')  ! in a command
 ```
 
-This is useful when you need to distinguish between "the user explicitly supplied the
-default value" and "the argument was omitted":
-
-```fortran
-if (cli%is_passed(switch='--config')) then
-  ! load from user-specified config file
-else
-  ! use built-in defaults
-end if
-```
-
-`is_passed` means "seen on the command line". A value can also come from an explicit source other than the command line
-(today the environment variable of a bare `envvar` switch): `get` returns it, and it satisfies a required option.
+`is_passed` means "seen on the command line". A value can also come from an environment variable or a configuration
+file: `get` returns it, and it satisfies a required option, but `is_passed` stays `.false.`. To know where a value comes
+from, use `get_source`.
 
 ---
 
-## Where a value comes from — `cli%get_source`, `cli%provenance`
+## Where a value comes from
 
-`get_source` returns the source of a value, one of `SOURCE_COMMANDLINE`, `SOURCE_ENVIRONMENT`, `SOURCE_CONFIG`,
-`SOURCE_DEFAULT` or `SOURCE_NONE` (ordered from the most to the least explicit):
+Every value has a source, one of `SOURCE_COMMANDLINE`, `SOURCE_ENVIRONMENT`, `SOURCE_CONFIG`, `SOURCE_DEFAULT` or
+`SOURCE_NONE` (ordered from the most to the least explicit):
 
 ```fortran
 if (cli%get_source(switch='--cfl') < SOURCE_DEFAULT) then
@@ -214,116 +183,38 @@ if (cli%get_source(switch='--cfl') < SOURCE_DEFAULT) then
 end if
 ```
 
-`provenance` returns one line per visible option of the top level and of the called commands, for a simulation's run
-log, where it matters for reproducibility:
+`provenance` returns one line per visible option of the top level and of the called commands, for the log of a run,
+where it matters for reproducibility:
 
-```fortran
-write(log_unit, '(A)') cli%provenance()
-```
+<<< @/examples/snippets/config-provenance.f90
 
-```
---mesh-file = wing.grd [environment: SOLVER_MESH_FILE]
---cfl       = 0.8      [config: solver.ini]
---threads   = 32       [command line]
-post --format = vtk    [default]
-```
+<<< @/examples/output/config-override.ansi{ansi}
 
 Both parse first if `parse` has not been called; an undefined option makes `get_source` return `SOURCE_NONE` with
-`ERROR_MISSING_CLA`. Hidden options and the builtins (`--help`, `--version`, `--markdown`) are not reported.
+`ERROR_MISSING_CLA` (1000). Hidden options and the builtins are not reported.
 
 ## Checking whether an argument is defined — `cli%is_defined`
 
-Queries whether a switch has been **registered** in the CLI (not whether it was passed):
-
 ```fortran
-logical :: defined
-
 defined = cli%is_defined(switch='--output')
-defined = cli%is_defined(switch='-o')           ! abbreviated form
-defined = cli%is_defined(position=1)            ! positional
+defined = cli%is_defined(switch='-o', group='commit')
+defined = cli%is_defined_group(group='commit')        ! a command (name or alias)
 ```
 
-Similarly for groups:
-
-```fortran
-defined = cli%is_defined_group(group='commit')
-```
-
-This is useful in generic code that operates on a CLI object it did not build itself.
+`is_defined` tells whether a switch has been **registered** (not whether it was passed), for code that works on a CLI
+it did not build itself.
 
 ---
 
 ## Freeing and redefining the CLI — `cli%free`
 
-```fortran
-call cli%free()
-```
-
-Destroys all internal state of the `command_line_interface` object and resets it to
-the default-initialised state. Use this when you need to redefine the CLI from scratch
-within the same program execution — for example in a test suite that exercises multiple
-CLI configurations.
-
-```fortran
-type(command_line_interface) :: cli
-integer                      :: error
-
-! first configuration
-call cli%init(progname='config-a')
-call cli%add(switch='--alpha', ...)
-call cli%parse(error=error)
-! ... use alpha config ...
-
-! reset and redefine
-call cli%free()
-call cli%init(progname='config-b')
-call cli%add(switch='--beta', ...)
-call cli%parse(error=error)
-```
+`cli%free()` destroys every definition and value, back to the default-initialised state; `init` calls it too. The CLI
+is also freed automatically when it goes out of scope.
 
 ---
 
-## Complete parse-and-get example
+## Complete example
 
-```fortran
-program example
-  use flap
-  implicit none
+<<< @/examples/snippets/myapp.f90
 
-  type(command_line_interface) :: cli
-  character(256) :: input, output
-  integer        :: n
-  real(8)        :: tol
-  logical        :: verbose
-  integer        :: error
-
-  call cli%init(progname    = 'example',                  &
-                version     = 'v1.0',                     &
-                description = 'Demonstration program',    &
-                examples    = ['example -i a.dat -o b.dat', &
-                               'example -i a.dat -n 100   '])
-
-  call cli%add(switch='--input',   switch_ab='-i', help='Input file',  &
-               required=.true.,  act='store', error=error)
-  call cli%add(switch='--output',  switch_ab='-o', help='Output file', &
-               required=.false., act='store', def='out.dat', error=error)
-  call cli%add(switch='--niter',   switch_ab='-n', help='Iterations',  &
-               required=.false., act='store', def='100', error=error)
-  call cli%add(switch='--tol',     switch_ab='-t', help='Tolerance',   &
-               required=.false., act='store', def='1.0e-6', error=error)
-  call cli%add(switch='--verbose', switch_ab='-v', help='Verbose output', &
-               required=.false., act='store_true', def='.false.', error=error)
-
-  call cli%parse(error=error)
-  if (error /= 0) stop
-
-  call cli%get(switch='-i', val=input,   error=error) ; if (error /= 0) stop
-  call cli%get(switch='-o', val=output,  error=error) ; if (error /= 0) stop
-  call cli%get(switch='-n', val=n,       error=error) ; if (error /= 0) stop
-  call cli%get(switch='-t', val=tol,     error=error) ; if (error /= 0) stop
-  call cli%get(switch='-v', val=verbose, error=error) ; if (error /= 0) stop
-
-  if (verbose) print '(A)', 'Input:  ' // trim(input)
-  if (verbose) print '(A)', 'Output: ' // trim(output)
-end program example
-```
+<<< @/examples/output/myapp-help.ansi{ansi}

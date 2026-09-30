@@ -1,0 +1,5 @@
+$ map --set cfll=0.5
+map: error: unknown key "cfll" for "--set" (allowed: cfl, nx, ny, t_end)! Did you mean "cfl"?
+
+Try 'map --help' for help.
+[exit status 1]

@@ -1,0 +1,7 @@
+$ environment --mesh-file body.grd
+mesh = body.grd, token = none, workers = 1
+fast = F
+--mesh-file = body.grd [command line]
+--workers   = 1        [default]
+--fast      = .false.  [default]
+--token     = none     [default]

@@ -1,0 +1,6 @@
+$ menus single < /dev/null
+1) Pizza
+2) Ice Cream
+3) Tacos
+What is your favorite food? error: end of input, no response
+[exit status 1]

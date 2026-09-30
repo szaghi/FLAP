@@ -1,0 +1,6 @@
+$ printf '2\n' | menus single
+1) Pizza
+2) Ice Cream
+3) Tacos
+What is your favorite food? 
+choice = 2

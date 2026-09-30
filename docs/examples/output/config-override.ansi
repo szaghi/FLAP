@@ -1,0 +1,5 @@
+$ SOLVER_CFL=0.6 config --mesh-file body.grd post
+--mesh-file   = body.grd   [command line]
+--cfl         = 0.6        [environment: SOLVER_CFL]
+--config      = solver.ini [default]
+post --format = vtu        [config: solver.ini]

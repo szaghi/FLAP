@@ -104,3 +104,32 @@ jobs:
       run: |
         make FC=gfortran-14
         for t in exe/flap_test_*; do "$t" > /dev/null || { echo "FAIL $t"; exit 1; }; done
+
+  docs-examples:
+    # the programs of docs/examples are built and run, and their snippets and outputs regenerated:
+    # the committed ones, included by the guide, must match what the code produces
+    name: docs examples / gfortran-14
+    runs-on: ubuntu-24.04
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup build environment
+      uses: ./.github/actions/setup-build-env
+      with:
+        gcc-version: '14'
+
+    - name: Fetch dependencies
+      run: fobis fetch
+
+    - name: Build and run the examples
+      run: bash scripts/docs_examples.sh
+
+    - name: Check the committed snippets and outputs
+      run: |
+        git add --intent-to-add docs/examples
+        git diff --exit-code -- docs/examples || {
+          echo "::error::docs/examples is out of date: run 'bash scripts/docs_examples.sh' and commit the result"
+          exit 1
+        }

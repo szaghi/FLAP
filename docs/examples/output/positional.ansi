@@ -1,0 +1,2 @@
+$ positional in.dat 2.5
+input = in.dat, scale = 2.50, verbose = F

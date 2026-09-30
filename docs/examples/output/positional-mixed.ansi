@@ -1,0 +1,2 @@
+$ positional --verbose in.dat
+input = in.dat, scale = 1.00, verbose = T

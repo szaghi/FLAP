@@ -1,0 +1,2 @@
+$ fake_git commit -m tag
+Committing with message: "tag"

@@ -1,0 +1,2 @@
+$ case_insensitive --MESH wing.grd RUN
+mesh = wing.grd, run = T

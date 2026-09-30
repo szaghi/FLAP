@@ -1,0 +1,2 @@
+$ choices --level 3 --scheme WENO5
+level = 3, scheme = weno5

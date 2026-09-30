@@ -1,0 +1,10 @@
+$ printf '7\n2\n' | menus retry
+1) Pizza
+2) Ice Cream
+3) Tacos
+What is your favorite food? error: invalid response: 7 (2 tries left)
+1) Pizza
+2) Ice Cream
+3) Tacos
+What is your favorite food? 
+choice = 2

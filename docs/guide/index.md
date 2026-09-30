@@ -4,15 +4,23 @@ title: About FLAP
 
 # About FLAP
 
-FLAP (Fortran command Line Arguments Parser for poor people) is a pure Fortran 2003+ library
-for building powerful, user-friendly Command Line Interfaces (CLIs). It is inspired by Python's
-`argparse` module and follows the same philosophy: define your arguments once, and FLAP handles
-parsing, help generation, error reporting, and more.
+FLAP (Fortran command Line Arguments Parser for poor people) is a pure Fortran library for building powerful,
+user-friendly Command Line Interfaces (CLIs). It is inspired by Python's `argparse` (and borrows from click, Typer and
+docopt): define your arguments once, and FLAP parses the command line, reads environment variables and configuration
+files, checks the values, prints the help and the errors, and writes man pages, Markdown and shell completions.
 
-Fortran programs often need rich command-line interfaces — optional switches, required
-parameters, boolean flags, positional arguments, mutually exclusive groups, and nested
-subcommands. FLAP provides all of this with a clean, consistent API and zero external
-dependencies beyond the Fortran standard library.
+Fortran programs, simulation codes above all, often need rich command lines: required parameters, optional switches with
+defaults, lists of values, commands (`solver run`, `solver post`), values from the environment of a batch job or from an
+input file. FLAP provides all of this with a small, consistent API, in standard Fortran 2018; it depends only on two
+small libraries by the same author, PENF (numeric kinds) and FACE (ANSI colours), which every build system fetches.
+
+- New to FLAP? Start from [Installation](./install), then [Defining Arguments](./arguments) and
+  [Parsing & Getting Values](./parsing).
+- Upgrading from an older release? See [Upgrading](./migration): v2.0.0 changed some behaviours.
+- Looking for a feature? See the [feature map](./features#feature-map).
+
+Every code sample of this guide is part of a program that is compiled and run to produce the outputs shown (see
+[`docs/examples`](https://github.com/szaghi/FLAP/tree/master/docs/examples)).
 
 ## Authors
 

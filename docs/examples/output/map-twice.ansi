@@ -1,0 +1,5 @@
+$ map --set cfl=0.5 cfl=0.6
+map: error: key "cfl" of "--set" given twice!
+
+Try 'map --help' for help.
+[exit status 1]

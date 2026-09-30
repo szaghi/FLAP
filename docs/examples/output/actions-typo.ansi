@@ -1,0 +1,5 @@
+$ actions --verbse
+actions: error: switch "--verbse" is unknown! Did you mean "--verbose"?
+
+Try 'actions --help' for help.
+[exit status 1]

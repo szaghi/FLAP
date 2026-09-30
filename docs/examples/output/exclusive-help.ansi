@@ -1,0 +1,29 @@
+$ exclusive --help
+usage: exclusive  [--json] [--csv] (--mesh value | --restart value) [--left | --right] [--help] [--markdown] [--version]
+
+
+Optional switches:
+   --json
+    default value .false.
+    mutually exclude "--csv"
+    JSON output
+   --csv
+    default value .false.
+    mutually exclude "--json"
+    CSV output
+   --mesh value, -m value
+    Mesh file
+   --restart value, -r value
+    Restart file
+   --left
+    default value .false.
+    Go left
+   --right
+    default value .false.
+    Go right
+   --help, -h
+    Print this help message
+   --markdown, -md
+    Save this help message in a Markdown file
+   --version, -v
+    Print version

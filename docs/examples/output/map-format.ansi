@@ -1,0 +1,5 @@
+$ map --set nx
+map: error: "--set" expects KEY=VALUE, got "nx"!
+
+Try 'map --help' for help.
+[exit status 1]

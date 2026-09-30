@@ -1,0 +1,2 @@
+$ completion --install-completion bash
+completion script installed in "/home/user/.completion-completion.bash", loaded by "/home/user/.bashrc"

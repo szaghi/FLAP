@@ -1,0 +1,5 @@
+$ actions
+verbosity = 0
+include   = .
+format    = text
+restart   = T

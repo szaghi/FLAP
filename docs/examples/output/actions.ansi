@@ -1,0 +1,5 @@
+$ actions -vv -I src --include=lib --format --no-restart
+verbosity = 2
+include   = src, lib
+format    = text
+restart   = F

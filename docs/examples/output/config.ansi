@@ -1,0 +1,4 @@
+$ config
+--mesh-file = wing.grd   [config: solver.ini]
+--cfl       = 0.8        [config: solver.ini]
+--config    = solver.ini [default]

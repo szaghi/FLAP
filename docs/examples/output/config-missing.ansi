@@ -1,0 +1,5 @@
+$ config --config other.ini
+config: error: configuration file "other.ini" not found!
+
+Try 'config --help' for help.
+[exit status 1]

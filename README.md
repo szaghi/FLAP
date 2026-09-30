@@ -1,7 +1,7 @@
 # FLAP
 
 >#### Fortran command Line Arguments Parser for poor people
->a pure Fortran 2003+ library for building elegant CLIs, inspired by Python's `argparse`.
+>a pure Fortran 2018 library for building elegant CLIs, inspired by Python's `argparse`.
 
 [![GitHub tag](https://img.shields.io/github/v/tag/szaghi/FLAP)](https://github.com/szaghi/FLAP/tags)
 [![GitHub issues](https://img.shields.io/github/issues/szaghi/FLAP)](https://github.com/szaghi/FLAP/issues)
@@ -9,9 +9,9 @@
 [![coverage](https://img.shields.io/endpoint?url=https://szaghi.github.io/FLAP/coverage.json)](https://github.com/szaghi/FLAP/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-GPLv3%20%7C%20BSD%20%7C%20MIT-blue.svg)](#copyrights)
 
-| 📋 **Argument Types**<br>Optional, required, boolean, positional, list-valued, and env-var-bound arguments | 🔢 **nargs Support**<br>Fixed count (`'3'`), one-or-more (`'+'`), zero-or-more (`'*'`) | 🔀 **Groups & Subcommands**<br>Mutually exclusive argument groups and arbitrarily nested subcommands | 📄 **Auto-generated Output**<br>Help, usage, man page, bash completion, and Markdown — all automatic |
+| 📋 **Rich arguments**<br>Options, positionals, flags and `--x/--no-x` pairs, counters, repeatable options, lists, `KEY=VALUE` maps | ✅ **Validation**<br>Required options, choices, numeric ranges, path checks, mutually exclusive sets, "did you mean" suggestions | 🔀 **Commands**<br>git-style commands with their own options and help, aliases, shared option sets | 🌱 **Values from everywhere**<br>Command line, environment variables, INI configuration files, and the source of every value |
 |:---:|:---:|:---:|:---:|
-| 🐍 **argparse-inspired**<br>Familiar Python-like API brought to modern Fortran | ✅ **POSIX compliant**<br>Standard CLI conventions respected out of the box | 🔓 **Multi-licensed**<br>GPL v3 · BSD 2/3-Clause · MIT | 📦 **Multiple build systems**<br>fpm, FoBiS, CMake, Make |
+| 📄 **Generated outputs**<br>Help, man page, Markdown, and completion for bash, zsh, fish and PowerShell | 🐍 **argparse-inspired**<br>A familiar Python-like API in modern Fortran | 🔓 **Multi-licensed**<br>GPL v3 · BSD 2/3-Clause · MIT | 📦 **Multiple build systems**<br>FoBiS, fpm, CMake, Make |
 
 >#### [Documentation](https://szaghi.github.io/FLAP/)
 > For full documentation (guide, API reference, examples, etc...) see the [FLAP website](https://szaghi.github.io/FLAP/).
@@ -48,17 +48,23 @@ program minimal
   call cli%init(description='minimal FLAP example')
   call cli%add(switch='--string', switch_ab='-s', help='a string', &
                required=.true., act='store', error=error)
-  if (error /= 0) stop
-  call cli%parse(error=error)
-  if (error /= 0) stop
+  if (error /= 0) stop 1, quiet=.true.
+  call cli%parse(error=error)                 ! prints the help, or the error, by itself
+  if (error /= 0) stop 1, quiet=.true.
   call cli%get(switch='-s', val=string, error=error)
-  if (error /= 0) stop
+  if (error /= 0) stop 1, quiet=.true.
 
   print '(A)', 'String = ' // trim(string)
 end program minimal
 ```
 
-See [`src/tests/`](src/tests/) for more examples including nested subcommands, mutually exclusive groups, choices, and bash completion.
+```console
+$ minimal --string "hello world"
+String = hello world
+```
+
+Every feature has a compiled, runnable example in [`docs/examples/src`](docs/examples/src), shown with its real output in
+the [guide](https://szaghi.github.io/FLAP/guide/).
 
 ---
 
@@ -93,22 +99,22 @@ Add to your `fpm.toml`:
 
 ```toml
 [dependencies]
-FLAP = { git = "https://github.com/szaghi/FLAP" }
-```
-
-```bash
-fpm build
-fpm test
+FLAP = { git = "https://github.com/szaghi/FLAP", tag = "v2.4.0" }
 ```
 
 ### CMake
 
 ```bash
+fobis fetch                            # PENF and FACE into src/third_party
 cmake -B build && cmake --build build
 ```
 
 ### GNU Make
 
 ```bash
-make
+fobis fetch
+make STATIC=yes                        # exe/libflap.a
 ```
+
+A Fortran 2018 compiler is required: tested with gfortran 13 to 16, nvfortran 26.5 and Intel ifx 2025.3 (see
+[Installation](https://szaghi.github.io/FLAP/guide/install)).

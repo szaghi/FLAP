@@ -1,0 +1,7 @@
+$ SOLVER_MESH_FILE=wing.grd MY_TOKEN=abc environment
+mesh = wing.grd, token = abc, workers = 1
+fast = F
+--mesh-file = wing.grd [environment: SOLVER_MESH_FILE]
+--workers   = 1        [default]
+--fast      = .false.  [default]
+--token     = abc      [environment: MY_TOKEN]

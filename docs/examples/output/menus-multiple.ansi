@@ -1,0 +1,6 @@
+$ printf '3 1\n' | menus multiple
+1) *Cheese
+2) Mushrooms
+3) *Olives
+Which toppings? 
+choices = 3,1
