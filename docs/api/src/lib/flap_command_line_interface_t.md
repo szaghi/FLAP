@@ -494,7 +494,7 @@ Add CLA to CLI.
  @note If CLA belongs to a not yet present group it is created on the fly.
 
 ```fortran
-subroutine add(self, pref, group, group_index, switch, switch_ab, switch_neg, help, help_markdown, help_color, help_style, required, val_required, positional, position, hidden, act, def, nargs, choices, exclude, envvar, must_exist, readable, writable, allow_dash, deprecated, min, max, min_open, max_open, clamp, case_sensitive, map, map_keys, error)
+subroutine add(self, pref, group, group_index, switch, switch_ab, switch_neg, help, help_markdown, help_color, help_style, required, val_required, positional, position, hidden, act, def, nargs, choices, exclude, envvar, must_exist, readable, writable, allow_dash, deprecated, min, max, min_open, max_open, clamp, case_sensitive, map, map_keys, metavar, error)
 ```
 
 **Arguments**
@@ -536,6 +536,7 @@ subroutine add(self, pref, group, group_index, switch, switch_ab, switch_neg, he
 | `case_sensitive` | logical | in | optional | Character choices match only in their case (default |
 | `map` | logical | in | optional | The values are KEY=VALUE pairs (F18). |
 | `map_keys` | character(len=*) | in | optional | Allowed keys of a map, comma separated (F18). |
+| `metavar` | character(len=*) | in | optional | Placeholder of the value in the help (F12), default 'value'. |
 | `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | optional | Error trapping flag. |
 
 **Call graph**

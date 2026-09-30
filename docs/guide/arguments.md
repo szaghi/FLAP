@@ -79,6 +79,7 @@ abbreviation (`-v` for verbosity), the builtin keeps just `--version`. The same 
 ```fortran
 call cli%add(switch, switch_ab, switch_neg, help, required, act, def, &
              nargs, choices, case_sensitive, map, map_keys,   &
+             metavar,                                         &
              exclude, envvar,                                 &
              positional, position, hidden,                &
              must_exist, readable, writable, allow_dash,  &
@@ -97,6 +98,7 @@ All arguments are optional except that either `switch` (for named arguments) or
 | `switch` | `character(*)` | — | Long switch name, e.g. `'--output'` |
 | `switch_ab` | `character(*)` | same as `switch` | Abbreviated switch, e.g. `'-o'` |
 | `switch_neg` | `character(*)` | not set | Negation of a flag, e.g. `'--no-restart'` (see [Flag pairs](#flag-pairs-switch-neg)) |
+| `metavar` | `character(*)` | `'value'` | Placeholder of the value in the usage, help, man page and Markdown, e.g. `'FILE'` (see [Metavar](#metavar)) |
 | `help` | `character(*)` | `'Undocumented argument'` | Description shown in help |
 | `required` | `logical` | `.false.` | If `.true.`, the argument must be supplied |
 | `act` | `character(*)` | `'store'` | Action (see below) |
@@ -144,6 +146,24 @@ call cli%add(switch='--format', &
              help='Output format (default: text)',      &
              required=.false., act='store*', def='text', error=error)
 ```
+
+### Metavar
+
+`metavar` names the value in the usage, the help, the man page and the Markdown output, instead of the generic `value`:
+
+```fortran
+call cli%add(switch='--mesh',   help='Mesh file', required=.true.,  act='store', metavar='FILE', error=error)
+call cli%add(switch='--cfl',    help='CFL',       required=.false., act='store', def='0.8', metavar='CFL', error=error)
+call cli%add(switch='--fields', help='Fields',    required=.false., act='store', nargs='+', def='u', metavar='NAME', &
+             error=error)
+```
+
+```text
+usage: solver --mesh FILE [--cfl CFL] [--fields NAME#1 [NAME#2 NAME#3...]] ...
+```
+
+A list numbers it (`NAME#1 ...`); for a map it replaces `KEY=VALUE`; a flag ignores it (it takes no value); a positional
+shows it alone. Without `metavar` the outputs are unchanged. The bash completion never shows placeholders.
 
 ### Flag pairs (`switch_neg`)
 

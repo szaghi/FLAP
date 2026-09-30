@@ -107,6 +107,10 @@ values still takes the default: both change in v2.0.0 (see below).
 - `act='alternate'` declares an auxiliary action (`--list-models`): `parse` returns `STATUS_ALTERNATE` and skips the
   value validation. The pairwise `exclude=` check now runs with the other value checks, after `--help`/`--version`.
 
+## v2.2.0 (additive)
+
+- `add(..., metavar='FILE')` names the value in the usage, help, man page and Markdown (F12); the default stays `value`.
+
 ## v2.1.0 (additive)
 
 - `add(..., min=, max=, min_open=, max_open=, clamp=)` gives a numeric option a range, checked by `get` (see
