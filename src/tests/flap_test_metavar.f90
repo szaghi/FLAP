@@ -32,7 +32,7 @@ call assert_contains(out, ' [--probes [P#1 P#2 P#3...]]', 'usage: nargs=*')
 call assert_contains(out, ' [--box X#1 X#2 X#3 ]', 'usage: nargs=3')
 call assert_contains(out, ' [--inc DIR]...', 'usage: append')
 call assert_contains(out, ' [--set PARAM=VAL [PARAM=VAL...]]', 'usage: a map with a metavar')
-call assert_contains(out, ' [LVL]', 'usage: optional value (store*)')
+call assert_contains(out, ' [--level [LVL]]', 'usage: optional value (store*)')
 ! T9.3: a positional
 call assert_contains(out, ' INPUT', 'usage: positional')
 ! the help lines

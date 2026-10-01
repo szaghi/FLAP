@@ -1,5 +1,5 @@
 $ actions --help
-usage: actions  [--verbose]... [--include value]... [value] [--restart/--no-restart] [--help] [--markdown] [--version]
+usage: actions  [--verbose]... [--include value]... [--format [value]] [--restart/--no-restart] [--help] [--markdown] [--version]
 
 The actions of FLAP
 
@@ -11,7 +11,7 @@ Optional switches:
    --include, -I
     default value .
     Include directory (repeatable)
-  [value]
+   --format [value]
     default value text
     Output format
    --restart/--no-restart

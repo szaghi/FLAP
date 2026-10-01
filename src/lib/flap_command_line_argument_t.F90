@@ -954,10 +954,22 @@ contains
         usage = usage//', value in: `'//self%choices//'`'
       endif
     elseif (self%act==action_store_star) then
-      usage = '  ['//ph//']'
-      if (allocated(self%choices)) then
-        usage = usage//', value in: ('//self%choices//')'
+      ! an optional value, with its switch as any option (B39 of #126)
+      if (trim(adjustl(self%switch))/=trim(adjustl(self%switch_ab))) then
+        if (markdownd) then
+          usage = new_line('a')//'* `'//trim(adjustl(self%switch))//' ['//ph//']`, `'//trim(adjustl(self%switch_ab))//&
+                  ' ['//ph//']`  '
+        else
+          usage = '   '//switch_//' ['//ph//'], '//switch_ab_//' ['//ph//']'
+        endif
+      else
+        if (markdownd) then
+          usage = new_line('a')//'* `'//trim(adjustl(self%switch))//' ['//ph//']`  '
+        else
+          usage = '   '//switch_//' ['//ph//']'
+        endif
       endif
+      if (allocated(self%choices)) usage = usage//', value in: `'//self%choices//'`'
     elseif (self%act==ACTION_SHOW_COMPLETION .or. self%act==ACTION_INSTALL_COMPLETION) then
       ! an optional value, the shell (F24)
       if (markdownd) then
@@ -1120,7 +1132,13 @@ contains
       endif
     endif
   elseif (self%act==action_store_star) then
-    signature = ' ['//ph//']'
+    ! an optional value, with its switch (B39 of #126)
+    signature = trim(adjustl(self%switch))//' ['//ph//']'
+    if (required) then
+      signature = ' '//signature
+    else
+      signature = ' ['//signature//']'
+    endif
   elseif (self%act==ACTION_SHOW_COMPLETION .or. self%act==ACTION_INSTALL_COMPLETION) then
     ! an optional value, the shell (F24)
     signature = ' ['//trim(adjustl(self%switch))//' ['//ph//']]'

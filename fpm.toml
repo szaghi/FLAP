@@ -346,3 +346,8 @@ main = "flap_test_value_missing.f90"
 name = "flap_test_choices_length"
 source-dir = "src/tests"
 main = "flap_test_choices_length.f90"
+
+[[test]]
+name = "flap_test_store_star"
+source-dir = "src/tests"
+main = "flap_test_store_star.f90"
