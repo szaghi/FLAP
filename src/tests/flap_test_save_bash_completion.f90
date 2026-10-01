@@ -63,7 +63,7 @@ contains
   call cli%save_bash_completion(bash_file=script, error=error)
   call assert_equal(error, 0_I4P, 'save_bash_completion: error')
   text = read_file(script)
-  call assert_contains(text, 'complete -o default -F _completion flap_test_save_bash_completion', &
+  call assert_contains(text, 'complete -o default -F _flap_test_save_bash_completion_completion flap_test_save_bash_completion', &
                        'script registers the function, with the file-name fallback (F15)')
   call assert_equal(text(1:19), '#!/usr/bin/env bash', 'shebang (B12)')
 
@@ -160,11 +160,11 @@ contains
   if (present(prime)) then
     write(buffer, '(I0)') prime_cword
     session = session//'COMP_WORDS=(flap_test_save_bash_completion '//prime//')'//new_line('a')// &
-                       'COMP_CWORD='//trim(buffer)//new_line('a')//'_completion'//new_line('a')
+                       'COMP_CWORD='//trim(buffer)//new_line('a')//'_flap_test_save_bash_completion_completion'//new_line('a')
   endif
   write(buffer, '(I0)') cword
   session = session//'COMP_WORDS=(flap_test_save_bash_completion '//words//')'//new_line('a')// &
-                     'COMP_CWORD='//trim(buffer)//new_line('a')//'_completion'//new_line('a')//  &
+                     'COMP_CWORD='//trim(buffer)//new_line('a')//'_flap_test_save_bash_completion_completion'//new_line('a')//  &
                      'echo "${COMPREPLY[*]}"'//new_line('a')
   driver = scratch_file('driver.bash')
   call write_file(driver, session)

@@ -98,6 +98,7 @@ graph LR
 - [usage_core](#usage-core)
 - [signature_core](#signature-core)
 - [bash_script](#bash-script)
+- [completion_function](#completion-function)
 - [program_basename](#program-basename)
 
 ## Variables
@@ -2738,11 +2739,41 @@ function bash_script(self, zsh) result(script)
 ```mermaid
 flowchart TD
   completion_script_core["completion_script_core"] --> bash_script["bash_script"]
+  bash_script["bash_script"] --> completion_function["completion_function"]
   bash_script["bash_script"] --> completion_skips["completion_skips"]
   bash_script["bash_script"] --> names["names"]
   bash_script["bash_script"] --> program_basename["program_basename"]
   bash_script["bash_script"] --> signature["signature"]
   style bash_script fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### completion_function
+
+Name of the bash (and zsh) completion function of a program, `_<basename>_completion`, the basename made an identifier
+ (any character but a letter, a digit or `_` becomes `_`): one function per program, so that two FLAP programs
+ complete in the same shell (B41 of #126).
+
+**Attributes**: pure
+
+**Returns**: `character(len=:)`
+
+```fortran
+function completion_function(progname) result(name)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `progname` | character(len=*) | in |  | Program name. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  bash_script["bash_script"] --> completion_function["completion_function"]
+  completion_function["completion_function"] --> program_basename["program_basename"]
+  style completion_function fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### program_basename
@@ -2768,6 +2799,7 @@ function program_basename(progname) result(basename)
 ```mermaid
 flowchart TD
   bash_script["bash_script"] --> program_basename["program_basename"]
+  completion_function["completion_function"] --> program_basename["program_basename"]
   completion_shell["completion_shell"] --> program_basename["program_basename"]
   fish_script["fish_script"] --> program_basename["program_basename"]
   install_completion["install_completion"] --> program_basename["program_basename"]

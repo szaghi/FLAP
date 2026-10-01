@@ -2964,7 +2964,7 @@ contains
   else
     script = '#!/usr/bin/env bash'
   endif
-  script = script//new_line('a')//'_completion()'
+  script = script//new_line('a')//completion_function(self%progname)//'()'
   script = script//new_line('a')//'{'
   script = script//new_line('a')//'  local cur prev group w i start skip used words'
   script = script//new_line('a')//'  cur=${COMP_WORDS[COMP_CWORD]}'
@@ -3021,7 +3021,8 @@ contains
   endif
   script = script//new_line('a')//'  return 0'
   script = script//new_line('a')//'}'
-  script = script//new_line('a')//'complete -o default -F _completion '//program_basename(self%progname)
+  script = script//new_line('a')//'complete -o default -F '//completion_function(self%progname)//' '//&
+           program_basename(self%progname)
   endfunction bash_script
 
   subroutine save_man_page_core(self, man_file, error)
@@ -3203,6 +3204,26 @@ contains
 #endif
   endsubroutine quiet_stop
   ! non type-bound procedures
+  pure function completion_function(progname) result(name)
+  !< Name of the bash (and zsh) completion function of a program, `_<basename>_completion`, the basename made an identifier
+  !< (any character but a letter, a digit or `_` becomes `_`): one function per program, so that two FLAP programs
+  !< complete in the same shell (B41 of #126).
+  character(*), intent(in)      :: progname !< Program name.
+  character(len=:), allocatable :: name     !< Name of the function.
+  character(len=:), allocatable :: base     !< Program basename, made an identifier.
+  integer(I4P)                  :: c        !< Character counter.
+
+  base = program_basename(progname)
+  do c=1, len(base)
+    select case(base(c:c))
+    case('a':'z', 'A':'Z', '0':'9', '_')
+    case default
+      base(c:c) = '_'
+    endselect
+  enddo
+  name = '_'//base//'_completion'
+  endfunction completion_function
+
   pure function program_basename(progname) result(basename)
   !< Return the program name without its path (separated by '/' or a backslash).
   character(*), intent(in)      :: progname !< Program name.

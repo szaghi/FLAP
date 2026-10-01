@@ -1,6 +1,6 @@
 $ heat --show-completion bash | head -n 12
 #!/usr/bin/env bash
-_completion()
+_heat_completion()
 {
   local cur prev group w i start skip used words
   cur=${COMP_WORDS[COMP_CWORD]}

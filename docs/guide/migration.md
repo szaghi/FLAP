@@ -7,6 +7,18 @@ title: Upgrading
 Every change you can observe when moving to a new release, newest first. Additive releases only add API: existing
 programs keep their behaviour. The plan behind them is issue [#125](https://github.com/szaghi/FLAP/issues/125).
 
+## Unreleased (fixes)
+
+- `get` checks the `choices` of a `character` value on the whole value, before storing it: a value longer than the
+  variable (`--scheme fex` into a `character(2)`) used to be checked truncated, and could pass (B38 of #126).
+- An option with an optional value (`act='store*'`) is shown with its switch in the usage, the help, the man page and the
+  Markdown (`[--save [value]]`); it used to be a bare `[value]` (B39).
+- A value that is not a number, read into an integer or a real, is the new `ERROR_CASTING_NUMBER` (50), reported in
+  FLAP's style on the error unit; it used to print PENF's message on standard error and return the I/O status (B40).
+- **The bash and zsh completion scripts change**: the function is named after the program (`_<prog>_completion`); with
+  the shared `_completion`, the script loaded last completed every FLAP program (B41). Regenerate the scripts, or run
+  `--install-completion` again.
+
 ## v2.4.0 (additive)
 
 - `init(usage_on_error='usage')` (or `'none'`) prints the usage line (or nothing) after a missing required option,

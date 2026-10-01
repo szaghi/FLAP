@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-_completion()
+_test_nested_completion()
 {
   local cur prev group w i start skip used words
   cur=${COMP_WORDS[COMP_CWORD]}
@@ -106,4 +106,4 @@ _completion()
   fi
   return 0
 }
-complete -o default -F _completion test_nested
+complete -o default -F _test_nested_completion test_nested

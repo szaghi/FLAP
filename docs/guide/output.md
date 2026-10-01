@@ -64,7 +64,8 @@ site; the builtin `--markdown` (`-md`) does the same from the command line, writ
 Every script completes the switches, the command names (and aliases) and the `choices` of an option; hidden options are
 left out, and none shows value placeholders.
 
-- **bash**: registered with `complete -o default`, so where it has nothing to offer (a free value such as
+- **bash**: a function named after the program (`_heat_completion` for `heat`, so that several FLAP programs complete
+  in the same shell), registered with `complete -o default`, so where it has nothing to offer (a free value such as
   `--mesh <TAB>`) bash completes file names. An option already typed is not offered again, unless it can be repeated
   (`append`, `count`); with several commands on the line, the options offered are those of the last one (the values of
   the options are skipped, so `commit -m tag` stays in `commit`). Load it with `source prog.bash`, or install it in

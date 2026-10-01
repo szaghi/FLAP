@@ -16,6 +16,7 @@ use penf, only : I4P
 
 implicit none
 type(command_line_interface) :: cli      !< Command Line Interface (CLI).
+type(command_line_interface) :: other    !< Another program (B41).
 character(:), allocatable    :: out      !< Output.
 character(:), allocatable    :: script   !< Script text.
 character(:), allocatable    :: bash     !< Bash script file.
@@ -23,6 +24,7 @@ character(:), allocatable    :: zsh      !< Zsh script file.
 character(:), allocatable    :: fish     !< Fish script file.
 character(:), allocatable    :: ps1      !< PowerShell script file.
 character(:), allocatable    :: driver   !< Driver script file.
+character(:), allocatable    :: bash2    !< Bash script file of another program.
 integer(I4P)                 :: lun      !< Capture unit.
 integer(I4P)                 :: error    !< Error trapping flag.
 integer(I4P)                 :: exitstat !< Exit status of a command.
@@ -38,7 +40,8 @@ call define
 call cli%save_bash_completion(bash_file=bash, error=error)
 call assert_equal(error, 0_I4P, 'bash script saved')
 script = read_file(bash)
-call assert_contains(script, 'complete -o default -F _completion flap_test_shell_completion', 'bash: -o default')
+call assert_contains(script, 'complete -o default -F _flap_test_shell_completion_completion flap_test_shell_completion', &
+                     'bash: -o default')
 ! the bash function, run: switches, a command's switches, a free value (empty: readline completes file names), choices
 call assert_equal(completed('bash', bash, 'prog --me', 1), '[--mesh]', 'bash: a switch')
 call assert_equal(completed('bash', bash, 'prog compile --o', 2), '[--opt]', 'bash: a switch of a command')
@@ -61,13 +64,34 @@ call assert_equal(completed('bash', bash, 'prog co --o', 2), '[--opt]', 'bash: a
 call assert_equal(completed('bash', bash, 'prog --mesh compile --sc', 3), '[--scheme]', 'bash: a value named as a command')
 call assert_equal(completed('bash', bash, 'prog compile -O 2 --o', 4), '[]', 'bash: a command option typed')
 call assert_equal(completed('bash', bash, 'prog --jobs 2 compile --o', 4), '[--opt]', 'bash: a top-level value skipped')
+! B41 (#126): every program has its own function, so that two FLAP programs complete in the same shell
+call assert(index(script, new_line('a')//'_completion()') == 0, 'bash: no function shared by every program')
+bash2 = scratch_file('bash2')
+call other%init(progname='/opt/bin/other-tool.x', usage_lun=lun, error_lun=lun)
+call other%add(switch='--zzz', help='zzz', required=.false., act='store', def='z', error=error)
+call other%save_bash_completion(bash_file=bash2, error=error)
+call assert_equal(error, 0_I4P, 'bash script of another program saved')
+call assert_contains(read_file(bash2), new_line('a')//'_other_tool_x_completion()', &
+                     'bash: the function named after the program, its basename made an identifier')
+call assert_contains(read_file(bash2), 'complete -o default -F _other_tool_x_completion other-tool.x', &
+                     'bash: the registration of another program')
+call write_file(driver, '. '//bash//new_line('a')//'. '//bash2//new_line('a')// &
+                'COMP_WORDS=(prog --me); COMP_CWORD=1; _flap_test_shell_completion_completion; '// &
+                'printf "[%s]\n" "${COMPREPLY[*]}"'//new_line('a')// &
+                'COMP_WORDS=(other --z); COMP_CWORD=1; _other_tool_x_completion; printf "[%s]\n" "${COMPREPLY[*]}"'// &
+                new_line('a'))
+call run_command('bash '//driver, exitstat, out)
+call assert_equal(exitstat, 0_I4P, 'bash: two programs sourced')
+call assert_contains(out, '[--mesh]'//new_line('a')//'[--zzz]', 'bash: each program completes its own options')
+call delete_file(bash2)
 ! T12.2: zsh, the bash script behind bashcompinit
 call cli%save_zsh_completion(zsh_file=zsh, error=error)
 call assert_equal(error, 0_I4P, 'zsh script saved')
 script = read_file(zsh)
 call assert_contains(script, 'autoload -U +X compinit && compinit', 'zsh: compinit first')
 call assert_contains(script, 'autoload -U +X bashcompinit && bashcompinit', 'zsh: bashcompinit')
-call assert_contains(script, 'complete -o default -F _completion flap_test_shell_completion', 'zsh: the bash registration')
+call assert_contains(script, 'complete -o default -F _flap_test_shell_completion_completion flap_test_shell_completion', &
+                     'zsh: the bash registration')
 call assert(index(script, '#!/usr/bin/env bash') == 0, 'zsh: no bash shebang')
 ! (the probe always exits 0: some compilers report a failing command through cmdstat)
 call run_command('if command -v zsh > /dev/null; then echo yes; else echo no; fi', exitstat, out)
@@ -172,7 +196,8 @@ contains
   integer(I4P)                  :: stat   !< Exit status.
   integer(I4P)                  :: e      !< End of the first line.
 
-  call_ = 'COMP_WORDS=('//words//'); COMP_CWORD='//achar(48 + cword)//'; _completion; printf "[%s]\n" "${COMPREPLY[*]}"'
+  call_ = 'COMP_WORDS=('//words//'); COMP_CWORD='//achar(48 + cword)//'; _flap_test_shell_completion_completion; '// &
+          'printf "[%s]\n" "${COMPREPLY[*]}"'
   if (shell == 'zsh') then
     call write_file(driver, 'source '//file//new_line('a')//"emulate sh -c '"//call_//"'"//new_line('a'))
   else

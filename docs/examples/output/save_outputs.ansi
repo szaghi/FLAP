@@ -6,7 +6,7 @@ save_outputs.md
 save_outputs.ps1
 save_outputs.zsh
 #!/usr/bin/env bash
-_completion()
+_save_outputs_completion()
 {
   local cur prev group w i start skip used words
   cur=${COMP_WORDS[COMP_CWORD]}

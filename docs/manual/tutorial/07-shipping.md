@@ -33,11 +33,6 @@ After a new shell, `heat --sch<TAB>` completes `--scheme`, and `heat --scheme <T
 be written by the program itself (`save_bash_completion`, ...: see [Output Formats](/guide/output#shell-completion)), for
 a package.
 
-::: warning Two FLAP programs in bash
-Today every FLAP bash script defines the same function, `_completion`: with two FLAP programs installed, the script
-loaded last completes both. This is [issue #126](https://github.com/szaghi/FLAP/issues/126) (B41).
-:::
-
 ::: tip What you learned
 Examples, epilog, colours, `--man`, `--markdown`, `--show-completion`, `--install-completion`.
 Reference: [Output Formats](/guide/output).

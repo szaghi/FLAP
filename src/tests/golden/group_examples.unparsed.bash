@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-_completion()
+_flap_test_group_examples_completion()
 {
   local cur prev group w i start skip used words
   cur=${COMP_WORDS[COMP_CWORD]}
@@ -96,4 +96,4 @@ _completion()
   fi
   return 0
 }
-complete -o default -F _completion flap_test_group_examples
+complete -o default -F _flap_test_group_examples_completion flap_test_group_examples
