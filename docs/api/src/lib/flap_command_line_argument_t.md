@@ -1366,7 +1366,7 @@ Check if CLA value is in allowed choices.
  @note This procedure can be called if and only if cla%choices has been allocated.
 
 ```fortran
-subroutine check_choices(self, val, pref)
+subroutine check_choices(self, val, pref, text)
 ```
 
 **Arguments**
@@ -1376,6 +1376,7 @@ subroutine check_choices(self, val, pref)
 | `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
 | `val` | class(*) | inout |  | CLA value; a character one becomes the declared spelling. |
 | `pref` | character(len=*) | in | optional | Prefixing string. |
+| `text` | character(len=*) | in | optional | The value as given, for the message (not the number re-written). |
 
 **Call graph**
 

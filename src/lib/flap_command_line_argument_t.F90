@@ -1418,27 +1418,22 @@ contains
                              'has not "nargs" value but an array has been passed to "get" method!'
       endif
     case(ERROR_NARGS_INSUFFICIENT)
-      if (.not.self%is_positional) then
-        if (self%nargs=='+') then
-          self%error_message = prefd//': named option "'//trim(adjustl(self%switch))//&
-                               '" requires at least 1 argument but no one remains!'
-        else
-          self%error_message = prefd//': named option "'//trim(adjustl(self%switch))//'" requires '//&
-                               trim(adjustl(self%nargs))//' arguments but no enough ones remain!'
-        endif
+      ! plain words (defect 6 of #126); a positional has no nargs (ERROR_POSITIONAL_NARGS)
+      if (self%nargs=='+') then
+        self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" requires at least 1 value!'
       else
-        if (self%nargs=='+') then
-          self%error_message = prefd//': "'//trim(str(self%position, .true.))//&
-                               '-th" positional option requires at least 1 argument but no one remains'
-        else
-          self%error_message = prefd//': "'//trim(str(self%position, .true.))//'-th" positional option requires '//&
-                               trim(adjustl(self%nargs))//' arguments but no enough ones remain!'
-        endif
+        self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" requires '//trim(adjustl(self%nargs))//&
+                             ' values!'
       endif
     case(ERROR_VALUE_MISSING)
       self%error_message = prefd//': named option "'//trim(adjustl(self%switch))//'" needs a value that is not passed!'
     case(ERROR_UNKNOWN)
-      self%error_message = prefd//': switch "'//trim(adjustl(switch))//'" is unknown!'
+      ! a switch is a switch; any other argument (an extra value, a misspelled command) is an argument (defect 7 of #126)
+      if (index(adjustl(switch), '-') == 1) then
+        self%error_message = prefd//': switch "'//trim(adjustl(switch))//'" is unknown!'
+      else
+        self%error_message = prefd//': argument "'//trim(adjustl(switch))//'" is unknown!'
+      endif
       if (present(hint)) self%error_message = self%error_message//hint
     case(ERROR_ENVVAR_POSITIONAL)
       self%error_message = prefd//': "'//trim(str(self%position, .true.))//'-th" positional option '//&
@@ -2117,13 +2112,14 @@ contains
   endif
   endsubroutine check_positional_consistency
 
-  subroutine check_choices(self, val, pref)
+  subroutine check_choices(self, val, pref, text)
   !< Check if CLA value is in allowed choices.
   !<
   !< @note This procedure can be called if and only if cla%choices has been allocated.
   class(command_line_argument), intent(inout) :: self    !< CLA data.
   class(*),                     intent(inout) :: val     !< CLA value; a character one becomes the declared spelling.
   character(*), optional,       intent(in)    :: pref    !< Prefixing string.
+  character(*), optional,       intent(in)    :: text    !< The value as given, for the message (not the number re-written).
   character(len(self%choices)), allocatable   :: toks(:) !< Tokens for parsing choices list.
   integer(I4P)                                :: Nc      !< Number of choices.
   logical                                     :: val_in  !< Flag for checking if val is in the choosen range.
@@ -2194,6 +2190,7 @@ contains
   class default
     call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
   endselect
+  if (present(text)) val_str = trim(adjustl(text)) ! "2", not "+2" (defect 1 of #126)
   if (.not.val_in.and.(self%error==0)) then
     call self%errored(pref=pref, error=ERROR_NOT_IN_CHOICES, val_str=val_str)
   endif
@@ -2314,7 +2311,7 @@ contains
         ! the whole value, not the one truncated to the variable (B38 of #126)
         call self%check_choices_text(text=self%stored_list(), val=val, pref=pref)
       class default
-        call self%check_choices(val=val, pref=pref)
+        call self%check_choices(val=val, pref=pref, text=self%stored_list())
       endselect
     endif
     if (self%has_range().and.self%error==0) call self%check_range(val=val, text=self%stored_list(), pref=pref)
@@ -2471,7 +2468,7 @@ contains
   type is(real(R16P))
     do v=1, Nv
       call self%cast_number(text=vals(v), val=val(v), pref=pref)
-      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref)
+      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref,text=vals(v))
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
@@ -2479,42 +2476,42 @@ contains
   type is(real(R8P))
     do v=1, Nv
       call self%cast_number(text=vals(v), val=val(v), pref=pref)
-      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref)
+      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref,text=vals(v))
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
   type is(real(R4P))
     do v=1, Nv
       call self%cast_number(text=vals(v), val=val(v), pref=pref)
-      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref)
+      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref,text=vals(v))
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
   type is(integer(I8P))
     do v=1, Nv
       call self%cast_number(text=vals(v), val=val(v), pref=pref)
-      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref)
+      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref,text=vals(v))
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
   type is(integer(I4P))
     do v=1, Nv
       call self%cast_number(text=vals(v), val=val(v), pref=pref)
-      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref)
+      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref,text=vals(v))
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
   type is(integer(I2P))
     do v=1, Nv
       call self%cast_number(text=vals(v), val=val(v), pref=pref)
-      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref)
+      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref,text=vals(v))
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
   type is(integer(I1P))
     do v=1, Nv
       call self%cast_number(text=vals(v), val=val(v), pref=pref)
-      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref)
+      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref,text=vals(v))
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
@@ -2577,7 +2574,7 @@ contains
     allocate(real(R16P):: val(1:Nv))
     do v=1, Nv
       call self%cast_number(text=vals(v), val=val(v), pref=pref)
-      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref, text=vals(v))
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
@@ -2609,7 +2606,7 @@ contains
     allocate(real(R8P):: val(1:Nv))
     do v=1, Nv
       call self%cast_number(text=vals(v), val=val(v), pref=pref)
-      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref, text=vals(v))
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
@@ -2641,7 +2638,7 @@ contains
     allocate(real(R4P):: val(1:Nv))
     do v=1, Nv
       call self%cast_number(text=vals(v), val=val(v), pref=pref)
-      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref, text=vals(v))
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
@@ -2673,7 +2670,7 @@ contains
     allocate(integer(I8P):: val(1:Nv))
     do v=1, Nv
       call self%cast_number(text=vals(v), val=val(v), pref=pref)
-      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref, text=vals(v))
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
@@ -2705,7 +2702,7 @@ contains
     allocate(integer(I4P):: val(1:Nv))
     do v=1, Nv
       call self%cast_number(text=vals(v), val=val(v), pref=pref)
-      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref, text=vals(v))
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
@@ -2737,7 +2734,7 @@ contains
     allocate(integer(I2P):: val(1:Nv))
     do v=1, Nv
       call self%cast_number(text=vals(v), val=val(v), pref=pref)
-      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref, text=vals(v))
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
@@ -2769,7 +2766,7 @@ contains
     allocate(integer(I1P):: val(1:Nv))
     do v=1, Nv
       call self%cast_number(text=vals(v), val=val(v), pref=pref)
-      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
+      if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref, text=vals(v))
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo

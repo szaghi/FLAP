@@ -146,7 +146,8 @@ if (error /= 0) stop 1
 <<< @/examples/output/raise_error.ansi{ansi}
 
 It returns `ERROR_USER` (1005, and sets `cli%error`) and never stops: the program decides what to do. The help follows
-the message unless `show_usage=.false.` (the whole help: `init(usage_on_error=...)` does not apply to it); with
+the message unless `show_usage=.false.`, as `init(usage_on_error=...)` chooses (the whole help, the usage line as here, or
+nothing); with
 `group='post'` it is the help of that command (an undefined group returns `ERROR_MISSING_GROUP` and prints nothing). It
 works before or after `parse`.
 

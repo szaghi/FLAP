@@ -15,6 +15,10 @@ programs keep their behaviour. The plan behind them is issue [#125](https://gith
   Markdown (`[--save [value]]`); it used to be a bare `[value]` (B39).
 - A value that is not a number, read into an integer or a real, is the new `ERROR_CASTING_NUMBER` (50), reported in
   FLAP's style on the error unit; it used to print PENF's message on standard error and return the I/O status (B40).
+- Error messages: a value out of its choices is quoted as given (`"2"`, not `"+2"`); an unknown argument that is not a
+  switch is `argument "x" is unknown!` (it was called a switch); a list with too few values is `option "--x" requires 3
+  values!`; the repeated-command error no longer starts with an empty line; `raise_error` prints the help as
+  `init(usage_on_error=)` chooses (it always printed the whole help).
 - **The bash and zsh completion scripts change**: the function is named after the program (`_<prog>_completion`); with
   the shared `_completion`, the script loaded last completed every FLAP program (B41). Regenerate the scripts, or run
   `--install-completion` again.

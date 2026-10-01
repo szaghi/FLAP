@@ -1,5 +1,5 @@
 $ lists --mesh wing.grd --coords 1 2
-lists: error: named option "--coords" requires 3 arguments but no enough ones remain!
+lists: error: option "--coords" requires 3 values!
 
 Try 'lists --help' for help.
 [exit status 1]

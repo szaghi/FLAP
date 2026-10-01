@@ -1014,8 +1014,9 @@ contains
   function raise_error(self, message, switch, group, show_usage) result(error)
   !< Report an application error in FLAP's style (prefix, colours, error unit) and return ERROR_USER; never stop (F17 of #125).
   !<
-  !< For validation only the application can do (e.g. "--nx must be even"); by default the usage (of `group`) follows the
-  !< message. An undefined `group` returns ERROR_MISSING_GROUP and prints nothing.
+  !< For validation only the application can do (e.g. "--nx must be even"); by default the help (of `group`) follows the
+  !< message, as init(usage_on_error=) chooses (the whole help, its usage line, nothing). An undefined `group` returns
+  !< ERROR_MISSING_GROUP and prints nothing.
   class(command_line_interface), intent(inout) :: self        !< CLI data.
   character(*),                  intent(in)    :: message     !< Error message.
   character(*), optional,        intent(in)    :: switch      !< Offending switch, prefixing the message.
@@ -1041,7 +1042,14 @@ contains
     self%error_message = self%error_prefix()//': '//message
   endif
   call self%print_error_message
-  if (show_usage_) call write_text(self%usage_lun, self%usage(g=g))
+  if (show_usage_) then
+    ! as the other errors printing a help (defect 10 of #126): init(usage_on_error=)
+    if (self%usage_on_error_is('USAGE')) then
+      call self%print_usage_line(g=g)
+    elseif (.not.self%usage_on_error_is('NONE')) then
+      call write_text(self%usage_lun, self%usage(g=g))
+    endif
+  endif
   error = self%error
   endfunction raise_error
 
@@ -3177,7 +3185,6 @@ contains
       ! self%error_message = prefd//': too few arguments ('//trim(str(.true.,Na))//')'//&
                          ! ' respect the required ('//trim(str(.true.,self%Na_required))//')'
     endselect
-    write(self%error_lun,'(A)')
     call self%print_error_message
   endif
   endsubroutine errored

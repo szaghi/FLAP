@@ -43,7 +43,7 @@ out = run('--secre')
 call assert(index(out, 'Did you mean') == 0, 'hidden --secret not suggested')
 ! T7.5: a command name, and an alias
 out = run('comit')
-call assert_contains(out, 'switch "comit" is unknown! Did you mean "commit"?', 'command suggestion')
+call assert_contains(out, 'argument "comit" is unknown! Did you mean "commit"?', 'command suggestion')
 out = run('chekout')
 call assert_contains(out, 'Did you mean "checkout"?', 'command suggestion: checkout')
 out = run('chx')

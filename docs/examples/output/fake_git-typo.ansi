@@ -1,5 +1,5 @@
 $ fake_git comit
-fake_git: error: switch "comit" is unknown! Did you mean "commit"?
+fake_git: error: argument "comit" is unknown! Did you mean "commit"?
 
 Try 'fake_git --help' for help.
 [exit status 1]

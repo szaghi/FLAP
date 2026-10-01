@@ -848,6 +848,7 @@ subroutine print_usage_line(self, pref, g)
 ```mermaid
 flowchart TD
   parse_core["parse_core"] --> print_usage_line["print_usage_line"]
+  raise_error["raise_error"] --> print_usage_line["print_usage_line"]
   print_usage_line["print_usage_line"] --> usage["usage"]
   print_usage_line["print_usage_line"] --> usage_on_error_is["usage_on_error_is"]
   print_usage_line["print_usage_line"] --> write_text["write_text"]
@@ -2122,8 +2123,9 @@ flowchart TD
 
 Report an application error in FLAP's style (prefix, colours, error unit) and return ERROR_USER; never stop (F17 of #125).
 
- For validation only the application can do (e.g. "--nx must be even"); by default the usage (of `group`) follows the
- message. An undefined `group` returns ERROR_MISSING_GROUP and prints nothing.
+ For validation only the application can do (e.g. "--nx must be even"); by default the help (of `group`) follows the
+ message, as init(usage_on_error=) chooses (the whole help, its usage line, nothing). An undefined `group` returns
+ ERROR_MISSING_GROUP and prints nothing.
 
 **Returns**: integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables))
 
@@ -2148,7 +2150,9 @@ flowchart TD
   raise_error["raise_error"] --> error_prefix["error_prefix"]
   raise_error["raise_error"] --> is_defined_group["is_defined_group"]
   raise_error["raise_error"] --> print_error_message["print_error_message"]
+  raise_error["raise_error"] --> print_usage_line["print_usage_line"]
   raise_error["raise_error"] --> usage["usage"]
+  raise_error["raise_error"] --> usage_on_error_is["usage_on_error_is"]
   raise_error["raise_error"] --> write_text["write_text"]
   style raise_error fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -2367,6 +2371,7 @@ function usage_on_error_is(self, mode) result(is)
 flowchart TD
   parse_core["parse_core"] --> usage_on_error_is["usage_on_error_is"]
   print_usage_line["print_usage_line"] --> usage_on_error_is["usage_on_error_is"]
+  raise_error["raise_error"] --> usage_on_error_is["usage_on_error_is"]
   usage_on_error_is["usage_on_error_is"] --> upper_case["upper_case"]
   style usage_on_error_is fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```

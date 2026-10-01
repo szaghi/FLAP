@@ -1,5 +1,5 @@
 $ positional in.dat 2 3
-positional: error: switch "3" is unknown!
+positional: error: argument "3" is unknown!
 
 Try 'positional --help' for help.
 [exit status 1]

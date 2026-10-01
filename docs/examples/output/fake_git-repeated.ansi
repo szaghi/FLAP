@@ -1,5 +1,4 @@
 $ fake_git commit -m x commit
-
 fake_git: error: the command "commit" is passed more than once!
 
 Try 'fake_git --help' for help.
