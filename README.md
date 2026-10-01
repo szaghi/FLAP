@@ -103,7 +103,7 @@ Add to your `fpm.toml`:
 
 ```toml
 [dependencies]
-FLAP = { git = "https://github.com/szaghi/FLAP", tag = "v2.4.0" }
+FLAP = { git = "https://github.com/szaghi/FLAP", tag = "v2.4.1" }
 ```
 
 ### CMake

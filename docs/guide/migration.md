@@ -7,7 +7,7 @@ title: Upgrading
 Every change you can observe when moving to a new release, newest first. Additive releases only add API: existing
 programs keep their behaviour. The plan behind them is issue [#125](https://github.com/szaghi/FLAP/issues/125).
 
-## Unreleased (fixes)
+## v2.4.1 (fixes)
 
 - `get` checks the `choices` of a `character` value on the whole value, before storing it: a value longer than the
   variable (`--scheme fex` into a `character(2)`) used to be checked truncated, and could pass (B38 of #126).

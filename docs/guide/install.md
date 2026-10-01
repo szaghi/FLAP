@@ -20,7 +20,7 @@ Add FLAP as a dependency in your project's `fpm.toml`, pinned to a release:
 
 ```toml
 [dependencies]
-FLAP = { git = "https://github.com/szaghi/FLAP", tag = "v2.4.0" }
+FLAP = { git = "https://github.com/szaghi/FLAP", tag = "v2.4.1" }
 ```
 
 `fpm build` fetches FLAP, PENF and FACE. To build and test FLAP itself:
@@ -86,7 +86,7 @@ Every release ships an `install.sh`, which downloads FLAP and builds it with one
 
 ```bash
 ./install.sh --download git --build fobis
-./install.sh --download wget --build cmake --tag v2.4.0
+./install.sh --download wget --build cmake --tag v2.4.1
 ```
 
 ## Compiler notes
