@@ -4,6 +4,29 @@ All notable changes to this project are documented here.
 Versions follow [Semantic Versioning](https://semver.org/).
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.4.1] — 2026-10-01
+### Documentation
+- Audit the guide against v2.4.0, samples built and run by a harness
+
+- **manual**: A tutorial, a cookbook and terminal images
+
+- Point the install pins and the upgrade notes at v2.4.1
+
+
+### Fixed
+- **cla**: Check the choices of a character value before truncating it
+
+- **cla**: Render a store* option with its switch
+
+- **cla**: Report a value that is not a number as ERROR_CASTING_NUMBER
+
+- **completion**: Name the bash function after the program
+
+- **messages**: Clearer wording of five error messages
+
+- **help**: A consistent layout of the help, man page and Markdown ⚠ BREAKING CHANGE
+
+
 ## [2.4.0] — 2026-09-30
 ### Added
 - **cli**: Usage_on_error, a shorter output after an error
