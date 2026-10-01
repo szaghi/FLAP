@@ -1760,6 +1760,7 @@ subroutine errored(self, error, pref, group, switch, position)
 ```mermaid
 flowchart TD
   add_exclusive_set["add_exclusive_set"] --> errored["errored"]
+  cast_number["cast_number"] --> errored["errored"]
   check["check"] --> errored["errored"]
   check["check"] --> errored["errored"]
   check["check"] --> errored["errored"]

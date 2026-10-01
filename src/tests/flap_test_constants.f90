@@ -15,6 +15,7 @@ use flap, only : command_line_interface,                                        
                  ERROR_APPEND_INCONSISTENT, ERROR_APPEND_SCALAR_GET,                                                              &
                  ERROR_LIST_SIZE, ERROR_DEF_NARGS, ERROR_ENVVAR_CSV,                                                              &
                  ERROR_PATH_NOT_FOUND, ERROR_PATH_NOT_READABLE, ERROR_PATH_NOT_WRITABLE, ERROR_PATH_INCONSISTENT,                 &
+                 ERROR_CASTING_NUMBER,                                                                                            &
                  ERROR_DEPRECATED_REQUIRED, ERROR_ALTERNATE_INCONSISTENT, ERROR_RANGE_DEFINITION, ERROR_OUT_OF_RANGE,             &
                  ERROR_RANGE_TYPE, ERROR_SWITCH_NEG_INCONSISTENT, ERROR_MAP_FORMAT, ERROR_MAP_DUPLICATE_KEY,                      &
                  ERROR_MAP_UNKNOWN_KEY, ERROR_MAP_KEY_MISSING, ERROR_MAP_INCONSISTENT,                                            &
@@ -83,6 +84,7 @@ contains
   call assert_equal(ERROR_PATH_NOT_READABLE,      34_I4P,   'ERROR_PATH_NOT_READABLE')
   call assert_equal(ERROR_PATH_NOT_WRITABLE,      35_I4P,   'ERROR_PATH_NOT_WRITABLE')
   call assert_equal(ERROR_PATH_INCONSISTENT,      49_I4P,   'ERROR_PATH_INCONSISTENT')
+  call assert_equal(ERROR_CASTING_NUMBER,         50_I4P,   'ERROR_CASTING_NUMBER')
   call assert_equal(STATUS_ALTERNATE,             -4_I4P,   'STATUS_ALTERNATE')
   call assert_equal(STATUS_SHOW_COMPLETION,       -6_I4P,   'STATUS_SHOW_COMPLETION')
   call assert_equal(STATUS_INSTALL_COMPLETION,    -7_I4P,   'STATUS_INSTALL_COMPLETION')

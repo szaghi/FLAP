@@ -644,6 +644,7 @@ subroutine errored(self, error, pref, a1, a2, position, members, reason)
 ```mermaid
 flowchart TD
   add_exclusive_set["add_exclusive_set"] --> errored["errored"]
+  cast_number["cast_number"] --> errored["errored"]
   check["check"] --> errored["errored"]
   check["check"] --> errored["errored"]
   check["check"] --> errored["errored"]

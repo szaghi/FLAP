@@ -64,6 +64,7 @@ public :: ERROR_PATH_NOT_FOUND
 public :: ERROR_PATH_NOT_READABLE
 public :: ERROR_PATH_NOT_WRITABLE
 public :: ERROR_PATH_INCONSISTENT
+public :: ERROR_CASTING_NUMBER
 public :: ERROR_DEPRECATED_REQUIRED
 public :: ERROR_ALTERNATE_INCONSISTENT
 public :: ERROR_SWITCH_NEG_INCONSISTENT
@@ -209,6 +210,7 @@ type, extends(object) :: command_line_argument
     procedure, private :: check_positional_consistency    !< Check positional CLA consistency.
     procedure, private :: check_choices                   !< Check if CLA value is in allowed choices.
     procedure, private :: check_choices_text              !< Check the choices of a whole character value, then store it.
+    procedure, private :: cast_number                     !< Convert a value to a number, quietly (B40 of #126).
     procedure, private :: check_list_size                 !< Check CLA multiple values list size consistency.
     procedure, private :: stored_list                     !< Stored list of values (parsed or default).
     procedure, private :: get_cla                         !< Get CLA (single) value.
@@ -283,6 +285,7 @@ integer(I4P), parameter :: ERROR_PATH_NOT_FOUND         = 33 !< Path value that 
 integer(I4P), parameter :: ERROR_PATH_NOT_READABLE      = 34 !< Path value that cannot be opened for reading (readable).
 integer(I4P), parameter :: ERROR_PATH_NOT_WRITABLE      = 35 !< Existing path value that cannot be opened for writing.
 integer(I4P), parameter :: ERROR_PATH_INCONSISTENT      = 49 !< Path checks on an option taking no value.
+integer(I4P), parameter :: ERROR_CASTING_NUMBER         = 50 !< A value that is not a number, got into one (B40 of #126).
 integer(I4P), parameter :: ERROR_DEPRECATED_REQUIRED    = 44 !< A required option cannot be deprecated.
 integer(I4P), parameter :: ERROR_ALTERNATE_INCONSISTENT = 37 !< An alternate action with an attribute of a value.
 integer(I4P), parameter :: ERROR_SWITCH_NEG_INCONSISTENT = 36 !< A negation (switch_neg) of a CLA that is not a named flag.
@@ -1349,7 +1352,7 @@ contains
   endfunction has_choices
 
   ! private methods
-  subroutine errored(self, error, pref, switch, val_str, log_value, hint)
+  subroutine errored(self, error, pref, switch, val_str, log_value, hint, type_name)
   !< Trig error occurence and print meaningful message.
   class(command_line_argument), intent(inout) :: self      !< CLA data.
   integer(I4P),                 intent(in)    :: error     !< Error occurred.
@@ -1358,6 +1361,7 @@ contains
   character(*), optional,       intent(in)    :: val_str   !< Value string.
   character(*), optional,       intent(in)    :: log_value !< Logical value to be casted.
   character(*), optional,       intent(in)    :: hint      !< Hint appended to the message (unknown switch, F10).
+  character(*), optional,       intent(in)    :: type_name !< Type a value cannot be converted to ('an integer', 'a real').
   character(len=:), allocatable               :: prefd     !< Prefixing string.
 
   self%error = error
@@ -1496,6 +1500,14 @@ contains
                            '" is not writable: '//trim(log_value)//'!'
     case(ERROR_RANGE_DEFINITION)
       self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'": invalid range: '//trim(val_str)//'!'
+    case(ERROR_CASTING_NUMBER)
+      if (self%is_positional) then
+        self%error_message = prefd//': cannot convert "'//val_str//'" of positional argument '//&
+                             trim(str(self%position, .true.))//' to '//type_name//'!'
+      else
+        self%error_message = prefd//': cannot convert "'//val_str//'" of option "'//trim(adjustl(self%switch))//'" to '//&
+                             type_name//'!'
+      endif
     case(ERROR_OUT_OF_RANGE)
       self%error_message = prefd//': value "'//trim(val_str)//'" of "'//trim(adjustl(self%switch))//&
                            '" is out of range '//self%range_text()//'!'
@@ -2203,6 +2215,54 @@ contains
   if (self%error == 0) val = whole
   endsubroutine check_choices_text
 
+  subroutine cast_number(self, text, val, pref)
+  !< Convert a value to the number type of `val`, quietly: a failure is `ERROR_CASTING_NUMBER`, reported by FLAP (B40 of #126).
+  !<
+  !< PENF's `cton` writes its own message on standard error (not on the error unit of the CLI) and returns the I/O status
+  !< as the error: values are never converted with it.
+  class(command_line_argument), intent(inout) :: self      !< CLA data.
+  character(*),                 intent(in)    :: text      !< Value.
+  class(*),                     intent(inout) :: val       !< Number.
+  character(*), optional,       intent(in)    :: pref      !< Prefixing string.
+  character(len=:), allocatable               :: trimmed   !< Value without the blanks around it.
+  character(len=:), allocatable               :: type_name !< Type of the number, for the message.
+  integer(I4P)                                :: ios       !< I/O status.
+
+  trimmed = trim(adjustl(text))
+  ios = 0
+  type_name = 'a real'
+  select type(val)
+#if defined _R16P
+  type is(real(R16P))
+    read(trimmed, *, iostat=ios) val
+#endif
+  type is(real(R8P))
+    read(trimmed, *, iostat=ios) val
+  type is(real(R4P))
+    read(trimmed, *, iostat=ios) val
+  type is(integer(I8P))
+    type_name = 'an integer'
+    read(trimmed, *, iostat=ios) val
+  type is(integer(I4P))
+    type_name = 'an integer'
+    read(trimmed, *, iostat=ios) val
+  type is(integer(I2P))
+    type_name = 'an integer'
+    read(trimmed, *, iostat=ios) val
+  type is(integer(I1P))
+    type_name = 'an integer'
+    read(trimmed, *, iostat=ios) val
+  class default
+    call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
+    return
+  endselect
+  if (ios /= 0 .or. len(trimmed) == 0) then
+    call self%errored(pref=pref, error=ERROR_CASTING_NUMBER, val_str=trimmed, type_name=type_name)
+  else
+    self%error = 0
+  endif
+  endsubroutine cast_number
+
   function check_list_size(self, vals, pref) result(is_ok)
   !< Check CLA multiple values list size consistency: a list without values (or with a single blank one) is empty.
   class(command_line_argument), intent(inout) :: self    !< CLA data.
@@ -2316,20 +2376,20 @@ contains
   select type(val)
 #if defined _R16P
   type is(real(R16P))
-    val = cton(pref=pref, error=self%error, str=trim(adjustl(buffer)), knd=real(1, R16P))
+    call self%cast_number(text=buffer, val=val, pref=pref)
 #endif
   type is(real(R8P))
-    val = cton(pref=pref, error=self%error, str=trim(adjustl(buffer)), knd=1._R8P)
+    call self%cast_number(text=buffer, val=val, pref=pref)
   type is(real(R4P))
-    val = cton(pref=pref, error=self%error, str=trim(adjustl(buffer)), knd=1._R4P)
+    call self%cast_number(text=buffer, val=val, pref=pref)
   type is(integer(I8P))
-    val = cton(pref=pref, error=self%error, str=trim(adjustl(buffer)), knd=1_I8P)
+    call self%cast_number(text=buffer, val=val, pref=pref)
   type is(integer(I4P))
-    val = cton(pref=pref, error=self%error, str=trim(adjustl(buffer)), knd=1_I4P)
+    call self%cast_number(text=buffer, val=val, pref=pref)
   type is(integer(I2P))
-    val = cton(pref=pref, error=self%error, str=trim(adjustl(buffer)), knd=1_I2P)
+    call self%cast_number(text=buffer, val=val, pref=pref)
   type is(integer(I1P))
-    val = cton(pref=pref, error=self%error, str=trim(adjustl(buffer)), knd=1_I1P)
+    call self%cast_number(text=buffer, val=val, pref=pref)
   type is(logical)
     read(buffer, *, iostat=self%error)val
     if (self%error/=0) call self%errored(pref=pref, error=ERROR_CASTING_LOGICAL, log_value=buffer)
@@ -2410,7 +2470,7 @@ contains
 #if defined _R16P
   type is(real(R16P))
     do v=1, Nv
-      val(v) = cton(pref=pref,error=self%error,str=trim(adjustl(vals(v))),knd=real(1, R16P))
+      call self%cast_number(text=vals(v), val=val(v), pref=pref)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref)
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
@@ -2418,42 +2478,42 @@ contains
 #endif
   type is(real(R8P))
     do v=1, Nv
-      val(v) = cton(pref=pref,error=self%error,str=trim(adjustl(vals(v))),knd=1._R8P)
+      call self%cast_number(text=vals(v), val=val(v), pref=pref)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref)
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
   type is(real(R4P))
     do v=1, Nv
-      val(v) = cton(pref=pref,error=self%error,str=trim(adjustl(vals(v))),knd=1._R4P)
+      call self%cast_number(text=vals(v), val=val(v), pref=pref)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref)
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
   type is(integer(I8P))
     do v=1, Nv
-      val(v) = cton(pref=pref,error=self%error,str=trim(adjustl(vals(v))),knd=1_I8P)
+      call self%cast_number(text=vals(v), val=val(v), pref=pref)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref)
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
   type is(integer(I4P))
     do v=1, Nv
-      val(v) = cton(pref=pref,error=self%error,str=trim(adjustl(vals(v))),knd=1_I4P)
+      call self%cast_number(text=vals(v), val=val(v), pref=pref)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref)
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
   type is(integer(I2P))
     do v=1, Nv
-      val(v) = cton(pref=pref,error=self%error,str=trim(adjustl(vals(v))),knd=1_I2P)
+      call self%cast_number(text=vals(v), val=val(v), pref=pref)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref)
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
     enddo
   type is(integer(I1P))
     do v=1, Nv
-      val(v) = cton(pref=pref,error=self%error,str=trim(adjustl(vals(v))),knd=1_I1P)
+      call self%cast_number(text=vals(v), val=val(v), pref=pref)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v),pref=pref)
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
@@ -2516,7 +2576,7 @@ contains
     endif
     allocate(real(R16P):: val(1:Nv))
     do v=1, Nv
-      val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=real(1, R16P))
+      call self%cast_number(text=vals(v), val=val(v), pref=pref)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
@@ -2548,7 +2608,7 @@ contains
     endif
     allocate(real(R8P):: val(1:Nv))
     do v=1, Nv
-      val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1._R8P)
+      call self%cast_number(text=vals(v), val=val(v), pref=pref)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
@@ -2580,7 +2640,7 @@ contains
     endif
     allocate(real(R4P):: val(1:Nv))
     do v=1, Nv
-      val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1._R4P)
+      call self%cast_number(text=vals(v), val=val(v), pref=pref)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
@@ -2612,7 +2672,7 @@ contains
     endif
     allocate(integer(I8P):: val(1:Nv))
     do v=1, Nv
-      val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1_I8P)
+      call self%cast_number(text=vals(v), val=val(v), pref=pref)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
@@ -2644,7 +2704,7 @@ contains
     endif
     allocate(integer(I4P):: val(1:Nv))
     do v=1, Nv
-      val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1_I4P)
+      call self%cast_number(text=vals(v), val=val(v), pref=pref)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
@@ -2676,7 +2736,7 @@ contains
     endif
     allocate(integer(I2P):: val(1:Nv))
     do v=1, Nv
-      val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1_I2P)
+      call self%cast_number(text=vals(v), val=val(v), pref=pref)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit
@@ -2708,7 +2768,7 @@ contains
     endif
     allocate(integer(I1P):: val(1:Nv))
     do v=1, Nv
-      val(v) = cton(pref=pref, error=self%error, str=trim(adjustl(vals(v))), knd=1_I1P)
+      call self%cast_number(text=vals(v), val=val(v), pref=pref)
       if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val(v), pref=pref)
       if (self%has_range().and.self%error==0) call self%check_range(val=val(v), text=vals(v), pref=pref)
       if (self%error/=0) exit

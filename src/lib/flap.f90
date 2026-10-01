@@ -41,6 +41,7 @@ use flap_command_line_argument_t, only : command_line_argument,        &
                                          ERROR_PATH_NOT_READABLE,      &
                                          ERROR_PATH_NOT_WRITABLE,      &
                                          ERROR_PATH_INCONSISTENT,      &
+                                         ERROR_CASTING_NUMBER,         &
                                          ERROR_DEPRECATED_REQUIRED,    &
                                          ERROR_ALTERNATE_INCONSISTENT, &
                                          ERROR_SWITCH_NEG_INCONSISTENT, &
@@ -153,6 +154,7 @@ public :: ERROR_PATH_NOT_FOUND
 public :: ERROR_PATH_NOT_READABLE
 public :: ERROR_PATH_NOT_WRITABLE
 public :: ERROR_PATH_INCONSISTENT
+public :: ERROR_CASTING_NUMBER
 public :: ERROR_DEPRECATED_REQUIRED
 public :: ERROR_ALTERNATE_INCONSISTENT
 public :: ERROR_SWITCH_NEG_INCONSISTENT

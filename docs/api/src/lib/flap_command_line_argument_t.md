@@ -57,6 +57,7 @@ graph LR
 - [check_positional_consistency](#check-positional-consistency)
 - [check_choices](#check-choices)
 - [check_choices_text](#check-choices-text)
+- [cast_number](#cast-number)
 - [get_cla](#get-cla)
 - [get_cla_from_buffer](#get-cla-from-buffer)
 - [get_cla_list](#get-cla-list)
@@ -168,6 +169,7 @@ graph LR
 | `ERROR_PATH_NOT_READABLE` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Path value that cannot be opened for reading (readable). |
 | `ERROR_PATH_NOT_WRITABLE` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Existing path value that cannot be opened for writing. |
 | `ERROR_PATH_INCONSISTENT` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Path checks on an option taking no value. |
+| `ERROR_CASTING_NUMBER` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | A value that is not a number, got into one (B40 of #126). |
 | `ERROR_DEPRECATED_REQUIRED` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | A required option cannot be deprecated. |
 | `ERROR_ALTERNATE_INCONSISTENT` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | An alternate action with an attribute of a value. |
 | `ERROR_SWITCH_NEG_INCONSISTENT` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | A negation (switch_neg) of a CLA that is not a named flag. |
@@ -332,6 +334,7 @@ classDiagram
 | `check_positional_consistency` |  | Check positional CLA consistency. |
 | `check_choices` |  | Check if CLA value is in allowed choices. |
 | `check_choices_text` |  | Check the choices of a whole character value, then store it. |
+| `cast_number` |  | Convert a value to a number, quietly (B40 of #126). |
 | `check_list_size` |  | Check CLA multiple values list size consistency. |
 | `stored_list` |  | Stored list of values (parsed or default). |
 | `get_cla` |  | Get CLA (single) value. |
@@ -757,7 +760,7 @@ flowchart TD
 Trig error occurence and print meaningful message.
 
 ```fortran
-subroutine errored(self, error, pref, switch, val_str, log_value, hint)
+subroutine errored(self, error, pref, switch, val_str, log_value, hint, type_name)
 ```
 
 **Arguments**
@@ -771,12 +774,14 @@ subroutine errored(self, error, pref, switch, val_str, log_value, hint)
 | `val_str` | character(len=*) | in | optional | Value string. |
 | `log_value` | character(len=*) | in | optional | Logical value to be casted. |
 | `hint` | character(len=*) | in | optional | Hint appended to the message (unknown switch, F10). |
+| `type_name` | character(len=*) | in | optional | Type a value cannot be converted to ('an integer', 'a real'). |
 
 **Call graph**
 
 ```mermaid
 flowchart TD
   add_exclusive_set["add_exclusive_set"] --> errored["errored"]
+  cast_number["cast_number"] --> errored["errored"]
   check["check"] --> errored["errored"]
   check["check"] --> errored["errored"]
   check["check"] --> errored["errored"]
@@ -1425,6 +1430,43 @@ flowchart TD
   style check_choices_text fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
+### cast_number
+
+Convert a value to the number type of `val`, quietly: a failure is `ERROR_CASTING_NUMBER`, reported by FLAP (B40 of #126).
+
+ PENF's `cton` writes its own message on standard error (not on the error unit of the CLI) and returns the I/O status
+ as the error: values are never converted with it.
+
+```fortran
+subroutine cast_number(self, text, val, pref)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `text` | character(len=*) | in |  | Value. |
+| `val` | class(*) | inout |  | Number. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  get_cla_from_buffer["get_cla_from_buffer"] --> cast_number["cast_number"]
+  get_cla_list_from_buffer["get_cla_list_from_buffer"] --> cast_number["cast_number"]
+  get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> cast_number["cast_number"]
+  get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> cast_number["cast_number"]
+  get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> cast_number["cast_number"]
+  get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> cast_number["cast_number"]
+  get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> cast_number["cast_number"]
+  get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> cast_number["cast_number"]
+  get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> cast_number["cast_number"]
+  cast_number["cast_number"] --> errored["errored"]
+  style cast_number fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
 ### get_cla
 
 Get CLA (single) value.
@@ -1481,7 +1523,7 @@ subroutine get_cla_from_buffer(self, buffer, val, pref)
 flowchart TD
   get_cla["get_cla"] --> get_cla_from_buffer["get_cla_from_buffer"]
   get_map_value["get_map_value"] --> get_cla_from_buffer["get_cla_from_buffer"]
-  get_cla_from_buffer["get_cla_from_buffer"] --> cton["cton"]
+  get_cla_from_buffer["get_cla_from_buffer"] --> cast_number["cast_number"]
   get_cla_from_buffer["get_cla_from_buffer"] --> errored["errored"]
   style get_cla_from_buffer fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -1536,9 +1578,9 @@ subroutine get_cla_list_from_buffer(self, buffer, val, pref)
 ```mermaid
 flowchart TD
   get_cla_list["get_cla_list"] --> get_cla_list_from_buffer["get_cla_list_from_buffer"]
+  get_cla_list_from_buffer["get_cla_list_from_buffer"] --> cast_number["cast_number"]
   get_cla_list_from_buffer["get_cla_list_from_buffer"] --> check_choices["check_choices"]
   get_cla_list_from_buffer["get_cla_list_from_buffer"] --> check_range["check_range"]
-  get_cla_list_from_buffer["get_cla_list_from_buffer"] --> cton["cton"]
   get_cla_list_from_buffer["get_cla_list_from_buffer"] --> errored["errored"]
   get_cla_list_from_buffer["get_cla_list_from_buffer"] --> get_cla_list_character["get_cla_list_character"]
   get_cla_list_from_buffer["get_cla_list_from_buffer"] --> has_range["has_range"]
@@ -1595,10 +1637,10 @@ subroutine get_cla_list_varying_R16P(self, val, pref)
 
 ```mermaid
 flowchart TD
+  get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> cast_number["cast_number"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> check_choices["check_choices"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> check_list_size["check_list_size"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> check_range["check_range"]
-  get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> cton["cton"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> errored["errored"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> has_range["has_range"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> is_list["is_list"]
@@ -1628,10 +1670,10 @@ subroutine get_cla_list_varying_R8P(self, val, pref)
 
 ```mermaid
 flowchart TD
+  get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> cast_number["cast_number"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> check_choices["check_choices"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> check_list_size["check_list_size"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> check_range["check_range"]
-  get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> cton["cton"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> errored["errored"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> has_range["has_range"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> is_list["is_list"]
@@ -1661,10 +1703,10 @@ subroutine get_cla_list_varying_R4P(self, val, pref)
 
 ```mermaid
 flowchart TD
+  get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> cast_number["cast_number"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> check_choices["check_choices"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> check_list_size["check_list_size"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> check_range["check_range"]
-  get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> cton["cton"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> errored["errored"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> has_range["has_range"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> is_list["is_list"]
@@ -1694,10 +1736,10 @@ subroutine get_cla_list_varying_I8P(self, val, pref)
 
 ```mermaid
 flowchart TD
+  get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> cast_number["cast_number"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> check_choices["check_choices"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> check_list_size["check_list_size"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> check_range["check_range"]
-  get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> cton["cton"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> errored["errored"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> has_range["has_range"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> is_list["is_list"]
@@ -1727,10 +1769,10 @@ subroutine get_cla_list_varying_I4P(self, val, pref)
 
 ```mermaid
 flowchart TD
+  get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> cast_number["cast_number"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> check_choices["check_choices"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> check_list_size["check_list_size"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> check_range["check_range"]
-  get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> cton["cton"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> errored["errored"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> has_range["has_range"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> is_list["is_list"]
@@ -1760,10 +1802,10 @@ subroutine get_cla_list_varying_I2P(self, val, pref)
 
 ```mermaid
 flowchart TD
+  get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> cast_number["cast_number"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> check_choices["check_choices"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> check_list_size["check_list_size"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> check_range["check_range"]
-  get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> cton["cton"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> errored["errored"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> has_range["has_range"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> is_list["is_list"]
@@ -1793,10 +1835,10 @@ subroutine get_cla_list_varying_I1P(self, val, pref)
 
 ```mermaid
 flowchart TD
+  get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> cast_number["cast_number"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> check_choices["check_choices"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> check_list_size["check_list_size"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> check_range["check_range"]
-  get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> cton["cton"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> errored["errored"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> has_range["has_range"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> is_list["is_list"]
