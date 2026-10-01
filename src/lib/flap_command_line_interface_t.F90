@@ -2851,23 +2851,21 @@ contains
   if (g>0) then ! usage of a specific command
     usaged = self%clasg(g)%usage(pref=prefd,no_header=no_headerd,markdown=markdownd)
     ! the examples through the group methods: the gfortran 16 trunk miscompiles a read of them here
-    if(self%clasg(g)%has_examples().and.(.not.no_examplesd)) then
-      usaged = usaged//self%clasg(g)%examples_text(prefd)
-      grouped_examples = .true.
-    endif
+    if(self%clasg(g)%has_examples().and.(.not.no_examplesd)) usaged = usaged//self%clasg(g)%examples_text(prefd)
+    grouped_examples = .true. ! never the examples of the program (defect 11 of #126)
   else ! usage of whole CLI
     if (no_headerd) then
       usaged = ''
     else
-      usaged = prefd//self%help//self%progname//' '//self%signature()
+      usaged = prefd//trim(self%help)//' '//self%progname//self%signature() ! single blanks (defect 4 of #126)
       if (self%description/='') usaged = usaged//new_line('a')//new_line('a')//prefd//self%description
     endif
-    if (self%clasg(0)%Na>0) usaged = usaged//new_line('a')//self%clasg(0)%usage(pref=prefd,no_header=.true.,markdown=markdownd)
+    if (self%clasg(0)%Na>0) usaged = usaged//self%clasg(0)%usage(pref=prefd,no_header=.true.,markdown=markdownd)
     if (size(self%clasg,dim=1)>1) then
       usaged = usaged//new_line('a')//new_line('a')//prefd//'Commands:'
       do gi=1, size(self%clasg,dim=1)-1
         usaged = usaged//new_line('a')//prefd//'  '//self%clasg(gi)%names(', ')
-        usaged = usaged//new_line('a')//prefd//repeat(' ',10)//self%clasg(gi)%description
+        usaged = usaged//new_line('a')//prefd//repeat(' ',6)//self%clasg(gi)%description
         if (allocated(self%clasg(gi)%deprecated)) then
           if (len_trim(self%clasg(gi)%deprecated) > 0) then
             usaged = usaged//' (DEPRECATED: '//trim(adjustl(self%clasg(gi)%deprecated))//')'
@@ -2885,7 +2883,7 @@ contains
   if (allocated(self%examples).and.(.not.no_examplesd).and.(.not.grouped_examples)) then
     usaged = usaged//print_examples(prefd, self%examples)
   endif
-  if (self%epilog/=''.and.(.not.no_epilogd)) usaged = usaged//new_line('a')//prefd//self%epilog
+  if (self%epilog/=''.and.(.not.no_epilogd)) usaged = usaged//new_line('a')//new_line('a')//prefd//self%epilog
 
   contains
     function print_examples(prefd, examples) result(exampled)
@@ -2897,7 +2895,7 @@ contains
 
       exampled = new_line('a')//new_line('a')//prefd//'Examples:'
       do e=1, size(examples,dim=1)
-        exampled = exampled//new_line('a')//prefd//'   '//trim(examples(e)%s)
+        exampled = exampled//new_line('a')//prefd//'  '//trim(examples(e)%s)
       enddo
     endfunction print_examples
   endfunction usage_core

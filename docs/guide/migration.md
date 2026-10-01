@@ -19,6 +19,11 @@ programs keep their behaviour. The plan behind them is issue [#125](https://gith
   switch is `argument "x" is unknown!` (it was called a switch); a list with too few values is `option "--x" requires 3
   values!`; the repeated-command error no longer starts with an empty line; `raise_error` prints the help as
   `init(usage_on_error=)` chooses (it always printed the whole help).
+- **The help, the man page and the Markdown change layout** (programs comparing them with a saved copy must update it):
+  `usage: prog [...]` with single blanks; one blank line between the parts; the options indented by 2 and their details
+  by 6; the positionals in their own `Positional arguments:` part (no `1-th argument` line); the choices on a detail
+  line, `choices: a, b`, in the text help; a list as `NAME#1 [NAME#2...]` in both the usage line and the help; the help of
+  a command without the examples of the program; a blank line before the epilog.
 - **The bash and zsh completion scripts change**: the function is named after the program (`_<prog>_completion`); with
   the shared `_completion`, the script loaded last completed every FLAP program (B41). Regenerate the scripts, or run
   `--install-completion` again.

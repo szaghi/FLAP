@@ -12,7 +12,6 @@ Toy program for testing FLAP with nested commands
 
 ### Command line options:
 
-
 Optional switches:  
 
 * `--authors`, `-a`    
@@ -30,11 +29,11 @@ Optional switches:
 
 Commands:
   init
-          fake init versioning
+      fake init versioning
   commit
-          fake commit changes to current branch
+      fake commit changes to current branch
   tag
-          fake tag current commit
+      fake tag current commit
 
 For more detailed commands help try:
   test_nested init -h,--help

@@ -1,23 +1,23 @@
 $ heat --help
-usage: heat  [--probe X#1 X#2 ] [--fields [NAME#1 NAME#2 NAME#3...]] [--set KEY=VALUE [KEY=VALUE...]] [--help] [--markdown] [--version]
+usage: heat [--probe X#1 X#2] [--fields [NAME#1 NAME#2...]] [--set KEY=VALUE [KEY=VALUE...]] [--help] [--markdown] [--version]
 
 Solve the 2D heat equation on a square plate
 
-
 Optional switches:
-   --probe X#1 X#2
-    default value 0.5 0.5
-    Probe coordinates
-   --fields [NAME#1 NAME#2...], value in: `T,flux`
-    default value T
-    Fields to save
-   --set KEY=VALUE [KEY=VALUE...]
-    keys: alpha, t_end
-    default value alpha=1e-4
-    Physical parameters
-   --help, -h
-    Print this help message
-   --markdown, -md
-    Save this help message in a Markdown file
-   --version, -v
-    Print version
+  --probe X#1 X#2
+      default value 0.5 0.5
+      Probe coordinates
+  --fields [NAME#1 NAME#2...]
+      choices: T, flux
+      default value T
+      Fields to save
+  --set KEY=VALUE [KEY=VALUE...]
+      keys: alpha, t_end
+      default value alpha=1e-4
+      Physical parameters
+  --help, -h
+      Print this help message
+  --markdown, -md
+      Save this help message in a Markdown file
+  --version, -v
+      Print version

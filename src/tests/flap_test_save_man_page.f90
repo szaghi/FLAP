@@ -67,8 +67,8 @@ contains
                        'NAME section')
   call assert_contains(text, '[value] [--man value] [--integer value]', 'SYNOPSIS')
   call assert_contains(text, '.SH DESCRIPTION'//new_line('a')//'FLAP test save man page', 'DESCRIPTION section')
-  call assert_contains(text, '--integer value, -i value'//new_line('a')//'    default value 2'//new_line('a')//'    a integer', &
-                       'OPTIONS: --integer with default and help')
+  call assert_contains(text, '--integer value, -i value'//new_line('a')//'      default value 2'//new_line('a')// &
+                       '      a integer', 'OPTIONS: --integer with default and help')
   call assert_contains(text, 'a positional real', 'OPTIONS: positional')
   call assert_contains(text, '.SH EXAMPLES', 'EXAMPLES section')
   call assert_contains(text, 'flap_save_man_page -1.5 -m test.man -i 102', 'EXAMPLES content')

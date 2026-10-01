@@ -1281,7 +1281,9 @@ flowchart TD
 
 ### usage
 
-Get correct CLAsG usage.
+Get correct CLAsG usage: the usage line, the description, then the positionals, the required and the optional switches.
+
+ One blank line between the parts; the positionals in their own part, in order of position (defects 2, 4, 8 of #126).
 
 **Returns**: `character(len=:)`
 

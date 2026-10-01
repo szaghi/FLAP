@@ -1,28 +1,27 @@
 $ environment --help
-usage: environment  --mesh-file value [--workers value#1 [value#2 value#3...]] [--fast] [--token value] [--help] [--markdown] [--version]
-
+usage: environment --mesh-file value [--workers value#1 [value#2...]] [--fast] [--token value] [--help] [--markdown] [--version]
 
 Required switches:
-   --mesh-file value
-          environment variable name "SOLVER_MESH_FILE"
-    Mesh
+  --mesh-file value
+      environment variable name "SOLVER_MESH_FILE"
+      Mesh
 
 Optional switches:
-   --workers value#1 [value#2...]
-          environment variable name "SOLVER_WORKERS"
-    default value 1
-    Workers
-   --fast
-          environment variable name "SOLVER_FAST"
-    default value .false.
-    Fast mode
-   --token value
-          environment variable name "MY_TOKEN"
-    default value none
-    API token
-   --help, -h
-    Print this help message
-   --markdown, -md
-    Save this help message in a Markdown file
-   --version, -v
-    Print version
+  --workers value#1 [value#2...]
+      environment variable name "SOLVER_WORKERS"
+      default value 1
+      Workers
+  --fast
+      environment variable name "SOLVER_FAST"
+      default value .false.
+      Fast mode
+  --token value
+      environment variable name "MY_TOKEN"
+      default value none
+      API token
+  --help, -h
+      Print this help message
+  --markdown, -md
+      Save this help message in a Markdown file
+  --version, -v
+      Print version

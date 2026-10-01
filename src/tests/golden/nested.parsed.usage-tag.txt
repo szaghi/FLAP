@@ -1,20 +1,13 @@
-usage:  test_nested tag [--annotate value] [--help] [--markdown] [--version]
+usage: test_nested tag [--annotate value] [--help] [--markdown] [--version]
 
 fake tag current commit
 
 Optional switches:
-   --annotate value, -a value
-    Tag annotation
-   --help, -h
-    Print this help message
-   --markdown, -md
-    Save this help message in a Markdown file
-   --version, -v
-    Print version
-
-Examples:
-   test_nested
-   test_nested -h
-   test_nested init
-   test_nested commit -m "fix bug-1"
-   test_nested tag -a "v2.1.5"
+  --annotate value, -a value
+      Tag annotation
+  --help, -h
+      Print this help message
+  --markdown, -md
+      Save this help message in a Markdown file
+  --version, -v
+      Print version

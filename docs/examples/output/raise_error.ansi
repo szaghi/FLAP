@@ -1,5 +1,5 @@
 $ raise_error --nx 33
 raise_error: error: switch "--nx": must be even
 
-usage: raise_error  [--nx value] [--help] [--markdown] [--version]
+usage: raise_error [--nx value] [--help] [--markdown] [--version]
 [exit status 1]

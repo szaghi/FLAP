@@ -1,6 +1,6 @@
 $ exclusive
 exclusive: error: one of "--mesh", "--restart" is required!
 
-usage: exclusive  [--json] [--csv] (--mesh value | --restart value) [--left | --right] [--help] [--markdown] [--version]
+usage: exclusive [--json] [--csv] (--mesh value | --restart value) [--left | --right] [--help] [--markdown] [--version]
 Try 'exclusive --help' for help.
 [exit status 1]

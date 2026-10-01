@@ -41,14 +41,14 @@ out = read_back(lun)
 ! T4.2: the definitions are equal: the option block of the help, and the behaviour; usage after parse, which adds the
 ! builtins, so that it does not copy the CLI (the gfortran 16 trunk miscopies it: the accepted B33 regression)
 call run('')
-top = block_of(cli%usage(g=0), '   --jobs')
-cmd = block_of(cli%usage(g=1), '   --jobs')
+top = block_of(cli%usage(g=0), '  --jobs')
+cmd = block_of(cli%usage(g=1), '  --jobs')
 call assert(len(top) > 0, 'T4.2 the --jobs block')
 call assert_equal(cmd, top, 'T4.2 --jobs: same help block')
-call assert_equal(block_of(cli%usage(g=1), '   --verbose'), block_of(cli%usage(g=0), '   --verbose'), 'T4.2 --verbose')
-call assert_equal(block_of(cli%usage(g=1), '   --scheme'), block_of(cli%usage(g=0), '   --scheme'), 'T4.2 --scheme')
-call assert_equal(block_of(cli%usage(g=1), '   --restart'), block_of(cli%usage(g=0), '   --restart'), 'T4.2 --restart')
-call assert_equal(block_of(cli%usage(g=1), '   --set'), block_of(cli%usage(g=0), '   --set'), 'T4.2 --set')
+call assert_equal(block_of(cli%usage(g=1), '  --verbose'), block_of(cli%usage(g=0), '  --verbose'), 'T4.2 --verbose')
+call assert_equal(block_of(cli%usage(g=1), '  --scheme'), block_of(cli%usage(g=0), '  --scheme'), 'T4.2 --scheme')
+call assert_equal(block_of(cli%usage(g=1), '  --restart'), block_of(cli%usage(g=0), '  --restart'), 'T4.2 --restart')
+call assert_equal(block_of(cli%usage(g=1), '  --set'), block_of(cli%usage(g=0), '  --set'), 'T4.2 --set')
 call assert_equal(block_of(cli%usage(g=1), '   -a'), block_of(cli%usage(g=0), '   -a'), 'T4.2 -a (exclude)')
 call assert(index(cli%usage(g=1), '--secret') == 0, 'T4.2 hidden stays hidden')
 call run('compile --jobs 999 --scheme WENO5 --no-restart --set a=1')
@@ -72,7 +72,7 @@ out = read_back(lun)
 call define
 call cli%parse(args='compile', error=error)
 out = cli%usage(g=1)
-call assert_equal(count_of(out, new_line('a')//'   --help'), 1_I4P, 'T4.8 one --help option in the command')
+call assert_equal(count_of(out, new_line('a')//'  --help'), 1_I4P, 'T4.8 one --help option in the command')
 ! T4.5-T4.7, T4.9: errors
 call define(copy=.false.)
 call cli%copy_options(to_group='compile', switches='--jobs,--bogus', error=error)
@@ -225,7 +225,7 @@ contains
   b = index(text, new_line('a')//head)
   if (b == 0) return
   b = b + 1
-  e = index(text(b+1:), new_line('a')//'   -')
+  e = index(text(b+1:), new_line('a')//'  -')
   if (e == 0) then
     block = text(b:)
   else

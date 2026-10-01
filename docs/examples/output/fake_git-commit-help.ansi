@@ -1,20 +1,14 @@
 $ fake_git commit --help
-usage:  fake_git commit [--message value] [--help] [--markdown] [--version]
+usage: fake_git commit [--message value] [--help] [--markdown] [--version]
 
 Commit changes to the current branch
 
 Optional switches:
-   --message value, -m value
-    Commit message
-   --help, -h
-    Print this help message
-   --markdown, -md
-    Save this help message in a Markdown file
-   --version, -v
-    Print version
-
-Examples:
-   fake_git --help
-   fake_git init
-   fake_git commit -m "fix bug #1"
-   fake_git tag -a "v2.1.5"
+  --message value, -m value
+      Commit message
+  --help, -h
+      Print this help message
+  --markdown, -md
+      Save this help message in a Markdown file
+  --version, -v
+      Print version

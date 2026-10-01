@@ -1,21 +1,21 @@
 $ alternate
 alternate: error: named option "--mesh" is required!
 
-usage:  alternate --mesh value [--list-models] [--help] [--markdown] [--version]
+usage: alternate --mesh value [--list-models] [--help] [--markdown] [--version]
 
 Required switches:
-   --mesh value
-    Mesh file
+  --mesh value
+      Mesh file
 
 Optional switches:
-   --list-models
-    default value .false.
-    List the turbulence models and exit
-   --help, -h
-    Print this help message
-   --markdown, -md
-    Save this help message in a Markdown file
-   --version, -v
-    Print version
+  --list-models
+      default value .false.
+      List the turbulence models and exit
+  --help, -h
+      Print this help message
+  --markdown, -md
+      Save this help message in a Markdown file
+  --version, -v
+      Print version
 Try 'alternate --help' for help.
 [exit status 1]

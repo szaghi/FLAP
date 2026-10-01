@@ -1,33 +1,32 @@
 $ myapp --help
-usage: myapp  --input value [--output value] [--niter value] [--tol value] [--verbose] [--help] [--markdown] [--version]
+usage: myapp --input value [--output value] [--niter value] [--tol value] [--verbose] [--help] [--markdown] [--version]
 
 Demonstration program
 
-
 Required switches:
-   --input value, -i value
-    Input file
+  --input value, -i value
+      Input file
 
 Optional switches:
-   --output value, -o value
-    default value out.dat
-    Output file
-   --niter value, -n value
-    default value 100
-    Iterations
-   --tol value, -t value
-    default value 1.0e-6
-    Tolerance
-   --verbose
-    default value .false.
-    Verbose output
-   --help, -h
-    Print this help message
-   --markdown, -md
-    Save this help message in a Markdown file
-   --version, -v
-    Print version
+  --output value, -o value
+      default value out.dat
+      Output file
+  --niter value, -n value
+      default value 100
+      Iterations
+  --tol value, -t value
+      default value 1.0e-6
+      Tolerance
+  --verbose
+      default value .false.
+      Verbose output
+  --help, -h
+      Print this help message
+  --markdown, -md
+      Save this help message in a Markdown file
+  --version, -v
+      Print version
 
 Examples:
-   myapp -i a.dat -o b.dat
-   myapp -i a.dat -n 100 --tol 1
+  myapp -i a.dat -o b.dat
+  myapp -i a.dat -n 100 --tol 1

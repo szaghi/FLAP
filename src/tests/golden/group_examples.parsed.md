@@ -12,7 +12,6 @@ group examples usage FLAP example
 
 ### Command line options:
 
-
 Optional switches:  
 
 * `--string value`, `-s value`    
@@ -30,9 +29,9 @@ Optional switches:
 
 Commands:
   gwe
-          Group with examples
+      Group with examples
   gne
-          Group without examples
+      Group without examples
 
 For more detailed commands help try:
   flap_test_group_examples gwe -h,--help

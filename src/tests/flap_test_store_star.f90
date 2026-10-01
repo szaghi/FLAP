@@ -35,8 +35,9 @@ call assert_contains(out, ' [--save [value]]', 'usage: optional')
 call assert_contains(out, ' --log [FILE]', 'usage: required, with its metavar')
 call assert_contains(out, ' [--fast [value] | --slow [value]]', 'usage: in a mutually exclusive set')
 ! the help lines
-call assert_contains(out, '   --save [value], -s [value], value in: `vtk,csv`', 'help: switch, abbreviation, choices')
-call assert_contains(out, '   --log [FILE]'//new_line('a'), 'help: required, with its metavar')
+call assert_contains(out, '  --save [value], -s [value]'//new_line('a')//'      choices: vtk, csv', &
+                     'help: switch, abbreviation, choices')
+call assert_contains(out, '  --log [FILE]'//new_line('a'), 'help: required, with its metavar')
 call assert(index(out, new_line('a')//'  [value]') == 0, 'help: no bare placeholder')
 ! the man page and the Markdown
 call cli%save_man_page(man_file=file, error=error)

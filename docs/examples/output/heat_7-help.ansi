@@ -1,38 +1,41 @@
 $ heat --help
-usage: heat  [--nx N] [--scheme value] [--help] [--markdown] [--version] [--man] [--show-completion [SHELL]] [--install-completion [SHELL]] {run} ...
+usage: heat [--nx N] [--scheme value] [--help] [--markdown] [--version] [--man] [--show-completion [SHELL]] [--install-completion [SHELL]] {run} ...
 
 Solve the 2D heat equation on a square plate
 
-
 Optional switches:
-   [1m[36m--nx[0m[0m N
-    default value 64
-    Cells along each direction
-   [1m[36m--scheme[0m[0m value, value in: `fe,cn`
-    default value fe
-    Time scheme
-   --help, -h
-    Print this help message
-   --markdown, -md
-    Save this help message in a Markdown file
-   --version, -v
-    Print version
-   --man
-    Save this help message as a man page
-   --show-completion [SHELL], value in: `bash,zsh,fish,powershell`
-    Print the completion script of SHELL (default: $SHELL)
-   --install-completion [SHELL], value in: `bash,zsh,fish,powershell`
-    Install the completion script of SHELL (default: $SHELL) in $HOME
+  [1m[36m--nx[0m[0m N
+      default value 64
+      Cells along each direction
+  [1m[36m--scheme[0m[0m value
+      choices: fe, cn
+      default value fe
+      Time scheme
+  --help, -h
+      Print this help message
+  --markdown, -md
+      Save this help message in a Markdown file
+  --version, -v
+      Print version
+  --man
+      Save this help message as a man page
+  --show-completion [SHELL]
+      choices: bash, zsh, fish, powershell
+      Print the completion script of SHELL (default: $SHELL)
+  --install-completion [SHELL]
+      choices: bash, zsh, fish, powershell
+      Install the completion script of SHELL (default: $SHELL) in $HOME
 
 Commands:
   run
-          Run a simulation
+      Run a simulation
 
 For more detailed commands help try:
   heat run -h,--help
 
 Examples:
-   heat --nx 128 run
-   heat run --cfl 0.4
-   heat --install-completion
+  heat --nx 128 run
+  heat run --cfl 0.4
+  heat --install-completion
+
 Report bugs at https://example.org/heat/issues

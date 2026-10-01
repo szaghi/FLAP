@@ -1,6 +1,6 @@
 $ usage_on_error
 usage_on_error: error: named option "--mesh" is required!
 
-usage: usage_on_error  --mesh value [--cfl value] [--help] [--markdown] [--version]
+usage: usage_on_error --mesh value [--cfl value] [--help] [--markdown] [--version]
 Try 'usage_on_error --help' for help.
 [exit status 1]

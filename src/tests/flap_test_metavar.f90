@@ -3,7 +3,7 @@ program flap_test_metavar
 !< Metavar: the placeholder of a value in the usage, help, man page and markdown (issue #125, step 4.1; #11 9.1, T9.1-T9.4).
 !<
 !< add(metavar='FILE') replaces the generic "value" (and the KEY=VALUE of a map) wherever a value is shown; lists number it,
-!< FILE#1 [FILE#2 FILE#3...]. Without metavar the outputs are unchanged (T9.4, and flap_test_golden). The bash completion
+!< FILE#1 [FILE#2...]. Without metavar the outputs are unchanged (T9.4, and flap_test_golden). The bash completion
 !< never shows placeholders (flap_test_signature).
 use flap, only : command_line_interface
 use flap_test_utils, only : assert, assert_contains, assert_equal, capture_close, capture_open, delete_file, read_back, &
@@ -27,18 +27,18 @@ out = cli%usage(g=0)
 call assert_contains(out, ' --mesh FILE ', 'usage: required option')
 call assert_contains(out, ' [--cfl CFL]', 'usage: optional option')
 ! T9.2: lists and the other placeholders
-call assert_contains(out, ' [--fields NAME#1 [NAME#2 NAME#3...]]', 'usage: nargs=+')
-call assert_contains(out, ' [--probes [P#1 P#2 P#3...]]', 'usage: nargs=*')
-call assert_contains(out, ' [--box X#1 X#2 X#3 ]', 'usage: nargs=3')
+call assert_contains(out, ' [--fields NAME#1 [NAME#2...]]', 'usage: nargs=+')
+call assert_contains(out, ' [--probes [P#1 P#2...]]', 'usage: nargs=*')
+call assert_contains(out, ' [--box X#1 X#2 X#3]', 'usage: nargs=3')
 call assert_contains(out, ' [--inc DIR]...', 'usage: append')
 call assert_contains(out, ' [--set PARAM=VAL [PARAM=VAL...]]', 'usage: a map with a metavar')
 call assert_contains(out, ' [--level [LVL]]', 'usage: optional value (store*)')
 ! T9.3: a positional
 call assert_contains(out, ' INPUT', 'usage: positional')
 ! the help lines
-call assert_contains(out, '   --mesh FILE, -m FILE', 'help: option with abbreviation')
-call assert_contains(out, '   --cfl CFL', 'help: option')
-call assert_contains(out, '   --fields NAME#1 [NAME#2...]', 'help: list')
+call assert_contains(out, '  --mesh FILE, -m FILE', 'help: option with abbreviation')
+call assert_contains(out, '  --cfl CFL', 'help: option')
+call assert_contains(out, '  --fields NAME#1 [NAME#2...]', 'help: list')
 call assert_contains(out, '  INPUT', 'help: positional')
 call assert(index(out, '--mesh value') == 0, 'no generic placeholder left for --mesh')
 ! T9.4: without metavar, the generic placeholders

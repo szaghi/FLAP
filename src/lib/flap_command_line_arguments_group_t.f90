@@ -261,7 +261,7 @@ contains
   text = new_line('a')//new_line('a')//prefd//'Examples:'
   if (.not.allocated(self%examples)) return
   do e=1, size(self%examples, dim=1)
-    text = text//new_line('a')//prefd//'   '//trim(self%examples(e)%s)
+    text = text//new_line('a')//prefd//'  '//trim(self%examples(e)%s)
   enddo
   endfunction examples_text
 
@@ -1149,38 +1149,53 @@ contains
   endsubroutine parse
 
   function usage(self, pref, no_header, markdown)
-  !< Get correct CLAsG usage.
+  !< Get correct CLAsG usage: the usage line, the description, then the positionals, the required and the optional switches.
+  !<
+  !< One blank line between the parts; the positionals in their own part, in order of position (defects 2, 4, 8 of #126).
   class(command_line_arguments_group), intent(in) :: self      !< CLAsG data.
   character(*), optional,              intent(in) :: pref      !< Prefixing string.
   logical,      optional,              intent(in) :: no_header !< Avoid insert header to usage.
   logical,      optional,              intent(in) :: markdown  !< Format things form markdown.
   character(len=:), allocatable                   :: usage     !< Usage string.
   integer(I4P)                                    :: a         !< Counters.
+  integer(I4P)                                    :: p         !< Position counter.
   character(len=:), allocatable                   :: prefd     !< Prefixing string.
   logical                                         :: markdownd !< Markdonw format, local variable.
 
   markdownd = .false. ; if (present(markdown)) markdownd = markdown
   prefd = '' ; if (present(pref)) prefd = pref
   usage = self%progname ; if (self%group/='') usage = self%progname//' '//self%group
-  usage = prefd//self%help//' '//usage//self%signature()
+  usage = prefd//trim(self%help)//' '//usage//self%signature()
   if (self%description/='') usage = usage//new_line('a')//new_line('a')//prefd//self%description
   if (present(no_header)) then
     if (no_header) usage = ''
   endif
-  if (self%Na_required>0) then
+  if (any(self%cla(1:self%Na)%is_positional.and..not.self%cla(1:self%Na)%is_hidden)) then
+    usage = usage//new_line('a')//new_line('a')//prefd//'Positional arguments:'
+    if(markdownd)usage = usage//'  '
+    do p=1, self%Na
+      do a=1, self%Na
+        if (self%cla(a)%is_positional.and.(.not.self%cla(a)%is_hidden).and.self%cla(a)%position==p) &
+          usage = usage//new_line('a')//self%cla(a)%usage(pref=prefd,markdown=markdownd)
+      enddo
+    enddo
+  endif
+  if (any(self%cla(1:self%Na)%is_required.and..not.self%cla(1:self%Na)%is_positional.and. &
+          .not.self%cla(1:self%Na)%is_hidden)) then
     usage = usage//new_line('a')//new_line('a')//prefd//'Required switches:'
     if(markdownd)usage = usage//'  '
     do a=1, self%Na
-      if (self%cla(a)%is_required.and.(.not.self%cla(a)%is_hidden)) usage = usage//new_line('a')//&
-        self%cla(a)%usage(pref=prefd,markdown=markdownd)
+      if (self%cla(a)%is_required.and.(.not.self%cla(a)%is_positional).and.(.not.self%cla(a)%is_hidden)) &
+        usage = usage//new_line('a')//self%cla(a)%usage(pref=prefd,markdown=markdownd)
     enddo
   endif
-  if (self%Na_optional>0) then
+  if (any(.not.self%cla(1:self%Na)%is_required.and..not.self%cla(1:self%Na)%is_positional.and. &
+          .not.self%cla(1:self%Na)%is_hidden)) then
     usage = usage//new_line('a')//new_line('a')//prefd//'Optional switches:'
     if(markdownd)usage = usage//'  '
     do a=1, self%Na
-      if (.not.self%cla(a)%is_required.and.(.not.self%cla(a)%is_hidden)) usage = usage//new_line('a')//&
-        self%cla(a)%usage(pref=prefd,markdown=markdownd)
+      if (.not.self%cla(a)%is_required.and.(.not.self%cla(a)%is_positional).and.(.not.self%cla(a)%is_hidden)) &
+        usage = usage//new_line('a')//self%cla(a)%usage(pref=prefd,markdown=markdownd)
     enddo
   endif
   endfunction usage

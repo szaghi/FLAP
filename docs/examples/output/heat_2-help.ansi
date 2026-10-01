@@ -1,36 +1,37 @@
 $ heat --help
-usage: heat  [--nx N] [--steps N] [--cfl CFL] [--scheme value] [--threads value] [--verbose]... [--save [value]] [--help] [--markdown] [--version]
+usage: heat [--nx N] [--steps N] [--cfl CFL] [--scheme value] [--threads value] [--verbose]... [--save [value]] [--help] [--markdown] [--version]
 
 Solve the 2D heat equation on a square plate
 
-
 Optional switches:
-   --nx N
-    default value 64
-    Cells along each direction
-   --steps N
-    default value 100
-    Time steps
-   --cfl CFL
-    range (0, 0.5]
-    default value 0.25
-    CFL number
-   --scheme value, -s value, value in: `fe,cn`
-    default value fe
-    Time scheme: explicit Euler or Crank-Nicolson
-   --threads value
-    range [1, 64]
-    default value 1
-    OpenMP threads
-   --verbose, -v
-    default value 0
-    Verbosity (repeatable)
-   --save [value], value in: `vtk,csv`
-    default value vtk
-    Save the solution (format: vtk, csv)
-   --help, -h
-    Print this help message
-   --markdown, -md
-    Save this help message in a Markdown file
-   --version
-    Print version
+  --nx N
+      default value 64
+      Cells along each direction
+  --steps N
+      default value 100
+      Time steps
+  --cfl CFL
+      range (0, 0.5]
+      default value 0.25
+      CFL number
+  --scheme value, -s value
+      choices: fe, cn
+      default value fe
+      Time scheme: explicit Euler or Crank-Nicolson
+  --threads value
+      range [1, 64]
+      default value 1
+      OpenMP threads
+  --verbose, -v
+      default value 0
+      Verbosity (repeatable)
+  --save [value]
+      choices: vtk, csv
+      default value vtk
+      Save the solution (format: vtk, csv)
+  --help, -h
+      Print this help message
+  --markdown, -md
+      Save this help message in a Markdown file
+  --version
+      Print version

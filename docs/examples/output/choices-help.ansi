@@ -1,17 +1,18 @@
 $ choices --help
-usage: choices  [--level value] [--scheme value] [--help] [--markdown] [--version]
-
+usage: choices [--level value] [--scheme value] [--help] [--markdown] [--version]
 
 Optional switches:
-   --level value, -l value, value in: `1,3,5`
-    default value 1
-    Verbosity level
-   --scheme value, value in: `weno5,muscl`
-    default value muscl
-    Space scheme
-   --help, -h
-    Print this help message
-   --markdown, -md
-    Save this help message in a Markdown file
-   --version, -v
-    Print version
+  --level value, -l value
+      choices: 1, 3, 5
+      default value 1
+      Verbosity level
+  --scheme value
+      choices: weno5, muscl
+      default value muscl
+      Space scheme
+  --help, -h
+      Print this help message
+  --markdown, -md
+      Save this help message in a Markdown file
+  --version, -v
+      Print version

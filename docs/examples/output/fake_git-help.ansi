@@ -1,27 +1,26 @@
 $ fake_git --help
-usage: fake_git  [--authors] [--help] [--markdown] [--version] {init,commit,tag} ...
+usage: fake_git [--authors] [--help] [--markdown] [--version] {init,commit,tag} ...
 
 A toy git-like program demonstrating FLAP
 
-
 Optional switches:
-   --authors, -a
-    default value .false.
-    Print the authors
-   --help, -h
-    Print this help message
-   --markdown, -md
-    Save this help message in a Markdown file
-   --version, -v
-    Print version
+  --authors, -a
+      default value .false.
+      Print the authors
+  --help, -h
+      Print this help message
+  --markdown, -md
+      Save this help message in a Markdown file
+  --version, -v
+      Print version
 
 Commands:
   init
-          Initialise versioning
+      Initialise versioning
   commit
-          Commit changes to the current branch
+      Commit changes to the current branch
   tag
-          Tag the current commit
+      Tag the current commit
 
 For more detailed commands help try:
   fake_git init -h,--help
@@ -29,7 +28,7 @@ For more detailed commands help try:
   fake_git tag -h,--help
 
 Examples:
-   fake_git --help
-   fake_git init
-   fake_git commit -m "fix bug #1"
-   fake_git tag -a "v2.1.5"
+  fake_git --help
+  fake_git init
+  fake_git commit -m "fix bug #1"
+  fake_git tag -a "v2.1.5"

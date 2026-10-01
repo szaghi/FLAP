@@ -883,7 +883,7 @@ contains
   integer                                  :: indent     !< how many spaces to indent
 
   markdownd = .false. ; if (present(markdown)) markdownd = markdown
-  indent = 4
+  indent = 6 ; if (markdownd) indent = 4
   neg_ = '' ; if (allocated(self%switch_neg)) neg_ = '/'//trim(adjustl(self%switch_neg))
   ph = self%placeholder()
   switch_ = colorize(trim(adjustl(self%switch))//neg_, color_fg=self%help_color, style=self%help_style)
@@ -921,13 +921,13 @@ contains
             if (markdownd) then
               usage = new_line('a')//'* `'//trim(adjustl(self%switch))//usage//'`, `'//trim(adjustl(self%switch_ab))//usage//'`  '
             else
-              usage = '   '//switch_//usage//', '//switch_ab_//usage
+              usage = '  '//switch_//usage//', '//switch_ab_//usage
             endif
           else
             if (markdownd) then
               usage = new_line('a')//'* `'//trim(adjustl(self%switch))//usage//'`  '
             else
-              usage = '   '//switch_//usage
+              usage = '  '//switch_//usage
             endif
           endif
         else
@@ -936,13 +936,13 @@ contains
               usage = new_line('a')//'* `'//trim(adjustl(self%switch))//' '//ph//'`, `'//trim(adjustl(self%switch_ab))//' '//ph//&
                       '`  '
             else
-              usage = '   '//switch_//' '//ph//', '//switch_ab_//' '//ph
+              usage = '  '//switch_//' '//ph//', '//switch_ab_//' '//ph
             endif
           else
             if (markdownd) then
               usage = new_line('a')//'* `'//trim(adjustl(self%switch))//' '//ph//'`  '
             else
-              usage = '   '//switch_//' '//ph
+              usage = '  '//switch_//' '//ph
             endif
           endif
         endif
@@ -953,9 +953,7 @@ contains
           usage = '  '//ph
         endif
       endif
-      if (allocated(self%choices)) then
-        usage = usage//', value in: `'//self%choices//'`'
-      endif
+      if (allocated(self%choices).and.markdownd) usage = usage//', value in: `'//self%choices//'`'
     elseif (self%act==action_store_star) then
       ! an optional value, with its switch as any option (B39 of #126)
       if (trim(adjustl(self%switch))/=trim(adjustl(self%switch_ab))) then
@@ -963,52 +961,49 @@ contains
           usage = new_line('a')//'* `'//trim(adjustl(self%switch))//' ['//ph//']`, `'//trim(adjustl(self%switch_ab))//&
                   ' ['//ph//']`  '
         else
-          usage = '   '//switch_//' ['//ph//'], '//switch_ab_//' ['//ph//']'
+          usage = '  '//switch_//' ['//ph//'], '//switch_ab_//' ['//ph//']'
         endif
       else
         if (markdownd) then
           usage = new_line('a')//'* `'//trim(adjustl(self%switch))//' ['//ph//']`  '
         else
-          usage = '   '//switch_//' ['//ph//']'
+          usage = '  '//switch_//' ['//ph//']'
         endif
       endif
-      if (allocated(self%choices)) usage = usage//', value in: `'//self%choices//'`'
+      if (allocated(self%choices).and.markdownd) usage = usage//', value in: `'//self%choices//'`'
     elseif (self%act==ACTION_SHOW_COMPLETION .or. self%act==ACTION_INSTALL_COMPLETION) then
       ! an optional value, the shell (F24)
       if (markdownd) then
         usage = new_line('a')//'* `'//trim(adjustl(self%switch))//' ['//ph//']`  '
       else
-        usage = '   '//switch_//' ['//ph//']'
+        usage = '  '//switch_//' ['//ph//']'
       endif
-      if (allocated(self%choices)) usage = usage//', value in: `'//self%choices//'`'
+      if (allocated(self%choices).and.markdownd) usage = usage//', value in: `'//self%choices//'`'
     else
       if (trim(adjustl(self%switch))/=trim(adjustl(self%switch_ab))) then
         if (markdownd) then
           usage = new_line('a')//'* `'//trim(adjustl(self%switch))//neg_//'`, `'//trim(adjustl(self%switch_ab))//'`  '
         else
-          usage = '   '//switch_//', '//switch_ab_
+          usage = '  '//switch_//', '//switch_ab_
         endif
       else
         if (markdownd) then
           usage = new_line('a')//'* `'//trim(adjustl(self%switch))//neg_//'`  '
         else
-          usage = '   '//switch_
+          usage = '  '//switch_
         endif
       endif
     endif
     prefd = '' ; if (present(pref)) prefd = pref
     usage = prefd//usage
-    if (self%is_positional)then
-      ! two spaces make a line break in markdown.
-      if (markdownd) then
-        usage = usage//'  '
-      endif
-      usage = usage//new_line('a')//prefd//repeat(' ',4)//trim(str(self%position, .true.))//&
-       '-th argument'
-    endif
+    ! the choices on a detail line of the plain help, as the keys and the range (defect 12 of #126)
+    if (allocated(self%choices).and..not.markdownd) usage = usage//new_line('a')//prefd//repeat(' ', indent)//'choices: '//&
+                                                         replace_all(string=self%choices, substring=',', restring=', ')
     if (allocated(self%envvar)) then
       if (self%envvar /= '') then
-        usage = usage//new_line('a')//prefd//repeat(' ',10)//'environment variable name "'//trim(adjustl(self%envvar))//'"'
+        if (markdownd) usage = usage//'  '
+        usage = usage//new_line('a')//prefd//repeat(' ', indent)//'environment variable name "'//trim(adjustl(self%envvar))//&
+                '"'
       endif
     endif
     if (allocated(self%map_keys)) then
@@ -1107,15 +1102,16 @@ contains
         endselect
       elseif (allocated(self%nargs)) then
         select case(self%nargs)
+        ! the same placeholders as the help, single blanks (defect 9 of #126)
         case('+')
-          signature = ph//'#1 ['//ph//'#2 '//ph//'#3...]'
+          signature = ph//'#1 ['//ph//'#2...]'
         case('*')
-          signature = '['//ph//'#1 '//ph//'#2 '//ph//'#3...]'
+          signature = '['//ph//'#1 '//ph//'#2...]'
         case default
           nargs = cton(str=trim(adjustl(self%nargs)),knd=1_I4P)
-          signature = ''
-          do a=1, nargs
-            signature = signature//ph//'#'//trim(str(a, .true.))//' '
+          signature = ph//'#1'
+          do a=2, nargs
+            signature = signature//' '//ph//'#'//trim(str(a, .true.))
           enddo
         endselect
       else

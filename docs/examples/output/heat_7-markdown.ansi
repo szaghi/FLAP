@@ -13,9 +13,9 @@ Solve the 2D heat equation on a square plate
 
 ### Command line options:
 
-
 Optional switches:  
 
 * `--nx N`    
     default value 64  
     Cells along each direction  
+

@@ -1,22 +1,21 @@
 $ heat --help
-usage: heat  [--nx value] [--steps value] [--cfl value] [--help] [--markdown] [--version]
+usage: heat [--nx value] [--steps value] [--cfl value] [--help] [--markdown] [--version]
 
 Solve the 2D heat equation on a square plate
 
-
 Optional switches:
-   --nx value
-    default value 64
-    Cells along each direction
-   --steps value
-    default value 100
-    Time steps
-   --cfl value
-    default value 0.25
-    CFL number
-   --help, -h
-    Print this help message
-   --markdown, -md
-    Save this help message in a Markdown file
-   --version, -v
-    Print version
+  --nx value
+      default value 64
+      Cells along each direction
+  --steps value
+      default value 100
+      Time steps
+  --cfl value
+      default value 0.25
+      CFL number
+  --help, -h
+      Print this help message
+  --markdown, -md
+      Save this help message in a Markdown file
+  --version, -v
+      Print version

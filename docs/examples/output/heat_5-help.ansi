@@ -1,20 +1,20 @@
 $ heat run --help
-usage:  heat run [--nx value] [--cfl value] [--help] [--markdown] [--version]
+usage: heat run [--nx value] [--cfl value] [--help] [--markdown] [--version]
 
 Run a simulation
 
 Optional switches:
-   --nx value
-          environment variable name "HEAT_RUN_NX"
-    default value 64
-    Cells along each direction
-   --cfl value
-          environment variable name "HEAT_RUN_CFL"
-    default value 0.25
-    CFL number
-   --help, -h
-    Print this help message
-   --markdown, -md
-    Save this help message in a Markdown file
-   --version, -v
-    Print version
+  --nx value
+      environment variable name "HEAT_RUN_NX"
+      default value 64
+      Cells along each direction
+  --cfl value
+      environment variable name "HEAT_RUN_CFL"
+      default value 0.25
+      CFL number
+  --help, -h
+      Print this help message
+  --markdown, -md
+      Save this help message in a Markdown file
+  --version, -v
+      Print version

@@ -361,3 +361,8 @@ main = "flap_test_casting.f90"
 name = "flap_test_messages"
 source-dir = "src/tests"
 main = "flap_test_messages.f90"
+
+[[test]]
+name = "flap_test_help_layout"
+source-dir = "src/tests"
+main = "flap_test_help_layout.f90"

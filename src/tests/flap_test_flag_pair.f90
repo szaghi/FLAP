@@ -103,7 +103,7 @@ call delete_file(ini)
 ! T8.9: help, usage, bash completion
 call define
 call assert_contains(cli%usage(g=0), ' [--restart/--no-restart]', 'usage: [--restart/--no-restart]')
-call assert_contains(cli%usage(g=0), '   --restart/--no-restart, -r', 'help: --restart/--no-restart, -r')
+call assert_contains(cli%usage(g=0), '  --restart/--no-restart, -r', 'help: --restart/--no-restart, -r')
 call assert_contains(cli%usage(g=0), ' [--no-color/--color]', 'usage: store_false pair')
 call cli%save_bash_completion(bash_file=bash, error=error)
 call assert_equal(error, 0_I4P, 'bash completion saved')

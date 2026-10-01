@@ -13,7 +13,6 @@ A solver
 
 ### Command line options:
 
-
 Required switches:  
 
 * `--mesh value`, `-m value`    
@@ -45,7 +44,7 @@ Optional switches:
 
 Commands:
   post
-          Post processing
+      Post processing
 
 For more detailed commands help try:
   completion post -h,--help

@@ -1,18 +1,18 @@
 $ aliases compile --help
-usage:  aliases compile [--jobs value] [--verbose] [--help] [--markdown] [--version]
+usage: aliases compile [--jobs value] [--verbose] [--help] [--markdown] [--version]
 
 Compile the sources
 
 Optional switches:
-   --jobs value, -j value
-    default value 1
-    Parallel jobs
-   --verbose
-    default value .false.
-    Verbose
-   --help, -h
-    Print this help message
-   --markdown, -md
-    Save this help message in a Markdown file
-   --version, -v
-    Print version
+  --jobs value, -j value
+      default value 1
+      Parallel jobs
+  --verbose
+      default value .false.
+      Verbose
+  --help, -h
+      Print this help message
+  --markdown, -md
+      Save this help message in a Markdown file
+  --version, -v
+      Print version
