@@ -1,0 +1,4 @@
+$ heat --probe 0.5 0.25 --fields T flux --set alpha=2e-5 t_end=60
+probe at  0.50  0.25
+saving 2 field(s): T, flux
+alpha =  2.0E-05, t_end =  60.0

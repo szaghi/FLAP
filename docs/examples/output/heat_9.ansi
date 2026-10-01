@@ -1,0 +1,5 @@
+$ printf '2\n' | heat --interactive
+1) *fe: explicit Euler
+2) cn: Crank-Nicolson
+Time scheme? 
+heat: scheme cn

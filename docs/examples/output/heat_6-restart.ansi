@@ -1,0 +1,2 @@
+$ heat --restart heat.h5 --nx 64
+heat: nx 64

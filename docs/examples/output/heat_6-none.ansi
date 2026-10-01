@@ -1,0 +1,6 @@
+$ heat --nx 64
+heat: error: one of "--init", "--restart" is required!
+
+usage: heat  (--init value | --restart FILE) [--nx value] [--dt value] [--list-schemes] [--help] [--markdown] [--version]
+Try 'heat --help' for help.
+[exit status 1]

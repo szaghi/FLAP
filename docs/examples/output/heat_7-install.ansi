@@ -1,0 +1,2 @@
+$ heat --install-completion bash
+completion script installed in "/home/user/.heat-completion.bash", loaded by "/home/user/.bashrc"

@@ -1,0 +1,4 @@
+$ heat
+probe at  0.50  0.50
+saving 1 field(s): T
+alpha =  1.0E-04, t_end =  10.0

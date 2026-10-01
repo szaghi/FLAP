@@ -1,0 +1,5 @@
+$ heat --interactive < /dev/null
+1) *fe: explicit Euler
+2) cn: Crank-Nicolson
+Time scheme? error: end of input, no response
+[exit status 1]

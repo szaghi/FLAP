@@ -1,0 +1,6 @@
+$ heat --init gauss --restart heat.h5
+heat: error: switches "--init", "--restart" are mutually exclusive!
+
+usage: heat  (--init value | --restart FILE) [--nx value] [--dt value] [--list-schemes] [--help] [--markdown] [--version]
+Try 'heat --help' for help.
+[exit status 1]

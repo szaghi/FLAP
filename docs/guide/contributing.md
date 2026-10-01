@@ -36,8 +36,10 @@ bash scripts/docs_examples.sh
 ```
 
 The script builds the library (FoBiS, mode `static-gnu`), then regenerates `docs/examples/snippets` (the programs and
-their `!region NAME` ... `!endregion NAME` parts, without the markers) and `docs/examples/output` (one file per
-`!run ID COMMAND` line of a program: the command and its output, colours included). The pages include them with
+their `!region NAME` ... `!endregion NAME` parts, without the markers), `docs/examples/output` (one file per
+`!run ID COMMAND` line of a program: the command and its output, colours included) and `docs/examples/images` (an SVG
+terminal window for each `!image ID` line, by `scripts/ansi2svg.py`). `!as NAME` runs a program under another name (the
+tutorial chapters, `heat_1.f90` ... `heat_9.f90`, all run as `heat`). The pages include them with
 VitePress snippet imports (`<<< @/examples/snippets/NAME.f90`, `<<< @/examples/output/ID.ansi{ansi}`). Commit the
 regenerated files with your change: the `docs-examples` job of the Compiler matrix workflow fails when they differ from
 what the code produces.

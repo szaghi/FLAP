@@ -1,0 +1,5 @@
+$ heat --restart haet.h5
+heat: error: option "--restart": path "haet.h5" does not exist!
+
+Try 'heat --help' for help.
+[exit status 1]

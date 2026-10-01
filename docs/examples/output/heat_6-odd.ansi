@@ -1,0 +1,4 @@
+$ heat --init gauss --nx 63
+heat: error: switch "--nx": must be even
+
+[exit status 1]

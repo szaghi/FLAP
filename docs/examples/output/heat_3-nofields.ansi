@@ -1,0 +1,4 @@
+$ heat --fields
+probe at  0.50  0.50
+saving 0 field(s): 
+alpha =  1.0E-04, t_end =  10.0

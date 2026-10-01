@@ -1,0 +1,4 @@
+$ heat --scheme euler
+heat: error: value of named option "--scheme" must be chosen in: (fe,cn) but "euler" has been passed!
+
+[exit status 1]

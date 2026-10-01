@@ -1,0 +1,5 @@
+$ heat --stesp 10
+heat: error: switch "--stesp" is unknown! Did you mean "--steps"?
+
+Try 'heat --help' for help.
+[exit status 1]

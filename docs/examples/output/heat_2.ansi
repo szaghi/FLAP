@@ -1,0 +1,3 @@
+$ heat -vv --scheme CN --cfl 0.4 --nx 100
+heat: 100x100 cells, 100 steps, cfl 0.40, scheme cn
+threads 1, verbosity 2

@@ -13,6 +13,9 @@
 |:---:|:---:|:---:|:---:|
 | 📄 **Generated outputs**<br>Help, man page, Markdown, and completion for bash, zsh, fish and PowerShell | 🐍 **argparse-inspired**<br>A familiar Python-like API in modern Fortran | 🔓 **Multi-licensed**<br>GPL v3 · BSD 2/3-Clause · MIT | 📦 **Multiple build systems**<br>FoBiS, fpm, CMake, Make |
 
+<p align="center"><img src="docs/examples/images/heat_7-help.svg" alt="the help of a FLAP program" width="760"></p>
+<p align="center"><img src="docs/examples/images/heat_7-error.svg" alt="an error of a FLAP program" width="440"></p>
+
 >#### [Documentation](https://szaghi.github.io/FLAP/)
 > For full documentation (guide, API reference, examples, etc...) see the [FLAP website](https://szaghi.github.io/FLAP/).
 
@@ -63,7 +66,8 @@ $ minimal --string "hello world"
 String = hello world
 ```
 
-Every feature has a compiled, runnable example in [`docs/examples/src`](docs/examples/src), shown with its real output in
+New to FLAP? The [tutorial](https://szaghi.github.io/FLAP/manual/tutorial/01-first-cli) builds a complete program step by
+step; the [cookbook](https://szaghi.github.io/FLAP/manual/cookbook) has short recipes. Every feature has a compiled, runnable example in [`docs/examples/src`](docs/examples/src), shown with its real output in
 the [guide](https://szaghi.github.io/FLAP/guide/).
 
 ---

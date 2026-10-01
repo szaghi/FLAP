@@ -1,0 +1,2 @@
+$ heat --nx 128 --steps=10
+heat: 128x128 cells, 10 steps, cfl 0.25

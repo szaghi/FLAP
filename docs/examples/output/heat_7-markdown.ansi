@@ -1,0 +1,21 @@
+$ heat --markdown && head -n 20 heat.md
+# heat
+
+Manual page for `heat` version v1.0
+
+`heat [--nx N] [--scheme value] [--help] [--markdown] [--version] [--man] [--show-completion [SHELL]] [--install-completion [SHELL]] {run} ...`
+
+<month> <year>
+
+### Short description
+
+Solve the 2D heat equation on a square plate
+
+### Command line options:
+
+
+Optional switches:  
+
+* `--nx N`    
+    default value 64  
+    Cells along each direction  

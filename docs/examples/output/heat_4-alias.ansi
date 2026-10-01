@@ -1,0 +1,3 @@
+$ heat r
+heat on 1 thread(s)
+run: nx 64, cfl 0.25, verbosity 0

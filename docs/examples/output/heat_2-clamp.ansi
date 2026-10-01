@@ -1,0 +1,4 @@
+$ heat --threads 1000 --save
+heat: 64x64 cells, 100 steps, cfl 0.25, scheme fe
+threads 64, verbosity 0
+saving the solution as vtk

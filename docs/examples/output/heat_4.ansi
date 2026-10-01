@@ -1,0 +1,4 @@
+$ heat --threads 4 run --nx 128 -v post --format csv
+heat on 4 thread(s)
+run: nx 128, cfl 0.25, verbosity 1
+post: format csv, verbosity 0

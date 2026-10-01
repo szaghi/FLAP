@@ -1,0 +1,4 @@
+$ heat --nx many
+heat: error: cannot convert "many" of option "--nx" to an integer!
+
+[exit status 1]

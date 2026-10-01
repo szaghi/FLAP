@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="542" height="158" viewBox="0 0 542 158">
+<rect width="542" height="158" rx="8" fill="#282c34"/>
+<circle cx="18" cy="16" r="6" fill="#ff5f56"/><circle cx="38" cy="16" r="6" fill="#ffbd2e"/>
+<circle cx="58" cy="16" r="6" fill="#27c93f"/>
+<text font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="14" fill="#dcdfe4" xml:space="preserve">
+<tspan x="18" y="59"><tspan fill="#98c379">$</tspan> heat --nxx 10</tspan>
+<tspan x="18" y="78">heat: <tspan fill="#e06c75" font-weight="bold">error</tspan>: switch &quot;--nxx&quot; is unknown! Did you mean &quot;--nx&quot;?</tspan>
+<tspan x="18" y="97"></tspan>
+<tspan x="18" y="116">Try &#x27;heat --help&#x27; for help.</tspan>
+<tspan x="18" y="135">[exit status 1]</tspan>
+</text></svg>

@@ -1,0 +1,32 @@
+$ heat --help
+usage: heat  [--threads value] [--verbose]... [--help] [--markdown] [--version] {run,post,info} ...
+
+Solve the 2D heat equation on a square plate
+
+
+Optional switches:
+   --threads value
+    default value 1
+    OpenMP threads
+   --verbose, -v
+    default value 0
+    Verbosity (repeatable)
+   --help, -h
+    Print this help message
+   --markdown, -md
+    Save this help message in a Markdown file
+   --version
+    Print version
+
+Commands:
+  run, r
+          Run a simulation
+  post, p
+          Post-process the results
+  info
+          Print the build information
+
+For more detailed commands help try:
+  heat run -h,--help
+  heat post -h,--help
+  heat info -h,--help

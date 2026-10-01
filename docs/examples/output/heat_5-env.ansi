@@ -1,0 +1,6 @@
+$ HEAT_THREADS=16 HEAT_RUN_CFL=0.3 heat run --nx 512
+# heat v0.5, parameters:
+--threads = 16       [environment: HEAT_THREADS]
+--config  = heat.ini [default]
+run --nx  = 512      [command line]
+run --cfl = 0.3      [environment: HEAT_RUN_CFL]

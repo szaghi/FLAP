@@ -1,0 +1,21 @@
+$ heat run --help
+usage:  heat run [--nx value] [--cfl value] [--verbose]... [--help] [--markdown] [--version]
+
+Run a simulation
+
+Optional switches:
+   --nx value
+    default value 64
+    Cells along each direction
+   --cfl value
+    default value 0.25
+    CFL number
+   --verbose, -v
+    default value 0
+    Verbosity (repeatable)
+   --help, -h
+    Print this help message
+   --markdown, -md
+    Save this help message in a Markdown file
+   --version
+    Print version

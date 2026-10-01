@@ -1,0 +1,5 @@
+$ heat --set alfa=1
+heat: error: unknown key "alfa" for "--set" (allowed: alpha, t_end)! Did you mean "alpha"?
+
+Try 'heat --help' for help.
+[exit status 1]

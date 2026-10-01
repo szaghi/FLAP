@@ -1,0 +1,4 @@
+$ heat --cfl 0.8
+heat: error: value "0.8" of "--cfl" is out of range (0, 0.5]!
+
+[exit status 1]

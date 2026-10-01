@@ -4,8 +4,11 @@
 #   docs/examples/src/*.f90    the example programs (hand-written), with two kinds of marker comments:
 #                                !run ID COMMAND        a run shown in the pages (!run -s: with its exit status)
 #                                !region NAME ... !endregion NAME   a part of the program included on its own
+#                                !as NAME               its runs call it NAME (the chapters of the tutorial are all heat)
+#                                !image ID              the output of the run ID also as an image, images/ID.svg
 #   docs/examples/files/       input files, copied into the directory where the runs happen
 #   docs/examples/snippets/    generated: <program>.f90 without the markers, and <program>-<region>.f90
+#   docs/examples/images/      generated: <ID>.svg, a terminal window showing the run ID (scripts/ansi2svg.py)
 #   docs/examples/output/      generated: <ID>.ansi, "$ COMMAND" then its output (standard output and error, colours
 #                              kept), the scratch run directory shown as /home/user and the current month (the date of
 #                              the man page and of the Markdown) as <month> <year>
@@ -31,18 +34,18 @@ mkdir -p "$root/build"
   > "$root/build/docs-examples.log" 2>&1 || {
   cat "$root/build/docs-examples.log"; echo "docs_examples: library build failed" >&2; exit 1; }
 rm -rf -- "$build"
-mkdir -p "$build/bin" "$run_dir" "$ex/snippets" "$ex/output"
-rm -f -- "$ex"/snippets/*.f90 "$ex"/output/*.ansi
+mkdir -p "$build/bin" "$run_dir" "$ex/snippets" "$ex/output" "$ex/images"
+rm -f -- "$ex"/snippets/*.f90 "$ex"/output/*.ansi "$ex"/images/*.svg
 
 # snippets: the whole program and each region, without the markers, dedented
 dedent() { awk '{l[NR]=$0; if ($0 ~ /[^ ]/) {match($0, /^ */); if (m == "" || RLENGTH < m) m = RLENGTH}}
                 END {for (i = 1; i <= NR; i++) print substr(l[i], m + 1)}' "$1"; }
 for src in "$ex"/src/*.f90; do
   name=$(basename "$src" .f90)
-  grep -Ev '^ *!(run|region|endregion) ' "$src" > "$ex/snippets/$name.f90" || true
+  grep -Ev '^ *!(run|region|endregion|as|image) ' "$src" > "$ex/snippets/$name.f90" || true
   for region in $(sed -n 's/^ *!region \([A-Za-z0-9_-]*\).*/\1/p' "$src"); do
     awk -v r="$region" '$1 == "!endregion" && $2 == r {on = 0}
-                        on && $0 !~ /^ *!(run|region|endregion) / {print}
+                        on && $0 !~ /^ *!(run|region|endregion|as|image) / {print}
                         $1 == "!region" && $2 == r {on = 1}' "$src" > "$build/region.f90"
     dedent "$build/region.f90" > "$ex/snippets/$name-$region.f90"
   done
@@ -55,6 +58,7 @@ done
 
 # runs, in the order of the files and of the lines
 if [ -d "$ex/files" ]; then cp -R "$ex/files/." "$run_dir/"; fi
+path=$build/bin
 run() { # run [-s] ID COMMAND
   local show=0 status=0
   if [ "$1" = -s ]; then show=1; shift; fi
@@ -62,16 +66,27 @@ run() { # run [-s] ID COMMAND
   local cmd="$*"
   {
     printf '$ %s\n' "$cmd"
-    (cd "$run_dir" && env -i HOME="$run_dir" PATH="$build/bin:/usr/bin:/bin" SHELL=/bin/bash LC_ALL=C \
+    (cd "$run_dir" && env -i HOME="$run_dir" PATH="$path:/usr/bin:/bin" SHELL=/bin/bash LC_ALL=C \
                      GFORTRAN_UNBUFFERED_PRECONNECTED=y bash -c "$cmd" 2>&1) || status=$?
     if [ $show = 1 ]; then printf '[exit status %d]\n' "$status"; fi
   } | sed -e "s|$run_dir|$home|g" -e "s|$month|<month> <year>|g" > "$ex/output/$id.ansi"
 }
 for src in "$ex"/src/*.f90; do
+  path=$build/bin
+  as=$(sed -n 's/^ *!as \([A-Za-z0-9_-]*\).*/\1/p' "$src" | head -n 1)
+  if [ -n "$as" ]; then
+    path=$build/as/$(basename "$src" .f90)
+    mkdir -p "$path" && ln -sf "$build/bin/$(basename "$src" .f90)" "$path/$as"
+    path=$path:$build/bin
+  fi
   while IFS= read -r line; do
     line=${line#*!run }
     if [ "${line%% *}" = -s ]; then line=${line#-s }; run -s "${line%% *}" "${line#* }"
     else run "${line%% *}" "${line#* }"; fi
   done < <(grep -E '^ *!run ' "$src" || true)
+done
+# images
+for id in $(sed -n 's/^ *!image \([A-Za-z0-9_-]*\).*/\1/p' "$ex"/src/*.f90); do
+  python3 "$root/scripts/ansi2svg.py" "$ex/output/$id.ansi" "$ex/images/$id.svg"
 done
 echo "docs_examples: $(ls "$ex"/src/*.f90 | wc -l) programs, $(ls "$ex"/output/*.ansi | wc -l) runs"

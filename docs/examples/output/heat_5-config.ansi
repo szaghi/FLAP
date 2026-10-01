@@ -1,0 +1,6 @@
+$ heat --config study.ini run
+# heat v0.5, parameters:
+--threads = 2         [config: study.ini]
+--config  = study.ini [command line]
+run --nx  = 64        [default]
+run --cfl = 0.25      [default]

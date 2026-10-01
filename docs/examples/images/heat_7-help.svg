@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1292" height="785" viewBox="0 0 1292 785">
+<rect width="1292" height="785" rx="8" fill="#282c34"/>
+<circle cx="18" cy="16" r="6" fill="#ff5f56"/><circle cx="38" cy="16" r="6" fill="#ffbd2e"/>
+<circle cx="58" cy="16" r="6" fill="#27c93f"/>
+<text font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="14" fill="#dcdfe4" xml:space="preserve">
+<tspan x="18" y="59"><tspan fill="#98c379">$</tspan> heat --help</tspan>
+<tspan x="18" y="78">usage: heat  [--nx N] [--scheme value] [--help] [--markdown] [--version] [--man] [--show-completion [SHELL]] [--install-completion [SHELL]] {run} ...</tspan>
+<tspan x="18" y="97"></tspan>
+<tspan x="18" y="116">Solve the 2D heat equation on a square plate</tspan>
+<tspan x="18" y="135"></tspan>
+<tspan x="18" y="154"></tspan>
+<tspan x="18" y="173">Optional switches:</tspan>
+<tspan x="18" y="192">   <tspan fill="#56b6c2" font-weight="bold">--nx</tspan> N</tspan>
+<tspan x="18" y="211">    default value 64</tspan>
+<tspan x="18" y="230">    Cells along each direction</tspan>
+<tspan x="18" y="249">   <tspan fill="#56b6c2" font-weight="bold">--scheme</tspan> value, value in: `fe,cn`</tspan>
+<tspan x="18" y="268">    default value fe</tspan>
+<tspan x="18" y="287">    Time scheme</tspan>
+<tspan x="18" y="306">   --help, -h</tspan>
+<tspan x="18" y="325">    Print this help message</tspan>
+<tspan x="18" y="344">   --markdown, -md</tspan>
+<tspan x="18" y="363">    Save this help message in a Markdown file</tspan>
+<tspan x="18" y="382">   --version, -v</tspan>
+<tspan x="18" y="401">    Print version</tspan>
+<tspan x="18" y="420">   --man</tspan>
+<tspan x="18" y="439">    Save this help message as a man page</tspan>
+<tspan x="18" y="458">   --show-completion [SHELL], value in: `bash,zsh,fish,powershell`</tspan>
+<tspan x="18" y="477">    Print the completion script of SHELL (default: $SHELL)</tspan>
+<tspan x="18" y="496">   --install-completion [SHELL], value in: `bash,zsh,fish,powershell`</tspan>
+<tspan x="18" y="515">    Install the completion script of SHELL (default: $SHELL) in $HOME</tspan>
+<tspan x="18" y="534"></tspan>
+<tspan x="18" y="553">Commands:</tspan>
+<tspan x="18" y="572">  run</tspan>
+<tspan x="18" y="591">          Run a simulation</tspan>
+<tspan x="18" y="610"></tspan>
+<tspan x="18" y="629">For more detailed commands help try:</tspan>
+<tspan x="18" y="648">  heat run -h,--help</tspan>
+<tspan x="18" y="667"></tspan>
+<tspan x="18" y="686">Examples:</tspan>
+<tspan x="18" y="705">   heat --nx 128 run</tspan>
+<tspan x="18" y="724">   heat run --cfl 0.4</tspan>
+<tspan x="18" y="743">   heat --install-completion</tspan>
+<tspan x="18" y="762">Report bugs at https://example.org/heat/issues</tspan>
+</text></svg>

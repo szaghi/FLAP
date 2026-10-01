@@ -1,0 +1,3 @@
+$ heat --init gauss --dt 0.1
+heat: warning: option "--dt" is deprecated: use --cfl
+heat: nx 64

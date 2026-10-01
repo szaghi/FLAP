@@ -1,0 +1,2 @@
+$ heat --scheme fe --interactive
+heat: scheme fe

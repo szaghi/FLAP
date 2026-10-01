@@ -1,0 +1,6 @@
+$ heat run
+# heat v0.5, parameters:
+--threads = 8        [config: heat.ini]
+--config  = heat.ini [default]
+run --nx  = 256      [config: heat.ini]
+run --cfl = 0.4      [config: heat.ini]
