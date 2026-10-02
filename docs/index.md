@@ -10,10 +10,13 @@ hero:
       text: Tutorial
       link: /manual/tutorial/01-first-cli
     - theme: alt
-      text: Guide
-      link: /guide/
+      text: Cookbook
+      link: /manual/cookbook
     - theme: alt
-      text: API Reference
+      text: Reference
+      link: /guide/features
+    - theme: alt
+      text: API
       link: /api/
     - theme: alt
       text: View on GitHub
@@ -102,7 +105,7 @@ are two keywords.
 
 <p align="center"><img src="./examples/images/heat_7-error.svg" alt="an error of a FLAP program"></p>
 
-Learn FLAP step by step in the [tutorial](/manual/tutorial/01-first-cli), find quick answers in the [cookbook](/manual/cookbook), look up every detail in the [Guide](/guide/). Upgrading from v1.x? Read [Upgrading](/guide/migration).
+Learn FLAP step by step in the [tutorial](/manual/tutorial/01-first-cli), find quick answers in the [cookbook](/manual/cookbook), look up every detail in the [reference](/guide/features#feature-map). Upgrading from v1.x? Read [Upgrading](/guide/migration).
 
 ## Authors
 

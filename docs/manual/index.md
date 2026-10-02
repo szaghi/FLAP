@@ -1,13 +1,13 @@
 ---
-title: The FLAP Manual
+title: The tutorial
 ---
 
-# The FLAP Manual
+# The tutorial
 
-This manual teaches FLAP by building one program, step by step, and then collects short recipes for everyday tasks.
-The [Guide](/guide/) remains the reference: every keyword, every rule, every error code.
+The tutorial teaches FLAP by building one program, step by step. The [cookbook](./cookbook) then collects short recipes
+for everyday tasks, and the [reference](/guide/features#feature-map) has every keyword, every rule, every error code.
 
-## The tutorial
+## The chapters
 
 The tutorial builds the command line of `heat`, a (pretend) solver of the 2D heat equation, from three options to a
 polished, tested program with commands, configuration files and shell completion. Each chapter is a complete program
@@ -38,7 +38,7 @@ reads an environment variable, a subcommand, a test of the command line, ...
 
 ## Building the examples
 
-Every program of this manual is in [`docs/examples/src`](https://github.com/szaghi/FLAP/tree/master/docs/examples/src).
+Every program of the tutorial and of the cookbook is in [`docs/examples/src`](https://github.com/szaghi/FLAP/tree/master/docs/examples/src).
 With FLAP built by FoBiS (`fobis build --mode static-gnu`, see [Installation](/guide/install)):
 
 ```bash

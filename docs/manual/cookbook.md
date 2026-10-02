@@ -4,7 +4,7 @@ title: Cookbook
 
 # Cookbook
 
-Short answers to "how do I ...?". Each recipe shows the code and its real output; the [Guide](/guide/) has the details.
+Short answers to "how do I ...?". Each recipe shows the code and its real output; the [reference](/guide/features#feature-map) has the details.
 
 [[toc]]
 

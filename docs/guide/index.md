@@ -15,12 +15,17 @@ defaults, lists of values, commands (`solver run`, `solver post`), values from t
 input file. FLAP provides all of this with a small, consistent API, in standard Fortran 2018; it depends only on two
 small libraries by the same author, PENF (numeric kinds) and FACE (ANSI colours), which every build system fetches.
 
-- New to FLAP? Follow the [tutorial](/manual/tutorial/01-first-cli), which builds a complete program step by step;
-  the [cookbook](/manual/cookbook) has short recipes.
-- Upgrading from an older release? See [Upgrading](./migration): v2.0.0 changed some behaviours.
-- Looking for a feature? See the [feature map](./features#feature-map).
+This documentation reads in order, and each page links to the next one:
 
-Every code sample of this guide is part of a program that is compiled and run to produce the outputs shown (see
+1. [Installation](./install): get FLAP into your project.
+2. The [tutorial](/manual/tutorial/01-first-cli): nine short chapters that build a complete program, step by step.
+3. The [cookbook](/manual/cookbook): short recipes, one for each "how do I ...?".
+4. The reference, from the [feature map](./features#feature-map) on: every keyword, every rule, every error code.
+
+The [API](/api/) documents the source itself. Upgrading from an older release? See [Upgrading](./migration): some
+releases changed a behaviour.
+
+Every code sample of this documentation is part of a program that is compiled and run to produce the outputs shown (see
 [`docs/examples`](https://github.com/szaghi/FLAP/tree/master/docs/examples)).
 
 ## Authors
