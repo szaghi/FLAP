@@ -4,6 +4,11 @@ All notable changes to this project are documented here.
 Versions follow [Semantic Versioning](https://semver.org/).
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.5.0] — 2026-10-02
+### Fixed
+- **build**: Rename the quad precision macro _R16P to PENF_R16P ⚠ BREAKING CHANGE
+
+
 ## [2.4.1] — 2026-10-01
 ### Documentation
 - Audit the guide against v2.4.0, samples built and run by a harness
