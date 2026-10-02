@@ -7,6 +7,15 @@ title: Upgrading
 Every change you can observe when moving to a new release, newest first. Additive releases only add API: existing
 programs keep their behaviour. The plan behind them is issue [#125](https://github.com/szaghi/FLAP/issues/125).
 
+## Unreleased (fixes)
+
+- With `init(ignore_unknown_clas=.true.)` an unknown argument is no longer printed on the error unit as
+  `error: switch "--x" is unknown!`: the program asked to ignore it. `parse` still returns `ERROR_UNKNOWN_CLAS_IGNORED`
+  (1004), and `cli%error_message` holds the message of one of the ignored arguments, for a program that wants to warn.
+- `cli%error_message` is the message of the last error whichever part of the CLI raised it. It used to be set only by a
+  few errors of the CLI itself: after an unknown switch, a missing required option or a failed `get` it was not
+  allocated. It is allocated only when `cli%error` is an error.
+
 ## v2.5.0 (build)
 
 - **The macro that enables real quad precision is `PENF_R16P`; it was `_R16P`.** Only builds that pass it are affected:

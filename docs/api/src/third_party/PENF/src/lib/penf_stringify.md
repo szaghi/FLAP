@@ -139,7 +139,7 @@ Convert string of default kind to ASCII string.
 
 **Attributes**: pure
 
-**Returns**: character(kind=[ASCII](/api/src/third_party/FACE/src/lib/face), len=:)
+**Returns**: character(kind=[ASCII](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables), len=:)
 
 ```fortran
 function str_ascii_default(input) result(output)
@@ -164,7 +164,7 @@ Convert string of ASCII kind to ASCII string, just for convenience in sanitize s
 
 **Attributes**: pure
 
-**Returns**: character(kind=[ASCII](/api/src/third_party/FACE/src/lib/face), len=:)
+**Returns**: character(kind=[ASCII](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables), len=:)
 
 ```fortran
 function str_ascii_ascii(input) result(output)
@@ -174,7 +174,7 @@ function str_ascii_ascii(input) result(output)
 
 | Name | Type | Intent | Attributes | Description |
 |------|------|--------|------------|-------------|
-| `input` | character(kind=[ASCII](/api/src/third_party/FACE/src/lib/face), len=*) | in |  | Input string of ASCII kind. |
+| `input` | character(kind=[ASCII](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables), len=*) | in |  | Input string of ASCII kind. |
 
 ### str_ascii_ucs4
 
@@ -189,7 +189,7 @@ Convert string of UCS4 kind to ASCII string.
 
 **Attributes**: pure
 
-**Returns**: character(kind=[ASCII](/api/src/third_party/FACE/src/lib/face), len=:)
+**Returns**: character(kind=[ASCII](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables), len=:)
 
 ```fortran
 function str_ascii_ucs4(input) result(output)
@@ -199,7 +199,7 @@ function str_ascii_ucs4(input) result(output)
 
 | Name | Type | Intent | Attributes | Description |
 |------|------|--------|------------|-------------|
-| `input` | character(kind=[UCS4](/api/src/third_party/FACE/src/lib/face), len=*) | in |  | Input string of UCS4 kind. |
+| `input` | character(kind=[UCS4](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables), len=*) | in |  | Input string of UCS4 kind. |
 
 ### str_ucs4_default
 
@@ -214,7 +214,7 @@ Convert string of default kind to UCS4 string.
 
 **Attributes**: pure
 
-**Returns**: character(kind=[UCS4](/api/src/third_party/FACE/src/lib/face), len=:)
+**Returns**: character(kind=[UCS4](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables), len=:)
 
 ```fortran
 function str_ucs4_default(input) result(output)
@@ -239,7 +239,7 @@ Convert string of ASCII kind to UCS4 string.
 
 **Attributes**: pure
 
-**Returns**: character(kind=[UCS4](/api/src/third_party/FACE/src/lib/face), len=:)
+**Returns**: character(kind=[UCS4](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables), len=:)
 
 ```fortran
 function str_ucs4_ascii(input) result(output)
@@ -249,7 +249,7 @@ function str_ucs4_ascii(input) result(output)
 
 | Name | Type | Intent | Attributes | Description |
 |------|------|--------|------------|-------------|
-| `input` | character(kind=[ASCII](/api/src/third_party/FACE/src/lib/face), len=*) | in |  | Input string of ASCII kind. |
+| `input` | character(kind=[ASCII](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables), len=*) | in |  | Input string of ASCII kind. |
 
 ### str_ucs4_ucs4
 
@@ -264,7 +264,7 @@ Convert string of UCS4 kind to UCS4 string, just for convenience in sanitize str
 
 **Attributes**: pure
 
-**Returns**: character(kind=[UCS4](/api/src/third_party/FACE/src/lib/face), len=:)
+**Returns**: character(kind=[UCS4](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables), len=:)
 
 ```fortran
 function str_ucs4_ucs4(input) result(output)
@@ -274,7 +274,7 @@ function str_ucs4_ucs4(input) result(output)
 
 | Name | Type | Intent | Attributes | Description |
 |------|------|--------|------------|-------------|
-| `input` | character(kind=[UCS4](/api/src/third_party/FACE/src/lib/face), len=*) | in |  | Input string of UCS4 kind. |
+| `input` | character(kind=[UCS4](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables), len=*) | in |  | Input string of UCS4 kind. |
 
 ### strf_R16P
 

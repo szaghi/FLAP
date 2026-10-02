@@ -1069,9 +1069,11 @@ contains
               self%cla(a)%is_passed = .true.
               self%cla(a)%source = SOURCE_COMMANDLINE
            else
-              ! neither a named option nor a further positional: unknown argument, reported on a scratch CLA
+              ! neither a named option nor a further positional: unknown argument, reported on a scratch CLA; an ignored
+              ! one is not printed (the message stays available to the program)
               call cla%assign_object(self)
-              call cla%raise_error_switch_unknown(pref=pref, switch=trim(adjustl(args(arg))), hint=hint(args(arg)))
+              call cla%raise_error_switch_unknown(pref=pref, switch=trim(adjustl(args(arg))), hint=hint(args(arg)), &
+                                                  quiet=ignore_unknown_clas)
               call self%inherit_error(from=cla)
               error_unknown_clas = self%error
               if (.not.ignore_unknown_clas) return

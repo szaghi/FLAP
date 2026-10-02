@@ -681,7 +681,7 @@ flowchart TD
 Raise error switch_unknown.
 
 ```fortran
-subroutine raise_error_switch_unknown(self, switch, pref, hint)
+subroutine raise_error_switch_unknown(self, switch, pref, hint, quiet)
 ```
 
 **Arguments**
@@ -692,6 +692,7 @@ subroutine raise_error_switch_unknown(self, switch, pref, hint)
 | `switch` | character(len=*) | in | optional | CLA switch name. |
 | `pref` | character(len=*) | in | optional | Prefixing string. |
 | `hint` | character(len=*) | in | optional | "Did you mean" hint, appended to the message (F10). |
+| `quiet` | logical | in | optional | Build the message without printing it (an ignored argument). |
 
 **Call graph**
 
@@ -762,7 +763,7 @@ flowchart TD
 Trig error occurence and print meaningful message.
 
 ```fortran
-subroutine errored(self, error, pref, switch, val_str, log_value, hint, type_name)
+subroutine errored(self, error, pref, switch, val_str, log_value, hint, type_name, quiet)
 ```
 
 **Arguments**
@@ -777,6 +778,7 @@ subroutine errored(self, error, pref, switch, val_str, log_value, hint, type_nam
 | `log_value` | character(len=*) | in | optional | Logical value to be casted. |
 | `hint` | character(len=*) | in | optional | Hint appended to the message (unknown switch, F10). |
 | `type_name` | character(len=*) | in | optional | Type a value cannot be converted to ('an integer', 'a real'). |
+| `quiet` | logical | in | optional | Build the message without printing it (default .false.). |
 
 **Call graph**
 

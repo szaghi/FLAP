@@ -43,6 +43,7 @@ type, extends(object), public :: command_line_interface
   logical                                         :: config_required=.false.     !< The configuration file must exist.
   character(len=:), allocatable                   :: config_used                 !< Configuration file read by parse.
   integer(I4P)                                    :: error_unknown_clas=0_I4P    !< Error trapping flag for unknown CLAs.
+  character(len=:), allocatable                   :: unknown_message             !< Message of an ignored unknown CLA.      
   contains
     ! public methods
     procedure, public :: free                            !< Free dynamic memory.
@@ -176,6 +177,7 @@ contains
   self%is_parsed_          = .false.
   self%ignore_unknown_clas = .false.
   self%error_unknown_clas  = 0_I4P
+  if (allocated(self%unknown_message)) deallocate(self%unknown_message)
   self%standalone          = .true.
   self%error_hint          = .true.
   self%no_args_is_help     = .false.
@@ -1098,6 +1100,7 @@ contains
   self%is_parsed_ = .false.
   call self%clear_error
   self%error_unknown_clas = 0
+  if (allocated(self%unknown_message)) deallocate(self%unknown_message)
   if (allocated(self%args)) deallocate(self%args)
   if (allocated(self%config_used)) deallocate(self%config_used)
   do g=0, size(self%clasg, dim=1) - 1
@@ -1214,6 +1217,9 @@ contains
       endif
       ! keep the mark of an ignored unknown argument: a later group must not erase it (B30 of #125)
       if (unknown /= 0 .and. self%error_unknown_clas /= ERROR_UNKNOWN_CLAS_IGNORED) self%error_unknown_clas = unknown
+      if (unknown /= 0 .and. self%ignore_unknown_clas .and. (.not.allocated(self%unknown_message))) then
+        if (allocated(self%clasg(g)%error_message)) self%unknown_message = self%clasg(g)%error_message
+      endif
     else
       call self%clasg(g)%sanitize_defaults
     endif
@@ -1299,8 +1305,11 @@ contains
 
   ! check if the only error found is for unknown passed CLAs and if it is ignored by the user; a later group may have reset
   ! the error to 0 (B30 of #125)
-  if ((self%error==0.or.self%error==ERROR_UNKNOWN).and.self%error_unknown_clas==ERROR_UNKNOWN_CLAS_IGNORED) &
+  ! the ignored arguments are not printed: the message of one of them is left to the program
+  if ((self%error==0.or.self%error==ERROR_UNKNOWN).and.self%error_unknown_clas==ERROR_UNKNOWN_CLAS_IGNORED) then
     self%error = ERROR_UNKNOWN_CLAS_IGNORED
+    if (allocated(self%unknown_message)) self%error_message = self%unknown_message
+  endif
   endsubroutine parse_core
 
   function no_args_help(self, ai, pref) result(printed)

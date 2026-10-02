@@ -39,7 +39,7 @@ Every argument is optional; pass them by keyword. Call `init` before `add`: it r
 | `no_args_is_help` | `logical` | `.false.` | With no arguments, print the help instead of parsing (`STATUS_NO_ARGS`; exit status 2 in standalone mode) |
 | `error_hint` | `logical` | `.true.` | After a failed `parse`, print `Try 'prog --help' for help.` (see [Error Codes](./errors#error-hint)) |
 | `usage_on_error` | `character(*)` | `'full'` | What a missing required option prints after its message: the whole help (`'full'`), the usage line (`'usage'`) or nothing (`'none'`); see [Errors](./errors#output-after-an-error) |
-| `ignore_unknown_clas` | `logical` | `.false.` | Unknown arguments are not an error (`parse` returns `ERROR_UNKNOWN_CLAS_IGNORED`, 1004, and goes on); also unknown configuration keys |
+| `ignore_unknown_clas` | `logical` | `.false.` | Unknown arguments are not an error: nothing is printed, `parse` returns `ERROR_UNKNOWN_CLAS_IGNORED` (1004) and goes on, with the message of one of them in `cli%error_message`; also unknown configuration keys |
 | `case_insensitive` | `logical` | `.false.` | Match switches (abbreviations and negations included) and command names in any case: `--MESH` is `--mesh`. Values and choices keep their case; two switches differing only by case are a consistency error (100) |
 | `ignore_env` | `logical` | `.false.` | Turn every environment lookup off (see [Advanced](./advanced#ignoring-the-environment)) |
 | `auto_envvar_prefix` | `character(*)` | none | Give every option an environment variable `PREFIX[_COMMAND]_NAME` (see [Advanced](./advanced#generated-variable-names)) |

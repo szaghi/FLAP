@@ -179,6 +179,7 @@ classDiagram
 | `config_required` | logical |  | The configuration file must exist. |
 | `config_used` | character(len=:) | allocatable | Configuration file read by parse. |
 | `error_unknown_clas` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Error trapping flag for unknown CLAs. |
+| `unknown_message` | character(len=:) | allocatable | Message of an ignored unknown CLA. |
 
 #### Type-Bound Procedures
 

@@ -829,14 +829,15 @@ contains
   call self%errored(pref=pref, error=ERROR_VALUE_MISSING)
   endsubroutine raise_error_value_missing
 
-  subroutine raise_error_switch_unknown(self, switch, pref, hint)
+  subroutine raise_error_switch_unknown(self, switch, pref, hint, quiet)
   !< Raise error switch_unknown.
   class(command_line_argument), intent(inout) :: self   !< CLA data.
   character(*), optional,       intent(in)    :: switch !< CLA switch name.
   character(*), optional,       intent(in)    :: pref   !< Prefixing string.
   character(*), optional,       intent(in)    :: hint   !< "Did you mean" hint, appended to the message (F10).
+  logical,      optional,       intent(in)    :: quiet  !< Build the message without printing it (an ignored argument).
 
-  call self%errored(pref=pref, error=ERROR_UNKNOWN, switch=switch, hint=hint)
+  call self%errored(pref=pref, error=ERROR_UNKNOWN, switch=switch, hint=hint, quiet=quiet)
   endsubroutine raise_error_switch_unknown
 
   subroutine raise_error_duplicated_clas(self, switch, pref)
@@ -1348,7 +1349,7 @@ contains
   endfunction has_choices
 
   ! private methods
-  subroutine errored(self, error, pref, switch, val_str, log_value, hint, type_name)
+  subroutine errored(self, error, pref, switch, val_str, log_value, hint, type_name, quiet)
   !< Trig error occurence and print meaningful message.
   class(command_line_argument), intent(inout) :: self      !< CLA data.
   integer(I4P),                 intent(in)    :: error     !< Error occurred.
@@ -1358,6 +1359,7 @@ contains
   character(*), optional,       intent(in)    :: log_value !< Logical value to be casted.
   character(*), optional,       intent(in)    :: hint      !< Hint appended to the message (unknown switch, F10).
   character(*), optional,       intent(in)    :: type_name !< Type a value cannot be converted to ('an integer', 'a real').
+  logical,      optional,       intent(in)    :: quiet     !< Build the message without printing it (default .false.).
   character(len=:), allocatable               :: prefd     !< Prefixing string.
 
   self%error = error
@@ -1532,6 +1534,9 @@ contains
       self%error_message = prefd//': environment variable "'//trim(adjustl(self%envvar))//'" of option "'//&
                            trim(adjustl(self%switch))//'": unterminated quote in the list "'//trim(val_str)//'"!'
     endselect
+    if (present(quiet)) then
+      if (quiet) return
+    endif
     call self%print_error_message
   endif
   endsubroutine errored

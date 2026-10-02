@@ -256,8 +256,8 @@ See [chapter 8 of the tutorial](./tutorial/08-testing).
 
 ## Arguments that are not yours
 
-With `ignore_unknown_clas`, `parse` reports the unknown arguments on the error unit and returns
-`ERROR_UNKNOWN_CLAS_IGNORED`, with every known value read:
+With `ignore_unknown_clas`, `parse` reads every known value, prints nothing about the unknown arguments and returns
+`ERROR_UNKNOWN_CLAS_IGNORED` when there are some (`cli%error_message` then describes one of them):
 
 <<< @/examples/snippets/ignore_unknown-define.f90
 

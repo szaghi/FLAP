@@ -10,7 +10,7 @@ program flap_test_ignore_unknown_clas
 !<
 !< Run with arguments it is the example program above; run without arguments it checks its own scenarios.
 use flap, only : command_line_interface, ERROR_MISSING_REQUIRED, ERROR_UNKNOWN_CLAS_IGNORED
-use flap_test_utils, only : assert_equal, capture_close, capture_open
+use flap_test_utils, only : assert, assert_contains, assert_equal, capture_close, capture_open, read_back
 use penf
 
 implicit none
@@ -73,6 +73,7 @@ contains
   integer(I4P),  intent(out)   :: parse_error !< Error of parse.
   integer(I4P),  intent(out)   :: get_error   !< Error of get.
   type(command_line_interface) :: cli         !< Command Line Interface (CLI).
+  character(:), allocatable    :: printed     !< Messages printed by parse.
 
   call cli%init(progname='flap_test_ignore_unknown_clas', description='ignore unknown CLAs usage FLAP example', &
                 ignore_unknown_clas=.true., error_lun=lun, usage_lun=lun)
@@ -80,6 +81,13 @@ contains
   call assert_equal(get_error, 0_I4P, 'add --string')
   a_string = ''
   call cli%parse(args=args, error=parse_error)
+  printed = read_back(lun)
+  if (parse_error == ERROR_UNKNOWN_CLAS_IGNORED) then
+    ! an ignored argument is not reported as an error: nothing is printed, the message is left to the program
+    call assert_equal(int(len(printed), I4P), 0_I4P, args//': nothing printed')
+    call assert(allocated(cli%error_message), args//': the message of the ignored argument is kept')
+    if (allocated(cli%error_message)) call assert_contains(cli%error_message, 'switch "--bogus" is unknown!', args//': the message')
+  endif
   get_error = -1
   if (parse_error /= 0 .and. parse_error /= ERROR_UNKNOWN_CLAS_IGNORED) return
   call cli%get(switch='-s', val=a_string, error=get_error)
