@@ -1,0 +1,2 @@
+$ GREET_LANG=it greet Mondo
+Ciao Mondo.

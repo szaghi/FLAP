@@ -141,7 +141,7 @@ These CLIs were broken before (some values were never reachable); `add`, or the 
 | Positionals declared out of order, or mixed with options | assigned by declaration index | assigned by their declared `position`, wherever they appear |
 | An argument beyond the last position | appended a dummy argument | unknown argument (15) |
 | An option value equal to a command name (`init --msg commit`) | taken as the command | the option's value |
-| `nargs='N'` followed by more than N values | `ERROR_NARGS_INSUFFICIENT` (13) | the option takes N values; the next one is the next argument (argparse) |
+| `nargs='N'` followed by more than N values | `ERROR_NARGS_INSUFFICIENT` (13) | the option takes N values; the next one is the next argument |
 | `choices` on a list | checked on the scalar `get` only | checked on every value, by `get` and `get_varying` (`ERROR_NOT_IN_CHOICES`, 7) |
 | `get` into an unsupported type (e.g. `complex`) | variable silently untouched | `ERROR_UNSUPPORTED_TYPE` (46) |
 | `get` into a fixed-size array of the wrong size | wrote past its end, or left elements unset | `ERROR_LIST_SIZE` (47), array untouched; use `get_varying` for lists of unknown length |

@@ -1,0 +1,3 @@
+$ greet World --times 9
+greet: [1m[31merror[0m[0m: value "9" of "--times" is out of range [1, 5]!
+

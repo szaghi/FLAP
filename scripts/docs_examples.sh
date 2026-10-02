@@ -6,9 +6,11 @@
 #                                !region NAME ... !endregion NAME   a part of the program included on its own
 #                                !as NAME               its runs call it NAME (the chapters of the tutorial are all heat)
 #                                !image ID              the output of the run ID also as an image, images/ID.svg
+#                                !cast NAME ID ID ...   the runs ID as one animated image, images/NAME.svg: a
+#                                                       terminal session typing each command, then showing its output
 #   docs/examples/files/       input files, copied into the directory where the runs happen
 #   docs/examples/snippets/    generated: <program>.f90 without the markers, and <program>-<region>.f90
-#   docs/examples/images/      generated: <ID>.svg, a terminal window showing the run ID (scripts/ansi2svg.py)
+#   docs/examples/images/      generated: <ID>.svg, a terminal window showing the run ID, and the casts (scripts/ansi2svg.py)
 #   docs/examples/output/      generated: <ID>.ansi, "$ COMMAND" then its output (standard output and error, colours
 #                              kept), the scratch run directory shown as /home/user and the current month (the date of
 #                              the man page and of the Markdown) as <month> <year>
@@ -42,10 +44,10 @@ dedent() { awk '{l[NR]=$0; if ($0 ~ /[^ ]/) {match($0, /^ */); if (m == "" || RL
                 END {for (i = 1; i <= NR; i++) print substr(l[i], m + 1)}' "$1"; }
 for src in "$ex"/src/*.f90; do
   name=$(basename "$src" .f90)
-  grep -Ev '^ *!(run|region|endregion|as|image) ' "$src" > "$ex/snippets/$name.f90" || true
+  grep -Ev '^ *!(run|region|endregion|as|image|cast) ' "$src" > "$ex/snippets/$name.f90" || true
   for region in $(sed -n 's/^ *!region \([A-Za-z0-9_-]*\).*/\1/p' "$src"); do
     awk -v r="$region" '$1 == "!endregion" && $2 == r {on = 0}
-                        on && $0 !~ /^ *!(run|region|endregion|as|image) / {print}
+                        on && $0 !~ /^ *!(run|region|endregion|as|image|cast) / {print}
                         $1 == "!region" && $2 == r {on = 1}' "$src" > "$build/region.f90"
     dedent "$build/region.f90" > "$ex/snippets/$name-$region.f90"
   done
@@ -89,4 +91,9 @@ done
 for id in $(sed -n 's/^ *!image \([A-Za-z0-9_-]*\).*/\1/p' "$ex"/src/*.f90); do
   python3 "$root/scripts/ansi2svg.py" "$ex/output/$id.ansi" "$ex/images/$id.svg"
 done
+while read -r name ids; do
+  captures=()
+  for id in $ids; do captures+=("$ex/output/$id.ansi"); done
+  python3 "$root/scripts/ansi2svg.py" --cast "$ex/images/$name.svg" "${captures[@]}"
+done < <(sed -n 's/^ *!cast \(.*\)/\1/p' "$ex"/src/*.f90)
 echo "docs_examples: $(ls "$ex"/src/*.f90 | wc -l) programs, $(ls "$ex"/output/*.ansi | wc -l) runs"

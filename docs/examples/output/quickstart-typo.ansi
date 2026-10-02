@@ -1,0 +1,4 @@
+$ greet World --tiems 3
+greet: [1m[31merror[0m[0m: switch "--tiems" is unknown! Did you mean "--times"?
+
+Try 'greet --help' for help.

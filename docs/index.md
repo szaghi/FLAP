@@ -3,8 +3,8 @@ layout: home
 
 hero:
   name: FLAP
-  text: Fortran command Line Arguments Parser for poor people
-  tagline: A pure Fortran 2018 library for building powerful, elegant command line interfaces, inspired by Python's argparse
+  text: Fortran command Line Arguments Parser
+  tagline: "Describe your command line once, in pure Fortran 2018: FLAP parses it, reads the environment and the configuration files, checks every value, and writes the help, the errors, the man page and the shell completions."
   actions:
     - theme: brand
       text: Tutorial
@@ -20,40 +20,87 @@ hero:
       link: https://github.com/szaghi/FLAP
 
 features:
-  - icon: 🖥️
-    title: Argparse-style API
-    details: Define your CLI with a handful of calls; FLAP parses, checks the values, and prints the help, the version and clear errors with "did you mean" suggestions.
+  - icon: 🧩
+    title: Every kind of argument
+    details: "Options with abbreviations, positionals, flags and --x/--no-x pairs, counters (-vvv), repeatable options, optional values, inline --opt=value, value placeholders."
+    link: /guide/arguments
+    linkText: Defining arguments
+  - icon: 🔢
+    title: Typed values, lists and maps
+    details: "One get for every integer and real kind, logicals and strings; fixed-size lists, runtime-sized ones into allocatable arrays, KEY=VALUE maps."
+    link: /guide/parsing
+    linkText: Parsing & getting values
   - icon: ✅
-    title: Rich arguments
-    details: Options, positionals, flags and --x/--no-x pairs, counters, repeatable options, lists, KEY=VALUE maps, choices, numeric ranges, path checks.
+    title: Validation built in
+    details: "Required options, choices, numeric ranges with open bounds or clamping, path checks, mutually exclusive sets, deprecation warnings: declared in the definition, checked for you."
+    link: /guide/advanced
+    linkText: Advanced features
+  - icon: 💬
+    title: Errors that help
+    details: "\"Did you mean\" suggestions, a hint line, the usage after an error, a named constant for every code, and your own errors printed in the same style."
+    link: /guide/errors
+    linkText: Errors
   - icon: 🔀
     title: Commands
-    details: git-style commands with their own options and help, aliases, option sets shared between commands, mutually exclusive options and commands.
+    details: "git-style commands, each with its options and its help; aliases, option sets shared between commands, mutually exclusive commands, several commands on one command line."
+    link: /guide/subcommands
+    linkText: Subcommands
   - icon: 🌱
     title: Values from everywhere
-    details: Command line, environment variables and INI configuration files, in a fixed precedence, with the source of every value reported for reproducible runs.
+    details: "Command line, environment variables (named or generated from a prefix), INI configuration files and defaults, in a fixed precedence; the source of every value reported, for reproducible runs."
+    link: /guide/advanced#value-sources
+    linkText: Value sources
   - icon: 📄
-    title: Generated outputs
-    details: Man page, Markdown, and completion scripts for bash, zsh, fish and PowerShell, which the program can also print or install itself.
-  - icon: 🆓
-    title: Free & Open Source
-    details: Multi-licensed (GPLv3, BSD 2/3-Clause, MIT); tested with gfortran 13 to 16, nvfortran and Intel ifx; built with FoBiS, fpm, CMake or make.
+    title: Help, man page, Markdown
+    details: "The help and the usage are generated from the definitions, with colours, examples and an epilog; --man and --markdown save the same content as files."
+    link: /guide/output
+    linkText: Output formats
+  - icon: ⌨️
+    title: Shell completion
+    details: "Completion scripts for bash, zsh, fish and PowerShell, which the program prints or installs by itself: --show-completion, --install-completion."
+    link: /guide/output#shell-completion
+    linkText: Shell completion
+  - icon: 🧪
+    title: Testable command lines
+    details: "Parse a string instead of the real command line, parse again, get statuses back instead of stops, send the messages to the units you choose."
+    link: /manual/tutorial/08-testing
+    linkText: Testing
+  - icon: 🙋
+    title: Interactive menus
+    details: "An opt-in module asks for what is missing: single or multiple choice, defaults, yes/no questions, retries; it never blocks a batch job."
+    link: /guide/menu
+    linkText: Interactive menus
+  - icon: 🛠️
+    title: Standard Fortran, any build
+    details: "Fortran 2018, tested with gfortran 13 to 16, nvfortran and Intel ifx; built with FoBiS, fpm, CMake or Make. Two small dependencies, fetched for you."
+    link: /guide/install
+    linkText: Installation
+  - icon: 🔓
+    title: Multi-licensed
+    details: "GPL v3 for FOSS projects; BSD 2-Clause, BSD 3-Clause or MIT for closed source and commercial ones: pick the license that fits."
+    link: #copyrights
+    linkText: Copyrights
 ---
-
-<p align="center"><img src="./examples/images/heat_7-help.svg" alt="the help of a FLAP program"></p>
-
-The help and the errors above are generated by FLAP from the definitions of the [tutorial](/manual/tutorial/07-shipping)'s
-`heat` program; the colours are two keywords.
-
-<p align="center"><img src="./examples/images/heat_7-error.svg" alt="an error of a FLAP program"></p>
 
 ## Quick start
 
-<<< @/examples/snippets/minimal.f90
+A real session with a FLAP program: the help, the values and the errors all come from FLAP.
 
-<<< @/examples/output/minimal.ansi{ansi}
+<p align="center"><img src="./examples/images/quickstart.svg" alt="a terminal session of a FLAP program: its help, some runs, a typo and an out-of-range value"></p>
 
-<<< @/examples/output/minimal-error.ansi{ansi}
+This is the whole program, in four steps: initialise, define, parse, get.
+
+<<< @/examples/snippets/quickstart.f90
+
+## Grows with your program
+
+The same calls scale to commands, configuration files, a man page and shell completion. This help is generated from
+the definitions of the `heat` solver that the [tutorial](/manual/tutorial/07-shipping) builds step by step; the colours
+are two keywords.
+
+<p align="center"><img src="./examples/images/heat_7-help.svg" alt="the help of a FLAP program"></p>
+
+<p align="center"><img src="./examples/images/heat_7-error.svg" alt="an error of a FLAP program"></p>
 
 Learn FLAP step by step in the [tutorial](/manual/tutorial/01-first-cli), find quick answers in the [cookbook](/manual/cookbook), look up every detail in the [Guide](/guide/). Upgrading from v1.x? Read [Upgrading](/guide/migration).
 

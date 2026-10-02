@@ -5,9 +5,10 @@ title: About FLAP
 # About FLAP
 
 FLAP (Fortran command Line Arguments Parser for poor people) is a pure Fortran library for building powerful,
-user-friendly Command Line Interfaces (CLIs). It is inspired by Python's `argparse` (and borrows from click, Typer and
-docopt): define your arguments once, and FLAP parses the command line, reads environment variables and configuration
-files, checks the values, prints the help and the errors, and writes man pages, Markdown and shell completions.
+user-friendly Command Line Interfaces (CLIs): define your arguments once, and FLAP parses the command line, reads
+environment variables and configuration files, checks the values, prints the help and the errors, and writes man pages,
+Markdown and shell completions. Its design borrows from the best command line libraries of other languages (Python's
+argparse, click and Typer, docopt).
 
 Fortran programs, simulation codes above all, often need rich command lines: required parameters, optional switches with
 defaults, lists of values, commands (`solver run`, `solver post`), values from the environment of a batch job or from an

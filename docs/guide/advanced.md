@@ -103,8 +103,8 @@ defaults; an option with `act='config'` lets the user choose the file:
 ## Mutually exclusive sets
 
 `cli%set_mutually_exclusive_switches(switches, required, group, pref, error)` declares a set of switches of which **at
-most one** may be given; with `required=.true.`, **exactly one**. This is argparse's `add_mutually_exclusive_group`, and
-the recommended mechanism over the pairwise `exclude`:
+most one** may be given; with `required=.true.`, **exactly one**. It is the recommended mechanism over the pairwise
+`exclude`:
 
 <<< @/examples/snippets/exclusive-sets.f90
 

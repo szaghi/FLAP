@@ -1,0 +1,28 @@
+$ greet --help
+usage: greet NAME [--times N] [--lang LANG] [--shout] [--help] [--markdown] [--version]
+
+Greet someone, in a few languages
+
+Positional arguments:
+  NAME
+      Who to greet
+
+Optional switches:
+  [1m[36m--times[0m[0m N, [1m[36m-t[0m[0m N
+      range [1, 5]
+      default value 1
+      How many times
+  [1m[36m--lang[0m[0m LANG
+      choices: en, it, fr
+      environment variable name "GREET_LANG"
+      default value en
+      Language
+  [1m[36m--shout[0m[0m
+      default value .false.
+      Say it louder
+  --help, -h
+      Print this help message
+  --markdown, -md
+      Save this help message in a Markdown file
+  --version, -v
+      Print version
