@@ -4,6 +4,25 @@ All notable changes to this project are documented here.
 Versions follow [Semantic Versioning](https://semver.org/).
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.5.1] — 2026-10-02
+### Documentation
+- A new first impression, with an animated quick start
+
+- Point the install pins at v2.5.0
+
+- **migration**: Add the v2.5.0 upgrade notes
+
+- One reading path instead of a Guide and a Manual
+
+- **cookbook**: Fifteen more recipes, without the Python table
+
+
+### Fixed
+- **cli**: Set error_message for the errors of groups and arguments
+
+- **cli**: Do not print the unknown arguments that are ignored
+
+
 ## [2.5.0] — 2026-10-02
 ### Fixed
 - **build**: Rename the quad precision macro _R16P to PENF_R16P ⚠ BREAKING CHANGE
