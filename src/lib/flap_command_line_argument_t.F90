@@ -169,7 +169,7 @@ type, extends(object) :: command_line_argument
                          get_cla, &
                          get_cla_list                    !< Get CLA value(s).
     generic,   public :: get_varying =>                &
-#if defined _R16P
+#if defined PENF_R16P
                          get_cla_list_varying_R16P,    &
 #endif
                          get_cla_list_varying_R8P,     &
@@ -1722,7 +1722,7 @@ contains
     rv = val ; call real_range(rv, single=.false.) ; val = rv
   type is(real(R4P))
     rv = real(val, R8P) ; call real_range(rv, single=.true.) ; if (self%error == 0) val = real(rv, R4P)
-#if defined _R16P
+#if defined PENF_R16P
   type is(real(R16P))
     call real16_range(val)
 #endif
@@ -1817,7 +1817,7 @@ contains
     endif
     endfunction bound
 
-#if defined _R16P
+#if defined PENF_R16P
     subroutine real16_range(v)
     !< Check (or clamp) a real(R16P) value.
     real(R16P), intent(inout) :: v   !< Value.
@@ -2128,7 +2128,7 @@ contains
   tmp = self%choices
   call tokenize(strin=tmp, delimiter=',', toks=toks, Nt=Nc)
   select type(val)
-#if defined _R16P
+#if defined PENF_R16P
   type is(real(R16P))
     val_str = str(n=val)
     do c=1, Nc
@@ -2225,7 +2225,7 @@ contains
   ios = 0
   type_name = 'a real'
   select type(val)
-#if defined _R16P
+#if defined PENF_R16P
   type is(real(R16P))
     read(trimmed, *, iostat=ios) val
 #endif
@@ -2367,7 +2367,7 @@ contains
   character(*), optional,       intent(in)    :: pref   !< Prefixing string.
 
   select type(val)
-#if defined _R16P
+#if defined PENF_R16P
   type is(real(R16P))
     call self%cast_number(text=buffer, val=val, pref=pref)
 #endif
@@ -2460,7 +2460,7 @@ contains
     return
   endif
   select type(val)
-#if defined _R16P
+#if defined PENF_R16P
   type is(real(R16P))
     do v=1, Nv
       call self%cast_number(text=vals(v), val=val(v), pref=pref)

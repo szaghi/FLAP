@@ -77,7 +77,7 @@ programs keep their behaviour. The plan behind them is issue [#125](https://gith
   errors 38–42. See [Key=value options](./arguments#key-value-options-map).
 - `cli%copy_options(to_group, from_group, switches)` copies option definitions between commands (F21); new error
   `ERROR_COPY_POSITIONAL` (1009).
-- With real quad precision (`-D_R16P`), `get` into `real(R16P)` now converts in quad precision (it converted in single
+- With real quad precision (`-DPENF_R16P`), `get` into `real(R16P)` now converts in quad precision (it converted in single
   precision, B35 of #125).
 
 ## v2.0.0 (breaking)

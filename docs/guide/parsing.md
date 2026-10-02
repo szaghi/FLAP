@@ -122,7 +122,7 @@ call cli%get(val, switch, position, group, args, pref, error)
 | `error` | `integer`, optional | Error code |
 
 `val` can be an `integer` of any PENF kind (`I1P`, `I2P`, `I4P`, `I8P`), a `real` (`R4P`, `R8P`, and `R16P` when built
-with `-D_R16P`), a `logical` or a `character`, scalar or a fixed-size array. The value is converted to the type of
+with `-DPENF_R16P`), a `logical` or a `character`, scalar or a fixed-size array. The value is converted to the type of
 `val`; `choices` and numeric ranges are checked at this point. A type FLAP cannot fill (e.g. `complex`) is
 `ERROR_UNSUPPORTED_TYPE` (46).
 

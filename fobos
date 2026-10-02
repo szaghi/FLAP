@@ -69,10 +69,10 @@ build_dir = ./exe/
 template  = template-static-gnu-debug
 build_dir = ./exe/
 
-# quad precision: _R16P enables the real128 branches of PENF and FLAP (_R16P_SUPPORTED alone does not)
+# quad precision: PENF_R16P enables the real128 branches of PENF and FLAP (_R16P_SUPPORTED alone does not)
 [tests-gnu-r16p]
 template  = template-static-gnu-debug
-preproc   = -D_R16P_SUPPORTED -D_R16P
+preproc   = -D_R16P_SUPPORTED -DPENF_R16P
 build_dir = ./exe/
 
 # Intel

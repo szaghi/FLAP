@@ -96,7 +96,7 @@ Every release ships an `install.sh`, which downloads FLAP and builds it with one
   scope, including an internal procedure using it by host association: a call executed before the first one in the
   source may leave the variable unassigned, or crash. In code built with nvfortran, give each `get` call its own
   variable (a local in each helper procedure).
-- **Quad precision:** `get` into `real(R16P)` needs FLAP and PENF compiled with `-D_R16P` (FoBiS mode
+- **Quad precision:** `get` into `real(R16P)` needs FLAP and PENF compiled with `-DPENF_R16P` (FoBiS mode
   `tests-gnu-r16p`); otherwise `R16P` is the same kind as `R8P`.
 
 ## Quick start

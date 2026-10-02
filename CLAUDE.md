@@ -20,7 +20,7 @@ fobis build --mode tests-gnu-debug           # debug tests (-fcheck=all, coverag
 fobis build --mode static-gnu                # static library
 fobis clean --mode tests-gnu-debug           # needed when stale gcov objects in exe/obj break the debug link
 fobis rule --ex delexe                       # wipe exe/ (fobis clean keeps executables); do it when switching modes
-fobis build --mode tests-gnu-r16p            # debug tests with -D_R16P: real quad precision (R16P = real128)
+fobis build --mode tests-gnu-r16p            # debug tests with -DPENF_R16P: real quad precision (R16P = real128)
 bash scripts/run_tests.sh                    # run every binary in exe/ (exit 0 = PASS; *_xfail_* must exit non-zero)
 fobis rule --ex makedoc                      # API docs (formal) + VitePress site
 ```
@@ -102,7 +102,7 @@ All library source is in `src/lib/`. Dependencies (PENF, FACE) are fetched with 
 
 ### Preprocessor
 
-**Never write a literal with the `_R16P` kind suffix** (`1._R16P`, `0.25_R16P`) in a preprocessed file (every file: the builds pass `-cpp`): with `-D_R16P` the preprocessor expands the `_R16P` of the suffix to `1` (`0.25_R16P` becomes `0.251`, a default real). Write `real(x, R16P)` (B35: `knd=1._R16P` made the quad `get` convert in single precision). PENF has the same pattern (third party). `.F90` files are preprocessed, `.f90` are not. Quad precision is gated on `#if defined _R16P` in both FLAP and PENF. The fobos templates and the CMake support check define `-D_R16P_SUPPORTED`, which **does not** enable that branch: with the current build files `R16P` aliases `R8P` and the quad-precision code is never compiled. Define `-D_R16P` to compile it (mode `tests-gnu-r16p`).
+**Never write a literal with the `_R16P` kind suffix** (`1._R16P`, `0.25_R16P`) in a preprocessed file (every file: the builds pass `-cpp`): with the legacy macro `-D_R16P` (renamed `PENF_R16P` in PENF and FLAP for this reason, but other libraries may still define it) the preprocessor expands the `_R16P` of the suffix to `1` (`0.25_R16P` becomes `0.251`, a default real). Write `real(x, R16P)` (B35: `knd=1._R16P` made the quad `get` convert in single precision). PENF has the same pattern (third party). `.F90` files are preprocessed, `.f90` are not. Quad precision is gated on `#if defined _R16P` in both FLAP and PENF. The fobos templates and the CMake support check define `-D_R16P_SUPPORTED`, which **does not** enable that branch: with the current build files `R16P` aliases `R8P` and the quad-precision code is never compiled. Define `-D_R16P` to compile it (mode `tests-gnu-r16p`).
 
 ### `get` Overloading
 
