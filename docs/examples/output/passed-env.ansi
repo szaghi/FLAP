@@ -1,0 +1,3 @@
+$ OMP_NUM_THREADS=8 passed
+threads = 8, passed on the command line: F
+from the environment

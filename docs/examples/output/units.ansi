@@ -1,0 +1,4 @@
+$ units --nxx 4 || cat flap.log
+units: error: switch "--nxx" is unknown! Did you mean "--nx"?
+
+Try 'units --help' for help.

@@ -1,0 +1,6 @@
+$ ignore_unknown --nx 8 --solver-option fast
+ignore_unknown: error: switch "--solver-option" is unknown!
+
+ignore_unknown: error: argument "fast" is unknown!
+
+nx = 8

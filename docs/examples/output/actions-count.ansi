@@ -1,0 +1,5 @@
+$ actions -vvv
+verbosity = 3
+include   = .
+format    = text
+restart   = T

@@ -1,0 +1,3 @@
+$ OMP_NUM_THREADS=8 passed --threads 2
+threads = 2, passed on the command line: T
+from the command line

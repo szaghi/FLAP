@@ -1,0 +1,5 @@
+$ actions --no-restart
+verbosity = 0
+include   = .
+format    = text
+restart   = F

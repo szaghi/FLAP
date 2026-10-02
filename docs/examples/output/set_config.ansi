@@ -1,0 +1,3 @@
+$ set_config
+--cfl   = 0.8 [config: defaults.ini]
+--steps = 500 [config: defaults.ini]

@@ -24,11 +24,43 @@ Short answers to "how do I ...?". Each recipe shows the code and its real output
 
 `get` converts to the type and kind of the variable; a value that is not a number is `ERROR_CASTING_NUMBER`.
 
-## A flag, a verbosity counter, a repeatable option
+## A flag and its negation
 
-<<< @/examples/snippets/actions-define.f90
+<<< @/examples/snippets/actions-pair.f90
 
-<<< @/examples/output/actions.ansi{ansi}
+<<< @/examples/output/actions-pair.ansi{ansi}
+
+## A flag that is true unless passed
+
+<<< @/examples/snippets/store_false-define.f90
+
+<<< @/examples/output/store_false-off.ansi{ansi}
+
+## A verbosity counter
+
+<<< @/examples/snippets/actions-count.f90
+
+<<< @/examples/output/actions-count.ansi{ansi}
+
+## A repeatable option
+
+<<< @/examples/snippets/actions-append.f90
+
+<<< @/examples/output/actions-append.ansi{ansi}
+
+Read it with `get_varying`, as a [list](#a-list-of-files).
+
+## An option whose value is optional
+
+<<< @/examples/snippets/actions-optional.f90
+
+<<< @/examples/output/actions-value.ansi{ansi}
+
+A value can always be given inline, `--format=json`; for an optional value it is the only unambiguous way.
+
+## An option hidden from the help
+
+<<< @/examples/snippets/actions-hidden.f90
 
 ## A value from a fixed list
 
@@ -74,6 +106,12 @@ Short answers to "how do I ...?". Each recipe shows the code and its real output
 
 <<< @/examples/output/map.ansi{ansi}
 
+## Two options that cannot go together
+
+<<< @/examples/snippets/exclusive-pair.f90
+
+<<< @/examples/output/exclusive-pair.ansi{ansi}
+
 ## Exactly one of two options
 
 <<< @/examples/snippets/exclusive-sets.f90
@@ -86,6 +124,12 @@ Short answers to "how do I ...?". Each recipe shows the code and its real output
 
 <<< @/examples/output/environment-env.ansi{ansi}
 
+## Ignoring the environment, for reproducible runs
+
+<<< @/examples/snippets/ignore_env-define.f90
+
+<<< @/examples/output/ignore_env.ansi{ansi}
+
 ## Values from a configuration file
 
 <<< @/examples/snippets/config-define.f90
@@ -94,11 +138,27 @@ Short answers to "how do I ...?". Each recipe shows the code and its real output
 
 <<< @/examples/output/config.ansi{ansi}
 
+## A configuration file chosen by the program
+
+<<< @/examples/snippets/set_config-define.f90
+
+<<< @/examples/files/defaults.ini{ini}
+
+<<< @/examples/output/set_config-override.ansi{ansi}
+
 ## Logging where every value comes from
 
 <<< @/examples/snippets/config-provenance.f90
 
 <<< @/examples/output/config-override.ansi{ansi}
+
+## Was an option passed, and where does its value come from?
+
+<<< @/examples/snippets/passed-query.f90
+
+<<< @/examples/output/passed-env.ansi{ansi}
+
+<<< @/examples/output/passed-cli.ansi{ansi}
 
 ## Subcommands
 
@@ -115,6 +175,12 @@ Short answers to "how do I ...?". Each recipe shows the code and its real output
 <<< @/examples/snippets/aliases-copy.f90
 
 <<< @/examples/output/aliases.ansi{ansi}
+
+## Two commands that cannot go together
+
+<<< @/examples/snippets/exclusive_groups-define.f90
+
+<<< @/examples/output/exclusive_groups-both.ansi{ansi}
 
 ## An option that lists something and exits
 
@@ -141,6 +207,18 @@ Short answers to "how do I ...?". Each recipe shows the code and its real output
 <<< @/examples/snippets/usage_on_error-define.f90
 
 <<< @/examples/output/usage_on_error.ansi{ansi}
+
+## The help and the errors in a file
+
+<<< @/examples/snippets/units-define.f90
+
+<<< @/examples/output/units.ansi{ansi}
+
+## The usage as text
+
+<<< @/examples/snippets/messages-text.f90
+
+<<< @/examples/output/messages.ansi{ansi}
 
 ## Colours
 
@@ -176,6 +254,15 @@ Short answers to "how do I ...?". Each recipe shows the code and its real output
 
 See [chapter 8 of the tutorial](./tutorial/08-testing).
 
+## Arguments that are not yours
+
+With `ignore_unknown_clas`, `parse` reports the unknown arguments on the error unit and returns
+`ERROR_UNKNOWN_CLAS_IGNORED`, with every known value read:
+
+<<< @/examples/snippets/ignore_unknown-define.f90
+
+<<< @/examples/output/ignore_unknown.ansi{ansi}
+
 ## Passing arguments through to another program
 
 Everything after `--` is collected, unparsed, in the hidden list of `--`:
@@ -192,23 +279,20 @@ call cli%get_varying(switch='--', val=rest, error=error)   ! prog --nx 4 -- mpir
 
 <<< @/examples/output/menus-single.ansi{ansi}
 
-## Coming from Python
+## Asking for several choices
 
-| Python | FLAP |
-|---|---|
-| `parser.add_argument('--n', type=int, default=1)` | `add(switch='--n', act='store', def='1')`, then `get` into an integer |
-| `required=True` | `required=.true.` |
-| `action='store_true'` | `act='store_true', def='.false.'` |
-| `action='count'` | `act='count'` |
-| `action='append'` | `act='append'`, read with `get_varying` |
-| `nargs='+'`, `nargs='*'`, `nargs=3` | `nargs='+'`, `'*'`, `'3'` |
-| `choices=['a', 'b']` | `choices='a,b'` |
-| `metavar='FILE'` | `metavar='FILE'` |
-| `add_subparsers()` | `add_group(group=...)` and `run_command` |
-| `add_mutually_exclusive_group(required=True)` | `set_mutually_exclusive_switches(switches=..., required=.true.)` |
-| click `envvar=`, `auto_envvar_prefix=` | `envvar=`, `init(auto_envvar_prefix=)` |
-| click `IntRange(1, 64, clamp=True)` | `min='1', max='64', clamp=.true.` |
-| click `Path(exists=True, readable=True)` | `must_exist=.true.`, `readable=.true.` |
-| click `--shout/--no-shout` | `switch='--shout', switch_neg='--no-shout'` |
-| click `deprecated=True` | `deprecated='message'` |
-| Typer `--install-completion` | `init(completion_options=.true.)` |
+<<< @/examples/snippets/menus-multiple.f90
+
+<<< @/examples/output/menus-multiple.ansi{ansi}
+
+## A yes/no question
+
+<<< @/examples/snippets/menus-yes_no.f90
+
+<<< @/examples/output/menus-yes_no.ansi{ansi}
+
+## Asking again after a wrong answer
+
+<<< @/examples/snippets/menus-retry.f90
+
+<<< @/examples/output/menus-retry.ansi{ansi}

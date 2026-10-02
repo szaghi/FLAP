@@ -1,0 +1,5 @@
+$ actions -I src --include=lib
+verbosity = 0
+include   = src, lib
+format    = text
+restart   = T

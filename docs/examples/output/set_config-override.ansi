@@ -1,0 +1,3 @@
+$ set_config --cfl 0.3
+--cfl   = 0.3 [command line]
+--steps = 500 [config: defaults.ini]

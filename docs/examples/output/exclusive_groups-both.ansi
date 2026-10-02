@@ -1,0 +1,5 @@
+$ exclusive_groups run clean
+exclusive_groups: error: the group "run" and "clean" are mutually exclusive, but both have been called!
+
+Try 'exclusive_groups run --help' for help.
+[exit status 1]
