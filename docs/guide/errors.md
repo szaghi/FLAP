@@ -202,7 +202,9 @@ its similarity `1 - d/max(len)` is at least 0.6, `d` being the Levenshtein (edit
 ## Accessing the error message
 
 `command_line_interface` has a public `error_message` attribute that contains a
-human-readable description of the last error:
+human-readable description of the last error, the text FLAP prints on the error unit, whichever part of the CLI raised
+it (`parse`, `get`, `add`, ...). It is allocated only when `cli%error` is an error: not after a call that succeeds, nor
+after a status (the help printed, ...). Check the error before reading it:
 
 ```fortran
 call cli%parse(error=error)

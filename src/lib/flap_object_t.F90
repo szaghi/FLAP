@@ -39,6 +39,8 @@ type, abstract, public :: object
     procedure, pass(self) :: free_object         !< Free dynamic memory.
     procedure, pass(self) :: print_version       !< Print version.
     procedure, pass(self) :: print_error_message !< Print meaningful error message.
+    procedure, pass(self) :: inherit_error       !< Take the error of another object, with its message.
+    procedure, pass(self) :: clear_error         !< Forget the error and its message.
     procedure, pass(self) :: set_examples        !< Set examples of correct usage.
     procedure, pass(lhs ) :: assign_object       !< Assignment overloading.
 endtype object
@@ -119,6 +121,28 @@ contains
     enddo
   endif
   endsubroutine set_examples
+
+  pure subroutine inherit_error(self, from)
+  !< Take the error of another object, with its message: the error of an argument is reported by its group, the one of a
+  !< group by the CLI, whose `error_message` is then the message of its `error`. A status (not positive) has no message.
+  class(object), intent(inout) :: self !< Object data.
+  class(object), intent(in)    :: from !< Object that raised the error.
+
+  self%error = from%error
+  if (from%error > 0 .and. allocated(from%error_message)) then
+    self%error_message = from%error_message
+  elseif (allocated(self%error_message)) then
+    deallocate(self%error_message)
+  endif
+  endsubroutine inherit_error
+
+  pure subroutine clear_error(self)
+  !< Forget the error and its message.
+  class(object), intent(inout) :: self !< Object data.
+
+  self%error = 0
+  if (allocated(self%error_message)) deallocate(self%error_message)
+  endsubroutine clear_error
 
   elemental subroutine assign_object(lhs, rhs)
   !< Assign two abstract objects.

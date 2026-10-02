@@ -26,7 +26,6 @@ graph LR
 - [cton](#cton)
 - [bstr](#bstr)
 - [bcton](#bcton)
-- [compact_real_string](#compact-real-string)
 - [str_ascii_default](#str-ascii-default)
 - [str_ascii_ascii](#str-ascii-ascii)
 - [str_ascii_ucs4](#str-ascii-ucs4)
@@ -55,6 +54,8 @@ graph LR
 - [str_a_I4P](#str-a-i4p)
 - [str_a_I2P](#str-a-i2p)
 - [str_a_I1P](#str-a-i1p)
+- [tidy_real_string](#tidy-real-string)
+- [is_little_endian](#is-little-endian)
 - [strz_I8P](#strz-i8p)
 - [strz_I4P](#strz-i4p)
 - [strz_I2P](#strz-i2p)
@@ -123,36 +124,6 @@ Convert bit-string to number (real and integer, bit-string to number type castin
 
 **Module procedures**: [`bctor_R8P`](/api/src/third_party/PENF/src/lib/penf_stringify#bctor-r8p), [`bctor_R4P`](/api/src/third_party/PENF/src/lib/penf_stringify#bctor-r4p), [`bctoi_I8P`](/api/src/third_party/PENF/src/lib/penf_stringify#bctoi-i8p), [`bctoi_I4P`](/api/src/third_party/PENF/src/lib/penf_stringify#bctoi-i4p), [`bctoi_I2P`](/api/src/third_party/PENF/src/lib/penf_stringify#bctoi-i2p), [`bctoi_I1P`](/api/src/third_party/PENF/src/lib/penf_stringify#bctoi-i1p)
 
-## Subroutines
-
-### compact_real_string
-
-Compact a string representing a real number, so that the same value is displayed with fewer characters.
-
- @note No need to add doctest: this is tested by a lot of doctests of other TBPs.
-
-**Attributes**: pure
-
-```fortran
-subroutine compact_real_string(string)
-```
-
-**Arguments**
-
-| Name | Type | Intent | Attributes | Description |
-|------|------|--------|------------|-------------|
-| `string` | character(len=*) | inout |  | string representation of a real number. |
-
-**Call graph**
-
-```mermaid
-flowchart TD
-  str_R16P["str_R16P"] --> compact_real_string["compact_real_string"]
-  str_R4P["str_R4P"] --> compact_real_string["compact_real_string"]
-  str_R8P["str_R8P"] --> compact_real_string["compact_real_string"]
-  style compact_real_string fill:#3e63dd,stroke:#99b,stroke-width:2px
-```
-
 ## Functions
 
 ### str_ascii_default
@@ -168,7 +139,7 @@ Convert string of default kind to ASCII string.
 
 **Attributes**: pure
 
-**Returns**: character(kind=[ASCII](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables), len=:)
+**Returns**: character(kind=[ASCII](/api/src/third_party/FACE/src/lib/face), len=:)
 
 ```fortran
 function str_ascii_default(input) result(output)
@@ -193,7 +164,7 @@ Convert string of ASCII kind to ASCII string, just for convenience in sanitize s
 
 **Attributes**: pure
 
-**Returns**: character(kind=[ASCII](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables), len=:)
+**Returns**: character(kind=[ASCII](/api/src/third_party/FACE/src/lib/face), len=:)
 
 ```fortran
 function str_ascii_ascii(input) result(output)
@@ -203,7 +174,7 @@ function str_ascii_ascii(input) result(output)
 
 | Name | Type | Intent | Attributes | Description |
 |------|------|--------|------------|-------------|
-| `input` | character(kind=[ASCII](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables), len=*) | in |  | Input string of ASCII kind. |
+| `input` | character(kind=[ASCII](/api/src/third_party/FACE/src/lib/face), len=*) | in |  | Input string of ASCII kind. |
 
 ### str_ascii_ucs4
 
@@ -218,7 +189,7 @@ Convert string of UCS4 kind to ASCII string.
 
 **Attributes**: pure
 
-**Returns**: character(kind=[ASCII](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables), len=:)
+**Returns**: character(kind=[ASCII](/api/src/third_party/FACE/src/lib/face), len=:)
 
 ```fortran
 function str_ascii_ucs4(input) result(output)
@@ -228,7 +199,7 @@ function str_ascii_ucs4(input) result(output)
 
 | Name | Type | Intent | Attributes | Description |
 |------|------|--------|------------|-------------|
-| `input` | character(kind=[UCS4](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables), len=*) | in |  | Input string of UCS4 kind. |
+| `input` | character(kind=[UCS4](/api/src/third_party/FACE/src/lib/face), len=*) | in |  | Input string of UCS4 kind. |
 
 ### str_ucs4_default
 
@@ -243,7 +214,7 @@ Convert string of default kind to UCS4 string.
 
 **Attributes**: pure
 
-**Returns**: character(kind=[UCS4](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables), len=:)
+**Returns**: character(kind=[UCS4](/api/src/third_party/FACE/src/lib/face), len=:)
 
 ```fortran
 function str_ucs4_default(input) result(output)
@@ -268,7 +239,7 @@ Convert string of ASCII kind to UCS4 string.
 
 **Attributes**: pure
 
-**Returns**: character(kind=[UCS4](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables), len=:)
+**Returns**: character(kind=[UCS4](/api/src/third_party/FACE/src/lib/face), len=:)
 
 ```fortran
 function str_ucs4_ascii(input) result(output)
@@ -278,7 +249,7 @@ function str_ucs4_ascii(input) result(output)
 
 | Name | Type | Intent | Attributes | Description |
 |------|------|--------|------------|-------------|
-| `input` | character(kind=[ASCII](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables), len=*) | in |  | Input string of ASCII kind. |
+| `input` | character(kind=[ASCII](/api/src/third_party/FACE/src/lib/face), len=*) | in |  | Input string of ASCII kind. |
 
 ### str_ucs4_ucs4
 
@@ -293,7 +264,7 @@ Convert string of UCS4 kind to UCS4 string, just for convenience in sanitize str
 
 **Attributes**: pure
 
-**Returns**: character(kind=[UCS4](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables), len=:)
+**Returns**: character(kind=[UCS4](/api/src/third_party/FACE/src/lib/face), len=:)
 
 ```fortran
 function str_ucs4_ucs4(input) result(output)
@@ -303,7 +274,7 @@ function str_ucs4_ucs4(input) result(output)
 
 | Name | Type | Intent | Attributes | Description |
 |------|------|--------|------------|-------------|
-| `input` | character(kind=[UCS4](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables), len=*) | in |  | Input string of UCS4 kind. |
+| `input` | character(kind=[UCS4](/api/src/third_party/FACE/src/lib/face), len=*) | in |  | Input string of UCS4 kind. |
 
 ### strf_R16P
 
@@ -477,6 +448,13 @@ function strf_I1P(fm, n) result(str)
 
 Convert real to string.
 
+ The string returned is read back exactly: by default it has the fixed width format FR16P, that has the significant
+ digits always sufficient for an exact read back.
+
+ If `compact` is true the string returned is the shortest one that is read back exactly: the significant digits are
+ increased until the number read back is equal to the input one. The plain decimal notation is used for decimal
+ exponents in [-5, 15], the scientific one otherwise.
+
 ```fortran
  use penf
  print "(A)", str(n=-1._R16P)
@@ -494,6 +472,33 @@ Convert real to string.
  print "(A)", str(n=-1._R16P, compact=.true.)
 ```
 
+
+```fortran
+ use penf
+ print "(A)", str(n=0.1_R16P, compact=.true.)
+```
+
+
+```fortran
+ use penf
+ print "(A)", str(n=-1._R16P, no_sign=.false.)
+```
+
+
+```fortran
+ use penf
+ real(R16P) :: x(1:5)
+ integer :: i
+ logical :: exact
+ x = [huge(1._R16P), tiny(1._R16P), 0.1_R16P, -1._R16P/3._R16P, 0._R16P]
+ exact = .true.
+ do i=1, 5
+   exact = exact.and.(cton(str=str(n=x(i)), knd=1._R16P)==x(i))
+   exact = exact.and.(cton(str=str(n=x(i), compact=.true.), knd=1._R16P)==x(i))
+ enddo
+ print "(L1)", exact
+```
+
 **Attributes**: elemental
 
 **Returns**: `character(len=DR16P)`
@@ -508,20 +513,27 @@ function str_R16P(n, no_sign, compact) result(str)
 |------|------|--------|------------|-------------|
 | `n` | real(kind=[R16P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in |  | Real to be converted. |
 | `no_sign` | logical | in | optional | Flag for leaving out the sign. |
-| `compact` | logical | in | optional | Flag for *compacting* string encoding. |
+| `compact` | logical | in | optional | Flag for the shortest exact string. |
 
 **Call graph**
 
 ```mermaid
 flowchart TD
   str_a_R16P["str_a_R16P"] --> str_R16P["str_R16P"]
-  str_R16P["str_R16P"] --> compact_real_string["compact_real_string"]
+  str_R16P["str_R16P"] --> tidy_real_string["tidy_real_string"]
   style str_R16P fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### str_R8P
 
 Convert real to string.
+
+ The string returned is read back exactly: by default it has the fixed width format FR8P, that has the significant
+ digits always sufficient for an exact read back.
+
+ If `compact` is true the string returned is the shortest one that is read back exactly: the significant digits are
+ increased until the number read back is equal to the input one. The plain decimal notation is used for decimal
+ exponents in [-5, 15], the scientific one otherwise.
 
 ```fortran
  use penf
@@ -540,6 +552,33 @@ Convert real to string.
  print "(A)", str(n=-1._R8P, compact=.true.)
 ```
 
+
+```fortran
+ use penf
+ print "(A)", str(n=0.1_R8P, compact=.true.)
+```
+
+
+```fortran
+ use penf
+ print "(A)", str(n=-1._R8P, no_sign=.false.)
+```
+
+
+```fortran
+ use penf
+ real(R8P) :: x(1:5)
+ integer :: i
+ logical :: exact
+ x = [huge(1._R8P), tiny(1._R8P), 0.1_R8P, -1._R8P/3._R8P, 0._R8P]
+ exact = .true.
+ do i=1, 5
+   exact = exact.and.(cton(str=str(n=x(i)), knd=1._R8P)==x(i))
+   exact = exact.and.(cton(str=str(n=x(i), compact=.true.), knd=1._R8P)==x(i))
+ enddo
+ print "(L1)", exact
+```
+
 **Attributes**: elemental
 
 **Returns**: `character(len=DR8P)`
@@ -554,20 +593,27 @@ function str_R8P(n, no_sign, compact) result(str)
 |------|------|--------|------------|-------------|
 | `n` | real(kind=[R8P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in |  | Real to be converted. |
 | `no_sign` | logical | in | optional | Flag for leaving out the sign. |
-| `compact` | logical | in | optional | Flag for *compacting* string encoding. |
+| `compact` | logical | in | optional | Flag for the shortest exact string. |
 
 **Call graph**
 
 ```mermaid
 flowchart TD
   str_a_R8P["str_a_R8P"] --> str_R8P["str_R8P"]
-  str_R8P["str_R8P"] --> compact_real_string["compact_real_string"]
+  str_R8P["str_R8P"] --> tidy_real_string["tidy_real_string"]
   style str_R8P fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### str_R4P
 
 Convert real to string.
+
+ The string returned is read back exactly: by default it has the fixed width format FR4P, that has the significant
+ digits always sufficient for an exact read back.
+
+ If `compact` is true the string returned is the shortest one that is read back exactly: the significant digits are
+ increased until the number read back is equal to the input one. The plain decimal notation is used for decimal
+ exponents in [-5, 15], the scientific one otherwise.
 
 ```fortran
  use penf
@@ -586,6 +632,33 @@ Convert real to string.
  print "(A)", str(n=-1._R4P, compact=.true.)
 ```
 
+
+```fortran
+ use penf
+ print "(A)", str(n=0.1_R4P, compact=.true.)
+```
+
+
+```fortran
+ use penf
+ print "(A)", str(n=-1._R4P, no_sign=.false.)
+```
+
+
+```fortran
+ use penf
+ real(R4P) :: x(1:5)
+ integer :: i
+ logical :: exact
+ x = [huge(1._R4P), tiny(1._R4P), 0.1_R4P, -1._R4P/3._R4P, 0._R4P]
+ exact = .true.
+ do i=1, 5
+   exact = exact.and.(cton(str=str(n=x(i)), knd=1._R4P)==x(i))
+   exact = exact.and.(cton(str=str(n=x(i), compact=.true.), knd=1._R4P)==x(i))
+ enddo
+ print "(L1)", exact
+```
+
 **Attributes**: elemental
 
 **Returns**: `character(len=DR4P)`
@@ -600,14 +673,14 @@ function str_R4P(n, no_sign, compact) result(str)
 |------|------|--------|------------|-------------|
 | `n` | real(kind=[R4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in |  | Real to be converted. |
 | `no_sign` | logical | in | optional | Flag for leaving out the sign. |
-| `compact` | logical | in | optional | Flag for *compacting* string encoding. |
+| `compact` | logical | in | optional | Flag for the shortest exact string. |
 
 **Call graph**
 
 ```mermaid
 flowchart TD
   str_a_R4P["str_a_R4P"] --> str_R4P["str_R4P"]
-  str_R4P["str_R4P"] --> compact_real_string["compact_real_string"]
+  str_R4P["str_R4P"] --> tidy_real_string["tidy_real_string"]
   style str_R4P fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -624,6 +697,12 @@ Convert integer to string.
 ```fortran
  use penf
  print "(A)", str(n=-1_I8P, no_sign=.true.)
+```
+
+
+```fortran
+ use penf
+ print "(A)", str(n=-1_I8P, no_sign=.false.)
 ```
 
 **Attributes**: elemental
@@ -664,6 +743,12 @@ Converting integer to string.
  print "(A)", str(n=-1_I4P, no_sign=.true.)
 ```
 
+
+```fortran
+ use penf
+ print "(A)", str(n=-1_I4P, no_sign=.false.)
+```
+
 **Attributes**: elemental
 
 **Returns**: `character(len=DI4P)`
@@ -702,6 +787,12 @@ Convert integer to string.
  print "(A)", str(n=-1_I2P, no_sign=.true.)
 ```
 
+
+```fortran
+ use penf
+ print "(A)", str(n=-1_I2P, no_sign=.false.)
+```
+
 **Attributes**: elemental
 
 **Returns**: `character(len=DI2P)`
@@ -738,6 +829,12 @@ Convert integer to string.
 ```fortran
  use penf
  print "(A)", str(n=-1_I1P, no_sign=.true.)
+```
+
+
+```fortran
+ use penf
+ print "(A)", str(n=-1_I1P, no_sign=.false.)
 ```
 
 **Attributes**: elemental
@@ -835,7 +932,7 @@ function str_a_R16P(n, no_sign, separator, delimiters, compact) result(str)
 | `no_sign` | logical | in | optional | Flag for leaving out the sign. |
 | `separator` | character(len=1) | in | optional | Eventual separator of array values. |
 | `delimiters` | character(len=*) | in | optional | Eventual delimiters of array values. |
-| `compact` | logical | in | optional | Flag for *compacting* string encoding. |
+| `compact` | logical | in | optional | Flag for the shortest exact strings. |
 
 **Call graph**
 
@@ -894,7 +991,7 @@ function str_a_R8P(n, no_sign, separator, delimiters, compact) result(str)
 | `no_sign` | logical | in | optional | Flag for leaving out the sign. |
 | `separator` | character(len=1) | in | optional | Eventual separator of array values. |
 | `delimiters` | character(len=*) | in | optional | Eventual delimiters of array values. |
-| `compact` | logical | in | optional | Flag for *compacting* string encoding. |
+| `compact` | logical | in | optional | Flag for the shortest exact strings. |
 
 **Call graph**
 
@@ -953,7 +1050,7 @@ function str_a_R4P(n, no_sign, separator, delimiters, compact) result(str)
 | `no_sign` | logical | in | optional | Flag for leaving out the sign. |
 | `separator` | character(len=1) | in | optional | Eventual separator of array values. |
 | `delimiters` | character(len=*) | in | optional | Eventual delimiters of array values. |
-| `compact` | logical | in | optional | Flag for *compacting* string encoding. |
+| `compact` | logical | in | optional | Flag for the shortest exact strings. |
 
 **Call graph**
 
@@ -1169,6 +1266,60 @@ function str_a_I1P(n, no_sign, separator, delimiters) result(str)
 flowchart TD
   str_a_I1P["str_a_I1P"] --> str_I1P["str_I1P"]
   style str_a_I1P fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### tidy_real_string
+
+Tidy a string representing a real number in scientific notation, e.g. `-3.21E+0001` becomes `-32.1`.
+
+ The plain decimal notation is used for decimal exponents in [-5, 15], the scientific one otherwise, e.g. `+1.0E+20`.
+ Not negative numbers are prefixed by the plus sign. Not finite numbers (NaN, Infinity) are left unchanged.
+
+ @note No need to add doctest: this is tested by a lot of doctests of other TBPs.
+
+**Attributes**: pure
+
+**Returns**: `character(len=:)`
+
+```fortran
+function tidy_real_string(source, no_sign) result(string)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `source` | character(len=*) | in |  | String representing the number in scientific notation. |
+| `no_sign` | logical | in | optional | Flag for leaving out the sign. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  str_R16P["str_R16P"] --> tidy_real_string["tidy_real_string"]
+  str_R4P["str_R4P"] --> tidy_real_string["tidy_real_string"]
+  str_R8P["str_R8P"] --> tidy_real_string["tidy_real_string"]
+  style tidy_real_string fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### is_little_endian
+
+Check if the type of the bit ordering of the running architecture is little endian.
+
+**Attributes**: pure
+
+**Returns**: `logical`
+
+```fortran
+function is_little_endian() result(is_little)
+```
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  check_endian["check_endian"] --> is_little_endian["is_little_endian"]
+  style is_little_endian fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### strz_I8P
@@ -1461,13 +1612,19 @@ function ctoi_I1P(str, knd, pref, error) result(n)
 
 ### bstr_R8P
 
-Convert real to string of bits.
+Convert real to string of bits, most significant bit first on all architectures.
 
  @note It is assumed that R8P is represented by means of 64 bits, but this is not ensured in all architectures.
 
 ```fortran
  use penf
  print "(A)", bstr(n=1._R8P)
+```
+
+
+```fortran
+ use penf
+ print "(L1)", bcton(bstr(n=-1._R8P/3._R8P), knd=1._R8P)==-1._R8P/3._R8P
 ```
 
 **Attributes**: elemental
@@ -1486,13 +1643,19 @@ function bstr_R8P(n) result(bstr)
 
 ### bstr_R4P
 
-Convert real to string of bits.
+Convert real to string of bits, most significant bit first on all architectures.
 
  @note It is assumed that R4P is represented by means of 32 bits, but this is not ensured in all architectures.
 
 ```fortran
  use penf
  print "(A)", bstr(n=1._R4P)
+```
+
+
+```fortran
+ use penf
+ print "(L1)", bcton(bstr(n=-1._R4P/3._R4P), knd=1._R4P)==-1._R4P/3._R4P
 ```
 
 **Attributes**: elemental
@@ -1611,11 +1774,11 @@ function bstr_I1P(n) result(bstr)
 
 ### bctor_R8P
 
-Convert bit-string to real.
+Convert bit-string (most significant bit first) to real.
 
 ```fortran
  use penf
- print FR8P, bcton('0000000000000000000000000000000000000000000000001111000000111111', knd=1._R8P)
+ print FR8P, bcton('0011111111110000000000000000000000000000000000000000000000000000', knd=1._R8P)
 ```
 
 **Attributes**: elemental
@@ -1635,11 +1798,11 @@ function bctor_R8P(bstr, knd) result(n)
 
 ### bctor_R4P
 
-Convert bit-string to real.
+Convert bit-string (most significant bit first) to real.
 
 ```fortran
  use penf
- print FR4P, bcton('00000000000000001000000000111111', knd=1._R4P)
+ print FR4P, bcton('00111111100000000000000000000000', knd=1._R4P)
 ```
 
 **Attributes**: elemental

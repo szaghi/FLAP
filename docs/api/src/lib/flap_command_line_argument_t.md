@@ -266,6 +266,8 @@ classDiagram
 | `free_object` | pass(self) | Free dynamic memory. |
 | `print_version` | pass(self) | Print version. |
 | `print_error_message` | pass(self) | Print meaningful error message. |
+| `inherit_error` | pass(self) | Take the error of another object, with its message. |
+| `clear_error` | pass(self) | Forget the error and its message. |
 | `set_examples` | pass(self) | Set examples of correct usage. |
 | `assign_object` | pass(lhs ) | Assignment overloading. |
 | `free` |  | Free dynamic memory. |

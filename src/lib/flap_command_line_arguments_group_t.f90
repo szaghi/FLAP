@@ -189,7 +189,7 @@ contains
     if (.not.self%cla(a)%is_map) cycle
     call self%cla(a)%check_map(pref=pref)
     if (self%cla(a)%error /= 0) then
-      self%error = self%cla(a)%error
+      call self%inherit_error(from=self%cla(a))
       return
     endif
   enddo
@@ -384,7 +384,7 @@ contains
   if (self%is_called) then
     do a=1, self%Na
       if (.not.self%cla(a)%is_required_passed(pref=pref)) then
-        self%error = self%cla(a)%error
+        call self%inherit_error(from=self%cla(a))
         if (print_usage_) call write_text(self%usage_lun, self%usage(pref=pref))
         return
       endif
@@ -557,7 +557,7 @@ contains
   integer(I4P)                                       :: a    !< Counter.
 
   self%is_called = .false.
-  self%error = 0
+  call self%clear_error
   do a=1, self%Na
     self%cla(a)%is_passed = .false.
     if (allocated(self%cla(a)%val)) deallocate(self%cla(a)%val)
@@ -593,10 +593,10 @@ contains
         call self%cla(a)%set_source_value(value=envvar, source=SOURCE_ENVIRONMENT)
         if (self%cla(a)%error == 0) cycle
         if (.not.present(lenient)) then
-          self%error = self%cla(a)%error
+          call self%inherit_error(from=self%cla(a))
           return
         elseif (.not.lenient) then
-          self%error = self%cla(a)%error
+          call self%inherit_error(from=self%cla(a))
           return
         endif
         self%cla(a)%error = 0 ! lenient: the next sources
@@ -620,7 +620,7 @@ contains
       do a=1, self%Na
         call self%cla(a)%check_paths
         if (self%cla(a)%error /= 0) then
-          self%error = self%cla(a)%error
+          call self%inherit_error(from=self%cla(a))
           return
         endif
       enddo
@@ -867,7 +867,7 @@ contains
                      (.not.self%cla(a)%is_pair_override(negated))) then
                     ! current CLA has been already passed: raise the error on it and stop parsing
                     call self%cla(a)%raise_error_duplicated_clas(pref=pref, switch=trim(adjustl(args(arg))))
-                    self%error = self%cla(a)%error
+                    call self%inherit_error(from=self%cla(a))
                     return
                  else
                     ! a flag pair (F11): the last spelling wins (D5), each spelling once
@@ -884,7 +884,7 @@ contains
                     ! NAME=VALUE (D1 rule 2): the value is inline, the next argument is not consumed
                     call self%cla(a)%set_inline_value(value=inline_val, pref=pref, first=first)
                     if (self%cla(a)%error/=0) then
-                       self%error = self%cla(a)%error
+                       call self%inherit_error(from=self%cla(a))
                        return
                     endif
                  elseif (self%cla(a)%act==action_store) then
@@ -914,7 +914,7 @@ contains
                           else
                              ! no found, raise value missing error
                              call self%cla(a)%raise_error_value_missing(pref=pref)
-                             self%error = self%cla(a)%error
+                             call self%inherit_error(from=self%cla(a))
                              return
                           endif
                        endif
@@ -933,7 +933,7 @@ contains
                              arg = aaa
                           elseif (self%cla(a)%is_val_required) then
                              call self%cla(a)%raise_error_nargs_insufficient(pref=pref)
-                             self%error = self%cla(a)%error
+                             call self%inherit_error(from=self%cla(a))
                              return
                           endif
                        case('*')
@@ -959,7 +959,7 @@ contains
                              arg = arg + nargs
                           elseif (self%cla(a)%is_val_required) then
                              call self%cla(a)%raise_error_nargs_insufficient(pref=pref)
-                             self%error = self%cla(a)%error
+                             call self%inherit_error(from=self%cla(a))
                              return
                           endif
                        endselect
@@ -971,12 +971,12 @@ contains
                           if (arg+1>size(args)) then
                              ! no more arguments remaining, raise value missing error
                              call self%cla(a)%raise_error_value_missing(pref=pref)
-                             self%error = self%cla(a)%error
+                             call self%inherit_error(from=self%cla(a))
                              return
                           elseif (self%is_switch_token(args(arg+1))) then
                              ! the next argument is a CLA switch, raise value missing error
                              call self%cla(a)%raise_error_value_missing(pref=pref)
-                             self%error = self%cla(a)%error
+                             call self%inherit_error(from=self%cla(a))
                              return
                           else
                              ! value found: an explicitly empty argument is the empty string (D17 of #125, reversed in 2.11)
@@ -1028,7 +1028,7 @@ contains
                        call self%cla(a)%append_value(value=args(arg), first=first, pref=pref)
                     endif
                     if (self%cla(a)%error/=0) then
-                       self%error = self%cla(a)%error
+                       call self%inherit_error(from=self%cla(a))
                        return
                     endif
                  elseif (self%cla(a)%act==action_print_help) then
@@ -1072,7 +1072,7 @@ contains
               ! neither a named option nor a further positional: unknown argument, reported on a scratch CLA
               call cla%assign_object(self)
               call cla%raise_error_switch_unknown(pref=pref, switch=trim(adjustl(args(arg))), hint=hint(args(arg)))
-              self%error = cla%error
+              call self%inherit_error(from=cla)
               error_unknown_clas = self%error
               if (.not.ignore_unknown_clas) return
            endif
@@ -1348,7 +1348,7 @@ contains
         if (self%cla(a)%m_exclude/='') then
           if (self%is_passed(switch=self%cla(a)%m_exclude)) then
             call self%cla(a)%raise_error_m_exclude(pref=pref)
-            self%error = self%cla(a)%error
+            call self%inherit_error(from=self%cla(a))
             return
           endif
         endif

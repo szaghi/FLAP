@@ -25,6 +25,8 @@ graph LR
 - [print_version](#print-version)
 - [print_error_message](#print-error-message)
 - [set_examples](#set-examples)
+- [inherit_error](#inherit-error)
+- [clear_error](#clear-error)
 - [assign_object](#assign-object)
 - [error_prefix](#error-prefix)
 
@@ -78,6 +80,8 @@ classDiagram
 | `free_object` | pass(self) | Free dynamic memory. |
 | `print_version` | pass(self) | Print version. |
 | `print_error_message` | pass(self) | Print meaningful error message. |
+| `inherit_error` | pass(self) | Take the error of another object, with its message. |
+| `clear_error` | pass(self) | Forget the error and its message. |
 | `set_examples` | pass(self) | Set examples of correct usage. |
 | `assign_object` | pass(lhs ) | Assignment overloading. |
 
@@ -180,6 +184,96 @@ flowchart TD
   add_group["add_group"] --> set_examples["set_examples"]
   init["init"] --> set_examples["set_examples"]
   style set_examples fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### inherit_error
+
+Take the error of another object, with its message: the error of an argument is reported by its group, the one of a
+ group by the CLI, whose `error_message` is then the message of its `error`. A status (not positive) has no message.
+
+**Attributes**: pure
+
+```fortran
+subroutine inherit_error(self, from)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([object](/api/src/lib/flap_object_t#object)) | inout |  | Object data. |
+| `from` | class([object](/api/src/lib/flap_object_t#object)) | in |  | Object that raised the error. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  add["add"] --> inherit_error["inherit_error"]
+  check["check"] --> inherit_error["inherit_error"]
+  check_m_exclusive["check_m_exclusive"] --> inherit_error["inherit_error"]
+  check_m_exclusive["check_m_exclusive"] --> inherit_error["inherit_error"]
+  check_maps["check_maps"] --> inherit_error["inherit_error"]
+  copy_options["copy_options"] --> inherit_error["inherit_error"]
+  get_cla["get_cla"] --> inherit_error["inherit_error"]
+  get_cla_list["get_cla_list"] --> inherit_error["inherit_error"]
+  get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> inherit_error["inherit_error"]
+  get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> inherit_error["inherit_error"]
+  get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> inherit_error["inherit_error"]
+  get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> inherit_error["inherit_error"]
+  get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> inherit_error["inherit_error"]
+  get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> inherit_error["inherit_error"]
+  get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> inherit_error["inherit_error"]
+  get_cla_list_varying_char["get_cla_list_varying_char"] --> inherit_error["inherit_error"]
+  get_cla_list_varying_logical["get_cla_list_varying_logical"] --> inherit_error["inherit_error"]
+  get_map["get_map"] --> inherit_error["inherit_error"]
+  get_map_value["get_map_value"] --> inherit_error["inherit_error"]
+  is_required_passed["is_required_passed"] --> inherit_error["inherit_error"]
+  parse["parse"] --> inherit_error["inherit_error"]
+  parse_core["parse_core"] --> inherit_error["inherit_error"]
+  resolve_values["resolve_values"] --> inherit_error["inherit_error"]
+  set_mutually_exclusive_switches["set_mutually_exclusive_switches"] --> inherit_error["inherit_error"]
+  style inherit_error fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### clear_error
+
+Forget the error and its message.
+
+**Attributes**: pure
+
+```fortran
+subroutine clear_error(self)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([object](/api/src/lib/flap_object_t#object)) | inout |  | Object data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  add["add"] --> clear_error["clear_error"]
+  add_group["add_group"] --> clear_error["clear_error"]
+  copy_options["copy_options"] --> clear_error["clear_error"]
+  get_cla["get_cla"] --> clear_error["clear_error"]
+  get_cla_list["get_cla_list"] --> clear_error["clear_error"]
+  get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> clear_error["clear_error"]
+  get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> clear_error["clear_error"]
+  get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> clear_error["clear_error"]
+  get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> clear_error["clear_error"]
+  get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> clear_error["clear_error"]
+  get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> clear_error["clear_error"]
+  get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> clear_error["clear_error"]
+  get_cla_list_varying_char["get_cla_list_varying_char"] --> clear_error["clear_error"]
+  get_cla_list_varying_logical["get_cla_list_varying_logical"] --> clear_error["clear_error"]
+  get_source["get_source"] --> clear_error["clear_error"]
+  map_cla["map_cla"] --> clear_error["clear_error"]
+  reset_parse["reset_parse"] --> clear_error["clear_error"]
+  reset_parse["reset_parse"] --> clear_error["clear_error"]
+  style clear_error fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### assign_object

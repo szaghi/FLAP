@@ -155,6 +155,8 @@ classDiagram
 | `free_object` | pass(self) | Free dynamic memory. |
 | `print_version` | pass(self) | Print version. |
 | `print_error_message` | pass(self) | Print meaningful error message. |
+| `inherit_error` | pass(self) | Take the error of another object, with its message. |
+| `clear_error` | pass(self) | Forget the error and its message. |
 | `set_examples` | pass(self) | Set examples of correct usage. |
 | `assign_object` | pass(lhs ) | Assignment overloading. |
 | `free` |  | Free dynamic memory. |
@@ -242,6 +244,7 @@ subroutine check_maps(self, pref)
 flowchart TD
   parse_core["parse_core"] --> check_maps["check_maps"]
   check_maps["check_maps"] --> check_map["check_map"]
+  check_maps["check_maps"] --> inherit_error["inherit_error"]
   style check_maps fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -335,6 +338,7 @@ flowchart TD
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> is_required_passed["is_required_passed"]
   is_required_passed["is_required_passed"] --> is_required_passed["is_required_passed"]
   parse_core["parse_core"] --> is_required_passed["is_required_passed"]
+  is_required_passed["is_required_passed"] --> inherit_error["inherit_error"]
   is_required_passed["is_required_passed"] --> is_required_passed["is_required_passed"]
   is_required_passed["is_required_passed"] --> usage["usage"]
   is_required_passed["is_required_passed"] --> write_text["write_text"]
@@ -429,6 +433,7 @@ subroutine reset_parse(self)
 ```mermaid
 flowchart TD
   reset_parse["reset_parse"] --> reset_parse["reset_parse"]
+  reset_parse["reset_parse"] --> clear_error["clear_error"]
   style reset_parse fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -463,6 +468,7 @@ flowchart TD
   resolve_values["resolve_values"] --> check_paths["check_paths"]
   resolve_values["resolve_values"] --> config_key["config_key"]
   resolve_values["resolve_values"] --> has_value["has_value"]
+  resolve_values["resolve_values"] --> inherit_error["inherit_error"]
   resolve_values["resolve_values"] --> lookup["lookup"]
   resolve_values["resolve_values"] --> read_env["read_env"]
   resolve_values["resolve_values"] --> set_source_value["set_source_value"]
@@ -598,6 +604,7 @@ flowchart TD
   parse["parse"] --> count_occurrences["count_occurrences"]
   parse["parse"] --> cton["cton"]
   parse["parse"] --> hint["hint"]
+  parse["parse"] --> inherit_error["inherit_error"]
   parse["parse"] --> is_pair_override["is_pair_override"]
   parse["parse"] --> is_repeatable["is_repeatable"]
   parse["parse"] --> is_switch_like["is_switch_like"]
@@ -736,6 +743,7 @@ subroutine check_m_exclusive(self, pref)
 ```mermaid
 flowchart TD
   parse_core["parse_core"] --> check_m_exclusive["check_m_exclusive"]
+  check_m_exclusive["check_m_exclusive"] --> inherit_error["inherit_error"]
   check_m_exclusive["check_m_exclusive"] --> is_passed["is_passed"]
   check_m_exclusive["check_m_exclusive"] --> raise_error_m_exclude["raise_error_m_exclude"]
   style check_m_exclusive fill:#3e63dd,stroke:#99b,stroke-width:2px

@@ -1,8 +1,9 @@
 $ messages
+code 15: messages: error: switch "--nxx" is unknown! Did you mean "--nx"?
 signature: [--nx value] [--help] [--markdown] [--version]
 usage: messages [--nx value] [--help] [--markdown] [--version]
 
-The usage as text
+Messages as text
 
 Optional switches:
   --nx value

@@ -214,7 +214,7 @@ A value can always be given inline, `--format=json`; for an optional value it is
 
 <<< @/examples/output/units.ansi{ansi}
 
-## The usage as text
+## The error message and the usage as text
 
 <<< @/examples/snippets/messages-text.f90
 

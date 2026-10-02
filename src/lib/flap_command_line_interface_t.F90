@@ -308,7 +308,7 @@ contains
   integer(I4P)                                    :: gi                !< Group index
 
   ! each add_group reports only its own definition (as add, B34)
-  self%error = 0
+  call self%clear_error
   if (present(error)) error = 0
   gi = self%group_index(group)
   if (gi >= 0) then
@@ -611,7 +611,7 @@ contains
 
   source = SOURCE_NONE
   if (.not.self%is_parsed_) call self%parse(pref=pref)
-  self%error = 0
+  call self%clear_error
   g = 0
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
@@ -720,7 +720,7 @@ contains
     self%error = ERROR_MISSING_GROUP
   else
     call self%clasg(g)%add_exclusive_set(switches=switches, required=required, pref=pref)
-    self%error = self%clasg(g)%error
+    call self%inherit_error(from=self%clasg(g))
   endif
   if (present(error)) error = self%error
   endsubroutine set_mutually_exclusive_switches
@@ -779,7 +779,7 @@ contains
   integer(I4P)                                 :: g             !< Counter.
 
   ! initialize CLA; each add reports only its own definition: the error of a previous failed add is not inherited (B34)
-  self%error = 0
+  call self%clear_error
   call cla%assign_object(self)
   cla%error = 0
   if (present(switch)) then
@@ -838,24 +838,25 @@ contains
   cla%m_exclude     = ''                        ; if (present(exclude      )) cla%m_exclude       = exclude
                                                   if (present(envvar       )) cla%envvar          = envvar
   if (.not.present(envvar)) call set_auto_envvar
-  call cla%check(pref=pref) ; self%error = cla%error
+  call cla%check(pref=pref) ; call self%inherit_error(from=cla)
   if (self%error/=0) then
     if (present(error)) error = self%error
     return
   endif
   ! add CLA to CLI
   if ((.not.present(group)).and.(.not.present(group_index))) then
-    call self%clasg(0)%add(pref=pref, cla=cla) ; self%error = self%clasg(0)%error
+    call self%clasg(0)%add(pref=pref, cla=cla) ; call self%inherit_error(from=self%clasg(0))
   elseif (present(group)) then
     if (self%is_defined_group(group=group, g=g)) then
-      call self%clasg(g)%add(pref=pref, cla=cla) ; self%error = self%clasg(g)%error
+      call self%clasg(g)%add(pref=pref, cla=cla) ; call self%inherit_error(from=self%clasg(g))
     else
       call self%add_group(group=group)
-      call self%clasg(size(self%clasg,dim=1)-1)%add(pref=pref, cla=cla) ; self%error = self%clasg(size(self%clasg,dim=1)-1)%error
+      call self%clasg(size(self%clasg,dim=1)-1)%add(pref=pref, cla=cla)
+      call self%inherit_error(from=self%clasg(size(self%clasg,dim=1)-1))
     endif
   elseif (present(group_index)) then
     if (group_index<=size(self%clasg,dim=1)-1) then
-      call self%clasg(group_index)%add(pref=pref, cla=cla) ; self%error = self%clasg(group_index)%error
+      call self%clasg(group_index)%add(pref=pref, cla=cla) ; call self%inherit_error(from=self%clasg(group_index))
     endif
   endif
   if (present(error)) error = self%error
@@ -917,7 +918,7 @@ contains
     ! check group consistency
     call self%clasg(g)%check(pref=pref)
     if (self%clasg(g)%error==0) call self%clasg(g)%check_position_gaps(pref=pref)
-    self%error = self%clasg(g)%error
+    call self%inherit_error(from=self%clasg(g))
     if (present(error)) error = self%error
     if (self%error/=0) exit
     ! check mutually exclusive interaction
@@ -944,7 +945,7 @@ contains
       if (self%is_defined_group(group=self%clasg(g)%m_exclude, g=gg)) then
         if (self%clasg(gg)%is_called) then
           call self%clasg(g)%raise_error_m_exclude(pref=pref)
-          self%error = self%clasg(g)%error
+          call self%inherit_error(from=self%clasg(g))
           exit
         endif
       endif
@@ -1095,7 +1096,7 @@ contains
   integer(I4P)                                 :: g    !< Counter for CLAs group.
 
   self%is_parsed_ = .false.
-  self%error = 0
+  call self%clear_error
   self%error_unknown_clas = 0
   if (allocated(self%args)) deallocate(self%args)
   if (allocated(self%config_used)) deallocate(self%config_used)
@@ -1216,7 +1217,7 @@ contains
     else
       call self%clasg(g)%sanitize_defaults
     endif
-    self%error = self%clasg(g)%error
+    call self%inherit_error(from=self%clasg(g))
     if (self%is_fatal()) exit ! a status (help, version, markdown) does not stop parsing: syntax errors come first (D3)
   enddo
   if (self%is_fatal()) return
@@ -1240,7 +1241,7 @@ contains
     call self%clasg(g)%resolve_values(ignore_env=self%ignore_env, config=config, &
                                       check_paths=(g == 0 .or. self%clasg(g)%is_called).and.(.not.alternate), &
                                       lenient=alternate)
-    self%error = self%clasg(g)%error
+    call self%inherit_error(from=self%clasg(g))
     if (self%is_fatal()) exit
   enddo
   if (self%is_fatal()) return
@@ -1257,7 +1258,7 @@ contains
   ! check if all required CLAs have been passed
   do g=0, size(ai,dim=1)-1
     call self%clasg(g)%is_required_passed(pref=pref, print_usage=self%usage_on_error_is('FULL'))
-    self%error = self%clasg(g)%error
+    call self%inherit_error(from=self%clasg(g))
     if (self%is_fatal()) exit
   enddo
   if (self%is_fatal()) then
@@ -1269,7 +1270,7 @@ contains
   do g=0, size(ai,dim=1)-1
     if (g > 0 .and. .not.self%clasg(g)%is_called) cycle
     call self%clasg(g)%check_maps(pref=pref)
-    self%error = self%clasg(g)%error
+    call self%inherit_error(from=self%clasg(g))
     if (self%is_fatal()) exit
   enddo
   if (self%is_fatal()) return
@@ -1277,7 +1278,7 @@ contains
   ! check the mutually exclusive sets of switches: after the statuses and the values (E4 of #125)
   do g=0, size(ai,dim=1)-1
     call self%clasg(g)%check_exclusive_sets(pref=pref, print_usage=self%usage_on_error_is('FULL'))
-    self%error = self%clasg(g)%error
+    call self%inherit_error(from=self%clasg(g))
     if (self%is_fatal()) exit
   enddo
   if (self%is_fatal()) then
@@ -1288,7 +1289,7 @@ contains
   ! check the pairwise exclusions (exclude=) of the called groups, then the exclusive groups (commands)
   do g=0, size(ai,dim=1)-1
     call self%clasg(g)%check_m_exclusive(pref=pref)
-    self%error = self%clasg(g)%error
+    call self%inherit_error(from=self%clasg(g))
     if (self%is_fatal()) exit
   enddo
   if (self%is_fatal()) return
@@ -1736,7 +1737,7 @@ contains
     call self%parse(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
-  self%error = 0 ! report only this get: the error of a previous get must not leak into it (B22)
+  call self%clear_error ! report only this get: the error of a previous get must not leak into it (B22)
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -1753,14 +1754,14 @@ contains
       if (.not.found) then
         call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch=switch)
       else
-        call self%clasg(g)%cla(a)%get(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+        call self%clasg(g)%cla(a)%get(pref=pref, val=val) ; call self%inherit_error(from=self%clasg(g)%cla(a))
       endif
     elseif (present(position)) then
       a = self%clasg(g)%positional_index(position)
       if (a == 0) then
         call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch='position '//trim(str(position, .true.)))
       else
-        call self%clasg(g)%cla(a)%get(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+        call self%clasg(g)%cla(a)%get(pref=pref, val=val) ; call self%inherit_error(from=self%clasg(g)%cla(a))
       endif
     else
       call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
@@ -1794,7 +1795,7 @@ contains
     call self%parse(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
-  self%error = 0 ! report only this get: the error of a previous get must not leak into it (B22)
+  call self%clear_error ! report only this get: the error of a previous get must not leak into it (B22)
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -1810,14 +1811,14 @@ contains
     if (.not.found) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch=switch)
     else
-      call self%clasg(g)%cla(a)%get(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+      call self%clasg(g)%cla(a)%get(pref=pref, val=val) ; call self%inherit_error(from=self%clasg(g)%cla(a))
     endif
   elseif (present(position)) then
     a = self%clasg(g)%positional_index(position)
     if (a == 0) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch='position '//trim(str(position, .true.)))
     else
-      call self%clasg(g)%cla(a)%get(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+      call self%clasg(g)%cla(a)%get(pref=pref, val=val) ; call self%inherit_error(from=self%clasg(g)%cla(a))
     endif
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
@@ -1849,7 +1850,7 @@ contains
     call self%parse(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
-  self%error = 0 ! report only this get: the error of a previous get must not leak into it (B22)
+  call self%clear_error ! report only this get: the error of a previous get must not leak into it (B22)
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -1865,14 +1866,14 @@ contains
     if (.not.found) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch=switch)
     else
-      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; call self%inherit_error(from=self%clasg(g)%cla(a))
     endif
   elseif (present(position)) then
     a = self%clasg(g)%positional_index(position)
     if (a == 0) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch='position '//trim(str(position, .true.)))
     else
-      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; call self%inherit_error(from=self%clasg(g)%cla(a))
     endif
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
@@ -1904,7 +1905,7 @@ contains
     call self%parse(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
-  self%error = 0 ! report only this get: the error of a previous get must not leak into it (B22)
+  call self%clear_error ! report only this get: the error of a previous get must not leak into it (B22)
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -1920,14 +1921,14 @@ contains
     if (.not.found) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch=switch)
     else
-      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; call self%inherit_error(from=self%clasg(g)%cla(a))
     endif
   elseif (present(position)) then
     a = self%clasg(g)%positional_index(position)
     if (a == 0) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch='position '//trim(str(position, .true.)))
     else
-      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; call self%inherit_error(from=self%clasg(g)%cla(a))
     endif
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
@@ -1959,7 +1960,7 @@ contains
     call self%parse(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
-  self%error = 0 ! report only this get: the error of a previous get must not leak into it (B22)
+  call self%clear_error ! report only this get: the error of a previous get must not leak into it (B22)
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -1975,14 +1976,14 @@ contains
     if (.not.found) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch=switch)
     else
-      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; call self%inherit_error(from=self%clasg(g)%cla(a))
     endif
   elseif (present(position)) then
     a = self%clasg(g)%positional_index(position)
     if (a == 0) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch='position '//trim(str(position, .true.)))
     else
-      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; call self%inherit_error(from=self%clasg(g)%cla(a))
     endif
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
@@ -2014,7 +2015,7 @@ contains
     call self%parse(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
-  self%error = 0 ! report only this get: the error of a previous get must not leak into it (B22)
+  call self%clear_error ! report only this get: the error of a previous get must not leak into it (B22)
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -2030,14 +2031,14 @@ contains
     if (.not.found) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch=switch)
     else
-      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; call self%inherit_error(from=self%clasg(g)%cla(a))
     endif
   elseif (present(position)) then
     a = self%clasg(g)%positional_index(position)
     if (a == 0) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch='position '//trim(str(position, .true.)))
     else
-      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; call self%inherit_error(from=self%clasg(g)%cla(a))
     endif
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
@@ -2069,7 +2070,7 @@ contains
     call self%parse(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
-  self%error = 0 ! report only this get: the error of a previous get must not leak into it (B22)
+  call self%clear_error ! report only this get: the error of a previous get must not leak into it (B22)
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -2085,14 +2086,14 @@ contains
     if (.not.found) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch=switch)
     else
-      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; call self%inherit_error(from=self%clasg(g)%cla(a))
     endif
   elseif (present(position)) then
     a = self%clasg(g)%positional_index(position)
     if (a == 0) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch='position '//trim(str(position, .true.)))
     else
-      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; call self%inherit_error(from=self%clasg(g)%cla(a))
     endif
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
@@ -2124,7 +2125,7 @@ contains
     call self%parse(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
-  self%error = 0 ! report only this get: the error of a previous get must not leak into it (B22)
+  call self%clear_error ! report only this get: the error of a previous get must not leak into it (B22)
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -2140,14 +2141,14 @@ contains
     if (.not.found) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch=switch)
     else
-      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; call self%inherit_error(from=self%clasg(g)%cla(a))
     endif
   elseif (present(position)) then
     a = self%clasg(g)%positional_index(position)
     if (a == 0) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch='position '//trim(str(position, .true.)))
     else
-      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; call self%inherit_error(from=self%clasg(g)%cla(a))
     endif
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
@@ -2179,7 +2180,7 @@ contains
     call self%parse(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
-  self%error = 0 ! report only this get: the error of a previous get must not leak into it (B22)
+  call self%clear_error ! report only this get: the error of a previous get must not leak into it (B22)
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -2195,14 +2196,14 @@ contains
     if (.not.found) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch=switch)
     else
-      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; call self%inherit_error(from=self%clasg(g)%cla(a))
     endif
   elseif (present(position)) then
     a = self%clasg(g)%positional_index(position)
     if (a == 0) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch='position '//trim(str(position, .true.)))
     else
-      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; call self%inherit_error(from=self%clasg(g)%cla(a))
     endif
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
@@ -2234,7 +2235,7 @@ contains
     call self%parse(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
-  self%error = 0 ! report only this get: the error of a previous get must not leak into it (B22)
+  call self%clear_error ! report only this get: the error of a previous get must not leak into it (B22)
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -2250,14 +2251,14 @@ contains
     if (.not.found) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch=switch)
     else
-      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; call self%inherit_error(from=self%clasg(g)%cla(a))
     endif
   elseif (present(position)) then
     a = self%clasg(g)%positional_index(position)
     if (a == 0) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch='position '//trim(str(position, .true.)))
     else
-      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; call self%inherit_error(from=self%clasg(g)%cla(a))
     endif
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)
@@ -2289,7 +2290,7 @@ contains
   integer(I4P)                                 :: n          !< Number of CLAs to copy.
   integer(I4P)                                 :: c          !< Position of the next comma.
 
-  self%error = 0
+  call self%clear_error
   if (present(error)) error = 0
   gt = self%group_index(to_group)
   if (gt < 0) then
@@ -2358,7 +2359,7 @@ contains
     if (cla%is_auto_envvar) cla%envvar = envvar_name(prefix=self%auto_envvar_prefix, group=self%clasg(gt)%group, &
                                                      switch=cla%switch)
     call self%clasg(gt)%add(pref=pref, cla=cla)
-    self%error = self%clasg(gt)%error
+    call self%inherit_error(from=self%clasg(gt))
     if (self%error /= 0) exit
   enddo
   if (present(error)) error = self%error
@@ -2407,7 +2408,7 @@ contains
     if (present(error)) error = self%error
     return
   endif
-  call self%clasg(g)%cla(a)%get_map(keys=keys, values=values, pref=pref) ; self%error = self%clasg(g)%cla(a)%error
+  call self%clasg(g)%cla(a)%get_map(keys=keys, values=values, pref=pref) ; call self%inherit_error(from=self%clasg(g)%cla(a))
   if (present(error)) error = self%error
   endsubroutine get_map
 
@@ -2431,7 +2432,8 @@ contains
     if (present(error)) error = self%error
     return
   endif
-  call self%clasg(g)%cla(a)%get_map_value(key=key, val=val, found=found, pref=pref) ; self%error = self%clasg(g)%cla(a)%error
+  call self%clasg(g)%cla(a)%get_map_value(key=key, val=val, found=found, pref=pref)
+  call self%inherit_error(from=self%clasg(g)%cla(a))
   if (present(error)) error = self%error
   endsubroutine get_map_value
 
@@ -2454,7 +2456,7 @@ contains
     call self%parse(pref=pref, args=args)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
-  self%error = 0 ! report only this get (B22)
+  call self%clear_error ! report only this get (B22)
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -2490,7 +2492,7 @@ contains
     call self%parse(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
-  self%error = 0 ! report only this get: the error of a previous get must not leak into it (B22)
+  call self%clear_error ! report only this get: the error of a previous get must not leak into it (B22)
   if (present(group)) then
     if (.not.self%is_defined_group(group=group, g=g)) then
       call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group)
@@ -2506,14 +2508,14 @@ contains
     if (.not.found) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch=switch)
     else
-      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; call self%inherit_error(from=self%clasg(g)%cla(a))
     endif
   elseif (present(position)) then
     a = self%clasg(g)%positional_index(position)
     if (a == 0) then
       call self%errored(pref=pref, error=ERROR_MISSING_CLA, switch='position '//trim(str(position, .true.)))
     else
-      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; self%error = self%clasg(g)%cla(a)%error
+      call self%clasg(g)%cla(a)%get_varying(pref=pref, val=val) ; call self%inherit_error(from=self%clasg(g)%cla(a))
     endif
   else
     call self%errored(pref=pref, error=ERROR_MISSING_SELECTION_CLA)

@@ -28,9 +28,9 @@ title: penf_global_parameters_variables
 | `I2P` | integer | parameter | Range \([-2^{15},+2^{15} - 1]\), 5  digits plus sign; 16 bits. |
 | `I1P` | integer | parameter | Range \([-2^{7} ,+2^{7}  - 1]\), 3  digits plus sign; 8  bits. |
 | `I_P` | integer | parameter | Default integer precision. |
-| `FR16P` | character(len=*) | parameter | Output format for kind=R8P real. |
-| `FR8P` | character(len=*) | parameter | Output format for kind=R8P real. |
-| `FR4P` | character(len=*) | parameter | Output format for kind=R4P real. |
+| `FR16P` | character(len=*) | parameter | Output format for kind=R8P real, exact when read back. |
+| `FR8P` | character(len=*) | parameter | Output format for kind=R8P real, exact when read back. |
+| `FR4P` | character(len=*) | parameter | Output format for kind=R4P real, exact when read back. |
 | `FR_P` | character(len=*) | parameter | Output format for kind=R_P real. |
 | `FI8P` | character(len=*) | parameter | Output format for kind=I8P integer. |
 | `FI8PZP` | character(len=*) | parameter | Output format for kind=I8P integer with zero prefixing. |
@@ -44,7 +44,7 @@ title: penf_global_parameters_variables
 | `FI_PZP` | character(len=*) | parameter | Output format for kind=I_P integer with zero prefixing. |
 | `DR16P` | integer | parameter | Number of digits of output format FR8P. |
 | `DR8P` | integer | parameter | Number of digits of output format FR8P. |
-| `DR4P` | integer | parameter | Number of digits of output format FR4P. |
+| `DR4P` | integer | parameter | Number of characters of the strings of kind=R4P real, not less than the width of FR4P. |
 | `DR_P` | integer | parameter | Number of digits of output format FR_P. |
 | `DI8P` | integer | parameter | Number of digits of output format I8P. |
 | `DI4P` | integer | parameter | Number of digits of output format I4P. |

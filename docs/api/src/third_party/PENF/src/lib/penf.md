@@ -59,8 +59,10 @@ Check the type of bit ordering (big or little endian) of the running architectur
 
 ```fortran
  use penf
+ integer(I1P) :: bytes(1:4)
  call check_endian
- print *, endian
+ bytes = transfer(1_I4P, bytes)
+ print "(L1)", (endian==endianL).eqv.(bytes(1)==1_I1P)
 ```
 
 ```fortran
@@ -84,6 +86,12 @@ Initialize PENF's variables that are not initialized into the definition specifi
  use penf
  call penf_init
  print FI1P, BYR4P
+```
+
+
+```fortran
+ use penf
+ print "(L1)", MaxR16P==huge(MaxR16P).and.MinR16P==-huge(MinR16P).and.smallR16P==tiny(smallR16P)
 ```
 
 ```fortran

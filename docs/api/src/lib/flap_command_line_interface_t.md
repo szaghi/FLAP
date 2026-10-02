@@ -188,6 +188,8 @@ classDiagram
 | `free_object` | pass(self) | Free dynamic memory. |
 | `print_version` | pass(self) | Print version. |
 | `print_error_message` | pass(self) | Print meaningful error message. |
+| `inherit_error` | pass(self) | Take the error of another object, with its message. |
+| `clear_error` | pass(self) | Forget the error and its message. |
 | `set_examples` | pass(self) | Set examples of correct usage. |
 | `assign_object` | pass(lhs ) | Assignment overloading. |
 | `free` |  | Free dynamic memory. |
@@ -373,6 +375,7 @@ flowchart TD
   add["add"] --> add_group["add_group"]
   add_group["add_group"] --> alias_error["alias_error"]
   add_group["add_group"] --> assign_object["assign_object"]
+  add_group["add_group"] --> clear_error["clear_error"]
   add_group["add_group"] --> group_index["group_index"]
   add_group["add_group"] --> has_alias["has_alias"]
   add_group["add_group"] --> is_defined_group["is_defined_group"]
@@ -518,6 +521,7 @@ subroutine set_mutually_exclusive_switches(self, switches, required, group, pref
 flowchart TD
   set_mutually_exclusive_switches["set_mutually_exclusive_switches"] --> add_exclusive_set["add_exclusive_set"]
   set_mutually_exclusive_switches["set_mutually_exclusive_switches"] --> group_index["group_index"]
+  set_mutually_exclusive_switches["set_mutually_exclusive_switches"] --> inherit_error["inherit_error"]
   style set_mutually_exclusive_switches fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -589,6 +593,8 @@ flowchart TD
   add["add"] --> add_group["add_group"]
   add["add"] --> assign_object["assign_object"]
   add["add"] --> check["check"]
+  add["add"] --> clear_error["clear_error"]
+  add["add"] --> inherit_error["inherit_error"]
   add["add"] --> is_defined_group["is_defined_group"]
   add["add"] --> set_auto_envvar["set_auto_envvar"]
   add["add"] --> upper_case["upper_case"]
@@ -622,6 +628,7 @@ flowchart TD
   check["check"] --> check["check"]
   check["check"] --> check_position_gaps["check_position_gaps"]
   check["check"] --> errored["errored"]
+  check["check"] --> inherit_error["inherit_error"]
   check["check"] --> is_defined_group["is_defined_group"]
   check["check"] --> upper_case["upper_case"]
   style check fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -647,6 +654,7 @@ subroutine check_m_exclusive(self, pref)
 ```mermaid
 flowchart TD
   parse_core["parse_core"] --> check_m_exclusive["check_m_exclusive"]
+  check_m_exclusive["check_m_exclusive"] --> inherit_error["inherit_error"]
   check_m_exclusive["check_m_exclusive"] --> is_defined_group["is_defined_group"]
   check_m_exclusive["check_m_exclusive"] --> raise_error_m_exclude["raise_error_m_exclude"]
   style check_m_exclusive fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -672,6 +680,7 @@ subroutine reset_parse(self)
 ```mermaid
 flowchart TD
   reset_parse["reset_parse"] --> reset_parse["reset_parse"]
+  reset_parse["reset_parse"] --> clear_error["clear_error"]
   reset_parse["reset_parse"] --> reset_parse["reset_parse"]
   style reset_parse fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -776,6 +785,7 @@ flowchart TD
   parse_core["parse_core"] --> ensure_builtins["ensure_builtins"]
   parse_core["parse_core"] --> errored["errored"]
   parse_core["parse_core"] --> get_args["get_args"]
+  parse_core["parse_core"] --> inherit_error["inherit_error"]
   parse_core["parse_core"] --> is_action_passed["is_action_passed"]
   parse_core["parse_core"] --> is_fatal["is_fatal"]
   parse_core["parse_core"] --> is_required_passed["is_required_passed"]
@@ -969,8 +979,10 @@ subroutine get_cla(self, val, pref, args, group, switch, position, error)
 
 ```mermaid
 flowchart TD
+  get_cla["get_cla"] --> clear_error["clear_error"]
   get_cla["get_cla"] --> errored["errored"]
   get_cla["get_cla"] --> get["get"]
+  get_cla["get_cla"] --> inherit_error["inherit_error"]
   get_cla["get_cla"] --> is_defined["is_defined"]
   get_cla["get_cla"] --> is_defined_group["is_defined_group"]
   get_cla["get_cla"] --> parse["parse"]
@@ -1006,8 +1018,10 @@ subroutine get_cla_list(self, val, pref, args, group, switch, position, error)
 
 ```mermaid
 flowchart TD
+  get_cla_list["get_cla_list"] --> clear_error["clear_error"]
   get_cla_list["get_cla_list"] --> errored["errored"]
   get_cla_list["get_cla_list"] --> get["get"]
+  get_cla_list["get_cla_list"] --> inherit_error["inherit_error"]
   get_cla_list["get_cla_list"] --> is_defined["is_defined"]
   get_cla_list["get_cla_list"] --> is_defined_group["is_defined_group"]
   get_cla_list["get_cla_list"] --> parse["parse"]
@@ -1045,8 +1059,10 @@ subroutine get_cla_list_varying_R16P(self, val, pref, args, group, switch, posit
 
 ```mermaid
 flowchart TD
+  get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> clear_error["clear_error"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> errored["errored"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> get_varying["get_varying"]
+  get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> inherit_error["inherit_error"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> is_defined["is_defined"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> is_defined_group["is_defined_group"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> parse["parse"]
@@ -1084,8 +1100,10 @@ subroutine get_cla_list_varying_R8P(self, val, pref, args, group, switch, positi
 
 ```mermaid
 flowchart TD
+  get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> clear_error["clear_error"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> errored["errored"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> get_varying["get_varying"]
+  get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> inherit_error["inherit_error"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> is_defined["is_defined"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> is_defined_group["is_defined_group"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> parse["parse"]
@@ -1123,8 +1141,10 @@ subroutine get_cla_list_varying_R4P(self, val, pref, args, group, switch, positi
 
 ```mermaid
 flowchart TD
+  get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> clear_error["clear_error"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> errored["errored"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> get_varying["get_varying"]
+  get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> inherit_error["inherit_error"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> is_defined["is_defined"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> is_defined_group["is_defined_group"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> parse["parse"]
@@ -1162,8 +1182,10 @@ subroutine get_cla_list_varying_I8P(self, val, pref, args, group, switch, positi
 
 ```mermaid
 flowchart TD
+  get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> clear_error["clear_error"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> errored["errored"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> get_varying["get_varying"]
+  get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> inherit_error["inherit_error"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> is_defined["is_defined"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> is_defined_group["is_defined_group"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> parse["parse"]
@@ -1201,8 +1223,10 @@ subroutine get_cla_list_varying_I4P(self, val, pref, args, group, switch, positi
 
 ```mermaid
 flowchart TD
+  get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> clear_error["clear_error"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> errored["errored"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> get_varying["get_varying"]
+  get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> inherit_error["inherit_error"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> is_defined["is_defined"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> is_defined_group["is_defined_group"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> parse["parse"]
@@ -1240,8 +1264,10 @@ subroutine get_cla_list_varying_I2P(self, val, pref, args, group, switch, positi
 
 ```mermaid
 flowchart TD
+  get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> clear_error["clear_error"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> errored["errored"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> get_varying["get_varying"]
+  get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> inherit_error["inherit_error"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> is_defined["is_defined"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> is_defined_group["is_defined_group"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> parse["parse"]
@@ -1279,8 +1305,10 @@ subroutine get_cla_list_varying_I1P(self, val, pref, args, group, switch, positi
 
 ```mermaid
 flowchart TD
+  get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> clear_error["clear_error"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> errored["errored"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> get_varying["get_varying"]
+  get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> inherit_error["inherit_error"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> is_defined["is_defined"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> is_defined_group["is_defined_group"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> parse["parse"]
@@ -1318,8 +1346,10 @@ subroutine get_cla_list_varying_logical(self, val, pref, args, group, switch, po
 
 ```mermaid
 flowchart TD
+  get_cla_list_varying_logical["get_cla_list_varying_logical"] --> clear_error["clear_error"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> errored["errored"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> get_varying["get_varying"]
+  get_cla_list_varying_logical["get_cla_list_varying_logical"] --> inherit_error["inherit_error"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> is_defined["is_defined"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> is_defined_group["is_defined_group"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> parse["parse"]
@@ -1356,9 +1386,11 @@ subroutine copy_options(self, to_group, from_group, switches, pref, error)
 ```mermaid
 flowchart TD
   copy_options["copy_options"] --> add["add"]
+  copy_options["copy_options"] --> clear_error["clear_error"]
   copy_options["copy_options"] --> envvar_name["envvar_name"]
   copy_options["copy_options"] --> errored["errored"]
   copy_options["copy_options"] --> group_index["group_index"]
+  copy_options["copy_options"] --> inherit_error["inherit_error"]
   copy_options["copy_options"] --> is_builtin["is_builtin"]
   copy_options["copy_options"] --> is_defined["is_defined"]
   copy_options["copy_options"] --> is_positional_name["is_positional_name"]
@@ -1392,6 +1424,7 @@ subroutine get_map(self, switch, keys, values, group, pref, args, error)
 flowchart TD
   get_map["get_map"] --> get_map["get_map"]
   get_map["get_map"] --> get_map["get_map"]
+  get_map["get_map"] --> inherit_error["inherit_error"]
   get_map["get_map"] --> map_cla["map_cla"]
   style get_map fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -1425,6 +1458,7 @@ subroutine get_map_value(self, switch, key, val, found, group, pref, args, error
 flowchart TD
   get_map_value["get_map_value"] --> get_map_value["get_map_value"]
   get_map_value["get_map_value"] --> get_map_value["get_map_value"]
+  get_map_value["get_map_value"] --> inherit_error["inherit_error"]
   get_map_value["get_map_value"] --> map_cla["map_cla"]
   style get_map_value fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -1458,8 +1492,10 @@ subroutine get_cla_list_varying_char(self, val, pref, args, group, switch, posit
 
 ```mermaid
 flowchart TD
+  get_cla_list_varying_char["get_cla_list_varying_char"] --> clear_error["clear_error"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> errored["errored"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> get_varying["get_varying"]
+  get_cla_list_varying_char["get_cla_list_varying_char"] --> inherit_error["inherit_error"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> is_defined["is_defined"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> is_defined_group["is_defined_group"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> parse["parse"]
@@ -1935,6 +1971,7 @@ function get_source(self, group, switch, position, pref, error) result(source)
 
 ```mermaid
 flowchart TD
+  get_source["get_source"] --> clear_error["clear_error"]
   get_source["get_source"] --> errored["errored"]
   get_source["get_source"] --> is_defined["is_defined"]
   get_source["get_source"] --> is_defined_group["is_defined_group"]
@@ -2429,6 +2466,7 @@ function map_cla(self, switch, group, pref, args, g, a) result(ok)
 flowchart TD
   get_map["get_map"] --> map_cla["map_cla"]
   get_map_value["get_map_value"] --> map_cla["map_cla"]
+  map_cla["map_cla"] --> clear_error["clear_error"]
   map_cla["map_cla"] --> errored["errored"]
   map_cla["map_cla"] --> is_defined["is_defined"]
   map_cla["map_cla"] --> is_defined_group["is_defined_group"]
