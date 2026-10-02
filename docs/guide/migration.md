@@ -7,6 +7,15 @@ title: Upgrading
 Every change you can observe when moving to a new release, newest first. Additive releases only add API: existing
 programs keep their behaviour. The plan behind them is issue [#125](https://github.com/szaghi/FLAP/issues/125).
 
+## v2.5.0 (build)
+
+- **The macro that enables real quad precision is `PENF_R16P`; it was `_R16P`.** Only builds that pass it are affected:
+  replace `-D_R16P` with `-DPENF_R16P` in your build files, for FLAP and for PENF. A build that still passes `-D_R16P`
+  stops in PENF with an explicit `#error`; a build that passes neither is unchanged (`R16P` is the same kind as `R8P`).
+  The old name was also the text of the kind suffix: with `-D_R16P` the preprocessor rewrote a literal like `0.25_R16P`
+  into `0.251`, a default real (B35 of #125). See [Compiler notes](./install#compiler-notes).
+- Nothing changes in the API nor in the behaviour of a program.
+
 ## v2.4.1 (fixes)
 
 - `get` checks the `choices` of a `character` value on the whole value, before storing it: a value longer than the
