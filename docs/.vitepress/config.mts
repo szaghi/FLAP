@@ -109,4 +109,14 @@ export default withMermaid({
     },
   },
   mermaid: {},
+  vite: {
+    // Build with an explicit modern JS target so the docs compile regardless of
+    // which mermaid/vitepress/esbuild versions npm resolves. Vite's default
+    // es2020 target forces esbuild to down-level modern syntax (e.g. the
+    // destructuring mermaid 11.16+ emits), which it refuses to do and the build
+    // dies. es2022 needs no lowering and is within VitePress's browser floor.
+    build: {
+      target: 'es2022',
+    },
+  },
 })
