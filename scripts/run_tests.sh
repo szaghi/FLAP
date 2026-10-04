@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 # Run the project test suite.
 #
-# Usage: run_tests.sh [--np N]
-#   -n, --np N   Ranks for MPI tests (default: 2).
+# Usage: run_tests.sh [--np N] [--vmem KB]
+#   -n, --np N     Ranks for MPI tests (default: 2).
+#   -m, --vmem KB  Cap the virtual memory of every test at KB kilobytes (`ulimit -v`), so that a test
+#                  exhausting the memory fails instead of swamping the machine (default: no cap). MPI
+#                  runtimes reserve much virtual memory: give MPI tests a generous cap.
 #
 # Execution by binary name:
 #   exe/*mpi*     — MPI test: run under `mpirun -np N` (N from --np, default 2).
@@ -14,7 +17,11 @@
 #   exe/*_xfail_*   — expected-failure test. MUST exit non-zero
 #                     (e.g. validates an `error stop` path). Exit 0 is treated
 #                     as a regression (XPASS, counted as failure).
-#   exe/*          — regular test. MUST exit 0.
+#   exe/*          — regular test. MUST exit 0 and, if the project has a
+#                     `<name>.result` file for it (as the doctests extracted by
+#                     `fobis doctests` have), MUST print that result: output and
+#                     result are compared with leading and trailing white space
+#                     removed, as `fobis doctests` does.
 #
 # Output labels (autotools convention):
 #   PASS   regular test passed
@@ -23,12 +30,17 @@
 #   XPASS  expected-failure test passed unexpectedly (failure)
 
 NP=2
+VMEM=''
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --np | -n ) NP="$2"; shift 2 ;;
+    --vmem | -m ) VMEM="$2"; shift 2 ;;
     * ) printf "Unknown argument: %s\n" "$1" >&2; exit 2 ;;
   esac
 done
+if [[ -n "$VMEM" && ! "$VMEM" =~ ^[0-9]+$ ]]; then
+  printf "Invalid --vmem: %s (kilobytes expected)\n" "$VMEM" >&2; exit 2
+fi
 
 if [[ -t 1 ]]; then
   RED=$'\033[0;31m'; GREEN=$'\033[0;32m'; BOLD=$'\033[1m'; RESET=$'\033[0m'
@@ -36,9 +48,21 @@ else
   RED=''; GREEN=''; BOLD=''; RESET=''
 fi
 
+# Remove leading and trailing white space (as Python's str.strip).
+trim() {
+  local s="$1"
+  s="${s#"${s%%[![:space:]]*}"}"
+  s="${s%"${s##*[![:space:]]}"}"
+  printf '%s' "$s"
+}
+
 pass=0; fail=0
 tmpout=$(mktemp)
-trap 'rm -f "$tmpout"' EXIT
+results=$(mktemp)
+trap 'rm -f "$tmpout" "$results"' EXIT
+
+# The expected results of the project: every <name>.result outside the build directory.
+find . -path ./exe -prune -o -type f -name '*.result' -print > "$results"
 
 shopt -s nullglob
 for exe in exe/*; do
@@ -52,7 +76,10 @@ for exe in exe/*; do
     runner=()
   fi
 
-  "${runner[@]}" "$exe" > "$tmpout" 2>&1
+  (
+    [[ -z "$VMEM" ]] || ulimit -v "$VMEM"
+    "${runner[@]}" "$exe"
+  ) > "$tmpout" 2>&1
   rc=$?
 
   if [[ "$name" == *_xfail_* ]]; then
@@ -65,12 +92,24 @@ for exe in exe/*; do
       fail=$((fail + 1))
     fi
   else
-    # Regular test: zero exit is success.
-    if [[ $rc -eq 0 ]]; then
+    # Regular test: zero exit is success, and the output must match the expected result if there is one.
+    reason=''
+    if [[ $rc -ne 0 ]]; then
+      reason="exit status $rc"
+    else
+      result=$(awk -F/ -v file="$name.result" '$NF==file {print; exit}' "$results")
+      if [[ -n "$result" ]]; then
+        expected=$(trim "$(cat "$result")")
+        if [[ "$(trim "$(cat "$tmpout")")" != "$expected" ]]; then
+          reason="output differs from ${result#./}, expected: $expected"
+        fi
+      fi
+    fi
+    if [[ -z "$reason" ]]; then
       printf "  ${GREEN}PASS${RESET}  %s\n" "$name"
       pass=$((pass + 1))
     else
-      printf "  ${RED}FAIL${RESET}  %s\n" "$name"
+      printf "  ${RED}FAIL${RESET}  %s ${BOLD}(%s)${RESET}\n" "$name" "$reason"
       sed 's/^/       /' "$tmpout"
       fail=$((fail + 1))
     fi

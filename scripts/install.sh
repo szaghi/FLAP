@@ -135,7 +135,7 @@ projectbuild() {
   case "$BUILD" in
     fobis | FoBiS.py )
       command -v FoBiS.py &>/dev/null || error "FoBiS.py not found."
-      FoBiS.py build -mode "$MODE"
+      FoBiS.py build --mode "$MODE"
       ;;
     make )
       command -v make &>/dev/null || error "make not found."

@@ -12,8 +12,8 @@
 # What it does:
 #   1. Pre-flight: branch, remote freshness, clean tree, tag uniqueness
 #   2. Runs git-cliff to regenerate CHANGELOG.md up to the new version
-#   3. Updates VERSION file
-#   4. Commits CHANGELOG.md + VERSION with a conventional "chore(release)" message
+#   3. Updates VERSION file, and the version of fpm.toml when the project has one
+#   4. Commits CHANGELOG.md + VERSION (+ fpm.toml) with a conventional "chore(release)" message
 #   5. Creates an annotated git tag
 #   6. Pushes commit + tag  →  triggers the release.yml workflow on GitHub
 #
@@ -30,7 +30,8 @@ CYAN='\033[0;36m'; BOLD='\033[1m'; RESET='\033[0m'
 info()    { echo -e "${CYAN}[info]${RESET}  $*"; }
 success() { echo -e "${GREEN}[ok]${RESET}    $*"; }
 warn()    { echo -e "${YELLOW}[warn]${RESET}  $*"; }
-die()     { echo -e "${RED}[error]${RESET} $*" >&2; exit 1; }
+# after the confirmation something may already be changed: show how to recover (exit bypasses the ERR trap)
+die()     { echo -e "${RED}[error]${RESET} $*" >&2; [[ "${STAGE:-preflight}" =~ ^(preflight|confirm)$ ]] || on_error; exit 1; }
 
 usage() {
   echo -e "Usage: $0 (--patch | --minor | --major | vX.Y.Z)"
@@ -43,8 +44,11 @@ usage() {
 }
 
 # ── Stage tracking + recovery trap ───────────────────────────────────────────
+# STAGE names the last step COMPLETED: a failure while committing is still "bumped" (no commit was
+# made), while tagging still "committed", while pushing "tagged"; the recovery hint relies on it.
 STAGE="preflight"
 NEW_TAG=""
+RELEASE_FILES=(CHANGELOG.md VERSION) # files modified and committed by the release
 
 on_error() {
   echo ""
@@ -56,9 +60,9 @@ on_error() {
       echo "  Nothing was changed. Fix the issue above and re-run."
       ;;
     bumped)
-      echo "  Files were modified locally but not committed."
+      echo "  Files were modified locally (maybe staged) but not committed."
       echo "  To discard and start over:"
-      echo "    git checkout -- VERSION CHANGELOG.md CMakeLists.txt fpm.toml"
+      echo "    git checkout HEAD -- ${RELEASE_FILES[*]}"
       ;;
     committed)
       echo "  Commit was made but not tagged/pushed. To resume:"
@@ -152,6 +156,16 @@ BEHIND="$(git rev-list --count HEAD..origin/${TRUNK} 2>/dev/null || echo 0)"
 [[ "$BEHIND" -eq 0 ]] \
   || die "${TRUNK} is ${BEHIND} commit(s) behind origin/${TRUNK} — run: git pull origin ${TRUNK}"
 
+# ── fpm manifest ──────────────────────────────────────────────────────────────
+# fpm.toml carries its own copy of the version (X.Y.Z, without the v prefix that
+# fpm does not accept): it is kept aligned when the manifest declares one.
+FPM_VERSION_RE='^version[[:space:]]*='
+HAS_FPM_VERSION=false
+if [[ -f fpm.toml ]] && grep -Eq "$FPM_VERSION_RE" fpm.toml; then
+  HAS_FPM_VERSION=true
+  RELEASE_FILES+=(fpm.toml)
+fi
+
 # ── Confirm ───────────────────────────────────────────────────────────────────
 STAGE="confirm"
 echo ""
@@ -160,7 +174,8 @@ echo -e "  New version     : ${BOLD}${NEW_TAG}${RESET}"
 echo ""
 echo -e "${BOLD}This will:${RESET}"
 echo -e "  1. Regenerate ${CYAN}CHANGELOG.md${RESET} up to ${BOLD}${NEW_TAG}${RESET}"
-echo -e "  2. Update ${CYAN}VERSION${RESET}, ${CYAN}CMakeLists.txt${RESET} and ${CYAN}fpm.toml${RESET} to ${BOLD}${NEW_TAG}${RESET}"
+echo -e "  2. Update ${CYAN}VERSION${RESET} to ${BOLD}${NEW_TAG}${RESET}"
+$HAS_FPM_VERSION && echo -e "     and the version of ${CYAN}fpm.toml${RESET} to ${BOLD}${NEW_TAG#v}${RESET}"
 echo -e "  3. Commit with message: ${CYAN}chore(release): ${NEW_TAG}${RESET}"
 echo -e "  4. Create annotated tag ${BOLD}${NEW_TAG}${RESET}"
 echo -e "  5. Push commit and tag to origin  →  triggers GitHub release workflow"
@@ -181,26 +196,29 @@ echo "$NEW_TAG" > VERSION
 grep -q "^${NEW_TAG}$" VERSION || die "VERSION update failed — file content mismatch"
 success "VERSION updated to ${NEW_TAG}"
 
-# ── Update the version of the CMake project and of the fpm manifest ─────────
-NEW_VER="${NEW_TAG#v}"
-info "Updating CMakeLists.txt and fpm.toml…"
-sed -i -E "s/^(project\(FLAP VERSION )[0-9]+\.[0-9]+\.[0-9]+/\1${NEW_VER}/" CMakeLists.txt
-grep -q "^project(FLAP VERSION ${NEW_VER} " CMakeLists.txt || die "CMakeLists.txt version update failed"
-sed -i -E "s/^version = \"[0-9]+\.[0-9]+\.[0-9]+\"/version = \"${NEW_VER}\"/" fpm.toml
-grep -q "^version = \"${NEW_VER}\"$" fpm.toml || die "fpm.toml version update failed"
-success "CMakeLists.txt and fpm.toml updated to ${NEW_VER}"
+# ── Update fpm.toml ───────────────────────────────────────────────────────────
+if $HAS_FPM_VERSION; then
+  info "Updating fpm.toml…"
+  # only the first match: the version of the package, not the one of a dependency
+  awk -v version="${NEW_TAG#v}" -v re="$FPM_VERSION_RE" \
+    '!done && $0 ~ re { print "version = \"" version "\""; done = 1; next } { print }' \
+    fpm.toml > fpm.toml.tmp
+  mv fpm.toml.tmp fpm.toml
+  grep -q "^version = \"${NEW_TAG#v}\"$" fpm.toml || die "fpm.toml update failed — version mismatch"
+  success "fpm.toml updated to ${NEW_TAG#v}"
+fi
 
 # ── Commit ────────────────────────────────────────────────────────────────────
-STAGE="committed"
 info "Committing changelog and version…"
-git add CHANGELOG.md VERSION CMakeLists.txt fpm.toml
+git add "${RELEASE_FILES[@]}"
 git commit -m "chore(release): ${NEW_TAG}"
+STAGE="committed"
 success "Committed"
 
 # ── Tag ───────────────────────────────────────────────────────────────────────
-STAGE="tagged"
 info "Creating annotated tag ${NEW_TAG}…"
 git tag -a "$NEW_TAG" -m "Release ${NEW_TAG}"
+STAGE="tagged"
 success "Tagged"
 
 # ── Push ──────────────────────────────────────────────────────────────────────

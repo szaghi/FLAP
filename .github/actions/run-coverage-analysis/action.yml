@@ -12,7 +12,7 @@ runs:
 
     - name: Run tests with coverage
       shell: bash
-      run: FoBiS.py rule -ex makecoverage-analysis
+      run: FoBiS.py rule --ex makecoverage-analysis
 
     - name: Read coverage result
       id: cov
