@@ -4,6 +4,11 @@ All notable changes to this project are documented here.
 Versions follow [Semantic Versioning](https://semver.org/).
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.5.2] — 2026-10-04
+### Security
+- **docs**: Set an es2022 build target for the VitePress site
+
+
 ## [2.5.1] — 2026-10-02
 ### Documentation
 - A new first impression, with an animated quick start
