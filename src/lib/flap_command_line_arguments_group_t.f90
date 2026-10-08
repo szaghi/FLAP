@@ -1410,15 +1410,14 @@ contains
   subroutine sanitize_defaults(self)
   !< Sanitize defaults values.
   !<
-  !< It is necessary to *sanitize* the default values of non-passed, optional CLAs.
+  !< It is necessary to *sanitize* the default values of non-passed, optional CLAs. Called or not: the getters read the
+  !< defaults of a command not called too (#127), and the CLA sanitize is idempotent.
   class(command_line_arguments_group), intent(inout) :: self !< CLAsG data.
   integer(I4P)                                       :: a    !< Counter.
 
-  if (self%is_called) then
-    do a=1, self%Na
-      call self%cla(a)%sanitize_defaults
-    enddo
-  endif
+  do a=1, self%Na
+    call self%cla(a)%sanitize_defaults
+  enddo
   endsubroutine sanitize_defaults
 
 

@@ -51,6 +51,9 @@ call assert_equal(error, ERROR_UNKNOWN, 'new -x: unknown switch in the group')
 call check_values_named_as_commands
 call check_unknown_group
 call check_group_index
+call check_uncalled_list_defaults('a')
+call check_uncalled_list_defaults('')
+call check_uncalled_list_defaults('b')
 
 call capture_close(lun)
 
@@ -82,6 +85,47 @@ contains
   call assert_equal(cli%run_command(group='tag'), .false., 'group index: tag not called')
   call assert_equal(cli%run_command(group='nope'), .false., 'group index: unknown group not called')
   endsubroutine check_group_index
+
+  subroutine check_uncalled_list_defaults(args)
+  !< #127: the list options of a command not called give their defaults, as when it is called.
+  character(*), intent(in)     :: args     !< Command line.
+  type(command_line_interface) :: cli      !< Command Line Interface (CLI).
+  real(R8P)                    :: x        !< Value of a -X.
+  real(R8P)                    :: u0(2)    !< Value of b --U0.
+  integer(I4P), allocatable    :: n(:)     !< Value of b --n.
+  character(99), allocatable   :: w(:)     !< Value of b --w.
+  integer(I4P)                 :: err      !< Error trapping flag.
+
+  call cli%init(progname='flap_test_group', error_lun=lun, usage_lun=lun)
+  call cli%add_group(group='a', description='group a')
+  call cli%add(group='a', switch='-X', help='scalar', required=.false., def='1.0', act='store', error=err)
+  call assert_equal(err, 0_I4P, '#127: add a -X')
+  call cli%add_group(group='b', description='group b')
+  call cli%add(group='b', switch='--U0', switch_ab='-U0', nargs='2', help='list', required=.false., def='0.0 1.0', &
+               act='store', error=err)
+  call assert_equal(err, 0_I4P, '#127: add b --U0')
+  call cli%add(group='b', switch='--n', nargs='+', help='list', required=.false., def=' 3  4 5 ', act='store', error=err)
+  call assert_equal(err, 0_I4P, '#127: add b --n')
+  call cli%add(group='b', switch='--w', nargs='*', help='list', required=.false., def='p q', act='store', error=err)
+  call assert_equal(err, 0_I4P, '#127: add b --w')
+  call cli%parse(args=args, error=err)
+  call assert_equal(err, 0_I4P, '#127 "'//args//'": parse')
+  call assert_equal(cli%run_command('b'), args == 'b', '#127 "'//args//'": b called')
+  call cli%get(group='a', switch='-X', val=x, error=err)
+  call assert_equal(err, 0_I4P, '#127 "'//args//'": get a -X, error')
+  call assert_equal(x, 1._R8P, '#127 "'//args//'": get a -X, value')
+  u0 = -1._R8P
+  call cli%get(group='b', switch='--U0', val=u0, error=err)
+  call assert_equal(err, 0_I4P, '#127 "'//args//'": get b --U0, error')
+  call assert_equal(u0, [0._R8P, 1._R8P], '#127 "'//args//'": get b --U0, value')
+  call cli%get_varying(group='b', switch='--n', val=n, error=err)
+  call assert_equal(err, 0_I4P, '#127 "'//args//'": get_varying b --n, error')
+  call assert_equal(n, [3_I4P, 4_I4P, 5_I4P], '#127 "'//args//'": get_varying b --n, value')
+  call cli%get_varying(group='b', switch='--w', val=w, error=err)
+  call assert_equal(err, 0_I4P, '#127 "'//args//'": get_varying b --w, error')
+  call assert_equal(int(size(w), I4P), 2_I4P, '#127 "'//args//'": get_varying b --w, size')
+  call assert_equal(trim(w(1))//','//trim(w(2)), 'p,q', '#127 "'//args//'": get_varying b --w, value')
+  endsubroutine check_uncalled_list_defaults
 
   subroutine check_unknown_group()
   !< B24 (#125): get with an unknown group reports ERROR_MISSING_GROUP and returns, for every getter kind.
