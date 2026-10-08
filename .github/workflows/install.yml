@@ -1,20 +1,52 @@
 name: Test (alternative) Install Methods
 
+# Smoke-tests the published release assets. Called by release.yml right after
+# it publishes the release: a `release: published` trigger never fires there,
+# because GitHub starts no workflow run for an event raised with GITHUB_TOKEN.
+# The release is already public when this runs, so a failure flags a broken
+# release; it cannot block it.
 on:
-  release:
-    types: [published]
+  workflow_call:
+    inputs:
+      tag:
+        type: string
+        required: true
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to smoke-test (e.g. v1.2.3)
+        type: string
+        required: true
+
+# A workflow_call caller must grant at least these same permissions.
+permissions:
+  contents: read
 
 jobs:
   install:
 
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     env:
-      TAG: ${{ github.event.release.tag_name }}
+      TAG: ${{ inputs.tag }}
 
     steps:
+    # Only the local actions are needed (the release itself is downloaded by
+    # install.sh); cone-mode sparse checkout also brings the root files, which
+    # the hashFiles() guards below inspect. A tag cut before the project had
+    # setup-build-env cannot be smoke-tested by this workflow.
+    - name: Checkout local actions
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.tag }}
+        sparse-checkout: .github/actions
+
+    # Same compiler, [scaffold] apt_packages and FoBiS.py as the CI: every
+    # build below needs them, not only the fobis one.
+    - name: Setup build environment
+      uses: ./.github/actions/setup-build-env
+
     - name: INSTALL SCRIPT + make
+      if: hashFiles('Makefile', 'makefile', 'GNUmakefile') != ''
       run: |
         WORKDIR=$(mktemp -d)
         cd "$WORKDIR"
@@ -23,26 +55,36 @@ jobs:
         ./install.sh --download wget --build make
 
     - name: INSTALL SCRIPT + cmake
+      if: hashFiles('CMakeLists.txt') != ''
       run: |
         WORKDIR=$(mktemp -d)
         cd "$WORKDIR"
         wget $(curl -s https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/$TAG | jq -r '.assets[] | select(.name | test("install.sh"; "i")) | .browser_download_url')
         chmod +x install.sh
-        # install.sh skips the cmake build itself when no CMakeLists.txt is present
         ./install.sh --download wget --build cmake
 
-    - name: Setup fpm
-      uses: fortran-lang/setup-fpm@v9
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: FPM
+    - name: INSTALL SCRIPT + fobis
+      if: hashFiles('fobos') != ''
       run: |
         WORKDIR=$(mktemp -d)
         cd "$WORKDIR"
-        git clone https://github.com/$GITHUB_REPOSITORY ./
-        if [[ ! -f fpm.toml ]]; then
-          echo "fpm.toml not found — skipping fpm build."
-          exit 0
-        fi
+        wget $(curl -s https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/$TAG | jq -r '.assets[] | select(.name | test("install.sh"; "i")) | .browser_download_url')
+        chmod +x install.sh
+        # fetches the fobos [dependencies], then builds the fobos default mode
+        ./install.sh --download wget --build fobis
+
+    - name: Setup fpm
+      if: hashFiles('fpm.toml') != ''
+      uses: fortran-lang/setup-fpm@v9
+      with:
+        # the v9 default (v0.12.0) rejects the [features] table of fpm.toml manifests
+        fpm-version: v0.13.0
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: FPM
+      if: hashFiles('fpm.toml') != ''
+      run: |
+        WORKDIR=$(mktemp -d)
+        cd "$WORKDIR"
+        git clone --depth 1 --branch "$TAG" https://github.com/$GITHUB_REPOSITORY ./
         fpm build --profile release

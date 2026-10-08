@@ -10,6 +10,8 @@ permissions:
 
 jobs:
   release:
+    # a dispatch from a branch would publish a release named after the branch
+    if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -36,8 +38,10 @@ jobs:
           tag, path = sys.argv[1], sys.argv[2]
           with open(path) as f:
               content = f.read()
-          pattern = rf'(## \[{re.escape(tag)}\].*?)(?=\n## |\Z)'
-          match = re.search(pattern, content, re.DOTALL)
+          # cliff.toml writes the heading without the tag's "v" prefix: accept both
+          version = re.escape(tag[1:] if tag.startswith('v') else tag)
+          pattern = rf'(^## \[v?{version}\].*?)(?=\n## |\Z)'
+          match = re.search(pattern, content, re.DOTALL | re.MULTILINE)
           print(match.group(1).strip() if match else f"Release {tag}\n\nSee CHANGELOG.md for details.")
           PYEOF
 
@@ -53,3 +57,12 @@ jobs:
             scripts/install.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  install:
+    # run in this workflow: a release published with GITHUB_TOKEN triggers no workflow
+    needs: release
+    permissions:
+      contents: read
+    uses: ./.github/workflows/install.yml
+    with:
+      tag: ${{ github.ref_name }}

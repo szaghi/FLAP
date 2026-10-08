@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches: ["**"]
-    tags-ignore: ["**"]   # tags are handled by release.yml
+    tags-ignore: ["**"]   # a release tag points at a commit already tested on its branch push
   pull_request:
 
 jobs:

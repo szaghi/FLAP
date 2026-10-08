@@ -31,7 +31,7 @@ error()   { echo -e "${RED}[error]${RESET} $*" >&2; exit 1; }
 REPO="${GITHUB_REPOSITORY:-}"
 DOWNLOAD=0
 BUILD=0
-MODE="tests-gnu"
+MODE=""
 TAG="${TAG:-latest}"
 VERBOSE=0
 readonly E_BAD_OPTION=254
@@ -43,7 +43,7 @@ usage() {
   echo "  --repo,     -r <owner/project>   GitHub repository (default: auto-detect)"
   echo "  --download, -d <git|wget>         Download the project"
   echo "  --build,    -b <fobis|make|cmake|fpm> Build the project"
-  echo "  --mode,     -m <mode>             FoBiS.py build mode (default: tests-gnu)"
+  echo "  --mode,     -m <mode>             fobos build mode (default: the fobos default mode)"
   echo "  --tag,      -t <tag>              Release tag for wget (default: latest)"
   echo "  --verbose,  -v                    Verbose output"
   echo "  --help,     -?                    Print this help"
@@ -63,7 +63,7 @@ while [[ $# -gt 0 ]]; do
     --mode     | -m ) MODE="$2";     shift 2 ;;
     --tag      | -t ) TAG="$2";      shift 2 ;;
     --verbose  | -v ) VERBOSE=1;     shift   ;;
-    --help     | -? ) usage; exit 0          ;;
+    --help     | '-?' ) usage; exit 0        ;;
     --         )      shift; break           ;;
     -*         ) echo "Unrecognized option: $1" >&2; usage; exit $E_BAD_OPTION ;;
     *          ) break ;;
@@ -89,6 +89,21 @@ GITHUB="https://github.com/$REPO"
 
 [[ $VERBOSE -eq 1 ]] && info "Repository: ${BOLD}${REPO}${RESET}"
 
+# ── Dependencies ──────────────────────────────────────────────────────────────
+# Run in the project root: fetch the fobos [dependencies], if any. A release
+# tarball does not contain them, and the fobis build as well as a Makefile or
+# CMakeLists.txt generated alongside the fobos (building from the fetched
+# sources) need them; fpm resolves its own from fpm.toml. Called only once the
+# build is known to happen, so a skipped build never requires fobis.
+fetchdeps() {
+  if [[ -f fobos ]] && grep -q '^\[dependencies\]' fobos; then
+    command -v fobis &>/dev/null || error "fobis not found (needed to fetch dependencies)."
+    info "Fetching dependencies…"
+    fobis fetch
+    success "Dependencies fetched"
+  fi
+}
+
 # ── Download ──────────────────────────────────────────────────────────────────
 projectdownload() {
   [[ $VERBOSE -eq 1 ]] && info "Downloading ${PROJECT}…"
@@ -96,12 +111,6 @@ projectdownload() {
   if [[ "$DOWNLOAD" == "git" ]]; then
     command -v git &>/dev/null || error "git not found."
     git clone "$GITHUB"
-    cd "$PROJECT"
-    if [[ -f .deps_config.ini || -f src/third_party/.deps_config.ini ]]; then
-      command -v FoBiS.py &>/dev/null || error "FoBiS.py not found (needed for fetch)."
-      FoBiS.py fetch
-    fi
-    cd -
 
   elif [[ "$DOWNLOAD" == "wget" ]]; then
     command -v wget &>/dev/null || error "wget not found."
@@ -134,11 +143,17 @@ projectbuild() {
 
   case "$BUILD" in
     fobis | FoBiS.py )
-      command -v FoBiS.py &>/dev/null || error "FoBiS.py not found."
-      FoBiS.py build --mode "$MODE"
+      command -v fobis &>/dev/null || error "fobis not found."
+      fetchdeps
+      fobis build ${MODE:+--mode "$MODE"}
       ;;
     make )
       command -v make &>/dev/null || error "make not found."
+      if [[ ! -f Makefile && ! -f makefile && ! -f GNUmakefile ]]; then
+        warn "Makefile not found — skipping make build."
+        return
+      fi
+      fetchdeps
       make
       ;;
     cmake )
@@ -147,6 +162,7 @@ projectbuild() {
         warn "CMakeLists.txt not found — skipping cmake build."
         return
       fi
+      fetchdeps
       cmake -B build
       cmake --build build
       ;;
@@ -177,12 +193,6 @@ elif [[ "$DOWNLOAD" != "0" && "$BUILD" != "0" ]]; then
   projectdownload
   if [[ "$DOWNLOAD" == "wget" ]]; then
     cd "$EXTRACTED"
-    if [[ -f .deps_config.ini || -f src/third_party/.deps_config.ini ]]; then
-      command -v FoBiS.py &>/dev/null || error "FoBiS.py not found (needed for fetch)."
-      info "Fetching dependencies…"
-      FoBiS.py fetch
-      success "Dependencies fetched"
-    fi
   else
     cd "$PROJECT"
   fi
