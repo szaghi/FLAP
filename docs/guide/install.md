@@ -16,12 +16,15 @@ title: Installation
 
 ## fpm
 
-Add FLAP as a dependency in your project's `fpm.toml`, pinned to a release:
+Add FLAP as a dependency in your project's `fpm.toml`:
 
 ```toml
 [dependencies]
-FLAP = { git = "https://github.com/szaghi/FLAP", tag = "v2.5.0" }
+FLAP = { git = "https://github.com/szaghi/FLAP", branch = "master" }
 ```
+
+This follows `master`, which always has the features of this documentation. For a fixed version, use
+`tag = "vX.Y.Z"` with a [release](https://github.com/szaghi/FLAP/releases).
 
 `fpm build` fetches FLAP, PENF and FACE. To build and test FLAP itself:
 

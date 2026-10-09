@@ -145,8 +145,11 @@ Add to your `fpm.toml`:
 
 ```toml
 [dependencies]
-FLAP = { git = "https://github.com/szaghi/FLAP", tag = "v2.5.0" }
+FLAP = { git = "https://github.com/szaghi/FLAP", branch = "master" }
 ```
+
+This follows `master`, which always has the features of this documentation. For a fixed version, use
+`tag = "vX.Y.Z"` with a [release](https://github.com/szaghi/FLAP/releases).
 
 ### CMake
 
