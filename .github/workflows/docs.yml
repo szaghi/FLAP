@@ -1,18 +1,25 @@
 name: Docs
 
+# Runs after CI succeeds on a push to the default branch and publishes the
+# coverage outputs that run uploaded (artifact coverage-docs), instead of
+# running the coverage a second time. Without that artifact (a manual dispatch,
+# a workflow_call, a project whose own ci.yml does not upload it) the coverage
+# runs here, as before.
 on:
-  push:
-    branches: ["**"]
-    tags-ignore: ["**"]   # a release tag points at a commit already deployed on its branch push
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
   workflow_dispatch:
   workflow_call:
 
-# Permissions required by the deploy job (OIDC-based GitHub Pages deployment).
+# Permissions required by the deploy job (OIDC-based GitHub Pages deployment),
+# plus actions: read to download the artifact of the CI run.
 # A workflow_call caller must grant at least these same permissions.
 permissions:
   contents: read
   pages: write
   id-token: write
+  actions: read
 
 # Only one Pages deployment at a time; do not cancel in-progress deployments.
 concurrency:
@@ -22,13 +29,23 @@ concurrency:
 jobs:
 
   build:
-    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    # a CI run of a pull request, of another branch, or a failed one must not deploy
+    if: >-
+      (github.event_name == 'workflow_run' &&
+       github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.head_branch == github.event.repository.default_branch) ||
+      (github.event_name != 'workflow_run' &&
+       github.ref == format('refs/heads/{0}', github.event.repository.default_branch))
     runs-on: ubuntu-latest
 
     steps:
 
+    # the commit CI tested, not the head of the branch when this job starts
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
     - name: Setup build environment
       uses: ./.github/actions/setup-build-env
@@ -44,9 +61,40 @@ jobs:
       if: hashFiles('**/.deps_config.ini') != ''
       run: FoBiS.py fetch
 
+    - name: Download the coverage outputs of CI
+      id: artifact
+      if: github.event_name == 'workflow_run'
+      continue-on-error: true
+      uses: actions/download-artifact@v4
+      with:
+        name: coverage-docs
+        run-id: ${{ github.event.workflow_run.id }}
+        github-token: ${{ github.token }}
+        path: ${{ runner.temp }}/coverage-docs
+
+    - name: Unpack the coverage outputs of CI
+      id: unpacked
+      if: steps.artifact.outcome == 'success'
+      continue-on-error: true
+      run: |
+        tar -xzvf "$RUNNER_TEMP/coverage-docs/coverage-docs.tgz"
+        PCT=$(jq -r '.pct' docs/public/coverage.json)
+        case "$PCT" in ''|null) echo "::warning::no coverage percentage in the CI outputs"; exit 1 ;; esac
+        echo "pct=${PCT}" >> "$GITHUB_OUTPUT"
+        echo "## Test coverage: ${PCT}% (from the CI run)" >> "$GITHUB_STEP_SUMMARY"
+
     - name: Run coverage analysis
-      id: cov
+      id: ran
+      if: steps.unpacked.outcome != 'success'
       uses: ./.github/actions/run-coverage-analysis
+
+    - name: Coverage percentage
+      id: cov
+      env:
+        PCT: ${{ steps.unpacked.outputs.pct || steps.ran.outputs.pct }}
+      run: |
+        case "$PCT" in ''|null) echo "::error::no coverage percentage"; exit 1 ;; esac
+        echo "pct=${PCT}" >> "$GITHUB_OUTPUT"
 
     # Overwrite docs/public/coverage.json with a shields.io endpoint badge.
     # The run-coverage-analysis step already consumed the internal {"pct": ...}

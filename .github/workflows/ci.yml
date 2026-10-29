@@ -6,6 +6,11 @@ on:
     tags-ignore: ["**"]   # a release tag points at a commit already tested on its branch push
   pull_request:
 
+# a newer push to the same ref supersedes the running checks
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -27,3 +32,25 @@ jobs:
     - name: Run tests with coverage
       id: cov
       uses: ./.github/actions/run-coverage-analysis
+
+    # docs.yml (workflow_run) publishes these outputs instead of running the
+    # coverage a second time: every file the coverage step wrote or changed
+    # under docs/ (badge JSON, coverage-analysis page, per-file gcov pages),
+    # git-ignored ones included, so docs.yml sees what a local run would
+    - name: Pack the coverage outputs for the docs
+      if: github.event_name == 'push' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+      run: |
+        git ls-files --others --modified -- docs | while IFS= read -r f; do
+          if [ -f "$f" ]; then printf '%s\n' "$f"; fi
+        done > coverage-docs.list
+        cat coverage-docs.list
+        tar -czf coverage-docs.tgz -T coverage-docs.list
+
+    - name: Upload the coverage outputs for the docs
+      if: github.event_name == 'push' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-docs
+        path: coverage-docs.tgz
+        if-no-files-found: error
+        retention-days: 1
