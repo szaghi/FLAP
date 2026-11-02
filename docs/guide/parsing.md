@@ -100,8 +100,10 @@ call cli%reset_parse                            ! forget values, passed flags, c
 call cli%parse(args='--level 5', error=error)   ! parsed again
 ```
 
-A parse that fails does not count as done: the next `get` parses again, and without `args` it parses the **real**
-command line. Call `reset_parse` before trying another string. `cli%is_parsed()` tells whether the CLI has been parsed.
+A parse that fails does not count as done, but it is not repeated: `get`, `get_varying`, `get_source` and `provenance` give
+back its result without reading the real command line or printing anything again, whether it was an error or a status (the
+help with `standalone=.false.`). A `get` with `args`, or another `parse`, does parse again, from a clean state, as after
+`reset_parse`. `cli%is_parsed()` tells whether the CLI has been parsed.
 
 ---
 

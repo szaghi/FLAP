@@ -32,6 +32,9 @@ type, extends(object), public :: command_line_interface
   type(flap_string), allocatable                  :: args(:)                     !< Actually passed command line arguments.
   logical                                         :: disable_hv=.false.          !< Disable automatic 'help' and 'version' CLAs.
   logical                                         :: is_parsed_=.false.          !< Parse status.
+  logical                                         :: parse_tried=.false.         !< A parse has run without completing.
+  integer(I4P)                                    :: parse_result=0_I4P          !< Error or status of that parse.
+  character(len=:), allocatable                   :: parse_message               !< Error message of that parse.
   logical                                         :: ignore_unknown_clas=.false. !< Disable errors-raising for passed unknown CLAs.
   logical                                         :: standalone=.true.           !< Stop after help/version/markdown.
   logical                                         :: error_hint=.true.           !< Print a hint after a failed parse.
@@ -120,6 +123,7 @@ type, extends(object), public :: command_line_interface
     procedure, private :: provenance_json                 !< JSON report of provenance.
     procedure, private :: provenance_arguments            !< Command line in JSON, sensitive values masked.
     procedure, private :: parse_core                      !< Parse the command line (body of parse).
+    procedure, private :: parse_once                      !< Parse for a getter, once: a failed parse is not repeated.
     procedure, private :: group_index                     !< Index of the group with a name, -1 if none.
     procedure, private :: is_fatal                        !< Check if the current error stops parsing.
     procedure, private :: dispatch_status                 !< Print help/version/markdown in the D3 order.
@@ -199,6 +203,9 @@ contains
   if (allocated(self%examples)) deallocate(self%examples)
   self%disable_hv          = .false.
   self%is_parsed_          = .false.
+  self%parse_tried        = .false.
+  self%parse_result       = 0_I4P
+  if (allocated(self%parse_message)) deallocate(self%parse_message)
   self%ignore_unknown_clas = .false.
   self%error_unknown_clas  = 0_I4P
   if (allocated(self%unknown_message)) deallocate(self%unknown_message)
@@ -661,7 +668,7 @@ contains
   integer(I4P)                                 :: a        !< CLA index.
 
   source = SOURCE_NONE
-  if (.not.self%is_parsed_) call self%parse(pref=pref)
+  if (.not.self%is_parsed_) call self%parse_once(pref=pref)
   call self%clear_error
   g = 0
   if (present(group)) then
@@ -698,7 +705,7 @@ contains
   logical                                      :: json    !< JSON report.
 
   ! a failed parse leaves the command line it read: the report is about that one, not about a new parse of the real one
-  if (.not.self%is_parsed_ .and. .not.allocated(self%args)) call self%parse(pref=pref)
+  if (.not.self%is_parsed_) call self%parse_once(pref=pref)
   json = .false.
   if (present(format)) json = upper_case(trim(adjustl(format))) == 'JSON'
   if (json) then
@@ -1313,6 +1320,9 @@ contains
   integer(I4P)                                 :: g    !< Counter for CLAs group.
 
   self%is_parsed_ = .false.
+  self%parse_tried = .false.
+  self%parse_result = 0_I4P
+  if (allocated(self%parse_message)) deallocate(self%parse_message)
   call self%clear_error
   self%error_unknown_clas = 0
   if (allocated(self%unknown_message)) deallocate(self%unknown_message)
@@ -1337,11 +1347,37 @@ contains
 
   if (present(error)) error = 0
   if (self%is_parsed_) return
+  if (self%parse_tried) call self%reset_parse ! a new parse must not inherit what the failed one stored
   call self%parse_core(pref=pref, args=args)
   if (self%error > 0 .and. self%error /= ERROR_UNKNOWN_CLAS_IGNORED) call self%print_error_hint
   if (self%check_requested()) call self%report_check
+  if (.not.self%is_parsed_) then
+    self%parse_tried = .true.
+    self%parse_result = self%error
+    if (allocated(self%parse_message)) deallocate(self%parse_message)
+    if (allocated(self%error_message)) self%parse_message = self%error_message
+  endif
   if (present(error)) error = self%error
   endsubroutine parse
+
+  subroutine parse_once(self, pref, args, error)
+  !< Parse for a getter. A parse that has not completed (an error, or a status such as the help with `standalone=.false.`) is
+  !< not repeated: its result comes back without reading the real command line nor printing again. A getter passing `args`
+  !< asks for a parse of that text, and gets it.
+  class(command_line_interface), intent(inout) :: self    !< CLI data.
+  character(*), optional,        intent(in)    :: pref    !< Prefixing string.
+  character(*), optional,        intent(in)    :: args    !< String containing command line arguments.
+  integer(I4P), optional,        intent(out)   :: error   !< Error trapping flag.
+
+  if (self%parse_tried .and. .not.present(args)) then
+    self%error = self%parse_result
+    if (allocated(self%error_message)) deallocate(self%error_message)
+    if (allocated(self%parse_message)) self%error_message = self%parse_message
+    if (present(error)) error = self%error
+  else
+    call self%parse(pref=pref, args=args, error=error)
+  endif
+  endsubroutine parse_once
 
   function check_requested(self) result(requested)
   !< Check if --check is on the command line, before a `--` and before the first command: by its token, since an earlier
@@ -2068,7 +2104,7 @@ contains
   integer(I4P)                                 :: a        !< Argument counter.
 
   if (.not.self%is_parsed_) then
-    call self%parse(pref=pref, args=args, error=error)
+    call self%parse_once(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
   call self%clear_error ! report only this get: the error of a previous get must not leak into it (B22)
@@ -2126,7 +2162,7 @@ contains
   integer(I4P)                                 :: a        !< Argument counter.
 
   if (.not.self%is_parsed_) then
-    call self%parse(pref=pref, args=args, error=error)
+    call self%parse_once(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
   call self%clear_error ! report only this get: the error of a previous get must not leak into it (B22)
@@ -2181,7 +2217,7 @@ contains
   integer(I4P)                                 :: a        !< Argument counter.
 
   if (.not.self%is_parsed_) then
-    call self%parse(pref=pref, args=args, error=error)
+    call self%parse_once(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
   call self%clear_error ! report only this get: the error of a previous get must not leak into it (B22)
@@ -2236,7 +2272,7 @@ contains
   integer(I4P)                                 :: a        !< Argument counter.
 
   if (.not.self%is_parsed_) then
-    call self%parse(pref=pref, args=args, error=error)
+    call self%parse_once(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
   call self%clear_error ! report only this get: the error of a previous get must not leak into it (B22)
@@ -2291,7 +2327,7 @@ contains
   integer(I4P)                                 :: a        !< Argument counter.
 
   if (.not.self%is_parsed_) then
-    call self%parse(pref=pref, args=args, error=error)
+    call self%parse_once(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
   call self%clear_error ! report only this get: the error of a previous get must not leak into it (B22)
@@ -2346,7 +2382,7 @@ contains
   integer(I4P)                                 :: a        !< Argument counter.
 
   if (.not.self%is_parsed_) then
-    call self%parse(pref=pref, args=args, error=error)
+    call self%parse_once(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
   call self%clear_error ! report only this get: the error of a previous get must not leak into it (B22)
@@ -2401,7 +2437,7 @@ contains
   integer(I4P)                                 :: a        !< Argument counter.
 
   if (.not.self%is_parsed_) then
-    call self%parse(pref=pref, args=args, error=error)
+    call self%parse_once(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
   call self%clear_error ! report only this get: the error of a previous get must not leak into it (B22)
@@ -2456,7 +2492,7 @@ contains
   integer(I4P)                                 :: a        !< Argument counter.
 
   if (.not.self%is_parsed_) then
-    call self%parse(pref=pref, args=args, error=error)
+    call self%parse_once(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
   call self%clear_error ! report only this get: the error of a previous get must not leak into it (B22)
@@ -2511,7 +2547,7 @@ contains
   integer(I4P)                                 :: a        !< Argument counter.
 
   if (.not.self%is_parsed_) then
-    call self%parse(pref=pref, args=args, error=error)
+    call self%parse_once(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
   call self%clear_error ! report only this get: the error of a previous get must not leak into it (B22)
@@ -2566,7 +2602,7 @@ contains
   integer(I4P)                                 :: a        !< Argument counter.
 
   if (.not.self%is_parsed_) then
-    call self%parse(pref=pref, args=args, error=error)
+    call self%parse_once(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
   call self%clear_error ! report only this get: the error of a previous get must not leak into it (B22)
@@ -2787,7 +2823,7 @@ contains
   g = 0
   a = 0
   if (.not.self%is_parsed_) then
-    call self%parse(pref=pref, args=args)
+    call self%parse_once(pref=pref, args=args)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
   call self%clear_error ! report only this get (B22)
@@ -2823,7 +2859,7 @@ contains
   integer(I4P)                                 :: a        !< Argument counter.
 
   if (.not.self%is_parsed_) then
-    call self%parse(pref=pref, args=args, error=error)
+    call self%parse_once(pref=pref, args=args, error=error)
     if (self%error>0.and.self%error_unknown_clas/=ERROR_UNKNOWN_CLAS_IGNORED) return
   endif
   call self%clear_error ! report only this get: the error of a previous get must not leak into it (B22)

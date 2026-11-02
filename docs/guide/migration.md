@@ -16,6 +16,10 @@ programs keep their behaviour. The plan behind them is issue [#125](https://gith
 
 ## Unreleased (fixes)
 
+- A `get` after a failed `parse` no longer parses the real command line again. The first failure stands: `get` returns the
+  same error and nothing is printed a second time. A program that relied on the second parse, reading a value of the real
+  command line after `parse(args=...)` failed, must call `reset_parse` first. Another `parse`, or a `get` with `args`, after a
+  failed parse now starts clean, without the values and the error of the failed one.
 - With `init(ignore_unknown_clas=.true.)` an unknown argument is no longer printed on the error unit as
   `error: switch "--x" is unknown!`: the program asked to ignore it. `parse` still returns `ERROR_UNKNOWN_CLAS_IGNORED`
   (1004), and `cli%error_message` holds the message of one of the ignored arguments, for a program that wants to warn.
