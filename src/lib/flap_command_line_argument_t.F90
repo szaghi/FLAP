@@ -2230,6 +2230,20 @@ contains
   ios = 0
   type_name = 'a real'
   select type(val)
+  type is(integer(I8P))
+    type_name = 'an integer'
+  type is(integer(I4P))
+    type_name = 'an integer'
+  type is(integer(I2P))
+    type_name = 'an integer'
+  type is(integer(I1P))
+    type_name = 'an integer'
+  endselect
+  if (.not.is_single_item(trimmed)) then
+    call self%errored(pref=pref, error=ERROR_CASTING_NUMBER, val_str=trimmed, type_name=type_name)
+    return
+  endif
+  select type(val)
 #if defined PENF_R16P
   type is(real(R16P))
     read(trimmed, *, iostat=ios) val
@@ -2239,22 +2253,18 @@ contains
   type is(real(R4P))
     read(trimmed, *, iostat=ios) val
   type is(integer(I8P))
-    type_name = 'an integer'
     read(trimmed, *, iostat=ios) val
   type is(integer(I4P))
-    type_name = 'an integer'
     read(trimmed, *, iostat=ios) val
   type is(integer(I2P))
-    type_name = 'an integer'
     read(trimmed, *, iostat=ios) val
   type is(integer(I1P))
-    type_name = 'an integer'
     read(trimmed, *, iostat=ios) val
   class default
     call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
     return
   endselect
-  if (ios /= 0 .or. len(trimmed) == 0) then
+  if (ios /= 0) then
     call self%errored(pref=pref, error=ERROR_CASTING_NUMBER, val_str=trimmed, type_name=type_name)
   else
     self%error = 0
@@ -2335,7 +2345,7 @@ contains
       select type(val)
       type is(logical)
         buffer = self%stored_list()
-        read(buffer, *, iostat=self%error)val
+        self%error = read_logical(buffer, val)
         if (self%error/=0) call self%errored(pref=pref, error=ERROR_CASTING_LOGICAL, log_value=buffer)
       class default
         call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
@@ -2354,7 +2364,7 @@ contains
       select type(val)
       type is(logical)
         buffer = self%stored_list()
-        read(buffer, *, iostat=self%error)val
+        self%error = read_logical(buffer, val)
         if (self%error/=0) call self%errored(pref=pref, error=ERROR_CASTING_LOGICAL, log_value=buffer)
       class default
         call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
@@ -2389,7 +2399,7 @@ contains
   type is(integer(I1P))
     call self%cast_number(text=buffer, val=val, pref=pref)
   type is(logical)
-    read(buffer, *, iostat=self%error)val
+    self%error = read_logical(buffer, val)
     if (self%error/=0) call self%errored(pref=pref, error=ERROR_CASTING_LOGICAL, log_value=buffer)
   type is(character(*))
     val = buffer
@@ -2518,7 +2528,7 @@ contains
     enddo
   type is(logical)
     do v=1, Nv
-      read(vals(v),*,iostat=self%error)val(v)
+      self%error = read_logical(vals(v), val(v))
       if (self%error/=0) then
         call self%errored(pref=pref,error=ERROR_CASTING_LOGICAL,log_value=vals(v))
         exit
@@ -2798,7 +2808,7 @@ contains
     endif
     allocate(logical:: val(1:Nv))
     do v=1, Nv
-      read(vals(v), *, iostat=self%error)val(v)
+      self%error = read_logical(vals(v), val(v))
       if (self%error/=0) then
         call self%errored(pref=pref, error=ERROR_CASTING_LOGICAL, log_value=vals(v))
         exit
@@ -2816,7 +2826,7 @@ contains
       val = self%act==action_store_true
     else
       do v=1, Nv
-        read(vals(v), *, iostat=self%error)val(v)
+        self%error = read_logical(vals(v), val(v))
         if (self%error/=0) then
           call self%errored(pref=pref, error=ERROR_CASTING_LOGICAL, log_value=vals(v))
           exit
@@ -2869,6 +2879,28 @@ contains
   call self%free
   endsubroutine finalize
   ! non type-bound procedures
+  pure function is_single_item(text) result(single)
+  !< Check that a text (without blanks around it) is one item of a list-directed read: a read alone accepts as numbers `/` and
+  !< `,` (no value, the variable left unassigned, and no error), `2*5` (a repeat count), `3 abc` and `1,5` (the first item).
+  character(*), intent(in) :: text   !< Text.
+  logical                  :: single !< Check result.
+
+  single = len(text) > 0 .and. scan(text, ' ,;/*'//achar(9)//'"'//"'") == 0
+  endfunction is_single_item
+
+  function read_logical(text, val) result(ios)
+  !< Read a logical from a text, quietly: `T`, `.true.`, `false`, ...; never more than one item (see is_single_item).
+  character(*), intent(in)    :: text !< Text.
+  logical,      intent(inout) :: val  !< Value, assigned only if the text is valid.
+  integer(I4P)                :: ios  !< I/O status (not zero if the text is invalid).
+  character(len=:), allocatable :: trimmed !< Text without the blanks around it.
+
+  trimmed = trim(adjustl(text))
+  ios = 1
+  if (.not.is_single_item(trimmed)) return
+  read(trimmed, *, iostat=ios) val
+  endfunction read_logical
+
   subroutine read_real(string, x, ok)
   !< Read a real from a string, quietly (cton prints an error message).
   character(*), intent(in)  :: string !< String.
@@ -2877,8 +2909,10 @@ contains
   integer(I4P)              :: ios    !< I/O status.
 
   x = 0._R8P
+  ok = is_single_item(trim(adjustl(string)))
+  if (.not.ok) return
   read(string, *, iostat=ios) x
-  ok = ios == 0 .and. len_trim(string) > 0
+  ok = ios == 0
   endsubroutine read_real
 
   subroutine read_integer(string, i, ok)
@@ -2889,7 +2923,9 @@ contains
   integer(I4P)              :: ios    !< I/O status.
 
   i = 0_I8P
+  ok = is_single_item(trim(adjustl(string)))
+  if (.not.ok) return
   read(string, *, iostat=ios) i
-  ok = ios == 0 .and. len_trim(string) > 0
+  ok = ios == 0
   endsubroutine read_integer
 endmodule flap_command_line_argument_t

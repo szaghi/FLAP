@@ -6,7 +6,7 @@ program flap_test_casting
 !< left the message to PENF's `cton`, written on standard error without the program name: it is `ERROR_CASTING_NUMBER`,
 !< with a message in FLAP's style on the error unit of the CLI, for every getter (scalar, fixed-size array, varying,
 !< map value, positional).
-use flap, only : command_line_interface, ERROR_CASTING_NUMBER
+use flap, only : command_line_interface, ERROR_CASTING_LOGICAL, ERROR_CASTING_NUMBER, ERROR_RANGE_DEFINITION
 use flap_test_utils, only : assert, assert_contains, assert_equal, capture_close, capture_open, child_case, read_back, &
                             reinvoke
 use penf, only : I4P, I8P, R4P, R8P
@@ -33,6 +33,31 @@ out = read_back(lun)
 call check_real('--cfl abc', ERROR_CASTING_NUMBER, 'real, not a number')
 call assert_contains(read_back(lun), 'cannot convert "abc" of option "--cfl" to a real!', 'real: message')
 call check_real('--cfl -3.5', 0_I4P, 'real, a negative number')
+! not a number for a list-directed read either: they returned no error, the value unassigned or a piece of it (#128)
+call check_integer('--nx /', ERROR_CASTING_NUMBER, 0_I4P, 'integer, a slash')
+call check_integer('--nx ,', ERROR_CASTING_NUMBER, 0_I4P, 'integer, a comma')
+call check_integer('--nx 2*5', ERROR_CASTING_NUMBER, 0_I4P, 'integer, a repeat count')
+call check_integer('--nx "3 abc"', ERROR_CASTING_NUMBER, 0_I4P, 'integer, two items')
+call check_integer('--nx 3,abc', ERROR_CASTING_NUMBER, 0_I4P, 'integer, two items by a comma')
+call check_integer('--nx 99999999999999999999', ERROR_CASTING_NUMBER, 0_I4P, 'integer, out of its kind')
+call check_integer('--nx "  7  "', 0_I4P, 7_I4P, 'integer, blanks around it')
+call check_integer('--nx +7', 0_I4P, 7_I4P, 'integer, a sign')
+call check_real('--cfl 1,5', ERROR_CASTING_NUMBER, 'real, a decimal comma')
+call check_real('--cfl 1/2', ERROR_CASTING_NUMBER, 'real, a fraction')
+call check_real('--cfl /', ERROR_CASTING_NUMBER, 'real, a slash')
+call check_real('--cfl -35e-1', 0_I4P, 'real, an exponent')
+call check_real('--cfl -35d-1', 0_I4P, 'real, a double exponent')
+call check_lists('--ijk 1 / 3', ERROR_CASTING_NUMBER, 'fixed-size integer list, a slash')
+call check_lists('--ijk 1 2 3 --w 0.5 2*5', ERROR_CASTING_NUMBER, 'varying real list, a repeat count')
+call check_map('--set nx=/', ERROR_CASTING_NUMBER, 'map value, a slash')
+call check_positional('/', ERROR_CASTING_NUMBER, 'positional, a slash')
+call check_logical('--flag T', 0_I4P, .true., 'logical, T')
+call check_logical('--flag .false.', 0_I4P, .false., 'logical, .false.')
+call check_logical('--flag /', ERROR_CASTING_LOGICAL, .true., 'logical, a slash: not assigned')
+call check_logical('--flag ,', ERROR_CASTING_LOGICAL, .true., 'logical, a comma: not assigned')
+call check_logical('--flag "F x"', ERROR_CASTING_LOGICAL, .true., 'logical, two items: not assigned')
+call check_bound
+out = read_back(lun)
 ! lists, a map, a positional
 call check_lists('--ijk 1 x 3', ERROR_CASTING_NUMBER, 'fixed-size integer list')
 call assert_contains(read_back(lun), 'cannot convert "x" of option "--ijk" to an integer!', 'list: message')
@@ -50,6 +75,36 @@ call assert(index(err, 'Error: conversion') == 0, 'child: no PENF message')
 call capture_close(lun)
 
 contains
+  subroutine check_logical(args, expected, value, message)
+  !< A logical value: the variable, initially .true., is assigned only by a valid value.
+  character(*), intent(in)     :: args     !< Arguments.
+  integer(I4P), intent(in)     :: expected !< Expected error.
+  logical,      intent(in)     :: value    !< Expected value.
+  character(*), intent(in)     :: message  !< Message.
+  type(command_line_interface) :: cli      !< Command Line Interface (CLI).
+  logical                      :: flag     !< Value.
+  integer(I4P)                 :: error    !< Error trapping flag.
+
+  call cli%init(progname='flap_test_casting', error_lun=lun, usage_lun=lun)
+  call cli%add(switch='--flag', help='flag', required=.false., act='store', def='T', error=error)
+  call cli%parse(args=args, error=error)
+  call assert_equal(error, 0_I4P, message//': parse')
+  flag = .true.
+  call cli%get(switch='--flag', val=flag, error=error)
+  call assert_equal(error, expected, message//': error')
+  call assert_equal(flag, value, message//': value')
+  endsubroutine check_logical
+
+  subroutine check_bound
+  !< A bound that is not a number is an invalid range: the read alone accepted a slash.
+  type(command_line_interface) :: cli   !< Command Line Interface (CLI).
+  integer(I4P)                 :: error !< Error trapping flag.
+
+  call cli%init(progname='flap_test_casting', error_lun=lun, usage_lun=lun)
+  call cli%add(switch='--a', help='a', required=.false., act='store', def='1', min='/', error=error)
+  call assert_equal(error, ERROR_RANGE_DEFINITION, 'a slash as a bound')
+  endsubroutine check_bound
+
   subroutine child
   !< The default error unit (standard error).
   type(command_line_interface) :: cli   !< Command Line Interface (CLI).

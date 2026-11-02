@@ -15,6 +15,10 @@ programs keep their behaviour. The plan behind them is issue [#125](https://gith
 - `cli%error_message` is the message of the last error whichever part of the CLI raised it. It used to be set only by a
   few errors of the CLI itself: after an unknown switch, a missing required option or a failed `get` it was not
   allocated. It is allocated only when `cli%error` is an error.
+- `get` of a number or a logical takes one item only. A list-directed read accepted `/` and `,` (no error, the variable
+  left unassigned), `2*5` (a repeat count: `5`), `3 abc`, `3,abc` and the decimal comma `1,5` (the first item: `3`, `1.0`).
+  They are now `ERROR_CASTING_NUMBER` (50) or `ERROR_CASTING_LOGICAL` (10), and a bound (`min`, `max`) written like this
+  is `ERROR_RANGE_DEFINITION` (30). Valid values are read as before (#128).
 
 ## v2.5.0 (build)
 
