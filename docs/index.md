@@ -81,7 +81,7 @@ features:
   - icon: 🔓
     title: Multi-licensed
     details: "GPL v3 for FOSS projects; BSD 2-Clause, BSD 3-Clause or MIT for closed source and commercial ones: pick the license that fits."
-    link: #copyrights
+    link: "#copyrights"
     linkText: Copyrights
 ---
 

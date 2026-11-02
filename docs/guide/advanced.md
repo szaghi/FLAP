@@ -91,6 +91,9 @@ defaults; an option with `act='config'` lets the user choose the file:
 - An unknown key or section, a key naming an option that takes no value (`count`, `append`, `store*`), or a line that is
   not `key = value`, `[section]` or a comment is `ERROR_CONFIG_UNKNOWN_KEY` (1007), naming the line; with
   `init(ignore_unknown_clas=.true.)` such lines are ignored. The last of repeated keys wins.
+- Lenient on purpose: text after a closing quote or after the `]` of a section is dropped, an unterminated quote stays in the
+  value, tabs count as blanks, and a section may name a command by an alias. A flag takes the logical value of the file, so
+  `1` gives `.true.` even for a `store_false`.
 - The file is the one named on the command line (`--config my.ini`), else in the environment variable of the `config`
   option, else the one of `set_config`, else the default of the `config` option. A file named on the command line or in
   the environment must exist (`ERROR_CONFIG_NOT_FOUND`, 1006); a missing default is skipped, unless
@@ -123,7 +126,8 @@ The usage shows the sets in docopt notation, `(a | b)` for a required set and `[
   satisfies a required set nor violates a set. When a member is on the command line, the environment and configuration
   values of the other members fall back to their defaults: the command line wins (a variable set for a batch job never
   makes a command line alternative a violation);
-- the sets are checked after help/version and after the required options, as the last validation;
+- the sets are checked after help/version, the required options, the declared types and the maps; the `exclude=` pairs and
+  the exclusive commands come after them;
 - an invalid set is not added: the call returns `ERROR_M_EXCLUDE_SET_DEFINITION` (104), and `parse` returns the same
   error, so a wrong definition cannot go unnoticed.
 
@@ -198,7 +202,7 @@ value: when it is passed, `parse` returns `STATUS_ALTERNATE` (also in standalone
 
 <<< @/examples/output/alternate.ansi{ansi}
 
-- Skipped: required options, mutually exclusive sets, `exclude=` pairs, exclusive commands, path checks, unknown
+- Skipped: required options, declared types (`val_type`), maps, mutually exclusive sets, `exclude=` pairs, exclusive commands, path checks, unknown
   configuration keys and invalid environment lists. Still reported: syntax errors (an unknown or repeated switch);
   `--help`, `--version` and `--markdown` come first. Deprecation warnings are still printed.
 - `get` works as usual after it (a value out of `choices` is still reported by `get`).

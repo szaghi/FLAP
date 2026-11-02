@@ -22,7 +22,7 @@ Each command has its own help:
 ## Adding a command — `cli%add_group`
 
 ```fortran
-call cli%add_group(group, description, help, exclude, examples, no_args_is_help, deprecated, aliases, error)
+call cli%add_group(help, description, exclude, examples, group, no_args_is_help, deprecated, aliases, error)
 ```
 
 | Argument | Type | Purpose |
@@ -112,4 +112,5 @@ Options defined once (at the top level by default, or in `from_group`) are copie
 call cli%set_mutually_exclusive_groups(group1='commit', group2='init')
 ```
 
-Both commands must be defined before the call. Calling both is `ERROR_GROUP_M_EXCLUDE` (101), reported by `parse`.
+Both commands must be defined before the call: with an undefined one the call does nothing, and has no `error` to tell you.
+The same holds for a misspelled `add_group(exclude=)`. Calling both is `ERROR_GROUP_M_EXCLUDE` (101), reported by `parse`.

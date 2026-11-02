@@ -20,13 +20,14 @@ The help goes to the usage unit (standard error unless `init(usage_lun=...)`). I
 
 | Method | Returns / does |
 |---|---|
-| `cli%usage(g, pref, no_header, no_examples, no_epilog, markdown)` | The help of the group `g` (0: top level, 1..: the commands, in order of definition) as a string |
+| `cli%usage(g, pref, no_header, no_examples, no_epilog, markdown)` | The help of the group `g` (0: top level, 1..: the commands, in order of definition) as a string. `no_header` leaves out the usage line and the description, `no_examples` the examples, `no_epilog` the epilog; `markdown=.true.` renders it as Markdown |
 | `cli%signature()` | The arguments of the top-level usage line, without `usage: <progname>` |
 | `cli%print_usage(pref)` | Prints the top-level help on the usage unit; the program goes on |
 
 ## Man page
 
-`cli%save_man_page(man_file, error)` writes a troff man page (section 1); with `init(man_option=.true.)` the user can ask
+`cli%save_man_page(man_file, error)` writes a troff man page (section 1), of the top level: the commands are listed, but their
+options and the epilog are not (`save_usage_to_markdown` is the same; write each command's help with `usage(g=)` if you need it); with `init(man_option=.true.)` the user can ask
 for it with `--man`.
 
 <<< @/examples/output/completion-man.ansi{ansi}
@@ -41,7 +42,7 @@ like `--help`), without checking the other arguments: `prog --man` writes `prog.
 
 ## Markdown
 
-`cli%save_usage_to_markdown(markdown_file, error)` writes the help as a Markdown page, for a wiki or a documentation
+`cli%save_usage_to_markdown(markdown_file, error)` writes the top-level help as a Markdown page, for a wiki or a documentation
 site; the builtin `--markdown` (`-md`) does the same from the command line, writing `<progname>.md` or the file named by
 `init(markdown_file=...)`.
 
@@ -55,7 +56,7 @@ site; the builtin `--markdown` (`-md`) does the same from the command line, writ
 | `cli%save_zsh_completion(zsh_file, error)` | zsh |
 | `cli%save_fish_completion(fish_file, error)` | fish |
 | `cli%save_powershell_completion(powershell_file, error)` | PowerShell |
-| `cli%completion_script(shell)` | the script of `shell` (`'bash'`, `'zsh'`, `'fish'`, `'powershell'`) as a string, `''` for an unknown one |
+| `cli%completion_script(shell)` | the script of `shell` (`'bash'`, `'zsh'`, `'fish'`, `'powershell'`) as a string, `''` for an unknown one; `pwsh` means `powershell` |
 
 <<< @/examples/snippets/save_outputs-save.f90
 

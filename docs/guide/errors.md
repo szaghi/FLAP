@@ -92,8 +92,8 @@ positive values are **errors**. Existing values never change.
 | `104` | `ERROR_M_EXCLUDE_SET_DEFINITION` | Invalid mutually exclusive set | Fewer than two switches, an undefined, repeated or `required` member, or a switch already in a set (returned by `set_mutually_exclusive_switches`, then by `parse`) | definition |
 | `105` | `ERROR_POSITION_DUPLICATE` | Position declared twice | Two positionals of a group (command) with the same `position` (raised by `add`) | definition |
 | `106` | `ERROR_POSITION_GAP` | Missing position | Positions are not `1..N`, e.g. `1` and `3` without `2` (raised when parsing starts) | definition |
-| `1000` | `ERROR_MISSING_CLA` | Argument not found in CLI | `get` or `is_passed` called for an undefined switch | definition |
-| `1001` | `ERROR_MISSING_GROUP` | Group not found in CLI | `get` or `run_command` called for an undefined group | definition |
+| `1000` | `ERROR_MISSING_CLA` | Argument not found in CLI | `get` or `get_source` called for an undefined switch (`is_passed` returns `.false.`, with no error) | definition |
+| `1001` | `ERROR_MISSING_GROUP` | Group not found in CLI | `get` or `get_source` called for an undefined group (`run_command` returns `.false.`, with no error) | definition |
 | `1002` | `ERROR_MISSING_SELECTION_CLA` | No argument selected | `get` called with neither `switch=` nor `position=` | definition |
 | `1003` | `ERROR_TOO_FEW_CLAS` | Insufficient arguments for CLI | Reserved: not raised by the current version | usage |
 | `1004` | `ERROR_UNKNOWN_CLAS_IGNORED` | Unknown arguments ignored | `init(ignore_unknown_clas=.true.)` and an unknown switch was passed: not printed, the message of one of them is in `cli%error_message` | usage |
@@ -131,7 +131,8 @@ does not end the program on an error, except with `--check`: the program writes 
 | 3 | `environment` | A file or a variable: the command line may be right | `EXIT_ENVIRONMENT` |
 | 4 | `definition` | The program: retrying cannot help | `EXIT_DEFINITION` |
 
-`error_class(code)` and `error_exit_status(code)` give the same answers for any code, and JSON errors carry `"class"`. The class
+`error_class(code)` (a string, `''` for a status or an unknown code) and `error_exit_status(code)` (an integer) give the same
+answers for any code, `error_description(code)` the meaning of the table above, and JSON errors carry `"class"`. The class
 belongs to the code, not to where the value came from: a bad number from a configuration file is still `usage`.
 
 ## Handling status codes
@@ -147,7 +148,7 @@ instead: the program can clean up first (close files, call `MPI_Finalize`), and 
 
 <<< @/examples/output/statuses.ansi{ansi}
 
-When several of them are passed, one wins, in this order: a syntax error anywhere on the command line (an unknown or
+When several of them are passed, one wins, in this order (`--schema` comes between the man page and completion): a syntax error anywhere on the command line (an unknown or
 duplicated switch, a missing value, a repeated command) is returned first, then help, version, Markdown, man page and
 completion. `--version --help` prints the help; `--help compile --bogus` reports the unknown switch.
 

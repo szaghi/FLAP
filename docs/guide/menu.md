@@ -44,7 +44,7 @@ returned in `error` and a message such as `error: invalid response: 7` is writte
 | Procedure | Purpose |
 |---|---|
 | `init(question, multiple, separator, loop_on_invalid, tries, default_icon, input_unit, output_unit, error_unit, option_color, option_style, question_color, question_style, error_color, error_style, error)` | Start a new menu: drops the options and settings of a previous one. Every argument except `question` is optional. |
-| `add_option(text, is_default, error)` | Append an option; its number is its position. An empty text, or a second default, is an error and is not added. |
+| `add_option(text, is_default, error)` | Append an option; its number is its position. An empty or blank text, or a second default, is an error and is not added. |
 | `run(choice, error)` | Show the menu and read one answer; `choice` is the index of the chosen option. A menu can be run several times. |
 | `run(choices, error)` | The same, `choices` an allocatable array: the chosen indexes (see [Multiple selection](#multiple-selection)). |
 | `yes_no(answer, default, error)` | Ask the question as a yes/no one, without the options; `answer` is a logical (see [Yes/no questions](#yes-no-questions)). |
@@ -142,7 +142,7 @@ error: invalid response: 7 (2 tries left)
 What is your favorite food? 2
 ```
 
-Every error kind is retried except the end of the input (see below). `tries` below 1 is `ERROR_MENU_DEFINITION` (returned by `init`,
+Every wrong answer is retried; the end of the input (see below) and an answer that cannot be read are not. `tries` below 1 is `ERROR_MENU_DEFINITION` (returned by `init`,
 which keeps the default 3).
 
 ## Colours

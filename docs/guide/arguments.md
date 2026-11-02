@@ -11,8 +11,11 @@ outputs shown.
 call cli%init(progname, version, help, description, license, authors, examples, epilog, disable_hv,        &
               usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone, &
               error_hint, no_args_is_help, ignore_env, auto_envvar_prefix, case_insensitive,               &
-              completion_options, usage_on_error, man_option, man_file, markdown_file)
+              completion_options, usage_on_error, man_option, man_file, markdown_file, schema_option,         &
+              error_format, error_format_env, check_option, dry_run_option)
 ```
+
+The last five serve programs that other programs call: see [Machine-readable Interfaces](./machine).
 
 Every argument is optional; pass them by keyword. Call `init` before `add`: it resets the CLI, and some settings
 (`case_insensitive`, `auto_envvar_prefix`) apply to the arguments added after it.
@@ -25,9 +28,9 @@ Every argument is optional; pass them by keyword. Call `init` before `add`: it r
 | `version` | `character(*)` | `'unknown'` | Printed by `--version` |
 | `help` | `character(*)` | `'usage: '` | Text before the usage line |
 | `description` | `character(*)` | `''` | Shown below the usage line |
-| `license` | `character(*)` | `''` | License note (`cli%license`) |
-| `authors` | `character(*)` | `''` | Authors (`cli%authors`) |
-| `examples` | `character(*), dimension(:)` | none | Usage examples, shown at the end of the help |
+| `license` | `character(*)` | `''` | License note: printed after the version by `--version`, and the COPYRIGHT section of the man page |
+| `authors` | `character(*)` | `''` | Authors: printed after the version by `--version`, and the AUTHOR section of the man page |
+| `examples` | `character(*), dimension(:)` | none | Usage examples, shown at the end of the help of the program, never in the help of a command (`add_group(examples=)` has its own) |
 | `epilog` | `character(*)` | `''` | Printed after the help |
 
 **Behaviour**
@@ -50,9 +53,9 @@ Every argument is optional; pass them by keyword. Call `init` before `add`: it r
 |---|---|---|---|
 | `completion_options` | `logical` | `.false.` | Add `--show-completion [SHELL]` and `--install-completion [SHELL]` (see [Output](./output#shell-completion-from-the-program)) |
 | `man_option` | `logical` | `.false.` | Add `--man`: save the man page and stop (see [Output](./output#from-the-command-line-man)) |
-| `man_file` | `character(*)` | `<progname>.1` | File written by `--man` |
+| `man_file` | `character(*)` | `<progname>.1` | File written by `--man`. The default comes from `progname`, by default `argv[0]`: set `progname`, or a path in it is a directory for the file |
 | `markdown_file` | `character(*)` | `<progname>.md` | File written by `--markdown` |
-| `usage_lun`, `error_lun`, `version_lun` | `integer` | standard error, standard error, standard output | Units of the help, of the errors and of the version (and of `--show-completion`) |
+| `usage_lun`, `error_lun`, `version_lun` | `integer` | standard error, standard error, standard output | Units of the help, of the errors and of the version (`version_lun` also receives `--show-completion`, the `--schema` JSON and the `--check` verdict) |
 | `error_color`, `error_style` | `character(*)` | none | Colour of the `error`/`warning` labels (see [Output](./output#colours)) |
 
 The `examples` of a character array constructor must all have the same length: pad the shorter ones with blanks.
@@ -89,7 +92,7 @@ three of them.
 call cli%add(pref, group, group_index, switch, switch_ab, switch_neg, help, help_markdown, help_color, help_style, &
              required, val_required, positional, position, hidden, act, def, nargs, choices, exclude, envvar,    &
              must_exist, readable, writable, allow_dash, deprecated, min, max, min_open, max_open, clamp,         &
-             case_sensitive, map, map_keys, metavar, error)
+             case_sensitive, map, map_keys, metavar, val_type, sensitive, error)
 ```
 
 A named argument needs `switch`; a positional one `positional=.true.` and `position`. Every other argument is optional.
@@ -103,12 +106,13 @@ A named argument needs `switch`; a positional one `positional=.true.` and `posit
 | `switch_neg` | `character(*)` | none | Negation of a flag, e.g. `'--no-restart'` (see [Flag pairs](#flag-pairs-switch-neg)) |
 | `help` | `character(*)` | `'Undocumented argument'` | Description in the help |
 | `required` | `logical` | `.false.` | The argument must be given (on the command line, or by the environment or a configuration file) |
+| `val_required` | `logical` | `.true.` | With `.false.`, the value of a plain `store` option may be omitted: the usage shows `[value]` and, passed alone, the option takes its default, which it must have (`ERROR_OPTIONAL_NO_DEF`). `act='store*'` is the same for the command line; see [Actions](#actions-act) |
 | `act` | `character(*)` | `'store'` | Action, see below (any case) |
 | `def` | `character(*)` | none | Default value, as a string; blank separated for a list |
 | `metavar` | `character(*)` | `'value'` | Placeholder of the value in the usage, help, man page and Markdown (see [Metavar](#metavar)) |
 | `group` | `character(*)` | top level | The command the argument belongs to (see [Subcommands](./subcommands)) |
 | `hidden` | `logical` | `.false.` | Parsed, but not shown in the help, the usage and the completion |
-| `help_markdown` | `character(*)` | `''` | Longer help, used by the Markdown output |
+| `help_markdown` | `character(*)` | `''` | Longer help, added after `help` in the Markdown output only |
 | `help_color`, `help_style` | `character(*)` | none | Colour of the switch names in the help (see [Output](./output#colours)) |
 | `error` | `integer` | — | Error code of the definition (0 = success) |
 

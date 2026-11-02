@@ -111,7 +111,7 @@ help with `standalone=.false.`). A `get` with `args`, or another `parse`, does p
 ## Retrieving values — `cli%get`
 
 ```fortran
-call cli%get(val, switch, position, group, args, pref, error)
+call cli%get(val, pref, args, group, switch, position, error)
 ```
 
 | Argument | Type | Purpose |
@@ -147,7 +147,7 @@ with `-DPENF_R16P`), a `logical` or a `character`, scalar or a fixed-size array.
 allocatable array, which `get_varying` allocates to the exact size (a size-0 array for an empty list):
 
 ```fortran
-call cli%get_varying(val, switch, position, group, args, pref, error)
+call cli%get_varying(val, pref, args, group, switch, position, error)
 ```
 
 <<< @/examples/snippets/lists-get.f90

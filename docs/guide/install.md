@@ -89,7 +89,8 @@ Every release ships an `install.sh`, which downloads FLAP and builds it with one
 
 ```bash
 ./install.sh --download git --build fobis
-./install.sh --download wget --build cmake --tag v2.5.0
+./install.sh --download wget --build cmake --tag v2.5.0   # --tag applies to wget
+./install.sh --build fobis --mode static-gnu              # the FoBiS mode
 ```
 
 ## Compiler notes

@@ -59,6 +59,7 @@ const docs = [
 export default withMermaid({
   title: 'FLAP Documentation',
   base: '/FLAP/',
+  srcExclude: ['ford.md'],
   markdown: {
     math: true,
     languages: ['fortran-free-form', 'fortran-fixed-form'],
@@ -80,7 +81,7 @@ export default withMermaid({
       {
         text: 'Reference',
         link: '/guide/features',
-        activeMatch: '^/guide/(features|arguments|parsing|subcommands|advanced|output|menu|errors)',
+        activeMatch: '^/guide/(features|arguments|parsing|subcommands|advanced|output|machine|menu|errors)',
       },
       { text: 'API', link: '/api/' },
       {
