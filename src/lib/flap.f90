@@ -69,6 +69,7 @@ use flap_command_line_arguments_group_t, only : command_line_arguments_group,   
                                                 STATUS_SHOW_COMPLETION,                       &
                                                 STATUS_INSTALL_COMPLETION,                    &
                                                 STATUS_PRINT_MAN,                             &
+                                                STATUS_SCHEMA,                                &
                                                 ERROR_GROUP_CONSISTENCY => ERROR_CONSISTENCY, &
                                                 ERROR_GROUP_M_EXCLUDE => ERROR_M_EXCLUDE,     &
                                                 ERROR_POSITION_DUPLICATE,                     &
@@ -76,7 +77,7 @@ use flap_command_line_arguments_group_t, only : command_line_arguments_group,   
                                                 ERROR_M_EXCLUDE_SET,                          &
                                                 ERROR_M_EXCLUDE_SET_REQUIRED,                 &
                                                 ERROR_M_EXCLUDE_SET_DEFINITION
-use flap_command_line_interface_t, only : command_line_interface,      &
+use flap_command_line_interface_t, only : command_line_interface, error_description,      &
                                           ERROR_MISSING_CLA,           &
                                           ERROR_MISSING_GROUP,         &
                                           ERROR_MISSING_SELECTION_CLA, &
@@ -117,6 +118,8 @@ public :: STATUS_ALTERNATE
 public :: STATUS_SHOW_COMPLETION
 public :: STATUS_INSTALL_COMPLETION
 public :: STATUS_PRINT_MAN
+public :: STATUS_SCHEMA
+public :: error_description
 ! errors 1-99: command line argument
 public :: SOURCE_COMMANDLINE
 public :: SOURCE_ENVIRONMENT

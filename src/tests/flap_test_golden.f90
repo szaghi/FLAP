@@ -24,6 +24,7 @@ case(0)
   call check_cli('group_examples', ['main', 'gwe ', 'gne '])
   call check_help('nested', ['--help       ', 'init --help  ', 'commit --help', 'tag --help   '])
   call check_help('group_examples', ['--help    ', 'gwe --help', 'gne --help'])
+  call check_schema
   call assert_equal(mismatches, 0_I4P, 'outputs differing from their golden file (see the messages above)')
 case(1)
   call run_child('nested')
@@ -135,6 +136,44 @@ contains
   call assert_equal(error, 0_I4P, prefix//': save_bash_completion')
   call compare_file(scratch_file(prefix//'.bash'), prefix//'.bash')
   endsubroutine check_outputs
+
+  subroutine check_schema()
+  !< The JSON description of a CLI using every feature it describes (#128).
+  type(command_line_interface) :: cli   !< Command line interface.
+  integer(I4P)                 :: error !< Error trapping flag.
+
+  call cli%init(progname='typed', version='1.2.0', description='A program with a "typed" interface', schema_option=.true.)
+  call cli%add(switch='--steps', switch_ab='-s', help='Time steps', required=.true., val_type='I4P', error=error)
+  call cli%add(switch='--cfl', help='CFL number', required=.false., def='0.5', val_type='R8P', min='0', max='1', max_open=.true., &
+               error=error)
+  call cli%add(switch='--tiny', help='Small', required=.false., def='1', val_type='I1P', min='0', error=error)
+  call cli%add(switch='--scheme', help='Scheme', required=.false., def='weno', choices='weno,muscl', metavar='NAME', error=error)
+  call cli%add(switch='--order', help='Order', required=.false., def='3', choices='3,5', val_type='I2P', error=error)
+  call cli%add(switch='--ijk', help='Sizes', required=.false., def='1 2 3', nargs='3', val_type='I8P', error=error)
+  call cli%add(switch='--weights', help='Weights', required=.false., def='0.5', nargs='+', val_type='R4P', error=error)
+  call cli%add(switch='--tags', help='Tags', required=.false., def='', nargs='*', error=error)
+  call cli%add(switch='--file', help='Input files', required=.false., def='', act='append', val_type='character', error=error)
+  call cli%add(switch='--set', help='Settings', required=.false., def='', nargs='*', map=.true., map_keys='nx,ny', error=error)
+  call cli%add(switch='--verbose', switch_ab='-v', help='Verbosity', required=.false., act='count', error=error)
+  call cli%add(switch='--color', switch_neg='--no-color', help='Colors', required=.false., act='store_true', def='.false.', &
+               error=error)
+  call cli%add(switch='--list', help='List and exit', required=.false., act='alternate', error=error)
+  call cli%add(switch='--old', help='Old name', required=.false., def='1', deprecated='use --steps', envvar='TYPED_OLD', &
+               error=error)
+  call cli%add(switch='--left', help='Left', required=.false., def='1', exclude='--right', error=error)
+  call cli%add(switch='--right', help='Right', required=.false., def='2', error=error)
+  call cli%add(switch='--cpu', help='CPU', required=.false., act='store_true', def='.false.', error=error)
+  call cli%add(switch='--gpu', help='GPU', required=.false., act='store_true', def='.false.', error=error)
+  call cli%set_mutually_exclusive_switches(switches='--cpu,--gpu', required=.true., error=error)
+  call cli%add(switch='--hide', help='Hidden', required=.false., def='1', hidden=.true., error=error)
+  call cli%add(positional=.true., position=1, help='Mesh', required=.true., val_type='character', error=error)
+  call cli%add_group(group='run', help='Run', description='Run the solver', aliases='r,go')
+  call cli%add(group='run', switch='--np', help='Ranks', required=.false., def='1', val_type='I4P', envvar='TYPED_NP', &
+               error=error)
+  call cli%add_group(group='stop', help='Stop', exclude='run', deprecated='use signals')
+  call assert_equal(error, 0_I4P, 'schema: definitions')
+  call compare(cli%json_schema()//new_line('a'), 'typed.schema.json')
+  endsubroutine check_schema
 
   subroutine check_help(name, args)
   !< Compare the help printed by `prog [group] --help` (run in a child process, because it ends the program).

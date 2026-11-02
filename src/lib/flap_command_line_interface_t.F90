@@ -4,14 +4,14 @@ module flap_command_line_interface_t
 
 use face, only : colorize
 use flap_command_line_argument_t, only : command_line_argument, ACTION_ALTERNATE, ACTION_CONFIG, ACTION_COUNT, ACTION_PRINT_HELP, &
-                                         ACTION_PRINT_MARK, ACTION_PRINT_MAN, ACTION_PRINT_VERS, ACTION_STORE, &
+                                         ACTION_PRINT_MARK, ACTION_PRINT_MAN, ACTION_SCHEMA, ACTION_PRINT_VERS, ACTION_STORE, &
                                          ACTION_STORE_FALSE, &
                                          ACTION_STORE_TRUE, ACTION_SHOW_COMPLETION, ACTION_INSTALL_COMPLETION, &
                                          ERROR_UNKNOWN, SOURCE_COMMANDLINE, SOURCE_CONFIG, &
                                          SOURCE_DEFAULT, SOURCE_ENVIRONMENT, SOURCE_NONE
 use flap_command_line_arguments_group_t, only : command_line_arguments_group, STATUS_ALTERNATE, STATUS_NO_ARGS, STATUS_PRINT_H, &
                                                 STATUS_PRINT_M, STATUS_PRINT_V, STATUS_SHOW_COMPLETION, &
-                                                STATUS_INSTALL_COMPLETION, STATUS_PRINT_MAN
+                                                STATUS_INSTALL_COMPLETION, STATUS_PRINT_MAN, STATUS_SCHEMA
 use flap_config_m, only : config_file
 use flap_object_t, only : object
 use flap_utils_m
@@ -20,6 +20,8 @@ use penf
 implicit none
 private
 save
+
+public :: error_description
 
 type, extends(object), public :: command_line_interface
   !< Command Line Interface (CLI) class.
@@ -37,6 +39,7 @@ type, extends(object), public :: command_line_interface
   character(len=:), allocatable                   :: auto_envvar_prefix          !< Prefix of the generated envvar names.
   character(len=:), allocatable                   :: usage_on_error              !< After an error: full, usage, none (F27).
   logical                                         :: man_option=.false.          !< --man builtin (F29).
+  logical                                         :: schema_option=.false.       !< --schema builtin (#128).
   character(len=:), allocatable                   :: man_file                    !< File of --man ('': <progname>.1).
   character(len=:), allocatable                   :: markdown_file               !< File of --markdown ('': <progname>.md).
   character(len=:), allocatable                   :: config_path                 !< Configuration file (F08).
@@ -88,6 +91,8 @@ type, extends(object), public :: command_line_interface
     procedure, public :: save_zsh_completion             !< Save zsh completion script (bash script via bashcompinit).
     procedure, public :: save_fish_completion            !< Save fish completion script (native).
     procedure, public :: save_powershell_completion      !< Save PowerShell completion script (native completer).
+    procedure, public :: json_schema                     !< JSON description of the CLI (#128).
+    procedure, public :: save_json_schema                !< Save the JSON description of the CLI (#128).
     procedure, public :: save_man_page                   !< Save CLI usage as man page.
     procedure, public :: save_usage_to_markdown          !< Save CLI usage as markdown.
     ! private methods
@@ -139,6 +144,14 @@ type, extends(object), public :: command_line_interface
 endtype command_line_interface
 
 ! errors codes
+integer(I4P), parameter :: ERROR_CODES(74) = [ &
+     1_I4P, 2_I4P, 3_I4P, 4_I4P, 5_I4P, 6_I4P, 7_I4P, 8_I4P, 9_I4P, 10_I4P, 11_I4P, 12_I4P, 13_I4P, &
+     14_I4P, 15_I4P, 16_I4P, 17_I4P, 18_I4P, 19_I4P, 20_I4P, 21_I4P, 22_I4P, 23_I4P, 24_I4P, 25_I4P, &
+     26_I4P, 27_I4P, 28_I4P, 29_I4P, 30_I4P, 31_I4P, 32_I4P, 33_I4P, 34_I4P, 35_I4P, 36_I4P, 37_I4P, &
+     38_I4P, 39_I4P, 40_I4P, 41_I4P, 42_I4P, 43_I4P, 44_I4P, 45_I4P, 46_I4P, 47_I4P, 48_I4P, 49_I4P, &
+     50_I4P, 51_I4P, 52_I4P, 100_I4P, 101_I4P, 102_I4P, 103_I4P, 104_I4P, 105_I4P, 106_I4P, 1000_I4P, &
+     1001_I4P, 1002_I4P, 1003_I4P, 1004_I4P, 1005_I4P, 1006_I4P, 1007_I4P, 1008_I4P, 1009_I4P, 1010_I4P, &
+     1011_I4P, 1012_I4P, 1013_I4P, 1014_I4P] !< Codes described by error_description.
 integer(I4P), parameter, public :: ERROR_MISSING_CLA           = 1000 !< CLA not found in CLI.
 integer(I4P), parameter, public :: ERROR_MISSING_GROUP         = 1001 !< Group not found in CLI.
 integer(I4P), parameter, public :: ERROR_MISSING_SELECTION_CLA = 1002 !< CLA selection in CLI failing.
@@ -185,6 +198,7 @@ contains
   self%completion_options  = .false.
   if (allocated(self%usage_on_error)) deallocate(self%usage_on_error)
   self%man_option = .false.
+  self%schema_option = .false.
   if (allocated(self%man_file)) deallocate(self%man_file)
   if (allocated(self%markdown_file)) deallocate(self%markdown_file)
   if (allocated(self%auto_envvar_prefix)) deallocate(self%auto_envvar_prefix)
@@ -196,7 +210,7 @@ contains
   subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, &
                   usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone, &
                   error_hint, no_args_is_help, ignore_env, auto_envvar_prefix, case_insensitive, completion_options, &
-                  usage_on_error, man_option, man_file, markdown_file)
+                  usage_on_error, man_option, man_file, markdown_file, schema_option)
   !< Initialize CLI.
   class(command_line_interface), intent(inout) :: self                !< CLI data.
   character(*), optional,        intent(in)    :: progname            !< Program name.
@@ -232,6 +246,7 @@ contains
                                                                       !< 'full' (the group help, default), 'usage' (the
                                                                       !< usage line), 'none'; any case.
   logical,      optional,        intent(in)    :: man_option          !< Add --man to the top level (F29).
+  logical,      optional,        intent(in)    :: schema_option       !< Add --schema to the top level (#128).
   character(*), optional,        intent(in)    :: man_file            !< File of --man (default <progname>.1).
   character(*), optional,        intent(in)    :: markdown_file       !< File of --markdown (default <progname>.md).
   character(len=:), allocatable                :: prog_invocation     !< Complete program invocation.
@@ -275,6 +290,7 @@ contains
   self%auto_envvar_prefix = '' ; if (present(auto_envvar_prefix)) self%auto_envvar_prefix = trim(adjustl(auto_envvar_prefix))
   self%usage_on_error = 'full' ; if (present(usage_on_error)) self%usage_on_error = trim(adjustl(usage_on_error))
   if (present(man_option)) self%man_option = man_option
+  if (present(schema_option)) self%schema_option = schema_option
   self%man_file = '' ; if (present(man_file)) self%man_file = trim(adjustl(man_file))
   self%markdown_file = '' ; if (present(markdown_file)) self%markdown_file = trim(adjustl(markdown_file))
   ! initialize only the first default group
@@ -1398,6 +1414,13 @@ contains
   if (self%clasg(0)%is_action_passed(ACTION_PRINT_MAN)) then
     self%error = STATUS_PRINT_MAN
     call self%save_man_page(output_file(self%man_file, '.1'))
+    if (self%standalone) call quiet_stop(0_I4P)
+    return
+  endif
+  ! the JSON description (#128): top level only
+  if (self%clasg(0)%is_action_passed(ACTION_SCHEMA)) then
+    self%error = STATUS_SCHEMA
+    call write_text(self%version_lun, self%json_schema())
     if (self%standalone) call quiet_stop(0_I4P)
     return
   endif
@@ -2572,6 +2595,13 @@ contains
                     help='Save this help message as a man page', act='print_man')
   endif
 
+  ! add the JSON description builtin to the top level, if asked (#128)
+  if (self%schema_option) then
+    if (.not.self%is_defined(group='', switch='--schema')) &
+      call self%add(pref=pref, group_index=0, switch='--schema', required=.false., def='', &
+                    help='Print the description of this program as JSON', act='print_schema')
+  endif
+
   ! add the completion builtins to the top level, if asked (F24)
   if (self%completion_options) then
     if (.not.self%is_defined(group='', switch='--show-completion')) &
@@ -2814,6 +2844,222 @@ contains
   script = script//nl//'  }'
   script = script//nl//'}'
   endfunction powershell_script
+
+  pure function error_description(code) result(description)
+  !< Return the meaning of an error code, as in the table of `docs/guide/errors.md` (`flap_test_json_schema` compares them);
+  !< '' for an unknown code. The JSON description of the CLI publishes it.
+  integer(I4P), intent(in)      :: code        !< Error code.
+  character(len=:), allocatable :: description !< Meaning.
+
+  select case(code)
+  case(1)
+    description = 'Missing default for optional argument'
+  case(2)
+    description = 'Required argument cannot use `exclude`'
+  case(3)
+    description = 'Positional argument cannot use `exclude`'
+  case(4)
+    description = 'Named argument has no switch'
+  case(5)
+    description = 'Positional argument has no position'
+  case(6)
+    description = 'Positional argument must use `act=''store''`'
+  case(7)
+    description = 'Value not in `choices` list'
+  case(8)
+    description = 'Required argument missing'
+  case(9)
+    description = 'Two mutually exclusive arguments both passed'
+  case(10)
+    description = 'Cast to `logical` failed'
+  case(11)
+    description = '`choices` not allowed for logical type'
+  case(12)
+    description = 'Argument is not list-valued'
+  case(13)
+    description = 'Insufficient list arguments'
+  case(14)
+    description = 'Missing value'
+  case(15)
+    description = 'Unknown switch'
+  case(16)
+    description = '`envvar` not allowed for positional'
+  case(17)
+    description = '`envvar` requires `act=''store''`, `store_true` or `store_false`'
+  case(18)
+    description = '`envvar` not allowed for list-valued'
+  case(19)
+    description = '`act=''store*''` not allowed for positional'
+  case(20)
+    description = '`act=''store*''` not allowed for list-valued'
+  case(21)
+    description = '`act=''store*''` not allowed with `envvar`'
+  case(22)
+    description = 'Unknown action'
+  case(23)
+    description = 'Argument passed more than once'
+  case(24)
+    description = 'Required value not passed'
+  case(25)
+    description = 'Inline value for a flag'
+  case(26)
+    description = 'Inline value for a list'
+  case(27)
+    description = 'Invalid count'
+  case(28)
+    description = 'Invalid append'
+  case(29)
+    description = 'Scalar get of an append'
+  case(30)
+    description = 'Invalid range'
+  case(31)
+    description = 'Value out of range'
+  case(32)
+    description = 'Range on a non-numeric get'
+  case(33)
+    description = 'Path does not exist'
+  case(34)
+    description = 'Path not readable'
+  case(35)
+    description = 'Path not writable'
+  case(36)
+    description = 'Invalid flag negation'
+  case(37)
+    description = 'Invalid alternate action'
+  case(38)
+    description = 'Map item not `KEY=VALUE`'
+  case(39)
+    description = 'Map key repeated'
+  case(40)
+    description = 'Map key not allowed'
+  case(41)
+    description = 'Map key not given'
+  case(42)
+    description = 'Invalid map'
+  case(43)
+    description = 'Unterminated quote in a list from the environment'
+  case(44)
+    description = 'A required option cannot be deprecated'
+  case(45)
+    description = '`nargs` on a positional argument'
+  case(46)
+    description = 'Unsupported variable type'
+  case(47)
+    description = 'List size differs from the array size'
+  case(48)
+    description = 'Default count differs from `nargs`'
+  case(49)
+    description = 'Path checks on an option without value'
+  case(50)
+    description = 'Value is not a number'
+  case(51)
+    description = 'Invalid `val_type`'
+  case(52)
+    description = '`get` against `val_type`'
+  case(100)
+    description = 'Group (command) consistency broken'
+  case(101)
+    description = 'Two mutually exclusive groups both passed'
+  case(102)
+    description = 'Two members of a mutually exclusive set passed'
+  case(103)
+    description = 'No member of a required set passed'
+  case(104)
+    description = 'Invalid mutually exclusive set'
+  case(105)
+    description = 'Position declared twice'
+  case(106)
+    description = 'Missing position'
+  case(1000)
+    description = 'Argument not found in CLI'
+  case(1001)
+    description = 'Group not found in CLI'
+  case(1002)
+    description = 'No argument selected'
+  case(1003)
+    description = 'Insufficient arguments for CLI'
+  case(1004)
+    description = 'Unknown arguments ignored'
+  case(1005)
+    description = 'Application error'
+  case(1006)
+    description = 'Configuration file not found'
+  case(1007)
+    description = 'Configuration file: unknown key'
+  case(1008)
+    description = 'Invalid command alias'
+  case(1009)
+    description = 'Positional in `copy_options`'
+  case(1010)
+    description = 'Unknown completion shell'
+  case(1011)
+    description = 'Completion not installed'
+  case(1012)
+    description = 'A command line argument cannot be read'
+  case(1013)
+    description = 'A command passed more than once'
+  case(1014)
+    description = 'Invalid `usage_on_error`'
+  case default
+    description = ''
+  endselect
+  endfunction error_description
+
+  function json_schema(self) result(json)
+  !< Return the JSON description of the CLI (#128). It needs no copy with the builtins, unlike the other outputs: it leaves them
+  !< out, and it reads no state of a parse, so that it is the same before and after parse.
+  class(command_line_interface), intent(in) :: self  !< CLI data.
+  character(len=:), allocatable             :: json  !< JSON document.
+  character(1)                              :: nl    !< New line.
+  integer(I4P)                              :: g     !< Group index.
+  integer(I4P)                              :: e     !< Counter.
+  character(len=:), allocatable             :: excluded !< Command excluded by a command.
+
+  nl = new_line('a')
+  json = '{'//nl//'  "schema_version": 1,'//nl
+  json = json//'  "program": {"name": '//json_string(self%progname)//', "version": '//json_string(self%version)//&
+         ', "description": '//json_string(self%description)//'},'//nl
+  json = json//'  "capabilities": {"check": false, "error_format_env": null},'//nl
+  json = json//'  "errors": {'//nl
+  do e=1, size(ERROR_CODES, dim=1)
+    json = json//'    "'//trim(str(n=ERROR_CODES(e), no_sign=.true.))//'": '//json_string(error_description(ERROR_CODES(e)))
+    if (e < size(ERROR_CODES, dim=1)) json = json//','
+    json = json//nl
+  enddo
+  json = json//'  },'//nl
+  json = json//self%clasg(0)%json_members(indent='  ')//','//nl
+  json = json//'  "commands": ['
+  do g=1, size(self%clasg, dim=1) - 1
+    if (g > 1) json = json//','
+    excluded = ''
+    if (allocated(self%clasg(g)%m_exclude)) excluded = trim(adjustl(self%clasg(g)%m_exclude))
+    if (len(excluded) == 0) then ! parse makes the relation symmetric: the same answer before it
+      do e=1, size(self%clasg, dim=1) - 1
+        if (e == g .or. .not.allocated(self%clasg(e)%m_exclude)) cycle
+        if (trim(adjustl(self%clasg(e)%m_exclude)) == self%clasg(g)%group) excluded = self%clasg(e)%group
+      enddo
+    endif
+    json = json//nl//self%clasg(g)%json_command(indent='    ', exclusive_with=excluded)
+  enddo
+  if (size(self%clasg, dim=1) > 1) json = json//nl//'  '
+  json = json//']'//nl//'}'
+  endfunction json_schema
+
+  subroutine save_json_schema(self, file, error)
+  !< Save the JSON description of the CLI (#128).
+  class(command_line_interface), intent(in)  :: self  !< CLI data.
+  character(*),                  intent(in)  :: file  !< Output file name.
+  integer(I4P), optional,        intent(out) :: error !< I/O status (not zero if the file cannot be written).
+  integer(I4P)                               :: u     !< Unit file handler.
+  integer(I4P)                               :: ios   !< I/O status.
+
+  open(newunit=u, file=trim(adjustl(file)), iostat=ios)
+  if (ios == 0) then
+    call write_text(u, self%json_schema())
+    close(u, iostat=ios)
+  endif
+  if (present(error)) error = ios
+  endsubroutine save_json_schema
 
   subroutine save_man_page(self, man_file, error)
   !< Save CLI usage as man page, builtins included whether or not parse has been called.

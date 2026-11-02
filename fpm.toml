@@ -381,3 +381,8 @@ main = "flap_test_val_type.f90"
 name = "flap_test_json"
 source-dir = "src/tests"
 main = "flap_test_json.f90"
+
+[[test]]
+name = "flap_test_json_schema"
+source-dir = "src/tests"
+main = "flap_test_json_schema.f90"

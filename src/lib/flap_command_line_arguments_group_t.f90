@@ -8,6 +8,7 @@ use flap_command_line_argument_t, only : command_line_argument, &
                                          ACTION_SHOW_COMPLETION, ACTION_INSTALL_COMPLETION, &
                                          ACTION_PRINT_MARK,     &
                                          ACTION_PRINT_MAN,      &
+                                         ACTION_SCHEMA,         &
                                          ACTION_PRINT_VERS,     &
                                          ACTION_APPEND,         &
                                          ACTION_COUNT,          &
@@ -20,7 +21,8 @@ use flap_command_line_argument_t, only : command_line_argument, &
                                          SOURCE_NONE
 use flap_config_m, only : config_file
 use flap_object_t, only : object
-use flap_utils_m, only : fish_escape, flap_string, list_count, list_items, list_push, ps_escape, read_env, suggestions, &
+use flap_utils_m, only : fish_escape, flap_string, json_array, json_string, list_count, list_items, list_push, ps_escape, &
+                         read_env, suggestions, &
                          tokenize, upper_case, write_text
 use penf
 
@@ -36,6 +38,7 @@ public :: STATUS_ALTERNATE
 public :: STATUS_SHOW_COMPLETION
 public :: STATUS_INSTALL_COMPLETION
 public :: STATUS_PRINT_MAN
+public :: STATUS_SCHEMA
 public :: ERROR_CONSISTENCY
 public :: ERROR_M_EXCLUDE
 public :: ERROR_M_EXCLUDE_SET
@@ -82,6 +85,8 @@ type, extends(object) :: command_line_arguments_group
     procedure, public :: is_required_passed    !< Check if required CLAs are passed.
     procedure, public :: add_exclusive_set     !< Add a mutually exclusive set of switches.
     procedure, public :: check_exclusive_sets  !< Check the mutually exclusive sets of switches.
+    procedure, public :: json_members          !< JSON description of the options, positionals and exclusive sets.
+    procedure, public :: json_command          !< JSON description of the group as a command.
     procedure, public :: check_types           !< Check the values of the typed CLAs against their declared type.
     procedure, public :: check_maps            !< Check the KEY=VALUE pairs of the map CLAs.
     procedure, public :: is_passed             !< Check if a CLA has been passed.
@@ -117,6 +122,7 @@ integer(I4P), parameter :: STATUS_NO_ARGS = -5 !< No arguments passed, help prin
 integer(I4P), parameter :: STATUS_ALTERNATE = -4 !< An alternate action passed: value validation bypassed (F16).
 integer(I4P), parameter :: STATUS_SHOW_COMPLETION = -6    !< --show-completion passed (F24).
 integer(I4P), parameter :: STATUS_INSTALL_COMPLETION = -7 !< --install-completion passed (F24).
+integer(I4P), parameter :: STATUS_SCHEMA = -9             !< --schema passed: the JSON description printed (#128).
 integer(I4P), parameter :: STATUS_PRINT_MAN = -8          !< --man passed: the man page saved (F29).
 
 ! errors codes
@@ -179,6 +185,106 @@ contains
     if (alias) return
   enddo
   endfunction has_alias
+
+  function json_members(self, indent) result(json)
+  !< Return the JSON members `options`, `positionals` and `exclusive_sets` of the group (#128): hidden CLAs and builtins are
+  !< left out; each ends with a comma but the last, without a final new line.
+  class(command_line_arguments_group), intent(in) :: self     !< CLAsG data.
+  character(*),                        intent(in) :: indent   !< Indentation of the members.
+  character(len=:), allocatable                   :: json     !< JSON members.
+  character(len=:), allocatable                   :: named    !< Options.
+  character(len=:), allocatable                   :: posit    !< Positionals.
+  character(len=:), allocatable                   :: sets     !< Exclusive sets.
+  character(len=:), allocatable                   :: members(:) !< Members of a set.
+  type(flap_string), allocatable                  :: names(:) !< Members of a set.
+  character(1)                                    :: nl       !< New line.
+  integer(I4P)                                    :: a        !< Counter.
+  integer(I4P)                                    :: m        !< Counter.
+  integer(I4P)                                    :: n        !< Number of members.
+
+  nl = new_line('a')
+  named = '' ; posit = '' ; sets = ''
+  do a=1, self%Na
+    if (self%cla(a)%is_hidden) cycle
+    if (self%cla(a)%is_builtin()) cycle
+    if (self%cla(a)%is_positional) then
+      if (len(posit) > 0) posit = posit//','//nl
+      posit = posit//indent//'  '//self%cla(a)%json_schema(exclude='')
+    else
+      if (len(named) > 0) named = named//','//nl
+      named = named//indent//'  '//self%cla(a)%json_schema(exclude=excluded_by(a))
+    endif
+  enddo
+  if (allocated(self%m_sets)) then
+    do a=1, size(self%m_sets, dim=1)
+      call list_items(self%m_sets(a)%switches, members, n)
+      if (allocated(names)) deallocate(names)
+      allocate(names(n))
+      do m=1, n
+        names(m)%s = trim(adjustl(members(m)))
+      enddo
+      if (len(sets) > 0) sets = sets//','//nl
+      sets = sets//indent//'  {"members": '//json_array(names)//', "required": '//&
+             trim(merge('true ', 'false', self%m_sets(a)%is_required))//'}'
+    enddo
+  endif
+  json = indent//'"options": ['//wrapped(named)//'],'//nl//&
+         indent//'"positionals": ['//wrapped(posit)//'],'//nl//&
+         indent//'"exclusive_sets": ['//wrapped(sets)//']'
+  contains
+    function wrapped(list) result(text)
+    !< Return the items of a list on their lines, or nothing for an empty one.
+    character(*), intent(in)      :: list !< Items.
+    character(len=:), allocatable :: text !< Text.
+
+    text = ''
+    if (len(list) > 0) text = nl//list//nl//indent
+    endfunction wrapped
+
+    function excluded_by(i) result(name)
+    !< Return the CLA excluded by the i-th one: parse makes the relation symmetric, this gives the same answer before it.
+    integer(I4P), intent(in)      :: i    !< CLA index.
+    character(len=:), allocatable :: name !< Switch ('' for none).
+    integer(I4P)                  :: j    !< Counter.
+
+    name = ''
+    if (allocated(self%cla(i)%m_exclude)) name = trim(adjustl(self%cla(i)%m_exclude))
+    if (len(name) > 0) return
+    do j=1, self%Na
+      if (j == i .or. .not.allocated(self%cla(j)%m_exclude)) cycle
+      if (trim(adjustl(self%cla(j)%m_exclude)) == trim(adjustl(self%cla(i)%switch))) name = trim(adjustl(self%cla(j)%switch))
+    enddo
+    endfunction excluded_by
+  endfunction json_members
+
+  function json_command(self, indent, exclusive_with) result(json)
+  !< Return the JSON description of the group as a command (#128).
+  class(command_line_arguments_group), intent(in) :: self      !< CLAsG data.
+  character(*),                        intent(in) :: indent    !< Indentation of the object.
+  character(*),                        intent(in) :: exclusive_with !< Command excluded ('' for none), resolved by the CLI.
+  character(len=:), allocatable                   :: json      !< JSON object.
+  type(flap_string), allocatable                  :: names(:)  !< Aliases.
+  type(flap_string), allocatable                  :: excl(:)   !< Excluded commands.
+  character(1)                                    :: nl        !< New line.
+  integer(I4P)                                    :: a         !< Counter.
+
+  nl = new_line('a')
+  allocate(names(self%name_count()-1))
+  do a=1, size(names, dim=1)
+    names(a)%s = self%name_of(a+1)
+  enddo
+  allocate(excl(0))
+  if (len_trim(exclusive_with) > 0) then
+    deallocate(excl)
+    allocate(excl(1))
+    excl(1)%s = trim(adjustl(exclusive_with))
+  endif
+  json = indent//'{"name": '//json_string(self%group)//', "aliases": '//json_array(names)
+  if (allocated(self%help)) json = json//', "help": '//json_string(self%help)
+  if (allocated(self%description)) json = json//', "description": '//json_string(self%description)
+  if (allocated(self%deprecated)) json = json//', "deprecated": '//json_string(self%deprecated)
+  json = json//', "exclusive_with": '//json_array(excl)//','//nl//self%json_members(indent=indent//'  ')//nl//indent//'}'
+  endfunction json_command
 
   subroutine check_types(self, pref)
   !< Check the values of the typed CLAs against their declared type (#128), whatever their source; the first error stops.
@@ -1053,6 +1159,8 @@ contains
                     self%error = STATUS_PRINT_M
                  elseif (self%cla(a)%act==ACTION_PRINT_MAN) then
                     self%error = STATUS_PRINT_MAN
+                 elseif (self%cla(a)%act==ACTION_SCHEMA) then
+                    self%error = STATUS_SCHEMA
                  elseif (self%cla(a)%act==action_print_vers) then
                     self%error = STATUS_PRINT_V
                  endif

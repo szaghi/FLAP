@@ -20,6 +20,7 @@ public :: ACTION_STORE_FALSE
 public :: ACTION_PRINT_HELP
 public :: ACTION_PRINT_MARK
 public :: ACTION_PRINT_MAN
+public :: ACTION_SCHEMA
 public :: ACTION_PRINT_VERS
 public :: ACTION_COUNT
 public :: ACTION_APPEND
@@ -136,6 +137,7 @@ type, extends(object) :: command_line_argument
     ! public methods
     procedure, public :: free                           !< Free dynamic memory.
     procedure, public :: check                          !< Check data consistency.
+    procedure, public :: json_schema                    !< JSON description of the CLA (#128).
     procedure, public :: check_value_type               !< Check the value against the declared type (#128).
     procedure, public :: is_required_passed             !< Check if required CLA is passed.
     procedure, public :: has_value                      !< Check if the value is given by the user (explicit source).
@@ -216,6 +218,10 @@ type, extends(object) :: command_line_argument
     procedure, private :: check_choices                   !< Check if CLA value is in allowed choices.
     procedure, private :: check_choices_text              !< Check the choices of a whole character value, then store it.
     procedure, private :: display_name                    !< Name of the CLA for a message.
+    procedure, private :: is_typed_for_schema             !< Check if FLAP knows the type of the value.
+    procedure, private :: json_value                      !< JSON description of the value of the CLA.
+    procedure, private :: json_item                       !< JSON description of one value of the CLA.
+    procedure, private :: json_default                    !< JSON form of the default of the CLA.
     procedure, private :: check_type_consistency          !< Check the declared type, its option and its default.
     procedure, private :: check_value_item                !< Check one value against the declared type.
     procedure, private :: type_allows                     !< Check that a get may read the declared type.
@@ -250,6 +256,7 @@ character(len=*), parameter :: ACTION_STORE_FALSE = 'STORE_FALSE'   !< Store .fa
 character(len=*), parameter :: ACTION_PRINT_HELP  = 'PRINT_HELP'    !< Print help message.
 character(len=*), parameter :: ACTION_PRINT_MARK  = 'PRINT_MARKDOWN'!< Print help to Markdown file.
 character(len=*), parameter :: ACTION_PRINT_MAN   = 'PRINT_MAN'     !< Save the man page (F29).
+character(len=*), parameter :: ACTION_SCHEMA      = 'PRINT_SCHEMA'  !< Print the JSON description of the CLI (#128).
 character(len=*), parameter :: ACTION_SHOW_COMPLETION    = 'SHOW_COMPLETION'    !< Print the completion script (F24).
 character(len=*), parameter :: ACTION_INSTALL_COMPLETION = 'INSTALL_COMPLETION' !< Install the completion script (F24).
 character(len=*), parameter :: ACTION_PRINT_VERS  = 'PRINT_VERSION' !< Print version.
@@ -745,7 +752,8 @@ contains
   builtin = .false.
   if (.not.allocated(self%act)) return
   builtin = self%act == ACTION_PRINT_HELP .or. self%act == ACTION_PRINT_VERS .or. self%act == ACTION_PRINT_MARK .or. &
-            self%act == ACTION_PRINT_MAN .or. self%act == ACTION_SHOW_COMPLETION .or. self%act == ACTION_INSTALL_COMPLETION
+            self%act == ACTION_PRINT_MAN .or. self%act == ACTION_SHOW_COMPLETION .or. self%act == ACTION_INSTALL_COMPLETION .or. &
+            self%act == ACTION_SCHEMA
   endfunction is_builtin
 
   pure function is_list(self) result(list)
@@ -1636,6 +1644,7 @@ contains
         self%act/=ACTION_PRINT_HELP.and. &
         self%act/=ACTION_PRINT_MARK.and. &
         self%act/=ACTION_PRINT_MAN.and.  &
+        self%act/=ACTION_SCHEMA.and.     &
         self%act/=ACTION_PRINT_VERS.and. &
         self%act/=ACTION_COUNT.and.      &
         self%act/=ACTION_ALTERNATE.and.  &
@@ -1902,6 +1911,204 @@ contains
     name = 'option "'//trim(adjustl(self%switch))//'"'
   endif
   endfunction display_name
+
+  function json_schema(self, exclude) result(json)
+  !< Return the JSON description of the CLA, on one line (#128): absent attributes are left out; no state of a parse is read.
+  class(command_line_argument), intent(in) :: self    !< CLA data.
+  character(*),                 intent(in) :: exclude !< Mutually excluded CLA ('' for none), resolved by the group.
+  character(len=:), allocatable            :: json    !< JSON object.
+  character(len=:), allocatable            :: action  !< Action.
+
+  json = ''
+  if (self%is_positional) then
+    call put('position', trim(str(n=self%position, no_sign=.true.)))
+  else
+    call put('switch', json_string(trim(adjustl(self%switch))))
+    if (allocated(self%switch_ab)) then
+      if (trim(adjustl(self%switch_ab)) /= trim(adjustl(self%switch))) &
+        call put('abbreviation', json_string(trim(adjustl(self%switch_ab))))
+    endif
+    if (allocated(self%switch_neg)) call put('negation', json_string(trim(adjustl(self%switch_neg))))
+  endif
+  call put('help', json_string(self%help))
+  call put('required', merge('true ', 'false', self%is_required))
+  action = lower_case(self%act)
+  if (self%is_config) action = 'config'
+  call put('action', json_string(action))
+  call put('value', self%json_value())
+  call put('typed', merge('true ', 'false', self%is_typed_for_schema()))
+  if (allocated(self%def)) then
+    if (self%act == ACTION_STORE .or. self%act == ACTION_STORE_STAR .or. self%act == ACTION_APPEND) then
+      if (len_trim(self%def) > 0) call put('default', self%json_default())
+    endif
+  endif
+  if (allocated(self%envvar)) call put('envvar', json_string(trim(adjustl(self%envvar))))
+  if (allocated(self%metavar)) call put('metavar', json_string(self%metavar))
+  if (len_trim(exclude) > 0) call put('exclude', json_string(trim(adjustl(exclude))))
+  if (allocated(self%deprecated)) call put('deprecated', json_string(self%deprecated))
+  json = '{'//json//'}'
+  contains
+    subroutine put(key, value)
+    !< Append a member.
+    character(*), intent(in) :: key   !< Key.
+    character(*), intent(in) :: value !< Value, in JSON.
+
+    if (len(json) > 0) json = json//', '
+    json = json//'"'//key//'": '//trim(value)
+    endsubroutine put
+  endfunction json_schema
+
+  pure function is_typed_for_schema(self) result(typed)
+  !< Check if FLAP knows the type of the value: declared, or implied by a flag or a count.
+  class(command_line_argument), intent(in) :: self  !< CLA data.
+  logical                                  :: typed !< Check result.
+
+  typed = allocated(self%val_type)
+  if (self%act == ACTION_STORE_TRUE .or. self%act == ACTION_STORE_FALSE .or. self%act == ACTION_COUNT .or. &
+      self%act == ACTION_ALTERNATE) typed = .true.
+  endfunction is_typed_for_schema
+
+  function json_value(self) result(json)
+  !< Return the JSON description of the value of the CLA: JSON Schema 2020-12 keywords, plus `x-flap-*`.
+  class(command_line_argument), intent(in) :: self  !< CLA data.
+  character(len=:), allocatable            :: json  !< JSON object.
+  integer(I4P)                             :: n     !< Number of values.
+  integer(I4P)                             :: ios   !< I/O status.
+
+  if (.not.self%is_list()) then
+    json = self%json_item()
+    return
+  endif
+  json = '{"type": "array", "items": '//self%json_item()
+  if (allocated(self%nargs)) then
+    if (trim(adjustl(self%nargs)) == '+') then
+      json = json//', "minItems": 1'
+    elseif (trim(adjustl(self%nargs)) /= '*') then
+      read(self%nargs, *, iostat=ios) n
+      if (ios == 0) json = json//', "minItems": '//trim(str(n=n, no_sign=.true.))//', "maxItems": '//trim(str(n=n, no_sign=.true.))
+    endif
+  endif
+  json = json//'}'
+  endfunction json_value
+
+  function json_item(self) result(json)
+  !< Return the JSON description of one value of the CLA. An untyped value is a string, unless a range says it is a number.
+  class(command_line_argument), intent(in) :: self     !< CLA data.
+  character(len=:), allocatable            :: json     !< JSON object.
+  character(len=:), allocatable            :: kind     !< Declared type ('' if none).
+  character(len=:), allocatable            :: lowest   !< Lowest value of the kind ('' if none).
+  character(len=:), allocatable            :: highest  !< Highest value of the kind ('' if none).
+  character(len=:), allocatable            :: bound    !< Bound.
+  character(len(self%choices)), allocatable:: toks(:)  !< Choices.
+  character(len=:), allocatable            :: tmp      !< Choices.
+  character(len=:), allocatable            :: item     !< Choice.
+  integer(I4P)                             :: n        !< Number of choices.
+  integer(I4P)                             :: i        !< Counter.
+
+  if (self%act == ACTION_STORE_TRUE .or. self%act == ACTION_STORE_FALSE .or. self%act == ACTION_ALTERNATE) then
+    json = '{"type": "boolean"}'
+    return
+  endif
+  kind = '' ; if (allocated(self%val_type)) kind = self%val_type
+  lowest = '' ; highest = ''
+  select case(kind)
+  case('I1P')
+    json = '{"type": "integer"' ; lowest = '-128' ; highest = '127'
+  case('I2P')
+    json = '{"type": "integer"' ; lowest = '-32768' ; highest = '32767'
+  case('I4P')
+    json = '{"type": "integer"' ; lowest = '-2147483648' ; highest = '2147483647'
+  case('I8P')
+    json = '{"type": "integer"' ; lowest = '-9223372036854775808' ; highest = '9223372036854775807'
+  case('R4P', 'R8P', 'R16P')
+    json = '{"type": "number"'
+  case('LOGICAL')
+    json = '{"type": "boolean"'
+  case('CHARACTER')
+    json = '{"type": "string"'
+  case default
+    if (self%act == ACTION_COUNT) then
+      json = '{"type": "integer", "minimum": 0'
+      lowest = ''
+    elseif (self%has_range()) then
+      json = '{"type": "number"'
+    else
+      json = '{"type": "string"'
+    endif
+  endselect
+  if (allocated(self%range_min)) then
+    bound = json_number(self%range_min)
+    if (len(bound) > 0) then
+      if (self%min_open) then
+        json = json//', "exclusiveMinimum": '//bound
+      else
+        json = json//', "minimum": '//bound
+      endif
+      lowest = ''
+    endif
+  endif
+  if (allocated(self%range_max)) then
+    bound = json_number(self%range_max)
+    if (len(bound) > 0) then
+      if (self%max_open) then
+        json = json//', "exclusiveMaximum": '//bound
+      else
+        json = json//', "maximum": '//bound
+      endif
+      highest = ''
+    endif
+  endif
+  if (len(lowest) > 0) json = json//', "minimum": '//lowest
+  if (len(highest) > 0) json = json//', "maximum": '//highest
+  if (allocated(self%choices)) then
+    tmp = self%choices
+    call tokenize(strin=tmp, delimiter=',', toks=toks, Nt=n)
+    json = json//', "enum": ['
+    do i=1, n
+      if (i > 1) json = json//', '
+      item = trim(adjustl(toks(i)))
+      if (len(json_number(item)) > 0 .and. len(kind) > 0 .and. kind /= 'CHARACTER') then
+        json = json//json_number(item)
+      else
+        json = json//json_string(item)
+      endif
+    enddo
+    json = json//']'
+  endif
+  if (self%is_map) then
+    json = json//', "x-flap-map": true'
+    if (allocated(self%map_keys)) then
+      tmp = self%map_keys
+      json = json//', "x-flap-map-keys": '//json_csv(tmp)
+    endif
+  endif
+  if (len(kind) > 0) json = json//', "x-flap-kind": '//json_string(kind)
+  json = json//'}'
+  endfunction json_item
+
+  function json_default(self) result(json)
+  !< Return the default of the CLA in JSON, the same before and after parse: a string, an array of strings for a list.
+  class(command_line_argument), intent(in) :: self     !< CLA data.
+  character(len=:), allocatable            :: json     !< JSON form.
+  character(len=:), allocatable            :: items(:) !< Items.
+  character(len=:), allocatable            :: text     !< Default, as a stored list.
+  integer(I4P)                             :: n        !< Number of items.
+  integer(I4P)                             :: i        !< Counter.
+
+  if (.not.self%is_list()) then
+    json = json_string(wstrip(self%def))
+    return
+  endif
+  text = replace_all(string=self%def, substring=LIST_SEP, restring=' ')
+  text = replace_all(string=unique(string=wstrip(text), substring=' '), substring=' ', restring=LIST_SEP)
+  call list_items(text, items, n)
+  json = '['
+  do i=1, n
+    if (i > 1) json = json//', '
+    json = json//json_string(trim(adjustl(items(i))))
+  enddo
+  json = json//']'
+  endfunction json_default
 
   subroutine check_type_consistency(self, pref)
   !< Check the declared type (#128): a known name, an option that can hold it, and a default, choices and range that fit it.
@@ -3223,6 +3430,87 @@ contains
   call self%free
   endsubroutine finalize
   ! non type-bound procedures
+  function json_csv(text) result(json)
+  !< Return a comma separated text as a JSON array of strings.
+  character(*), intent(in)      :: text    !< Text.
+  character(len=:), allocatable :: json    !< JSON array.
+  character(len=len(text)), allocatable :: toks(:) !< Items.
+  character(len=:), allocatable :: tmp     !< Text.
+  integer(I4P)                  :: n       !< Number of items.
+  integer(I4P)                  :: i       !< Counter.
+
+  tmp = text
+  call tokenize(strin=tmp, delimiter=',', toks=toks, Nt=n)
+  json = '['
+  do i=1, n
+    if (i > 1) json = json//', '
+    json = json//json_string(trim(adjustl(toks(i))))
+  enddo
+  json = json//']'
+  endfunction json_csv
+
+  pure function lower_case(text) result(lower)
+  !< Return a text in lower case.
+  character(*), intent(in) :: text  !< Text.
+  character(len=len(text)) :: lower !< Text in lower case.
+  integer(I4P)             :: i     !< Counter.
+  integer(I4P)             :: code  !< Code of a character.
+
+  lower = text
+  do i=1, len(text)
+    code = iachar(text(i:i))
+    if (code >= iachar('A') .and. code <= iachar('Z')) lower(i:i) = achar(code + 32)
+  enddo
+  endfunction lower_case
+
+  pure function json_number(text) result(json)
+  !< Return a number written for a list-directed read as a JSON number, '' if it is not one: `+1`, `.5`, `1.`, `1d3`, `007`
+  !< are valid Fortran and invalid JSON; `inf` and `nan` have no JSON form.
+  character(*), intent(in)      :: text     !< Number.
+  character(len=:), allocatable :: json     !< JSON number.
+  character(len=:), allocatable :: t        !< Number without blanks and sign.
+  character(len=:), allocatable :: mantissa !< Mantissa.
+  character(len=:), allocatable :: exponent_!< Exponent, its letter included.
+  character(len=:), allocatable :: sign_    !< Sign.
+  integer(I4P)                  :: e        !< Position of the exponent.
+  integer(I4P)                  :: dot      !< Position of the point.
+  integer(I4P)                  :: first    !< First significant digit.
+
+  json = ''
+  t = trim(adjustl(text))
+  if (len(t) == 0) return
+  sign_ = ''
+  if (t(1:1) == '-' .or. t(1:1) == '+') then
+    if (t(1:1) == '-') sign_ = '-'
+    t = t(2:)
+    if (len(t) == 0) return
+  endif
+  e = scan(t, 'eEdD')
+  exponent_ = ''
+  mantissa = t
+  if (e > 0) then
+    mantissa = t(:e-1)
+    exponent_ = 'e'//t(e+1:)
+    if (len(exponent_) == 1) return
+    if (verify(exponent_(2:), '+-0123456789') /= 0) return
+    if (verify(exponent_(len(exponent_):), '0123456789') /= 0) return
+  endif
+  if (len(mantissa) == 0 .or. verify(mantissa, '.0123456789') /= 0 .or. verify(mantissa, '.') == 0) return
+  dot = index(mantissa, '.')
+  if (dot > 0) then
+    if (index(mantissa(dot+1:), '.') > 0) return
+    if (dot == 1) mantissa = '0'//mantissa
+    if (mantissa(len(mantissa):) == '.') mantissa = mantissa//'0'
+    dot = index(mantissa, '.')
+  else
+    dot = len(mantissa) + 1
+  endif
+  first = verify(mantissa(:dot-1), '0')
+  if (first == 0) first = dot - 1
+  if (first > 1) mantissa = mantissa(first:)
+  json = sign_//mantissa//exponent_
+  endfunction json_number
+
   pure function is_single_item(text) result(single)
   !< Check that a text (without blanks around it) is one item of a list-directed read: a read alone accepts as numbers `/` and
   !< `,` (no value, the variable left unassigned, and no error), `2*5` (a repeat count), `3 abc` and `1,5` (the first item).
