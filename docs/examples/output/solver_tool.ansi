@@ -1,0 +1,35 @@
+$ python3 -I flap_tool.py solver
+{
+  "name": "solver",
+  "description": "A solver",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "--steps": {
+        "type": "integer",
+        "minimum": -2147483648,
+        "maximum": 2147483647,
+        "x-flap-kind": "I4P",
+        "description": "Time steps"
+      },
+      "--cfl": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1,
+        "x-flap-kind": "R8P",
+        "description": "CFL number"
+      },
+      "--label": {
+        "type": "string",
+        "description": "Label of the run"
+      },
+      "--token": {
+        "type": "string",
+        "description": "Access token"
+      }
+    },
+    "required": [
+      "--steps"
+    ]
+  }
+}

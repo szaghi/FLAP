@@ -1,0 +1,4 @@
+$ solver --steps abc
+solver: error: cannot convert "abc" of option "--steps" to an integer!
+
+Try 'solver --help' for help.

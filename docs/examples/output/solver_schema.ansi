@@ -1,0 +1,11 @@
+$ solver --schema | sed -n '/"options"/,$p'
+  "options": [
+    {"switch": "--steps", "help": "Time steps", "required": true, "action": "store", "value": {"type": "integer", "minimum": -2147483648, "maximum": 2147483647, "x-flap-kind": "I4P"}, "typed": true},
+    {"switch": "--cfl", "help": "CFL number", "required": false, "action": "store", "value": {"type": "number", "minimum": 0, "maximum": 1, "x-flap-kind": "R8P"}, "typed": true, "default": "0.5", "envvar": "SOLVER_CFL"},
+    {"switch": "--label", "help": "Label of the run", "required": false, "action": "store", "value": {"type": "string"}, "typed": false, "default": "run"},
+    {"switch": "--token", "help": "Access token", "required": false, "action": "store", "value": {"type": "string"}, "typed": false, "sensitive": true}
+  ],
+  "positionals": [],
+  "exclusive_sets": [],
+  "commands": []
+}

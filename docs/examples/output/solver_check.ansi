@@ -1,0 +1,3 @@
+$ solver --check --steps 100 --cfl 0.5 --label demo
+solver: command line valid
+2 options not type-checked: --label --token

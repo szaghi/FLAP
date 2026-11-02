@@ -33,12 +33,16 @@ graph LR
 - [list_join](#list-join)
 - [replace](#replace)
 - [replace_all](#replace-all)
+- [json_string](#json-string)
+- [utf8_sequence](#utf8-sequence)
+- [json_array](#json-array)
 - [unique](#unique)
 - [upper_case](#upper-case)
 - [fish_escape](#fish-escape)
 - [ps_escape](#ps-escape)
 - [levenshtein](#levenshtein)
 - [suggestions](#suggestions)
+- [suggestion_items](#suggestion-items)
 - [wstrip](#wstrip)
 
 ## Variables
@@ -95,6 +99,8 @@ flowchart TD
   check_exclusive_sets["check_exclusive_sets"] --> list_items["list_items"]
   check_map_list["check_map_list"] --> list_items["list_items"]
   check_paths["check_paths"] --> list_items["list_items"]
+  check_type_consistency["check_type_consistency"] --> list_items["list_items"]
+  check_value_type["check_value_type"] --> list_items["list_items"]
   exclusive_set_of["exclusive_set_of"] --> list_items["list_items"]
   exclusive_set_signature["exclusive_set_signature"] --> list_items["list_items"]
   get_cla_list_from_buffer["get_cla_list_from_buffer"] --> list_items["list_items"]
@@ -109,6 +115,9 @@ flowchart TD
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> list_items["list_items"]
   get_map["get_map"] --> list_items["list_items"]
   get_map_value["get_map_value"] --> list_items["list_items"]
+  json_default["json_default"] --> list_items["list_items"]
+  json_members["json_members"] --> list_items["list_items"]
+  json_resolved["json_resolved"] --> list_items["list_items"]
   list_items["list_items"] --> list_count["list_count"]
   list_items["list_items"] --> tokenize["tokenize"]
   style list_items fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -167,6 +176,7 @@ subroutine read_env(name, value, found, ignore)
 ```mermaid
 flowchart TD
   completion_shell["completion_shell"] --> read_env["read_env"]
+  init["init"] --> read_env["read_env"]
   install_completion["install_completion"] --> read_env["read_env"]
   parse["parse"] --> read_env["read_env"]
   resolve_values["resolve_values"] --> read_env["read_env"]
@@ -230,6 +240,9 @@ subroutine tokenize(strin, delimiter, toks, Nt)
 flowchart TD
   add_exclusive_set["add_exclusive_set"] --> tokenize["tokenize"]
   check_choices["check_choices"] --> tokenize["tokenize"]
+  check_type_consistency["check_type_consistency"] --> tokenize["tokenize"]
+  json_csv["json_csv"] --> tokenize["tokenize"]
+  json_item["json_item"] --> tokenize["tokenize"]
   list_items["list_items"] --> tokenize["tokenize"]
   style tokenize fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -292,6 +305,9 @@ flowchart TD
   print_usage["print_usage"] --> write_text["write_text"]
   print_usage_line["print_usage_line"] --> write_text["write_text"]
   raise_error["raise_error"] --> write_text["write_text"]
+  report_check["report_check"] --> write_text["write_text"]
+  save_json_schema["save_json_schema"] --> write_text["write_text"]
+  save_provenance["save_provenance"] --> write_text["write_text"]
   style write_text fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -477,15 +493,115 @@ function replace_all(string, substring, restring) result(newstring)
 ```mermaid
 flowchart TD
   check_map_consistency["check_map_consistency"] --> replace_all["replace_all"]
+  check_type_consistency["check_type_consistency"] --> replace_all["replace_all"]
   completion_fish["completion_fish"] --> replace_all["replace_all"]
   completion_powershell["completion_powershell"] --> replace_all["replace_all"]
   envvar_name["envvar_name"] --> replace_all["replace_all"]
+  json_default["json_default"] --> replace_all["replace_all"]
   list_join["list_join"] --> replace_all["replace_all"]
   sanitize_defaults["sanitize_defaults"] --> replace_all["replace_all"]
   set_source_value["set_source_value"] --> replace_all["replace_all"]
   usage["usage"] --> replace_all["replace_all"]
   replace_all["replace_all"] --> wstrip["wstrip"]
   style replace_all fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### json_string
+
+Return a text as a JSON string, quotes included (#128): control characters are escaped, and invalid UTF-8 is replaced by
+ U+FFFD, since command lines and environment values are bytes while a JSON document must be valid UTF-8.
+
+**Attributes**: pure
+
+**Returns**: `character(len=:)`
+
+```fortran
+function json_string(text) result(quoted)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `text` | character(len=*) | in |  | Text. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  json_array["json_array"] --> json_string["json_string"]
+  json_command["json_command"] --> json_string["json_string"]
+  json_csv["json_csv"] --> json_string["json_string"]
+  json_default["json_default"] --> json_string["json_string"]
+  json_item["json_item"] --> json_string["json_string"]
+  json_resolved["json_resolved"] --> json_string["json_string"]
+  json_schema["json_schema"] --> json_string["json_string"]
+  json_schema["json_schema"] --> json_string["json_string"]
+  print_error_message["print_error_message"] --> json_string["json_string"]
+  print_warning["print_warning"] --> json_string["json_string"]
+  provenance_json["provenance_json"] --> json_string["json_string"]
+  report_check["report_check"] --> json_string["json_string"]
+  json_string["json_string"] --> utf8_sequence["utf8_sequence"]
+  style json_string fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### utf8_sequence
+
+Return the length of the valid UTF-8 multi-byte sequence a text starts with, 0 if there is none (RFC 3629: no overlong
+ form, no surrogate, nothing above U+10FFFF).
+
+**Attributes**: pure
+
+**Returns**: integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables))
+
+```fortran
+function utf8_sequence(text) result(seq)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `text` | character(len=*) | in |  | Text, not empty, starting with a byte above 127. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  json_string["json_string"] --> utf8_sequence["utf8_sequence"]
+  utf8_sequence["utf8_sequence"] --> is_continuation["is_continuation"]
+  style utf8_sequence fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### json_array
+
+Return an array of strings as a JSON array, on one line.
+
+**Attributes**: pure
+
+**Returns**: `character(len=:)`
+
+```fortran
+function json_array(items) result(array)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `items` | type([flap_string](/api/src/lib/flap_utils_m#flap-string)) | in |  | Items. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  json_command["json_command"] --> json_array["json_array"]
+  json_members["json_members"] --> json_array["json_array"]
+  print_error_message["print_error_message"] --> json_array["json_array"]
+  provenance_arguments["provenance_arguments"] --> json_array["json_array"]
+  report_check["report_check"] --> json_array["json_array"]
+  json_array["json_array"] --> json_string["json_string"]
+  style json_array fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### unique
@@ -515,6 +631,8 @@ function unique(string, substring) result(uniq)
 ```mermaid
 flowchart TD
   check_map_consistency["check_map_consistency"] --> unique["unique"]
+  check_type_consistency["check_type_consistency"] --> unique["unique"]
+  json_default["json_default"] --> unique["unique"]
   sanitize_defaults["sanitize_defaults"] --> unique["unique"]
   set_source_value["set_source_value"] --> unique["unique"]
   usage["usage"] --> unique["unique"]
@@ -548,6 +666,9 @@ flowchart TD
   check_choices["check_choices"] --> upper_case["upper_case"]
   envvar_name["envvar_name"] --> upper_case["upper_case"]
   evaluate_yes_no["evaluate_yes_no"] --> upper_case["upper_case"]
+  init["init"] --> upper_case["upper_case"]
+  is_json_format["is_json_format"] --> upper_case["upper_case"]
+  provenance["provenance"] --> upper_case["upper_case"]
   same["same"] --> upper_case["upper_case"]
   same_name["same_name"] --> upper_case["upper_case"]
   set_source_value["set_source_value"] --> upper_case["upper_case"]
@@ -659,8 +780,38 @@ function suggestions(token, candidates, case_insensitive) result(hint)
 ```mermaid
 flowchart TD
   check_map_list["check_map_list"] --> suggestions["suggestions"]
-  suggestions["suggestions"] --> similarity["similarity"]
+  suggestions["suggestions"] --> suggestion_items["suggestion_items"]
   style suggestions fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### suggestion_items
+
+Return the candidates of the "Did you mean" hint of an unknown token (F10 of #125): up to three with similarity
+ 1 - d/max(len) >= 0.6 (d the Levenshtein distance), most similar first (declaration order among equals).
+
+**Attributes**: pure
+
+**Returns**: type([flap_string](/api/src/lib/flap_utils_m#flap-string))
+
+```fortran
+function suggestion_items(token, candidates, case_insensitive) result(items)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `token` | character(len=*) | in |  | Unknown token. |
+| `candidates` | type([flap_string](/api/src/lib/flap_utils_m#flap-string)) | in |  | Candidate names. |
+| `case_insensitive` | logical | in |  | Compare in any case. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  suggestions["suggestions"] --> suggestion_items["suggestion_items"]
+  suggestion_items["suggestion_items"] --> similarity["similarity"]
+  style suggestion_items fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### wstrip
@@ -686,6 +837,8 @@ function wstrip(string) result(newstring)
 ```mermaid
 flowchart TD
   check_map_consistency["check_map_consistency"] --> wstrip["wstrip"]
+  check_type_consistency["check_type_consistency"] --> wstrip["wstrip"]
+  json_default["json_default"] --> wstrip["wstrip"]
   replace_all["replace_all"] --> wstrip["wstrip"]
   sanitize_defaults["sanitize_defaults"] --> wstrip["wstrip"]
   set_source_value["set_source_value"] --> wstrip["wstrip"]

@@ -7,6 +7,13 @@ title: Upgrading
 Every change you can observe when moving to a new release, newest first. Additive releases only add API: existing
 programs keep their behaviour. The plan behind them is issue [#125](https://github.com/szaghi/FLAP/issues/125).
 
+## Unreleased (additions)
+
+- Every addition is opt-in, and the help, man page, Markdown and completion scripts of a program using none of them are
+  unchanged: `val_type` and `sensitive` of `cli%add`; `schema_option`, `check_option`, `error_format` and `error_format_env`
+  of `init`; `json_schema`, `save_json_schema`, `save_provenance`, `provenance(format=)`, `error_description`. See
+  [Machine-readable Interfaces](./machine).
+
 ## Unreleased (fixes)
 
 - With `init(ignore_unknown_clas=.true.)` an unknown argument is no longer printed on the error unit as
@@ -19,6 +26,8 @@ programs keep their behaviour. The plan behind them is issue [#125](https://gith
   left unassigned), `2*5` (a repeat count: `5`), `3 abc`, `3,abc` and the decimal comma `1,5` (the first item: `3`, `1.0`).
   They are now `ERROR_CASTING_NUMBER` (50) or `ERROR_CASTING_LOGICAL` (10), and a bound (`min`, `max`) written like this
   is `ERROR_RANGE_DEFINITION` (30). Valid values are read as before (#128).
+- With nvfortran, `get` into an integer read `2.5` as `2` and wrapped a value too big for `I1P`, `I2P` or `I4P`, without
+  error. Both are now `ERROR_CASTING_NUMBER` (50), as with gfortran.
 
 ## v2.5.0 (build)
 

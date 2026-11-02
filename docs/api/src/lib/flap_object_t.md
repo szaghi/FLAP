@@ -24,11 +24,13 @@ graph LR
 - [free_object](#free-object)
 - [print_version](#print-version)
 - [print_error_message](#print-error-message)
+- [print_warning](#print-warning)
 - [set_examples](#set-examples)
 - [inherit_error](#inherit-error)
 - [clear_error](#clear-error)
 - [assign_object](#assign-object)
 - [error_prefix](#error-prefix)
+- [is_json_format](#is-json-format)
 
 ## Derived Types
 
@@ -71,6 +73,9 @@ classDiagram
 | `version_lun` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Output unit to print version message |
 | `error_lun` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Error unit to print error messages |
 | `case_insensitive` | logical |  | Match switches and command names in any case (F14). |
+| `error_format` | character(len=:) | allocatable | Format of the error messages: text (default) or json (#128). |
+| `error_argument` | character(len=:) | allocatable | Argument of the last error, when known (JSON format). |
+| `error_suggestions` | type([flap_string](/api/src/lib/flap_utils_m#flap-string)) | allocatable | "Did you mean" candidates of the last error (JSON format). |
 
 #### Type-Bound Procedures
 
@@ -80,6 +85,8 @@ classDiagram
 | `free_object` | pass(self) | Free dynamic memory. |
 | `print_version` | pass(self) | Print version. |
 | `print_error_message` | pass(self) | Print meaningful error message. |
+| `print_warning` | pass(self) | Print a warning. |
+| `is_json_format` | pass(self) | Check if the error messages are JSON lines. |
 | `inherit_error` | pass(self) | Take the error of another object, with its message. |
 | `clear_error` | pass(self) | Forget the error and its message. |
 | `set_examples` | pass(self) | Set examples of correct usage. |
@@ -159,7 +166,36 @@ flowchart TD
   errored["errored"] --> print_error_message["print_error_message"]
   get_map_value["get_map_value"] --> print_error_message["print_error_message"]
   raise_error["raise_error"] --> print_error_message["print_error_message"]
+  print_error_message["print_error_message"] --> is_json_format["is_json_format"]
+  print_error_message["print_error_message"] --> json_array["json_array"]
+  print_error_message["print_error_message"] --> json_string["json_string"]
+  print_error_message["print_error_message"] --> str["str"]
   style print_error_message fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### print_warning
+
+Print a warning on the error unit, in the format of the error messages.
+
+```fortran
+subroutine print_warning(self, message)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([object](/api/src/lib/flap_object_t#object)) | in |  | Object data. |
+| `message` | character(len=*) | in |  | Warning, its prefix included. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  warn_deprecated["warn_deprecated"] --> print_warning["print_warning"]
+  print_warning["print_warning"] --> is_json_format["is_json_format"]
+  print_warning["print_warning"] --> json_string["json_string"]
+  style print_warning fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### set_examples
@@ -213,6 +249,7 @@ flowchart TD
   check_m_exclusive["check_m_exclusive"] --> inherit_error["inherit_error"]
   check_m_exclusive["check_m_exclusive"] --> inherit_error["inherit_error"]
   check_maps["check_maps"] --> inherit_error["inherit_error"]
+  check_types["check_types"] --> inherit_error["inherit_error"]
   copy_options["copy_options"] --> inherit_error["inherit_error"]
   get_cla["get_cla"] --> inherit_error["inherit_error"]
   get_cla_list["get_cla_list"] --> inherit_error["inherit_error"]
@@ -273,6 +310,9 @@ flowchart TD
   map_cla["map_cla"] --> clear_error["clear_error"]
   reset_parse["reset_parse"] --> clear_error["clear_error"]
   reset_parse["reset_parse"] --> clear_error["clear_error"]
+  type_allows["type_allows"] --> clear_error["clear_error"]
+  type_allows_list["type_allows_list"] --> clear_error["clear_error"]
+  type_allows_val["type_allows_val"] --> clear_error["clear_error"]
   style clear_error fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -333,5 +373,39 @@ flowchart TD
   get_map_value["get_map_value"] --> error_prefix["error_prefix"]
   raise_error["raise_error"] --> error_prefix["error_prefix"]
   error_prefix["error_prefix"] --> colorize["colorize"]
+  error_prefix["error_prefix"] --> is_json_format["is_json_format"]
   style error_prefix fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### is_json_format
+
+Check if the error messages are JSON lines (#128): an invalid format is text, and parse reports it.
+
+**Attributes**: pure
+
+**Returns**: `logical`
+
+```fortran
+function is_json_format(self) result(is_json)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([object](/api/src/lib/flap_object_t#object)) | in |  | Object data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  error_prefix["error_prefix"] --> is_json_format["is_json_format"]
+  print_error_hint["print_error_hint"] --> is_json_format["is_json_format"]
+  print_error_message["print_error_message"] --> is_json_format["is_json_format"]
+  print_warning["print_warning"] --> is_json_format["is_json_format"]
+  report_check["report_check"] --> is_json_format["is_json_format"]
+  usage_on_error_is["usage_on_error_is"] --> is_json_format["is_json_format"]
+  warn_deprecated["warn_deprecated"] --> is_json_format["is_json_format"]
+  is_json_format["is_json_format"] --> upper_case["upper_case"]
+  style is_json_format fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```

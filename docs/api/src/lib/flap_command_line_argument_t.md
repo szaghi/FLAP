@@ -44,6 +44,9 @@ graph LR
 - [check_optional_consistency](#check-optional-consistency)
 - [check_range_consistency](#check-range-consistency)
 - [check_range](#check-range)
+- [check_type_consistency](#check-type-consistency)
+- [check_value_type](#check-value-type)
+- [check_value_item](#check-value-item)
 - [check_alternate_consistency](#check-alternate-consistency)
 - [check_switch_neg_consistency](#check-switch-neg-consistency)
 - [check_map_consistency](#check-map-consistency)
@@ -78,6 +81,7 @@ graph LR
 - [is_required_passed](#is-required-passed)
 - [has_value](#has-value)
 - [config_key](#config-key)
+- [json_resolved](#json-resolved)
 - [value_text](#value-text)
 - [deprecation_note](#deprecation-note)
 - [has_range](#has-range)
@@ -104,8 +108,23 @@ graph LR
 - [completion_powershell](#completion-powershell)
 - [completion_values](#completion-values)
 - [has_choices](#has-choices)
+- [display_name](#display-name)
+- [json_schema](#json-schema)
+- [is_typed_for_schema](#is-typed-for-schema)
+- [json_value](#json-value)
+- [json_item](#json-item)
+- [json_default](#json-default)
+- [type_allows](#type-allows)
+- [type_allows_list](#type-allows-list)
+- [type_allows_val](#type-allows-val)
 - [check_list_size](#check-list-size)
 - [stored_list](#stored-list)
+- [json_csv](#json-csv)
+- [lower_case](#lower-case)
+- [json_number](#json-number)
+- [is_single_item](#is-single-item)
+- [is_integer_text](#is-integer-text)
+- [read_logical](#read-logical)
 
 ## Variables
 
@@ -125,6 +144,8 @@ graph LR
 | `ACTION_PRINT_HELP` | character(len=*) | parameter | Print help message. |
 | `ACTION_PRINT_MARK` | character(len=*) | parameter | Print help to Markdown file. |
 | `ACTION_PRINT_MAN` | character(len=*) | parameter | Save the man page (F29). |
+| `ACTION_SCHEMA` | character(len=*) | parameter | Print the JSON description of the CLI (#128). |
+| `ACTION_CHECK` | character(len=*) | parameter | Validate the command line, then stop (#128). |
 | `ACTION_SHOW_COMPLETION` | character(len=*) | parameter | Print the completion script (F24). |
 | `ACTION_INSTALL_COMPLETION` | character(len=*) | parameter | Install the completion script (F24). |
 | `ACTION_PRINT_VERS` | character(len=*) | parameter | Print version. |
@@ -170,6 +191,8 @@ graph LR
 | `ERROR_PATH_NOT_WRITABLE` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Existing path value that cannot be opened for writing. |
 | `ERROR_PATH_INCONSISTENT` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Path checks on an option taking no value. |
 | `ERROR_CASTING_NUMBER` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | A value that is not a number, got into one (B40 of #126). |
+| `ERROR_TYPE_DEFINITION` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Invalid val_type, or one its option or default contradicts (#128). |
+| `ERROR_TYPE_MISMATCH` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Get into another type, or a narrower kind, than val_type (#128). |
 | `ERROR_DEPRECATED_REQUIRED` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | A required option cannot be deprecated. |
 | `ERROR_ALTERNATE_INCONSISTENT` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | An alternate action with an attribute of a value. |
 | `ERROR_SWITCH_NEG_INCONSISTENT` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | A negation (switch_neg) of a CLA that is not a named flag. |
@@ -223,6 +246,9 @@ classDiagram
 | `version_lun` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Output unit to print version message |
 | `error_lun` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Error unit to print error messages |
 | `case_insensitive` | logical |  | Match switches and command names in any case (F14). |
+| `error_format` | character(len=:) | allocatable | Format of the error messages: text (default) or json (#128). |
+| `error_argument` | character(len=:) | allocatable | Argument of the last error, when known (JSON format). |
+| `error_suggestions` | type([flap_string](/api/src/lib/flap_utils_m#flap-string)) | allocatable | "Did you mean" candidates of the last error (JSON format). |
 | `switch` | character(len=:) | allocatable | Switch name. |
 | `switch_ab` | character(len=:) | allocatable | Abbreviated switch name. |
 | `switch_neg` | character(len=:) | allocatable | Negation of a flag, --no-x (F11); allocated if any. |
@@ -257,6 +283,9 @@ classDiagram
 | `map_keys` | character(len=:) | allocatable | Allowed keys of a map, comma separated (F18). |
 | `is_negated` | logical |  | The last spelling of a flag pair passed is the negation. |
 | `pair_passed` | logical |  | Both spellings of a flag pair passed (D5: once each). |
+| `val_type` | character(len=:) | allocatable | Declared type of the value, upper case (#128); if any. |
+| `muted` | logical |  | Build the error messages without printing them. |
+| `is_sensitive` | logical |  | Never report the value (#128): `***` in provenance. |
 
 #### Type-Bound Procedures
 
@@ -266,17 +295,23 @@ classDiagram
 | `free_object` | pass(self) | Free dynamic memory. |
 | `print_version` | pass(self) | Print version. |
 | `print_error_message` | pass(self) | Print meaningful error message. |
+| `print_warning` | pass(self) | Print a warning. |
+| `is_json_format` | pass(self) | Check if the error messages are JSON lines. |
 | `inherit_error` | pass(self) | Take the error of another object, with its message. |
 | `clear_error` | pass(self) | Forget the error and its message. |
 | `set_examples` | pass(self) | Set examples of correct usage. |
 | `assign_object` | pass(lhs ) | Assignment overloading. |
 | `free` |  | Free dynamic memory. |
 | `check` |  | Check data consistency. |
+| `is_typed_for_schema` |  | Check if FLAP knows the type of the value. |
+| `json_schema` |  | JSON description of the CLA (#128). |
+| `check_value_type` |  | Check the value against the declared type (#128). |
 | `is_required_passed` |  | Check if required CLA is passed. |
 | `has_value` |  | Check if the value is given by the user (explicit source). |
 | `set_source_value` |  | Set a value read from the environment or a configuration file. |
 | `config_key` |  | Key of the CLA in a configuration file. |
 | `takes_config_value` |  | Check if the CLA takes a value from a configuration file. |
+| `json_resolved` |  | Resolved value in JSON (JSON provenance, #128). |
 | `value_text` |  | Resolved value as text (provenance report). |
 | `has_path_checks` |  | Check if the value is a path to check. |
 | `deprecation_note` |  | Marker of a deprecated CLA in the help. |
@@ -336,6 +371,15 @@ classDiagram
 | `check_positional_consistency` |  | Check positional CLA consistency. |
 | `check_choices` |  | Check if CLA value is in allowed choices. |
 | `check_choices_text` |  | Check the choices of a whole character value, then store it. |
+| `display_name` |  | Name of the CLA for a message. |
+| `json_value` |  | JSON description of the value of the CLA. |
+| `json_item` |  | JSON description of one value of the CLA. |
+| `json_default` |  | JSON form of the default of the CLA. |
+| `check_type_consistency` |  | Check the declared type, its option and its default. |
+| `check_value_item` |  | Check one value against the declared type. |
+| `type_allows` |  | Check that a get may read the declared type. |
+| `type_allows_list` |  | Check that a get into an array may read the declared type. |
+| `type_allows_val` |  | Check that a get into a variable may read the declared type. |
 | `cast_number` |  | Convert a value to a number, quietly (B40 of #126). |
 | `check_list_size` |  | Check CLA multiple values list size consistency. |
 | `stored_list` |  | Stored list of values (parsed or default). |
@@ -416,6 +460,7 @@ flowchart TD
   check["check"] --> check_positional_consistency["check_positional_consistency"]
   check["check"] --> check_range_consistency["check_range_consistency"]
   check["check"] --> check_switch_neg_consistency["check_switch_neg_consistency"]
+  check["check"] --> check_type_consistency["check_type_consistency"]
   check["check"] --> errored["errored"]
   style check fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -515,6 +560,7 @@ subroutine match_inline_token(self, token, match, inline_val, has_inline)
 flowchart TD
   is_switch_token["is_switch_token"] --> match_inline_token["match_inline_token"]
   parse["parse"] --> match_inline_token["match_inline_token"]
+  provenance_arguments["provenance_arguments"] --> match_inline_token["match_inline_token"]
   match_inline_token["match_inline_token"] --> match_token["match_token"]
   style match_inline_token fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -681,7 +727,7 @@ flowchart TD
 Raise error switch_unknown.
 
 ```fortran
-subroutine raise_error_switch_unknown(self, switch, pref, hint, quiet)
+subroutine raise_error_switch_unknown(self, switch, pref, hint, quiet, suggested)
 ```
 
 **Arguments**
@@ -693,6 +739,7 @@ subroutine raise_error_switch_unknown(self, switch, pref, hint, quiet)
 | `pref` | character(len=*) | in | optional | Prefixing string. |
 | `hint` | character(len=*) | in | optional | "Did you mean" hint, appended to the message (F10). |
 | `quiet` | logical | in | optional | Build the message without printing it (an ignored argument). |
+| `suggested` | type([flap_string](/api/src/lib/flap_utils_m#flap-string)) | in | optional | "Did you mean" candidates (JSON errors, #128). |
 
 **Call graph**
 
@@ -810,6 +857,9 @@ flowchart TD
   check_range["check_range"] --> errored["errored"]
   check_range_consistency["check_range_consistency"] --> errored["errored"]
   check_switch_neg_consistency["check_switch_neg_consistency"] --> errored["errored"]
+  check_type_consistency["check_type_consistency"] --> errored["errored"]
+  check_value_item["check_value_item"] --> errored["errored"]
+  check_value_type["check_value_type"] --> errored["errored"]
   copy_options["copy_options"] --> errored["errored"]
   get_args_from_invocation["get_args_from_invocation"] --> errored["errored"]
   get_cla["get_cla"] --> errored["errored"]
@@ -851,6 +901,8 @@ flowchart TD
   raise_error_value_missing["raise_error_value_missing"] --> errored["errored"]
   set_inline_value["set_inline_value"] --> errored["errored"]
   set_source_value["set_source_value"] --> errored["errored"]
+  type_allows["type_allows"] --> errored["errored"]
+  errored["errored"] --> display_name["display_name"]
   errored["errored"] --> error_prefix["error_prefix"]
   errored["errored"] --> print_error_message["print_error_message"]
   errored["errored"] --> range_text["range_text"]
@@ -1070,6 +1122,101 @@ flowchart TD
   check_range["check_range"] --> integer_range["integer_range"]
   check_range["check_range"] --> real_range["real_range"]
   style check_range fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### check_type_consistency
+
+Check the declared type (#128): a known name, an option that can hold it, and a default, choices and range that fit it.
+
+```fortran
+subroutine check_type_consistency(self, pref)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  check["check"] --> check_type_consistency["check_type_consistency"]
+  check_type_consistency["check_type_consistency"] --> check_value_item["check_value_item"]
+  check_type_consistency["check_type_consistency"] --> errored["errored"]
+  check_type_consistency["check_type_consistency"] --> has_range["has_range"]
+  check_type_consistency["check_type_consistency"] --> is_list["is_list"]
+  check_type_consistency["check_type_consistency"] --> list_items["list_items"]
+  check_type_consistency["check_type_consistency"] --> replace_all["replace_all"]
+  check_type_consistency["check_type_consistency"] --> tokenize["tokenize"]
+  check_type_consistency["check_type_consistency"] --> unique["unique"]
+  check_type_consistency["check_type_consistency"] --> wstrip["wstrip"]
+  style check_type_consistency fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### check_value_type
+
+Check the resolved value against the declared type, whatever its source (#128): the same conversion, choices and range
+ of `get`, on locals of the declared kind, so that a value accepted here is accepted by a `get` of that kind.
+
+ Nothing to do for an untyped CLA, a count (FLAP's own number) or a value not given (blank default, no default).
+
+```fortran
+subroutine check_value_type(self, pref)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  check_types["check_types"] --> check_value_type["check_value_type"]
+  check_value_type["check_value_type"] --> check_value_item["check_value_item"]
+  check_value_type["check_value_type"] --> errored["errored"]
+  check_value_type["check_value_type"] --> has_value["has_value"]
+  check_value_type["check_value_type"] --> is_list["is_list"]
+  check_value_type["check_value_type"] --> list_items["list_items"]
+  check_value_type["check_value_type"] --> read_logical["read_logical"]
+  check_value_type["check_value_type"] --> stored_list["stored_list"]
+  style check_value_type fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### check_value_item
+
+Check one value against the declared type: the conversion, then the choices and the range.
+
+```fortran
+subroutine check_value_item(self, item, pref, cast_only)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `item` | character(len=*) | in |  | Value. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+| `cast_only` | logical | in | optional | Check the conversion only. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  check_type_consistency["check_type_consistency"] --> check_value_item["check_value_item"]
+  check_value_type["check_value_type"] --> check_value_item["check_value_item"]
+  check_value_item["check_value_item"] --> check_choices_text["check_choices_text"]
+  check_value_item["check_value_item"] --> errored["errored"]
+  check_value_item["check_value_item"] --> number["number"]
+  check_value_item["check_value_item"] --> read_logical["read_logical"]
+  style check_value_item fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### check_alternate_consistency
@@ -1428,6 +1575,7 @@ subroutine check_choices_text(self, text, val, pref)
 
 ```mermaid
 flowchart TD
+  check_value_item["check_value_item"] --> check_choices_text["check_choices_text"]
   get_cla["get_cla"] --> check_choices_text["check_choices_text"]
   get_cla_list_character["get_cla_list_character"] --> check_choices_text["check_choices_text"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> check_choices_text["check_choices_text"]
@@ -1469,6 +1617,8 @@ flowchart TD
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> cast_number["cast_number"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> cast_number["cast_number"]
   cast_number["cast_number"] --> errored["errored"]
+  cast_number["cast_number"] --> is_integer_text["is_integer_text"]
+  cast_number["cast_number"] --> is_single_item["is_single_item"]
   style cast_number fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -1501,7 +1651,9 @@ flowchart TD
   get_cla["get_cla"] --> has_range["has_range"]
   get_cla["get_cla"] --> has_value["has_value"]
   get_cla["get_cla"] --> is_required_passed["is_required_passed"]
+  get_cla["get_cla"] --> read_logical["read_logical"]
   get_cla["get_cla"] --> stored_list["stored_list"]
+  get_cla["get_cla"] --> type_allows_val["type_allows_val"]
   style get_cla fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -1530,6 +1682,7 @@ flowchart TD
   get_map_value["get_map_value"] --> get_cla_from_buffer["get_cla_from_buffer"]
   get_cla_from_buffer["get_cla_from_buffer"] --> cast_number["cast_number"]
   get_cla_from_buffer["get_cla_from_buffer"] --> errored["errored"]
+  get_cla_from_buffer["get_cla_from_buffer"] --> read_logical["read_logical"]
   style get_cla_from_buffer fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -1558,6 +1711,7 @@ flowchart TD
   get_cla_list["get_cla_list"] --> is_list["is_list"]
   get_cla_list["get_cla_list"] --> is_required_passed["is_required_passed"]
   get_cla_list["get_cla_list"] --> stored_list["stored_list"]
+  get_cla_list["get_cla_list"] --> type_allows_list["type_allows_list"]
   style get_cla_list fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -1590,6 +1744,7 @@ flowchart TD
   get_cla_list_from_buffer["get_cla_list_from_buffer"] --> get_cla_list_character["get_cla_list_character"]
   get_cla_list_from_buffer["get_cla_list_from_buffer"] --> has_range["has_range"]
   get_cla_list_from_buffer["get_cla_list_from_buffer"] --> list_items["list_items"]
+  get_cla_list_from_buffer["get_cla_list_from_buffer"] --> read_logical["read_logical"]
   get_cla_list_from_buffer["get_cla_list_from_buffer"] --> str["str"]
   style get_cla_list_from_buffer fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -1652,6 +1807,7 @@ flowchart TD
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> is_required_passed["is_required_passed"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> list_items["list_items"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> stored_list["stored_list"]
+  get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> type_allows["type_allows"]
   style get_cla_list_varying_R16P fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -1685,6 +1841,7 @@ flowchart TD
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> is_required_passed["is_required_passed"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> list_items["list_items"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> stored_list["stored_list"]
+  get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> type_allows["type_allows"]
   style get_cla_list_varying_R8P fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -1718,6 +1875,7 @@ flowchart TD
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> is_required_passed["is_required_passed"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> list_items["list_items"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> stored_list["stored_list"]
+  get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> type_allows["type_allows"]
   style get_cla_list_varying_R4P fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -1751,6 +1909,7 @@ flowchart TD
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> is_required_passed["is_required_passed"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> list_items["list_items"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> stored_list["stored_list"]
+  get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> type_allows["type_allows"]
   style get_cla_list_varying_I8P fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -1784,6 +1943,7 @@ flowchart TD
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> is_required_passed["is_required_passed"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> list_items["list_items"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> stored_list["stored_list"]
+  get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> type_allows["type_allows"]
   style get_cla_list_varying_I4P fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -1817,6 +1977,7 @@ flowchart TD
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> is_required_passed["is_required_passed"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> list_items["list_items"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> stored_list["stored_list"]
+  get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> type_allows["type_allows"]
   style get_cla_list_varying_I2P fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -1850,6 +2011,7 @@ flowchart TD
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> is_required_passed["is_required_passed"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> list_items["list_items"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> stored_list["stored_list"]
+  get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> type_allows["type_allows"]
   style get_cla_list_varying_I1P fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -1878,7 +2040,9 @@ flowchart TD
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> is_list["is_list"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> is_required_passed["is_required_passed"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> list_items["list_items"]
+  get_cla_list_varying_logical["get_cla_list_varying_logical"] --> read_logical["read_logical"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> stored_list["stored_list"]
+  get_cla_list_varying_logical["get_cla_list_varying_logical"] --> type_allows["type_allows"]
   style get_cla_list_varying_logical fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -1951,6 +2115,7 @@ subroutine read_real(string, x, ok)
 ```mermaid
 flowchart TD
   check_range_consistency["check_range_consistency"] --> read_real["read_real"]
+  read_real["read_real"] --> is_single_item["is_single_item"]
   style read_real fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -1969,6 +2134,15 @@ subroutine read_integer(string, i, ok)
 | `string` | character(len=*) | in |  | String. |
 | `i` | integer(kind=[I8P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out |  | Value. |
 | `ok` | logical | out |  | The string is an integer. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  read_integer["read_integer"] --> is_integer_text["is_integer_text"]
+  read_integer["read_integer"] --> is_single_item["is_single_item"]
+  style read_integer fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
 
 ## Functions
 
@@ -2036,6 +2210,7 @@ function has_value(self)
 ```mermaid
 flowchart TD
   check_exclusive_sets["check_exclusive_sets"] --> has_value["has_value"]
+  check_value_type["check_value_type"] --> has_value["has_value"]
   get_cla["get_cla"] --> has_value["has_value"]
   is_required_passed["is_required_passed"] --> has_value["has_value"]
   resolve_values["resolve_values"] --> has_value["has_value"]
@@ -2070,6 +2245,35 @@ flowchart TD
   style config_key fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
+### json_resolved
+
+Return the resolved value in JSON, as it is, with no conversion: a string, an array of strings for a list.
+
+**Returns**: `character(len=:)`
+
+```fortran
+function json_resolved(self) result(json)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  provenance_json["provenance_json"] --> json_resolved["json_resolved"]
+  json_resolved["json_resolved"] --> is_list["is_list"]
+  json_resolved["json_resolved"] --> json_string["json_string"]
+  json_resolved["json_resolved"] --> list_items["list_items"]
+  json_resolved["json_resolved"] --> stored_list["stored_list"]
+  json_resolved["json_resolved"] --> value_text["value_text"]
+  style json_resolved fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
 ### value_text
 
 Return the resolved value as text, for the provenance report: a list blank separated, a flag passed on the command
@@ -2091,7 +2295,8 @@ function value_text(self) result(text)
 
 ```mermaid
 flowchart TD
-  provenance["provenance"] --> value_text["value_text"]
+  json_resolved["json_resolved"] --> value_text["value_text"]
+  provenance_text["provenance_text"] --> value_text["value_text"]
   value_text["value_text"] --> flag_value["flag_value"]
   value_text["value_text"] --> is_list["is_list"]
   value_text["value_text"] --> list_join["list_join"]
@@ -2148,6 +2353,7 @@ function has_range(self) result(ranged)
 ```mermaid
 flowchart TD
   check_range_consistency["check_range_consistency"] --> has_range["has_range"]
+  check_type_consistency["check_type_consistency"] --> has_range["has_range"]
   get_cla["get_cla"] --> has_range["has_range"]
   get_cla_list_character["get_cla_list_character"] --> has_range["has_range"]
   get_cla_list_from_buffer["get_cla_list_from_buffer"] --> has_range["has_range"]
@@ -2159,6 +2365,7 @@ flowchart TD
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> has_range["has_range"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> has_range["has_range"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> has_range["has_range"]
+  json_item["json_item"] --> has_range["has_range"]
   usage["usage"] --> has_range["has_range"]
   style has_range fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -2273,6 +2480,7 @@ function match_token(self, token) result(match)
 ```mermaid
 flowchart TD
   check["check"] --> match_token["match_token"]
+  check_requested["check_requested"] --> match_token["match_token"]
   exclusive_set_of["exclusive_set_of"] --> match_token["match_token"]
   is_defined["is_defined"] --> match_token["match_token"]
   is_passed["is_passed"] --> match_token["match_token"]
@@ -2505,7 +2713,10 @@ function is_builtin(self) result(builtin)
 ```mermaid
 flowchart TD
   copy_options["copy_options"] --> is_builtin["is_builtin"]
-  provenance["provenance"] --> is_builtin["is_builtin"]
+  json_members["json_members"] --> is_builtin["is_builtin"]
+  provenance_json["provenance_json"] --> is_builtin["is_builtin"]
+  provenance_text["provenance_text"] --> is_builtin["is_builtin"]
+  report_check["report_check"] --> is_builtin["is_builtin"]
   style is_builtin fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -2532,6 +2743,8 @@ function is_list(self) result(list)
 ```mermaid
 flowchart TD
   check_paths["check_paths"] --> is_list["is_list"]
+  check_type_consistency["check_type_consistency"] --> is_list["is_list"]
+  check_value_type["check_value_type"] --> is_list["is_list"]
   get_cla_list["get_cla_list"] --> is_list["is_list"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> is_list["is_list"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> is_list["is_list"]
@@ -2542,6 +2755,9 @@ flowchart TD
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> is_list["is_list"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> is_list["is_list"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> is_list["is_list"]
+  json_default["json_default"] --> is_list["is_list"]
+  json_resolved["json_resolved"] --> is_list["is_list"]
+  json_value["json_value"] --> is_list["is_list"]
   sanitize_defaults["sanitize_defaults"] --> is_list["is_list"]
   set_source_value["set_source_value"] --> is_list["is_list"]
   value_text["value_text"] --> is_list["is_list"]
@@ -2860,6 +3076,275 @@ flowchart TD
   style has_choices fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
+### display_name
+
+Return the name of the CLA for a message: `option "--x"` or `positional argument 1`.
+
+**Returns**: `character(len=:)`
+
+```fortran
+function display_name(self) result(name)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  errored["errored"] --> display_name["display_name"]
+  display_name["display_name"] --> str["str"]
+  style display_name fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### json_schema
+
+Return the JSON description of the CLA, on one line (#128): absent attributes are left out; no state of a parse is read.
+
+**Returns**: `character(len=:)`
+
+```fortran
+function json_schema(self, exclude) result(json)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+| `exclude` | character(len=*) | in |  | Mutually excluded CLA ('' for none), resolved by the group. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  dispatch_status["dispatch_status"] --> json_schema["json_schema"]
+  json_members["json_members"] --> json_schema["json_schema"]
+  save_json_schema["save_json_schema"] --> json_schema["json_schema"]
+  json_schema["json_schema"] --> is_typed_for_schema["is_typed_for_schema"]
+  json_schema["json_schema"] --> json_default["json_default"]
+  json_schema["json_schema"] --> json_string["json_string"]
+  json_schema["json_schema"] --> json_value["json_value"]
+  json_schema["json_schema"] --> lower_case["lower_case"]
+  json_schema["json_schema"] --> put["put"]
+  json_schema["json_schema"] --> str["str"]
+  style json_schema fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### is_typed_for_schema
+
+Check if FLAP knows the type of the value: declared, or implied by a flag or a count.
+
+**Attributes**: pure
+
+**Returns**: `logical`
+
+```fortran
+function is_typed_for_schema(self) result(typed)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  json_schema["json_schema"] --> is_typed_for_schema["is_typed_for_schema"]
+  report_check["report_check"] --> is_typed_for_schema["is_typed_for_schema"]
+  style is_typed_for_schema fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### json_value
+
+Return the JSON description of the value of the CLA: JSON Schema 2020-12 keywords, plus `x-flap-*`.
+
+**Returns**: `character(len=:)`
+
+```fortran
+function json_value(self) result(json)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  json_schema["json_schema"] --> json_value["json_value"]
+  json_value["json_value"] --> is_list["is_list"]
+  json_value["json_value"] --> json_item["json_item"]
+  json_value["json_value"] --> str["str"]
+  style json_value fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### json_item
+
+Return the JSON description of one value of the CLA. An untyped value is a string, unless a range says it is a number.
+
+**Returns**: `character(len=:)`
+
+```fortran
+function json_item(self) result(json)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  json_value["json_value"] --> json_item["json_item"]
+  json_item["json_item"] --> has_range["has_range"]
+  json_item["json_item"] --> json_csv["json_csv"]
+  json_item["json_item"] --> json_number["json_number"]
+  json_item["json_item"] --> json_string["json_string"]
+  json_item["json_item"] --> tokenize["tokenize"]
+  style json_item fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### json_default
+
+Return the default of the CLA in JSON, the same before and after parse: a string, an array of strings for a list.
+
+**Returns**: `character(len=:)`
+
+```fortran
+function json_default(self) result(json)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  json_schema["json_schema"] --> json_default["json_default"]
+  json_default["json_default"] --> is_list["is_list"]
+  json_default["json_default"] --> json_string["json_string"]
+  json_default["json_default"] --> list_items["list_items"]
+  json_default["json_default"] --> replace_all["replace_all"]
+  json_default["json_default"] --> unique["unique"]
+  json_default["json_default"] --> wstrip["wstrip"]
+  style json_default fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### type_allows
+
+Check that a get may read the declared type (#128): the same family and an equal or wider kind, whatever the value, or
+ a value accepted by parse could be rejected here. A character get is always allowed: the value is text.
+
+**Returns**: `logical`
+
+```fortran
+function type_allows(self, family, width, name, pref) result(allowed)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `family` | character(len=1) | in |  | Family of the variable: I, R, L or C. |
+| `width` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in |  | Range (integers) or precision (reals) of the variable. |
+| `name` | character(len=*) | in |  | Variable, for the message. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> type_allows["type_allows"]
+  get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> type_allows["type_allows"]
+  get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> type_allows["type_allows"]
+  get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> type_allows["type_allows"]
+  get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> type_allows["type_allows"]
+  get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> type_allows["type_allows"]
+  get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> type_allows["type_allows"]
+  get_cla_list_varying_logical["get_cla_list_varying_logical"] --> type_allows["type_allows"]
+  type_allows_list["type_allows_list"] --> type_allows["type_allows"]
+  type_allows_val["type_allows_val"] --> type_allows["type_allows"]
+  type_allows["type_allows"] --> clear_error["clear_error"]
+  type_allows["type_allows"] --> errored["errored"]
+  style type_allows fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### type_allows_list
+
+Check that a get into an array may read the declared type. An element is not passed to type_allows_val: nvfortran then
+ loses the element length of a character array.
+
+**Returns**: `logical`
+
+```fortran
+function type_allows_list(self, val, pref) result(allowed)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `val` | class(*) | in |  | Variable. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  get_cla_list["get_cla_list"] --> type_allows_list["type_allows_list"]
+  type_allows_list["type_allows_list"] --> clear_error["clear_error"]
+  type_allows_list["type_allows_list"] --> type_allows["type_allows"]
+  style type_allows_list fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### type_allows_val
+
+Check that a get into a variable may read the declared type.
+
+**Returns**: `logical`
+
+```fortran
+function type_allows_val(self, val, pref) result(allowed)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | inout |  | CLA data. |
+| `val` | class(*) | in |  | Variable. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  get_cla["get_cla"] --> type_allows_val["type_allows_val"]
+  type_allows_val["type_allows_val"] --> clear_error["clear_error"]
+  type_allows_val["type_allows_val"] --> type_allows["type_allows"]
+  style type_allows_val fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
 ### check_list_size
 
 Check CLA multiple values list size consistency: a list without values (or with a single blank one) is empty.
@@ -2917,6 +3402,7 @@ function stored_list(self) result(list)
 flowchart TD
   check_map["check_map"] --> stored_list["stored_list"]
   check_paths["check_paths"] --> stored_list["stored_list"]
+  check_value_type["check_value_type"] --> stored_list["stored_list"]
   get_cla["get_cla"] --> stored_list["stored_list"]
   get_cla_list["get_cla_list"] --> stored_list["stored_list"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> stored_list["stored_list"]
@@ -2930,7 +3416,175 @@ flowchart TD
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> stored_list["stored_list"]
   get_map["get_map"] --> stored_list["stored_list"]
   get_map_value["get_map_value"] --> stored_list["stored_list"]
+  json_resolved["json_resolved"] --> stored_list["stored_list"]
   value_text["value_text"] --> stored_list["stored_list"]
   stored_list["stored_list"] --> has_value["has_value"]
   style stored_list fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### json_csv
+
+Return a comma separated text as a JSON array of strings.
+
+**Returns**: `character(len=:)`
+
+```fortran
+function json_csv(text) result(json)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `text` | character(len=*) | in |  | Text. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  json_item["json_item"] --> json_csv["json_csv"]
+  json_csv["json_csv"] --> json_string["json_string"]
+  json_csv["json_csv"] --> tokenize["tokenize"]
+  style json_csv fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### lower_case
+
+Return a text in lower case.
+
+**Attributes**: pure
+
+**Returns**: `character(len=len)`
+
+```fortran
+function lower_case(text) result(lower)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `text` | character(len=*) | in |  | Text. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  json_schema["json_schema"] --> lower_case["lower_case"]
+  style lower_case fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### json_number
+
+Return a number written for a list-directed read as a JSON number, '' if it is not one: `+1`, `.5`, `1.`, `1d3`, `007`
+ are valid Fortran and invalid JSON; `inf` and `nan` have no JSON form.
+
+**Attributes**: pure
+
+**Returns**: `character(len=:)`
+
+```fortran
+function json_number(text) result(json)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `text` | character(len=*) | in |  | Number. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  json_item["json_item"] --> json_number["json_number"]
+  style json_number fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### is_single_item
+
+Check that a text (without blanks around it) is one item of a list-directed read: a read alone accepts as numbers `/` and
+ `,` (no value, the variable left unassigned, and no error), `2*5` (a repeat count), `3 abc` and `1,5` (the first item).
+
+**Attributes**: pure
+
+**Returns**: `logical`
+
+```fortran
+function is_single_item(text) result(single)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `text` | character(len=*) | in |  | Text. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  cast_number["cast_number"] --> is_single_item["is_single_item"]
+  read_integer["read_integer"] --> is_single_item["is_single_item"]
+  read_logical["read_logical"] --> is_single_item["is_single_item"]
+  read_real["read_real"] --> is_single_item["is_single_item"]
+  style is_single_item fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### is_integer_text
+
+Check that a text (one item) is an integer: nvfortran reads `2.5` into an integer as 2, without error.
+
+**Attributes**: pure
+
+**Returns**: `logical`
+
+```fortran
+function is_integer_text(text) result(is_integer)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `text` | character(len=*) | in |  | Text. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  cast_number["cast_number"] --> is_integer_text["is_integer_text"]
+  read_integer["read_integer"] --> is_integer_text["is_integer_text"]
+  style is_integer_text fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### read_logical
+
+Read a logical from a text, quietly: `T`, `.true.`, `false`, ...; never more than one item (see is_single_item).
+
+**Returns**: integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables))
+
+```fortran
+function read_logical(text, val) result(ios)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `text` | character(len=*) | in |  | Text. |
+| `val` | logical | inout |  | Value, assigned only if the text is valid. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  check_value_item["check_value_item"] --> read_logical["read_logical"]
+  check_value_type["check_value_type"] --> read_logical["read_logical"]
+  get_cla["get_cla"] --> read_logical["read_logical"]
+  get_cla_from_buffer["get_cla_from_buffer"] --> read_logical["read_logical"]
+  get_cla_list_from_buffer["get_cla_list_from_buffer"] --> read_logical["read_logical"]
+  get_cla_list_varying_logical["get_cla_list_varying_logical"] --> read_logical["read_logical"]
+  read_logical["read_logical"] --> is_single_item["is_single_item"]
+  style read_logical fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```

@@ -31,12 +31,14 @@ graph LR
 - [set_config](#set-config)
 - [warn_deprecated](#warn-deprecated)
 - [load_config](#load-config)
+- [save_provenance](#save-provenance)
 - [set_mutually_exclusive_switches](#set-mutually-exclusive-switches)
 - [add](#add)
 - [check](#check)
 - [check_m_exclusive](#check-m-exclusive)
 - [reset_parse](#reset-parse)
 - [parse](#parse)
+- [report_check](#report-check)
 - [print_error_hint](#print-error-hint)
 - [parse_core](#parse-core)
 - [install_completion](#install-completion)
@@ -63,6 +65,7 @@ graph LR
 - [save_zsh_completion](#save-zsh-completion)
 - [save_fish_completion](#save-fish-completion)
 - [save_powershell_completion](#save-powershell-completion)
+- [save_json_schema](#save-json-schema)
 - [save_man_page](#save-man-page)
 - [save_usage_to_markdown](#save-usage-to-markdown)
 - [print_usage](#print-usage)
@@ -74,6 +77,9 @@ graph LR
 - [write_script](#write-script)
 - [get_source](#get-source)
 - [provenance](#provenance)
+- [provenance_text](#provenance-text)
+- [provenance_json](#provenance-json)
+- [provenance_arguments](#provenance-arguments)
 - [envvar_name](#envvar-name)
 - [is_passed](#is-passed)
 - [is_defined_group](#is-defined-group)
@@ -82,6 +88,7 @@ graph LR
 - [is_called_group](#is-called-group)
 - [is_defined](#is-defined)
 - [is_parsed](#is-parsed)
+- [check_requested](#check-requested)
 - [no_args_help](#no-args-help)
 - [dispatch_status](#dispatch-status)
 - [completion_shell](#completion-shell)
@@ -95,9 +102,12 @@ graph LR
 - [completion_script_core](#completion-script-core)
 - [fish_script](#fish-script)
 - [powershell_script](#powershell-script)
+- [error_description](#error-description)
+- [json_schema](#json-schema)
 - [usage_core](#usage-core)
 - [signature_core](#signature-core)
 - [bash_script](#bash-script)
+- [provenance_name](#provenance-name)
 - [completion_function](#completion-function)
 - [program_basename](#program-basename)
 
@@ -105,6 +115,7 @@ graph LR
 
 | Name | Type | Attributes | Description |
 |------|------|------------|-------------|
+| `ERROR_CODES` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Codes described by error_description. |
 | `ERROR_MISSING_CLA` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | CLA not found in CLI. |
 | `ERROR_MISSING_GROUP` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Group not found in CLI. |
 | `ERROR_MISSING_SELECTION_CLA` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | CLA selection in CLI failing. |
@@ -120,6 +131,7 @@ graph LR
 | `ERROR_ARGUMENT_RETRIEVAL` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | A command line argument cannot be retrieved. |
 | `ERROR_COMMAND_REPEATED` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | A command passed more than once (B36). |
 | `ERROR_USAGE_ON_ERROR` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | init(usage_on_error=) not full, usage or none (F27). |
+| `ERROR_FORMAT` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | init(error_format=) not text or json (#128). |
 
 ## Derived Types
 
@@ -160,6 +172,9 @@ classDiagram
 | `version_lun` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Output unit to print version message |
 | `error_lun` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Error unit to print error messages |
 | `case_insensitive` | logical |  | Match switches and command names in any case (F14). |
+| `error_format` | character(len=:) | allocatable | Format of the error messages: text (default) or json (#128). |
+| `error_argument` | character(len=:) | allocatable | Argument of the last error, when known (JSON format). |
+| `error_suggestions` | type([flap_string](/api/src/lib/flap_utils_m#flap-string)) | allocatable | "Did you mean" candidates of the last error (JSON format). |
 | `clasg` | type([command_line_arguments_group](/api/src/lib/flap_command_line_arguments_group_t#command-line-arguments-group)) | allocatable | CLA list [1:Na]. |
 | `args` | type([flap_string](/api/src/lib/flap_utils_m#flap-string)) | allocatable | Actually passed command line arguments. |
 | `disable_hv` | logical |  | Disable automatic 'help' and 'version' CLAs. |
@@ -173,6 +188,9 @@ classDiagram
 | `auto_envvar_prefix` | character(len=:) | allocatable | Prefix of the generated envvar names. |
 | `usage_on_error` | character(len=:) | allocatable | After an error: full, usage, none (F27). |
 | `man_option` | logical |  | --man builtin (F29). |
+| `schema_option` | logical |  | --schema builtin (#128). |
+| `check_option` | logical |  | --check builtin (#128). |
+| `error_format_env` | character(len=:) | allocatable | Variable choosing the error format (#128). |
 | `man_file` | character(len=:) | allocatable | File of --man ('': .1). |
 | `markdown_file` | character(len=:) | allocatable | File of --markdown ('': .md). |
 | `config_path` | character(len=:) | allocatable | Configuration file (F08). |
@@ -189,6 +207,8 @@ classDiagram
 | `free_object` | pass(self) | Free dynamic memory. |
 | `print_version` | pass(self) | Print version. |
 | `print_error_message` | pass(self) | Print meaningful error message. |
+| `print_warning` | pass(self) | Print a warning. |
+| `is_json_format` | pass(self) | Check if the error messages are JSON lines. |
 | `inherit_error` | pass(self) | Take the error of another object, with its message. |
 | `clear_error` | pass(self) | Forget the error and its message. |
 | `set_examples` | pass(self) | Set examples of correct usage. |
@@ -206,6 +226,7 @@ classDiagram
 | `set_mutually_exclusive_switches` |  | Set a mutually exclusive set of switches. |
 | `set_config` |  | Set the configuration file. |
 | `get_source` |  | Source of the value of a CLA. |
+| `save_provenance` |  | Save the JSON report of every value with its source (#128). |
 | `provenance` |  | Report of every value with its source. |
 | `run_command` |  | Check if a CLAs group has been run. |
 | `parse` |  | Parse Command Line Interfaces. |
@@ -222,6 +243,8 @@ classDiagram
 | `save_zsh_completion` |  | Save zsh completion script (bash script via bashcompinit). |
 | `save_fish_completion` |  | Save fish completion script (native). |
 | `save_powershell_completion` |  | Save PowerShell completion script (native completer). |
+| `json_schema` |  | JSON description of the CLI (#128). |
+| `save_json_schema` |  | Save the JSON description of the CLI (#128). |
 | `save_man_page` |  | Save CLI usage as man page. |
 | `save_usage_to_markdown` |  | Save CLI usage as markdown. |
 | `ensure_builtins` |  | Add the builtin CLAs (help, markdown, version, --) if missing. |
@@ -237,6 +260,11 @@ classDiagram
 | `powershell_script` |  | PowerShell completion script. |
 | `save_man_page_core` |  | Save CLI usage as man page (builtins already present). |
 | `save_usage_to_markdown_core` |  | Save CLI usage as markdown (builtins already present). |
+| `check_requested` |  | Check if --check is on the command line. |
+| `report_check` |  | Report the verdict of --check. |
+| `provenance_text` |  | Text report of provenance. |
+| `provenance_json` |  | JSON report of provenance. |
+| `provenance_arguments` |  | Command line in JSON, sensitive values masked. |
 | `parse_core` |  | Parse the command line (body of parse). |
 | `group_index` |  | Index of the group with a name, -1 if none. |
 | `is_fatal` |  | Check if the current error stops parsing. |
@@ -298,7 +326,7 @@ flowchart TD
 Initialize CLI.
 
 ```fortran
-subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone, error_hint, no_args_is_help, ignore_env, auto_envvar_prefix, case_insensitive, completion_options, usage_on_error, man_option, man_file, markdown_file)
+subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone, error_hint, no_args_is_help, ignore_env, auto_envvar_prefix, case_insensitive, completion_options, usage_on_error, man_option, man_file, markdown_file, schema_option, error_format, error_format_env, check_option)
 ```
 
 **Arguments**
@@ -332,13 +360,19 @@ subroutine init(self, progname, version, help, description, license, authors, ex
 | `man_option` | logical | in | optional | Add --man to the top level (F29). |
 | `man_file` | character(len=*) | in | optional | File of --man (default .1). |
 | `markdown_file` | character(len=*) | in | optional | File of --markdown (default .md). |
+| `schema_option` | logical | in | optional | Add --schema to the top level (#128). |
+| `error_format` | character(len=*) | in | optional | Format of the error messages: text (default), json. |
+| `error_format_env` | character(len=*) | in | optional | Variable choosing the format, per run: text, json; |
+| `check_option` | logical | in | optional | Add --check to the top level (#128). |
 
 **Call graph**
 
 ```mermaid
 flowchart TD
   init["init"] --> assign_object["assign_object"]
+  init["init"] --> read_env["read_env"]
   init["init"] --> set_examples["set_examples"]
+  init["init"] --> upper_case["upper_case"]
   style init fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -453,6 +487,8 @@ flowchart TD
   parse_core["parse_core"] --> warn_deprecated["warn_deprecated"]
   warn_deprecated["warn_deprecated"] --> because["because"]
   warn_deprecated["warn_deprecated"] --> colorize["colorize"]
+  warn_deprecated["warn_deprecated"] --> is_json_format["is_json_format"]
+  warn_deprecated["warn_deprecated"] --> print_warning["print_warning"]
   warn_deprecated["warn_deprecated"] --> str["str"]
   style warn_deprecated fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -491,6 +527,32 @@ flowchart TD
   load_config["load_config"] --> str["str"]
   load_config["load_config"] --> takes_config_value["takes_config_value"]
   style load_config fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### save_provenance
+
+Save the JSON report of provenance, the run manifest (#128); like get, it parses first if parse has not been called.
+
+```fortran
+subroutine save_provenance(self, file, pref, error)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | inout |  | CLI data. |
+| `file` | character(len=*) | in |  | Output file name. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+| `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | optional | I/O status (not zero if the file cannot be written). |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  save_provenance["save_provenance"] --> provenance["provenance"]
+  save_provenance["save_provenance"] --> write_text["write_text"]
+  style save_provenance fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### set_mutually_exclusive_switches
@@ -538,7 +600,7 @@ Add CLA to CLI.
  @note If CLA belongs to a not yet present group it is created on the fly.
 
 ```fortran
-subroutine add(self, pref, group, group_index, switch, switch_ab, switch_neg, help, help_markdown, help_color, help_style, required, val_required, positional, position, hidden, act, def, nargs, choices, exclude, envvar, must_exist, readable, writable, allow_dash, deprecated, min, max, min_open, max_open, clamp, case_sensitive, map, map_keys, metavar, error)
+subroutine add(self, pref, group, group_index, switch, switch_ab, switch_neg, help, help_markdown, help_color, help_style, required, val_required, positional, position, hidden, act, def, nargs, choices, exclude, envvar, must_exist, readable, writable, allow_dash, deprecated, min, max, min_open, max_open, clamp, case_sensitive, map, map_keys, metavar, error, val_type, sensitive)
 ```
 
 **Arguments**
@@ -582,6 +644,8 @@ subroutine add(self, pref, group, group_index, switch, switch_ab, switch_neg, he
 | `map_keys` | character(len=*) | in | optional | Allowed keys of a map, comma separated (F18). |
 | `metavar` | character(len=*) | in | optional | Placeholder of the value in the help (F12), default 'value'. |
 | `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | optional | Error trapping flag. |
+| `val_type` | character(len=*) | in | optional | Declared type of the value, validated by parse (#128): I1P, |
+| `sensitive` | logical | in | optional | Never report the value: `***` in provenance, no default in |
 
 **Call graph**
 
@@ -727,9 +791,43 @@ flowchart TD
   map_cla["map_cla"] --> parse["parse"]
   parse_core["parse_core"] --> parse["parse"]
   provenance["provenance"] --> parse["parse"]
+  parse["parse"] --> check_requested["check_requested"]
   parse["parse"] --> parse_core["parse_core"]
   parse["parse"] --> print_error_hint["print_error_hint"]
+  parse["parse"] --> report_check["report_check"]
   style parse fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### report_check
+
+Report the verdict of --check (#128): the result, then, in standalone mode, the end of the program, 0 if valid, 1 if not.
+
+ The options of an unknown type are named: FLAP has not validated them, and says so instead of implying they are fine.
+
+```fortran
+subroutine report_check(self)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | inout |  | CLI data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  parse["parse"] --> report_check["report_check"]
+  report_check["report_check"] --> is_builtin["is_builtin"]
+  report_check["report_check"] --> is_json_format["is_json_format"]
+  report_check["report_check"] --> is_typed_for_schema["is_typed_for_schema"]
+  report_check["report_check"] --> json_array["json_array"]
+  report_check["report_check"] --> json_string["json_string"]
+  report_check["report_check"] --> quiet_stop["quiet_stop"]
+  report_check["report_check"] --> str["str"]
+  report_check["report_check"] --> write_text["write_text"]
+  style report_check fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### print_error_hint
@@ -754,6 +852,7 @@ subroutine print_error_hint(self)
 ```mermaid
 flowchart TD
   parse["parse"] --> print_error_hint["print_error_hint"]
+  print_error_hint["print_error_hint"] --> is_json_format["is_json_format"]
   style print_error_hint fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -782,6 +881,7 @@ flowchart TD
   parse_core["parse_core"] --> check_exclusive_sets["check_exclusive_sets"]
   parse_core["parse_core"] --> check_m_exclusive["check_m_exclusive"]
   parse_core["parse_core"] --> check_maps["check_maps"]
+  parse_core["parse_core"] --> check_types["check_types"]
   parse_core["parse_core"] --> dispatch_status["dispatch_status"]
   parse_core["parse_core"] --> ensure_builtins["ensure_builtins"]
   parse_core["parse_core"] --> errored["errored"]
@@ -1643,6 +1743,31 @@ flowchart TD
   style save_powershell_completion fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
+### save_json_schema
+
+Save the JSON description of the CLI (#128).
+
+```fortran
+subroutine save_json_schema(self, file, error)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | in |  | CLI data. |
+| `file` | character(len=*) | in |  | Output file name. |
+| `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | optional | I/O status (not zero if the file cannot be written). |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  save_json_schema["save_json_schema"] --> json_schema["json_schema"]
+  save_json_schema["save_json_schema"] --> write_text["write_text"]
+  style save_json_schema fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
 ### save_man_page
 
 Save CLI usage as man page, builtins included whether or not parse has been called.
@@ -1824,6 +1949,9 @@ flowchart TD
   check_range["check_range"] --> errored["errored"]
   check_range_consistency["check_range_consistency"] --> errored["errored"]
   check_switch_neg_consistency["check_switch_neg_consistency"] --> errored["errored"]
+  check_type_consistency["check_type_consistency"] --> errored["errored"]
+  check_value_item["check_value_item"] --> errored["errored"]
+  check_value_type["check_value_type"] --> errored["errored"]
   copy_options["copy_options"] --> errored["errored"]
   get_args_from_invocation["get_args_from_invocation"] --> errored["errored"]
   get_cla["get_cla"] --> errored["errored"]
@@ -1865,6 +1993,7 @@ flowchart TD
   raise_error_value_missing["raise_error_value_missing"] --> errored["errored"]
   set_inline_value["set_inline_value"] --> errored["errored"]
   set_source_value["set_source_value"] --> errored["errored"]
+  type_allows["type_allows"] --> errored["errored"]
   errored["errored"] --> error_prefix["error_prefix"]
   errored["errored"] --> print_error_message["print_error_message"]
   errored["errored"] --> str["str"]
@@ -1910,6 +2039,7 @@ subroutine quiet_stop(code)
 flowchart TD
   dispatch_status["dispatch_status"] --> quiet_stop["quiet_stop"]
   no_args_help["no_args_help"] --> quiet_stop["quiet_stop"]
+  report_check["report_check"] --> quiet_stop["quiet_stop"]
   style quiet_stop fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -1988,10 +2118,13 @@ Return a report of every value with its source, for a run log (F06 of #125): one
  level and of the called commands, `name = value [source]`, the environment and configuration sources naming their
  variable and file. Builtins and hidden options are left out; like get, it parses first if parse has not been called.
 
+ With `format='json'` the report is a JSON document, the run manifest (#128): no date, host or directory, so that the same
+ inputs give the same bytes. Any other format is the text report.
+
 **Returns**: `character(len=:)`
 
 ```fortran
-function provenance(self, pref) result(report)
+function provenance(self, pref, format) result(report)
 ```
 
 **Arguments**
@@ -2000,16 +2133,101 @@ function provenance(self, pref) result(report)
 |------|------|--------|------------|-------------|
 | `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | inout |  | CLI data. |
 | `pref` | character(len=*) | in | optional | Prefixing string. |
+| `format` | character(len=*) | in | optional | Format of the report: text (default) or json. |
 
 **Call graph**
 
 ```mermaid
 flowchart TD
-  provenance["provenance"] --> is_builtin["is_builtin"]
+  save_provenance["save_provenance"] --> provenance["provenance"]
   provenance["provenance"] --> parse["parse"]
-  provenance["provenance"] --> str["str"]
-  provenance["provenance"] --> value_text["value_text"]
+  provenance["provenance"] --> provenance_json["provenance_json"]
+  provenance["provenance"] --> provenance_text["provenance_text"]
+  provenance["provenance"] --> upper_case["upper_case"]
   style provenance fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### provenance_text
+
+Return the text report of provenance.
+
+**Returns**: `character(len=:)`
+
+```fortran
+function provenance_text(self) result(report)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | in |  | CLI data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  provenance["provenance"] --> provenance_text["provenance_text"]
+  provenance_text["provenance_text"] --> is_builtin["is_builtin"]
+  provenance_text["provenance_text"] --> provenance_name["provenance_name"]
+  provenance_text["provenance_text"] --> value_text["value_text"]
+  style provenance_text fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### provenance_json
+
+Return the JSON report of provenance, the run manifest (#128).
+
+**Returns**: `character(len=:)`
+
+```fortran
+function provenance_json(self) result(report)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | in |  | CLI data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  provenance["provenance"] --> provenance_json["provenance_json"]
+  provenance_json["provenance_json"] --> is_builtin["is_builtin"]
+  provenance_json["provenance_json"] --> json_resolved["json_resolved"]
+  provenance_json["provenance_json"] --> json_string["json_string"]
+  provenance_json["provenance_json"] --> provenance_arguments["provenance_arguments"]
+  provenance_json["provenance_json"] --> provenance_name["provenance_name"]
+  style provenance_json fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### provenance_arguments
+
+Return the command line in JSON, the values of the sensitive options masked; `null` when a sensitive positional exists,
+ since a token cannot be told to be its value without parsing again.
+
+**Returns**: `character(len=:)`
+
+```fortran
+function provenance_arguments(self) result(json)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | in |  | CLI data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  provenance_json["provenance_json"] --> provenance_arguments["provenance_arguments"]
+  provenance_arguments["provenance_arguments"] --> json_array["json_array"]
+  provenance_arguments["provenance_arguments"] --> match_inline_token["match_inline_token"]
+  style provenance_arguments fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### envvar_name
@@ -2246,6 +2464,7 @@ flowchart TD
   builtins_missing["builtins_missing"] --> is_defined["is_defined"]
   check["check"] --> is_defined["is_defined"]
   check_exclusive_sets["check_exclusive_sets"] --> is_defined["is_defined"]
+  check_requested["check_requested"] --> is_defined["is_defined"]
   copy_options["copy_options"] --> is_defined["is_defined"]
   ensure_builtins["ensure_builtins"] --> is_defined["is_defined"]
   exclusive_set_signature["exclusive_set_signature"] --> is_defined["is_defined"]
@@ -2285,6 +2504,33 @@ function is_parsed(self)
 | Name | Type | Intent | Attributes | Description |
 |------|------|--------|------------|-------------|
 | `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | in |  | CLI data. |
+
+### check_requested
+
+Check if --check is on the command line, before a `--`: by its token, since an earlier error may have stopped the parse
+ before reaching it, and the exit status must not depend on that (#128). A status of a builtin leaves it to that builtin.
+
+**Returns**: `logical`
+
+```fortran
+function check_requested(self) result(requested)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | in |  | CLI data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  parse["parse"] --> check_requested["check_requested"]
+  check_requested["check_requested"] --> is_defined["is_defined"]
+  check_requested["check_requested"] --> match_token["match_token"]
+  style check_requested fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
 
 ### no_args_help
 
@@ -2346,6 +2592,7 @@ flowchart TD
   dispatch_status["dispatch_status"] --> completion_shell["completion_shell"]
   dispatch_status["dispatch_status"] --> install_completion["install_completion"]
   dispatch_status["dispatch_status"] --> is_action_passed["is_action_passed"]
+  dispatch_status["dispatch_status"] --> json_schema["json_schema"]
   dispatch_status["dispatch_status"] --> output_file["output_file"]
   dispatch_status["dispatch_status"] --> print_version["print_version"]
   dispatch_status["dispatch_status"] --> quiet_stop["quiet_stop"]
@@ -2410,6 +2657,7 @@ flowchart TD
   parse_core["parse_core"] --> usage_on_error_is["usage_on_error_is"]
   print_usage_line["print_usage_line"] --> usage_on_error_is["usage_on_error_is"]
   raise_error["raise_error"] --> usage_on_error_is["usage_on_error_is"]
+  usage_on_error_is["usage_on_error_is"] --> is_json_format["is_json_format"]
   usage_on_error_is["usage_on_error_is"] --> upper_case["upper_case"]
   style usage_on_error_is fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -2697,6 +2945,65 @@ flowchart TD
   style powershell_script fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
+### error_description
+
+Return the meaning of an error code, as in the table of `docs/guide/errors.md` (`flap_test_json_schema` compares them);
+ '' for an unknown code. The JSON description of the CLI publishes it.
+
+**Attributes**: pure
+
+**Returns**: `character(len=:)`
+
+```fortran
+function error_description(code) result(description)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `code` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in |  | Error code. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  json_schema["json_schema"] --> error_description["error_description"]
+  style error_description fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### json_schema
+
+Return the JSON description of the CLI (#128). It needs no copy with the builtins, unlike the other outputs: it leaves them
+ out, and it reads no state of a parse, so that it is the same before and after parse.
+
+**Returns**: `character(len=:)`
+
+```fortran
+function json_schema(self) result(json)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | in |  | CLI data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  dispatch_status["dispatch_status"] --> json_schema["json_schema"]
+  json_members["json_members"] --> json_schema["json_schema"]
+  save_json_schema["save_json_schema"] --> json_schema["json_schema"]
+  json_schema["json_schema"] --> error_description["error_description"]
+  json_schema["json_schema"] --> json_command["json_command"]
+  json_schema["json_schema"] --> json_members["json_members"]
+  json_schema["json_schema"] --> json_string["json_string"]
+  json_schema["json_schema"] --> str["str"]
+  style json_schema fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
 ### usage_core
 
 Print correct usage of CLI.
@@ -2789,6 +3096,32 @@ flowchart TD
   bash_script["bash_script"] --> program_basename["program_basename"]
   bash_script["bash_script"] --> signature["signature"]
   style bash_script fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### provenance_name
+
+Return the name of a CLA in the provenance reports.
+
+**Returns**: `character(len=:)`
+
+```fortran
+function provenance_name(cla) result(name)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `cla` | type([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  provenance_json["provenance_json"] --> provenance_name["provenance_name"]
+  provenance_text["provenance_text"] --> provenance_name["provenance_name"]
+  provenance_name["provenance_name"] --> str["str"]
+  style provenance_name fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### completion_function

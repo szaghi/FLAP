@@ -21,6 +21,7 @@ graph LR
 - [colors_samples](#colors-samples)
 - [styles_samples](#styles-samples)
 - [colorize_default](#colorize-default)
+- [color_code](#color-code)
 - [color_index](#color-index)
 - [style_index](#style-index)
 - [upper](#upper)
@@ -33,6 +34,7 @@ graph LR
 | `UCS4` | integer | parameter | Unicode character set kind. |
 | `UPPER_ALPHABET` | character(len=26) | parameter | Upper case alphabet. |
 | `LOWER_ALPHABET` | character(len=26) | parameter | Lower case alphabet. |
+| `HEX_DIGITS` | character(len=16) | parameter | Hexadecimal digits. |
 | `NL` | character(len=1) | parameter | New line character. |
 | `ESCAPE` | character(len=1) | parameter | "\" character. |
 | `CODE_START` | character(len=2) | parameter | Start ansi code, "\[". |
@@ -109,10 +111,39 @@ function colorize_default(string, color_fg, color_bg, style) result(colorized)
 
 ```mermaid
 flowchart TD
-  colorize_default["colorize_default"] --> color_index["color_index"]
+  colorize_default["colorize_default"] --> color_code["color_code"]
   colorize_default["colorize_default"] --> style_index["style_index"]
   colorize_default["colorize_default"] --> upper["upper"]
   style colorize_default fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### color_code
+
+Return the SGR parameters of a colour: a name of the colors lists, or "#rrggbb" (24-bit, any case); empty if unknown.
+
+**Attributes**: pure
+
+**Returns**: `character(len=:)`
+
+```fortran
+function color_code(color, background) result(code)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `color` | character(len=*) | in |  | Color definition. |
+| `background` | logical | in |  | Background color, foreground otherwise. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  colorize_default["colorize_default"] --> color_code["color_code"]
+  color_code["color_code"] --> color_index["color_index"]
+  color_code["color_code"] --> upper["upper"]
+  style color_code fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### color_index
@@ -140,7 +171,7 @@ function color_index(color)
 
 ```mermaid
 flowchart TD
-  colorize_default["colorize_default"] --> color_index["color_index"]
+  color_code["color_code"] --> color_index["color_index"]
   style color_index fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -192,6 +223,7 @@ function upper(string)
 
 ```mermaid
 flowchart TD
+  color_code["color_code"] --> upper["upper"]
   colorize_default["colorize_default"] --> upper["upper"]
   style upper fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```

@@ -25,6 +25,7 @@ graph LR
 - [exclusive_set](#exclusive-set)
 - [command_line_arguments_group](#command-line-arguments-group)
 - [free](#free)
+- [check_types](#check-types)
 - [check_maps](#check-maps)
 - [check](#check)
 - [check_position_gaps](#check-position-gaps)
@@ -43,6 +44,8 @@ graph LR
 - [finalize](#finalize)
 - [is_named](#is-named)
 - [has_alias](#has-alias)
+- [json_members](#json-members)
+- [json_command](#json-command)
 - [completion_fish](#completion-fish)
 - [completion_powershell](#completion-powershell)
 - [has_examples](#has-examples)
@@ -75,6 +78,8 @@ graph LR
 | `STATUS_ALTERNATE` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | An alternate action passed: value validation bypassed (F16). |
 | `STATUS_SHOW_COMPLETION` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | --show-completion passed (F24). |
 | `STATUS_INSTALL_COMPLETION` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | --install-completion passed (F24). |
+| `STATUS_CHECK` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | --check passed: the command line is valid (#128). |
+| `STATUS_SCHEMA` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | --schema passed: the JSON description printed (#128). |
 | `STATUS_PRINT_MAN` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | --man passed: the man page saved (F29). |
 | `ERROR_CONSISTENCY` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | CLAs group consistency error. |
 | `ERROR_M_EXCLUDE` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Two mutually exclusive CLAs group have been called. |
@@ -136,6 +141,9 @@ classDiagram
 | `version_lun` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Output unit to print version message |
 | `error_lun` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Error unit to print error messages |
 | `case_insensitive` | logical |  | Match switches and command names in any case (F14). |
+| `error_format` | character(len=:) | allocatable | Format of the error messages: text (default) or json (#128). |
+| `error_argument` | character(len=:) | allocatable | Argument of the last error, when known (JSON format). |
+| `error_suggestions` | type([flap_string](/api/src/lib/flap_utils_m#flap-string)) | allocatable | "Did you mean" candidates of the last error (JSON format). |
 | `group` | character(len=:) | allocatable | Group name (command). |
 | `Na` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Number of CLA. |
 | `Na_required` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Number of required command line arguments. |
@@ -155,6 +163,8 @@ classDiagram
 | `free_object` | pass(self) | Free dynamic memory. |
 | `print_version` | pass(self) | Print version. |
 | `print_error_message` | pass(self) | Print meaningful error message. |
+| `print_warning` | pass(self) | Print a warning. |
+| `is_json_format` | pass(self) | Check if the error messages are JSON lines. |
 | `inherit_error` | pass(self) | Take the error of another object, with its message. |
 | `clear_error` | pass(self) | Forget the error and its message. |
 | `set_examples` | pass(self) | Set examples of correct usage. |
@@ -174,6 +184,9 @@ classDiagram
 | `is_required_passed` |  | Check if required CLAs are passed. |
 | `add_exclusive_set` |  | Add a mutually exclusive set of switches. |
 | `check_exclusive_sets` |  | Check the mutually exclusive sets of switches. |
+| `json_members` |  | JSON description of the options, positionals and exclusive sets. |
+| `json_command` |  | JSON description of the group as a command. |
+| `check_types` |  | Check the values of the typed CLAs against their declared type. |
 | `check_maps` |  | Check the KEY=VALUE pairs of the map CLAs. |
 | `is_passed` |  | Check if a CLA has been passed. |
 | `is_defined` |  | Check if a CLA has been defined. |
@@ -221,6 +234,31 @@ subroutine free(self)
 flowchart TD
   free["free"] --> free_object["free_object"]
   style free fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### check_types
+
+Check the values of the typed CLAs against their declared type (#128), whatever their source; the first error stops.
+
+```fortran
+subroutine check_types(self, pref)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_arguments_group](/api/src/lib/flap_command_line_arguments_group_t#command-line-arguments-group)) | inout |  | CLAsG data. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  parse_core["parse_core"] --> check_types["check_types"]
+  check_types["check_types"] --> check_value_type["check_value_type"]
+  check_types["check_types"] --> inherit_error["inherit_error"]
+  style check_types fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### check_maps
@@ -622,6 +660,7 @@ flowchart TD
   parse["parse"] --> read_env["read_env"]
   parse["parse"] --> sanitize_defaults["sanitize_defaults"]
   parse["parse"] --> set_inline_value["set_inline_value"]
+  parse["parse"] --> suggested["suggested"]
   style parse fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -676,6 +715,9 @@ flowchart TD
   check_range["check_range"] --> errored["errored"]
   check_range_consistency["check_range_consistency"] --> errored["errored"]
   check_switch_neg_consistency["check_switch_neg_consistency"] --> errored["errored"]
+  check_type_consistency["check_type_consistency"] --> errored["errored"]
+  check_value_item["check_value_item"] --> errored["errored"]
+  check_value_type["check_value_type"] --> errored["errored"]
   copy_options["copy_options"] --> errored["errored"]
   get_args_from_invocation["get_args_from_invocation"] --> errored["errored"]
   get_cla["get_cla"] --> errored["errored"]
@@ -717,6 +759,7 @@ flowchart TD
   raise_error_value_missing["raise_error_value_missing"] --> errored["errored"]
   set_inline_value["set_inline_value"] --> errored["errored"]
   set_source_value["set_source_value"] --> errored["errored"]
+  type_allows["type_allows"] --> errored["errored"]
   errored["errored"] --> error_prefix["error_prefix"]
   errored["errored"] --> print_error_message["print_error_message"]
   errored["errored"] --> str["str"]
@@ -753,7 +796,8 @@ flowchart TD
 
 Sanitize defaults values.
 
- It is necessary to *sanitize* the default values of non-passed, optional CLAs.
+ It is necessary to *sanitize* the default values of non-passed, optional CLAs. Called or not: the getters read the
+ defaults of a command not called too (#127), and the CLA sanitize is idempotent.
 
 ```fortran
 subroutine sanitize_defaults(self)
@@ -851,6 +895,70 @@ flowchart TD
   is_named["is_named"] --> has_alias["has_alias"]
   has_alias["has_alias"] --> same["same"]
   style has_alias fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### json_members
+
+Return the JSON members `options`, `positionals` and `exclusive_sets` of the group (#128): hidden CLAs and builtins are
+ left out; each ends with a comma but the last, without a final new line.
+
+**Returns**: `character(len=:)`
+
+```fortran
+function json_members(self, indent) result(json)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_arguments_group](/api/src/lib/flap_command_line_arguments_group_t#command-line-arguments-group)) | in |  | CLAsG data. |
+| `indent` | character(len=*) | in |  | Indentation of the members. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  json_command["json_command"] --> json_members["json_members"]
+  json_schema["json_schema"] --> json_members["json_members"]
+  json_members["json_members"] --> excluded_by["excluded_by"]
+  json_members["json_members"] --> is_builtin["is_builtin"]
+  json_members["json_members"] --> json_array["json_array"]
+  json_members["json_members"] --> json_schema["json_schema"]
+  json_members["json_members"] --> list_items["list_items"]
+  json_members["json_members"] --> wrapped["wrapped"]
+  style json_members fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### json_command
+
+Return the JSON description of the group as a command (#128).
+
+**Returns**: `character(len=:)`
+
+```fortran
+function json_command(self, indent, exclusive_with) result(json)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_arguments_group](/api/src/lib/flap_command_line_arguments_group_t#command-line-arguments-group)) | in |  | CLAsG data. |
+| `indent` | character(len=*) | in |  | Indentation of the object. |
+| `exclusive_with` | character(len=*) | in |  | Command excluded ('' for none), resolved by the CLI. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  json_schema["json_schema"] --> json_command["json_command"]
+  json_command["json_command"] --> json_array["json_array"]
+  json_command["json_command"] --> json_members["json_members"]
+  json_command["json_command"] --> json_string["json_string"]
+  json_command["json_command"] --> name_count["name_count"]
+  json_command["json_command"] --> name_of["name_of"]
+  style json_command fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### completion_fish
@@ -991,6 +1099,7 @@ function name_count(self) result(n)
 ```mermaid
 flowchart TD
   completion_powershell["completion_powershell"] --> name_count["name_count"]
+  json_command["json_command"] --> name_count["name_count"]
   parse_core["parse_core"] --> name_count["name_count"]
   style name_count fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -1019,6 +1128,7 @@ function name_of(self, i) result(name)
 ```mermaid
 flowchart TD
   completion_powershell["completion_powershell"] --> name_of["name_of"]
+  json_command["json_command"] --> name_of["name_of"]
   parse_core["parse_core"] --> name_of["name_of"]
   style name_of fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -1209,6 +1319,7 @@ flowchart TD
   builtins_missing["builtins_missing"] --> is_defined["is_defined"]
   check["check"] --> is_defined["is_defined"]
   check_exclusive_sets["check_exclusive_sets"] --> is_defined["is_defined"]
+  check_requested["check_requested"] --> is_defined["is_defined"]
   copy_options["copy_options"] --> is_defined["is_defined"]
   ensure_builtins["ensure_builtins"] --> is_defined["is_defined"]
   exclusive_set_signature["exclusive_set_signature"] --> is_defined["is_defined"]

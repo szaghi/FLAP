@@ -41,6 +41,7 @@ const docs = [
       { text: 'Subcommands',              link: '/guide/subcommands' },
       { text: 'Advanced Features',        link: '/guide/advanced' },
       { text: 'Output Formats',           link: '/guide/output' },
+      { text: 'Machine-readable Interfaces', link: '/guide/machine' },
       { text: 'Interactive Menus',        link: '/guide/menu' },
       { text: 'Error Codes',              link: '/guide/errors' },
     ],

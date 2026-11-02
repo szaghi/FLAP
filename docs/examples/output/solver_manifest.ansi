@@ -1,0 +1,13 @@
+$ SOLVER_CFL=0.25 solver --steps 100 --token s3cret && cat solver.manifest.json
+{
+  "schema_version": 1,
+  "program": {"name": "solver", "version": "1.2.0"},
+  "arguments": ["--steps","100","--token","***"],
+  "status": 0,
+  "values": [
+    {"command": "", "name": "--steps", "value": "100", "source": "command line"},
+    {"command": "", "name": "--cfl", "value": "0.25", "source": "environment", "variable": "SOLVER_CFL"},
+    {"command": "", "name": "--label", "value": "run", "source": "default"},
+    {"command": "", "name": "--token", "value": "***", "source": "command line"}
+  ]
+}
