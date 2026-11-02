@@ -21,6 +21,7 @@ public :: ACTION_PRINT_HELP
 public :: ACTION_PRINT_MARK
 public :: ACTION_PRINT_MAN
 public :: ACTION_SCHEMA
+public :: ACTION_CHECK
 public :: ACTION_PRINT_VERS
 public :: ACTION_COUNT
 public :: ACTION_APPEND
@@ -137,6 +138,7 @@ type, extends(object) :: command_line_argument
     ! public methods
     procedure, public :: free                           !< Free dynamic memory.
     procedure, public :: check                          !< Check data consistency.
+    procedure, public :: is_typed_for_schema            !< Check if FLAP knows the type of the value.
     procedure, public :: json_schema                    !< JSON description of the CLA (#128).
     procedure, public :: check_value_type               !< Check the value against the declared type (#128).
     procedure, public :: is_required_passed             !< Check if required CLA is passed.
@@ -218,7 +220,6 @@ type, extends(object) :: command_line_argument
     procedure, private :: check_choices                   !< Check if CLA value is in allowed choices.
     procedure, private :: check_choices_text              !< Check the choices of a whole character value, then store it.
     procedure, private :: display_name                    !< Name of the CLA for a message.
-    procedure, private :: is_typed_for_schema             !< Check if FLAP knows the type of the value.
     procedure, private :: json_value                      !< JSON description of the value of the CLA.
     procedure, private :: json_item                       !< JSON description of one value of the CLA.
     procedure, private :: json_default                    !< JSON form of the default of the CLA.
@@ -257,6 +258,7 @@ character(len=*), parameter :: ACTION_PRINT_HELP  = 'PRINT_HELP'    !< Print hel
 character(len=*), parameter :: ACTION_PRINT_MARK  = 'PRINT_MARKDOWN'!< Print help to Markdown file.
 character(len=*), parameter :: ACTION_PRINT_MAN   = 'PRINT_MAN'     !< Save the man page (F29).
 character(len=*), parameter :: ACTION_SCHEMA      = 'PRINT_SCHEMA'  !< Print the JSON description of the CLI (#128).
+character(len=*), parameter :: ACTION_CHECK       = 'CHECK'         !< Validate the command line, then stop (#128).
 character(len=*), parameter :: ACTION_SHOW_COMPLETION    = 'SHOW_COMPLETION'    !< Print the completion script (F24).
 character(len=*), parameter :: ACTION_INSTALL_COMPLETION = 'INSTALL_COMPLETION' !< Install the completion script (F24).
 character(len=*), parameter :: ACTION_PRINT_VERS  = 'PRINT_VERSION' !< Print version.
@@ -753,7 +755,7 @@ contains
   if (.not.allocated(self%act)) return
   builtin = self%act == ACTION_PRINT_HELP .or. self%act == ACTION_PRINT_VERS .or. self%act == ACTION_PRINT_MARK .or. &
             self%act == ACTION_PRINT_MAN .or. self%act == ACTION_SHOW_COMPLETION .or. self%act == ACTION_INSTALL_COMPLETION .or. &
-            self%act == ACTION_SCHEMA
+            self%act == ACTION_SCHEMA .or. self%act == ACTION_CHECK
   endfunction is_builtin
 
   pure function is_list(self) result(list)
@@ -1655,6 +1657,7 @@ contains
         self%act/=ACTION_PRINT_MARK.and. &
         self%act/=ACTION_PRINT_MAN.and.  &
         self%act/=ACTION_SCHEMA.and.     &
+        self%act/=ACTION_CHECK.and.      &
         self%act/=ACTION_PRINT_VERS.and. &
         self%act/=ACTION_COUNT.and.      &
         self%act/=ACTION_ALTERNATE.and.  &

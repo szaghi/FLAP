@@ -39,6 +39,7 @@ public :: STATUS_SHOW_COMPLETION
 public :: STATUS_INSTALL_COMPLETION
 public :: STATUS_PRINT_MAN
 public :: STATUS_SCHEMA
+public :: STATUS_CHECK
 public :: ERROR_CONSISTENCY
 public :: ERROR_M_EXCLUDE
 public :: ERROR_M_EXCLUDE_SET
@@ -122,6 +123,7 @@ integer(I4P), parameter :: STATUS_NO_ARGS = -5 !< No arguments passed, help prin
 integer(I4P), parameter :: STATUS_ALTERNATE = -4 !< An alternate action passed: value validation bypassed (F16).
 integer(I4P), parameter :: STATUS_SHOW_COMPLETION = -6    !< --show-completion passed (F24).
 integer(I4P), parameter :: STATUS_INSTALL_COMPLETION = -7 !< --install-completion passed (F24).
+integer(I4P), parameter :: STATUS_CHECK = -10             !< --check passed: the command line is valid (#128).
 integer(I4P), parameter :: STATUS_SCHEMA = -9             !< --schema passed: the JSON description printed (#128).
 integer(I4P), parameter :: STATUS_PRINT_MAN = -8          !< --man passed: the man page saved (F29).
 

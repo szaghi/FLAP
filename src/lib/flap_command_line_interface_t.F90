@@ -4,14 +4,16 @@ module flap_command_line_interface_t
 
 use face, only : colorize
 use flap_command_line_argument_t, only : command_line_argument, ACTION_ALTERNATE, ACTION_CONFIG, ACTION_COUNT, ACTION_PRINT_HELP, &
-                                         ACTION_PRINT_MARK, ACTION_PRINT_MAN, ACTION_SCHEMA, ACTION_PRINT_VERS, ACTION_STORE, &
+                                         ACTION_PRINT_MARK, ACTION_PRINT_MAN, ACTION_SCHEMA, ACTION_CHECK, &
+                                         ACTION_PRINT_VERS, ACTION_STORE, &
                                          ACTION_STORE_FALSE, &
                                          ACTION_STORE_TRUE, ACTION_SHOW_COMPLETION, ACTION_INSTALL_COMPLETION, &
                                          ERROR_UNKNOWN, SOURCE_COMMANDLINE, SOURCE_CONFIG, &
                                          SOURCE_DEFAULT, SOURCE_ENVIRONMENT, SOURCE_NONE
 use flap_command_line_arguments_group_t, only : command_line_arguments_group, STATUS_ALTERNATE, STATUS_NO_ARGS, STATUS_PRINT_H, &
                                                 STATUS_PRINT_M, STATUS_PRINT_V, STATUS_SHOW_COMPLETION, &
-                                                STATUS_INSTALL_COMPLETION, STATUS_PRINT_MAN, STATUS_SCHEMA
+                                                STATUS_INSTALL_COMPLETION, STATUS_PRINT_MAN, STATUS_SCHEMA, &
+                                                STATUS_CHECK
 use flap_config_m, only : config_file
 use flap_object_t, only : object
 use flap_utils_m
@@ -40,6 +42,7 @@ type, extends(object), public :: command_line_interface
   character(len=:), allocatable                   :: usage_on_error              !< After an error: full, usage, none (F27).
   logical                                         :: man_option=.false.          !< --man builtin (F29).
   logical                                         :: schema_option=.false.       !< --schema builtin (#128).
+  logical                                         :: check_option=.false.        !< --check builtin (#128).
   character(len=:), allocatable                   :: error_format_env            !< Variable choosing the error format (#128).
   character(len=:), allocatable                   :: man_file                    !< File of --man ('': <progname>.1).
   character(len=:), allocatable                   :: markdown_file               !< File of --markdown ('': <progname>.md).
@@ -110,6 +113,8 @@ type, extends(object), public :: command_line_interface
     procedure, private :: powershell_script                !< PowerShell completion script.
     procedure, private :: save_man_page_core              !< Save CLI usage as man page (builtins already present).
     procedure, private :: save_usage_to_markdown_core     !< Save CLI usage as markdown (builtins already present).
+    procedure, private :: check_requested                 !< Check if --check is on the command line.
+    procedure, private :: report_check                    !< Report the verdict of --check.
     procedure, private :: parse_core                      !< Parse the command line (body of parse).
     procedure, private :: group_index                     !< Index of the group with a name, -1 if none.
     procedure, private :: is_fatal                        !< Check if the current error stops parsing.
@@ -201,6 +206,7 @@ contains
   if (allocated(self%usage_on_error)) deallocate(self%usage_on_error)
   self%man_option = .false.
   self%schema_option = .false.
+  self%check_option = .false.
   if (allocated(self%error_format_env)) deallocate(self%error_format_env)
   if (allocated(self%man_file)) deallocate(self%man_file)
   if (allocated(self%markdown_file)) deallocate(self%markdown_file)
@@ -214,7 +220,7 @@ contains
                   usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone, &
                   error_hint, no_args_is_help, ignore_env, auto_envvar_prefix, case_insensitive, completion_options, &
                   usage_on_error, man_option, man_file, markdown_file, schema_option, &
-                  error_format, error_format_env)
+                  error_format, error_format_env, check_option)
   !< Initialize CLI.
   class(command_line_interface), intent(inout) :: self                !< CLI data.
   character(*), optional,        intent(in)    :: progname            !< Program name.
@@ -251,6 +257,7 @@ contains
                                                                       !< usage line), 'none'; any case.
   logical,      optional,        intent(in)    :: man_option          !< Add --man to the top level (F29).
   logical,      optional,        intent(in)    :: schema_option       !< Add --schema to the top level (#128).
+  logical,      optional,        intent(in)    :: check_option        !< Add --check to the top level (#128).
   character(*), optional,        intent(in)    :: error_format        !< Format of the error messages: text (default), json.
   character(*), optional,        intent(in)    :: error_format_env    !< Variable choosing the format, per run: text, json;
                                                                       !< any other value is text; unset, error_format holds.
@@ -300,6 +307,7 @@ contains
   self%usage_on_error = 'full' ; if (present(usage_on_error)) self%usage_on_error = trim(adjustl(usage_on_error))
   if (present(man_option)) self%man_option = man_option
   if (present(schema_option)) self%schema_option = schema_option
+  if (present(check_option)) self%check_option = check_option
   self%man_file = '' ; if (present(man_file)) self%man_file = trim(adjustl(man_file))
   self%markdown_file = '' ; if (present(markdown_file)) self%markdown_file = trim(adjustl(markdown_file))
   self%error_format = 'text' ; if (present(error_format)) self%error_format = trim(adjustl(error_format))
@@ -1174,8 +1182,93 @@ contains
   if (self%is_parsed_) return
   call self%parse_core(pref=pref, args=args)
   if (self%error > 0 .and. self%error /= ERROR_UNKNOWN_CLAS_IGNORED) call self%print_error_hint
+  if (self%check_requested()) call self%report_check
   if (present(error)) error = self%error
   endsubroutine parse
+
+  function check_requested(self) result(requested)
+  !< Check if --check is on the command line, before a `--`: by its token, since an earlier error may have stopped the parse
+  !< before reaching it, and the exit status must not depend on that (#128). A status of a builtin leaves it to that builtin.
+  class(command_line_interface), intent(in) :: self      !< CLI data.
+  logical                                   :: requested !< Check result.
+  integer(I4P)                              :: a         !< CLA index.
+  integer(I4P)                              :: t         !< Token index.
+
+  requested = .false.
+  if (.not.self%check_option .or. .not.allocated(self%args)) return
+  if (self%error < 0 .and. self%error /= STATUS_ALTERNATE) return
+  if (.not.self%clasg(0)%is_defined(switch='--check', pos=a)) return
+  if (self%clasg(0)%cla(a)%act /= ACTION_CHECK) return ! the program owns a --check
+  do t=1, size(self%args, dim=1)
+    if (trim(adjustl(self%args(t)%s)) == '--') return
+    if (self%clasg(0)%cla(a)%match_token(self%args(t)%s)) then
+      requested = .true.
+      return
+    endif
+  enddo
+  endfunction check_requested
+
+  subroutine report_check(self)
+  !< Report the verdict of --check (#128): the result, then, in standalone mode, the end of the program, 0 if valid, 1 if not.
+  !<
+  !< The options of an unknown type are named: FLAP has not validated them, and says so instead of implying they are fine.
+  class(command_line_interface), intent(inout) :: self      !< CLI data.
+  type(flap_string), allocatable               :: names(:)  !< Options not type-checked.
+  character(len=:), allocatable                :: line      !< Result.
+  character(len=:), allocatable                :: ignored   !< Message of an ignored argument.
+  logical                                      :: valid     !< The command line is valid.
+  integer(I4P)                                 :: n         !< Number of names.
+  integer(I4P)                                 :: g         !< Group index.
+  integer(I4P)                                 :: a         !< CLA index.
+
+  valid = self%error <= 0 .or. self%error == ERROR_UNKNOWN_CLAS_IGNORED
+  n = 0
+  do g=0, size(self%clasg, dim=1) - 1
+    n = n + self%clasg(g)%Na
+  enddo
+  allocate(names(n))
+  n = 0
+  do g=0, size(self%clasg, dim=1) - 1
+    if (g > 0 .and. .not.self%clasg(g)%is_called) cycle
+    do a=1, self%clasg(g)%Na
+      associate(cla => self%clasg(g)%cla(a))
+        if (cla%is_hidden .or. cla%is_builtin() .or. cla%is_typed_for_schema()) cycle
+        n = n + 1
+        if (cla%is_positional) then
+          names(n)%s = 'position '//trim(str(cla%position, .true.))
+        else
+          names(n)%s = trim(adjustl(cla%switch))
+        endif
+        if (g > 0) names(n)%s = self%clasg(g)%group//' '//names(n)%s
+      endassociate
+    enddo
+  enddo
+  ignored = ''
+  if (self%error == ERROR_UNKNOWN_CLAS_IGNORED .and. allocated(self%error_message)) ignored = self%error_message
+  if (self%is_json_format()) then
+    line = '{"schema_version":1,"level":"result","valid":'//trim(merge('true ', 'false', valid))
+    if (valid) line = line//',"unchecked":'//json_array(names(1:n))
+    if (len(ignored) > 0) line = line//',"ignored":'//json_string(ignored)
+    line = line//'}'
+    write(self%version_lun, '(A)') line
+  elseif (valid) then
+    line = self%progname//': command line valid'
+    if (n > 0) then
+      line = line//new_line('a')//trim(str(n, .true.))//' option'//trim(merge('  ', 's ', n == 1))//' not type-checked:'
+      do a=1, n
+        line = line//' '//names(a)%s
+      enddo
+    endif
+    if (len(ignored) > 0) line = line//new_line('a')//'ignored: '//ignored
+    call write_text(self%version_lun, line)
+  endif
+  if (valid) then
+    self%error = STATUS_CHECK
+    if (self%standalone) call quiet_stop(0_I4P)
+  elseif (self%standalone) then
+    call quiet_stop(1_I4P)
+  endif
+  endsubroutine report_check
 
   subroutine print_error_hint(self)
   !< Print the last line after a failed parse: "Try 'prog [command] --help' for help." (F26 of #125).
@@ -2635,6 +2728,13 @@ contains
                     help='Print the description of this program as JSON', act='print_schema')
   endif
 
+  ! add the validate-only builtin to the top level, if asked (#128)
+  if (self%check_option) then
+    if (.not.self%is_defined(group='', switch='--check')) &
+      call self%add(pref=pref, group_index=0, switch='--check', required=.false., def='', &
+                    help='Validate the command line and stop: exit status 0 if valid, 1 if not', act='check')
+  endif
+
   ! add the completion builtins to the top level, if asked (F24)
   if (self%completion_options) then
     if (.not.self%is_defined(group='', switch='--show-completion')) &
@@ -3056,7 +3156,8 @@ contains
   json = json//'  "program": {"name": '//json_string(self%progname)//', "version": '//json_string(self%version)//&
          ', "description": '//json_string(self%description)//'},'//nl
   env = 'null' ; if (allocated(self%error_format_env)) env = json_string(self%error_format_env)
-  json = json//'  "capabilities": {"check": false, "error_format_env": '//env//'},'//nl
+  json = json//'  "capabilities": {"check": '//trim(merge('true ', 'false', self%check_option))//&
+         ', "error_format_env": '//env//'},'//nl
   json = json//'  "errors": {'//nl
   do e=1, size(ERROR_CODES, dim=1)
     json = json//'    "'//trim(str(n=ERROR_CODES(e), no_sign=.true.))//'": '//json_string(error_description(ERROR_CODES(e)))

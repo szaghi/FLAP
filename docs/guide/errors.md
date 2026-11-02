@@ -22,7 +22,8 @@ positive values are **errors**. Existing values never change.
 
 | Code | Constant | Meaning | Typical cause |
 |---:|---|---|---|
-| `-9` | `STATUS_SCHEMA` | JSON description printed |
+| `-10` | `STATUS_CHECK` | Command line valid | `--check` was passed (`init(check_option=.true.)`) and the command line is valid; in standalone mode the program ends with exit status 0 |
+| `-9` | `STATUS_SCHEMA` | JSON description printed | `--schema` was passed (`init(schema_option=.true.)`); in standalone mode the program ends with exit status 0 |
 | `-8` | `STATUS_PRINT_MAN` | Man page saved | `--man` was passed (`init(man_option=.true.)`); in standalone mode the program ends with exit status 0 |
 | `-7` | `STATUS_INSTALL_COMPLETION` | Completion script installed | `--install-completion` was passed (`init(completion_options=.true.)`); in standalone mode the program ends with exit status 0 |
 | `-6` | `STATUS_SHOW_COMPLETION` | Completion script printed | `--show-completion` was passed; in standalone mode the program ends with exit status 0 |
