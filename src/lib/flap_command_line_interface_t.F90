@@ -4,7 +4,7 @@ module flap_command_line_interface_t
 
 use face, only : colorize
 use flap_command_line_argument_t, only : command_line_argument, ACTION_ALTERNATE, ACTION_CONFIG, ACTION_COUNT, ACTION_PRINT_HELP, &
-                                         ACTION_PRINT_MARK, ACTION_PRINT_MAN, ACTION_SCHEMA, ACTION_CHECK, &
+                                         ACTION_PRINT_MARK, ACTION_PRINT_MAN, ACTION_SCHEMA, ACTION_DRY_RUN, ACTION_CHECK, &
                                          ACTION_PRINT_VERS, ACTION_STORE, &
                                          ACTION_STORE_FALSE, &
                                          ACTION_STORE_TRUE, ACTION_SHOW_COMPLETION, ACTION_INSTALL_COMPLETION, &
@@ -45,6 +45,7 @@ type, extends(object), public :: command_line_interface
   character(len=:), allocatable                   :: usage_on_error              !< After an error: full, usage, none (F27).
   logical                                         :: man_option=.false.          !< --man builtin (F29).
   logical                                         :: schema_option=.false.       !< --schema builtin (#128).
+  logical                                         :: dry_run_option=.false.      !< --dry-run builtin (#129).
   logical                                         :: check_option=.false.        !< --check builtin (#128).
   character(len=:), allocatable                   :: error_format_env            !< Variable choosing the error format (#128).
   character(len=:), allocatable                   :: man_file                    !< File of --man ('': <progname>.1).
@@ -64,6 +65,7 @@ type, extends(object), public :: command_line_interface
     procedure, public :: is_defined_group                !< Check if a CLAs group has been defined.
     procedure, public :: raise_error                     !< Report an application error in FLAP's style.
     procedure, public :: is_defined                      !< Check if a CLA has been defined.
+    procedure, public :: is_dry_run                      !< Check if --dry-run has been passed.
     procedure, public :: exit_status                     !< Exit status of the current error or status.
     procedure, public :: is_parsed                       !< Check if CLI has been parsed.
     procedure, public :: set_mutually_exclusive_groups   !< Set two CLAs group as mutually exclusive.
@@ -124,6 +126,7 @@ type, extends(object), public :: command_line_interface
     procedure, private :: provenance_json                 !< JSON report of provenance.
     procedure, private :: provenance_arguments            !< Command line in JSON, sensitive values masked.
     procedure, private :: parse_core                      !< Parse the command line (body of parse).
+    procedure, private :: dry_run_passed                  !< Check the --dry-run builtin.
     procedure, private :: parse_once                      !< Parse for a getter, once: a failed parse is not repeated.
     procedure, private :: group_index                     !< Index of the group with a name, -1 if none.
     procedure, private :: is_fatal                        !< Check if the current error stops parsing.
@@ -219,6 +222,7 @@ contains
   self%man_option = .false.
   self%schema_option = .false.
   self%check_option = .false.
+  self%dry_run_option = .false.
   if (allocated(self%error_format_env)) deallocate(self%error_format_env)
   if (allocated(self%man_file)) deallocate(self%man_file)
   if (allocated(self%markdown_file)) deallocate(self%markdown_file)
@@ -232,7 +236,7 @@ contains
                   usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone, &
                   error_hint, no_args_is_help, ignore_env, auto_envvar_prefix, case_insensitive, completion_options, &
                   usage_on_error, man_option, man_file, markdown_file, schema_option, &
-                  error_format, error_format_env, check_option)
+                  error_format, error_format_env, check_option, dry_run_option)
   !< Initialize CLI.
   class(command_line_interface), intent(inout) :: self                !< CLI data.
   character(*), optional,        intent(in)    :: progname            !< Program name.
@@ -270,6 +274,7 @@ contains
   logical,      optional,        intent(in)    :: man_option          !< Add --man to the top level (F29).
   logical,      optional,        intent(in)    :: schema_option       !< Add --schema to the top level (#128).
   logical,      optional,        intent(in)    :: check_option        !< Add --check to the top level (#128).
+  logical,      optional,        intent(in)    :: dry_run_option      !< Add --dry-run to the top level, read by is_dry_run (#129).
   character(*), optional,        intent(in)    :: error_format        !< Format of the error messages: text (default), json.
   character(*), optional,        intent(in)    :: error_format_env    !< Variable choosing the format, per run: text, json;
                                                                       !< any other value is text; unset, error_format holds.
@@ -320,6 +325,7 @@ contains
   if (present(man_option)) self%man_option = man_option
   if (present(schema_option)) self%schema_option = schema_option
   if (present(check_option)) self%check_option = check_option
+  if (present(dry_run_option)) self%dry_run_option = dry_run_option
   self%man_file = '' ; if (present(man_file)) self%man_file = trim(adjustl(man_file))
   self%markdown_file = '' ; if (present(markdown_file)) self%markdown_file = trim(adjustl(markdown_file))
   self%error_format = 'text' ; if (present(error_format)) self%error_format = trim(adjustl(error_format))
@@ -818,6 +824,7 @@ contains
   report = report//'  "arguments": '//self%provenance_arguments()//','//nl
   write(status, '(I0)') self%error
   report = report//'  "status": '//trim(status)//','//nl
+  if (self%dry_run_option) report = report//'  "dry_run": '//trim(merge('true ', 'false', self%dry_run_passed()))//','//nl
   report = report//'  "values": ['
   if (len(values) > 0) report = report//nl//values//nl//'  '
   report = report//']'//nl//'}'
@@ -1305,6 +1312,27 @@ contains
     if (self%is_defined_group(group=group, g=g)) is_defined = self%clasg(g)%is_defined(switch=switch)
   endif
   endfunction is_defined
+
+  function is_dry_run(self, pref) result(dry_run)
+  !< Check if --dry-run has been passed (#129), parsing first if parse has not been called. The program must then skip its side
+  !< effects: FLAP cannot do that for it. False if `init(dry_run_option=)` is not set, or if the program defines its own --dry-run.
+  class(command_line_interface), intent(inout) :: self    !< CLI data.
+  character(*), optional,        intent(in)    :: pref    !< Prefixing string.
+  logical                                      :: dry_run !< Check result.
+
+  if (.not.self%is_parsed_) call self%parse_once(pref=pref)
+  dry_run = self%dry_run_passed()
+  endfunction is_dry_run
+
+  pure function dry_run_passed(self) result(passed)
+  !< Check if the --dry-run builtin is on the parsed command line.
+  class(command_line_interface), intent(in) :: self   !< CLI data.
+  logical                                   :: passed !< Check result.
+
+  passed = .false.
+  if (.not.self%dry_run_option .or. .not.allocated(self%clasg)) return
+  passed = self%clasg(0)%is_action_passed(ACTION_DRY_RUN)
+  endfunction dry_run_passed
 
   elemental function exit_status(self) result(status)
   !< Return the exit status for the current error or status (#129), for `stop cli%exit_status()`. FLAP ends the program on an
@@ -2945,6 +2973,13 @@ contains
                     help='Validate the command line and stop: exit status 0 if valid', act='check')
   endif
 
+  ! add the dry-run builtin to the top level, if asked (#129)
+  if (self%dry_run_option) then
+    if (.not.self%is_defined(group='', switch='--dry-run')) &
+      call self%add(pref=pref, group_index=0, switch='--dry-run', required=.false., def='', &
+                    help='Report what would be done, without doing it', act='dry_run')
+  endif
+
   ! add the completion builtins to the top level, if asked (F24)
   if (self%completion_options) then
     if (.not.self%is_defined(group='', switch='--show-completion')) &
@@ -3367,7 +3402,7 @@ contains
          ', "description": '//json_string(self%description)//'},'//nl
   env = 'null' ; if (allocated(self%error_format_env)) env = json_string(self%error_format_env)
   json = json//'  "capabilities": {"check": '//trim(merge('true ', 'false', self%check_option))//&
-         ', "error_format_env": '//env//'},'//nl
+         ', "dry_run": '//trim(merge('true ', 'false', self%dry_run_option))//', "error_format_env": '//env//'},'//nl
   json = json//'  "exit_statuses": {"application": '//trim(str(n=EXIT_APPLICATION, no_sign=.true.))//&
          ', "usage": '//trim(str(n=EXIT_USAGE, no_sign=.true.))//&
          ', "environment": '//trim(str(n=EXIT_ENVIRONMENT, no_sign=.true.))//&

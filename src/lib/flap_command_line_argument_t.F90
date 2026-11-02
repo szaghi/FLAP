@@ -22,6 +22,7 @@ public :: ACTION_PRINT_MARK
 public :: ACTION_PRINT_MAN
 public :: ACTION_SCHEMA
 public :: ACTION_CHECK
+public :: ACTION_DRY_RUN
 public :: ACTION_PRINT_VERS
 public :: ACTION_COUNT
 public :: ACTION_APPEND
@@ -265,6 +266,7 @@ character(len=*), parameter :: ACTION_PRINT_MARK  = 'PRINT_MARKDOWN'!< Print hel
 character(len=*), parameter :: ACTION_PRINT_MAN   = 'PRINT_MAN'     !< Save the man page (F29).
 character(len=*), parameter :: ACTION_SCHEMA      = 'PRINT_SCHEMA'  !< Print the JSON description of the CLI (#128).
 character(len=*), parameter :: ACTION_CHECK       = 'CHECK'         !< Validate the command line, then stop (#128).
+character(len=*), parameter :: ACTION_DRY_RUN     = 'DRY_RUN'       !< Run without side effects: the program's task (#129).
 character(len=*), parameter :: ACTION_SHOW_COMPLETION    = 'SHOW_COMPLETION'    !< Print the completion script (F24).
 character(len=*), parameter :: ACTION_INSTALL_COMPLETION = 'INSTALL_COMPLETION' !< Install the completion script (F24).
 character(len=*), parameter :: ACTION_PRINT_VERS  = 'PRINT_VERSION' !< Print version.
@@ -806,7 +808,7 @@ contains
   if (.not.allocated(self%act)) return
   builtin = self%act == ACTION_PRINT_HELP .or. self%act == ACTION_PRINT_VERS .or. self%act == ACTION_PRINT_MARK .or. &
             self%act == ACTION_PRINT_MAN .or. self%act == ACTION_SHOW_COMPLETION .or. self%act == ACTION_INSTALL_COMPLETION .or. &
-            self%act == ACTION_SCHEMA .or. self%act == ACTION_CHECK
+            self%act == ACTION_SCHEMA .or. self%act == ACTION_CHECK .or. self%act == ACTION_DRY_RUN
   endfunction is_builtin
 
   pure function is_list(self) result(list)
@@ -1723,6 +1725,7 @@ contains
         self%act/=ACTION_PRINT_MAN.and.  &
         self%act/=ACTION_SCHEMA.and.     &
         self%act/=ACTION_CHECK.and.      &
+        self%act/=ACTION_DRY_RUN.and.    &
         self%act/=ACTION_PRINT_VERS.and. &
         self%act/=ACTION_COUNT.and.      &
         self%act/=ACTION_ALTERNATE.and.  &

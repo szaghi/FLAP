@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "program": {"name": "typed", "version": "1.2.0", "description": "A program with a \"typed\" interface"},
-  "capabilities": {"check": false, "error_format_env": null},
+  "capabilities": {"check": false, "dry_run": false, "error_format_env": null},
   "exit_statuses": {"application": 1, "usage": 2, "environment": 3, "definition": 4},
   "error_classes": {
     "1": "definition",

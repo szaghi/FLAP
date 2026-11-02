@@ -88,6 +88,8 @@ graph LR
 - [raise_error](#raise-error)
 - [is_called_group](#is-called-group)
 - [is_defined](#is-defined)
+- [is_dry_run](#is-dry-run)
+- [dry_run_passed](#dry-run-passed)
 - [exit_status](#exit-status)
 - [is_parsed](#is-parsed)
 - [check_requested](#check-requested)
@@ -194,6 +196,7 @@ classDiagram
 | `usage_on_error` | character(len=:) | allocatable | After an error: full, usage, none (F27). |
 | `man_option` | logical |  | --man builtin (F29). |
 | `schema_option` | logical |  | --schema builtin (#128). |
+| `dry_run_option` | logical |  | --dry-run builtin (#129). |
 | `check_option` | logical |  | --check builtin (#128). |
 | `error_format_env` | character(len=:) | allocatable | Variable choosing the error format (#128). |
 | `man_file` | character(len=:) | allocatable | File of --man ('': .1). |
@@ -226,6 +229,7 @@ classDiagram
 | `is_defined_group` |  | Check if a CLAs group has been defined. |
 | `raise_error` |  | Report an application error in FLAP's style. |
 | `is_defined` |  | Check if a CLA has been defined. |
+| `is_dry_run` |  | Check if --dry-run has been passed. |
 | `exit_status` |  | Exit status of the current error or status. |
 | `is_parsed` |  | Check if CLI has been parsed. |
 | `set_mutually_exclusive_groups` |  | Set two CLAs group as mutually exclusive. |
@@ -272,6 +276,7 @@ classDiagram
 | `provenance_json` |  | JSON report of provenance. |
 | `provenance_arguments` |  | Command line in JSON, sensitive values masked. |
 | `parse_core` |  | Parse the command line (body of parse). |
+| `dry_run_passed` |  | Check the --dry-run builtin. |
 | `parse_once` |  | Parse for a getter, once: a failed parse is not repeated. |
 | `group_index` |  | Index of the group with a name, -1 if none. |
 | `is_fatal` |  | Check if the current error stops parsing. |
@@ -333,7 +338,7 @@ flowchart TD
 Initialize CLI.
 
 ```fortran
-subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone, error_hint, no_args_is_help, ignore_env, auto_envvar_prefix, case_insensitive, completion_options, usage_on_error, man_option, man_file, markdown_file, schema_option, error_format, error_format_env, check_option)
+subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone, error_hint, no_args_is_help, ignore_env, auto_envvar_prefix, case_insensitive, completion_options, usage_on_error, man_option, man_file, markdown_file, schema_option, error_format, error_format_env, check_option, dry_run_option)
 ```
 
 **Arguments**
@@ -371,6 +376,7 @@ subroutine init(self, progname, version, help, description, license, authors, ex
 | `error_format` | character(len=*) | in | optional | Format of the error messages: text (default), json. |
 | `error_format_env` | character(len=*) | in | optional | Variable choosing the format, per run: text, json; |
 | `check_option` | logical | in | optional | Add --check to the top level (#128). |
+| `dry_run_option` | logical | in | optional | Add --dry-run to the top level, read by is_dry_run (#129). |
 
 **Call graph**
 
@@ -829,6 +835,7 @@ flowchart TD
   get_cla_list_varying_char["get_cla_list_varying_char"] --> parse_once["parse_once"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> parse_once["parse_once"]
   get_source["get_source"] --> parse_once["parse_once"]
+  is_dry_run["is_dry_run"] --> parse_once["parse_once"]
   map_cla["map_cla"] --> parse_once["parse_once"]
   provenance["provenance"] --> parse_once["parse_once"]
   parse_once["parse_once"] --> parse["parse"]
@@ -2233,6 +2240,7 @@ function provenance_json(self) result(report)
 ```mermaid
 flowchart TD
   provenance["provenance"] --> provenance_json["provenance_json"]
+  provenance_json["provenance_json"] --> dry_run_passed["dry_run_passed"]
   provenance_json["provenance_json"] --> is_builtin["is_builtin"]
   provenance_json["provenance_json"] --> json_resolved["json_resolved"]
   provenance_json["provenance_json"] --> json_string["json_string"]
@@ -2527,6 +2535,61 @@ flowchart TD
   is_defined["is_defined"] --> is_defined["is_defined"]
   is_defined["is_defined"] --> is_defined_group["is_defined_group"]
   style is_defined fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### is_dry_run
+
+Check if --dry-run has been passed (#129), parsing first if parse has not been called. The program must then skip its side
+ effects: FLAP cannot do that for it. False if `init(dry_run_option=)` is not set, or if the program defines its own --dry-run.
+
+**Returns**: `logical`
+
+```fortran
+function is_dry_run(self, pref) result(dry_run)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | inout |  | CLI data. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  is_dry_run["is_dry_run"] --> dry_run_passed["dry_run_passed"]
+  is_dry_run["is_dry_run"] --> parse_once["parse_once"]
+  style is_dry_run fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### dry_run_passed
+
+Check if the --dry-run builtin is on the parsed command line.
+
+**Attributes**: pure
+
+**Returns**: `logical`
+
+```fortran
+function dry_run_passed(self) result(passed)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | in |  | CLI data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  is_dry_run["is_dry_run"] --> dry_run_passed["dry_run_passed"]
+  provenance_json["provenance_json"] --> dry_run_passed["dry_run_passed"]
+  dry_run_passed["dry_run_passed"] --> is_action_passed["is_action_passed"]
+  style dry_run_passed fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### exit_status

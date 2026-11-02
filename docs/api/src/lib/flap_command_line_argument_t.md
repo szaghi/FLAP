@@ -151,6 +151,7 @@ graph LR
 | `ACTION_PRINT_MAN` | character(len=*) | parameter | Save the man page (F29). |
 | `ACTION_SCHEMA` | character(len=*) | parameter | Print the JSON description of the CLI (#128). |
 | `ACTION_CHECK` | character(len=*) | parameter | Validate the command line, then stop (#128). |
+| `ACTION_DRY_RUN` | character(len=*) | parameter | Run without side effects: the program's task (#129). |
 | `ACTION_SHOW_COMPLETION` | character(len=*) | parameter | Print the completion script (F24). |
 | `ACTION_INSTALL_COMPLETION` | character(len=*) | parameter | Install the completion script (F24). |
 | `ACTION_PRINT_VERS` | character(len=*) | parameter | Print version. |

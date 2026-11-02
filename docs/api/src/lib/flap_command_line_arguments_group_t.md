@@ -1355,6 +1355,7 @@ function is_action_passed(self, act) result(passed)
 ```mermaid
 flowchart TD
   dispatch_status["dispatch_status"] --> is_action_passed["is_action_passed"]
+  dry_run_passed["dry_run_passed"] --> is_action_passed["is_action_passed"]
   parse_core["parse_core"] --> is_action_passed["is_action_passed"]
   style is_action_passed fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```

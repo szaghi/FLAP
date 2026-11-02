@@ -101,6 +101,23 @@ error message quotes it as `***` too: `cannot convert "***" of option "--token" 
 attributes to the option: a misspelled `--tokn=abc` is an unknown argument, quoted as typed. The keys of a sensitive map stay
 visible.
 
+## Dry run
+
+`init(dry_run_option=.true.)` adds a `--dry-run` flag at the top level, and `cli%is_dry_run()` reads it. Unlike `--check`, the
+program runs, and it is the program that must skip its side effects:
+
+```fortran
+if (cli%is_dry_run()) then
+  print '(A)', 'would write '//trim(file)
+else
+  call write_results(file)
+endif
+```
+
+FLAP cannot enforce this, nor detect a program that never reads the flag: such a program performs the real action while its
+caller believes otherwise. Enable the option only once every side effect is guarded. The JSON description declares it
+(`capabilities.dry_run`) and the run manifest records it (`dry_run`).
+
 ## Using it from an agent
 
 FLAP does not include an MCP server: that would need a JSON-RPC layer in the library, and tool calls fit long parallel runs
