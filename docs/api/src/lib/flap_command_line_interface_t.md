@@ -66,6 +66,7 @@ graph LR
 - [save_zsh_completion](#save-zsh-completion)
 - [save_fish_completion](#save-fish-completion)
 - [save_powershell_completion](#save-powershell-completion)
+- [save_skill](#save-skill)
 - [save_json_schema](#save-json-schema)
 - [save_man_page](#save-man-page)
 - [save_usage_to_markdown](#save-usage-to-markdown)
@@ -108,6 +109,7 @@ graph LR
 - [powershell_script](#powershell-script)
 - [error_description](#error-description)
 - [json_schema](#json-schema)
+- [skill](#skill)
 - [exclusive_of](#exclusive-of)
 - [usage_core](#usage-core)
 - [signature_core](#signature-core)
@@ -255,6 +257,8 @@ classDiagram
 | `save_fish_completion` |  | Save fish completion script (native). |
 | `save_powershell_completion` |  | Save PowerShell completion script (native completer). |
 | `json_schema` |  | JSON description of the CLI (#128). |
+| `skill` |  | Agent Skill describing the program. |
+| `save_skill` |  | Save the Agent Skill. |
 | `save_json_schema` |  | Save the JSON description of the CLI (#128). |
 | `save_man_page` |  | Save CLI usage as man page. |
 | `save_usage_to_markdown` |  | Save CLI usage as markdown. |
@@ -846,7 +850,8 @@ flowchart TD
 
 ### report_check
 
-Report the verdict of --check (#128): the result, then, in standalone mode, the end of the program, 0 if valid, else the status of the error (`exit_status`).
+Report the verdict of --check (#128): the result, then, in standalone mode, the end of the program, 0 if valid, else
+ the status of the error (`exit_status`).
 
  The options of an unknown type are named: FLAP has not validated them, and says so instead of implying they are fine.
 
@@ -1788,6 +1793,31 @@ flowchart TD
   save_powershell_completion["save_powershell_completion"] --> completion_script["completion_script"]
   save_powershell_completion["save_powershell_completion"] --> write_script["write_script"]
   style save_powershell_completion fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### save_skill
+
+Save the Agent Skill (#129) in a file, usually `<skill name>/SKILL.md`: the format wants the directory named as the skill.
+
+```fortran
+subroutine save_skill(self, file, error)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | in |  | CLI data. |
+| `file` | character(len=*) | in |  | Output file name. |
+| `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | optional | I/O status (not zero if the file cannot be written). |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  save_skill["save_skill"] --> skill["skill"]
+  save_skill["save_skill"] --> write_text["write_text"]
+  style save_skill fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### save_json_schema
@@ -3149,6 +3179,38 @@ flowchart TD
   json_schema["json_schema"] --> json_string["json_string"]
   json_schema["json_schema"] --> str["str"]
   style json_schema fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### skill
+
+Return a `SKILL.md` (Agent Skills format, #129) describing the program: name and description first, then the options of the
+ top level, one line per command, the machine-readable options enabled and the exit statuses. The detail stays in the
+ program, read on demand: a skill is loaded whole. Like json_schema, it needs no copy with the builtins and reads no parse
+ state.
+
+**Returns**: `character(len=:)`
+
+```fortran
+function skill(self) result(text)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | in |  | CLI data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  save_skill["save_skill"] --> skill["skill"]
+  skill["skill"] --> is_builtin["is_builtin"]
+  skill["skill"] --> json_string["json_string"]
+  skill["skill"] --> names["names"]
+  skill["skill"] --> skill_line["skill_line"]
+  skill["skill"] --> skill_name["skill_name"]
+  style skill fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### exclusive_of

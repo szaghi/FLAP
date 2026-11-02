@@ -103,6 +103,8 @@ type, extends(object), public :: command_line_interface
     procedure, public :: save_fish_completion            !< Save fish completion script (native).
     procedure, public :: save_powershell_completion      !< Save PowerShell completion script (native completer).
     procedure, public :: json_schema                     !< JSON description of the CLI (#128).
+    procedure, public :: skill                           !< Agent Skill describing the program.
+    procedure, public :: save_skill                      !< Save the Agent Skill.
     procedure, public :: save_json_schema                !< Save the JSON description of the CLI (#128).
     procedure, public :: save_man_page                   !< Save CLI usage as man page.
     procedure, public :: save_usage_to_markdown          !< Save CLI usage as markdown.
@@ -1443,7 +1445,8 @@ contains
   endfunction check_requested
 
   subroutine report_check(self)
-  !< Report the verdict of --check (#128): the result, then, in standalone mode, the end of the program, 0 if valid, else the status of the error (`exit_status`).
+  !< Report the verdict of --check (#128): the result, then, in standalone mode, the end of the program, 0 if valid, else
+  !< the status of the error (`exit_status`).
   !<
   !< The options of an unknown type are named: FLAP has not validated them, and says so instead of implying they are fine.
   class(command_line_interface), intent(inout) :: self      !< CLI data.
@@ -3453,6 +3456,70 @@ contains
   if (size(self%clasg, dim=1) > 1) json = json//nl//'  '
   json = json//']'//nl//'}'
   endfunction json_schema
+
+  function skill(self) result(text)
+  !< Return a `SKILL.md` (Agent Skills format, #129) describing the program: name and description first, then the options of the
+  !< top level, one line per command, the machine-readable options enabled and the exit statuses. The detail stays in the
+  !< program, read on demand: a skill is loaded whole. Like json_schema, it needs no copy with the builtins and reads no parse
+  !< state.
+  class(command_line_interface), intent(in) :: self !< CLI data.
+  character(len=:), allocatable             :: text !< Skill.
+  character(len=:), allocatable             :: what !< What the program does.
+  character(len=:), allocatable             :: more !< How to read the detail of a command.
+  character(1)                              :: nl   !< New line.
+  integer(I4P)                              :: g    !< Group index.
+  integer(I4P)                              :: a    !< CLA index.
+
+  nl = new_line('a')
+  what = trim(adjustl(self%description))
+  if (len(what) > 0) then
+    if (what(len(what):) /= '.') what = what//'.'
+    what = what//' '
+  endif
+  what = what//'Use when running '//trim(adjustl(self%progname))//'.'
+  if (len(what) > 1024) what = what(:1024) ! the limit of the format
+  text = '---'//nl//'name: '//skill_name(self%progname)//nl//'description: '//json_string(what)//nl//'---'//nl//nl
+  text = text//'# '//trim(adjustl(self%progname))//nl//nl//'## Options'//nl//nl
+  do a=1, self%clasg(0)%Na
+    if (self%clasg(0)%cla(a)%is_hidden .or. self%clasg(0)%cla(a)%is_builtin()) cycle
+    text = text//self%clasg(0)%cla(a)%skill_line()//nl
+  enddo
+  if (size(self%clasg, dim=1) > 1) then
+    more = '--help'
+    if (self%schema_option) more = '--schema'
+    text = text//nl//'## Commands'//nl//nl//'Read the options of a command with `'//trim(adjustl(self%progname))//&
+           ' COMMAND '//more//'`.'//nl//nl
+    do g=1, size(self%clasg, dim=1) - 1
+      text = text//'- `'//self%clasg(g)%names(', ')//'`'
+      if (allocated(self%clasg(g)%description)) text = text//': '//trim(adjustl(self%clasg(g)%description))
+      text = text//nl
+    enddo
+  endif
+  text = text//nl//'## Calling it'//nl//nl
+  if (self%schema_option) text = text//'- `--schema` prints the full description as JSON.'//nl
+  if (self%check_option) text = text//'- `--check`, before any command, validates a command line without running it, '//&
+                                      'and names what it could not validate: `'//trim(adjustl(self%progname))//' --check ...`.'//nl
+  if (self%dry_run_option) text = text//'- `--dry-run`, before any command, reports what would be done, without doing it.'//nl
+  if (allocated(self%error_format_env)) text = text//'- `'//self%error_format_env//'=json` writes errors as JSON lines.'//nl
+  text = text//'- Exit status: 0 success; 1 failure of the program; '//&
+         '2 fix the command line and retry; 3 fix a file or a variable; 4 the program is wrong, do not retry.'//nl
+  endfunction skill
+
+  subroutine save_skill(self, file, error)
+  !< Save the Agent Skill (#129) in a file, usually `<skill name>/SKILL.md`: the format wants the directory named as the skill.
+  class(command_line_interface), intent(in)  :: self  !< CLI data.
+  character(*),                  intent(in)  :: file  !< Output file name.
+  integer(I4P), optional,        intent(out) :: error !< I/O status (not zero if the file cannot be written).
+  integer(I4P)                               :: u     !< Unit file handler.
+  integer(I4P)                               :: ios   !< I/O status.
+
+  open(newunit=u, file=trim(adjustl(file)), iostat=ios)
+  if (ios == 0) then
+    call write_text(u, self%skill())
+    close(u, iostat=ios)
+  endif
+  if (present(error)) error = ios
+  endsubroutine save_skill
 
   function exclusive_of(self, g) result(excluded)
   !< Return the command excluded by a command, '' for none. parse makes the relation symmetric: the same answer before it.

@@ -163,6 +163,7 @@ type, extends(object) :: command_line_argument
     procedure, public :: is_pair_override               !< Check if a flag passed may be passed again by its other spelling.
     procedure, public :: flag_value                     !< Value of a flag passed on the command line.
     procedure, public :: names                          !< Visible switch names, for suggestions.
+    procedure, public :: skill_line                     !< Line of the Agent Skill.
     procedure, public :: placeholder                    !< Placeholder of the value in the help (metavar).
     procedure, public :: check_map                      !< Check the KEY=VALUE pairs of a map.
     procedure, public :: get_map                        !< Get the keys and values of a map.
@@ -740,6 +741,25 @@ contains
     list(n)%s = trim(adjustl(self%switch_neg))
   endif
   endfunction names
+
+  function skill_line(self) result(line)
+  !< Return the line of the argument in the Agent Skill (#129): its spelling, then what a caller must know.
+  class(command_line_argument), intent(in) :: self !< CLA data.
+  character(len=:), allocatable            :: line !< Line.
+
+  if (self%is_positional) then
+    line = '- `'//self%placeholder()//'` (position '//trim(str(n=self%position, no_sign=.true.))//')'
+  else
+    line = '- `'//trim(adjustl(self%switch))
+    if (self%takes_values() /= 0) line = line//' '//self%placeholder()
+    line = line//'`'
+  endif
+  if (self%is_required) line = line//', required'
+  if (allocated(self%val_type)) line = line//', '//self%val_type
+  if (allocated(self%choices)) line = line//', one of '//trim(adjustl(self%choices))
+  if (self%is_sensitive) line = line//', sensitive'
+  if (allocated(self%help)) line = line//': '//trim(adjustl(self%help))
+  endfunction skill_line
 
   pure function placeholder(self) result(ph)
   !< Return the placeholder of the value in the usage and help (F12 of #125): the metavar if given (not blank), otherwise

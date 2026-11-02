@@ -94,6 +94,7 @@ graph LR
 - [same_name](#same-name)
 - [is_pair_override](#is-pair-override)
 - [names](#names)
+- [skill_line](#skill-line)
 - [placeholder](#placeholder)
 - [flag_value](#flag-value)
 - [is_repeatable](#is-repeatable)
@@ -332,6 +333,7 @@ classDiagram
 | `is_pair_override` |  | Check if a flag passed may be passed again by its other spelling. |
 | `flag_value` |  | Value of a flag passed on the command line. |
 | `names` |  | Visible switch names, for suggestions. |
+| `skill_line` |  | Line of the Agent Skill. |
 | `placeholder` |  | Placeholder of the value in the help (metavar). |
 | `check_map` |  | Check the KEY=VALUE pairs of a map. |
 | `get_map` |  | Get the keys and values of a map. |
@@ -2286,6 +2288,7 @@ function takes_values(self) result(n)
 ```mermaid
 flowchart TD
   provenance_arguments["provenance_arguments"] --> takes_values["takes_values"]
+  skill_line["skill_line"] --> takes_values["takes_values"]
   style takes_values fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -2647,8 +2650,36 @@ flowchart TD
   bash_script["bash_script"] --> names["names"]
   completion_fish["completion_fish"] --> names["names"]
   signature_core["signature_core"] --> names["names"]
+  skill["skill"] --> names["names"]
   usage_core["usage_core"] --> names["names"]
   style names fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### skill_line
+
+Return the line of the argument in the Agent Skill (#129): its spelling, then what a caller must know.
+
+**Returns**: `character(len=:)`
+
+```fortran
+function skill_line(self) result(line)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  skill["skill"] --> skill_line["skill_line"]
+  skill_line["skill_line"] --> placeholder["placeholder"]
+  skill_line["skill_line"] --> str["str"]
+  skill_line["skill_line"] --> takes_values["takes_values"]
+  style skill_line fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### placeholder
@@ -2675,6 +2706,7 @@ function placeholder(self) result(ph)
 ```mermaid
 flowchart TD
   signature_usage["signature_usage"] --> placeholder["placeholder"]
+  skill_line["skill_line"] --> placeholder["placeholder"]
   usage["usage"] --> placeholder["placeholder"]
   style placeholder fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -2762,6 +2794,7 @@ flowchart TD
   provenance_json["provenance_json"] --> is_builtin["is_builtin"]
   provenance_text["provenance_text"] --> is_builtin["is_builtin"]
   report_check["report_check"] --> is_builtin["is_builtin"]
+  skill["skill"] --> is_builtin["is_builtin"]
   style is_builtin fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 

@@ -27,6 +27,7 @@ graph LR
 - [split_command_line](#split-command-line)
 - [write_text](#write-text)
 - [csv_split](#csv-split)
+- [skill_name](#skill-name)
 - [error_class](#error-class)
 - [error_exit_status](#error-exit-status)
 - [count_substring](#count-substring)
@@ -314,6 +315,7 @@ flowchart TD
   report_check["report_check"] --> write_text["write_text"]
   save_json_schema["save_json_schema"] --> write_text["write_text"]
   save_provenance["save_provenance"] --> write_text["write_text"]
+  save_skill["save_skill"] --> write_text["write_text"]
   style write_text fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -349,6 +351,33 @@ flowchart TD
 ```
 
 ## Functions
+
+### skill_name
+
+Return a name valid for an Agent Skill (#129) from a program name: the base name, lower case, any other character a hyphen,
+ no leading, trailing or repeated hyphen, at most 64 characters; 'program' if nothing is left.
+
+**Attributes**: pure
+
+**Returns**: `character(len=:)`
+
+```fortran
+function skill_name(progname) result(name)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `progname` | character(len=*) | in |  | Program name. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  skill["skill"] --> skill_name["skill_name"]
+  style skill_name fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
 
 ### error_class
 
@@ -605,6 +634,7 @@ flowchart TD
   print_warning["print_warning"] --> json_string["json_string"]
   provenance_json["provenance_json"] --> json_string["json_string"]
   report_check["report_check"] --> json_string["json_string"]
+  skill["skill"] --> json_string["json_string"]
   json_string["json_string"] --> utf8_sequence["utf8_sequence"]
   style json_string fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```

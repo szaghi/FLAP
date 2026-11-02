@@ -7,6 +7,7 @@ implicit none
 private
 public :: count
 public :: csv_split
+public :: skill_name
 public :: error_class
 public :: error_exit_status
 public :: fish_escape
@@ -52,6 +53,30 @@ integer(I4P), parameter, public :: EXIT_ENVIRONMENT = 3 !< Exit status of an err
 integer(I4P), parameter, public :: EXIT_DEFINITION  = 4 !< Exit status of an error of the program's definitions or calls.
 
 contains
+  pure function skill_name(progname) result(name)
+  !< Return a name valid for an Agent Skill (#129) from a program name: the base name, lower case, any other character a hyphen,
+  !< no leading, trailing or repeated hyphen, at most 64 characters; 'program' if nothing is left.
+  character(*), intent(in)      :: progname !< Program name.
+  character(len=:), allocatable :: name     !< Skill name.
+  character(1)                  :: c        !< Character.
+  integer(I4P)                  :: i        !< Counter.
+
+  name = ''
+  do i=index(progname, '/', back=.true.)+1, len_trim(progname)
+    c = progname(i:i)
+    if (c >= 'A' .and. c <= 'Z') c = achar(iachar(c) + 32)
+    if ((c >= 'a' .and. c <= 'z') .or. (c >= '0' .and. c <= '9')) then
+      if (len(name) < 64) name = name//c
+    elseif (len(name) > 0 .and. len(name) < 64) then
+      if (name(len(name):) /= '-') name = name//'-'
+    endif
+  enddo
+  if (len(name) > 0) then
+    if (name(len(name):) == '-') name = name(:len(name)-1)
+  endif
+  if (len(name) == 0) name = 'program'
+  endfunction skill_name
+
   pure function error_class(code) result(class_name)
   !< Return the class of an error code (#129), as in the table of `docs/guide/errors.md`: what the caller must change.
   !< '' for a status, for no error and for an unknown code.

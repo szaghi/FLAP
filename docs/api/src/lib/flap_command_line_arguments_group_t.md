@@ -1148,6 +1148,7 @@ flowchart TD
   bash_script["bash_script"] --> names["names"]
   completion_fish["completion_fish"] --> names["names"]
   signature_core["signature_core"] --> names["names"]
+  skill["skill"] --> names["names"]
   usage_core["usage_core"] --> names["names"]
   style names fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
