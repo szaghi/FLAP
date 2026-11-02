@@ -134,6 +134,7 @@ type, extends(object) :: command_line_argument
   logical,                       public :: pair_passed=.false.    !< Both spellings of a flag pair passed (D5: once each).
   character(len=:), allocatable, public :: val_type               !< Declared type of the value, upper case (#128); if any.
   logical                               :: muted=.false.          !< Build the error messages without printing them.
+  logical,                       public :: is_sensitive=.false.   !< Never report the value (#128): `***` in provenance.
   contains
     ! public methods
     procedure, public :: free                           !< Free dynamic memory.
@@ -146,6 +147,7 @@ type, extends(object) :: command_line_argument
     procedure, public :: set_source_value               !< Set a value read from the environment or a configuration file.
     procedure, public :: config_key                     !< Key of the CLA in a configuration file.
     procedure, public :: takes_config_value             !< Check if the CLA takes a value from a configuration file.
+    procedure, public :: json_resolved                  !< Resolved value in JSON (JSON provenance, #128).
     procedure, public :: value_text                     !< Resolved value as text (provenance report).
     procedure, public :: has_path_checks                !< Check if the value is a path to check.
     procedure, public :: deprecation_note               !< Marker of a deprecated CLA in the help.
@@ -339,6 +341,7 @@ contains
   if (allocated(self%val      )) deallocate(self%val      )
   if (allocated(self%envvar   )) deallocate(self%envvar   )
   if (allocated(self%val_type )) deallocate(self%val_type )
+  self%is_sensitive    = .false.
   self%is_required     = .false.
   self%is_positional   = .false.
   self%position        = 0_I4P
@@ -477,12 +480,40 @@ contains
   endif
   endfunction config_key
 
+  function json_resolved(self) result(json)
+  !< Return the resolved value in JSON, as it is, with no conversion: a string, an array of strings for a list.
+  class(command_line_argument), intent(in) :: self     !< CLA data.
+  character(len=:), allocatable            :: json     !< JSON form.
+  character(len=:), allocatable            :: items(:) !< Items.
+  integer(I4P)                             :: n        !< Number of items.
+  integer(I4P)                             :: i        !< Counter.
+
+  if (self%is_sensitive .or. .not.self%is_list()) then
+    json = json_string(self%value_text())
+    return
+  endif
+  call list_items(self%stored_list(), items, n)
+  if (n == 1) then
+    if (len_trim(items(1)) == 0) n = 0 ! an empty list
+  endif
+  json = '['
+  do i=1, n
+    if (i > 1) json = json//', '
+    json = json//json_string(trim(adjustl(items(i))))
+  enddo
+  json = json//']'
+  endfunction json_resolved
+
   function value_text(self) result(text)
   !< Return the resolved value as text, for the provenance report: a list blank separated, a flag passed on the command
   !< line as .true./.false., otherwise the value from its source (or the default).
   class(command_line_argument), intent(in) :: self !< CLA data.
   character(len=:), allocatable            :: text !< Value.
 
+  if (self%is_sensitive) then
+    text = '***'
+    return
+  endif
   if ((self%act == ACTION_STORE_TRUE .or. self%act == ACTION_STORE_FALSE .or. self%act == ACTION_ALTERNATE) .and. &
       self%source == SOURCE_COMMANDLINE) then
     text = merge('.true. ', '.false.', self%flag_value())
@@ -1051,7 +1082,7 @@ contains
       endif
     endif
     if (.not.self%is_required) then
-      if (self%def /= '') then
+      if (self%def /= '' .and. .not.self%is_sensitive) then
         if (markdownd) then
           ! two spaces make a line break in markdown.
           usage = usage//'  '//new_line('a')//prefd//repeat(' ', 4)//'default value '//trim(list_join(self%def, ' '))
@@ -1952,13 +1983,14 @@ contains
   call put('typed', merge('true ', 'false', self%is_typed_for_schema()))
   if (allocated(self%def)) then
     if (self%act == ACTION_STORE .or. self%act == ACTION_STORE_STAR .or. self%act == ACTION_APPEND) then
-      if (len_trim(self%def) > 0) call put('default', self%json_default())
+      if (len_trim(self%def) > 0 .and. .not.self%is_sensitive) call put('default', self%json_default())
     endif
   endif
   if (allocated(self%envvar)) call put('envvar', json_string(trim(adjustl(self%envvar))))
   if (allocated(self%metavar)) call put('metavar', json_string(self%metavar))
   if (len_trim(exclude) > 0) call put('exclude', json_string(trim(adjustl(exclude))))
   if (allocated(self%deprecated)) call put('deprecated', json_string(self%deprecated))
+  if (self%is_sensitive) call put('sensitive', 'true')
   json = '{'//json//'}'
   contains
     subroutine put(key, value)

@@ -66,6 +66,7 @@ type, extends(object), public :: command_line_interface
     procedure, public :: set_mutually_exclusive_switches !< Set a mutually exclusive set of switches.
     procedure, public :: set_config                      !< Set the configuration file.
     procedure, public :: get_source                      !< Source of the value of a CLA.
+    procedure, public :: save_provenance                 !< Save the JSON report of every value with its source (#128).
     procedure, public :: provenance                      !< Report of every value with its source.
     procedure, public :: run_command => is_called_group  !< Check if a CLAs group has been run.
     procedure, public :: parse                           !< Parse Command Line Interfaces.
@@ -115,6 +116,9 @@ type, extends(object), public :: command_line_interface
     procedure, private :: save_usage_to_markdown_core     !< Save CLI usage as markdown (builtins already present).
     procedure, private :: check_requested                 !< Check if --check is on the command line.
     procedure, private :: report_check                    !< Report the verdict of --check.
+    procedure, private :: provenance_text                 !< Text report of provenance.
+    procedure, private :: provenance_json                 !< JSON report of provenance.
+    procedure, private :: provenance_arguments            !< Command line in JSON, sensitive values masked.
     procedure, private :: parse_core                      !< Parse the command line (body of parse).
     procedure, private :: group_index                     !< Index of the group with a name, -1 if none.
     procedure, private :: is_fatal                        !< Check if the current error stops parsing.
@@ -680,25 +684,44 @@ contains
   if (present(error)) error = self%error
   endfunction get_source
 
-  function provenance(self, pref) result(report)
+  function provenance(self, pref, format) result(report)
   !< Return a report of every value with its source, for a run log (F06 of #125): one line per visible option of the top
   !< level and of the called commands, `name = value [source]`, the environment and configuration sources naming their
   !< variable and file. Builtins and hidden options are left out; like get, it parses first if parse has not been called.
+  !<
+  !< With `format='json'` the report is a JSON document, the run manifest (#128): no date, host or directory, so that the same
+  !< inputs give the same bytes. Any other format is the text report.
   class(command_line_interface), intent(inout) :: self    !< CLI data.
   character(*), optional,        intent(in)    :: pref    !< Prefixing string.
+  character(*), optional,        intent(in)    :: format  !< Format of the report: text (default) or json.
   character(len=:), allocatable                :: report  !< Report.
-  type(flap_string), allocatable               :: names(:)   !< Names.
-  type(flap_string), allocatable               :: values(:)  !< Values.
-  type(flap_string), allocatable               :: sources(:) !< Sources.
-  integer(I4P)                                 :: n       !< Number of lines.
-  integer(I4P)                                 :: wn      !< Width of the names.
-  integer(I4P)                                 :: wv      !< Width of the values.
-  integer(I4P)                                 :: g       !< Group index.
-  integer(I4P)                                 :: a       !< CLA index.
-  integer(I4P)                                 :: l       !< Line index.
+  logical                                      :: json    !< JSON report.
+
+  if (.not.self%is_parsed_) call self%parse(pref=pref)
+  json = .false.
+  if (present(format)) json = upper_case(trim(adjustl(format))) == 'JSON'
+  if (json) then
+    report = self%provenance_json()
+  else
+    report = self%provenance_text()
+  endif
+  endfunction provenance
+
+  function provenance_text(self) result(report)
+  !< Return the text report of provenance.
+  class(command_line_interface), intent(in) :: self    !< CLI data.
+  character(len=:), allocatable             :: report  !< Report.
+  type(flap_string), allocatable            :: names(:)   !< Names.
+  type(flap_string), allocatable            :: values(:)  !< Values.
+  type(flap_string), allocatable            :: sources(:) !< Sources.
+  integer(I4P)                              :: n       !< Number of lines.
+  integer(I4P)                              :: wn      !< Width of the names.
+  integer(I4P)                              :: wv      !< Width of the values.
+  integer(I4P)                              :: g       !< Group index.
+  integer(I4P)                              :: a       !< CLA index.
+  integer(I4P)                              :: l       !< Line index.
 
   report = ''
-  if (.not.self%is_parsed_) call self%parse(pref=pref)
   n = 0
   do g=0, size(self%clasg, dim=1) - 1
     n = n + self%clasg(g)%Na
@@ -712,11 +735,7 @@ contains
         if (cla%is_hidden) cycle
         if (cla%is_builtin()) cycle
         n = n + 1
-        if (cla%is_positional) then
-          names(n)%s = 'position '//trim(str(cla%position, .true.))
-        else
-          names(n)%s = trim(adjustl(cla%switch))
-        endif
+        names(n)%s = provenance_name(cla)
         if (g > 0) names(n)%s = self%clasg(g)%group//' '//names(n)%s
         values(n)%s = cla%value_text()
         select case(cla%source)
@@ -745,7 +764,125 @@ contains
     report = report//names(l)%s//repeat(' ', wn - len(names(l)%s))//' = '//values(l)%s//&
              repeat(' ', wv - len(values(l)%s))//' ['//sources(l)%s//']'
   enddo
-  endfunction provenance
+  endfunction provenance_text
+
+  function provenance_json(self) result(report)
+  !< Return the JSON report of provenance, the run manifest (#128).
+  class(command_line_interface), intent(in) :: self   !< CLI data.
+  character(len=:), allocatable             :: report !< Report.
+  character(len=:), allocatable             :: source !< Source, with its variable or file.
+  character(len=:), allocatable             :: values !< The values.
+  character(16)                             :: status !< Status (no sign: `+0` is not a JSON number).
+  character(1)                              :: nl     !< New line.
+  integer(I4P)                              :: g      !< Group index.
+  integer(I4P)                              :: a      !< CLA index.
+
+  nl = new_line('a')
+  values = ''
+  do g=0, size(self%clasg, dim=1) - 1
+    if (g > 0 .and. .not.self%clasg(g)%is_called) cycle
+    do a=1, self%clasg(g)%Na
+      associate(cla => self%clasg(g)%cla(a))
+        if (cla%is_hidden) cycle
+        if (cla%is_builtin()) cycle
+        select case(cla%source)
+        case(SOURCE_COMMANDLINE)
+          source = '"source": "command line"'
+        case(SOURCE_ENVIRONMENT)
+          source = '"source": "environment", "variable": '//json_string(trim(adjustl(cla%envvar)))
+        case(SOURCE_CONFIG)
+          source = '"source": "config"'
+          if (allocated(self%config_used)) source = source//', "file": '//json_string(self%config_used)
+        case(SOURCE_DEFAULT)
+          source = '"source": "default"'
+        case default
+          source = '"source": "none"'
+        endselect
+        if (len(values) > 0) values = values//','//nl
+        values = values//'    {"command": '//json_string(self%clasg(g)%group)//', "name": '//&
+                 json_string(provenance_name(cla))//', "value": '//cla%json_resolved()//', '//source//'}'
+      endassociate
+    enddo
+  enddo
+  report = '{'//nl//'  "schema_version": 1,'//nl
+  report = report//'  "program": {"name": '//json_string(self%progname)//', "version": '//json_string(self%version)//'},'//nl
+  report = report//'  "arguments": '//self%provenance_arguments()//','//nl
+  write(status, '(I0)') self%error
+  report = report//'  "status": '//trim(status)//','//nl
+  report = report//'  "values": ['
+  if (len(values) > 0) report = report//nl//values//nl//'  '
+  report = report//']'//nl//'}'
+  endfunction provenance_json
+
+  function provenance_arguments(self) result(json)
+  !< Return the command line in JSON, the values of the sensitive options masked; `null` when a sensitive positional exists,
+  !< since a token cannot be told to be its value without parsing again.
+  class(command_line_interface), intent(in) :: self     !< CLI data.
+  character(len=:), allocatable             :: json     !< JSON form.
+  type(flap_string), allocatable            :: items(:) !< Tokens.
+  character(len=:), allocatable             :: inline   !< Value of an inline token.
+  logical                                   :: match    !< The token names the CLA.
+  logical                                   :: has_inline !< The token has an inline value.
+  logical                                   :: masked   !< The token follows a sensitive switch.
+  integer(I4P)                              :: g        !< Group index.
+  integer(I4P)                              :: a        !< CLA index.
+  integer(I4P)                              :: t        !< Token index.
+
+  json = 'null'
+  do g=0, size(self%clasg, dim=1) - 1
+    do a=1, self%clasg(g)%Na
+      if (self%clasg(g)%cla(a)%is_sensitive .and. self%clasg(g)%cla(a)%is_positional) return
+    enddo
+  enddo
+  if (.not.allocated(self%args)) then
+    allocate(items(0))
+    json = json_array(items)
+    return
+  endif
+  allocate(items(size(self%args, dim=1)))
+  masked = .false.
+  do t=1, size(items, dim=1)
+    items(t)%s = self%args(t)%s
+    if (masked) then
+      items(t)%s = '***'
+      masked = .false.
+      cycle
+    endif
+    groups: do g=0, size(self%clasg, dim=1) - 1
+      do a=1, self%clasg(g)%Na
+        if (.not.self%clasg(g)%cla(a)%is_sensitive) cycle
+        call self%clasg(g)%cla(a)%match_inline_token(token=self%args(t)%s, match=match, inline_val=inline, has_inline=has_inline)
+        if (.not.match) cycle
+        if (has_inline) then
+          items(t)%s = self%args(t)%s(:index(self%args(t)%s, '='))//'***'
+        else
+          masked = .true.
+        endif
+        exit groups
+      enddo
+    enddo groups
+  enddo
+  json = json_array(items)
+  endfunction provenance_arguments
+
+  subroutine save_provenance(self, file, pref, error)
+  !< Save the JSON report of provenance, the run manifest (#128); like get, it parses first if parse has not been called.
+  class(command_line_interface), intent(inout) :: self  !< CLI data.
+  character(*),                  intent(in)    :: file  !< Output file name.
+  character(*), optional,        intent(in)    :: pref  !< Prefixing string.
+  integer(I4P), optional,        intent(out)   :: error !< I/O status (not zero if the file cannot be written).
+  character(len=:), allocatable                :: text  !< Report.
+  integer(I4P)                                 :: u     !< Unit file handler.
+  integer(I4P)                                 :: ios   !< I/O status.
+
+  text = self%provenance(pref=pref, format='json')
+  open(newunit=u, file=trim(adjustl(file)), iostat=ios)
+  if (ios == 0) then
+    call write_text(u, text)
+    close(u, iostat=ios)
+  endif
+  if (present(error)) error = ios
+  endsubroutine save_provenance
 
   subroutine set_mutually_exclusive_switches(self, switches, required, group, pref, error)
   !< Set a mutually exclusive set of switches (F03 of #125): at most one member may be passed, exactly one if required.
@@ -775,7 +912,7 @@ contains
   subroutine add(self, pref, group, group_index, switch, switch_ab, switch_neg, help, help_markdown, help_color, help_style, &
                  required, val_required, positional, position, hidden, act, def, nargs, choices, exclude, envvar, &
                  must_exist, readable, writable, allow_dash, deprecated, min, max, min_open, max_open, clamp, &
-                 case_sensitive, map, map_keys, metavar, error, val_type)
+                 case_sensitive, map, map_keys, metavar, error, val_type, sensitive)
   !< Add CLA to CLI.
   !<
   !< @note If not otherwise declared the action on CLA value is set to "store" a value that must be passed after the switch name
@@ -824,6 +961,8 @@ contains
   integer(I4P), optional,        intent(out)   :: error         !< Error trapping flag.
   character(*), optional,        intent(in)    :: val_type      !< Declared type of the value, validated by parse (#128): I1P,
                                                                   !< I2P, I4P, I8P, R4P, R8P, R16P, logical, character.
+  logical,      optional,        intent(in)    :: sensitive     !< Never report the value: `***` in provenance, no default in
+                                                                  !< the help and in the JSON description (#128).
   type(command_line_argument)                  :: cla           !< CLA data.
   integer(I4P)                                 :: g             !< Counter.
 
@@ -866,6 +1005,7 @@ contains
                                                   if (present(map_keys     )) cla%map_keys        = map_keys
                                                   if (present(metavar      )) cla%metavar         = metavar
   if (present(val_type)) cla%val_type = trim(adjustl(Upper_Case(val_type)))
+  if (present(sensitive)) cla%is_sensitive = sensitive
   cla%act             = action_store            ; if (present(act          )) cla%act             = trim(adjustl(Upper_Case(act)))
   if (cla%act == ACTION_ALTERNATE .and. .not.present(def)) then
     ! an alternate action is a flag (F16)
@@ -3618,6 +3758,18 @@ contains
 #endif
   endsubroutine quiet_stop
   ! non type-bound procedures
+  function provenance_name(cla) result(name)
+  !< Return the name of a CLA in the provenance reports.
+  type(command_line_argument), intent(in) :: cla  !< CLA data.
+  character(len=:), allocatable           :: name !< Name.
+
+  if (cla%is_positional) then
+    name = 'position '//trim(str(cla%position, .true.))
+  else
+    name = trim(adjustl(cla%switch))
+  endif
+  endfunction provenance_name
+
   pure function completion_function(progname) result(name)
   !< Name of the bash (and zsh) completion function of a program, `_<basename>_completion`, the basename made an identifier
   !< (any character but a letter, a digit or `_` becomes `_`): one function per program, so that two FLAP programs

@@ -396,3 +396,8 @@ main = "flap_test_error_json.f90"
 name = "flap_test_check"
 source-dir = "src/tests"
 main = "flap_test_check.f90"
+
+[[test]]
+name = "flap_test_provenance_json"
+source-dir = "src/tests"
+main = "flap_test_provenance_json.f90"
