@@ -24,6 +24,7 @@ that you can compile and run; every output shown is the real output of that prog
 | [7. Shipping it](./tutorial/07-shipping) | a polished help, colours, man page, Markdown, shell completion |
 | [8. Testing the command line](./tutorial/08-testing) | parsing strings, statuses instead of stops, capturing the messages |
 | [9. Asking the user](./tutorial/09-asking) | an interactive menu, only when a value is missing |
+| [10. Calling it from other programs](./tutorial/10-agents) | declared types, `--schema`, `--check`, JSON errors, exit statuses, `--dry-run`, a run manifest, an agent skill |
 
 ```mermaid
 flowchart LR

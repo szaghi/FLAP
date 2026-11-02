@@ -273,6 +273,62 @@ character(256), allocatable :: rest(:)
 call cli%get_varying(switch='--', val=rest, error=error)   ! prog --nx 4 -- mpirun -np 8  ->  rest = [mpirun, -np, 8]
 ```
 
+## Exit statuses a caller can act on
+
+`stop cli%exit_status()` ends with 2 for a wrong command line, 3 for a file or a variable, 4 for a wrong program.
+
+<<< @/examples/snippets/heat_10-parse.f90
+
+<<< @/examples/output/heat_10-status.ansi{ansi}
+
+## A description of the program as JSON
+
+<<< @/examples/output/heat_10-schema.ansi{ansi}
+
+From `schema_option=.true.`; see [the tutorial](./tutorial/10-agents).
+
+## Validating a command line without running
+
+<<< @/examples/output/heat_10-check-bad.ansi{ansi}
+
+## A dry run
+
+<<< @/examples/snippets/heat_10-dry.f90
+
+<<< @/examples/output/heat_10-dry.ansi{ansi}
+
+## A manifest of the run, in a file
+
+<<< @/examples/snippets/heat_10-manifest.f90
+
+<<< @/examples/output/heat_10-manifest.ansi{ansi}
+
+## A skill file for agents
+
+<<< @/examples/snippets/heat_10-skill.f90
+
+## Reading the standard input with `-`
+
+<<< @/examples/snippets/dash-define.f90
+
+<<< @/examples/snippets/dash-read.f90
+
+<<< @/examples/output/dash.ansi{ansi}
+
+## Your own `--version`
+
+A switch you define takes the place of the builtin of the same name.
+
+<<< @/examples/snippets/own_version-define.f90
+
+<<< @/examples/output/own_version.ansi{ansi}
+
+## An error without the hint line
+
+<<< @/examples/snippets/no_hint-define.f90
+
+<<< @/examples/output/no_hint.ansi{ansi}
+
 ## Asking the user
 
 <<< @/examples/snippets/menus-single.f90

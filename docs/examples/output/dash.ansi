@@ -1,0 +1,2 @@
+$ printf 'from stdin\n' | dash --input -
+from stdin

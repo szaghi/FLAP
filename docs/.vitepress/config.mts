@@ -24,6 +24,7 @@ const docs = [
       { text: '7. Shipping it',              link: '/manual/tutorial/07-shipping' },
       { text: '8. Testing the command line', link: '/manual/tutorial/08-testing' },
       { text: '9. Asking the user',          link: '/manual/tutorial/09-asking' },
+      { text: '10. Calling it from other programs', link: '/manual/tutorial/10-agents' },
     ],
   },
   {

@@ -24,4 +24,4 @@ The parser never asks anything: menus are a separate module, used only where the
 Reference: [Interactive Menus](/guide/menu).
 :::
 
-That is the whole tour. For quick answers, see the [cookbook](../cookbook).
+Next: [10. Calling it from other programs](./10-agents).

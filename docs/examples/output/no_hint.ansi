@@ -1,0 +1,4 @@
+$ no_hint --bogus
+no_hint: error: switch "--bogus" is unknown!
+
+[exit status 2]

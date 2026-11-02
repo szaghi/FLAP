@@ -1,0 +1,5 @@
+$ dash --input none.dat
+dash: error: option "--input": path "none.dat" does not exist!
+
+Try 'dash --help' for help.
+[exit status 3]

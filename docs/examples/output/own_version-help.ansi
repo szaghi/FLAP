@@ -1,0 +1,11 @@
+$ own_version --help
+usage: own_version [--version] [--help] [--markdown]
+
+Optional switches:
+  --version, -V
+      default value .false.
+      Print the build information
+  --help, -h
+      Print this help message
+  --markdown, -md
+      Save this help message in a Markdown file
