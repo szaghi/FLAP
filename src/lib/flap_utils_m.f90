@@ -10,6 +10,8 @@ public :: csv_split
 public :: fish_escape
 public :: ps_escape
 public :: flap_string
+public :: json_array
+public :: json_string
 public :: levenshtein
 public :: to_characters
 public :: LIST_SEP
@@ -329,6 +331,125 @@ contains
     if (pass == 1) allocate(toks(1:Nt))
   enddo
   endsubroutine split_command_line
+
+  pure function json_string(text) result(quoted)
+  !< Return a text as a JSON string, quotes included (#128): control characters are escaped, and invalid UTF-8 is replaced by
+  !< U+FFFD, since command lines and environment values are bytes while a JSON document must be valid UTF-8.
+  character(*), intent(in)      :: text   !< Text.
+  character(len=:), allocatable :: quoted !< JSON string.
+  character(1), parameter       :: BS = achar(92) !< Backslash (a literal one is an escape for nvfortran, without -Mbackslash).
+  character(len=6*len(text)+2)  :: buffer !< Escaped text; a byte takes 6 characters at most.
+  character(16), parameter      :: HEXA = '0123456789abcdef' !< Hexadecimal digits.
+  integer(I4P)                  :: i      !< Position in the text.
+  integer(I4P)                  :: n      !< Position in the buffer.
+  integer(I4P)                  :: code   !< Code of a byte.
+  integer(I4P)                  :: seq    !< Length of a valid UTF-8 sequence.
+
+  n = 1
+  buffer(1:1) = '"'
+  i = 1
+  do while (i <= len(text))
+    code = iachar(text(i:i))
+    if (code < 0) code = code + 256
+    if (text(i:i) == '"' .or. text(i:i) == BS) then
+      buffer(n+1:n+2) = BS//text(i:i)
+      n = n + 2
+    elseif (code < 32) then
+      select case(code)
+      case(8)
+        buffer(n+1:n+2) = BS//'b'
+        n = n + 2
+      case(9)
+        buffer(n+1:n+2) = BS//'t'
+        n = n + 2
+      case(10)
+        buffer(n+1:n+2) = BS//'n'
+        n = n + 2
+      case(12)
+        buffer(n+1:n+2) = BS//'f'
+        n = n + 2
+      case(13)
+        buffer(n+1:n+2) = BS//'r'
+        n = n + 2
+      case default
+        buffer(n+1:n+6) = BS//'u00'//HEXA(code/16+1:code/16+1)//HEXA(mod(code,16)+1:mod(code,16)+1)
+        n = n + 6
+      endselect
+    elseif (code < 128) then
+      buffer(n+1:n+1) = text(i:i)
+      n = n + 1
+    else
+      seq = utf8_sequence(text(i:))
+      if (seq == 0) then
+        buffer(n+1:n+6) = BS//'ufffd'
+        n = n + 6
+      else
+        buffer(n+1:n+seq) = text(i:i+seq-1)
+        n = n + seq
+        i = i + seq - 1
+      endif
+    endif
+    i = i + 1
+  enddo
+  n = n + 1
+  buffer(n:n) = '"'
+  quoted = buffer(1:n)
+  endfunction json_string
+
+  pure function utf8_sequence(text) result(seq)
+  !< Return the length of the valid UTF-8 multi-byte sequence a text starts with, 0 if there is none (RFC 3629: no overlong
+  !< form, no surrogate, nothing above U+10FFFF).
+  character(*), intent(in) :: text !< Text, not empty, starting with a byte above 127.
+  integer(I4P)             :: seq  !< Length of the sequence.
+  integer(I4P)             :: b(4) !< Codes of the bytes, -1 if absent.
+  integer(I4P)             :: i    !< Counter.
+
+  b = -1
+  do i=1, min(4, len(text))
+    b(i) = iachar(text(i:i))
+    if (b(i) < 0) b(i) = b(i) + 256
+  enddo
+  seq = 0
+  if (b(1) >= 194 .and. b(1) <= 223) then
+    if (is_continuation(b(2), 128, 191)) seq = 2
+  elseif (b(1) == 224) then
+    if (is_continuation(b(2), 160, 191) .and. is_continuation(b(3), 128, 191)) seq = 3
+  elseif (b(1) == 237) then
+    if (is_continuation(b(2), 128, 159) .and. is_continuation(b(3), 128, 191)) seq = 3
+  elseif (b(1) >= 225 .and. b(1) <= 239) then
+    if (is_continuation(b(2), 128, 191) .and. is_continuation(b(3), 128, 191)) seq = 3
+  elseif (b(1) == 240) then
+    if (is_continuation(b(2), 144, 191) .and. is_continuation(b(3), 128, 191) .and. is_continuation(b(4), 128, 191)) seq = 4
+  elseif (b(1) >= 241 .and. b(1) <= 243) then
+    if (is_continuation(b(2), 128, 191) .and. is_continuation(b(3), 128, 191) .and. is_continuation(b(4), 128, 191)) seq = 4
+  elseif (b(1) == 244) then
+    if (is_continuation(b(2), 128, 143) .and. is_continuation(b(3), 128, 191) .and. is_continuation(b(4), 128, 191)) seq = 4
+  endif
+  contains
+    pure function is_continuation(byte, low, high) result(valid)
+    !< Check a byte against its allowed interval.
+    integer(I4P), intent(in) :: byte  !< Code of the byte.
+    integer(I4P), intent(in) :: low   !< Lowest allowed.
+    integer(I4P), intent(in) :: high  !< Highest allowed.
+    logical                  :: valid !< Check result.
+
+    valid = byte >= low .and. byte <= high
+    endfunction is_continuation
+  endfunction utf8_sequence
+
+  pure function json_array(items) result(array)
+  !< Return an array of strings as a JSON array, on one line.
+  type(flap_string), intent(in) :: items(:) !< Items.
+  character(len=:), allocatable :: array    !< JSON array.
+  integer(I4P)                  :: i        !< Counter.
+
+  array = '['
+  do i=1, size(items, dim=1)
+    if (i > 1) array = array//','
+    array = array//json_string(items(i)%s)
+  enddo
+  array = array//']'
+  endfunction json_array
 
   subroutine write_text(lun, text)
   !< Write a text on a unit. The text is an argument, so a function building it (usage, signature) is evaluated before the
