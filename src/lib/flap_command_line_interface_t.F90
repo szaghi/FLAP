@@ -40,6 +40,7 @@ type, extends(object), public :: command_line_interface
   character(len=:), allocatable                   :: usage_on_error              !< After an error: full, usage, none (F27).
   logical                                         :: man_option=.false.          !< --man builtin (F29).
   logical                                         :: schema_option=.false.       !< --schema builtin (#128).
+  character(len=:), allocatable                   :: error_format_env            !< Variable choosing the error format (#128).
   character(len=:), allocatable                   :: man_file                    !< File of --man ('': <progname>.1).
   character(len=:), allocatable                   :: markdown_file               !< File of --markdown ('': <progname>.md).
   character(len=:), allocatable                   :: config_path                 !< Configuration file (F08).
@@ -144,14 +145,14 @@ type, extends(object), public :: command_line_interface
 endtype command_line_interface
 
 ! errors codes
-integer(I4P), parameter :: ERROR_CODES(74) = [ &
+integer(I4P), parameter :: ERROR_CODES(75) = [ &
      1_I4P, 2_I4P, 3_I4P, 4_I4P, 5_I4P, 6_I4P, 7_I4P, 8_I4P, 9_I4P, 10_I4P, 11_I4P, 12_I4P, 13_I4P, &
      14_I4P, 15_I4P, 16_I4P, 17_I4P, 18_I4P, 19_I4P, 20_I4P, 21_I4P, 22_I4P, 23_I4P, 24_I4P, 25_I4P, &
      26_I4P, 27_I4P, 28_I4P, 29_I4P, 30_I4P, 31_I4P, 32_I4P, 33_I4P, 34_I4P, 35_I4P, 36_I4P, 37_I4P, &
      38_I4P, 39_I4P, 40_I4P, 41_I4P, 42_I4P, 43_I4P, 44_I4P, 45_I4P, 46_I4P, 47_I4P, 48_I4P, 49_I4P, &
      50_I4P, 51_I4P, 52_I4P, 100_I4P, 101_I4P, 102_I4P, 103_I4P, 104_I4P, 105_I4P, 106_I4P, 1000_I4P, &
      1001_I4P, 1002_I4P, 1003_I4P, 1004_I4P, 1005_I4P, 1006_I4P, 1007_I4P, 1008_I4P, 1009_I4P, 1010_I4P, &
-     1011_I4P, 1012_I4P, 1013_I4P, 1014_I4P] !< Codes described by error_description.
+     1011_I4P, 1012_I4P, 1013_I4P, 1014_I4P, 1015_I4P] !< Codes described by error_description.
 integer(I4P), parameter, public :: ERROR_MISSING_CLA           = 1000 !< CLA not found in CLI.
 integer(I4P), parameter, public :: ERROR_MISSING_GROUP         = 1001 !< Group not found in CLI.
 integer(I4P), parameter, public :: ERROR_MISSING_SELECTION_CLA = 1002 !< CLA selection in CLI failing.
@@ -167,6 +168,7 @@ integer(I4P), parameter, public :: ERROR_COMPLETION_INSTALL    = 1011 !< The com
 integer(I4P), parameter, public :: ERROR_ARGUMENT_RETRIEVAL    = 1012 !< A command line argument cannot be retrieved.
 integer(I4P), parameter, public :: ERROR_COMMAND_REPEATED      = 1013 !< A command passed more than once (B36).
 integer(I4P), parameter, public :: ERROR_USAGE_ON_ERROR        = 1014 !< init(usage_on_error=) not full, usage or none (F27).
+integer(I4P), parameter, public :: ERROR_FORMAT                = 1015 !< init(error_format=) not text or json (#128).
 
 contains
   ! public methods
@@ -199,6 +201,7 @@ contains
   if (allocated(self%usage_on_error)) deallocate(self%usage_on_error)
   self%man_option = .false.
   self%schema_option = .false.
+  if (allocated(self%error_format_env)) deallocate(self%error_format_env)
   if (allocated(self%man_file)) deallocate(self%man_file)
   if (allocated(self%markdown_file)) deallocate(self%markdown_file)
   if (allocated(self%auto_envvar_prefix)) deallocate(self%auto_envvar_prefix)
@@ -210,7 +213,8 @@ contains
   subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, &
                   usage_lun, error_lun, version_lun, error_color, error_style, ignore_unknown_clas, standalone, &
                   error_hint, no_args_is_help, ignore_env, auto_envvar_prefix, case_insensitive, completion_options, &
-                  usage_on_error, man_option, man_file, markdown_file, schema_option)
+                  usage_on_error, man_option, man_file, markdown_file, schema_option, &
+                  error_format, error_format_env)
   !< Initialize CLI.
   class(command_line_interface), intent(inout) :: self                !< CLI data.
   character(*), optional,        intent(in)    :: progname            !< Program name.
@@ -247,6 +251,11 @@ contains
                                                                       !< usage line), 'none'; any case.
   logical,      optional,        intent(in)    :: man_option          !< Add --man to the top level (F29).
   logical,      optional,        intent(in)    :: schema_option       !< Add --schema to the top level (#128).
+  character(*), optional,        intent(in)    :: error_format        !< Format of the error messages: text (default), json.
+  character(*), optional,        intent(in)    :: error_format_env    !< Variable choosing the format, per run: text, json;
+                                                                      !< any other value is text; unset, error_format holds.
+  character(len=:), allocatable                :: format_value        !< Value of the variable.
+  logical                                      :: format_set          !< The variable is set.
   character(*), optional,        intent(in)    :: man_file            !< File of --man (default <progname>.1).
   character(*), optional,        intent(in)    :: markdown_file       !< File of --markdown (default <progname>.md).
   character(len=:), allocatable                :: prog_invocation     !< Complete program invocation.
@@ -293,6 +302,15 @@ contains
   if (present(schema_option)) self%schema_option = schema_option
   self%man_file = '' ; if (present(man_file)) self%man_file = trim(adjustl(man_file))
   self%markdown_file = '' ; if (present(markdown_file)) self%markdown_file = trim(adjustl(markdown_file))
+  self%error_format = 'text' ; if (present(error_format)) self%error_format = trim(adjustl(error_format))
+  if (present(error_format_env)) then
+    self%error_format_env = trim(adjustl(error_format_env))
+    call read_env(name=self%error_format_env, value=format_value, found=format_set, ignore=self%ignore_env)
+    if (format_set) then
+      self%error_format = 'text'
+      if (upper_case(trim(adjustl(format_value))) == 'JSON') self%error_format = 'json'
+    endif
+  endif
   ! initialize only the first default group
   allocate(self%clasg(0:0))
   call self%clasg(0)%assign_object(self)
@@ -473,12 +491,15 @@ contains
   integer(I4P)                              :: a       !< CLA index.
 
   prefix = '' ; if (present(pref)) prefix = pref
-  prefix = prefix//self%progname//': '//colorize('warning', color_fg=self%error_color, style=self%error_style)//': '
+  if (self%is_json_format()) then
+    prefix = prefix//self%progname//': warning: '
+  else
+    prefix = prefix//self%progname//': '//colorize('warning', color_fg=self%error_color, style=self%error_style)//': '
+  endif
   do g=0, size(self%clasg, dim=1) - 1
     if (g > 0 .and. .not.self%clasg(g)%is_called) cycle
     if (g > 0 .and. allocated(self%clasg(g)%deprecated)) &
-      write(self%error_lun, '(A)') prefix//'command "'//self%clasg(g)%group//'" is deprecated'//&
-                                   because(self%clasg(g)%deprecated)
+      call self%print_warning(prefix//'command "'//self%clasg(g)%group//'" is deprecated'//because(self%clasg(g)%deprecated))
     do a=1, self%clasg(g)%Na
       associate(cla => self%clasg(g)%cla(a))
         if (.not.allocated(cla%deprecated)) cycle
@@ -488,7 +509,7 @@ contains
         else
           name = trim(adjustl(cla%switch))
         endif
-        write(self%error_lun, '(A)') prefix//'option "'//name//'" is deprecated'//because(cla%deprecated)
+        call self%print_warning(prefix//'option "'//name//'" is deprecated'//because(cla%deprecated))
       endassociate
     enddo
   enddo
@@ -925,6 +946,16 @@ contains
   integer(I4P)                                 :: g     !< Counter.
   integer(I4P)                                 :: gg    !< Counter.
 
+  ! init(error_format=) (#128): reported by parse, as the other definition errors
+  if (allocated(self%error_format)) then
+    select case(upper_case(self%error_format))
+    case('TEXT', 'JSON')
+    case default
+      call self%errored(pref=pref, error=ERROR_FORMAT, switch=self%error_format)
+      if (present(error)) error = self%error
+      return
+    endselect
+  endif
   ! init(usage_on_error=) (F27): reported by parse, as the other definition errors
   if (allocated(self%usage_on_error)) then
     select case(upper_case(self%usage_on_error))
@@ -1155,7 +1186,7 @@ contains
   character(len=:), allocatable             :: command !< Command of the error, if any.
   integer(I4P)                              :: g       !< Counter for CLAs group.
 
-  if (.not.self%error_hint .or. self%disable_hv) return
+  if (.not.self%error_hint .or. self%disable_hv .or. self%is_json_format()) return
   command = ''
   do g=1, size(self%clasg, dim=1)-1
     if (self%clasg(g)%is_called .and. self%clasg(g)%error > 0) then
@@ -1603,7 +1634,9 @@ contains
   character(*),                  intent(in) :: mode !< 'FULL', 'USAGE' or 'NONE'.
   logical                                   :: is   !< Check result.
 
-  if (allocated(self%usage_on_error)) then
+  if (self%is_json_format()) then ! one line per message: nothing a program would have to skip
+    is = mode == 'NONE'
+  elseif (allocated(self%usage_on_error)) then
     is = upper_case(self%usage_on_error) == mode
   else
     is = mode == 'FULL'
@@ -2998,6 +3031,8 @@ contains
     description = 'A command line argument cannot be read'
   case(1013)
     description = 'A command passed more than once'
+  case(1015)
+    description = 'Invalid `error_format`'
   case(1014)
     description = 'Invalid `usage_on_error`'
   case default
@@ -3014,12 +3049,14 @@ contains
   integer(I4P)                              :: g     !< Group index.
   integer(I4P)                              :: e     !< Counter.
   character(len=:), allocatable             :: excluded !< Command excluded by a command.
+  character(len=:), allocatable             :: env      !< Variable choosing the error format, in JSON.
 
   nl = new_line('a')
   json = '{'//nl//'  "schema_version": 1,'//nl
   json = json//'  "program": {"name": '//json_string(self%progname)//', "version": '//json_string(self%version)//&
          ', "description": '//json_string(self%description)//'},'//nl
-  json = json//'  "capabilities": {"check": false, "error_format_env": null},'//nl
+  env = 'null' ; if (allocated(self%error_format_env)) env = json_string(self%error_format_env)
+  json = json//'  "capabilities": {"check": false, "error_format_env": '//env//'},'//nl
   json = json//'  "errors": {'//nl
   do e=1, size(ERROR_CODES, dim=1)
     json = json//'    "'//trim(str(n=ERROR_CODES(e), no_sign=.true.))//'": '//json_string(error_description(ERROR_CODES(e)))
@@ -3439,6 +3476,8 @@ contains
                            'options only!'
     case(ERROR_ARGUMENT_RETRIEVAL)
       self%error_message = prefd//': the command line argument number '//trim(str(position, .true.))//' cannot be retrieved!'
+    case(ERROR_FORMAT)
+      self%error_message = prefd//': invalid error_format "'//trim(switch)//'": it must be text or json!'
     case(ERROR_USAGE_ON_ERROR)
       self%error_message = prefd//': usage_on_error is "full", "usage" or "none", not "'//switch//'"!'
     case(ERROR_COMMAND_REPEATED)

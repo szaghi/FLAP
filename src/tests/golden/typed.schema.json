@@ -76,7 +76,8 @@
     "1011": "Completion not installed",
     "1012": "A command line argument cannot be read",
     "1013": "A command passed more than once",
-    "1014": "Invalid `usage_on_error`"
+    "1014": "Invalid `usage_on_error`",
+    "1015": "Invalid `error_format`"
   },
   "options": [
     {"switch": "--steps", "abbreviation": "-s", "help": "Time steps", "required": true, "action": "store", "value": {"type": "integer", "minimum": -2147483648, "maximum": 2147483647, "x-flap-kind": "I4P"}, "typed": true},

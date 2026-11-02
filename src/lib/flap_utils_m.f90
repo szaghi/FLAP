@@ -24,6 +24,7 @@ public :: read_line
 public :: replace
 public :: replace_all
 public :: split_command_line
+public :: suggestion_items
 public :: suggestions
 public :: tokenize
 public :: unique
@@ -671,6 +672,29 @@ contains
   type(flap_string), intent(in) :: candidates(:)    !< Candidate names.
   logical,           intent(in) :: case_insensitive !< Compare in any case.
   character(len=:), allocatable :: hint             !< Hint.
+  type(flap_string), allocatable :: items(:)        !< Candidates chosen.
+  integer(I4P)                  :: c                !< Counter.
+
+  items = suggestion_items(token, candidates, case_insensitive)
+  hint = ''
+  if (size(items) == 1) then
+    hint = ' Did you mean "'//items(1)%s//'"?'
+  elseif (size(items) > 1) then
+    hint = ' (Did you mean one of: "'//items(1)%s//'"'
+    do c=2, size(items)
+      hint = hint//', "'//items(c)%s//'"'
+    enddo
+    hint = hint//'?)'
+  endif
+  endfunction suggestions
+
+  pure function suggestion_items(token, candidates, case_insensitive) result(items)
+  !< Return the candidates of the "Did you mean" hint of an unknown token (F10 of #125): up to three with similarity
+  !< 1 - d/max(len) >= 0.6 (d the Levenshtein distance), most similar first (declaration order among equals).
+  character(*),      intent(in) :: token            !< Unknown token.
+  type(flap_string), intent(in) :: candidates(:)    !< Candidate names.
+  logical,           intent(in) :: case_insensitive !< Compare in any case.
+  type(flap_string), allocatable :: items(:)        !< Candidates chosen.
   real(R8P),        allocatable :: score(:)         !< Similarity of each candidate.
   logical,          allocatable :: taken(:)         !< Candidate already chosen (or excluded).
   integer(I4P)                  :: pick(3)          !< Chosen candidates.
@@ -680,7 +704,6 @@ contains
   integer(I4P)                  :: k                !< Counter.
   real(R8P), parameter          :: cutoff = 0.6_R8P !< Minimum similarity.
 
-  hint = ''
   allocate(score(size(candidates)), taken(size(candidates)))
   do c=1, size(candidates)
     score(c) = similarity(candidates(c)%s)
@@ -703,15 +726,10 @@ contains
     pick(n) = best
     taken(best) = .true.
   enddo
-  if (n == 1) then
-    hint = ' Did you mean "'//candidates(pick(1))%s//'"?'
-  elseif (n > 1) then
-    hint = ' (Did you mean one of: "'//candidates(pick(1))%s//'"'
-    do c=2, n
-      hint = hint//', "'//candidates(pick(c))%s//'"'
-    enddo
-    hint = hint//'?)'
-  endif
+  allocate(items(n))
+  do c=1, n
+    items(c)%s = candidates(pick(c))%s
+  enddo
   contains
     pure function similarity(name) result(sim)
     !< Similarity of a candidate to the token, 1 - d/max(len).
@@ -728,7 +746,7 @@ contains
       sim = 1._R8P - real(levenshtein(name, token), R8P) / l
     endif
     endfunction similarity
-  endfunction suggestions
+  endfunction suggestion_items
 
   pure function wstrip(string) result(newstring)
   !< Strip out leading and trailing white spaces from a string.

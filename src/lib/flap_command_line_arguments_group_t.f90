@@ -22,7 +22,7 @@ use flap_command_line_argument_t, only : command_line_argument, &
 use flap_config_m, only : config_file
 use flap_object_t, only : object
 use flap_utils_m, only : fish_escape, flap_string, json_array, json_string, list_count, list_items, list_push, ps_escape, &
-                         read_env, suggestions, &
+                         read_env, suggestion_items, suggestions, &
                          tokenize, upper_case, write_text
 use penf
 
@@ -1197,7 +1197,7 @@ contains
               ! one is not printed (the message stays available to the program)
               call cla%assign_object(self)
               call cla%raise_error_switch_unknown(pref=pref, switch=trim(adjustl(args(arg))), hint=hint(args(arg)), &
-                                                  quiet=ignore_unknown_clas)
+                                                  quiet=ignore_unknown_clas, suggested=suggested(args(arg)))
               call self%inherit_error(from=cla)
               error_unknown_clas = self%error
               if (.not.ignore_unknown_clas) return
@@ -1212,11 +1212,32 @@ contains
      character(*), intent(in)       :: token !< Unknown argument.
      character(len=:), allocatable  :: hint  !< Hint.
      type(flap_string), allocatable :: names(:) !< Candidates.
-     type(flap_string), allocatable :: cnames(:) !< Names of a CLA.
      character(len=:), allocatable  :: name  !< Name of the argument.
-     integer(I4P)                   :: c     !< Counter.
-     integer(I4P)                   :: i     !< Counter.
-     integer(I4P)                   :: n     !< Number of candidates.
+
+     call candidates(token, name, names)
+     hint = suggestions(name, names, self%case_insensitive)
+     endfunction hint
+
+     pure function suggested(token)
+     !< Return the "Did you mean" candidates of an unknown argument (JSON errors, #128).
+     character(*), intent(in)       :: token        !< Argument.
+     type(flap_string), allocatable :: suggested(:) !< Candidates chosen.
+     type(flap_string), allocatable :: names(:)     !< Candidates.
+     character(len=:), allocatable  :: name         !< Name of the argument.
+
+     call candidates(token, name, names)
+     suggested = suggestion_items(name, names, self%case_insensitive)
+     endfunction suggested
+
+     pure subroutine candidates(token, name, names)
+     !< Return the name of an unknown argument and the names it may be a misspelling of.
+     character(*), intent(in)                    :: token     !< Argument.
+     character(len=:), allocatable, intent(out)  :: name      !< Name of the argument.
+     type(flap_string), allocatable, intent(out) :: names(:)  !< Candidates.
+     type(flap_string), allocatable              :: cnames(:) !< Names of a CLA.
+     integer(I4P)                                :: c         !< Counter.
+     integer(I4P)                                :: i         !< Counter.
+     integer(I4P)                                :: n         !< Number of candidates.
 
      name = trim(adjustl(token))
      if (is_switch_like(name)) then
@@ -1242,8 +1263,7 @@ contains
      else
        allocate(names(0))
      endif
-     hint = suggestions(name, names, self%case_insensitive)
-     endfunction hint
+     endsubroutine candidates
 
      pure function is_switch_like(token)
      !< Return true if an argument looks like a switch: a dash followed by anything but a digit or a dot.

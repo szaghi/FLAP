@@ -106,6 +106,7 @@ positive values are **errors**. Existing values never change.
 | `1012` | `ERROR_ARGUMENT_RETRIEVAL` | A command line argument cannot be read | `get_command_argument` failed (processor error; not expected in practice) |
 | `1013` | `ERROR_COMMAND_REPEATED` | A command passed more than once | `prog commit -m x commit`, or a command and one of its aliases; reported before `--help` |
 | `1014` | `ERROR_USAGE_ON_ERROR` | Invalid `usage_on_error` | `init(usage_on_error=...)` other than `full`, `usage`, `none` (any case); reported by `parse` |
+| `1015` | `ERROR_FORMAT` | Invalid `error_format` | `init(error_format=)` is not `text` or `json` |
 | `2001` | `ERROR_MENU_INVALID` | Invalid menu answer | Not one of the numbers shown, an empty field, or unreadable (see [Interactive Menus](./menu#errors)) |
 | `2002` | `ERROR_MENU_TOO_MANY` | Too many menu answers | Several answers to a single-choice menu |
 | `2003` | `ERROR_MENU_DUPLICATE` | Duplicate menu answer | The same option chosen twice with multiple selection |

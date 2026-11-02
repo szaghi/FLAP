@@ -4,7 +4,7 @@ module flap_object_t
 
 use, intrinsic :: iso_fortran_env, only : stdout=>output_unit, stderr=>error_unit
 use face, only : colorize
-use flap_utils_m, only : flap_string
+use flap_utils_m, only : flap_string, json_array, json_string, upper_case
 use penf
 
 implicit none
@@ -33,12 +33,17 @@ type, abstract, public :: object
   integer(I4P)                  :: version_lun=stdout !< Output unit to print version message
   integer(I4P)                  :: error_lun=stderr   !< Error unit to print error messages
   logical                       :: case_insensitive=.false. !< Match switches and command names in any case (F14).
+  character(len=:), allocatable :: error_format       !< Format of the error messages: text (default) or json (#128).
+  character(len=:), allocatable :: error_argument     !< Argument of the last error, when known (JSON format).
+  type(flap_string), allocatable :: error_suggestions(:) !< "Did you mean" candidates of the last error (JSON format).
   contains
     ! public methods
     procedure, pass(self) :: error_prefix        !< Prefix of error messages.
     procedure, pass(self) :: free_object         !< Free dynamic memory.
     procedure, pass(self) :: print_version       !< Print version.
     procedure, pass(self) :: print_error_message !< Print meaningful error message.
+    procedure, pass(self) :: print_warning       !< Print a warning.
+    procedure, pass(self) :: is_json_format      !< Check if the error messages are JSON lines.
     procedure, pass(self) :: inherit_error       !< Take the error of another object, with its message.
     procedure, pass(self) :: clear_error         !< Forget the error and its message.
     procedure, pass(self) :: set_examples        !< Set examples of correct usage.
@@ -65,6 +70,9 @@ contains
   if (allocated(self%error_message)) deallocate(self%error_message)
   if (allocated(self%error_color  )) deallocate(self%error_color  )
   if (allocated(self%error_style  )) deallocate(self%error_style  )
+  if (allocated(self%error_format )) deallocate(self%error_format )
+  if (allocated(self%error_argument)) deallocate(self%error_argument)
+  if (allocated(self%error_suggestions)) deallocate(self%error_suggestions)
   if (allocated(self%examples     )) deallocate(self%examples     )
   self%error = 0_I4P
   self%usage_lun = stderr
@@ -80,7 +88,11 @@ contains
   character(len=:), allocatable      :: prefd !< Prefix of error messages.
 
   prefd = '' ; if (present(pref)) prefd = pref
-  prefd = prefd//self%progname//': '//colorize('error', color_fg=self%error_color, style=self%error_style)
+  if (self%is_json_format()) then ! no escape codes in a message for a program
+    prefd = prefd//self%progname//': error'
+  else
+    prefd = prefd//self%progname//': '//colorize('error', color_fg=self%error_color, style=self%error_style)
+  endif
   endfunction error_prefix
 
   subroutine print_version(self, pref)
@@ -103,9 +115,42 @@ contains
   !< Print meaningful error message to standard-error.
   class(object), intent(in) :: self !< Object data.
 
+  character(len=:), allocatable :: line !< JSON line.
+
+  if (self%is_json_format()) then
+    line = '{"schema_version":1,"level":"error","code":'//trim(str(n=self%error, no_sign=.true.))//&
+           ',"message":'//json_string(self%error_message)
+    if (allocated(self%error_argument)) line = line//',"argument":'//json_string(self%error_argument)
+    if (allocated(self%error_suggestions)) then
+      if (size(self%error_suggestions) > 0) line = line//',"suggestions":'//json_array(self%error_suggestions)
+    endif
+    write(self%error_lun, '(A)') line//'}'
+    return
+  endif
   write(self%error_lun, '(A)') self%error_message
   write(self%error_lun, '(A)')
   endsubroutine print_error_message
+
+  subroutine print_warning(self, message)
+  !< Print a warning on the error unit, in the format of the error messages.
+  class(object), intent(in) :: self    !< Object data.
+  character(*),  intent(in) :: message !< Warning, its prefix included.
+
+  if (self%is_json_format()) then
+    write(self%error_lun, '(A)') '{"schema_version":1,"level":"warning","message":'//json_string(message)//'}'
+  else
+    write(self%error_lun, '(A)') message
+  endif
+  endsubroutine print_warning
+
+  pure function is_json_format(self) result(is_json)
+  !< Check if the error messages are JSON lines (#128): an invalid format is text, and parse reports it.
+  class(object), intent(in) :: self    !< Object data.
+  logical                   :: is_json !< Check result.
+
+  is_json = .false.
+  if (allocated(self%error_format)) is_json = upper_case(self%error_format) == 'JSON'
+  endfunction is_json_format
 
   subroutine set_examples(self, examples)
   !< Set the examples of correct usage: exactly the given ones, or none.
@@ -163,6 +208,9 @@ contains
   if (allocated(rhs%error_message)) lhs%error_message = rhs%error_message
   if (allocated(rhs%error_color  )) lhs%error_color   = rhs%error_color
   if (allocated(rhs%error_style  )) lhs%error_style   = rhs%error_style
+  if (allocated(rhs%error_format )) lhs%error_format  = rhs%error_format
+  if (allocated(rhs%error_argument)) lhs%error_argument = rhs%error_argument
+  if (allocated(rhs%error_suggestions)) lhs%error_suggestions = rhs%error_suggestions
   if (allocated(rhs%examples     )) lhs%examples      = rhs%examples
                                     lhs%error         = rhs%error
                                     lhs%usage_lun     = rhs%usage_lun

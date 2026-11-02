@@ -852,14 +852,16 @@ contains
   call self%errored(pref=pref, error=ERROR_VALUE_MISSING)
   endsubroutine raise_error_value_missing
 
-  subroutine raise_error_switch_unknown(self, switch, pref, hint, quiet)
+  subroutine raise_error_switch_unknown(self, switch, pref, hint, quiet, suggested)
   !< Raise error switch_unknown.
   class(command_line_argument), intent(inout) :: self   !< CLA data.
   character(*), optional,       intent(in)    :: switch !< CLA switch name.
   character(*), optional,       intent(in)    :: pref   !< Prefixing string.
   character(*), optional,       intent(in)    :: hint   !< "Did you mean" hint, appended to the message (F10).
   logical,      optional,       intent(in)    :: quiet  !< Build the message without printing it (an ignored argument).
+  type(flap_string), optional,  intent(in)    :: suggested(:) !< "Did you mean" candidates (JSON errors, #128).
 
+  if (present(suggested)) self%error_suggestions = suggested
   call self%errored(pref=pref, error=ERROR_UNKNOWN, switch=switch, hint=hint, quiet=quiet)
   endsubroutine raise_error_switch_unknown
 
@@ -1388,6 +1390,14 @@ contains
   self%error = error
   if (self%error/=0) then
     prefd = self%error_prefix(pref=pref)
+    if (allocated(self%error_argument)) deallocate(self%error_argument)
+    if (present(switch)) then
+      self%error_argument = trim(adjustl(switch))
+    elseif (self%is_positional) then
+      self%error_argument = 'position '//trim(str(n=self%position, no_sign=.true.))
+    elseif (allocated(self%switch)) then
+      self%error_argument = trim(adjustl(self%switch))
+    endif
     select case(self%error)
     case(ERROR_OPTIONAL_NO_DEF)
       if (self%is_positional) then
