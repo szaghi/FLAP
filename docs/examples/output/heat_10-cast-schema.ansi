@@ -1,0 +1,9 @@
+$ heat run --schema | head -n 8 | cut -c1-76
+{
+  "schema_version": 1,
+  "program": {"name": "heat", "version": "v1.0"},
+  "command":
+  {"name": "run", "aliases": [], "description": "Run a simulation", "exclusi
+    "options": [
+      {"switch": "--steps", "help": "Time steps", "required": true, "action"
+      {"switch": "--cfl", "help": "CFL number", "required": false, "action":

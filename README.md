@@ -10,12 +10,17 @@
 [![License](https://img.shields.io/badge/license-GPLv3%20%7C%20BSD%20%7C%20MIT-blue.svg)](#copyrights)
 
 > Describe your command line once, in pure Fortran 2018: FLAP parses it, reads the environment and the configuration files,
-> checks every value, and writes the help, the errors, the man page and the shell completions.
+> checks every value, writes the help, the errors, the man page and the shell completions, and tells scripts and AI agents
+> how to call your program.
 > From three options to git-style commands, with a handful of calls.
 
 <img src="docs/examples/images/quickstart.svg" alt="a terminal session of a FLAP program: its help, some runs, a typo and an out-of-range value" width="760">
 
 <sub>A real session of the short program of the <a href="#quick-start">quick start</a> below: help, values and errors all come from FLAP.</sub>
+
+<img src="docs/examples/images/agents.svg" alt="a terminal session of a FLAP program answering another program: its JSON description, a rejected command line, a JSON error, an exit status and a dry run" width="760">
+
+<sub>The same definitions answer a script or an AI agent: <a href="https://szaghi.github.io/FLAP/manual/tutorial/10-agents">chapter 10 of the tutorial</a> builds this session.</sub>
 
 <div>
 <table>
@@ -38,6 +43,10 @@
 <tr>
 <td width="50%"><b>🧪 Testable command lines</b><br><sub>Parse a string instead of the real command line, parse again, get statuses back instead of stops, send the messages to the units you choose: your CLI can be unit tested. <a href="https://szaghi.github.io/FLAP/manual/tutorial/08-testing">Testing</a></sub></td>
 <td width="50%"><b>🙋 Interactive menus</b><br><sub>An opt-in module asks for what is missing: single or multiple choice, defaults, yes/no questions, retries; it never blocks a batch job. <a href="https://szaghi.github.io/FLAP/guide/menu">Interactive menus</a></sub></td>
+</tr>
+<tr>
+<td width="50%"><b>🤖 Ready for scripts and agents</b><br><sub>Declared value types, a JSON description (<code>--schema</code>), a validate-only mode (<code>--check</code>), <code>--dry-run</code>, JSON errors with exit statuses that say what to change, and an agent skill generated from the definitions. <a href="https://szaghi.github.io/FLAP/manual/tutorial/10-agents">Tutorial</a>.</sub></td>
+<td width="50%"><b>🧾 Reproducible runs</b><br><sub>A JSON manifest of every run: the command line and each value with its source, with no date or host, so the same inputs give the same bytes. Sensitive values stay masked, in errors too. <a href="https://szaghi.github.io/FLAP/guide/machine#run-manifest">Run manifest</a>.</sub></td>
 </tr>
 <tr>
 <td width="50%"><b>🛠️ Standard Fortran, any build</b><br><sub>Fortran 2018, tested with gfortran 13 to 16, nvfortran and Intel ifx; built with FoBiS, fpm, CMake or Make. Two small dependencies, fetched for you. <a href="https://szaghi.github.io/FLAP/guide/install">Installation</a></sub></td>

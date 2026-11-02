@@ -4,7 +4,10 @@ layout: home
 hero:
   name: FLAP
   text: Fortran command Line Arguments Parser
-  tagline: "Describe your command line once, in pure Fortran 2018: FLAP parses it, reads the environment and the configuration files, checks every value, and writes the help, the errors, the man page and the shell completions."
+  tagline: "Describe your command line once, in pure Fortran 2018. FLAP parses it, checks every value, writes the help, the man page and the completions, and tells scripts and AI agents how to call your program."
+  image:
+    src: /hero-cast.svg
+    alt: a terminal session of a FLAP program, playing its help, some runs, a typo and an out-of-range value
   actions:
     - theme: brand
       text: Tutorial
@@ -73,6 +76,16 @@ features:
     details: "An opt-in module asks for what is missing: single or multiple choice, defaults, yes/no questions, retries; it never blocks a batch job."
     link: /guide/menu
     linkText: Interactive menus
+  - icon: 🤖
+    title: Ready for scripts and agents
+    details: "Declared value types, a JSON description (--schema), a validate-only mode (--check), --dry-run, JSON errors with exit statuses that say what to change, and an agent skill generated from the definitions."
+    link: /manual/tutorial/10-agents
+    linkText: Calling it from other programs
+  - icon: 🧾
+    title: Reproducible runs
+    details: "A JSON manifest of every run: the command line and each value with its source, with no date or host, so the same inputs give the same bytes. Sensitive values stay masked, in errors too."
+    link: /guide/machine#run-manifest
+    linkText: Run manifest
   - icon: 🛠️
     title: Standard Fortran, any build
     details: "Fortran 2018, tested with gfortran 13 to 16, nvfortran and Intel ifx; built with FoBiS, fpm, CMake or Make. Two small dependencies, fetched for you."
@@ -87,13 +100,20 @@ features:
 
 ## Quick start
 
-A real session with a FLAP program: the help, the values and the errors all come from FLAP.
-
-<p align="center"><img src="./examples/images/quickstart.svg" alt="a terminal session of a FLAP program: its help, some runs, a typo and an out-of-range value"></p>
+The session at the top of this page is real: the help, the values and the errors all come from FLAP.
 
 This is the whole program, in four steps: initialise, define, parse, get.
 
 <<< @/examples/snippets/quickstart.f90
+
+## Ready for other programs
+
+The same definitions answer a script or an AI agent: what the program takes, whether a command line is valid, and what to
+change when a call fails. [Chapter 10 of the tutorial](/manual/tutorial/10-agents) builds this session.
+
+<div class="flap-casts">
+<img src="./examples/images/agents.svg" alt="a terminal session of a FLAP program answering another program: its JSON description, a rejected command line, a JSON error, an exit status and a dry run">
+</div>
 
 ## Grows with your program
 

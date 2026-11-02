@@ -7,7 +7,9 @@
 !run heat_10-dry heat --dry-run run --steps 100
 !run heat_10-manifest heat run --steps 100 --token s3cret && cat heat.manifest.json
 !run heat_10-skill heat --write-skill && cat heat/SKILL.md
-!cast agents heat_10-schema heat_10-check-bad heat_10-json heat_10-status heat_10-dry
+!run heat_10-cast-schema heat run --schema | head -n 8 | cut -c1-76
+!run heat_10-cast-json HEAT_ERROR_FORMAT=json heat run --stepz 100 2>&1 | cut -c1-76
+!cast agents heat_10-cast-schema heat_10-check-bad heat_10-cast-json heat_10-status heat_10-dry
 program heat
 !< Tutorial, chapter 10: a program that another program, or an agent, can read, check and call.
 use flap

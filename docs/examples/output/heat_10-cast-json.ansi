@@ -1,0 +1,2 @@
+$ HEAT_ERROR_FORMAT=json heat run --stepz 100 2>&1 | cut -c1-76
+{"schema_version":1,"level":"error","code":15,"class":"usage","message":"hea

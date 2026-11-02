@@ -96,4 +96,5 @@ while read -r name ids; do
   for id in $ids; do captures+=("$ex/output/$id.ansi"); done
   python3 "$root/scripts/ansi2svg.py" --cast "$ex/images/$name.svg" "${captures[@]}"
 done < <(sed -n 's/^ *!cast \(.*\)/\1/p' "$ex"/src/*.f90)
+cp "$ex/images/quickstart.svg" "$root/docs/public/hero-cast.svg" # the hero image of the home page must be a public file
 echo "docs_examples: $(ls "$ex"/src/*.f90 | wc -l) programs, $(ls "$ex"/output/*.ansi | wc -l) runs"

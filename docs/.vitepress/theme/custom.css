@@ -35,12 +35,12 @@
 /* the session in the hero is a terminal: it needs room to read, and no glow behind its text */
 @media (min-width: 960px) {
   .VPHero .image-container {
-    width: 560px;
-    height: 440px;
+    width: 470px;
+    height: 370px;
   }
   .VPHero .image-src {
-    max-width: 560px;
-    max-height: 440px;
+    max-width: 470px;
+    max-height: 370px;
   }
 }
 .VPHero .image-src {
