@@ -88,6 +88,7 @@ graph LR
 - [raise_error](#raise-error)
 - [is_called_group](#is-called-group)
 - [is_defined](#is-defined)
+- [exit_status](#exit-status)
 - [is_parsed](#is-parsed)
 - [check_requested](#check-requested)
 - [no_args_help](#no-args-help)
@@ -225,6 +226,7 @@ classDiagram
 | `is_defined_group` |  | Check if a CLAs group has been defined. |
 | `raise_error` |  | Report an application error in FLAP's style. |
 | `is_defined` |  | Check if a CLA has been defined. |
+| `exit_status` |  | Exit status of the current error or status. |
 | `is_parsed` |  | Check if CLI has been parsed. |
 | `set_mutually_exclusive_groups` |  | Set two CLAs group as mutually exclusive. |
 | `set_mutually_exclusive_switches` |  | Set a mutually exclusive set of switches. |
@@ -835,7 +837,7 @@ flowchart TD
 
 ### report_check
 
-Report the verdict of --check (#128): the result, then, in standalone mode, the end of the program, 0 if valid, 1 if not.
+Report the verdict of --check (#128): the result, then, in standalone mode, the end of the program, 0 if valid, else the status of the error (`exit_status`).
 
  The options of an unknown type are named: FLAP has not validated them, and says so instead of implying they are fine.
 
@@ -854,6 +856,7 @@ subroutine report_check(self)
 ```mermaid
 flowchart TD
   parse["parse"] --> report_check["report_check"]
+  report_check["report_check"] --> exit_status["exit_status"]
   report_check["report_check"] --> is_builtin["is_builtin"]
   report_check["report_check"] --> is_json_format["is_json_format"]
   report_check["report_check"] --> is_validated["is_validated"]
@@ -2526,6 +2529,34 @@ flowchart TD
   style is_defined fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
+### exit_status
+
+Return the exit status for the current error or status (#129), for `stop cli%exit_status()`. FLAP ends the program on an
+ error only with --check: otherwise the program does.
+
+**Attributes**: elemental
+
+**Returns**: integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables))
+
+```fortran
+function exit_status(self) result(status)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | in |  | CLI data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  report_check["report_check"] --> exit_status["exit_status"]
+  exit_status["exit_status"] --> error_exit_status["error_exit_status"]
+  style exit_status fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
 ### is_parsed
 
 Check if CLI has been parsed.
@@ -3037,6 +3068,7 @@ flowchart TD
   dispatch_status["dispatch_status"] --> json_schema["json_schema"]
   json_members["json_members"] --> json_schema["json_schema"]
   save_json_schema["save_json_schema"] --> json_schema["json_schema"]
+  json_schema["json_schema"] --> error_class["error_class"]
   json_schema["json_schema"] --> error_description["error_description"]
   json_schema["json_schema"] --> json_command["json_command"]
   json_schema["json_schema"] --> json_members["json_members"]

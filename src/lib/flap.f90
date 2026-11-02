@@ -78,6 +78,7 @@ use flap_command_line_arguments_group_t, only : command_line_arguments_group,   
                                                 ERROR_M_EXCLUDE_SET,                          &
                                                 ERROR_M_EXCLUDE_SET_REQUIRED,                 &
                                                 ERROR_M_EXCLUDE_SET_DEFINITION
+use flap_utils_m, only : error_class, error_exit_status, EXIT_APPLICATION, EXIT_DEFINITION, EXIT_ENVIRONMENT, EXIT_USAGE
 use flap_command_line_interface_t, only : command_line_interface, error_description,      &
                                           ERROR_MISSING_CLA,           &
                                           ERROR_MISSING_GROUP,         &
@@ -123,6 +124,12 @@ public :: STATUS_PRINT_MAN
 public :: STATUS_SCHEMA
 public :: STATUS_CHECK
 public :: error_description
+public :: error_class
+public :: error_exit_status
+public :: EXIT_APPLICATION
+public :: EXIT_DEFINITION
+public :: EXIT_ENVIRONMENT
+public :: EXIT_USAGE
 ! errors 1-99: command line argument
 public :: SOURCE_COMMANDLINE
 public :: SOURCE_ENVIRONMENT

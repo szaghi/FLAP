@@ -4,7 +4,7 @@ module flap_object_t
 
 use, intrinsic :: iso_fortran_env, only : stdout=>output_unit, stderr=>error_unit
 use face, only : colorize
-use flap_utils_m, only : flap_string, json_array, json_string, upper_case
+use flap_utils_m, only : error_class, flap_string, json_array, json_string, upper_case
 use penf
 
 implicit none
@@ -118,8 +118,9 @@ contains
   character(len=:), allocatable :: line !< JSON line.
 
   if (self%is_json_format()) then
-    line = '{"schema_version":1,"level":"error","code":'//trim(str(n=self%error, no_sign=.true.))//&
-           ',"message":'//json_string(self%error_message)
+    line = '{"schema_version":1,"level":"error","code":'//trim(str(n=self%error, no_sign=.true.))
+    if (len(error_class(self%error)) > 0) line = line//',"class":'//json_string(error_class(self%error))
+    line = line//',"message":'//json_string(self%error_message)
     if (allocated(self%error_argument)) line = line//',"argument":'//json_string(self%error_argument)
     if (allocated(self%error_suggestions)) then
       if (size(self%error_suggestions) > 0) line = line//',"suggestions":'//json_array(self%error_suggestions)

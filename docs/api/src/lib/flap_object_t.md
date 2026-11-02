@@ -166,6 +166,7 @@ flowchart TD
   errored["errored"] --> print_error_message["print_error_message"]
   get_map_value["get_map_value"] --> print_error_message["print_error_message"]
   raise_error["raise_error"] --> print_error_message["print_error_message"]
+  print_error_message["print_error_message"] --> error_class["error_class"]
   print_error_message["print_error_message"] --> is_json_format["is_json_format"]
   print_error_message["print_error_message"] --> json_array["json_array"]
   print_error_message["print_error_message"] --> json_string["json_string"]

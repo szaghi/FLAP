@@ -67,7 +67,7 @@ then stops before the program uses a value:
 
 <<< @/examples/output/solver_check_bad.ansi{ansi}
 
-The exit status is 0 if valid and 1 if not, even when an error comes before `--check` on the command line. With JSON errors
+The exit status is 0 if valid and otherwise the [status of the error](./errors#exit-statuses), even when an error comes before `--check` on the command line. With JSON errors
 the verdict is a line like `{"schema_version":1,"level":"result","valid":true,"unchecked":["--label"]}`. With
 `standalone=.false.`, `parse` returns `STATUS_CHECK` or the error and the program decides.
 

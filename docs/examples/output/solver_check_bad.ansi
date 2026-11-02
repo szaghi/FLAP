@@ -2,4 +2,4 @@ $ solver --check --steps 100 --cfl 7
 solver: error: value "7" of "--cfl" is out of range [0, 1]!
 
 Try 'solver --help' for help.
-[exit status 1]
+[exit status 2]

@@ -64,6 +64,7 @@ type, extends(object), public :: command_line_interface
     procedure, public :: is_defined_group                !< Check if a CLAs group has been defined.
     procedure, public :: raise_error                     !< Report an application error in FLAP's style.
     procedure, public :: is_defined                      !< Check if a CLA has been defined.
+    procedure, public :: exit_status                     !< Exit status of the current error or status.
     procedure, public :: is_parsed                       !< Check if CLI has been parsed.
     procedure, public :: set_mutually_exclusive_groups   !< Set two CLAs group as mutually exclusive.
     procedure, public :: set_mutually_exclusive_switches !< Set a mutually exclusive set of switches.
@@ -1305,6 +1306,15 @@ contains
   endif
   endfunction is_defined
 
+  elemental function exit_status(self) result(status)
+  !< Return the exit status for the current error or status (#129), for `stop cli%exit_status()`. FLAP ends the program on an
+  !< error only with --check: otherwise the program does.
+  class(command_line_interface), intent(in) :: self   !< CLI data.
+  integer(I4P)                              :: status !< Exit status.
+
+  status = error_exit_status(self%error)
+  endfunction exit_status
+
   elemental function is_parsed(self)
   !< Check if CLI has been parsed.
   class(command_line_interface), intent(in) :: self      !< CLI data.
@@ -1404,7 +1414,7 @@ contains
   endfunction check_requested
 
   subroutine report_check(self)
-  !< Report the verdict of --check (#128): the result, then, in standalone mode, the end of the program, 0 if valid, 1 if not.
+  !< Report the verdict of --check (#128): the result, then, in standalone mode, the end of the program, 0 if valid, else the status of the error (`exit_status`).
   !<
   !< The options of an unknown type are named: FLAP has not validated them, and says so instead of implying they are fine.
   class(command_line_interface), intent(inout) :: self      !< CLI data.
@@ -1466,7 +1476,7 @@ contains
     self%error = STATUS_CHECK
     if (self%standalone) call quiet_stop(0_I4P)
   elseif (self%standalone) then
-    call quiet_stop(1_I4P)
+    call quiet_stop(self%exit_status())
   endif
   endsubroutine report_check
 
@@ -2932,7 +2942,7 @@ contains
   if (self%check_option) then
     if (.not.self%is_defined(group='', switch='--check')) &
       call self%add(pref=pref, group_index=0, switch='--check', required=.false., def='', &
-                    help='Validate the command line and stop: exit status 0 if valid, 1 if not', act='check')
+                    help='Validate the command line and stop: exit status 0 if valid', act='check')
   endif
 
   ! add the completion builtins to the top level, if asked (F24)
@@ -3358,6 +3368,17 @@ contains
   env = 'null' ; if (allocated(self%error_format_env)) env = json_string(self%error_format_env)
   json = json//'  "capabilities": {"check": '//trim(merge('true ', 'false', self%check_option))//&
          ', "error_format_env": '//env//'},'//nl
+  json = json//'  "exit_statuses": {"application": '//trim(str(n=EXIT_APPLICATION, no_sign=.true.))//&
+         ', "usage": '//trim(str(n=EXIT_USAGE, no_sign=.true.))//&
+         ', "environment": '//trim(str(n=EXIT_ENVIRONMENT, no_sign=.true.))//&
+         ', "definition": '//trim(str(n=EXIT_DEFINITION, no_sign=.true.))//'},'//nl
+  json = json//'  "error_classes": {'//nl
+  do e=1, size(ERROR_CODES, dim=1)
+    json = json//'    "'//trim(str(n=ERROR_CODES(e), no_sign=.true.))//'": '//json_string(error_class(ERROR_CODES(e)))
+    if (e < size(ERROR_CODES, dim=1)) json = json//','
+    json = json//nl
+  enddo
+  json = json//'  },'//nl
   json = json//'  "errors": {'//nl
   do e=1, size(ERROR_CODES, dim=1)
     json = json//'    "'//trim(str(n=ERROR_CODES(e), no_sign=.true.))//'": '//json_string(error_description(ERROR_CODES(e)))

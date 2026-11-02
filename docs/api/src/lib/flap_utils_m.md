@@ -27,6 +27,8 @@ graph LR
 - [split_command_line](#split-command-line)
 - [write_text](#write-text)
 - [csv_split](#csv-split)
+- [error_class](#error-class)
+- [error_exit_status](#error-exit-status)
 - [count_substring](#count-substring)
 - [to_characters](#to-characters)
 - [list_count](#list-count)
@@ -50,6 +52,10 @@ graph LR
 | Name | Type | Attributes | Description |
 |------|------|------------|-------------|
 | `LIST_SEP` | character(len=*) | parameter | Separator of the items of a stored list: v1\|\|!\|\|v2\|\|!\|\|. |
+| `EXIT_APPLICATION` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Exit status of an application error. |
+| `EXIT_USAGE` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Exit status of an error of the command line. |
+| `EXIT_ENVIRONMENT` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Exit status of an error of a file or a variable. |
+| `EXIT_DEFINITION` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | parameter | Exit status of an error of the program's definitions or calls. |
 
 ## Derived Types
 
@@ -343,6 +349,64 @@ flowchart TD
 ```
 
 ## Functions
+
+### error_class
+
+Return the class of an error code (#129), as in the table of `docs/guide/errors.md`: what the caller must change.
+ '' for a status, for no error and for an unknown code.
+
+**Attributes**: pure
+
+**Returns**: `character(len=:)`
+
+```fortran
+function error_class(code) result(class_name)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `code` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in |  | Error code. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  error_exit_status["error_exit_status"] --> error_class["error_class"]
+  json_schema["json_schema"] --> error_class["error_class"]
+  print_error_message["print_error_message"] --> error_class["error_class"]
+  style error_class fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### error_exit_status
+
+Return the exit status of an error code or a status (#129): 0 for success and for the statuses, 2 for STATUS_NO_ARGS and
+ the `usage` class, 3 `environment`, 4 `definition`, 1 `application`. An unknown argument that the program asked to ignore
+ (ERROR_UNKNOWN_CLAS_IGNORED) is a success.
+
+**Attributes**: pure
+
+**Returns**: integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables))
+
+```fortran
+function error_exit_status(code) result(status)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `code` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in |  | Error code or status. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  exit_status["exit_status"] --> error_exit_status["error_exit_status"]
+  error_exit_status["error_exit_status"] --> error_class["error_class"]
+  style error_exit_status fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
 
 ### count_substring
 

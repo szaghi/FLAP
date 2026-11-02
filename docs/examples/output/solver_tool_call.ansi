@@ -2,4 +2,4 @@ $ python3 -I flap_tool.py solver '{"--steps": 100, "--cfl": 7}'
 command: solver --steps 100 --cfl 7
 verdict: {"schema_version":1,"level":"result","valid":false}
 error: solver: error: value "7" of "--cfl" is out of range [0, 1]!
-[exit status 1]
+[exit status 2]

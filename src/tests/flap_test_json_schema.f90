@@ -3,7 +3,7 @@ program flap_test_json_schema
 !< JSON description of a CLI: save_json_schema and --schema (issue #128).
 !<
 !< The whole document of a CLI using every feature is pinned by `flap_test_golden`; this test checks the single behaviours.
-use flap, only : command_line_interface, error_description, STATUS_SCHEMA
+use flap, only : command_line_interface, error_class, error_description, STATUS_SCHEMA
 use flap_test_utils, only : assert, assert_contains, assert_equal, capture_close, capture_open, child_case, delete_file, &
                             read_back, read_file, reinvoke, run_command, scratch_file, write_file
 use penf, only : I4P
@@ -269,6 +269,10 @@ contains
     c = c + index(row(c:), '|') ! after the third bar
     d = c + index(row(c:), '|') - 2
     call assert_equal(error_description(code), trim(adjustl(row(c:d))), 'the page and the table, code '//row(a:b))
+    c = d + 2
+    c = c + index(row(c:), '|') ! after the fourth bar
+    d = c + index(row(c:), '|') - 2
+    call assert_equal(error_class(code), trim(adjustl(row(c:d))), 'the class on the page, code '//row(a:b))
     n = n + 1
   enddo
   call assert(n > 50, 'the rows of the page have been read')

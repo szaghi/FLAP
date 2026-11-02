@@ -1,2 +1,2 @@
 $ SOLVER_ERROR_FORMAT=json solver --stepz 5
-{"schema_version":1,"level":"error","code":15,"message":"solver: error: switch \"--stepz\" is unknown! Did you mean \"--steps\"?","argument":"--stepz","suggestions":["--steps"]}
+{"schema_version":1,"level":"error","code":15,"class":"usage","message":"solver: error: switch \"--stepz\" is unknown! Did you mean \"--steps\"?","argument":"--stepz","suggestions":["--steps"]}

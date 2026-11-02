@@ -7,6 +7,8 @@ implicit none
 private
 public :: count
 public :: csv_split
+public :: error_class
+public :: error_exit_status
 public :: fish_escape
 public :: ps_escape
 public :: flap_string
@@ -44,7 +46,54 @@ interface count
   !< Overload intrinsic function count for counting substring occurences into strings.
   module procedure count_substring
 endinterface
+integer(I4P), parameter, public :: EXIT_APPLICATION = 1 !< Exit status of an application error.
+integer(I4P), parameter, public :: EXIT_USAGE       = 2 !< Exit status of an error of the command line.
+integer(I4P), parameter, public :: EXIT_ENVIRONMENT = 3 !< Exit status of an error of a file or a variable.
+integer(I4P), parameter, public :: EXIT_DEFINITION  = 4 !< Exit status of an error of the program's definitions or calls.
+
 contains
+  pure function error_class(code) result(class_name)
+  !< Return the class of an error code (#129), as in the table of `docs/guide/errors.md`: what the caller must change.
+  !< '' for a status, for no error and for an unknown code.
+  integer(I4P), intent(in)      :: code       !< Error code.
+  character(len=:), allocatable :: class_name !< Class.
+
+  select case(code)
+  case(7:10, 13:15, 23:26, 31, 38:41, 47, 50, 101:103, 1003, 1004, 1010, 1013, 2001:2004)
+    class_name = 'usage'
+  case(33:35, 43, 1006, 1007, 1011, 1012, 2005)
+    class_name = 'environment'
+  case(1:6, 11, 12, 16:22, 27:30, 32, 36, 37, 42, 44:46, 48, 49, 51, 52, 100, 104:106, 1000:1002, 1008, 1009, 1014, 1015, 2006)
+    class_name = 'definition'
+  case(1005)
+    class_name = 'application'
+  case default
+    class_name = ''
+  endselect
+  endfunction error_class
+
+  pure function error_exit_status(code) result(status)
+  !< Return the exit status of an error code or a status (#129): 0 for success and for the statuses, 2 for STATUS_NO_ARGS and
+  !< the `usage` class, 3 `environment`, 4 `definition`, 1 `application`. An unknown argument that the program asked to ignore
+  !< (ERROR_UNKNOWN_CLAS_IGNORED) is a success.
+  integer(I4P), intent(in) :: code   !< Error code or status.
+  integer(I4P)             :: status !< Exit status.
+
+  status = 0
+  if (code == -5_I4P) status = EXIT_USAGE
+  if (code <= 0 .or. code == 1004_I4P) return
+  select case(error_class(code))
+  case('usage')
+    status = EXIT_USAGE
+  case('environment')
+    status = EXIT_ENVIRONMENT
+  case('definition')
+    status = EXIT_DEFINITION
+  case default
+    status = EXIT_APPLICATION
+  endselect
+  endfunction error_exit_status
+
   elemental function count_substring(string, substring) result(No)
   !< Count the number of (non-overlapping) occurences of a substring into a string.
   character(*), intent(in) :: string    !< String.

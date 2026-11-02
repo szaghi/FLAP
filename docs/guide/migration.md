@@ -14,6 +14,11 @@ programs keep their behaviour. The plan behind them is issue [#125](https://gith
   of `init`; `json_schema`, `save_json_schema`, `save_provenance`, `provenance(format=)`, `error_description`. See
   [Machine-readable Interfaces](./machine).
 
+## Unreleased (changes)
+
+- `--check` on an invalid command line ends with the status of the error's class (2, 3 or 4) instead of 1. A caller testing for
+  non-zero is unaffected.
+
 ## Unreleased (fixes)
 
 - An error message about an option with `sensitive=.true.` quotes its value as `***`.
