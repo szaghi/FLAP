@@ -40,6 +40,8 @@ call check_integer('--nx 2*5', ERROR_CASTING_NUMBER, 0_I4P, 'integer, a repeat c
 call check_integer('--nx "3 abc"', ERROR_CASTING_NUMBER, 0_I4P, 'integer, two items')
 call check_integer('--nx 3,abc', ERROR_CASTING_NUMBER, 0_I4P, 'integer, two items by a comma')
 call check_integer('--nx 99999999999999999999', ERROR_CASTING_NUMBER, 0_I4P, 'integer, out of its kind')
+call check_integer('--nx 2.5', ERROR_CASTING_NUMBER, 0_I4P, 'integer, a real (nvfortran read 2)')
+call check_integer('--nx 2e3', ERROR_CASTING_NUMBER, 0_I4P, 'integer, an exponent')
 call check_integer('--nx "  7  "', 0_I4P, 7_I4P, 'integer, blanks around it')
 call check_integer('--nx +7', 0_I4P, 7_I4P, 'integer, a sign')
 call check_real('--cfl 1,5', ERROR_CASTING_NUMBER, 'real, a decimal comma')

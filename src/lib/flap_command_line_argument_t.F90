@@ -65,6 +65,8 @@ public :: ERROR_PATH_NOT_READABLE
 public :: ERROR_PATH_NOT_WRITABLE
 public :: ERROR_PATH_INCONSISTENT
 public :: ERROR_CASTING_NUMBER
+public :: ERROR_TYPE_DEFINITION
+public :: ERROR_TYPE_MISMATCH
 public :: ERROR_DEPRECATED_REQUIRED
 public :: ERROR_ALTERNATE_INCONSISTENT
 public :: ERROR_SWITCH_NEG_INCONSISTENT
@@ -128,10 +130,13 @@ type, extends(object) :: command_line_argument
   character(len=:), allocatable, public :: map_keys               !< Allowed keys of a map, comma separated (F18).
   logical,                       public :: is_negated=.false.     !< The last spelling of a flag pair passed is the negation.
   logical,                       public :: pair_passed=.false.    !< Both spellings of a flag pair passed (D5: once each).
+  character(len=:), allocatable, public :: val_type               !< Declared type of the value, upper case (#128); if any.
+  logical                               :: muted=.false.          !< Build the error messages without printing them.
   contains
     ! public methods
     procedure, public :: free                           !< Free dynamic memory.
     procedure, public :: check                          !< Check data consistency.
+    procedure, public :: check_value_type               !< Check the value against the declared type (#128).
     procedure, public :: is_required_passed             !< Check if required CLA is passed.
     procedure, public :: has_value                      !< Check if the value is given by the user (explicit source).
     procedure, public :: set_source_value               !< Set a value read from the environment or a configuration file.
@@ -210,6 +215,12 @@ type, extends(object) :: command_line_argument
     procedure, private :: check_positional_consistency    !< Check positional CLA consistency.
     procedure, private :: check_choices                   !< Check if CLA value is in allowed choices.
     procedure, private :: check_choices_text              !< Check the choices of a whole character value, then store it.
+    procedure, private :: display_name                    !< Name of the CLA for a message.
+    procedure, private :: check_type_consistency          !< Check the declared type, its option and its default.
+    procedure, private :: check_value_item                !< Check one value against the declared type.
+    procedure, private :: type_allows                     !< Check that a get may read the declared type.
+    procedure, private :: type_allows_list                !< Check that a get into an array may read the declared type.
+    procedure, private :: type_allows_val                 !< Check that a get into a variable may read the declared type.
     procedure, private :: cast_number                     !< Convert a value to a number, quietly (B40 of #126).
     procedure, private :: check_list_size                 !< Check CLA multiple values list size consistency.
     procedure, private :: stored_list                     !< Stored list of values (parsed or default).
@@ -286,6 +297,8 @@ integer(I4P), parameter :: ERROR_PATH_NOT_READABLE      = 34 !< Path value that 
 integer(I4P), parameter :: ERROR_PATH_NOT_WRITABLE      = 35 !< Existing path value that cannot be opened for writing.
 integer(I4P), parameter :: ERROR_PATH_INCONSISTENT      = 49 !< Path checks on an option taking no value.
 integer(I4P), parameter :: ERROR_CASTING_NUMBER         = 50 !< A value that is not a number, got into one (B40 of #126).
+integer(I4P), parameter :: ERROR_TYPE_DEFINITION        = 51 !< Invalid val_type, or one its option or default contradicts (#128).
+integer(I4P), parameter :: ERROR_TYPE_MISMATCH          = 52 !< Get into another type, or a narrower kind, than val_type (#128).
 integer(I4P), parameter :: ERROR_DEPRECATED_REQUIRED    = 44 !< A required option cannot be deprecated.
 integer(I4P), parameter :: ERROR_ALTERNATE_INCONSISTENT = 37 !< An alternate action with an attribute of a value.
 integer(I4P), parameter :: ERROR_SWITCH_NEG_INCONSISTENT = 36 !< A negation (switch_neg) of a CLA that is not a named flag.
@@ -316,6 +329,7 @@ contains
   if (allocated(self%choices  )) deallocate(self%choices  )
   if (allocated(self%val      )) deallocate(self%val      )
   if (allocated(self%envvar   )) deallocate(self%envvar   )
+  if (allocated(self%val_type )) deallocate(self%val_type )
   self%is_required     = .false.
   self%is_positional   = .false.
   self%position        = 0_I4P
@@ -360,6 +374,7 @@ contains
   call self%check_def_nargs_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_m_exclude_consistency(pref=pref) ; if (self%error/=0) return
   call self%check_path_consistency(pref=pref) ; if (self%error/=0) return
+  call self%check_type_consistency(pref=pref) ; if (self%error/=0) return
   if (allocated(self%deprecated).and.self%is_required) then
     call self%errored(pref=pref, error=ERROR_DEPRECATED_REQUIRED)
     return
@@ -1530,6 +1545,11 @@ contains
     case(ERROR_PATH_INCONSISTENT)
       self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'": must_exist, readable, writable and '//&
                            'allow_dash need an option taking a value (store, store*, append)!'
+    case(ERROR_TYPE_DEFINITION)
+      self%error_message = prefd//': '//self%display_name()//': invalid val_type "'//self%val_type//'": '//trim(val_str)//'!'
+    case(ERROR_TYPE_MISMATCH)
+      self%error_message = prefd//': '//self%display_name()//' is declared '//self%val_type//&
+                           ': it cannot be read into '//trim(val_str)//'!'
     case(ERROR_ENVVAR_CSV)
       self%error_message = prefd//': environment variable "'//trim(adjustl(self%envvar))//'" of option "'//&
                            trim(adjustl(self%switch))//'": unterminated quote in the list "'//trim(val_str)//'"!'
@@ -1537,6 +1557,7 @@ contains
     if (present(quiet)) then
       if (quiet) return
     endif
+    if (self%muted) return
     call self%print_error_message
   endif
   endsubroutine errored
@@ -1869,6 +1890,291 @@ contains
                       val_str='a real value cannot be clamped to the open bound of '//self%range_text())
     endsubroutine cannot_clamp
   endsubroutine check_range
+
+  function display_name(self) result(name)
+  !< Return the name of the CLA for a message: `option "--x"` or `positional argument 1`.
+  class(command_line_argument), intent(in) :: self !< CLA data.
+  character(len=:), allocatable            :: name !< Name.
+
+  if (self%is_positional) then
+    name = 'positional argument '//trim(str(n=self%position, no_sign=.true.))
+  else
+    name = 'option "'//trim(adjustl(self%switch))//'"'
+  endif
+  endfunction display_name
+
+  subroutine check_type_consistency(self, pref)
+  !< Check the declared type (#128): a known name, an option that can hold it, and a default, choices and range that fit it.
+  class(command_line_argument), intent(inout) :: self    !< CLA data.
+  character(*), optional,       intent(in)    :: pref    !< Prefixing string.
+  character(len=:), allocatable               :: items(:)!< Default or choices, one per item.
+  character(len=:), allocatable               :: text    !< Default as a list.
+  character(len(self%choices)), allocatable   :: toks(:) !< Choices.
+  character(len=:), allocatable               :: tmp     !< Choices (avoiding a gfortran bug of tokenize, as check_choices).
+  integer(I4P)                                :: n       !< Number of items.
+  integer(I4P)                                :: i       !< Counter.
+  logical                                     :: numeric !< The type is a number.
+
+  if (.not.allocated(self%val_type)) return
+  select case(self%val_type)
+  case('I1P', 'I2P', 'I4P', 'I8P', 'R4P', 'R8P', 'R16P')
+    numeric = .true.
+  case('LOGICAL', 'CHARACTER')
+    numeric = .false.
+  case default
+    call self%errored(pref=pref, error=ERROR_TYPE_DEFINITION, &
+                      val_str='not one of I1P, I2P, I4P, I8P, R4P, R8P, R16P, logical, character')
+    return
+  endselect
+  if (self%is_map) then
+    call self%errored(pref=pref, error=ERROR_TYPE_DEFINITION, val_str='a map has no declared type')
+  elseif (self%is_config) then
+    call self%errored(pref=pref, error=ERROR_TYPE_DEFINITION, val_str='a configuration file option is a path')
+  elseif (self%act == ACTION_STORE_TRUE .or. self%act == ACTION_STORE_FALSE) then
+    if (self%val_type /= 'LOGICAL') call self%errored(pref=pref, error=ERROR_TYPE_DEFINITION, val_str='a flag is logical')
+  elseif (self%act == ACTION_COUNT) then
+    if (self%val_type(1:1) /= 'I') call self%errored(pref=pref, error=ERROR_TYPE_DEFINITION, val_str='a count is an integer')
+  elseif (self%act /= ACTION_STORE .and. self%act /= ACTION_STORE_STAR .and. self%act /= ACTION_APPEND) then
+    call self%errored(pref=pref, error=ERROR_TYPE_DEFINITION, val_str='this action has no value')
+  elseif ((self%must_exist.or.self%readable.or.self%writable) .and. self%val_type /= 'CHARACTER') then
+    call self%errored(pref=pref, error=ERROR_TYPE_DEFINITION, val_str='a path is character')
+  elseif (self%has_range() .and. .not.numeric) then
+    call self%errored(pref=pref, error=ERROR_TYPE_DEFINITION, val_str='a range needs a number')
+  elseif (allocated(self%choices) .and. self%val_type == 'LOGICAL') then
+    call self%errored(pref=pref, error=ERROR_TYPE_DEFINITION, val_str='a logical has no choices')
+  endif
+  if (self%error /= 0) return
+  self%muted = .true.
+  ! the choices must be values of the type: check_choices converts them in get
+  if (allocated(self%choices) .and. numeric) then
+    tmp = self%choices
+    call tokenize(strin=tmp, delimiter=',', toks=toks, Nt=n)
+    do i=1, n
+      call self%check_value_item(item=trim(adjustl(toks(i))), pref=pref, cast_only=.true.)
+      if (self%error /= 0) then
+        self%muted = .false.
+        call self%errored(pref=pref, error=ERROR_TYPE_DEFINITION, val_str='choice "'//trim(adjustl(toks(i)))//'" does not fit it')
+        return
+      endif
+    enddo
+  endif
+  ! the default, even of a command not called: blank means no default value
+  if (allocated(self%def) .and. &
+      (self%act == ACTION_STORE .or. self%act == ACTION_STORE_STAR .or. self%act == ACTION_APPEND)) then
+    text = wstrip(self%def)
+    if (len_trim(text) > 0) then
+      if (self%is_list()) then
+        text = replace_all(string=unique(string=text, substring=' '), substring=' ', restring=LIST_SEP)
+        call list_items(text, items, n)
+        do i=1, n
+          call self%check_value_item(item=trim(adjustl(items(i))), pref=pref)
+          if (self%error /= 0) exit
+        enddo
+      else
+        call self%check_value_item(item=text, pref=pref)
+      endif
+      if (self%error /= 0) then
+        self%muted = .false.
+        call self%errored(pref=pref, error=ERROR_TYPE_DEFINITION, val_str='the default "'//wstrip(self%def)//'" does not fit it')
+        return
+      endif
+    endif
+  endif
+  self%muted = .false.
+  endsubroutine check_type_consistency
+
+  subroutine check_value_type(self, pref)
+  !< Check the resolved value against the declared type, whatever its source (#128): the same conversion, choices and range
+  !< of `get`, on locals of the declared kind, so that a value accepted here is accepted by a `get` of that kind.
+  !<
+  !< Nothing to do for an untyped CLA, a count (FLAP's own number) or a value not given (blank default, no default).
+  class(command_line_argument), intent(inout) :: self     !< CLA data.
+  character(*), optional,       intent(in)    :: pref     !< Prefixing string.
+  character(len=:), allocatable               :: items(:) !< Stored values.
+  character(len=:), allocatable               :: text     !< Stored value.
+  integer(I4P)                                :: n        !< Number of values.
+  integer(I4P)                                :: i        !< Counter.
+  logical                                     :: flag     !< Value of a flag.
+
+  self%error = 0
+  if (.not.allocated(self%val_type)) return
+  if (self%act == ACTION_STORE_TRUE .or. self%act == ACTION_STORE_FALSE) then
+    if (self%source /= SOURCE_ENVIRONMENT .and. self%source /= SOURCE_CONFIG) return
+    text = self%stored_list()
+    self%error = read_logical(text, flag)
+    if (self%error /= 0) call self%errored(pref=pref, error=ERROR_CASTING_LOGICAL, log_value=text)
+    return
+  endif
+  if (self%act /= ACTION_STORE .and. self%act /= ACTION_STORE_STAR .and. self%act /= ACTION_APPEND) return
+  text = self%stored_list()
+  if (self%is_list()) then
+    call list_items(text, items, n)
+    if (n == 1) then
+      if (len_trim(items(1)) == 0) return ! an empty list
+    endif
+    do i=1, n
+      call self%check_value_item(item=trim(adjustl(items(i))), pref=pref)
+      if (self%error /= 0) return
+    enddo
+  else
+    if (len_trim(text) == 0 .and. .not.self%has_value()) return
+    call self%check_value_item(item=text, pref=pref)
+  endif
+  endsubroutine check_value_type
+
+  subroutine check_value_item(self, item, pref, cast_only)
+  !< Check one value against the declared type: the conversion, then the choices and the range.
+  class(command_line_argument), intent(inout) :: self      !< CLA data.
+  character(*),                 intent(in)    :: item      !< Value.
+  character(*), optional,       intent(in)    :: pref      !< Prefixing string.
+  logical,      optional,       intent(in)    :: cast_only !< Check the conversion only.
+  integer(I1P)                                :: i1        !< Value.
+  integer(I2P)                                :: i2        !< Value.
+  integer(I4P)                                :: i4        !< Value.
+  integer(I8P)                                :: i8        !< Value.
+  real(R4P)                                   :: r4        !< Value.
+  real(R8P)                                   :: r8        !< Value.
+  real(R16P)                                  :: r16       !< Value.
+  logical                                     :: l         !< Value.
+  character(len=len(item))                    :: c         !< Value.
+  logical                                     :: cast      !< Check the conversion only.
+
+  cast = .false. ; if (present(cast_only)) cast = cast_only
+  self%error = 0
+  select case(self%val_type)
+  case('I1P')
+    call number(i1)
+  case('I2P')
+    call number(i2)
+  case('I4P')
+    call number(i4)
+  case('I8P')
+    call number(i8)
+  case('R4P')
+    call number(r4)
+  case('R8P')
+    call number(r8)
+  case('R16P')
+    call number(r16)
+  case('LOGICAL')
+    self%error = read_logical(item, l)
+    if (self%error /= 0) call self%errored(pref=pref, error=ERROR_CASTING_LOGICAL, log_value=item)
+  case('CHARACTER')
+    if (allocated(self%choices).and.(.not.cast)) call self%check_choices_text(text=item, val=c, pref=pref)
+  endselect
+  contains
+    subroutine number(val)
+    !< Convert the value to a local of the declared kind, then check it as `get` does.
+    class(*), intent(inout) :: val !< Value.
+
+    call self%cast_number(text=item, val=val, pref=pref)
+    if (cast) return
+    if (allocated(self%choices).and.self%error==0) call self%check_choices(val=val, pref=pref, text=item)
+    if (self%has_range().and.self%error==0) call self%check_range(val=val, text=item, pref=pref)
+    endsubroutine number
+  endsubroutine check_value_item
+
+  function type_allows(self, family, width, name, pref) result(allowed)
+  !< Check that a get may read the declared type (#128): the same family and an equal or wider kind, whatever the value, or
+  !< a value accepted by parse could be rejected here. A character get is always allowed: the value is text.
+  class(command_line_argument), intent(inout) :: self    !< CLA data.
+  character(1),                 intent(in)    :: family  !< Family of the variable: I, R, L or C.
+  integer(I4P),                 intent(in)    :: width   !< Range (integers) or precision (reals) of the variable.
+  character(*),                 intent(in)    :: name    !< Variable, for the message.
+  character(*), optional,       intent(in)    :: pref    !< Prefixing string.
+  logical                                     :: allowed !< Check result.
+  integer(I4P)                                :: needed  !< Range or precision declared.
+
+  call self%clear_error
+  allowed = .true.
+  if (.not.allocated(self%val_type)) return
+  if (family == 'C') return
+  select case(self%val_type)
+  case('I1P')
+    allowed = family == 'I' ; needed = range(1_I1P)
+  case('I2P')
+    allowed = family == 'I' ; needed = range(1_I2P)
+  case('I4P')
+    allowed = family == 'I' ; needed = range(1_I4P)
+  case('I8P')
+    allowed = family == 'I' ; needed = range(1_I8P)
+  case('R4P')
+    allowed = family == 'R' ; needed = precision(1._R4P)
+  case('R8P')
+    allowed = family == 'R' ; needed = precision(1._R8P)
+  case('R16P')
+    allowed = family == 'R' ; needed = precision(real(1, R16P))
+  case('LOGICAL')
+    allowed = family == 'L' ; needed = 0
+  case default ! CHARACTER
+    allowed = .false. ; needed = 0
+  endselect
+  if (allowed) allowed = width >= needed
+  if (.not.allowed) call self%errored(pref=pref, error=ERROR_TYPE_MISMATCH, val_str=name)
+  endfunction type_allows
+
+  function type_allows_list(self, val, pref) result(allowed)
+  !< Check that a get into an array may read the declared type. An element is not passed to type_allows_val: nvfortran then
+  !< loses the element length of a character array.
+  class(command_line_argument), intent(inout) :: self    !< CLA data.
+  class(*),                     intent(in)    :: val(:)  !< Variable.
+  character(*), optional,       intent(in)    :: pref    !< Prefixing string.
+  logical                                     :: allowed !< Check result.
+
+  call self%clear_error
+  allowed = .true.
+  select type(val)
+#if defined PENF_R16P
+  type is(real(R16P))
+    allowed = self%type_allows('R', precision(val), 'a real(R16P)', pref)
+#endif
+  type is(real(R8P))
+    allowed = self%type_allows('R', precision(val), 'a real(R8P)', pref)
+  type is(real(R4P))
+    allowed = self%type_allows('R', precision(val), 'a real(R4P)', pref)
+  type is(integer(I8P))
+    allowed = self%type_allows('I', range(val), 'an integer(I8P)', pref)
+  type is(integer(I4P))
+    allowed = self%type_allows('I', range(val), 'an integer(I4P)', pref)
+  type is(integer(I2P))
+    allowed = self%type_allows('I', range(val), 'an integer(I2P)', pref)
+  type is(integer(I1P))
+    allowed = self%type_allows('I', range(val), 'an integer(I1P)', pref)
+  type is(logical)
+    allowed = self%type_allows('L', 0_I4P, 'a logical', pref)
+  endselect
+  endfunction type_allows_list
+
+  function type_allows_val(self, val, pref) result(allowed)
+  !< Check that a get into a variable may read the declared type.
+  class(command_line_argument), intent(inout) :: self    !< CLA data.
+  class(*),                     intent(in)    :: val     !< Variable.
+  character(*), optional,       intent(in)    :: pref    !< Prefixing string.
+  logical                                     :: allowed !< Check result.
+
+  call self%clear_error ! a previous get does not leave its error to a character one, which assigns without checking
+  allowed = .true.
+  select type(val)
+#if defined PENF_R16P
+  type is(real(R16P))
+    allowed = self%type_allows('R', precision(val), 'a real(R16P)', pref)
+#endif
+  type is(real(R8P))
+    allowed = self%type_allows('R', precision(val), 'a real(R8P)', pref)
+  type is(real(R4P))
+    allowed = self%type_allows('R', precision(val), 'a real(R4P)', pref)
+  type is(integer(I8P))
+    allowed = self%type_allows('I', range(val), 'an integer(I8P)', pref)
+  type is(integer(I4P))
+    allowed = self%type_allows('I', range(val), 'an integer(I4P)', pref)
+  type is(integer(I2P))
+    allowed = self%type_allows('I', range(val), 'an integer(I2P)', pref)
+  type is(integer(I1P))
+    allowed = self%type_allows('I', range(val), 'an integer(I1P)', pref)
+  type is(logical)
+    allowed = self%type_allows('L', 0_I4P, 'a logical', pref)
+  endselect
+  endfunction type_allows_val
 
   subroutine check_alternate_consistency(self, pref)
   !< Check that an alternate action (F16 of #125) is a plain flag: no nargs, envvar, positional, choices, required, exclude.
@@ -2225,6 +2531,8 @@ contains
   character(len=:), allocatable               :: trimmed   !< Value without the blanks around it.
   character(len=:), allocatable               :: type_name !< Type of the number, for the message.
   integer(I4P)                                :: ios       !< I/O status.
+  logical                                     :: invalid   !< The text is not one number.
+  integer(I8P)                                :: wide      !< Value of a narrower integer (nvfortran wraps it, without error).
 
   trimmed = trim(adjustl(text))
   ios = 0
@@ -2239,7 +2547,12 @@ contains
   type is(integer(I1P))
     type_name = 'an integer'
   endselect
-  if (.not.is_single_item(trimmed)) then
+  if (type_name == 'an integer') then
+    invalid = .not.is_integer_text(trimmed)
+  else
+    invalid = .not.is_single_item(trimmed)
+  endif
+  if (invalid) then
     call self%errored(pref=pref, error=ERROR_CASTING_NUMBER, val_str=trimmed, type_name=type_name)
     return
   endif
@@ -2255,11 +2568,32 @@ contains
   type is(integer(I8P))
     read(trimmed, *, iostat=ios) val
   type is(integer(I4P))
-    read(trimmed, *, iostat=ios) val
+    read(trimmed, *, iostat=ios) wide
+    if (ios == 0) then
+      if (wide > huge(val) .or. wide < -int(huge(val), I8P) - 1_I8P) then
+        ios = 1
+      else
+        val = int(wide, I4P)
+      endif
+    endif
   type is(integer(I2P))
-    read(trimmed, *, iostat=ios) val
+    read(trimmed, *, iostat=ios) wide
+    if (ios == 0) then
+      if (wide > huge(val) .or. wide < -int(huge(val), I8P) - 1_I8P) then
+        ios = 1
+      else
+        val = int(wide, I2P)
+      endif
+    endif
   type is(integer(I1P))
-    read(trimmed, *, iostat=ios) val
+    read(trimmed, *, iostat=ios) wide
+    if (ios == 0) then
+      if (wide > huge(val) .or. wide < -int(huge(val), I8P) - 1_I8P) then
+        ios = 1
+      else
+        val = int(wide, I1P)
+      endif
+    endif
   class default
     call self%errored(pref=pref, error=ERROR_UNSUPPORTED_TYPE)
     return
@@ -2310,6 +2644,7 @@ contains
   character(len=:), allocatable               :: buffer !< Stored value of a flag.
 
   if (.not.self%is_required_passed(pref=pref)) return
+  if (.not.self%type_allows_val(val, pref=pref)) return
   if (self%act==action_store.or.self%act==action_store_star) then
     if (self%has_value().and.allocated(self%val)) then
       call self%get_cla_from_buffer(buffer=self%val, val=val, pref=pref)
@@ -2415,6 +2750,7 @@ contains
   class(*),                     intent(inout) :: val(1:)  !< CLA values.
 
   if (.not.self%is_required_passed(pref=pref)) return
+  if (.not.self%type_allows_list(val, pref=pref)) return
   if (.not.self%is_list()) then
     call self%errored(pref=pref,error=ERROR_NO_LIST)
     return
@@ -2572,6 +2908,7 @@ contains
   integer(I4P)                                :: v       !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
+  if (.not.self%type_allows('R', precision(real(1, R16P)), 'a real(R16P)', pref)) return
   if (.not.self%is_list()) then
     call self%errored(pref=pref, error=ERROR_NO_LIST)
     return
@@ -2604,6 +2941,7 @@ contains
   integer(I4P)                                :: v       !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
+  if (.not.self%type_allows('R', precision(1._R8P), 'a real(R8P)', pref)) return
   if (.not.self%is_list()) then
     call self%errored(pref=pref, error=ERROR_NO_LIST)
     return
@@ -2636,6 +2974,7 @@ contains
   integer(I4P)                                :: v       !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
+  if (.not.self%type_allows('R', precision(1._R4P), 'a real(R4P)', pref)) return
   if (.not.self%is_list()) then
     call self%errored(pref=pref, error=ERROR_NO_LIST)
     return
@@ -2668,6 +3007,7 @@ contains
   integer(I4P)                                :: v       !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
+  if (.not.self%type_allows('I', range(1_I8P), 'an integer(I8P)', pref)) return
   if (.not.self%is_list()) then
     call self%errored(pref=pref, error=ERROR_NO_LIST)
     return
@@ -2700,6 +3040,7 @@ contains
   integer(I4P)                                :: v       !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
+  if (.not.self%type_allows('I', range(1_I4P), 'an integer(I4P)', pref)) return
   if (.not.self%is_list()) then
     call self%errored(pref=pref, error=ERROR_NO_LIST)
     return
@@ -2732,6 +3073,7 @@ contains
   integer(I4P)                                :: v       !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
+  if (.not.self%type_allows('I', range(1_I2P), 'an integer(I2P)', pref)) return
   if (.not.self%is_list()) then
     call self%errored(pref=pref, error=ERROR_NO_LIST)
     return
@@ -2764,6 +3106,7 @@ contains
   integer(I4P)                                :: v       !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
+  if (.not.self%type_allows('I', range(1_I1P), 'an integer(I1P)', pref)) return
   if (.not.self%is_list()) then
     call self%errored(pref=pref, error=ERROR_NO_LIST)
     return
@@ -2796,6 +3139,7 @@ contains
   integer(I4P)                                :: v       !< Values counter.
 
   if (.not.self%is_required_passed(pref=pref)) return
+  if (.not.self%type_allows('L', 0_I4P, 'a logical', pref)) return
   if (.not.self%is_list()) then
     call self%errored(pref=pref, error=ERROR_NO_LIST)
     return
@@ -2888,6 +3232,19 @@ contains
   single = len(text) > 0 .and. scan(text, ' ,;/*'//achar(9)//'"'//"'") == 0
   endfunction is_single_item
 
+  pure function is_integer_text(text) result(is_integer)
+  !< Check that a text (one item) is an integer: nvfortran reads `2.5` into an integer as 2, without error.
+  character(*), intent(in) :: text       !< Text.
+  logical                  :: is_integer !< Check result.
+  integer(I4P)             :: first      !< First digit.
+
+  is_integer = .false.
+  if (len(text) == 0) return
+  first = 1 ; if (scan(text(1:1), '+-') == 1) first = 2
+  if (len(text) < first) return
+  is_integer = verify(text(first:), '0123456789') == 0
+  endfunction is_integer_text
+
   function read_logical(text, val) result(ios)
   !< Read a logical from a text, quietly: `T`, `.true.`, `false`, ...; never more than one item (see is_single_item).
   character(*), intent(in)    :: text !< Text.
@@ -2924,6 +3281,7 @@ contains
 
   i = 0_I8P
   ok = is_single_item(trim(adjustl(string)))
+  if (ok) ok = is_integer_text(trim(adjustl(string)))
   if (.not.ok) return
   read(string, *, iostat=ios) i
   ok = ios == 0

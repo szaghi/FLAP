@@ -80,7 +80,9 @@ positive values are **errors**. Existing values never change.
 | `47` | `ERROR_LIST_SIZE` | List size differs from the array size | `get` into a fixed-size array with more or fewer elements than the values: use an array of the right size, or `get_varying` |
 | `48` | `ERROR_DEF_NARGS` | Default count differs from `nargs` | `nargs='N'` with a default of another number of values: give the default N values |
 | `49` | `ERROR_PATH_INCONSISTENT` | Path checks on an option without value | `must_exist`/`readable`/`writable`/`allow_dash` on a flag, `count`, ... |
-| `50` | `ERROR_CASTING_NUMBER` | Value is not a number | `get` into an integer or a real of a value that is not one (`--nx many`), from any source; the message names the value, the option and the type |
+| `50` | `ERROR_CASTING_NUMBER` | Value is not a number | `get` into an integer or a real of a value that is not exactly one number (`--nx many`, `--nx /`, `--nx 2*5`), from any source, or `parse` of an option with `val_type`; the message names the value, the option and the type |
+| `51` | `ERROR_TYPE_DEFINITION` | Invalid `val_type` | An unknown name; a map, a configuration file option or an action without value; a flag not `logical`, a count not an integer, a path not `character`; a range on a non-number; a default or a choice that does not fit the type |
+| `52` | `ERROR_TYPE_MISMATCH` | `get` against `val_type` | `get` into another family or a narrower kind than declared, whatever the value (`character` is always allowed) |
 | `100` | `ERROR_GROUP_CONSISTENCY` | Group (command) consistency broken | Two arguments of a group share a switch |
 | `101` | `ERROR_GROUP_M_EXCLUDE` | Two mutually exclusive groups both passed | Both sides of `set_mutually_exclusive_groups` given |
 | `102` | `ERROR_M_EXCLUDE_SET` | Two members of a mutually exclusive set passed | `--mesh m --restart r` with `set_mutually_exclusive_switches(switches='--mesh,--restart')` |

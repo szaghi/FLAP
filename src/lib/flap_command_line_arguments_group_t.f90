@@ -82,6 +82,7 @@ type, extends(object) :: command_line_arguments_group
     procedure, public :: is_required_passed    !< Check if required CLAs are passed.
     procedure, public :: add_exclusive_set     !< Add a mutually exclusive set of switches.
     procedure, public :: check_exclusive_sets  !< Check the mutually exclusive sets of switches.
+    procedure, public :: check_types           !< Check the values of the typed CLAs against their declared type.
     procedure, public :: check_maps            !< Check the KEY=VALUE pairs of the map CLAs.
     procedure, public :: is_passed             !< Check if a CLA has been passed.
     procedure, public :: is_defined            !< Check if a CLA has been defined.
@@ -178,6 +179,21 @@ contains
     if (alias) return
   enddo
   endfunction has_alias
+
+  subroutine check_types(self, pref)
+  !< Check the values of the typed CLAs against their declared type (#128), whatever their source; the first error stops.
+  class(command_line_arguments_group), intent(inout) :: self !< CLAsG data.
+  character(*), optional,              intent(in)    :: pref !< Prefixing string.
+  integer(I4P)                                       :: a    !< Counter.
+
+  do a=1, self%Na
+    call self%cla(a)%check_value_type(pref=pref)
+    if (self%cla(a)%error /= 0) then
+      call self%inherit_error(from=self%cla(a))
+      return
+    endif
+  enddo
+  endsubroutine check_types
 
   subroutine check_maps(self, pref)
   !< Check the KEY=VALUE pairs of the map CLAs (F18 of #125), whatever their source; the first error stops.

@@ -730,7 +730,7 @@ contains
   subroutine add(self, pref, group, group_index, switch, switch_ab, switch_neg, help, help_markdown, help_color, help_style, &
                  required, val_required, positional, position, hidden, act, def, nargs, choices, exclude, envvar, &
                  must_exist, readable, writable, allow_dash, deprecated, min, max, min_open, max_open, clamp, &
-                 case_sensitive, map, map_keys, metavar, error)
+                 case_sensitive, map, map_keys, metavar, error, val_type)
   !< Add CLA to CLI.
   !<
   !< @note If not otherwise declared the action on CLA value is set to "store" a value that must be passed after the switch name
@@ -777,6 +777,8 @@ contains
   character(*), optional,        intent(in)    :: exclude       !< Switch name of the mutually exclusive CLA.
   character(*), optional,        intent(in)    :: envvar        !< Environment variable from which take value.
   integer(I4P), optional,        intent(out)   :: error         !< Error trapping flag.
+  character(*), optional,        intent(in)    :: val_type      !< Declared type of the value, validated by parse (#128): I1P,
+                                                                  !< I2P, I4P, I8P, R4P, R8P, R16P, logical, character.
   type(command_line_argument)                  :: cla           !< CLA data.
   integer(I4P)                                 :: g             !< Counter.
 
@@ -818,6 +820,7 @@ contains
                                                   if (present(map          )) cla%is_map          = map
                                                   if (present(map_keys     )) cla%map_keys        = map_keys
                                                   if (present(metavar      )) cla%metavar         = metavar
+  if (present(val_type)) cla%val_type = trim(adjustl(Upper_Case(val_type)))
   cla%act             = action_store            ; if (present(act          )) cla%act             = trim(adjustl(Upper_Case(act)))
   if (cla%act == ACTION_ALTERNATE .and. .not.present(def)) then
     ! an alternate action is a flag (F16)
@@ -1271,6 +1274,15 @@ contains
     call self%print_usage_line(pref=pref, g=g)
     return
   endif
+
+  ! check the values of the typed options (#128), whatever their source: the top level, the commands called
+  do g=0, size(ai,dim=1)-1
+    if (g > 0 .and. .not.self%clasg(g)%is_called) cycle
+    call self%clasg(g)%check_types(pref=pref)
+    call self%inherit_error(from=self%clasg(g))
+    if (self%is_fatal()) exit
+  enddo
+  if (self%is_fatal()) return
 
   ! check the KEY=VALUE pairs of the maps (F18), whatever their source: the top level, the commands called
   do g=0, size(ai,dim=1)-1

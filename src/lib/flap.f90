@@ -18,6 +18,8 @@ use flap_command_line_argument_t, only : command_line_argument,        &
                                          ERROR_MISSING_REQUIRED,       &
                                          ERROR_M_EXCLUDE,              &
                                          ERROR_CASTING_LOGICAL,        &
+                                         ERROR_TYPE_DEFINITION,        &
+                                         ERROR_TYPE_MISMATCH,          &
                                          ERROR_CHOICES_LOGICAL,        &
                                          ERROR_NO_LIST,                &
                                          ERROR_NARGS_INSUFFICIENT,     &
@@ -131,6 +133,8 @@ public :: ERROR_NOT_IN_CHOICES
 public :: ERROR_MISSING_REQUIRED
 public :: ERROR_M_EXCLUDE
 public :: ERROR_CASTING_LOGICAL
+public :: ERROR_TYPE_DEFINITION
+public :: ERROR_TYPE_MISMATCH
 public :: ERROR_CHOICES_LOGICAL
 public :: ERROR_NO_LIST
 public :: ERROR_NARGS_INSUFFICIENT
