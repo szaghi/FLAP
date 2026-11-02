@@ -4,6 +4,37 @@ All notable changes to this project are documented here.
 Versions follow [Semantic Versioning](https://semver.org/).
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.6.0] — 2026-11-02
+### Added
+- **argument**: Optional declared value type, validated by parse
+
+- **utils**: JSON string escaping and validation
+
+- **cli**: JSON description of the CLI, save_json_schema and --schema
+
+- **cli**: Structured errors, error_format and error_format_env
+
+- **cli**: Validate-only mode, --check
+
+- **cli**: JSON provenance, save_provenance and sensitive values
+
+
+### Documentation
+- Point the install instructions at master instead of a release tag
+
+- Machine-readable interfaces guide and example adapter
+
+
+### Fixed
+- **argument**: Reject malformed numeric and logical values instead of reading them as list items
+
+- **cli**: Close the gaps between parse, get and --check found by review
+
+- **cli**: A getter no longer parses again after a failed parse
+
+- **argument**: Mask sensitive values in error messages
+
+
 ## [2.5.3] — 2026-10-08
 ### Fixed
 - **ci**: Run install smoke test from the release workflow
