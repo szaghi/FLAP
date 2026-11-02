@@ -821,7 +821,7 @@ flowchart TD
   parse["parse"] --> report_check["report_check"]
   report_check["report_check"] --> is_builtin["is_builtin"]
   report_check["report_check"] --> is_json_format["is_json_format"]
-  report_check["report_check"] --> is_typed_for_schema["is_typed_for_schema"]
+  report_check["report_check"] --> is_validated["is_validated"]
   report_check["report_check"] --> json_array["json_array"]
   report_check["report_check"] --> json_string["json_string"]
   report_check["report_check"] --> quiet_stop["quiet_stop"]
@@ -2225,8 +2225,10 @@ function provenance_arguments(self) result(json)
 ```mermaid
 flowchart TD
   provenance_json["provenance_json"] --> provenance_arguments["provenance_arguments"]
+  provenance_arguments["provenance_arguments"] --> ends_list["ends_list"]
   provenance_arguments["provenance_arguments"] --> json_array["json_array"]
   provenance_arguments["provenance_arguments"] --> match_inline_token["match_inline_token"]
+  provenance_arguments["provenance_arguments"] --> takes_values["takes_values"]
   style provenance_arguments fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -2367,6 +2369,7 @@ function group_index(self, name) result(g)
 ```mermaid
 flowchart TD
   add_group["add_group"] --> group_index["group_index"]
+  check_requested["check_requested"] --> group_index["group_index"]
   copy_options["copy_options"] --> group_index["group_index"]
   is_defined_group["is_defined_group"] --> group_index["group_index"]
   load_config["load_config"] --> group_index["group_index"]
@@ -2481,6 +2484,7 @@ flowchart TD
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> is_defined["is_defined"]
   get_source["get_source"] --> is_defined["is_defined"]
   is_defined["is_defined"] --> is_defined["is_defined"]
+  json_members["json_members"] --> is_defined["is_defined"]
   map_cla["map_cla"] --> is_defined["is_defined"]
   is_defined["is_defined"] --> is_defined["is_defined"]
   is_defined["is_defined"] --> is_defined_group["is_defined_group"]
@@ -2507,7 +2511,8 @@ function is_parsed(self)
 
 ### check_requested
 
-Check if --check is on the command line, before a `--`: by its token, since an earlier error may have stopped the parse
+Check if --check is on the command line, before a `--` and before the first command: by its token, since an earlier
+ error may have stopped the parse
  before reaching it, and the exit status must not depend on that (#128). A status of a builtin leaves it to that builtin.
 
 **Returns**: `logical`
@@ -2527,6 +2532,7 @@ function check_requested(self) result(requested)
 ```mermaid
 flowchart TD
   parse["parse"] --> check_requested["check_requested"]
+  check_requested["check_requested"] --> group_index["group_index"]
   check_requested["check_requested"] --> is_defined["is_defined"]
   check_requested["check_requested"] --> match_token["match_token"]
   style check_requested fill:#3e63dd,stroke:#99b,stroke-width:2px

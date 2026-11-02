@@ -140,6 +140,7 @@ type, extends(object) :: command_line_argument
     procedure, public :: free                           !< Free dynamic memory.
     procedure, public :: check                          !< Check data consistency.
     procedure, public :: is_typed_for_schema            !< Check if FLAP knows the type of the value.
+    procedure, public :: is_validated                   !< Check if parse has validated the value.
     procedure, public :: json_schema                    !< JSON description of the CLA (#128).
     procedure, public :: check_value_type               !< Check the value against the declared type (#128).
     procedure, public :: is_required_passed             !< Check if required CLA is passed.
@@ -147,6 +148,7 @@ type, extends(object) :: command_line_argument
     procedure, public :: set_source_value               !< Set a value read from the environment or a configuration file.
     procedure, public :: config_key                     !< Key of the CLA in a configuration file.
     procedure, public :: takes_config_value             !< Check if the CLA takes a value from a configuration file.
+    procedure, public :: takes_values                   !< Number of tokens of a value after the switch, -1 if open ended.
     procedure, public :: json_resolved                  !< Resolved value in JSON (JSON provenance, #128).
     procedure, public :: value_text                     !< Resolved value as text (provenance report).
     procedure, public :: has_path_checks                !< Check if the value is a path to check.
@@ -221,6 +223,7 @@ type, extends(object) :: command_line_argument
     procedure, private :: check_positional_consistency    !< Check positional CLA consistency.
     procedure, private :: check_choices                   !< Check if CLA value is in allowed choices.
     procedure, private :: check_choices_text              !< Check the choices of a whole character value, then store it.
+    procedure, private :: is_typed_number                 !< Check if the declared type is a number.
     procedure, private :: display_name                    !< Name of the CLA for a message.
     procedure, private :: json_value                      !< JSON description of the value of the CLA.
     procedure, private :: json_item                       !< JSON description of one value of the CLA.
@@ -479,6 +482,22 @@ contains
     key = ''
   endif
   endfunction config_key
+
+  pure function takes_values(self) result(n)
+  !< Return how many tokens follow the switch as its value: 0 for a flag or a count, -1 for a list ended by the next switch.
+  class(command_line_argument), intent(in) :: self !< CLA data.
+  integer(I4P)                             :: n    !< Number of tokens.
+  integer(I4P)                             :: ios  !< I/O status.
+
+  n = 1
+  if (self%act == ACTION_STORE_TRUE .or. self%act == ACTION_STORE_FALSE .or. self%act == ACTION_ALTERNATE .or. &
+      self%act == ACTION_COUNT) then
+    n = 0
+  elseif (allocated(self%nargs)) then
+    read(self%nargs, *, iostat=ios) n
+    if (ios /= 0) n = -1 ! + or *
+  endif
+  endfunction takes_values
 
   function json_resolved(self) result(json)
   !< Return the resolved value in JSON, as it is, with no conversion: a string, an array of strings for a list.
@@ -1851,6 +1870,10 @@ contains
     logical,   intent(in)    :: single !< The value is real(R4P).
     real(R8P)                :: b      !< Bound.
 
+    if (v /= v) then ! NaN: every comparison below is false
+      call out_of_range
+      return
+    endif
     if (allocated(self%range_min)) then
       b = bound(self%range_min, single)
       if (v < b .or. (self%min_open .and. v == b)) then
@@ -1903,6 +1926,10 @@ contains
     real(R16P)                :: b   !< Bound.
     integer(I4P)              :: ios !< I/O status.
 
+    if (v /= v) then ! NaN: every comparison below is false
+      call out_of_range
+      return
+    endif
     if (allocated(self%range_min)) then
       read(self%range_min, *, iostat=ios) b
       if (v < b .or. (self%min_open .and. v == b)) then
@@ -2073,8 +2100,8 @@ contains
     json = '{"type": "string"'
   case default
     if (self%act == ACTION_COUNT) then
-      json = '{"type": "integer", "minimum": 0'
-      lowest = ''
+      json = '{"type": "integer"'
+      lowest = '0'
     elseif (self%has_range()) then
       json = '{"type": "number"'
     else
@@ -2112,7 +2139,8 @@ contains
     do i=1, n
       if (i > 1) json = json//', '
       item = trim(adjustl(toks(i)))
-      if (len(json_number(item)) > 0 .and. len(kind) > 0 .and. kind /= 'CHARACTER') then
+      if (len(json_number(item)) > 0 .and. ((len(kind) > 0 .and. kind /= 'CHARACTER') .or. &
+                                            (len(kind) == 0 .and. self%has_range()))) then
         json = json//json_number(item)
       else
         json = json//json_string(item)
@@ -2239,7 +2267,7 @@ contains
   !< Check the resolved value against the declared type, whatever its source (#128): the same conversion, choices and range
   !< of `get`, on locals of the declared kind, so that a value accepted here is accepted by a `get` of that kind.
   !<
-  !< Nothing to do for an untyped CLA, a count (FLAP's own number) or a value not given (blank default, no default).
+  !< Nothing to do for an untyped CLA or a value not given (blank default, no default).
   class(command_line_argument), intent(inout) :: self     !< CLA data.
   character(*), optional,       intent(in)    :: pref     !< Prefixing string.
   character(len=:), allocatable               :: items(:) !< Stored values.
@@ -2257,12 +2285,21 @@ contains
     if (self%error /= 0) call self%errored(pref=pref, error=ERROR_CASTING_LOGICAL, log_value=text)
     return
   endif
+  if (self%act == ACTION_COUNT) then
+    call self%check_value_item(item=self%stored_list(), pref=pref)
+    return
+  endif
   if (self%act /= ACTION_STORE .and. self%act /= ACTION_STORE_STAR .and. self%act /= ACTION_APPEND) return
   text = self%stored_list()
   if (self%is_list()) then
     call list_items(text, items, n)
     if (n == 1) then
-      if (len_trim(items(1)) == 0) return ! an empty list
+      if (len_trim(items(1)) == 0) then ! an empty list, as the getters take it
+        if (allocated(self%nargs).and.self%has_value()) then
+          if (trim(adjustl(self%nargs)) == '+') call self%errored(pref=pref, error=ERROR_NARGS_INSUFFICIENT)
+        endif
+        return
+      endif
     endif
     do i=1, n
       call self%check_value_item(item=trim(adjustl(items(i))), pref=pref)
@@ -2287,6 +2324,9 @@ contains
   real(R4P)                                   :: r4        !< Value.
   real(R8P)                                   :: r8        !< Value.
   real(R16P)                                  :: r16       !< Value.
+  real(R8P)                                   :: r4_as_r8  !< Value of a R4P, as a wider get reads it.
+  real(R16P)                                  :: r4_as_r16 !< Value of a R4P, as a wider get reads it.
+  real(R16P)                                  :: r8_as_r16 !< Value of a R8P, as a wider get reads it.
   logical                                     :: l         !< Value.
   character(len=len(item))                    :: c         !< Value.
   logical                                     :: cast      !< Check the conversion only.
@@ -2302,10 +2342,14 @@ contains
     call number(i4)
   case('I8P')
     call number(i8)
+  ! a wider get compares in its own kind: 1.00000001 is 1.0 in R4P, above a maximum of 1 in R8P
   case('R4P')
     call number(r4)
+    if (self%error == 0) call number(r4_as_r8)
+    if (self%error == 0) call number(r4_as_r16)
   case('R8P')
     call number(r8)
+    if (self%error == 0) call number(r8_as_r16)
   case('R16P')
     call number(r16)
   case('LOGICAL')
@@ -2325,6 +2369,30 @@ contains
     if (self%has_range().and.self%error==0) call self%check_range(val=val, text=item, pref=pref)
     endsubroutine number
   endsubroutine check_value_item
+
+  pure function is_typed_number(self) result(is_number)
+  !< Check if the declared type is a number.
+  class(command_line_argument), intent(in) :: self      !< CLA data.
+  logical                                  :: is_number !< Check result.
+
+  is_number = .false.
+  if (allocated(self%val_type)) is_number = self%val_type /= 'LOGICAL' .and. self%val_type /= 'CHARACTER'
+  endfunction is_typed_number
+
+  pure function is_validated(self) result(validated)
+  !< Check if parse has validated the value (--check, #128): declared type, or a flag or count that cannot be wrong; a flag
+  !< from the environment or a configuration file, or a count with a range, can fail only at get unless its type is declared.
+  class(command_line_argument), intent(in) :: self      !< CLA data.
+  logical                                  :: validated !< Check result.
+
+  validated = allocated(self%val_type)
+  if (validated) return
+  if (self%act == ACTION_STORE_TRUE .or. self%act == ACTION_STORE_FALSE .or. self%act == ACTION_ALTERNATE) then
+    validated = self%source /= SOURCE_ENVIRONMENT .and. self%source /= SOURCE_CONFIG
+  elseif (self%act == ACTION_COUNT) then
+    validated = .not.self%has_range()
+  endif
+  endfunction is_validated
 
   function type_allows(self, family, width, name, pref) result(allowed)
   !< Check that a get may read the declared type (#128): the same family and an equal or wider kind, whatever the value, or
@@ -2786,7 +2854,7 @@ contains
   logical                                     :: invalid   !< The text is not one number.
   integer(I8P)                                :: wide      !< Value of a narrower integer (nvfortran wraps it, without error).
 
-  trimmed = trim(adjustl(text))
+  trimmed = strip_blanks(text)
   ios = 0
   type_name = 'a real'
   select type(val)
@@ -2812,11 +2880,14 @@ contains
 #if defined PENF_R16P
   type is(real(R16P))
     read(trimmed, *, iostat=ios) val
+    if (ios == 0 .and. abs(val) > huge(val) .and. scan(trimmed, 'iI') == 0) ios = 1 ! overflow, not an explicit infinity
 #endif
   type is(real(R8P))
     read(trimmed, *, iostat=ios) val
+    if (ios == 0 .and. abs(val) > huge(val) .and. scan(trimmed, 'iI') == 0) ios = 1 ! overflow, not an explicit infinity
   type is(real(R4P))
     read(trimmed, *, iostat=ios) val
+    if (ios == 0 .and. abs(val) > huge(val) .and. scan(trimmed, 'iI') == 0) ios = 1 ! overflow, not an explicit infinity
   type is(integer(I8P))
     read(trimmed, *, iostat=ios) val
   type is(integer(I4P))
@@ -2897,6 +2968,13 @@ contains
 
   if (.not.self%is_required_passed(pref=pref)) return
   if (.not.self%type_allows_val(val, pref=pref)) return
+  if (self%is_typed_number() .and. self%act /= action_append) then
+    select type(val)
+    type is(character(*)) ! the text as given: parse has checked it as a number, the choices and the range included
+      val = self%stored_list()
+      return
+    endselect
+  endif
   if (self%act==action_store.or.self%act==action_store_star) then
     if (self%has_value().and.allocated(self%val)) then
       call self%get_cla_from_buffer(buffer=self%val, val=val, pref=pref)
@@ -3140,6 +3218,10 @@ contains
   integer(I4P)                                :: v       !< Values counter.
 
   do v=1, size(vals, dim=1)
+    if (self%is_typed_number()) then ! the text as given: parse has checked it as a number
+      val(v) = vals(v)
+      cycle
+    endif
     if (allocated(self%choices)) then
       call self%check_choices_text(text=vals(v), val=val(v), pref=pref) ! the whole value (B38 of #126)
     else
@@ -3454,6 +3536,10 @@ contains
     endif
     allocate(val(1:Nv))
     do v=1, Nv
+      if (self%is_typed_number()) then ! the text as given: parse has checked it as a number
+        val(v) = vals(v)
+        cycle
+      endif
       if (allocated(self%choices)) then
         call self%check_choices_text(text=trim(adjustl(vals(v))), val=val(v), pref=pref) ! the whole value (B38 of #126)
       else
@@ -3556,6 +3642,20 @@ contains
   json = sign_//mantissa//exponent_
   endfunction json_number
 
+  pure function strip_blanks(text) result(stripped)
+  !< Return a text without the blanks, tabs and line ends around it (a list-directed read takes them as separators).
+  character(*), intent(in)      :: text     !< Text.
+  character(len=:), allocatable :: stripped !< Stripped text.
+  character(4), parameter       :: BLANKS = ' '//achar(9)//achar(10)//achar(13) !< What is stripped.
+  integer(I4P)                  :: first    !< First character kept.
+  integer(I4P)                  :: last     !< Last character kept.
+
+  first = verify(text, BLANKS)
+  last = verify(text, BLANKS, back=.true.)
+  stripped = ''
+  if (first > 0) stripped = text(first:last)
+  endfunction strip_blanks
+
   pure function is_single_item(text) result(single)
   !< Check that a text (without blanks around it) is one item of a list-directed read: a read alone accepts as numbers `/` and
   !< `,` (no value, the variable left unassigned, and no error), `2*5` (a repeat count), `3 abc` and `1,5` (the first item).
@@ -3585,7 +3685,7 @@ contains
   integer(I4P)                :: ios  !< I/O status (not zero if the text is invalid).
   character(len=:), allocatable :: trimmed !< Text without the blanks around it.
 
-  trimmed = trim(adjustl(text))
+  trimmed = strip_blanks(text)
   ios = 1
   if (.not.is_single_item(trimmed)) return
   read(trimmed, *, iostat=ios) val
@@ -3599,7 +3699,7 @@ contains
   integer(I4P)              :: ios    !< I/O status.
 
   x = 0._R8P
-  ok = is_single_item(trim(adjustl(string)))
+  ok = is_single_item(strip_blanks(string))
   if (.not.ok) return
   read(string, *, iostat=ios) x
   ok = ios == 0
@@ -3613,8 +3713,8 @@ contains
   integer(I4P)              :: ios    !< I/O status.
 
   i = 0_I8P
-  ok = is_single_item(trim(adjustl(string)))
-  if (ok) ok = is_integer_text(trim(adjustl(string)))
+  ok = is_single_item(strip_blanks(string))
+  if (ok) ok = is_integer_text(strip_blanks(string))
   if (.not.ok) return
   read(string, *, iostat=ios) i
   ok = ios == 0

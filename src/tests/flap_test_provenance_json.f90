@@ -29,6 +29,8 @@ call check_escaping
 call check_sensitive
 call check_sensitive_positional
 call check_sensitive_outputs
+call check_sensitive_lists
+call check_failed_args
 call check_save
 call capture_close(lun)
 
@@ -227,6 +229,40 @@ contains
   call assert(index(cli%json_schema(), 'DEFSECRET') == 0, 'sensitive: description')
   call assert_contains(cli%json_schema(), '"sensitive": true', 'sensitive: described')
   endsubroutine check_sensitive_outputs
+
+  subroutine check_sensitive_lists
+  !< All the tokens of a sensitive value, and none after them; a sensitive flag has none.
+  type(command_line_interface)  :: cli    !< Command Line Interface (CLI).
+  character(len=:), allocatable :: report !< Report.
+  integer(I4P)                  :: error  !< Error trapping flag.
+
+  call cli%init(progname='prog', error_lun=lun, usage_lun=lun)
+  call cli%add(switch='--s', help='s', required=.false., def='', nargs='+', sensitive=.true., error=error)
+  call cli%add(switch='--pair', help='p', required=.false., def='x y', nargs='2', sensitive=.true., error=error)
+  call cli%add(switch='--ff', help='f', required=.false., act='store_true', def='.false.', sensitive=.true., error=error)
+  call cli%add(switch='--o', help='o', required=.false., def='', error=error)
+  call cli%parse(args='--s aa bb cc --pair dd ee --ff --o visible', error=error)
+  call assert_equal(error, 0_I4P, 'sensitive lists: parse')
+  report = cli%provenance(format='json')
+  call assert_contains(report, '"arguments": ["--s","***","***","***","--pair","***","***","--ff","--o","visible"]', &
+                       'sensitive lists: arguments')
+  endsubroutine check_sensitive_lists
+
+  subroutine check_failed_args
+  !< A failed parse(args=): the report is about that command line, and parse does not run again.
+  type(command_line_interface)  :: cli    !< Command Line Interface (CLI).
+  character(len=:), allocatable :: report !< Report.
+  integer(I4P)                  :: error  !< Error trapping flag.
+
+  call cli%init(progname='prog', error_lun=lun, usage_lun=lun, standalone=.false., error_hint=.false.)
+  call cli%add(switch='--x', help='x', required=.false., def='1', val_type='I4P', error=error)
+  call cli%parse(args='--x abc', error=error)
+  report = read_back(lun)
+  report = cli%provenance(format='json')
+  call assert_contains(report, '"arguments": ["--x","abc"]', 'failed: arguments')
+  call assert_contains(report, '"status": 50', 'failed: status')
+  call assert_equal(read_back(lun), '', 'failed: nothing printed again')
+  endsubroutine check_failed_args
 
   subroutine check_save
   !< save_provenance writes the manifest; it parses first, as get does.

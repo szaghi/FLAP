@@ -177,7 +177,29 @@ contains
   call assert_contains(json, '{"type": "number", "exclusiveMinimum": 1e0, "x-flap-kind": "R4P"}', 'T2.9 open')
   call assert_contains(json, '"value": {"type": "number", "minimum": 1}, "typed": false', 'T2.9 untyped with a range')
   call assert_contains(json, '"enum": [1, 2]', 'T2.9 numeric choices')
+  call check_review
   endsubroutine check_ranges
+
+  subroutine check_review
+  !< No key twice, a range and choices that agree, no hidden member of an exclusive set.
+  type(command_line_interface) :: cli   !< Command Line Interface (CLI).
+  integer(I4P)                 :: error !< Error trapping flag.
+
+  call cli%init(progname='prog', error_lun=lun, usage_lun=lun)
+  call cli%add(switch='-v', help='v', required=.false., act='count', min='1', error=error)
+  call cli%add(switch='-w', help='w', required=.false., act='count', error=error)
+  call cli%add(switch='--r', help='r', required=.false., def='1', min='0', choices='1,2', error=error)
+  call cli%add(switch='--a', help='a', required=.false., act='store_true', def='.false.', error=error)
+  call cli%add(switch='--hide', help='h', required=.false., act='store_true', def='.false.', hidden=.true., error=error)
+  call cli%set_mutually_exclusive_switches(switches='--a,--hide', error=error)
+  call assert_equal(error, 0_I4P, 'review: definitions')
+  json = cli%json_schema()
+  call assert_contains(json, '"action": "count", "value": {"type": "integer", "minimum": 1}', 'a count with a minimum')
+  call assert_contains(json, '"action": "count", "value": {"type": "integer", "minimum": 0}', 'a count without')
+  call assert_contains(json, '{"type": "number", "minimum": 0, "enum": [1, 2]}', 'a range and choices')
+  call assert_contains(json, '{"members": ["--a"], "required": false}', 'a hidden member')
+  call assert(index(json, '--hide') == 0, 'a hidden member: left out')
+  endsubroutine check_review
 
   subroutine check_not_standalone
   !< T2.7 the status with standalone=.false.

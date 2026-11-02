@@ -203,6 +203,8 @@ contains
   integer(I4P)                                    :: a        !< Counter.
   integer(I4P)                                    :: m        !< Counter.
   integer(I4P)                                    :: n        !< Number of members.
+  integer(I4P)                                    :: visible  !< Number of members not hidden.
+  integer(I4P)                                    :: pos      !< Index of a member.
 
   nl = new_line('a')
   named = '' ; posit = '' ; sets = ''
@@ -221,8 +223,16 @@ contains
     do a=1, size(self%m_sets, dim=1)
       call list_items(self%m_sets(a)%switches, members, n)
       if (allocated(names)) deallocate(names)
-      allocate(names(n))
+      visible = 0
       do m=1, n
+        if (self%is_defined(switch=trim(adjustl(members(m))), pos=pos)) then
+          if (self%cla(pos)%is_hidden) cycle
+        endif
+        visible = visible + 1
+        members(visible) = members(m)
+      enddo
+      allocate(names(visible))
+      do m=1, visible
         names(m)%s = trim(adjustl(members(m)))
       enddo
       if (len(sets) > 0) sets = sets//','//nl

@@ -31,6 +31,9 @@ case(4)
 case(5)
   call child_owned
   stop
+case(6)
+  call child_review
+  stop
 endselect
 
 ! T4.1 valid: exit 0, the body of the program not run
@@ -112,6 +115,24 @@ call reinvoke(4_I4P, exitstat, out, err, args='--check --bogus')
 call assert_equal(exitstat, 0_I4P, 'ignored: exit status')
 call assert_contains(out, 'ignored:', 'ignored: reported')
 call assert_contains(out, '--bogus', 'ignored: named')
+! the tokens of a command are its own (the builtin is top level only)
+call reinvoke(6_I4P, exitstat, out, err, args='run --check')
+call assert_contains(out, 'BODY', 'the --check of a command')
+call reinvoke(6_I4P, exitstat, out, err, args='--check run --check')
+call assert(index(out, 'BODY') == 0, 'the builtin, then the --check of a command')
+! what can fail only at get is named: an untyped count with a range, a flag from the environment
+call reinvoke(6_I4P, exitstat, out, err, args='--check -vvv')
+call assert_contains(out, 'not type-checked:', 'a count: listed')
+call assert_contains(out, '-v', 'a count: named')
+call reinvoke(6_I4P, exitstat, out, err, args='--check', env='FLAP_TEST_CK=abc')
+call assert_contains(out, '--f', 'a flag from the environment: named')
+call reinvoke(6_I4P, exitstat, out, err, args='--check', env='-u FLAP_TEST_CK')
+call assert(index(out, '--f') == 0, 'a flag not from the environment: not named')
+! an alternate action skips the validation, and says so
+call run('--check --list --steps abc')
+call assert_equal(exitstat, 0_I4P, 'alternate, a bad value: exit status')
+call assert_contains(out, 'an alternate action skips the validation', 'alternate: says so')
+call assert_contains(out, '--steps', 'alternate: nothing has been checked')
 
 contains
   subroutine run(args)
@@ -174,6 +195,20 @@ contains
   call cli%init(progname='prog', check_option=.true., ignore_unknown_clas=.true.)
   call cli%parse(error=error)
   endsubroutine child_ignore
+
+  subroutine child_review
+  !< A command with its own --check; what parse cannot validate without a declared type.
+  type(command_line_interface) :: cli   !< Command Line Interface (CLI).
+  integer(I4P)                 :: error !< Error trapping flag.
+
+  call cli%init(progname='prog', check_option=.true.)
+  call cli%add(switch='-v', help='v', required=.false., act='count', max='2', error=error)
+  call cli%add(switch='--f', help='f', required=.false., act='store_true', def='.false.', envvar='FLAP_TEST_CK', error=error)
+  call cli%add_group(group='run', help='r')
+  call cli%add(group='run', switch='--check', help='its own', required=.false., act='store_true', def='.false.', error=error)
+  call cli%parse(error=error)
+  print '(A)', 'BODY'
+  endsubroutine child_review
 
   subroutine child_owned
   !< A program owning --check, the builtin not enabled.

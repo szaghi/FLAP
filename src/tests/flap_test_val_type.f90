@@ -129,11 +129,129 @@ call assert_contains(out, 'error=10', 'a typed flag, junk in the environment')
 ! T1.13 copy_options keeps the type
 call check_copy
 
+! found by the review of the step: parse and get must not disagree
+call check_review
 ! T1.14 an untyped option behaves as before: the failure is in get
 call check_untyped
 call capture_close(lun)
 
 contains
+  subroutine check_review
+  !< A typed count, a wider get, a character get, an explicitly empty list, real overflow, NaN.
+  call count_range
+  call wider_real
+  call character_number
+  call character_list
+  call empty_plus
+  call parse_one('--n 1e50', 'R4P', ERROR_CASTING_NUMBER, 'a real overflow of R4P')
+  call parse_one('--n 1e50', 'R8P', 0_I4P, 'a real that fits R8P')
+  call parse_one('--n inf', 'R4P', 0_I4P, 'an explicit infinity')
+  call nan_range
+  text = read_back(lun)
+  endsubroutine check_review
+
+  subroutine count_range
+  !< A typed count is checked by parse.
+  type(command_line_interface) :: cli   !< Command Line Interface (CLI).
+  integer(I4P)                 :: error !< Error trapping flag.
+
+  call cli%init(progname=PROG, error_lun=lun, usage_lun=lun, error_hint=.false.)
+  call cli%add(switch='-v', help='v', required=.false., act='count', max='2', val_type='I4P', error=error)
+  call cli%parse(args='-vvv', error=error)
+  call assert_equal(error, ERROR_OUT_OF_RANGE, 'a typed count over its range')
+  endsubroutine count_range
+
+  subroutine wider_real
+  !< What parse accepts for R4P, a get into R8P accepts.
+  type(command_line_interface) :: cli1  !< Command Line Interface (CLI).
+  type(command_line_interface) :: cli2  !< Command Line Interface (CLI).
+  type(command_line_interface) :: cli3  !< Command Line Interface (CLI).
+  real(R8P)                    :: v     !< Value.
+  integer(I4P)                 :: error !< Error trapping flag.
+
+  call cli1%init(progname=PROG, error_lun=lun, usage_lun=lun, error_hint=.false.)
+  call cli1%add(switch='--x', help='x', required=.false., def='0.5', val_type='R4P', max='1', error=error)
+  call cli1%parse(args='--x 1.00000001', error=error)
+  call assert_equal(error, ERROR_OUT_OF_RANGE, 'R4P: above the maximum in a wider kind')
+  call cli2%init(progname=PROG, error_lun=lun, usage_lun=lun, error_hint=.false.)
+  call cli2%add(switch='--x', help='x', required=.false., def='1.0', val_type='R4P', choices='1.0,2.0', error=error)
+  call cli2%parse(args='--x 1.00000001', error=error)
+  call assert_equal(error, ERROR_NOT_IN_CHOICES, 'R4P: not a choice in a wider kind')
+  call cli3%init(progname=PROG, error_lun=lun, usage_lun=lun, error_hint=.false.)
+  call cli3%add(switch='--x', help='x', required=.false., def='0.5', val_type='R4P', max='1', error=error)
+  call cli3%parse(args='--x 0.75', error=error)
+  call assert_equal(error, 0_I4P, 'R4P: valid')
+  call cli3%get(switch='--x', val=v, error=error)
+  call assert_equal(error, 0_I4P, 'R4P: a get into R8P')
+  endsubroutine wider_real
+
+  subroutine character_number
+  !< A character get of a typed number is the text as given, with a range or choices too.
+  type(command_line_interface) :: cli1  !< Command Line Interface (CLI).
+  type(command_line_interface) :: cli2  !< Command Line Interface (CLI).
+  character(8)                 :: v1    !< Value.
+  character(8)                 :: v2    !< Value.
+  integer(I4P)                 :: error !< Error trapping flag.
+
+  call cli1%init(progname=PROG, error_lun=lun, usage_lun=lun, error_hint=.false.)
+  call cli1%add(switch='--x', help='x', required=.false., def='1', val_type='I4P', min='0', max='10', error=error)
+  call cli1%parse(args='--x 5', error=error)
+  call cli1%get(switch='--x', val=v1, error=error)
+  call assert_equal(error, 0_I4P, 'a character get, a range')
+  call assert_equal(trim(v1), '5', 'a character get, a range: value')
+  call cli2%init(progname=PROG, error_lun=lun, usage_lun=lun, error_hint=.false.)
+  call cli2%add(switch='--x', help='x', required=.false., def='1', val_type='I4P', choices='1,2', error=error)
+  call cli2%parse(args='--x +1', error=error)
+  call assert_equal(error, 0_I4P, 'choices compare numbers: parse')
+  call cli2%get(switch='--x', val=v2, error=error)
+  call assert_equal(error, 0_I4P, 'a character get, choices')
+  call assert_equal(trim(v2), '+1', 'a character get, choices: value')
+  endsubroutine character_number
+
+  subroutine character_list
+  !< The same for lists.
+  type(command_line_interface)  :: cli1  !< Command Line Interface (CLI).
+  type(command_line_interface)  :: cli2  !< Command Line Interface (CLI).
+  character(8)                  :: v1(2) !< Values.
+  character(8), allocatable     :: v2(:) !< Values.
+  integer(I4P)                  :: error !< Error trapping flag.
+
+  call cli1%init(progname=PROG, error_lun=lun, usage_lun=lun, error_hint=.false.)
+  call cli1%add(switch='--l', help='l', required=.false., def='1 2', nargs='2', val_type='I4P', min='0', error=error)
+  call cli1%parse(args='--l 3 +4', error=error)
+  call cli1%get(switch='--l', val=v1, error=error)
+  call assert_equal(error, 0_I4P, 'a character list get, fixed size')
+  call assert_equal(trim(v1(2)), '+4', 'a character list get, fixed size: value')
+  call cli2%init(progname=PROG, error_lun=lun, usage_lun=lun, error_hint=.false.)
+  call cli2%add(switch='--l', help='l', required=.false., def='1', nargs='+', val_type='I4P', min='0', error=error)
+  call cli2%parse(args='--l 3 +4', error=error)
+  call cli2%get_varying(switch='--l', val=v2, error=error)
+  call assert_equal(error, 0_I4P, 'a character list get, varying')
+  call assert_equal(trim(v2(2)), '+4', 'a character list get, varying: value')
+  endsubroutine character_list
+
+  subroutine empty_plus
+  !< An explicitly empty list where at least one value is needed.
+  type(command_line_interface) :: cli   !< Command Line Interface (CLI).
+  integer(I4P)                 :: error !< Error trapping flag.
+
+  call cli%init(progname=PROG, error_lun=lun, usage_lun=lun, error_hint=.false.)
+  call cli%add(switch='--n', help='n', required=.false., def='1', nargs='+', val_type='I4P', error=error)
+  call cli%parse(args='--n ""', error=error)
+  call assert(error /= 0, 'nargs=+, an empty value: an error from parse')
+  endsubroutine empty_plus
+
+  subroutine nan_range
+  !< NaN is outside every range.
+  type(command_line_interface) :: cli   !< Command Line Interface (CLI).
+  integer(I4P)                 :: error !< Error trapping flag.
+
+  call cli%init(progname=PROG, error_lun=lun, usage_lun=lun, error_hint=.false.)
+  call cli%add(switch='--x', help='x', required=.false., def='0.5', val_type='R8P', min='0', max='1', error=error)
+  call cli%parse(args='--x nan', error=error)
+  call assert_equal(error, ERROR_OUT_OF_RANGE, 'NaN and a range')
+  endsubroutine nan_range
+
   subroutine parse_one(args, val_type, expected, message)
   !< Parse a typed option.
   character(*), intent(in)     :: args     !< Command line.

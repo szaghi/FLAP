@@ -26,7 +26,9 @@ their source (command line, environment, configuration file):
 Typed values are also checked against their `choices` and their range during `parse`, and defaults and choices when the
 option is added (`ERROR_TYPE_DEFINITION`). The kind is part of the declaration, so a value accepted by `parse` also fits a
 `get` of that kind. To keep that promise, a `get` into another family or a narrower kind is always `ERROR_TYPE_MISMATCH`,
-whatever the value. A `get` into a wider kind or into a `character` is allowed.
+whatever the value. A `get` into a wider kind is allowed, and a real is checked in the wider kinds too: `1.00000001` is `1.0`
+in `R4P` but above a maximum of `1` in `R8P`, so `parse` rejects it. A `get` into a `character` is always allowed and gives
+the text as passed. A real too big for its kind is an error; an explicit `inf` is a value, and `nan` is outside every range.
 
 Not allowed with `val_type`: maps, `act='config'`, `act='alternate'` and the print actions. A flag can only be `logical`,
 a count an integer, a path check a `character`.
@@ -58,7 +60,7 @@ stays the plain message. The variable takes `text` or `json`; any other value me
 
 ## Validating without running
 
-`init(check_option=.true.)` adds `--check`, at the top level, so it comes before a command. It runs every stage of `parse`,
+`init(check_option=.true.)` adds `--check`, at the top level, so it comes before a command, whose tokens are its own. It runs every stage of `parse`,
 then stops before the program uses a value:
 
 <<< @/examples/output/solver_check.ansi{ansi}
@@ -71,7 +73,10 @@ the verdict is a line like `{"schema_version":1,"level":"result","valid":true,"u
 
 What a valid result does not tell you:
 
-- **Untyped options.** They are listed as not type-checked, because a failure would come only at `get`.
+- **Untyped options.** They are listed as not type-checked, because a failure would come only at `get`. So are an untyped
+  count with a range and a flag that took its value from the environment or a configuration file.
+- **An alternate action.** It skips the validation, as in a normal run. The verdict says so (`"bypassed":true`) and lists
+  every option as not checked.
 - **Relations between values.** Those are the program's business.
 - **Paths elsewhere.** The path checks ran here: a valid result on a login node says nothing about a compute node.
 

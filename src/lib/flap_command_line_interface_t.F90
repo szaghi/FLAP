@@ -697,7 +697,8 @@ contains
   character(len=:), allocatable                :: report  !< Report.
   logical                                      :: json    !< JSON report.
 
-  if (.not.self%is_parsed_) call self%parse(pref=pref)
+  ! a failed parse leaves the command line it read: the report is about that one, not about a new parse of the real one
+  if (.not.self%is_parsed_ .and. .not.allocated(self%args)) call self%parse(pref=pref)
   json = .false.
   if (present(format)) json = upper_case(trim(adjustl(format))) == 'JSON'
   if (json) then
@@ -823,7 +824,7 @@ contains
   character(len=:), allocatable             :: inline   !< Value of an inline token.
   logical                                   :: match    !< The token names the CLA.
   logical                                   :: has_inline !< The token has an inline value.
-  logical                                   :: masked   !< The token follows a sensitive switch.
+  integer(I4P)                              :: masked   !< Tokens left of a sensitive value, -1 up to the next switch.
   integer(I4P)                              :: g        !< Group index.
   integer(I4P)                              :: a        !< CLA index.
   integer(I4P)                              :: t        !< Token index.
@@ -840,13 +841,17 @@ contains
     return
   endif
   allocate(items(size(self%args, dim=1)))
-  masked = .false.
+  masked = 0
   do t=1, size(items, dim=1)
     items(t)%s = self%args(t)%s
-    if (masked) then
-      items(t)%s = '***'
-      masked = .false.
-      cycle
+    if (masked /= 0) then
+      ! an open ended list goes on up to the next switch or command
+      if (masked > 0 .or. .not.ends_list(self%args(t)%s)) then
+        items(t)%s = '***'
+        masked = masked - merge(1, 0, masked > 0)
+        cycle
+      endif
+      masked = 0
     endif
     groups: do g=0, size(self%clasg, dim=1) - 1
       do a=1, self%clasg(g)%Na
@@ -856,13 +861,25 @@ contains
         if (has_inline) then
           items(t)%s = self%args(t)%s(:index(self%args(t)%s, '='))//'***'
         else
-          masked = .true.
+          masked = self%clasg(g)%cla(a)%takes_values()
         endif
         exit groups
       enddo
     enddo groups
   enddo
   json = json_array(items)
+  contains
+    function ends_list(token) result(ends)
+    !< Check if a token ends an open ended list: a switch of any group, a command or `--`.
+    character(*), intent(in) :: token !< Token.
+    logical                  :: ends  !< Check result.
+    integer(I4P)             :: h     !< Group index.
+
+    ends = trim(adjustl(token)) == '--' .or. self%group_index(trim(adjustl(token))) > 0
+    do h=0, size(self%clasg, dim=1) - 1
+      if (self%clasg(h)%is_switch_token(token)) ends = .true.
+    enddo
+    endfunction ends_list
   endfunction provenance_arguments
 
   subroutine save_provenance(self, file, pref, error)
@@ -1327,7 +1344,8 @@ contains
   endsubroutine parse
 
   function check_requested(self) result(requested)
-  !< Check if --check is on the command line, before a `--`: by its token, since an earlier error may have stopped the parse
+  !< Check if --check is on the command line, before a `--` and before the first command: by its token, since an earlier
+  !< error may have stopped the parse
   !< before reaching it, and the exit status must not depend on that (#128). A status of a builtin leaves it to that builtin.
   class(command_line_interface), intent(in) :: self      !< CLI data.
   logical                                   :: requested !< Check result.
@@ -1341,6 +1359,7 @@ contains
   if (self%clasg(0)%cla(a)%act /= ACTION_CHECK) return ! the program owns a --check
   do t=1, size(self%args, dim=1)
     if (trim(adjustl(self%args(t)%s)) == '--') return
+    if (self%group_index(trim(adjustl(self%args(t)%s))) > 0) return ! the tokens of a command are its own
     if (self%clasg(0)%cla(a)%match_token(self%args(t)%s)) then
       requested = .true.
       return
@@ -1357,11 +1376,13 @@ contains
   character(len=:), allocatable                :: line      !< Result.
   character(len=:), allocatable                :: ignored   !< Message of an ignored argument.
   logical                                      :: valid     !< The command line is valid.
+  logical                                      :: bypassed  !< An alternate action has skipped the validation.
   integer(I4P)                                 :: n         !< Number of names.
   integer(I4P)                                 :: g         !< Group index.
   integer(I4P)                                 :: a         !< CLA index.
 
   valid = self%error <= 0 .or. self%error == ERROR_UNKNOWN_CLAS_IGNORED
+  bypassed = self%error == STATUS_ALTERNATE ! an alternate action has skipped the validation: nothing has been checked
   n = 0
   do g=0, size(self%clasg, dim=1) - 1
     n = n + self%clasg(g)%Na
@@ -1372,7 +1393,8 @@ contains
     if (g > 0 .and. .not.self%clasg(g)%is_called) cycle
     do a=1, self%clasg(g)%Na
       associate(cla => self%clasg(g)%cla(a))
-        if (cla%is_hidden .or. cla%is_builtin() .or. cla%is_typed_for_schema()) cycle
+        if (cla%is_hidden .or. cla%is_builtin()) cycle
+        if (cla%is_validated() .and. .not.bypassed) cycle
         n = n + 1
         if (cla%is_positional) then
           names(n)%s = 'position '//trim(str(cla%position, .true.))
@@ -1387,12 +1409,14 @@ contains
   if (self%error == ERROR_UNKNOWN_CLAS_IGNORED .and. allocated(self%error_message)) ignored = self%error_message
   if (self%is_json_format()) then
     line = '{"schema_version":1,"level":"result","valid":'//trim(merge('true ', 'false', valid))
+    if (bypassed) line = line//',"bypassed":true'
     if (valid) line = line//',"unchecked":'//json_array(names(1:n))
     if (len(ignored) > 0) line = line//',"ignored":'//json_string(ignored)
     line = line//'}'
     write(self%version_lun, '(A)') line
   elseif (valid) then
     line = self%progname//': command line valid'
+    if (bypassed) line = self%progname//': an alternate action skips the validation'
     if (n > 0) then
       line = line//new_line('a')//trim(str(n, .true.))//' option'//trim(merge('  ', 's ', n == 1))//' not type-checked:'
       do a=1, n

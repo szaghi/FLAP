@@ -59,6 +59,7 @@ call check_logical('--flag /', ERROR_CASTING_LOGICAL, .true., 'logical, a slash:
 call check_logical('--flag ,', ERROR_CASTING_LOGICAL, .true., 'logical, a comma: not assigned')
 call check_logical('--flag "F x"', ERROR_CASTING_LOGICAL, .true., 'logical, two items: not assigned')
 call check_bound
+call check_blanks
 out = read_back(lun)
 ! lists, a map, a positional
 call check_lists('--ijk 1 x 3', ERROR_CASTING_NUMBER, 'fixed-size integer list')
@@ -96,6 +97,20 @@ contains
   call assert_equal(error, expected, message//': error')
   call assert_equal(flag, value, message//': value')
   endsubroutine check_logical
+
+  subroutine check_blanks
+  !< Tabs and line ends around a value are not significant, as they were for the read; between two items they are.
+  type(command_line_interface) :: cli   !< Command Line Interface (CLI).
+  integer(I4P)                 :: n     !< Value.
+  integer(I4P)                 :: error !< Error trapping flag.
+
+  call cli%init(progname='flap_test_casting', error_lun=lun, usage_lun=lun)
+  call cli%add(switch='--n', help='n', required=.false., def='3'//achar(9)//achar(10), error=error)
+  call cli%parse(args='', error=error)
+  call cli%get(switch='--n', val=n, error=error)
+  call assert_equal(error, 0_I4P, 'a tab and a new line around a value')
+  call assert_equal(n, 3_I4P, 'a tab and a new line around a value: value')
+  endsubroutine check_blanks
 
   subroutine check_bound
   !< A bound that is not a number is an invalid range: the read alone accepted a slash.

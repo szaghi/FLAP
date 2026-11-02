@@ -81,6 +81,7 @@ graph LR
 - [is_required_passed](#is-required-passed)
 - [has_value](#has-value)
 - [config_key](#config-key)
+- [takes_values](#takes-values)
 - [json_resolved](#json-resolved)
 - [value_text](#value-text)
 - [deprecation_note](#deprecation-note)
@@ -114,6 +115,8 @@ graph LR
 - [json_value](#json-value)
 - [json_item](#json-item)
 - [json_default](#json-default)
+- [is_typed_number](#is-typed-number)
+- [is_validated](#is-validated)
 - [type_allows](#type-allows)
 - [type_allows_list](#type-allows-list)
 - [type_allows_val](#type-allows-val)
@@ -122,6 +125,7 @@ graph LR
 - [json_csv](#json-csv)
 - [lower_case](#lower-case)
 - [json_number](#json-number)
+- [strip_blanks](#strip-blanks)
 - [is_single_item](#is-single-item)
 - [is_integer_text](#is-integer-text)
 - [read_logical](#read-logical)
@@ -304,6 +308,7 @@ classDiagram
 | `free` |  | Free dynamic memory. |
 | `check` |  | Check data consistency. |
 | `is_typed_for_schema` |  | Check if FLAP knows the type of the value. |
+| `is_validated` |  | Check if parse has validated the value. |
 | `json_schema` |  | JSON description of the CLA (#128). |
 | `check_value_type` |  | Check the value against the declared type (#128). |
 | `is_required_passed` |  | Check if required CLA is passed. |
@@ -311,6 +316,7 @@ classDiagram
 | `set_source_value` |  | Set a value read from the environment or a configuration file. |
 | `config_key` |  | Key of the CLA in a configuration file. |
 | `takes_config_value` |  | Check if the CLA takes a value from a configuration file. |
+| `takes_values` |  | Number of tokens of a value after the switch, -1 if open ended. |
 | `json_resolved` |  | Resolved value in JSON (JSON provenance, #128). |
 | `value_text` |  | Resolved value as text (provenance report). |
 | `has_path_checks` |  | Check if the value is a path to check. |
@@ -371,6 +377,7 @@ classDiagram
 | `check_positional_consistency` |  | Check positional CLA consistency. |
 | `check_choices` |  | Check if CLA value is in allowed choices. |
 | `check_choices_text` |  | Check the choices of a whole character value, then store it. |
+| `is_typed_number` |  | Check if the declared type is a number. |
 | `display_name` |  | Name of the CLA for a message. |
 | `json_value` |  | JSON description of the value of the CLA. |
 | `json_item` |  | JSON description of one value of the CLA. |
@@ -1161,7 +1168,7 @@ flowchart TD
 Check the resolved value against the declared type, whatever its source (#128): the same conversion, choices and range
  of `get`, on locals of the declared kind, so that a value accepted here is accepted by a `get` of that kind.
 
- Nothing to do for an untyped CLA, a count (FLAP's own number) or a value not given (blank default, no default).
+ Nothing to do for an untyped CLA or a value not given (blank default, no default).
 
 ```fortran
 subroutine check_value_type(self, pref)
@@ -1619,6 +1626,7 @@ flowchart TD
   cast_number["cast_number"] --> errored["errored"]
   cast_number["cast_number"] --> is_integer_text["is_integer_text"]
   cast_number["cast_number"] --> is_single_item["is_single_item"]
+  cast_number["cast_number"] --> strip_blanks["strip_blanks"]
   style cast_number fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -1651,6 +1659,7 @@ flowchart TD
   get_cla["get_cla"] --> has_range["has_range"]
   get_cla["get_cla"] --> has_value["has_value"]
   get_cla["get_cla"] --> is_required_passed["is_required_passed"]
+  get_cla["get_cla"] --> is_typed_number["is_typed_number"]
   get_cla["get_cla"] --> read_logical["read_logical"]
   get_cla["get_cla"] --> stored_list["stored_list"]
   get_cla["get_cla"] --> type_allows_val["type_allows_val"]
@@ -1774,6 +1783,7 @@ flowchart TD
   get_cla_list_character["get_cla_list_character"] --> check_choices_text["check_choices_text"]
   get_cla_list_character["get_cla_list_character"] --> check_range["check_range"]
   get_cla_list_character["get_cla_list_character"] --> has_range["has_range"]
+  get_cla_list_character["get_cla_list_character"] --> is_typed_number["is_typed_number"]
   style get_cla_list_character fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -2073,6 +2083,7 @@ flowchart TD
   get_cla_list_varying_char["get_cla_list_varying_char"] --> has_range["has_range"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> is_list["is_list"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> is_required_passed["is_required_passed"]
+  get_cla_list_varying_char["get_cla_list_varying_char"] --> is_typed_number["is_typed_number"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> list_items["list_items"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> stored_list["stored_list"]
   style get_cla_list_varying_char fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -2116,6 +2127,7 @@ subroutine read_real(string, x, ok)
 flowchart TD
   check_range_consistency["check_range_consistency"] --> read_real["read_real"]
   read_real["read_real"] --> is_single_item["is_single_item"]
+  read_real["read_real"] --> strip_blanks["strip_blanks"]
   style read_real fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -2141,6 +2153,7 @@ subroutine read_integer(string, i, ok)
 flowchart TD
   read_integer["read_integer"] --> is_integer_text["is_integer_text"]
   read_integer["read_integer"] --> is_single_item["is_single_item"]
+  read_integer["read_integer"] --> strip_blanks["strip_blanks"]
   style read_integer fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -2243,6 +2256,32 @@ flowchart TD
   config_key_index["config_key_index"] --> config_key["config_key"]
   resolve_values["resolve_values"] --> config_key["config_key"]
   style config_key fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### takes_values
+
+Return how many tokens follow the switch as its value: 0 for a flag or a count, -1 for a list ended by the next switch.
+
+**Attributes**: pure
+
+**Returns**: integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables))
+
+```fortran
+function takes_values(self) result(n)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  provenance_arguments["provenance_arguments"] --> takes_values["takes_values"]
+  style takes_values fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### json_resolved
@@ -2365,6 +2404,7 @@ flowchart TD
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> has_range["has_range"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> has_range["has_range"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> has_range["has_range"]
+  is_validated["is_validated"] --> has_range["has_range"]
   json_item["json_item"] --> has_range["has_range"]
   usage["usage"] --> has_range["has_range"]
   style has_range fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -3158,7 +3198,6 @@ function is_typed_for_schema(self) result(typed)
 ```mermaid
 flowchart TD
   json_schema["json_schema"] --> is_typed_for_schema["is_typed_for_schema"]
-  report_check["report_check"] --> is_typed_for_schema["is_typed_for_schema"]
   style is_typed_for_schema fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -3246,6 +3285,62 @@ flowchart TD
   json_default["json_default"] --> unique["unique"]
   json_default["json_default"] --> wstrip["wstrip"]
   style json_default fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### is_typed_number
+
+Check if the declared type is a number.
+
+**Attributes**: pure
+
+**Returns**: `logical`
+
+```fortran
+function is_typed_number(self) result(is_number)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  get_cla["get_cla"] --> is_typed_number["is_typed_number"]
+  get_cla_list_character["get_cla_list_character"] --> is_typed_number["is_typed_number"]
+  get_cla_list_varying_char["get_cla_list_varying_char"] --> is_typed_number["is_typed_number"]
+  style is_typed_number fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### is_validated
+
+Check if parse has validated the value (--check, #128): declared type, or a flag or count that cannot be wrong; a flag
+ from the environment or a configuration file, or a count with a range, can fail only at get unless its type is declared.
+
+**Attributes**: pure
+
+**Returns**: `logical`
+
+```fortran
+function is_validated(self) result(validated)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  report_check["report_check"] --> is_validated["is_validated"]
+  is_validated["is_validated"] --> has_range["has_range"]
+  style is_validated fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### type_allows
@@ -3501,6 +3596,35 @@ flowchart TD
   style json_number fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
+### strip_blanks
+
+Return a text without the blanks, tabs and line ends around it (a list-directed read takes them as separators).
+
+**Attributes**: pure
+
+**Returns**: `character(len=:)`
+
+```fortran
+function strip_blanks(text) result(stripped)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `text` | character(len=*) | in |  | Text. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  cast_number["cast_number"] --> strip_blanks["strip_blanks"]
+  read_integer["read_integer"] --> strip_blanks["strip_blanks"]
+  read_logical["read_logical"] --> strip_blanks["strip_blanks"]
+  read_real["read_real"] --> strip_blanks["strip_blanks"]
+  style strip_blanks fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
 ### is_single_item
 
 Check that a text (without blanks around it) is one item of a list-directed read: a read alone accepts as numbers `/` and
@@ -3586,5 +3710,6 @@ flowchart TD
   get_cla_list_from_buffer["get_cla_list_from_buffer"] --> read_logical["read_logical"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> read_logical["read_logical"]
   read_logical["read_logical"] --> is_single_item["is_single_item"]
+  read_logical["read_logical"] --> strip_blanks["strip_blanks"]
   style read_logical fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```

@@ -26,6 +26,8 @@ programs keep their behaviour. The plan behind them is issue [#125](https://gith
   left unassigned), `2*5` (a repeat count: `5`), `3 abc`, `3,abc` and the decimal comma `1,5` (the first item: `3`, `1.0`).
   They are now `ERROR_CASTING_NUMBER` (50) or `ERROR_CASTING_LOGICAL` (10), and a bound (`min`, `max`) written like this
   is `ERROR_RANGE_DEFINITION` (30). Valid values are read as before (#128).
+- `get` of a real too big for its kind (`1e50` into `R4P`) is `ERROR_CASTING_NUMBER`: it was an infinity. An explicit `inf` is
+  still a value. `nan` is `ERROR_OUT_OF_RANGE` on an option with a range: it passed every comparison.
 - With nvfortran, `get` into an integer read `2.5` as `2` and wrapped a value too big for `I1P`, `I2P` or `I4P`, without
   error. Both are now `ERROR_CASTING_NUMBER` (50), as with gfortran.
 

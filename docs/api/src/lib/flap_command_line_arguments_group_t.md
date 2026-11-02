@@ -923,6 +923,7 @@ flowchart TD
   json_schema["json_schema"] --> json_members["json_members"]
   json_members["json_members"] --> excluded_by["excluded_by"]
   json_members["json_members"] --> is_builtin["is_builtin"]
+  json_members["json_members"] --> is_defined["is_defined"]
   json_members["json_members"] --> json_array["json_array"]
   json_members["json_members"] --> json_schema["json_schema"]
   json_members["json_members"] --> list_items["list_items"]
@@ -1336,6 +1337,7 @@ flowchart TD
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> is_defined["is_defined"]
   get_source["get_source"] --> is_defined["is_defined"]
   is_defined["is_defined"] --> is_defined["is_defined"]
+  json_members["json_members"] --> is_defined["is_defined"]
   map_cla["map_cla"] --> is_defined["is_defined"]
   is_defined["is_defined"] --> match_token["match_token"]
   style is_defined fill:#3e63dd,stroke:#99b,stroke-width:2px
