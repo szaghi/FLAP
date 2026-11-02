@@ -1,0 +1,2 @@
+$ heat --dry-run run --steps 100
+would run 100 steps

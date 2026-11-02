@@ -1,0 +1,26 @@
+$ heat --write-skill && cat heat/SKILL.md
+---
+name: heat
+description: "Solve the 2D heat equation on a square plate. Use when running heat."
+---
+
+# heat
+
+## Options
+
+- `--write-skill`: Write the agent skill and stop
+
+## Commands
+
+Read the options of a command with `heat COMMAND --schema`.
+
+- `run`: Run a simulation
+
+## Calling it
+
+- `--schema` prints the full description as JSON.
+- `--check`, before any command, validates a command line without running it, and names what it could not validate: `heat --check ...`.
+- `--dry-run`, before any command, reports what would be done, without doing it.
+- `HEAT_ERROR_FORMAT=json` writes errors as JSON lines.
+- Exit status: 0 success; 1 failure of the program; 2 fix the command line and retry; 3 fix a file or a variable; 4 the program is wrong, do not retry.
+

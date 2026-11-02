@@ -26,7 +26,7 @@ call cli%add(switch='--label', help='Label of the run', required=.false., def='r
 call cli%add(switch='--token', help='Access token', required=.false., def='', sensitive=.true.)
 !endregion define
 call cli%parse(error=error)
-if (error /= 0) stop error, quiet=.true.
+if (error /= 0) stop cli%exit_status(), quiet=.true.
 call cli%get(switch='--steps', val=steps, error=error)
 call cli%get(switch='--cfl', val=cfl, error=error)
 !region manifest

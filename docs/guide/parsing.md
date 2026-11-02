@@ -19,7 +19,8 @@ call cli%parse(error=error)
 if (error /= 0) stop 1, quiet=.true.
 ```
 
-FLAP has already printed the message of an error: the program only has to end with a non-zero exit status.
+FLAP has already printed the message of an error: the program only has to end with a non-zero exit status, and
+`stop cli%exit_status(), quiet=.true.` tells its caller what to change ([Exit statuses](./errors#exit-statuses)).
 (`stop code, quiet=.true.` is Fortran 2018; nvfortran 26.5 rejects `quiet=`, use `call exit(1)` there.)
 
 In standalone mode (the default), `--help`, `--version`, `--markdown`, `--man` and the completion builtins end the

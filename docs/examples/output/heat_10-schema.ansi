@@ -1,0 +1,13 @@
+$ heat run --schema | head -n 12
+{
+  "schema_version": 1,
+  "program": {"name": "heat", "version": "v1.0"},
+  "command":
+  {"name": "run", "aliases": [], "description": "Run a simulation", "exclusive_with": [],
+    "options": [
+      {"switch": "--steps", "help": "Time steps", "required": true, "action": "store", "value": {"type": "integer", "minimum": 1, "maximum": 2147483647, "x-flap-kind": "I4P"}, "typed": true},
+      {"switch": "--cfl", "help": "CFL number", "required": false, "action": "store", "value": {"type": "number", "minimum": 0, "maximum": 1, "x-flap-kind": "R8P"}, "typed": true, "default": "0.25"},
+      {"switch": "--label", "help": "Label of the run", "required": false, "action": "store", "value": {"type": "string"}, "typed": false, "default": "run"},
+      {"switch": "--token", "help": "Access token", "required": false, "action": "store", "value": {"type": "string"}, "typed": false, "sensitive": true}
+    ],
+    "positionals": [],

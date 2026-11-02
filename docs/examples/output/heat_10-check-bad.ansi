@@ -1,0 +1,5 @@
+$ heat --check run --steps 100 --cfl 7
+heat: error: value "7" of "--cfl" is out of range [0, 1]!
+
+Try 'heat run --help' for help.
+[exit status 2]

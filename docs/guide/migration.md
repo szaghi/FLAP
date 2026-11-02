@@ -7,19 +7,25 @@ title: Upgrading
 Every change you can observe when moving to a new release, newest first. Additive releases only add API: existing
 programs keep their behaviour. The plan behind them is issue [#125](https://github.com/szaghi/FLAP/issues/125).
 
-## Unreleased (additions)
+## Unreleased
+
+- `--check` on an invalid command line ends with the status of the error's class (2, 3 or 4) instead of 1. A caller testing
+  for non-zero is unaffected.
+- The JSON description gains `exit_statuses`, `error_classes` and `capabilities.dry_run`, and a JSON error gains `class`. A
+  parser that ignores unknown members is unaffected; `schema_version` stays 1.
+- A command in the JSON description has `help` only if the program set one: it no longer shows the default `usage: `.
+- With `schema_option`, every command gets a `--schema` of its own, so its help lists it.
+- Additions, opt-in: `cli%exit_status()`, `error_class`, `error_exit_status`, `EXIT_*`; `init(dry_run_option=)`, `is_dry_run`;
+  `json_schema(group=)`, `save_json_schema(group=)`; `skill`, `save_skill`.
+
+## v2.6.0 (additions)
 
 - Every addition is opt-in, and the help, man page, Markdown and completion scripts of a program using none of them are
   unchanged: `val_type` and `sensitive` of `cli%add`; `schema_option`, `check_option`, `error_format` and `error_format_env`
   of `init`; `json_schema`, `save_json_schema`, `save_provenance`, `provenance(format=)`, `error_description`. See
   [Machine-readable Interfaces](./machine).
 
-## Unreleased (changes)
-
-- `--check` on an invalid command line ends with the status of the error's class (2, 3 or 4) instead of 1. A caller testing for
-  non-zero is unaffected.
-
-## Unreleased (fixes)
+## v2.6.0 (fixes)
 
 - An error message about an option with `sensitive=.true.` quotes its value as `***`.
 - A `get` after a failed `parse` no longer parses the real command line again. The first failure stands: `get` returns the

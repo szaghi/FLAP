@@ -125,6 +125,24 @@ FLAP cannot enforce this, nor detect a program that never reads the flag: such a
 caller believes otherwise. Enable the option only once every side effect is guarded. The JSON description declares it
 (`capabilities.dry_run`) and the run manifest records it (`dry_run`).
 
+## Agent Skill
+
+`cli%skill()` returns a `SKILL.md` in the [Agent Skills](https://agentskills.io/specification) format, and `save_skill(file)`
+saves it. It holds what an agent needs before its first call: what the program is, the top-level options, one line per
+command, the machine options you enabled and the exit statuses. The options of a command stay out, read on demand.
+
+<<< @/examples/snippets/heat_10-skill.f90
+
+<<< @/examples/output/heat_10-skill.ansi{ansi}
+
+The format wants the directory named as the skill: `skill_name` lower-cases the program name and replaces what the format
+forbids. A sensitive default and hidden options stay out.
+
+**Is it worth shipping?** Measured once, on a small program with two commands, six runs of a small model: with the skill file,
+5 calls on average to finish the task and about 62,800 tokens; without it, 5.7 calls and about 62,100 tokens, with no failed
+call on either side (three runs each). A program whose `--help` is good already gives an agent what it needs, so expect little on the calls. A
+skill helps an agent that does not yet know the program exists, which this test did not measure.
+
 ## Using it from an agent
 
 FLAP does not include an MCP server: that would need a JSON-RPC layer in the library, and tool calls fit long parallel runs

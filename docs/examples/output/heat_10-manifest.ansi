@@ -1,0 +1,16 @@
+$ heat run --steps 100 --token s3cret && cat heat.manifest.json
+ran 100 steps
+{
+  "schema_version": 1,
+  "program": {"name": "heat", "version": "v1.0"},
+  "arguments": ["run","--steps","100","--token","***"],
+  "status": 0,
+  "dry_run": false,
+  "values": [
+    {"command": "", "name": "--write-skill", "value": ".false.", "source": "default"},
+    {"command": "run", "name": "--steps", "value": "100", "source": "command line"},
+    {"command": "run", "name": "--cfl", "value": "0.25", "source": "default"},
+    {"command": "run", "name": "--label", "value": "run", "source": "default"},
+    {"command": "run", "name": "--token", "value": "***", "source": "command line"}
+  ]
+}

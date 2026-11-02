@@ -1,0 +1,6 @@
+call cli%add(switch='--write-skill', help='Write the agent skill and stop', required=.false., def='.false.', act='store_true')
+call cli%add_group(group='run', description='Run a simulation')
+call cli%add(group='run', switch='--steps', help='Time steps', required=.true., val_type='I4P', min='1')
+call cli%add(group='run', switch='--cfl', help='CFL number', required=.false., def='0.25', val_type='R8P', min='0', max='1')
+call cli%add(group='run', switch='--label', help='Label of the run', required=.false., def='run')
+call cli%add(group='run', switch='--token', help='Access token', required=.false., def='', sensitive=.true.)

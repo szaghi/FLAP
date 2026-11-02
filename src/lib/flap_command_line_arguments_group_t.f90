@@ -292,7 +292,9 @@ contains
     excl(1)%s = trim(adjustl(exclusive_with))
   endif
   json = indent//'{"name": '//json_string(self%group)//', "aliases": '//json_array(names)
-  if (allocated(self%help)) json = json//', "help": '//json_string(self%help)
+  if (allocated(self%help)) then
+    if (self%help /= 'usage: ') json = json//', "help": '//json_string(self%help) ! the default is a prefix of the usage
+  endif
   if (allocated(self%description)) json = json//', "description": '//json_string(self%description)
   if (allocated(self%deprecated)) json = json//', "deprecated": '//json_string(self%deprecated)
   json = json//', "exclusive_with": '//json_array(excl)//','//nl//self%json_members(indent=indent//'  ')//nl//indent//'}'

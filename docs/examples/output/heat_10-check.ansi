@@ -1,0 +1,3 @@
+$ heat --check run --steps 100 --cfl 0.4 --label demo
+heat: command line valid
+2 options not type-checked: run --label run --token

@@ -1,0 +1,5 @@
+$ heat run --steps many
+heat: error: cannot convert "many" of option "--steps" to an integer!
+
+Try 'heat run --help' for help.
+[exit status 2]

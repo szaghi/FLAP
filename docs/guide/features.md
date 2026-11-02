@@ -37,7 +37,7 @@ endprogram myprogram
 | **Help and errors** | help and usage generated from the definitions; "did you mean" suggestions; a hint line after an error; a shorter output after an error (`usage_on_error`); colours; case-insensitive switches and commands; alternate actions (`--list-models`) | [Output](./output), [Errors](./errors) |
 | **Generated files** | man page (`--man`), Markdown (`--markdown`), completion scripts for bash, zsh, fish and PowerShell, printed or installed by the program itself (`--show-completion`, `--install-completion`) | [Output Formats](./output) |
 | **Testing** | parse a string (`parse(args=...)`), parse again (`reset_parse`), statuses returned instead of stopping (`standalone=.false.`), output units of your choice | [Parsing](./parsing), [Errors](./errors#handling-status-codes) |
-| **Other programs** | declared value types validated by `parse`; a JSON description of the program (`--schema`); errors as JSON lines; a validate-only mode (`--check`); a JSON run manifest; sensitive values | [Machine-readable Interfaces](./machine) |
+| **Other programs** | declared value types validated by `parse`; a JSON description of the program (`--schema`); errors as JSON lines; a validate-only mode (`--check`); a dry-run flag; exit statuses by error class; a JSON run manifest; sensitive values; an Agent Skill generated from the definitions | [Machine-readable Interfaces](./machine) |
 | **Menus** | interactive numbered menus: single or multiple choice, defaults, yes/no questions, retries; safe in batch jobs | [Interactive Menus](./menu) |
 
 Every error and status has a named constant exported by the `flap` module (see [Error Codes](./errors)).
