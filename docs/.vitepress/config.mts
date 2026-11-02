@@ -60,6 +60,7 @@ const docs = [
 export default withMermaid({
   title: 'FLAP Documentation',
   base: '/FLAP/',
+  head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/FLAP/logo.svg' }]],
   srcExclude: ['ford.md'],
   markdown: {
     math: true,
@@ -74,6 +75,13 @@ export default withMermaid({
     },
   },
   themeConfig: {
+    logo: '/logo.svg',
+    siteTitle: 'FLAP',
+    socialLinks: [{ icon: 'github', link: 'https://github.com/szaghi/FLAP' }],
+    footer: {
+      message: 'Released under GPL v3, BSD 2-Clause, BSD 3-Clause or MIT, at your choice.',
+    },
+    outline: { level: [2, 3] },
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Start here', link: '/guide/', activeMatch: '^/guide/(index|install)' },

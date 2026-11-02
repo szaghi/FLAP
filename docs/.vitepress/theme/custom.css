@@ -1,0 +1,67 @@
+/* FLAP palette: blue, cyan, lime (public/logo.svg has the same stops, brighter for its dark tile). */
+:root {
+  --vp-c-brand-1: #1d4fd8;
+  --vp-c-brand-2: #2b63ea;
+  --vp-c-brand-3: #1d4fd8;
+  --vp-c-brand-soft: rgba(29, 79, 216, 0.13);
+
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(120deg, #1d4fd8 10%, #0e9fbd 55%, #65a30d 95%);
+  --vp-home-hero-image-background-image: linear-gradient(135deg, rgba(29, 79, 216, 0.38) 25%, rgba(14, 159, 189, 0.32) 55%, rgba(132, 204, 22, 0.32));
+  --vp-home-hero-image-filter: blur(56px);
+
+  --vp-custom-block-tip-border: transparent;
+  --vp-custom-block-tip-bg: rgba(14, 159, 189, 0.1);
+}
+
+.dark {
+  --vp-c-brand-1: #8fb0ff;
+  --vp-c-brand-2: #6d96fa;
+  --vp-c-brand-3: #2b63ea;
+  --vp-c-brand-soft: rgba(143, 176, 255, 0.16);
+  --vp-home-hero-name-background: linear-gradient(120deg, #8fb0ff 10%, #4fd3ea 55%, #bef264 95%);
+  --vp-custom-block-tip-bg: rgba(79, 211, 234, 0.1);
+}
+
+/* the feature cards answer the pointer in colour */
+.VPFeature.link {
+  transition: border-color 0.2s, transform 0.2s;
+}
+.VPFeature.link:hover {
+  border-color: var(--vp-c-brand-1) !important;
+  transform: translateY(-2px);
+}
+
+/* the session in the hero is a terminal: it needs room to read, and no glow behind its text */
+@media (min-width: 960px) {
+  .VPHero .image-container {
+    width: 560px;
+    height: 440px;
+  }
+  .VPHero .image-src {
+    max-width: 560px;
+    max-height: 440px;
+  }
+}
+.VPHero .image-src {
+  border-radius: 8px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
+}
+
+/* the terminal sessions of the home page, side by side when they fit */
+.flap-casts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 16px;
+  margin: 1.4rem 0;
+}
+.flap-casts img {
+  max-width: 100%;
+}
+
+/* the terminal outputs of the guide read as terminals in both themes */
+.vp-doc div[class*='language-ansi'] {
+  border-radius: 8px;
+}
