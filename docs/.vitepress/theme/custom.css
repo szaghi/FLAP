@@ -1,26 +1,36 @@
-/* FLAP palette: blue, cyan, lime (public/logo.svg has the same stops, brighter for its dark tile). */
+/* FLAP palette: phosphor green on the near-black of a terminal tube (public/logo.svg uses the same colours). */
 :root {
-  --vp-c-brand-1: #1d4fd8;
-  --vp-c-brand-2: #2b63ea;
-  --vp-c-brand-3: #1d4fd8;
-  --vp-c-brand-soft: rgba(29, 79, 216, 0.13);
+  --vp-c-brand-1: #1d7f36;
+  --vp-c-brand-2: #24923f;
+  --vp-c-brand-3: #1d7f36;
+  --vp-c-brand-soft: rgba(29, 127, 54, 0.12);
 
   --vp-home-hero-name-color: transparent;
-  --vp-home-hero-name-background: linear-gradient(120deg, #1d4fd8 10%, #0e9fbd 55%, #65a30d 95%);
-  --vp-home-hero-image-background-image: linear-gradient(135deg, rgba(29, 79, 216, 0.38) 25%, rgba(14, 159, 189, 0.32) 55%, rgba(132, 204, 22, 0.32));
-  --vp-home-hero-image-filter: blur(56px);
+  --vp-home-hero-name-background: linear-gradient(120deg, #0d1a10 15%, #1d7f36 95%);
+  --vp-home-hero-image-background-image: radial-gradient(circle, rgba(134, 255, 151, 0.45) 0%, rgba(134, 255, 151, 0) 70%);
+  --vp-home-hero-image-filter: blur(48px);
 
   --vp-custom-block-tip-border: transparent;
-  --vp-custom-block-tip-bg: rgba(14, 159, 189, 0.1);
+  --vp-custom-block-tip-bg: rgba(29, 127, 54, 0.08);
 }
 
 .dark {
-  --vp-c-brand-1: #8fb0ff;
-  --vp-c-brand-2: #6d96fa;
-  --vp-c-brand-3: #2b63ea;
-  --vp-c-brand-soft: rgba(143, 176, 255, 0.16);
-  --vp-home-hero-name-background: linear-gradient(120deg, #8fb0ff 10%, #4fd3ea 55%, #bef264 95%);
-  --vp-custom-block-tip-bg: rgba(79, 211, 234, 0.1);
+  --vp-c-bg: #0a0f0b;
+  --vp-c-bg-alt: #070b08;
+  --vp-c-bg-soft: #121a13;
+  --vp-c-bg-elv: #111812;
+  --vp-c-divider: #1f2b21;
+  --vp-c-gutter: #070b08;
+  --vp-c-brand-1: #86ff97;
+  --vp-c-brand-2: #6fe882;
+  --vp-c-brand-3: #2f9e48;
+  --vp-c-brand-soft: rgba(134, 255, 151, 0.14);
+  --vp-button-brand-text: #0a0f0b;
+  --vp-button-brand-hover-text: #0a0f0b;
+  --vp-button-brand-active-text: #0a0f0b;
+  --vp-home-hero-name-background: linear-gradient(120deg, #d9f5dc 15%, #86ff97 95%);
+  --vp-home-hero-image-background-image: radial-gradient(circle, rgba(134, 255, 151, 0.28) 0%, rgba(134, 255, 151, 0) 70%);
+  --vp-custom-block-tip-bg: rgba(134, 255, 151, 0.08);
 }
 
 /* the feature cards answer the pointer in colour */

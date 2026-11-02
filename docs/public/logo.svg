@@ -1,12 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="FLAP">
   <defs>
-    <linearGradient id="g" gradientUnits="userSpaceOnUse" x1="14" y1="14" x2="54" y2="50">
-      <stop offset="0" stop-color="#4f7bff"/>
-      <stop offset="0.55" stop-color="#22c1dc"/>
-      <stop offset="1" stop-color="#a3e635"/>
-    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.62">
+      <stop offset="0" stop-color="#173a1d"/>
+      <stop offset="1" stop-color="#060a07"/>
+    </radialGradient>
+    <pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse">
+      <rect width="4" height="2" fill="#000" opacity="0.3"/>
+    </pattern>
+    <filter id="bloom" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
   </defs>
-  <rect width="64" height="64" rx="15" fill="#10151f"/>
-  <path d="M15 12 V52" fill="none" stroke="url(#g)" stroke-width="6" stroke-linecap="round"/>
-  <path d="M15 15 C24 9 31 21 40 15 S48 13 52 14 L46 25 L52 36 C44 34 39 38 33 39 C26 40 21 35 15 38 Z" fill="url(#g)"/>
+  <rect width="64" height="64" rx="13" fill="url(#glow)"/>
+  <g fill="#86ff97" filter="url(#bloom)">
+    <rect x="11" y="11" width="7" height="7"/><rect x="18" y="18" width="7" height="7"/><rect x="25" y="25" width="7" height="7"/>
+    <rect x="18" y="32" width="7" height="7"/><rect x="11" y="39" width="7" height="7"/>
+    <rect x="32" y="46" width="21" height="7"/>
+  </g>
+  <rect width="64" height="64" rx="13" fill="url(#scan)"/>
 </svg>
