@@ -38,6 +38,7 @@ graph LR
 - [check_m_exclusive](#check-m-exclusive)
 - [reset_parse](#reset-parse)
 - [parse](#parse)
+- [parse_once](#parse-once)
 - [report_check](#report-check)
 - [print_error_hint](#print-error-hint)
 - [parse_core](#parse-core)
@@ -179,6 +180,9 @@ classDiagram
 | `args` | type([flap_string](/api/src/lib/flap_utils_m#flap-string)) | allocatable | Actually passed command line arguments. |
 | `disable_hv` | logical |  | Disable automatic 'help' and 'version' CLAs. |
 | `is_parsed_` | logical |  | Parse status. |
+| `parse_tried` | logical |  | A parse has run without completing. |
+| `parse_result` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) |  | Error or status of that parse. |
+| `parse_message` | character(len=:) | allocatable | Error message of that parse. |
 | `ignore_unknown_clas` | logical |  | Disable errors-raising for passed unknown CLAs. |
 | `standalone` | logical |  | Stop after help/version/markdown. |
 | `error_hint` | logical |  | Print a hint after a failed parse. |
@@ -266,6 +270,7 @@ classDiagram
 | `provenance_json` |  | JSON report of provenance. |
 | `provenance_arguments` |  | Command line in JSON, sensitive values masked. |
 | `parse_core` |  | Parse the command line (body of parse). |
+| `parse_once` |  | Parse for a getter, once: a failed parse is not repeated. |
 | `group_index` |  | Index of the group with a name, -1 if none. |
 | `is_fatal` |  | Check if the current error stops parsing. |
 | `dispatch_status` |  | Print help/version/markdown in the D3 order. |
@@ -744,6 +749,7 @@ subroutine reset_parse(self)
 
 ```mermaid
 flowchart TD
+  parse["parse"] --> reset_parse["reset_parse"]
   reset_parse["reset_parse"] --> reset_parse["reset_parse"]
   reset_parse["reset_parse"] --> clear_error["clear_error"]
   reset_parse["reset_parse"] --> reset_parse["reset_parse"]
@@ -776,26 +782,55 @@ subroutine parse(self, pref, args, error)
 
 ```mermaid
 flowchart TD
-  get_cla["get_cla"] --> parse["parse"]
-  get_cla_list["get_cla_list"] --> parse["parse"]
-  get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> parse["parse"]
-  get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> parse["parse"]
-  get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> parse["parse"]
-  get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> parse["parse"]
-  get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> parse["parse"]
-  get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> parse["parse"]
-  get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> parse["parse"]
-  get_cla_list_varying_char["get_cla_list_varying_char"] --> parse["parse"]
-  get_cla_list_varying_logical["get_cla_list_varying_logical"] --> parse["parse"]
-  get_source["get_source"] --> parse["parse"]
-  map_cla["map_cla"] --> parse["parse"]
   parse_core["parse_core"] --> parse["parse"]
-  provenance["provenance"] --> parse["parse"]
+  parse_once["parse_once"] --> parse["parse"]
   parse["parse"] --> check_requested["check_requested"]
   parse["parse"] --> parse_core["parse_core"]
   parse["parse"] --> print_error_hint["print_error_hint"]
   parse["parse"] --> report_check["report_check"]
+  parse["parse"] --> reset_parse["reset_parse"]
   style parse fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### parse_once
+
+Parse for a getter. A parse that has not completed (an error, or a status such as the help with `standalone=.false.`) is
+ not repeated: its result comes back without reading the real command line nor printing again. A getter passing `args`
+ asks for a parse of that text, and gets it.
+
+```fortran
+subroutine parse_once(self, pref, args, error)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | inout |  | CLI data. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+| `args` | character(len=*) | in | optional | String containing command line arguments. |
+| `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | optional | Error trapping flag. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  get_cla["get_cla"] --> parse_once["parse_once"]
+  get_cla_list["get_cla_list"] --> parse_once["parse_once"]
+  get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> parse_once["parse_once"]
+  get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> parse_once["parse_once"]
+  get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> parse_once["parse_once"]
+  get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> parse_once["parse_once"]
+  get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> parse_once["parse_once"]
+  get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> parse_once["parse_once"]
+  get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> parse_once["parse_once"]
+  get_cla_list_varying_char["get_cla_list_varying_char"] --> parse_once["parse_once"]
+  get_cla_list_varying_logical["get_cla_list_varying_logical"] --> parse_once["parse_once"]
+  get_source["get_source"] --> parse_once["parse_once"]
+  map_cla["map_cla"] --> parse_once["parse_once"]
+  provenance["provenance"] --> parse_once["parse_once"]
+  parse_once["parse_once"] --> parse["parse"]
+  style parse_once fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### report_check
@@ -1086,7 +1121,7 @@ flowchart TD
   get_cla["get_cla"] --> inherit_error["inherit_error"]
   get_cla["get_cla"] --> is_defined["is_defined"]
   get_cla["get_cla"] --> is_defined_group["is_defined_group"]
-  get_cla["get_cla"] --> parse["parse"]
+  get_cla["get_cla"] --> parse_once["parse_once"]
   get_cla["get_cla"] --> positional_index["positional_index"]
   get_cla["get_cla"] --> str["str"]
   style get_cla fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -1125,7 +1160,7 @@ flowchart TD
   get_cla_list["get_cla_list"] --> inherit_error["inherit_error"]
   get_cla_list["get_cla_list"] --> is_defined["is_defined"]
   get_cla_list["get_cla_list"] --> is_defined_group["is_defined_group"]
-  get_cla_list["get_cla_list"] --> parse["parse"]
+  get_cla_list["get_cla_list"] --> parse_once["parse_once"]
   get_cla_list["get_cla_list"] --> positional_index["positional_index"]
   get_cla_list["get_cla_list"] --> str["str"]
   style get_cla_list fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -1166,7 +1201,7 @@ flowchart TD
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> inherit_error["inherit_error"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> is_defined["is_defined"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> is_defined_group["is_defined_group"]
-  get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> parse["parse"]
+  get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> parse_once["parse_once"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> positional_index["positional_index"]
   get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> str["str"]
   style get_cla_list_varying_R16P fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -1207,7 +1242,7 @@ flowchart TD
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> inherit_error["inherit_error"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> is_defined["is_defined"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> is_defined_group["is_defined_group"]
-  get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> parse["parse"]
+  get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> parse_once["parse_once"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> positional_index["positional_index"]
   get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> str["str"]
   style get_cla_list_varying_R8P fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -1248,7 +1283,7 @@ flowchart TD
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> inherit_error["inherit_error"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> is_defined["is_defined"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> is_defined_group["is_defined_group"]
-  get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> parse["parse"]
+  get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> parse_once["parse_once"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> positional_index["positional_index"]
   get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> str["str"]
   style get_cla_list_varying_R4P fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -1289,7 +1324,7 @@ flowchart TD
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> inherit_error["inherit_error"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> is_defined["is_defined"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> is_defined_group["is_defined_group"]
-  get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> parse["parse"]
+  get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> parse_once["parse_once"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> positional_index["positional_index"]
   get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> str["str"]
   style get_cla_list_varying_I8P fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -1330,7 +1365,7 @@ flowchart TD
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> inherit_error["inherit_error"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> is_defined["is_defined"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> is_defined_group["is_defined_group"]
-  get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> parse["parse"]
+  get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> parse_once["parse_once"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> positional_index["positional_index"]
   get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> str["str"]
   style get_cla_list_varying_I4P fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -1371,7 +1406,7 @@ flowchart TD
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> inherit_error["inherit_error"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> is_defined["is_defined"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> is_defined_group["is_defined_group"]
-  get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> parse["parse"]
+  get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> parse_once["parse_once"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> positional_index["positional_index"]
   get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> str["str"]
   style get_cla_list_varying_I2P fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -1412,7 +1447,7 @@ flowchart TD
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> inherit_error["inherit_error"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> is_defined["is_defined"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> is_defined_group["is_defined_group"]
-  get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> parse["parse"]
+  get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> parse_once["parse_once"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> positional_index["positional_index"]
   get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> str["str"]
   style get_cla_list_varying_I1P fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -1453,7 +1488,7 @@ flowchart TD
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> inherit_error["inherit_error"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> is_defined["is_defined"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> is_defined_group["is_defined_group"]
-  get_cla_list_varying_logical["get_cla_list_varying_logical"] --> parse["parse"]
+  get_cla_list_varying_logical["get_cla_list_varying_logical"] --> parse_once["parse_once"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> positional_index["positional_index"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> str["str"]
   style get_cla_list_varying_logical fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -1599,7 +1634,7 @@ flowchart TD
   get_cla_list_varying_char["get_cla_list_varying_char"] --> inherit_error["inherit_error"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> is_defined["is_defined"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> is_defined_group["is_defined_group"]
-  get_cla_list_varying_char["get_cla_list_varying_char"] --> parse["parse"]
+  get_cla_list_varying_char["get_cla_list_varying_char"] --> parse_once["parse_once"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> positional_index["positional_index"]
   get_cla_list_varying_char["get_cla_list_varying_char"] --> str["str"]
   style get_cla_list_varying_char fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -2106,7 +2141,7 @@ flowchart TD
   get_source["get_source"] --> errored["errored"]
   get_source["get_source"] --> is_defined["is_defined"]
   get_source["get_source"] --> is_defined_group["is_defined_group"]
-  get_source["get_source"] --> parse["parse"]
+  get_source["get_source"] --> parse_once["parse_once"]
   get_source["get_source"] --> positional_index["positional_index"]
   get_source["get_source"] --> str["str"]
   style get_source fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -2140,7 +2175,7 @@ function provenance(self, pref, format) result(report)
 ```mermaid
 flowchart TD
   save_provenance["save_provenance"] --> provenance["provenance"]
-  provenance["provenance"] --> parse["parse"]
+  provenance["provenance"] --> parse_once["parse_once"]
   provenance["provenance"] --> provenance_json["provenance_json"]
   provenance["provenance"] --> provenance_text["provenance_text"]
   provenance["provenance"] --> upper_case["upper_case"]
@@ -2725,7 +2760,7 @@ flowchart TD
   map_cla["map_cla"] --> errored["errored"]
   map_cla["map_cla"] --> is_defined["is_defined"]
   map_cla["map_cla"] --> is_defined_group["is_defined_group"]
-  map_cla["map_cla"] --> parse["parse"]
+  map_cla["map_cla"] --> parse_once["parse_once"]
   style map_cla fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 

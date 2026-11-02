@@ -109,6 +109,7 @@ graph LR
 - [completion_powershell](#completion-powershell)
 - [completion_values](#completion-values)
 - [has_choices](#has-choices)
+- [shown](#shown)
 - [display_name](#display-name)
 - [json_schema](#json-schema)
 - [is_typed_for_schema](#is-typed-for-schema)
@@ -386,6 +387,7 @@ classDiagram
 | `check_value_item` |  | Check one value against the declared type. |
 | `type_allows` |  | Check that a get may read the declared type. |
 | `type_allows_list` |  | Check that a get into an array may read the declared type. |
+| `shown` |  | Value as an error message may quote it. |
 | `type_allows_val` |  | Check that a get into a variable may read the declared type. |
 | `cast_number` |  | Convert a value to a number, quietly (B40 of #126). |
 | `check_list_size` |  | Check CLA multiple values list size consistency. |
@@ -913,6 +915,7 @@ flowchart TD
   errored["errored"] --> error_prefix["error_prefix"]
   errored["errored"] --> print_error_message["print_error_message"]
   errored["errored"] --> range_text["range_text"]
+  errored["errored"] --> shown["shown"]
   errored["errored"] --> str["str"]
   style errored fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -1157,6 +1160,7 @@ flowchart TD
   check_type_consistency["check_type_consistency"] --> is_list["is_list"]
   check_type_consistency["check_type_consistency"] --> list_items["list_items"]
   check_type_consistency["check_type_consistency"] --> replace_all["replace_all"]
+  check_type_consistency["check_type_consistency"] --> shown["shown"]
   check_type_consistency["check_type_consistency"] --> tokenize["tokenize"]
   check_type_consistency["check_type_consistency"] --> unique["unique"]
   check_type_consistency["check_type_consistency"] --> wstrip["wstrip"]
@@ -3114,6 +3118,32 @@ flowchart TD
   completion_powershell["completion_powershell"] --> has_choices["has_choices"]
   completion_values["completion_values"] --> has_choices["has_choices"]
   style has_choices fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### shown
+
+Return a value as an error message may quote it: `***` if the option is sensitive (#128).
+
+**Returns**: `character(len=:)`
+
+```fortran
+function shown(self, text) result(masked)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_argument](/api/src/lib/flap_command_line_argument_t#command-line-argument)) | in |  | CLA data. |
+| `text` | character(len=*) | in |  | Value. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  check_type_consistency["check_type_consistency"] --> shown["shown"]
+  errored["errored"] --> shown["shown"]
+  style shown fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### display_name

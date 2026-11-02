@@ -30,6 +30,7 @@ call check_sensitive
 call check_sensitive_positional
 call check_sensitive_outputs
 call check_sensitive_lists
+call check_sensitive_errors
 call check_failed_args
 call check_save
 call capture_close(lun)
@@ -229,6 +230,104 @@ contains
   call assert(index(cli%json_schema(), 'DEFSECRET') == 0, 'sensitive: description')
   call assert_contains(cli%json_schema(), '"sensitive": true', 'sensitive: described')
   endsubroutine check_sensitive_outputs
+
+  subroutine check_sensitive_errors
+  !< An error message never quotes a sensitive value, in text or in JSON; the same messages of another option do.
+  character(*), parameter :: S = 'SECRET' !< Value that must not appear.
+
+  call masked_error(switch_args='--t '//S, type='I4P', message='cannot convert "***"')
+  call masked_error(switch_args='--t '//S, type='logical', message='cannot convert "***"')
+  call masked_error(switch_args='--t '//S, choices='a,b', message='but "***" has been passed')
+  call masked_error(switch_args='--t 99', type='I4P', max='9', message='value "***" of', secret='99')
+  call masked_error(switch_args='--t /no/'//S, must_exist=.true., message='path "***" does not exist')
+  call masked_error(switch_args='--t '//S, map=.true., message='got "***"')
+  call masked_default
+  call shown_when_not_sensitive
+  endsubroutine check_sensitive_errors
+
+  subroutine masked_error(switch_args, message, type, choices, max, must_exist, map, secret)
+  !< A failed option, sensitive: the message has the mask, not the value, in `parse`, `error_message` and JSON.
+  character(*),           intent(in) :: switch_args !< Command line.
+  character(*),           intent(in) :: message     !< Text expected in the message.
+  character(*), optional, intent(in) :: type        !< Declared type.
+  character(*), optional, intent(in) :: choices     !< Choices.
+  character(*), optional, intent(in) :: max         !< Maximum.
+  logical,      optional, intent(in) :: must_exist  !< The path must exist.
+  logical,      optional, intent(in) :: map         !< KEY=VALUE pairs.
+  character(*), optional, intent(in) :: secret      !< Value that must not appear (default SECRET).
+  type(command_line_interface)  :: cli   !< Command Line Interface (CLI).
+  character(len=:), allocatable :: text  !< Captured text.
+  character(len=:), allocatable :: value !< Value that must not appear.
+  character(len=:), allocatable :: fmt   !< Format of the errors.
+  character(len=:), allocatable :: def   !< Default.
+  integer(I4P)                  :: lun   !< Capture unit.
+  integer(I4P)                  :: error !< Error trapping flag.
+  integer(I4P)                  :: f     !< Format counter.
+
+  value = 'SECRET' ; if (present(secret)) value = secret
+  def = '0'
+  if (present(type)) then
+    if (type == 'logical') def = '.false.'
+  endif
+  if (present(choices)) def = 'a'
+  call capture_open(lun)
+  do f=1, 2
+    fmt = trim(merge('text', 'json', f == 1))
+    call cli%free
+    call cli%init(progname='prog', error_lun=lun, usage_lun=lun, standalone=.false., error_format=fmt)
+    if (present(map)) then
+      call cli%add(switch='--t', help='t', required=.false., def='', nargs='+', map=map, sensitive=.true., error=error)
+    else
+      call cli%add(switch='--t', help='t', required=.false., def=def, val_type=type, choices=choices, max=max, &
+                   must_exist=must_exist, sensitive=.true., error=error)
+    endif
+    call cli%parse(args=switch_args, error=error)
+    if (.not.present(type)) call get_text(cli, error)
+    text = read_back(lun)
+    call assert(error /= 0, switch_args//': the error')
+    call assert_contains(cli%error_message, message, switch_args//': the mask')
+    call assert(index(text, value) == 0, switch_args//': no value on the error unit, '//fmt)
+    call assert(index(cli%error_message, value) == 0, switch_args//': no value in the message, '//fmt)
+  enddo
+  call capture_close(lun)
+  endsubroutine masked_error
+
+  subroutine get_text(cli, error)
+  !< Read an untyped value if parse has not failed: the choices are checked here.
+  type(command_line_interface), intent(inout) :: cli   !< Command Line Interface (CLI).
+  integer(I4P),                 intent(inout) :: error !< Error trapping flag.
+  character(99)                               :: value !< Value.
+
+  if (error == 0) call cli%get(switch='--t', val=value, error=error)
+  endsubroutine get_text
+
+  subroutine masked_default
+  !< The default that does not fit the declared type, reported by add.
+  type(command_line_interface) :: cli   !< Command Line Interface (CLI).
+  integer(I4P)                 :: lun   !< Capture unit.
+  integer(I4P)                 :: error !< Error trapping flag.
+
+  call capture_open(lun)
+  call cli%init(progname='prog', error_lun=lun, usage_lun=lun)
+  call cli%add(switch='--t', help='t', required=.false., def='SECRET', val_type='I4P', sensitive=.true., error=error)
+  call assert(error /= 0, 'default: the error')
+  call assert(index(read_back(lun), 'SECRET') == 0, 'default: masked')
+  call capture_close(lun)
+  endsubroutine masked_default
+
+  subroutine shown_when_not_sensitive
+  !< Without sensitive the message quotes the value.
+  type(command_line_interface) :: cli   !< Command Line Interface (CLI).
+  integer(I4P)                 :: lun   !< Capture unit.
+  integer(I4P)                 :: error !< Error trapping flag.
+
+  call capture_open(lun)
+  call cli%init(progname='prog', error_lun=lun, usage_lun=lun, standalone=.false.)
+  call cli%add(switch='--t', help='t', required=.false., def='0', val_type='I4P', error=error)
+  call cli%parse(args='--t abc', error=error)
+  call assert_contains(cli%error_message, 'cannot convert "abc"', 'not sensitive: quoted')
+  call capture_close(lun)
+  endsubroutine shown_when_not_sensitive
 
   subroutine check_sensitive_lists
   !< All the tokens of a sensitive value, and none after them; a sensitive flag has none.

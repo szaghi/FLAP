@@ -470,6 +470,7 @@ subroutine reset_parse(self)
 
 ```mermaid
 flowchart TD
+  parse["parse"] --> reset_parse["reset_parse"]
   reset_parse["reset_parse"] --> reset_parse["reset_parse"]
   reset_parse["reset_parse"] --> clear_error["clear_error"]
   style reset_parse fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -622,21 +623,8 @@ subroutine parse(self, args, ignore_unknown_clas, pref, error_unknown_clas, igno
 
 ```mermaid
 flowchart TD
-  get_cla["get_cla"] --> parse["parse"]
-  get_cla_list["get_cla_list"] --> parse["parse"]
-  get_cla_list_varying_I1P["get_cla_list_varying_I1P"] --> parse["parse"]
-  get_cla_list_varying_I2P["get_cla_list_varying_I2P"] --> parse["parse"]
-  get_cla_list_varying_I4P["get_cla_list_varying_I4P"] --> parse["parse"]
-  get_cla_list_varying_I8P["get_cla_list_varying_I8P"] --> parse["parse"]
-  get_cla_list_varying_R16P["get_cla_list_varying_R16P"] --> parse["parse"]
-  get_cla_list_varying_R4P["get_cla_list_varying_R4P"] --> parse["parse"]
-  get_cla_list_varying_R8P["get_cla_list_varying_R8P"] --> parse["parse"]
-  get_cla_list_varying_char["get_cla_list_varying_char"] --> parse["parse"]
-  get_cla_list_varying_logical["get_cla_list_varying_logical"] --> parse["parse"]
-  get_source["get_source"] --> parse["parse"]
-  map_cla["map_cla"] --> parse["parse"]
   parse_core["parse_core"] --> parse["parse"]
-  provenance["provenance"] --> parse["parse"]
+  parse_once["parse_once"] --> parse["parse"]
   parse["parse"] --> append_value["append_value"]
   parse["parse"] --> assign_object["assign_object"]
   parse["parse"] --> count_occurrences["count_occurrences"]

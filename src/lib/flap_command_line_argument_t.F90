@@ -232,6 +232,7 @@ type, extends(object) :: command_line_argument
     procedure, private :: check_value_item                !< Check one value against the declared type.
     procedure, private :: type_allows                     !< Check that a get may read the declared type.
     procedure, private :: type_allows_list                !< Check that a get into an array may read the declared type.
+    procedure, private :: shown                           !< Value as an error message may quote it.
     procedure, private :: type_allows_val                 !< Check that a get into a variable may read the declared type.
     procedure, private :: cast_number                     !< Convert a value to a number, quietly (B40 of #126).
     procedure, private :: check_list_size                 !< Check CLA multiple values list size consistency.
@@ -1426,6 +1427,19 @@ contains
   endfunction has_choices
 
   ! private methods
+  function shown(self, text) result(masked)
+  !< Return a value as an error message may quote it: `***` if the option is sensitive (#128).
+  class(command_line_argument), intent(in) :: self   !< CLA data.
+  character(*),                 intent(in) :: text   !< Value.
+  character(len=:), allocatable            :: masked !< Value to quote.
+
+  if (self%is_sensitive) then
+    masked = '***'
+  else
+    masked = text
+  endif
+  endfunction shown
+
   subroutine errored(self, error, pref, switch, val_str, log_value, hint, type_name, quiet)
   !< Trig error occurence and print meaningful message.
   class(command_line_argument), intent(inout) :: self      !< CLA data.
@@ -1480,7 +1494,7 @@ contains
         self%error_message = prefd//': value of named option "'//self%switch//'" must be chosen in: '
       endif
       self%error_message = self%error_message//'('//self%choices//')'
-      self%error_message = self%error_message//' but "'//trim(val_str)//'" has been passed!'
+      self%error_message = self%error_message//' but "'//self%shown(trim(val_str))//'" has been passed!'
     case(ERROR_MISSING_REQUIRED)
       if (.not.self%is_positional) then
         self%error_message = prefd//': named option "'//trim(adjustl(self%switch))//'" is required!'
@@ -1488,7 +1502,7 @@ contains
         self%error_message = prefd//': "'//trim(str(self%position, .true.))//'-th" positional option is required!'
       endif
     case(ERROR_CASTING_LOGICAL)
-      self%error_message = prefd//': cannot convert "'//log_value//'" of option "'//self%switch//'" to logical type!'
+      self%error_message = prefd//': cannot convert "'//self%shown(log_value)//'" of option "'//self%switch//'" to logical type!'
     case(ERROR_CHOICES_LOGICAL)
       self%error_message = prefd//': cannot use "choices" value check for option "'//self%switch//&
                            '" it being of logical type! The choices are limited to ".true." or ".false." by definition!'
@@ -1569,31 +1583,32 @@ contains
     case(ERROR_LIST_SIZE)
       self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" has '//trim(val_str)//'!'
     case(ERROR_PATH_NOT_FOUND)
-      self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'": path "'//trim(val_str)//'" does not exist!'
+      self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'": path "'//self%shown(trim(val_str))//&
+                           '" does not exist!'
     case(ERROR_PATH_NOT_READABLE)
-      self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'": path "'//trim(val_str)//&
-                           '" is not readable: '//trim(log_value)//'!'
+      self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'": path "'//self%shown(trim(val_str))//&
+                           '" is not readable: '//self%shown(trim(log_value))//'!'
     case(ERROR_PATH_NOT_WRITABLE)
-      self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'": path "'//trim(val_str)//&
-                           '" is not writable: '//trim(log_value)//'!'
+      self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'": path "'//self%shown(trim(val_str))//&
+                           '" is not writable: '//self%shown(trim(log_value))//'!'
     case(ERROR_RANGE_DEFINITION)
       self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'": invalid range: '//trim(val_str)//'!'
     case(ERROR_CASTING_NUMBER)
       if (self%is_positional) then
-        self%error_message = prefd//': cannot convert "'//val_str//'" of positional argument '//&
+        self%error_message = prefd//': cannot convert "'//self%shown(val_str)//'" of positional argument '//&
                              trim(str(self%position, .true.))//' to '//type_name//'!'
       else
-        self%error_message = prefd//': cannot convert "'//val_str//'" of option "'//trim(adjustl(self%switch))//'" to '//&
-                             type_name//'!'
+        self%error_message = prefd//': cannot convert "'//self%shown(val_str)//'" of option "'//&
+                             trim(adjustl(self%switch))//'" to '//type_name//'!'
       endif
     case(ERROR_OUT_OF_RANGE)
-      self%error_message = prefd//': value "'//trim(val_str)//'" of "'//trim(adjustl(self%switch))//&
+      self%error_message = prefd//': value "'//self%shown(trim(val_str))//'" of "'//trim(adjustl(self%switch))//&
                            '" is out of range '//self%range_text()//'!'
     case(ERROR_RANGE_TYPE)
       self%error_message = prefd//': option "'//trim(adjustl(self%switch))//'" has a range: get it into a number, not a '//&
                            'character or a logical!'
     case(ERROR_MAP_FORMAT)
-      self%error_message = prefd//': "'//trim(adjustl(self%switch))//'" expects KEY=VALUE, got "'//val_str//'"!'
+      self%error_message = prefd//': "'//trim(adjustl(self%switch))//'" expects KEY=VALUE, got "'//self%shown(val_str)//'"!'
     case(ERROR_MAP_DUPLICATE_KEY)
       self%error_message = prefd//': key "'//val_str//'" of "'//trim(adjustl(self%switch))//'" given twice!'
     case(ERROR_MAP_UNKNOWN_KEY)
@@ -1622,7 +1637,7 @@ contains
                            ': it cannot be read into '//trim(val_str)//'!'
     case(ERROR_ENVVAR_CSV)
       self%error_message = prefd//': environment variable "'//trim(adjustl(self%envvar))//'" of option "'//&
-                           trim(adjustl(self%switch))//'": unterminated quote in the list "'//trim(val_str)//'"!'
+                           trim(adjustl(self%switch))//'": unterminated quote in the list "'//self%shown(trim(val_str))//'"!'
     endselect
     if (present(quiet)) then
       if (quiet) return
@@ -2255,7 +2270,8 @@ contains
       endif
       if (self%error /= 0) then
         self%muted = .false.
-        call self%errored(pref=pref, error=ERROR_TYPE_DEFINITION, val_str='the default "'//wstrip(self%def)//'" does not fit it')
+        call self%errored(pref=pref, error=ERROR_TYPE_DEFINITION, &
+                          val_str='the default "'//self%shown(wstrip(self%def))//'" does not fit it')
         return
       endif
     endif

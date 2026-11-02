@@ -16,6 +16,7 @@ programs keep their behaviour. The plan behind them is issue [#125](https://gith
 
 ## Unreleased (fixes)
 
+- An error message about an option with `sensitive=.true.` quotes its value as `***`.
 - A `get` after a failed `parse` no longer parses the real command line again. The first failure stands: `get` returns the
   same error and nothing is printed a second time. A program that relied on the second parse, reading a value of the real
   command line after `parse(args=...)` failed, must call `reset_parse` first. Another `parse`, or a `get` with `args`, after a

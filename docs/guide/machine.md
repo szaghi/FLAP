@@ -97,7 +97,9 @@ report: a manifest may not reproduce a run that uses them.
 
 `cli%add(sensitive=.true.)` masks a value as `***` in both reports and in the recorded command line, and leaves its default
 out of the help and of the JSON description. A sensitive positional leaves the command line out altogether (`null`). An
-error message can still quote the value of a failed check, such as `choices`.
+error message quotes it as `***` too: `cannot convert "***" of option "--token" to an integer!`. FLAP can mask only what it
+attributes to the option: a misspelled `--tokn=abc` is an unknown argument, quoted as typed. The keys of a sensitive map stay
+visible.
 
 ## Using it from an agent
 
