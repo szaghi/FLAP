@@ -4,6 +4,35 @@ All notable changes to this project are documented here.
 Versions follow [Semantic Versioning](https://semver.org/).
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.7.0] — 2026-11-02
+### Added
+- **cli**: Error classes, exit_status and class in JSON errors
+
+- **cli**: Dry-run option
+
+- **cli**: Schema of one command
+
+- **cli**: Save_skill
+
+
+### Documentation
+- Exit statuses, dry-run contract and skill generation
+
+- Feature audit, close the gaps in the guide
+
+- Tutorials, agent features included
+
+- Site style after SHORE and StringiFor
+
+- Landing pages, features in the hero and animations
+
+- Phosphor logo and palette
+
+
+### Fixed
+- **cli**: --check and --dry-run after a command; report an undefined command of set_mutually_exclusive_groups
+
+
 ## [2.6.0] — 2026-11-02
 ### Added
 - **argument**: Optional declared value type, validated by parse
