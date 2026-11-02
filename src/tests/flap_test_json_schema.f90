@@ -31,6 +31,7 @@ call check_ranges
 call check_not_standalone
 call check_save
 call check_errors_table
+call check_one_command
 call capture_close(lun)
 
 ! T2.6 printed by a child, with a required option missing, exit 0; T2.8 unknown when not enabled
@@ -44,6 +45,38 @@ call reinvoke(1_I4P, exitstat, out, err, args='--need 1')
 call assert_contains(out, 'status=0', 'no --schema, the program runs')
 
 contains
+  subroutine check_one_command
+  !< The description of one command: from the method, by an alias, from `cmd --schema` (#129).
+  type(command_line_interface) :: cli   !< CLI.
+  character(:), allocatable    :: json  !< Description.
+  integer(I4P)                 :: lun   !< Capture unit.
+  integer(I4P)                 :: error !< Error trapping flag.
+
+  call capture_open(lun)
+  call cli%init(progname='prog', version='1', schema_option=.true., standalone=.false., &
+                version_lun=lun, error_lun=lun, usage_lun=lun)
+  call cli%add(switch='--top', help='t', required=.false., def='0', error=error)
+  call cli%add_group(group='run', description='r', aliases='go')
+  call cli%add_group(group='other', description='o')
+  call cli%add(group='run', switch='--inner', help='i', required=.false., def='0', error=error)
+  call cli%add(group='other', switch='--elsewhere', help='e', required=.false., def='0', error=error)
+  json = cli%json_schema(group='run')
+  call assert_contains(json, '"--inner"', 'one command: its option')
+  call assert_contains(json, '"command":', 'one command: the member')
+  call assert(index(json, '--top') == 0, 'one command: not the top level')
+  call assert(index(json, '--elsewhere') == 0, 'one command: not the others')
+  call assert(index(json, '"errors"') == 0, 'one command: not the code tables')
+  call assert_equal(cli%json_schema(group='go'), json, 'one command: by alias')
+  call assert_equal(cli%json_schema(group='nope'), '', 'one command: unknown')
+  call assert_equal(cli%json_schema(group=''), '', 'one command: the top level is not a command')
+  call cli%save_json_schema(file='/nonexistent-dir/x', group='nope', error=error)
+  call assert(error /= 0, 'one command: save of an unknown one')
+  call cli%parse(args='run --schema', error=error)
+  call assert_equal(error, STATUS_SCHEMA, 'cmd --schema: the status')
+  call assert_contains(read_back(lun), '"--inner"', 'cmd --schema: printed')
+  call capture_close(lun)
+  endsubroutine check_one_command
+
   subroutine define(cli)
   !< A CLI using the features of the description.
   type(command_line_interface), intent(out) :: cli   !< Command Line Interface (CLI).

@@ -108,6 +108,7 @@ graph LR
 - [powershell_script](#powershell-script)
 - [error_description](#error-description)
 - [json_schema](#json-schema)
+- [exclusive_of](#exclusive-of)
 - [usage_core](#usage-core)
 - [signature_core](#signature-core)
 - [bash_script](#bash-script)
@@ -276,6 +277,7 @@ classDiagram
 | `provenance_json` |  | JSON report of provenance. |
 | `provenance_arguments` |  | Command line in JSON, sensitive values masked. |
 | `parse_core` |  | Parse the command line (body of parse). |
+| `exclusive_of` |  | Command excluded by a command. |
 | `dry_run_passed` |  | Check the --dry-run builtin. |
 | `parse_once` |  | Parse for a getter, once: a failed parse is not repeated. |
 | `group_index` |  | Index of the group with a name, -1 if none. |
@@ -1790,10 +1792,10 @@ flowchart TD
 
 ### save_json_schema
 
-Save the JSON description of the CLI (#128).
+Save the JSON description of the CLI (#128), or of one command (#129): `error` is ERROR_MISSING_GROUP if there is no such one.
 
 ```fortran
-subroutine save_json_schema(self, file, error)
+subroutine save_json_schema(self, file, error, group)
 ```
 
 **Arguments**
@@ -1803,11 +1805,13 @@ subroutine save_json_schema(self, file, error)
 | `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | in |  | CLI data. |
 | `file` | character(len=*) | in |  | Output file name. |
 | `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | optional | I/O status (not zero if the file cannot be written). |
+| `group` | character(len=*) | in | optional | Name of a command. |
 
 **Call graph**
 
 ```mermaid
 flowchart TD
+  save_json_schema["save_json_schema"] --> group_index["group_index"]
   save_json_schema["save_json_schema"] --> json_schema["json_schema"]
   save_json_schema["save_json_schema"] --> write_text["write_text"]
   style save_json_schema fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -2418,7 +2422,9 @@ flowchart TD
   check_requested["check_requested"] --> group_index["group_index"]
   copy_options["copy_options"] --> group_index["group_index"]
   is_defined_group["is_defined_group"] --> group_index["group_index"]
+  json_schema["json_schema"] --> group_index["group_index"]
   load_config["load_config"] --> group_index["group_index"]
+  save_json_schema["save_json_schema"] --> group_index["group_index"]
   set_mutually_exclusive_switches["set_mutually_exclusive_switches"] --> group_index["group_index"]
   group_index["group_index"] --> is_named["is_named"]
   style group_index fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -3112,10 +3118,12 @@ flowchart TD
 Return the JSON description of the CLI (#128). It needs no copy with the builtins, unlike the other outputs: it leaves them
  out, and it reads no state of a parse, so that it is the same before and after parse.
 
+ With `group`, a command by its name or alias, only that command (#129); '' if there is no such command.
+
 **Returns**: `character(len=:)`
 
 ```fortran
-function json_schema(self) result(json)
+function json_schema(self, group) result(json)
 ```
 
 **Arguments**
@@ -3123,6 +3131,7 @@ function json_schema(self) result(json)
 | Name | Type | Intent | Attributes | Description |
 |------|------|--------|------------|-------------|
 | `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | in |  | CLI data. |
+| `group` | character(len=*) | in | optional | Name of a command. |
 
 **Call graph**
 
@@ -3133,11 +3142,38 @@ flowchart TD
   save_json_schema["save_json_schema"] --> json_schema["json_schema"]
   json_schema["json_schema"] --> error_class["error_class"]
   json_schema["json_schema"] --> error_description["error_description"]
+  json_schema["json_schema"] --> exclusive_of["exclusive_of"]
+  json_schema["json_schema"] --> group_index["group_index"]
   json_schema["json_schema"] --> json_command["json_command"]
   json_schema["json_schema"] --> json_members["json_members"]
   json_schema["json_schema"] --> json_string["json_string"]
   json_schema["json_schema"] --> str["str"]
   style json_schema fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### exclusive_of
+
+Return the command excluded by a command, '' for none. parse makes the relation symmetric: the same answer before it.
+
+**Returns**: `character(len=:)`
+
+```fortran
+function exclusive_of(self, g) result(excluded)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | in |  | CLI data. |
+| `g` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | in |  | Group index. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  json_schema["json_schema"] --> exclusive_of["exclusive_of"]
+  style exclusive_of fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### usage_core

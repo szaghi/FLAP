@@ -126,6 +126,7 @@ type, extends(object), public :: command_line_interface
     procedure, private :: provenance_json                 !< JSON report of provenance.
     procedure, private :: provenance_arguments            !< Command line in JSON, sensitive values masked.
     procedure, private :: parse_core                      !< Parse the command line (body of parse).
+    procedure, private :: exclusive_of                    !< Command excluded by a command.
     procedure, private :: dry_run_passed                  !< Check the --dry-run builtin.
     procedure, private :: parse_once                      !< Parse for a getter, once: a failed parse is not repeated.
     procedure, private :: group_index                     !< Index of the group with a name, -1 if none.
@@ -1779,13 +1780,19 @@ contains
     if (self%standalone) call quiet_stop(0_I4P)
     return
   endif
-  ! the JSON description (#128): top level only
-  if (self%clasg(0)%is_action_passed(ACTION_SCHEMA)) then
+  ! the JSON description (#128): the program, or the first command asking for its own (#129)
+  do g=0, size(self%clasg, dim=1) - 1
+    if (g > 0 .and. .not.self%clasg(g)%is_called) cycle
+    if (.not.self%clasg(g)%is_action_passed(ACTION_SCHEMA)) cycle
     self%error = STATUS_SCHEMA
-    call write_text(self%version_lun, self%json_schema())
+    if (g == 0) then
+      call write_text(self%version_lun, self%json_schema())
+    else
+      call write_text(self%version_lun, self%json_schema(group=self%clasg(g)%group))
+    endif
     if (self%standalone) call quiet_stop(0_I4P)
     return
-  endif
+  enddo
   ! the completion builtins (F24): top level only; an unknown shell or a failed install is an error, returned
   if (self%clasg(0)%is_action_passed(ACTION_SHOW_COMPLETION)) then
     shell = self%completion_shell(ACTION_SHOW_COMPLETION, pref=pref)
@@ -2964,6 +2971,11 @@ contains
     if (.not.self%is_defined(group='', switch='--schema')) &
       call self%add(pref=pref, group_index=0, switch='--schema', required=.false., def='', &
                     help='Print the description of this program as JSON', act='print_schema')
+    do g=1, size(self%clasg, dim=1) - 1 ! a command describes itself (#129)
+      if (.not.self%clasg(g)%is_defined(switch='--schema')) &
+        call self%add(pref=pref, group_index=g, switch='--schema', required=.false., def='', &
+                      help='Print the description of this command as JSON', act='print_schema')
+    enddo
   endif
 
   ! add the validate-only builtin to the top level, if asked (#128)
@@ -3385,18 +3397,29 @@ contains
   endselect
   endfunction error_description
 
-  function json_schema(self) result(json)
+  function json_schema(self, group) result(json)
   !< Return the JSON description of the CLI (#128). It needs no copy with the builtins, unlike the other outputs: it leaves them
   !< out, and it reads no state of a parse, so that it is the same before and after parse.
+  !<
+  !< With `group`, a command by its name or alias, only that command (#129); '' if there is no such command.
   class(command_line_interface), intent(in) :: self  !< CLI data.
+  character(*), optional,        intent(in) :: group !< Name of a command.
   character(len=:), allocatable             :: json  !< JSON document.
   character(1)                              :: nl    !< New line.
   integer(I4P)                              :: g     !< Group index.
   integer(I4P)                              :: e     !< Counter.
-  character(len=:), allocatable             :: excluded !< Command excluded by a command.
   character(len=:), allocatable             :: env      !< Variable choosing the error format, in JSON.
 
   nl = new_line('a')
+  if (present(group)) then
+    json = ''
+    g = self%group_index(trim(adjustl(group)))
+    if (g < 1) return
+    json = '{'//nl//'  "schema_version": 1,'//nl
+    json = json//'  "program": {"name": '//json_string(self%progname)//', "version": '//json_string(self%version)//'},'//nl
+    json = json//'  "command":'//nl//self%clasg(g)%json_command(indent='  ', exclusive_with=self%exclusive_of(g))//nl//'}'
+    return
+  endif
   json = '{'//nl//'  "schema_version": 1,'//nl
   json = json//'  "program": {"name": '//json_string(self%progname)//', "version": '//json_string(self%version)//&
          ', "description": '//json_string(self%description)//'},'//nl
@@ -3425,31 +3448,46 @@ contains
   json = json//'  "commands": ['
   do g=1, size(self%clasg, dim=1) - 1
     if (g > 1) json = json//','
-    excluded = ''
-    if (allocated(self%clasg(g)%m_exclude)) excluded = trim(adjustl(self%clasg(g)%m_exclude))
-    if (len(excluded) == 0) then ! parse makes the relation symmetric: the same answer before it
-      do e=1, size(self%clasg, dim=1) - 1
-        if (e == g .or. .not.allocated(self%clasg(e)%m_exclude)) cycle
-        if (trim(adjustl(self%clasg(e)%m_exclude)) == self%clasg(g)%group) excluded = self%clasg(e)%group
-      enddo
-    endif
-    json = json//nl//self%clasg(g)%json_command(indent='    ', exclusive_with=excluded)
+    json = json//nl//self%clasg(g)%json_command(indent='    ', exclusive_with=self%exclusive_of(g))
   enddo
   if (size(self%clasg, dim=1) > 1) json = json//nl//'  '
   json = json//']'//nl//'}'
   endfunction json_schema
 
-  subroutine save_json_schema(self, file, error)
-  !< Save the JSON description of the CLI (#128).
+  function exclusive_of(self, g) result(excluded)
+  !< Return the command excluded by a command, '' for none. parse makes the relation symmetric: the same answer before it.
+  class(command_line_interface), intent(in) :: self     !< CLI data.
+  integer(I4P),                  intent(in) :: g        !< Group index.
+  character(len=:), allocatable             :: excluded !< Command excluded.
+  integer(I4P)                              :: e        !< Counter.
+
+  excluded = ''
+  if (allocated(self%clasg(g)%m_exclude)) excluded = trim(adjustl(self%clasg(g)%m_exclude))
+  if (len(excluded) > 0) return
+  do e=1, size(self%clasg, dim=1) - 1
+    if (e == g .or. .not.allocated(self%clasg(e)%m_exclude)) cycle
+    if (trim(adjustl(self%clasg(e)%m_exclude)) == self%clasg(g)%group) excluded = self%clasg(e)%group
+  enddo
+  endfunction exclusive_of
+
+  subroutine save_json_schema(self, file, error, group)
+  !< Save the JSON description of the CLI (#128), or of one command (#129): `error` is ERROR_MISSING_GROUP if there is no such one.
   class(command_line_interface), intent(in)  :: self  !< CLI data.
   character(*),                  intent(in)  :: file  !< Output file name.
+  character(*), optional,        intent(in)  :: group !< Name of a command.
   integer(I4P), optional,        intent(out) :: error !< I/O status (not zero if the file cannot be written).
   integer(I4P)                               :: u     !< Unit file handler.
   integer(I4P)                               :: ios   !< I/O status.
 
+  if (present(group)) then
+    if (self%group_index(trim(adjustl(group))) < 1) then
+      if (present(error)) error = ERROR_MISSING_GROUP
+      return
+    endif
+  endif
   open(newunit=u, file=trim(adjustl(file)), iostat=ios)
   if (ios == 0) then
-    call write_text(u, self%json_schema())
+    call write_text(u, self%json_schema(group=group))
     close(u, iostat=ios)
   endif
   if (present(error)) error = ios

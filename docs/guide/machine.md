@@ -58,6 +58,13 @@ Each message is one line on the error unit, with `level` (`error` or `warning`),
 `suggestions` when known. There are no colours, no `Try ... --help` line and no help after the message. `cli%error_message`
 stays the plain message. The variable takes `text` or `json`; any other value means text.
 
+### One command
+
+A program with many commands has a long description, and an agent pays for every word. `prog cmd --schema`, or
+`cli%json_schema(group='cmd')`, describes one command, by its name or an alias, without the top level or the code tables.
+
+`save_json_schema(file, group='cmd')` saves it. An unknown command gives `''`, and `ERROR_MISSING_GROUP` from `save_json_schema`.
+
 ## Validating without running
 
 `init(check_option=.true.)` adds `--check`, at the top level, so it comes before a command, whose tokens are its own. It runs every stage of `parse`,
