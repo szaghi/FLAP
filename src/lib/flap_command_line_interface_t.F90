@@ -128,6 +128,8 @@ type, extends(object), public :: command_line_interface
     procedure, private :: provenance_json                 !< JSON report of provenance.
     procedure, private :: provenance_arguments            !< Command line in JSON, sensitive values masked.
     procedure, private :: parse_core                      !< Parse the command line (body of parse).
+    procedure, private :: hoist_top_builtins              !< Move --check and --dry-run to the top level.
+    procedure, private :: top_builtin                     !< Check a top-level builtin.
     procedure, private :: exclusive_of                    !< Command excluded by a command.
     procedure, private :: dry_run_passed                  !< Check the --dry-run builtin.
     procedure, private :: parse_once                      !< Parse for a getter, once: a failed parse is not repeated.
@@ -479,18 +481,29 @@ contains
     endsubroutine alias_error
   endsubroutine add_group
 
-  subroutine set_mutually_exclusive_groups(self, group1, group2)
-  !< Set two CLAs group ad mutually exclusive.
+  subroutine set_mutually_exclusive_groups(self, group1, group2, pref, error)
+  !< Set two CLAs group ad mutually exclusive. An undefined command is ERROR_MISSING_GROUP, reported (#129: it was ignored).
   class(command_line_interface), intent(inout) :: self   !< CLI data.
   character(*),                  intent(in)    :: group1 !< Name of the first grouped CLAs.
   character(*),                  intent(in)    :: group2 !< Name of the second grouped CLAs.
+  character(*), optional,        intent(in)    :: pref   !< Prefixing string.
+  integer(I4P), optional,        intent(out)   :: error  !< Error trapping flag.
   integer(I4P)                                 :: g1     !< Counter.
   integer(I4P)                                 :: g2     !< Counter.
 
-  if (self%is_defined_group(group=group1, g=g1).and.self%is_defined_group(group=group2, g=g2)) then
+  call self%clear_error
+  ! the indexes first: an expression may evaluate its operands in any order, and g1 is set by the call (nvfortran does)
+  g1 = self%group_index(trim(adjustl(group1)))
+  g2 = self%group_index(trim(adjustl(group2)))
+  if (g1 < 1) then
+    call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group1)
+  elseif (g2 < 1) then
+    call self%errored(pref=pref, error=ERROR_MISSING_GROUP, group=group2)
+  else
     self%clasg(g1)%m_exclude = self%clasg(g2)%group ! the canonical names, also when given by an alias (F19)
     self%clasg(g2)%m_exclude = self%clasg(g1)%group
   endif
+  if (present(error)) error = self%error
   endsubroutine set_mutually_exclusive_groups
 
   subroutine set_config(self, file, required, error)
@@ -2029,6 +2042,7 @@ contains
 
   allocate(ai(0:size(self%clasg,dim=1)-1,1:2))
   ai = 0
+  call self%hoist_top_builtins
   if (allocated(self%args)) then
     Na = size(self%args,dim=1)
     gc = 0
@@ -2070,6 +2084,74 @@ contains
     self%clasg(0)%is_called = .true.
   endif
   endsubroutine get_clasg_indexes
+
+  subroutine hoist_top_builtins(self)
+  !< Move --check and --dry-run found after a command name to the front of the arguments (#129): they belong to the top level,
+  !< and `prog cmd --check` must mean `prog --check cmd`. Only the builtins (a command, or the program, defining its own switch
+  !< of that name keeps it), only before a `--`, never a value slot of a switch. The order of the other arguments is kept.
+  class(command_line_interface), intent(inout) :: self  !< CLI data.
+  type(flap_string), allocatable               :: moved(:) !< Arguments, the hoisted first.
+  logical,           allocatable               :: hoist(:) !< The argument is hoisted.
+  character(len=:),  allocatable               :: token    !< Argument.
+  integer(I4P)                                 :: Na       !< Number of arguments.
+  integer(I4P)                                 :: a        !< Counter.
+  integer(I4P)                                 :: n        !< Fixed value slots of a switch.
+  integer(I4P)                                 :: g        !< Group of a command name.
+  integer(I4P)                                 :: gc       !< Current group.
+  integer(I4P)                                 :: m        !< Counter.
+
+  if (.not.allocated(self%args)) return
+  if (.not.(self%top_builtin('--check', ACTION_CHECK) .or. self%top_builtin('--dry-run', ACTION_DRY_RUN))) return
+  Na = size(self%args, dim=1)
+  allocate(hoist(Na))
+  hoist = .false.
+  gc = 0
+  a = 0
+  do while (a < Na)
+    a = a + 1
+    token = trim(adjustl(self%args(a)%s))
+    if (token == '--') exit
+    n = self%clasg(gc)%value_arity(switch=token)
+    if (n > 0) then
+      a = min(a + n, Na)
+    elseif (self%is_defined_group(group=trim(self%args(a)%s), g=g)) then
+      if (g > 0) gc = g
+    elseif (gc > 0) then
+      if (self%clasg(gc)%is_defined(switch=token)) cycle
+      if (token == '--check') hoist(a) = self%top_builtin('--check', ACTION_CHECK)
+      if (token == '--dry-run') hoist(a) = self%top_builtin('--dry-run', ACTION_DRY_RUN)
+    endif
+  enddo
+  if (.not.any(hoist)) return
+  allocate(moved(Na))
+  m = 0
+  do a=1, Na
+    if (.not.hoist(a)) cycle
+    m = m + 1
+    moved(m)%s = self%args(a)%s
+  enddo
+  do a=1, Na
+    if (hoist(a)) cycle
+    m = m + 1
+    moved(m)%s = self%args(a)%s
+  enddo
+  do a=1, Na
+    self%args(a)%s = moved(a)%s
+  enddo
+  endsubroutine hoist_top_builtins
+
+  function top_builtin(self, switch, act) result(is)
+  !< Check if the top level has a builtin of this switch and action (not an option of the program with the same name).
+  class(command_line_interface), intent(in) :: self   !< CLI data.
+  character(*),                  intent(in) :: switch !< Switch name.
+  character(*),                  intent(in) :: act    !< Action of the builtin.
+  logical                                   :: is     !< Check result.
+  integer(I4P)                              :: a      !< CLA index.
+
+  is = .false.
+  if (.not.self%clasg(0)%is_defined(switch=switch, pos=a)) return
+  is = self%clasg(0)%cla(a)%act == act
+  endfunction top_builtin
 
   subroutine get_args_from_string(self, args, ai, repeated)
   !< Get CLAs from string.
@@ -3497,9 +3579,9 @@ contains
   endif
   text = text//nl//'## Calling it'//nl//nl
   if (self%schema_option) text = text//'- `--schema` prints the full description as JSON.'//nl
-  if (self%check_option) text = text//'- `--check`, before any command, validates a command line without running it, '//&
-                                      'and names what it could not validate: `'//trim(adjustl(self%progname))//' --check ...`.'//nl
-  if (self%dry_run_option) text = text//'- `--dry-run`, before any command, reports what would be done, without doing it.'//nl
+  if (self%check_option) text = text//'- `--check` validates a command line without running it, and names what it could not '//&
+                                      'validate.'//nl
+  if (self%dry_run_option) text = text//'- `--dry-run` reports what would be done, without doing it.'//nl
   if (allocated(self%error_format_env)) text = text//'- `'//self%error_format_env//'=json` writes errors as JSON lines.'//nl
   text = text//'- Exit status: 0 success; 1 failure of the program; '//&
          '2 fix the command line and retry; 3 fix a file or a variable; 4 the program is wrong, do not retry.'//nl
@@ -3932,7 +4014,7 @@ contains
     case(ERROR_MISSING_SELECTION_CLA)
       self%error_message = prefd//': to get an option value one of switch "name" or "position" must be provided!'
     case(ERROR_MISSING_GROUP)
-      self%error_message = prefd//': ther is no group (command) named "'//trim(adjustl(group))//'"!'
+      self%error_message = prefd//': there is no group (command) named "'//trim(adjustl(group))//'"!'
     case(ERROR_COPY_POSITIONAL)
       self%error_message = prefd//': "'//trim(adjustl(switch))//'" is a positional argument: copy_options copies named '//&
                            'options only!'

@@ -112,5 +112,5 @@ Options defined once (at the top level by default, or in `from_group`) are copie
 call cli%set_mutually_exclusive_groups(group1='commit', group2='init')
 ```
 
-Both commands must be defined before the call: with an undefined one the call does nothing, and has no `error` to tell you.
-The same holds for a misspelled `add_group(exclude=)`. Calling both is `ERROR_GROUP_M_EXCLUDE` (101), reported by `parse`.
+Both commands must be defined before the call: an undefined one is `ERROR_MISSING_GROUP` (1001), returned in the optional
+`error` and printed. A misspelled `add_group(exclude=)` is still ignored. Calling both is `ERROR_GROUP_M_EXCLUDE` (101), reported by `parse`.

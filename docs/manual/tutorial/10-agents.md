@@ -25,7 +25,7 @@ type, range and default. `heat run --schema` describes one command, so a caller 
 
 ## Check before running
 
-`check_option=.true.` adds `--check`, before any command. It runs every stage of `parse` and stops:
+`check_option=.true.` adds `--check`, before or after the command. It runs every stage of `parse` and stops:
 
 <<< @/examples/output/heat_10-check.ansi{ansi}
 

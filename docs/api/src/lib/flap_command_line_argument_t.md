@@ -912,6 +912,7 @@ flowchart TD
   raise_error_switch_unknown["raise_error_switch_unknown"] --> errored["errored"]
   raise_error_value_missing["raise_error_value_missing"] --> errored["errored"]
   set_inline_value["set_inline_value"] --> errored["errored"]
+  set_mutually_exclusive_groups["set_mutually_exclusive_groups"] --> errored["errored"]
   set_source_value["set_source_value"] --> errored["errored"]
   type_allows["type_allows"] --> errored["errored"]
   errored["errored"] --> display_name["display_name"]

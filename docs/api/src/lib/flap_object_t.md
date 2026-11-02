@@ -311,6 +311,7 @@ flowchart TD
   map_cla["map_cla"] --> clear_error["clear_error"]
   reset_parse["reset_parse"] --> clear_error["clear_error"]
   reset_parse["reset_parse"] --> clear_error["clear_error"]
+  set_mutually_exclusive_groups["set_mutually_exclusive_groups"] --> clear_error["clear_error"]
   type_allows["type_allows"] --> clear_error["clear_error"]
   type_allows_list["type_allows_list"] --> clear_error["clear_error"]
   type_allows_val["type_allows_val"] --> clear_error["clear_error"]

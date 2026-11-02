@@ -67,7 +67,8 @@ A program with many commands has a long description, and an agent pays for every
 
 ## Validating without running
 
-`init(check_option=.true.)` adds `--check`, at the top level, so it comes before a command, whose tokens are its own. It runs every stage of `parse`,
+`init(check_option=.true.)` adds `--check` at the top level. It may also come after a command, `prog cmd --check`, unless the
+command defines a `--check` of its own, as may `--dry-run`. It runs every stage of `parse`,
 then stops before the program uses a value:
 
 <<< @/examples/output/solver_check.ansi{ansi}

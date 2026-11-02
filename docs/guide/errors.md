@@ -93,7 +93,7 @@ positive values are **errors**. Existing values never change.
 | `105` | `ERROR_POSITION_DUPLICATE` | Position declared twice | Two positionals of a group (command) with the same `position` (raised by `add`) | definition |
 | `106` | `ERROR_POSITION_GAP` | Missing position | Positions are not `1..N`, e.g. `1` and `3` without `2` (raised when parsing starts) | definition |
 | `1000` | `ERROR_MISSING_CLA` | Argument not found in CLI | `get` or `get_source` called for an undefined switch (`is_passed` returns `.false.`, with no error) | definition |
-| `1001` | `ERROR_MISSING_GROUP` | Group not found in CLI | `get` or `get_source` called for an undefined group (`run_command` returns `.false.`, with no error) | definition |
+| `1001` | `ERROR_MISSING_GROUP` | Group not found in CLI | `get`, `get_source` or `set_mutually_exclusive_groups` called for an undefined group (`run_command` returns `.false.`, with no error) | definition |
 | `1002` | `ERROR_MISSING_SELECTION_CLA` | No argument selected | `get` called with neither `switch=` nor `position=` | definition |
 | `1003` | `ERROR_TOO_FEW_CLAS` | Insufficient arguments for CLI | Reserved: not raised by the current version | usage |
 | `1004` | `ERROR_UNKNOWN_CLAS_IGNORED` | Unknown arguments ignored | `init(ignore_unknown_clas=.true.)` and an unknown switch was passed: not printed, the message of one of them is in `cli%error_message` | usage |

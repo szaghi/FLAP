@@ -45,6 +45,7 @@ graph LR
 - [install_completion](#install-completion)
 - [print_usage_line](#print-usage-line)
 - [get_clasg_indexes](#get-clasg-indexes)
+- [hoist_top_builtins](#hoist-top-builtins)
 - [get_args_from_string](#get-args-from-string)
 - [get_args_from_invocation](#get-args-from-invocation)
 - [get_cla](#get-cla)
@@ -99,6 +100,7 @@ graph LR
 - [completion_shell](#completion-shell)
 - [usage_on_error_is](#usage-on-error-is)
 - [is_fatal](#is-fatal)
+- [top_builtin](#top-builtin)
 - [map_cla](#map-cla)
 - [builtins_missing](#builtins-missing)
 - [usage](#usage)
@@ -281,6 +283,8 @@ classDiagram
 | `provenance_json` |  | JSON report of provenance. |
 | `provenance_arguments` |  | Command line in JSON, sensitive values masked. |
 | `parse_core` |  | Parse the command line (body of parse). |
+| `hoist_top_builtins` |  | Move --check and --dry-run to the top level. |
+| `top_builtin` |  | Check a top-level builtin. |
 | `exclusive_of` |  | Command excluded by a command. |
 | `dry_run_passed` |  | Check the --dry-run builtin. |
 | `parse_once` |  | Parse for a getter, once: a failed parse is not repeated. |
@@ -440,10 +444,10 @@ flowchart TD
 
 ### set_mutually_exclusive_groups
 
-Set two CLAs group ad mutually exclusive.
+Set two CLAs group ad mutually exclusive. An undefined command is ERROR_MISSING_GROUP, reported (#129: it was ignored).
 
 ```fortran
-subroutine set_mutually_exclusive_groups(self, group1, group2)
+subroutine set_mutually_exclusive_groups(self, group1, group2, pref, error)
 ```
 
 **Arguments**
@@ -453,12 +457,16 @@ subroutine set_mutually_exclusive_groups(self, group1, group2)
 | `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | inout |  | CLI data. |
 | `group1` | character(len=*) | in |  | Name of the first grouped CLAs. |
 | `group2` | character(len=*) | in |  | Name of the second grouped CLAs. |
+| `pref` | character(len=*) | in | optional | Prefixing string. |
+| `error` | integer(kind=[I4P](/api/src/third_party/PENF/src/lib/penf_global_parameters_variables)) | out | optional | Error trapping flag. |
 
 **Call graph**
 
 ```mermaid
 flowchart TD
-  set_mutually_exclusive_groups["set_mutually_exclusive_groups"] --> is_defined_group["is_defined_group"]
+  set_mutually_exclusive_groups["set_mutually_exclusive_groups"] --> clear_error["clear_error"]
+  set_mutually_exclusive_groups["set_mutually_exclusive_groups"] --> errored["errored"]
+  set_mutually_exclusive_groups["set_mutually_exclusive_groups"] --> group_index["group_index"]
   style set_mutually_exclusive_groups fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
@@ -1045,9 +1053,38 @@ subroutine get_clasg_indexes(self, ai, repeated)
 flowchart TD
   get_args_from_invocation["get_args_from_invocation"] --> get_clasg_indexes["get_clasg_indexes"]
   get_args_from_string["get_args_from_string"] --> get_clasg_indexes["get_clasg_indexes"]
+  get_clasg_indexes["get_clasg_indexes"] --> hoist_top_builtins["hoist_top_builtins"]
   get_clasg_indexes["get_clasg_indexes"] --> is_defined_group["is_defined_group"]
   get_clasg_indexes["get_clasg_indexes"] --> value_arity["value_arity"]
   style get_clasg_indexes fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### hoist_top_builtins
+
+Move --check and --dry-run found after a command name to the front of the arguments (#129): they belong to the top level,
+ and `prog cmd --check` must mean `prog --check cmd`. Only the builtins (a command, or the program, defining its own switch
+ of that name keeps it), only before a `--`, never a value slot of a switch. The order of the other arguments is kept.
+
+```fortran
+subroutine hoist_top_builtins(self)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | inout |  | CLI data. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  get_clasg_indexes["get_clasg_indexes"] --> hoist_top_builtins["hoist_top_builtins"]
+  hoist_top_builtins["hoist_top_builtins"] --> is_defined["is_defined"]
+  hoist_top_builtins["hoist_top_builtins"] --> is_defined_group["is_defined_group"]
+  hoist_top_builtins["hoist_top_builtins"] --> top_builtin["top_builtin"]
+  hoist_top_builtins["hoist_top_builtins"] --> value_arity["value_arity"]
+  style hoist_top_builtins fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### get_args_from_string
@@ -2071,6 +2108,7 @@ flowchart TD
   raise_error_switch_unknown["raise_error_switch_unknown"] --> errored["errored"]
   raise_error_value_missing["raise_error_value_missing"] --> errored["errored"]
   set_inline_value["set_inline_value"] --> errored["errored"]
+  set_mutually_exclusive_groups["set_mutually_exclusive_groups"] --> errored["errored"]
   set_source_value["set_source_value"] --> errored["errored"]
   type_allows["type_allows"] --> errored["errored"]
   errored["errored"] --> error_prefix["error_prefix"]
@@ -2412,12 +2450,12 @@ flowchart TD
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> is_defined_group["is_defined_group"]
   get_clasg_indexes["get_clasg_indexes"] --> is_defined_group["is_defined_group"]
   get_source["get_source"] --> is_defined_group["is_defined_group"]
+  hoist_top_builtins["hoist_top_builtins"] --> is_defined_group["is_defined_group"]
   is_called_group["is_called_group"] --> is_defined_group["is_defined_group"]
   is_defined["is_defined"] --> is_defined_group["is_defined_group"]
   is_passed["is_passed"] --> is_defined_group["is_defined_group"]
   map_cla["map_cla"] --> is_defined_group["is_defined_group"]
   raise_error["raise_error"] --> is_defined_group["is_defined_group"]
-  set_mutually_exclusive_groups["set_mutually_exclusive_groups"] --> is_defined_group["is_defined_group"]
   is_defined_group["is_defined_group"] --> group_index["group_index"]
   style is_defined_group fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -2455,6 +2493,7 @@ flowchart TD
   json_schema["json_schema"] --> group_index["group_index"]
   load_config["load_config"] --> group_index["group_index"]
   save_json_schema["save_json_schema"] --> group_index["group_index"]
+  set_mutually_exclusive_groups["set_mutually_exclusive_groups"] --> group_index["group_index"]
   set_mutually_exclusive_switches["set_mutually_exclusive_switches"] --> group_index["group_index"]
   group_index["group_index"] --> is_named["is_named"]
   style group_index fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -2565,9 +2604,11 @@ flowchart TD
   get_cla_list_varying_char["get_cla_list_varying_char"] --> is_defined["is_defined"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> is_defined["is_defined"]
   get_source["get_source"] --> is_defined["is_defined"]
+  hoist_top_builtins["hoist_top_builtins"] --> is_defined["is_defined"]
   is_defined["is_defined"] --> is_defined["is_defined"]
   json_members["json_members"] --> is_defined["is_defined"]
   map_cla["map_cla"] --> is_defined["is_defined"]
+  top_builtin["top_builtin"] --> is_defined["is_defined"]
   is_defined["is_defined"] --> is_defined["is_defined"]
   is_defined["is_defined"] --> is_defined_group["is_defined_group"]
   style is_defined fill:#3e63dd,stroke:#99b,stroke-width:2px
@@ -2855,6 +2896,33 @@ function is_fatal(self)
 flowchart TD
   parse_core["parse_core"] --> is_fatal["is_fatal"]
   style is_fatal fill:#3e63dd,stroke:#99b,stroke-width:2px
+```
+
+### top_builtin
+
+Check if the top level has a builtin of this switch and action (not an option of the program with the same name).
+
+**Returns**: `logical`
+
+```fortran
+function top_builtin(self, switch, act) result(is)
+```
+
+**Arguments**
+
+| Name | Type | Intent | Attributes | Description |
+|------|------|--------|------------|-------------|
+| `self` | class([command_line_interface](/api/src/lib/flap_command_line_interface_t#command-line-interface)) | in |  | CLI data. |
+| `switch` | character(len=*) | in |  | Switch name. |
+| `act` | character(len=*) | in |  | Action of the builtin. |
+
+**Call graph**
+
+```mermaid
+flowchart TD
+  hoist_top_builtins["hoist_top_builtins"] --> top_builtin["top_builtin"]
+  top_builtin["top_builtin"] --> is_defined["is_defined"]
+  style top_builtin fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
 
 ### map_cla

@@ -15,6 +15,10 @@ programs keep their behaviour. The plan behind them is issue [#125](https://gith
   parser that ignores unknown members is unaffected; `schema_version` stays 1.
 - A command in the JSON description has `help` only if the program set one: it no longer shows the default `usage: `.
 - With `schema_option`, every command gets a `--schema` of its own, so its help lists it.
+- `--check` and `--dry-run` may come after the command (`prog cmd --check`), unless the command defines that switch: the run
+  manifest records them first.
+- `set_mutually_exclusive_groups` reports an undefined command (`ERROR_MISSING_GROUP`, printed, and an optional `error`)
+  instead of ignoring it.
 - Additions, opt-in: `cli%exit_status()`, `error_class`, `error_exit_status`, `EXIT_*`; `init(dry_run_option=)`, `is_dry_run`;
   `json_schema(group=)`, `save_json_schema(group=)`; `skill`, `save_skill`.
 

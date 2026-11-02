@@ -746,6 +746,7 @@ flowchart TD
   raise_error_switch_unknown["raise_error_switch_unknown"] --> errored["errored"]
   raise_error_value_missing["raise_error_value_missing"] --> errored["errored"]
   set_inline_value["set_inline_value"] --> errored["errored"]
+  set_mutually_exclusive_groups["set_mutually_exclusive_groups"] --> errored["errored"]
   set_source_value["set_source_value"] --> errored["errored"]
   type_allows["type_allows"] --> errored["errored"]
   errored["errored"] --> error_prefix["error_prefix"]
@@ -1279,6 +1280,7 @@ function value_arity(self, switch) result(n)
 flowchart TD
   completion_skips["completion_skips"] --> value_arity["value_arity"]
   get_clasg_indexes["get_clasg_indexes"] --> value_arity["value_arity"]
+  hoist_top_builtins["hoist_top_builtins"] --> value_arity["value_arity"]
   value_arity["value_arity"] --> match_token["match_token"]
   style value_arity fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
@@ -1325,9 +1327,11 @@ flowchart TD
   get_cla_list_varying_char["get_cla_list_varying_char"] --> is_defined["is_defined"]
   get_cla_list_varying_logical["get_cla_list_varying_logical"] --> is_defined["is_defined"]
   get_source["get_source"] --> is_defined["is_defined"]
+  hoist_top_builtins["hoist_top_builtins"] --> is_defined["is_defined"]
   is_defined["is_defined"] --> is_defined["is_defined"]
   json_members["json_members"] --> is_defined["is_defined"]
   map_cla["map_cla"] --> is_defined["is_defined"]
+  top_builtin["top_builtin"] --> is_defined["is_defined"]
   is_defined["is_defined"] --> match_token["match_token"]
   style is_defined fill:#3e63dd,stroke:#99b,stroke-width:2px
 ```
