@@ -1,6 +1,9 @@
 <div align="center">
 
-<img src="docs/public/logo.svg" alt="FLAP logo: a glowing command prompt on a terminal tube" width="96">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/public/logo-dark.svg">
+  <img src="docs/public/logo.svg" alt="FLAP logo: a brushed command prompt, a chevron and a cursor" width="96">
+</picture>
 
 # FLAP
 #### Fortran command Line Arguments Parser

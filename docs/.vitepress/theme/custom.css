@@ -1,36 +1,81 @@
-/* FLAP palette: phosphor green on the near-black of a terminal tube (public/logo.svg uses the same colours). */
+/* FLAP identity: Ya · Kasure in Hotaru (Sumi family).
+   Hotaru keeps the phosphor green of the old icon and moves it onto washi: ink on paper in light, ink on the tube at night.
+   No gradients, glows or shadows behind the mark: the ink carries it. */
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@800&family=Inter:wght@400;500;600&family=JetBrains+Mono&display=swap');
+
 :root {
-  --vp-c-brand-1: #1d7f36;
-  --vp-c-brand-2: #24923f;
-  --vp-c-brand-3: #1d7f36;
-  --vp-c-brand-soft: rgba(29, 127, 54, 0.12);
-
-  --vp-home-hero-name-color: transparent;
-  --vp-home-hero-name-background: linear-gradient(120deg, #0d1a10 15%, #1d7f36 95%);
-  --vp-home-hero-image-background-image: radial-gradient(circle, rgba(134, 255, 151, 0.45) 0%, rgba(134, 255, 151, 0) 70%);
-  --vp-home-hero-image-filter: blur(48px);
-
+  --vp-c-bg: #f5f6f0;
+  --vp-c-bg-alt: #edefe8;
+  --vp-c-bg-soft: #edefe8;
+  --vp-c-bg-elv: #f5f6f0;
+  --vp-c-divider: #dee1da;
+  --vp-c-gutter: #edefe8;
+  --vp-c-border: #848b84;
+  --vp-c-text-1: #142018;
+  --vp-c-text-2: #676e67;
+  --vp-c-brand-1: #1c7b34;
+  --vp-c-brand-2: #16622a;
+  --vp-c-brand-3: #1c7b34;
+  --vp-c-brand-soft: #1c7b341f;
+  --vp-button-brand-bg: #1c7b34;
+  --vp-button-brand-hover-bg: #16622a;
+  --vp-button-brand-active-bg: #16622a;
+  --vp-button-brand-text: #ffffff;
+  --vp-button-brand-hover-text: #ffffff;
+  --vp-button-brand-active-text: #ffffff;
+  --vp-home-hero-name-color: #142018;
+  --vp-custom-block-tip-bg: #1c7b3414;
+  --vp-font-family-base: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --vp-font-family-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --vp-home-hero-name-background: none;
+  --vp-home-hero-image-background-image: none;
+  --vp-home-hero-image-filter: none;
   --vp-custom-block-tip-border: transparent;
-  --vp-custom-block-tip-bg: rgba(29, 127, 54, 0.08);
 }
 
 .dark {
   --vp-c-bg: #0a0f0b;
-  --vp-c-bg-alt: #070b08;
-  --vp-c-bg-soft: #121a13;
-  --vp-c-bg-elv: #111812;
-  --vp-c-divider: #1f2b21;
-  --vp-c-gutter: #070b08;
+  --vp-c-bg-alt: #080c09;
+  --vp-c-bg-soft: #080c09;
+  --vp-c-bg-elv: #0a0f0b;
+  --vp-c-divider: #2c332e;
+  --vp-c-gutter: #080c09;
+  --vp-c-border: #717b73;
+  --vp-c-text-1: #e1f0e3;
+  --vp-c-text-2: #8f9a91;
   --vp-c-brand-1: #86ff97;
-  --vp-c-brand-2: #6fe882;
-  --vp-c-brand-3: #2f9e48;
-  --vp-c-brand-soft: rgba(134, 255, 151, 0.14);
-  --vp-button-brand-text: #0a0f0b;
-  --vp-button-brand-hover-text: #0a0f0b;
-  --vp-button-brand-active-text: #0a0f0b;
-  --vp-home-hero-name-background: linear-gradient(120deg, #d9f5dc 15%, #86ff97 95%);
-  --vp-home-hero-image-background-image: radial-gradient(circle, rgba(134, 255, 151, 0.28) 0%, rgba(134, 255, 151, 0) 70%);
-  --vp-custom-block-tip-bg: rgba(134, 255, 151, 0.08);
+  --vp-c-brand-2: #38ff54;
+  --vp-c-brand-3: #86ff97;
+  --vp-c-brand-soft: #86ff971f;
+  --vp-button-brand-bg: #86ff97;
+  --vp-button-brand-hover-bg: #38ff54;
+  --vp-button-brand-active-bg: #38ff54;
+  --vp-button-brand-text: #080c09;
+  --vp-button-brand-hover-text: #080c09;
+  --vp-button-brand-active-text: #080c09;
+  --vp-home-hero-name-color: #e1f0e3;
+  --vp-custom-block-tip-bg: #86ff9714;
+}
+
+/* the project name is set in Shippori Mincho 800, tracked wide, as in the Sumi family */
+.VPHero .name,
+.VPNavBarTitle .title {
+  font-family: 'Shippori Mincho', 'Hiragino Mincho ProN', serif;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+/* the brushed icons stand on the card itself, without the default tile */
+.VPFeature .icon {
+  background-color: transparent;
+  width: 40px;
+  height: 40px;
+}
+
+/* focus: a 2px ring in ink, offset by the ground */
+:focus-visible {
+  outline: 2px solid var(--vp-c-text-1);
+  outline-offset: 2px;
 }
 
 /* the feature cards answer the pointer in colour */
@@ -42,21 +87,6 @@
   transform: translateY(-2px);
 }
 
-/* the session in the hero is a terminal: it needs room to read, and no glow behind its text */
-@media (min-width: 960px) {
-  .VPHero .image-container {
-    width: 470px;
-    height: 370px;
-  }
-  .VPHero .image-src {
-    max-width: 470px;
-    max-height: 370px;
-  }
-}
-.VPHero .image-src {
-  border-radius: 8px;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
-}
 
 /* the terminal sessions of the home page, side by side when they fit */
 .flap-casts {

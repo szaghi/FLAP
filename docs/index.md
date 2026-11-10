@@ -6,8 +6,9 @@ hero:
   text: Fortran command Line Arguments Parser
   tagline: "Describe your command line once, in pure Fortran 2018. FLAP parses it, checks every value, writes the help, the man page and the completions, and tells scripts and AI agents how to call your program."
   image:
-    src: /hero-cast.svg
-    alt: a terminal session of a FLAP program, playing its help, some runs, a typo and an out-of-range value
+    light: /logo.svg
+    dark: /logo-dark.svg
+    alt: the FLAP mark, a brushed chevron and cursor
   actions:
     - theme: brand
       text: Tutorial
@@ -26,72 +27,128 @@ hero:
       link: https://github.com/szaghi/FLAP
 
 features:
-  - icon: 🧩
+  - icon:
+      light: /icons/option.svg
+      dark: /icons/dark/option.svg
+      width: 40
+      height: 40
     title: Every kind of argument
     details: "Options with abbreviations, positionals, flags and --x/--no-x pairs, counters (-vvv), repeatable options, optional values, inline --opt=value, value placeholders."
     link: /guide/arguments
     linkText: Defining arguments
-  - icon: 🔢
+  - icon:
+      light: /icons/positional.svg
+      dark: /icons/dark/positional.svg
+      width: 40
+      height: 40
     title: Typed values, lists and maps
     details: "One get for every integer and real kind, logicals and strings; fixed-size lists, runtime-sized ones into allocatable arrays, KEY=VALUE maps."
     link: /guide/parsing
     linkText: Parsing & getting values
-  - icon: ✅
+  - icon:
+      light: /icons/validate.svg
+      dark: /icons/dark/validate.svg
+      width: 40
+      height: 40
     title: Validation built in
     details: "Required options, choices, numeric ranges with open bounds or clamping, path checks, mutually exclusive sets, deprecation warnings: declared in the definition, checked for you."
     link: /guide/advanced
     linkText: Advanced features
-  - icon: 💬
+  - icon:
+      light: /icons/error.svg
+      dark: /icons/dark/error.svg
+      width: 40
+      height: 40
     title: Errors that help
     details: "\"Did you mean\" suggestions, a hint line, the usage after an error, a named constant for every code, and your own errors printed in the same style."
     link: /guide/errors
     linkText: Errors
-  - icon: 🔀
+  - icon:
+      light: /icons/command.svg
+      dark: /icons/dark/command.svg
+      width: 40
+      height: 40
     title: Commands
     details: "git-style commands, each with its options and its help; aliases, option sets shared between commands, mutually exclusive commands, several commands on one command line."
     link: /guide/subcommands
     linkText: Subcommands
-  - icon: 🌱
+  - icon:
+      light: /icons/sources.svg
+      dark: /icons/dark/sources.svg
+      width: 40
+      height: 40
     title: Values from everywhere
     details: "Command line, environment variables (named or generated from a prefix), INI configuration files and defaults, in a fixed precedence; the source of every value reported, for reproducible runs."
     link: /guide/advanced#value-sources
     linkText: Value sources
-  - icon: 📄
+  - icon:
+      light: /icons/help.svg
+      dark: /icons/dark/help.svg
+      width: 40
+      height: 40
     title: Help, man page, Markdown
     details: "The help and the usage are generated from the definitions, with colours, examples and an epilog; --man and --markdown save the same content as files."
     link: /guide/output
     linkText: Output formats
-  - icon: ⌨️
+  - icon:
+      light: /icons/complete.svg
+      dark: /icons/dark/complete.svg
+      width: 40
+      height: 40
     title: Shell completion
     details: "Completion scripts for bash, zsh, fish and PowerShell, which the program prints or installs by itself: --show-completion, --install-completion."
     link: /guide/output#shell-completion
     linkText: Shell completion
-  - icon: 🧪
+  - icon:
+      light: /icons/testing.svg
+      dark: /icons/dark/testing.svg
+      width: 40
+      height: 40
     title: Testable command lines
     details: "Parse a string instead of the real command line, parse again, get statuses back instead of stops, send the messages to the units you choose."
     link: /manual/tutorial/08-testing
     linkText: Testing
-  - icon: 🙋
+  - icon:
+      light: /icons/menu.svg
+      dark: /icons/dark/menu.svg
+      width: 40
+      height: 40
     title: Interactive menus
     details: "An opt-in module asks for what is missing: single or multiple choice, defaults, yes/no questions, retries; it never blocks a batch job."
     link: /guide/menu
     linkText: Interactive menus
-  - icon: 🤖
+  - icon:
+      light: /icons/agents.svg
+      dark: /icons/dark/agents.svg
+      width: 40
+      height: 40
     title: Ready for scripts and agents
     details: "Declared value types, a JSON description (--schema), a validate-only mode (--check), --dry-run, JSON errors with exit statuses that say what to change, and an agent skill generated from the definitions."
     link: /manual/tutorial/10-agents
     linkText: Calling it from other programs
-  - icon: 🧾
+  - icon:
+      light: /icons/manifest.svg
+      dark: /icons/dark/manifest.svg
+      width: 40
+      height: 40
     title: Reproducible runs
     details: "A JSON manifest of every run: the command line and each value with its source, with no date or host, so the same inputs give the same bytes. Sensitive values stay masked, in errors too."
     link: /guide/machine#run-manifest
     linkText: Run manifest
-  - icon: 🛠️
+  - icon:
+      light: /icons/fortran.svg
+      dark: /icons/dark/fortran.svg
+      width: 40
+      height: 40
     title: Standard Fortran, any build
     details: "Fortran 2018, tested with gfortran 13 to 16, nvfortran and Intel ifx; built with FoBiS, fpm, CMake or Make. Two small dependencies, fetched for you."
     link: /guide/install
     linkText: Installation
-  - icon: 🔓
+  - icon:
+      light: /icons/license.svg
+      dark: /icons/dark/license.svg
+      width: 40
+      height: 40
     title: Multi-licensed
     details: "GPL v3 for FOSS projects; BSD 2-Clause, BSD 3-Clause or MIT for closed source and commercial ones: pick the license that fits."
     link: "#copyrights"
@@ -100,7 +157,11 @@ features:
 
 ## Quick start
 
-The session at the top of this page is real: the help, the values and the errors all come from FLAP.
+The session below is real: the help, the values and the errors all come from FLAP.
+
+<div class="flap-casts">
+<img src="/hero-cast.svg" alt="a terminal session of a FLAP program, playing its help, some runs, a typo and an out-of-range value">
+</div>
 
 This is the whole program, in four steps: initialise, define, parse, get.
 

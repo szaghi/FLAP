@@ -60,7 +60,14 @@ const docs = [
 export default withMermaid({
   title: 'FLAP Documentation',
   base: '/FLAP/',
-  head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/FLAP/logo.svg' }]],
+  head: [
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/FLAP/favicon.svg' }],
+    ['link', { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/FLAP/favicon-32.png' }],
+    ['link', { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/FLAP/favicon-16.png' }],
+    ['link', { rel: 'apple-touch-icon', sizes: '180x180', href: '/FLAP/apple-touch-icon.png' }],
+    ['meta', { name: 'theme-color', content: '#f5f6f0', media: '(prefers-color-scheme: light)' }],
+    ['meta', { name: 'theme-color', content: '#0a0f0b', media: '(prefers-color-scheme: dark)' }],
+  ],
   srcExclude: ['ford.md'],
   markdown: {
     math: true,
@@ -75,7 +82,7 @@ export default withMermaid({
     },
   },
   themeConfig: {
-    logo: '/logo.svg',
+    logo: { light: '/favicon.svg', dark: '/favicon-dark.svg', alt: 'FLAP' },
     siteTitle: 'FLAP',
     socialLinks: [{ icon: 'github', link: 'https://github.com/szaghi/FLAP' }],
     footer: {
