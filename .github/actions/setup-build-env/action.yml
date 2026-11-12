@@ -16,8 +16,13 @@ runs:
     - name: Install GCC
       shell: bash
       run: |
-        sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
+        # the toolchain PPA only for a GCC the runner's Ubuntu does not ship, so a job does not depend on Launchpad
+        # when it does (ubuntu-24.04: gfortran-14 is 14.2; ubuntu-latest has moved to 26.04)
         sudo apt update
+        if ! apt-cache show gfortran-${{ inputs.gcc-version }} > /dev/null 2>&1; then
+          sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
+          sudo apt update
+        fi
         sudo apt install -y \
           gcc-${{ inputs.gcc-version }} \
           gfortran-${{ inputs.gcc-version }} \

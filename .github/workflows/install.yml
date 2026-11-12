@@ -40,8 +40,9 @@ jobs:
         ref: ${{ inputs.tag }}
         sparse-checkout: .github/actions
 
-    # Same compiler, [scaffold] apt_packages and FoBiS.py as the CI: every
-    # build below needs them, not only the fobis one.
+    # The runner's GCC, [scaffold] apt_packages and FoBiS.py: every build
+    # below needs them, not only the fobis one. Not the CI's compiler when
+    # ci.yml runs in a [scaffold] toolchain_image.
     - name: Setup build environment
       uses: ./.github/actions/setup-build-env
 

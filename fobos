@@ -7,6 +7,9 @@ website    = https://szaghi.github.io/FLAP
 email      = stefano.zaghi@gmail.it
 authors    = Stefano Zaghi
 
+[scaffold]
+toolchain_image = ghcr.io/szaghi/fortran-toolchains:gnu-16.2
+
 [dependencies]
 deps_dir = src/third_party
 FACE     = https://github.com/szaghi/FACE
