@@ -54,7 +54,7 @@
 <td width="50%"><b>🧾 Reproducible runs</b><br><sub>A JSON manifest of every run: the command line and each value with its source, with no date or host, so the same inputs give the same bytes. Sensitive values stay masked, in errors too. <a href="https://szaghi.github.io/FLAP/guide/machine#run-manifest">Run manifest</a>.</sub></td>
 </tr>
 <tr>
-<td width="50%"><b>🛠️ Standard Fortran, any build</b><br><sub>Fortran 2018, tested with gfortran 13 to 16, nvfortran and Intel ifx; built with FoBiS, fpm, CMake or Make. Two small dependencies, fetched for you. <a href="https://szaghi.github.io/FLAP/guide/install">Installation</a></sub></td>
+<td width="50%"><b>🛠️ Standard Fortran, any build</b><br><sub>Fortran 2018, tested with gfortran 16, nvfortran and Intel ifx; built with FoBiS, fpm, CMake or Make. Two small dependencies, fetched for you. <a href="https://szaghi.github.io/FLAP/guide/install">Installation</a></sub></td>
 <td width="50%"><b>🔓 Multi-licensed</b><br><sub>GPL v3 for FOSS projects; BSD 2-Clause, BSD 3-Clause or MIT for closed source and commercial ones: pick the license that fits. <a href="#copyrights">Copyrights</a></sub></td>
 </tr>
 </table>
@@ -179,7 +179,7 @@ fobis fetch
 make STATIC=yes                        # exe/libflap.a
 ```
 
-A Fortran 2018 compiler is required: tested with gfortran 13 to 16, nvfortran 26.5 and Intel ifx 2025.3 (see
+A Fortran 2018 compiler is required: tested with gfortran 16, nvfortran 26.5 and Intel ifx 2025.3 (see
 [Installation](https://szaghi.github.io/FLAP/guide/install)).
 
 ## Authors

@@ -141,7 +141,7 @@ features:
       width: 40
       height: 40
     title: Standard Fortran, any build
-    details: "Fortran 2018, tested with gfortran 13 to 16, nvfortran and Intel ifx; built with FoBiS, fpm, CMake or Make. Two small dependencies, fetched for you."
+    details: "Fortran 2018, tested with gfortran 16, nvfortran and Intel ifx; built with FoBiS, fpm, CMake or Make. Two small dependencies, fetched for you."
     link: /guide/install
     linkText: Installation
   - icon:

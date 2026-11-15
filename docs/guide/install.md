@@ -6,8 +6,7 @@ title: Installation
 
 ## Requirements
 
-- A **Fortran 2018** compiler. FLAP is tested on every push with gfortran 13, 14 and 15 (and the gfortran 16 trunk),
-  with FoBiS, fpm, CMake and make. It also builds and passes its tests with nvfortran 26.5 and Intel ifx 2025.3 (except
+- A **Fortran 2018** compiler. FLAP is tested on every push with gfortran 16.2, with FoBiS, fpm, CMake and make. It also builds and passes its tests with nvfortran 26.5 and Intel ifx 2025.3 (except
   one processor-dependent case: ifx reports a directory as not existing, see [path checks](./advanced#path-checks)).
   gfortran 12 compiles the library (not tested); gfortran 11 and older do not (`stop code, quiet=` is Fortran 2018).
 - Two small libraries by the same author, fetched automatically by every build system:
