@@ -1,0 +1,28 @@
+name: Docs examples
+
+# The committed outputs of the documentation's examples must match their sources: scripts/docs_examples.sh
+# regenerates them in the project's toolchain image, then any change or new file under the fobos [scaffold]
+# docs_examples paths fails with the diff, by the reusable workflow of fortran-toolchains
+# (https://github.com/szaghi/fortran-toolchains). Managed by fobis scaffold while [scaffold] docs_examples is set.
+on:
+  push:
+    branches: ["**"]
+    tags-ignore: ["**"]
+  pull_request:
+
+# a newer push to the same ref supersedes the running check
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    uses: szaghi/fortran-toolchains/.github/workflows/generated.yml@v1
+    with:
+      command: bash scripts/docs_examples.sh
+      paths: 'docs/examples'
+      toolchain: 'linux-gnu'
+      apt-packages: ''

@@ -1,141 +1,31 @@
 name: Docs
 
-# Runs after CI succeeds on a push to the default branch and publishes the
-# coverage outputs that run uploaded (artifact coverage-docs), instead of
-# running the coverage a second time. Without that artifact (a manual dispatch,
-# a workflow_call, a project whose own ci.yml does not upload it) the coverage
-# runs here, as before.
+# After a successful CI run on the default branch: the VitePress site (formal for the API, through docs/package.json's
+# predocs:build) built in the project's toolchain image, with the coverage badge from CI's coverage-docs artifact, and
+# deployed to GitHub Pages, by the reusable workflow of fortran-toolchains
+# (https://github.com/szaghi/fortran-toolchains). A manual dispatch runs the coverage itself. Managed by fobis
+# scaffold.
 on:
   workflow_run:
     workflows: [CI]
     types: [completed]
   workflow_dispatch:
-  workflow_call:
 
-# Permissions required by the deploy job (OIDC-based GitHub Pages deployment),
-# plus actions: read to download the artifact of the CI run.
-# A workflow_call caller must grant at least these same permissions.
+# all four, even when nothing deploys: GitHub checks what the called workflow's jobs request at startup
 permissions:
   contents: read
+  actions: read     # the coverage-docs artifact of the CI run
   pages: write
   id-token: write
-  actions: read
 
-# Only one Pages deployment at a time; do not cancel in-progress deployments.
+# one docs run at a time, none cancelled half-way
 concurrency:
   group: pages
   cancel-in-progress: false
 
 jobs:
-
-  build:
-    # a CI run of a pull request, of another branch, or a failed one must not deploy
-    if: >-
-      (github.event_name == 'workflow_run' &&
-       github.event.workflow_run.conclusion == 'success' &&
-       github.event.workflow_run.event == 'push' &&
-       github.event.workflow_run.head_branch == github.event.repository.default_branch) ||
-      (github.event_name != 'workflow_run' &&
-       github.ref == format('refs/heads/{0}', github.event.repository.default_branch))
-    runs-on: ubuntu-latest
-    container: ghcr.io/szaghi/fortran-toolchains:gnu-16.2
-
-    steps:
-
-    # the commit CI tested, not the head of the branch when this job starts
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        ref: ${{ github.event.workflow_run.head_sha || github.sha }}
-
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-
-    - name: Fetch dependencies
-      if: hashFiles('**/.deps_config.ini') != ''
-      run: FoBiS.py fetch
-
-    - name: Download the coverage outputs of CI
-      id: artifact
-      if: github.event_name == 'workflow_run'
-      continue-on-error: true
-      uses: actions/download-artifact@v4
-      with:
-        name: coverage-docs
-        run-id: ${{ github.event.workflow_run.id }}
-        github-token: ${{ github.token }}
-        path: ${{ runner.temp }}/coverage-docs
-
-    - name: Unpack the coverage outputs of CI
-      id: unpacked
-      if: steps.artifact.outcome == 'success'
-      continue-on-error: true
-      run: |
-        tar -xzvf "$RUNNER_TEMP/coverage-docs/coverage-docs.tgz"
-        PCT=$(jq -r '.pct' docs/public/coverage.json)
-        case "$PCT" in ''|null) echo "::warning::no coverage percentage in the CI outputs"; exit 1 ;; esac
-        echo "pct=${PCT}" >> "$GITHUB_OUTPUT"
-        echo "## Test coverage: ${PCT}% (from the CI run)" >> "$GITHUB_STEP_SUMMARY"
-
-    - name: Run coverage analysis
-      id: ran
-      if: steps.unpacked.outcome != 'success'
-      uses: ./.github/actions/run-coverage-analysis
-
-    - name: Coverage percentage
-      id: cov
-      env:
-        PCT: ${{ steps.unpacked.outputs.pct || steps.ran.outputs.pct }}
-      run: |
-        case "$PCT" in ''|null) echo "::error::no coverage percentage"; exit 1 ;; esac
-        echo "pct=${PCT}" >> "$GITHUB_OUTPUT"
-
-    # Overwrite docs/public/coverage.json with a shields.io endpoint badge.
-    # The run-coverage-analysis step already consumed the internal {"pct": ...}
-    # form above; the published file (served from Pages) is the badge a README
-    # shields-endpoint URL points at.
-    - name: Write coverage badge JSON
-      env:
-        PCT: ${{ steps.cov.outputs.pct }}
-      run: |
-        if awk "BEGIN{exit !($PCT >= 90)}"; then C=brightgreen
-        elif awk "BEGIN{exit !($PCT >= 80)}"; then C=green
-        elif awk "BEGIN{exit !($PCT >= 70)}"; then C=yellowgreen
-        elif awk "BEGIN{exit !($PCT >= 60)}"; then C=yellow
-        else C=red; fi
-        mkdir -p docs/public
-        printf '{"schemaVersion":1,"label":"coverage","message":"%s%%","color":"%s"}\n' \
-          "$PCT" "$C" > docs/public/coverage.json
-
-    - name: Build documentation
-      env:
-        COVERAGE_PCT: ${{ steps.cov.outputs.pct }}
-      run: |
-        formal generate --mirror-sources --diagrams --project docs/ford.md --output docs/api
-        # npm install (not npm ci): the scaffold ships package.json but not a
-        # lockfile, so the lock may lag a package.json version bump. npm install
-        # reconciles it in-place; npm ci would hard-fail on any drift.
-        cd docs && npm install && npm run docs:build
-
-    - name: Upload Pages artifact
-      uses: actions/upload-pages-artifact@v3
-      with:
-        path: docs/.vitepress/dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    permissions:
-      pages: write
-      id-token: write
-
-    steps:
-
-    - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v4
+  docs:
+    uses: szaghi/fortran-toolchains/.github/workflows/docs.yml@v1
+    with:
+      toolchain: 'linux-gnu'
+      apt-packages: ''

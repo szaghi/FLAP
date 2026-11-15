@@ -1,0 +1,25 @@
+name: fpm
+
+# The project built and tested by fpm (fpm test, fpm build --profile release) in the project's toolchain image, with
+# its compilers, by the reusable workflow of fortran-toolchains (https://github.com/szaghi/fortran-toolchains).
+# Managed by fobis scaffold while [scaffold] fpm is set.
+on:
+  push:
+    branches: ["**"]
+    tags-ignore: ["**"]
+  pull_request:
+
+# a newer push to the same ref supersedes the running check
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  fpm:
+    uses: szaghi/fortran-toolchains/.github/workflows/fpm.yml@v1
+    with:
+      toolchain: 'linux-gnu'
+      apt-packages: ''

@@ -1,5 +1,10 @@
 name: CI
 
+# The tests with coverage in the project's toolchain image, by the reusable workflow of fortran-toolchains
+# (https://github.com/szaghi/fortran-toolchains): FoBiS.py fetch when the project has dependencies, then
+# FoBiS.py rule --ex makecoverage-analysis; on a push to the default branch the coverage outputs under docs/ are
+# packed for docs.yml (the coverage-docs artifact). Managed by fobis scaffold: set the fobos [scaffold] keys
+# (toolchain, toolchain_packages), then fobis scaffold sync.
 on:
   push:
     branches: ["**"]
@@ -11,51 +16,12 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   test:
-    runs-on: ubuntu-latest
-    container: ghcr.io/szaghi/fortran-toolchains:gnu-16.2
-    permissions:
-      contents: read
-
-    steps:
-
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
-    - name: Fetch dependencies
-      if: hashFiles('**/.deps_config.ini') != ''
-      run: FoBiS.py fetch
-
-    - name: Run tests with coverage
-      id: cov
-      uses: ./.github/actions/run-coverage-analysis
-
-    # docs.yml (workflow_run) publishes these outputs instead of running the
-    # coverage a second time: every file the coverage step wrote or changed
-    # under docs/ (badge JSON, coverage-analysis page, per-file gcov pages),
-    # git-ignored ones included, so docs.yml sees what a local run would
-    - name: Pack the coverage outputs for the docs
-      if: github.event_name == 'push' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
-      # bash for pipefail: a failing git (e.g. "dubious ownership" in a job container) must fail the step, not leave
-      # an empty list behind; an empty list fails too, else docs.yml publishes the committed, stale coverage.json
-      shell: bash
-      run: |
-        git ls-files --others --modified -- docs | while IFS= read -r f; do
-          if [ -f "$f" ]; then printf '%s\n' "$f"; fi
-        done > coverage-docs.list
-        cat coverage-docs.list
-        if [ ! -s coverage-docs.list ]; then
-          echo "::error::no coverage outputs under docs/ to pack for the docs"
-          exit 1
-        fi
-        tar -czf coverage-docs.tgz -T coverage-docs.list
-
-    - name: Upload the coverage outputs for the docs
-      if: github.event_name == 'push' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
-      uses: actions/upload-artifact@v4
-      with:
-        name: coverage-docs
-        path: coverage-docs.tgz
-        if-no-files-found: error
-        retention-days: 1
+    uses: szaghi/fortran-toolchains/.github/workflows/test.yml@v1
+    with:
+      toolchain: 'linux-gnu'
+      apt-packages: ''

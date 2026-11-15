@@ -8,7 +8,10 @@ email      = stefano.zaghi@gmail.it
 authors    = Stefano Zaghi
 
 [scaffold]
-toolchain_image = ghcr.io/szaghi/fortran-toolchains:gnu-16.2
+toolchain     = linux-gnu
+docs_examples = docs/examples
+fpm           = true
+matrix        = linux-gnu
 
 [dependencies]
 deps_dir = src/third_party

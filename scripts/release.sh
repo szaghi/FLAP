@@ -13,9 +13,24 @@
 #   1. Pre-flight: branch, remote freshness, clean tree, tag uniqueness
 #   2. Runs git-cliff to regenerate CHANGELOG.md up to the new version
 #   3. Updates VERSION file, and the version of fpm.toml when the project has one
-#   4. Commits CHANGELOG.md + VERSION (+ fpm.toml) with a conventional "chore(release)" message
-#   5. Creates an annotated git tag
-#   6. Pushes commit + tag  →  triggers the release.yml workflow on GitHub
+#   4. Runs the project's scripts/release_hook.sh when it has one (see below)
+#   5. Commits CHANGELOG.md + VERSION (+ fpm.toml, + the hook's files) with a conventional "chore(release)" message
+#   6. Creates an annotated git tag
+#   7. Pushes commit + tag  →  triggers the release.yml workflow on GitHub
+#
+# Project hook (optional, the project's own: the scaffold never writes it): an executable scripts/release_hook.sh for
+# the files a release must also update (a version in the README, a CMake project(VERSION), a roadmap section).
+#   scripts/release_hook.sh --check vX.Y.Z   in the pre-flight: non-zero stops the release before anything changes
+#   scripts/release_hook.sh vX.Y.Z           after VERSION: updates its files and prints their paths, one per line,
+#                                            relative to the repository root; they are committed with the release
+# Both run from the repository root; their standard error is shown, a non-zero exit stops the release.
+#
+# CMake: a version written into project() of CMakeLists.txt (project(Name VERSION X.Y.Z ...)) is not updated by this
+# script and would go stale: the release refuses it, before any change. Read it from VERSION instead:
+#   file(STRINGS "${CMAKE_CURRENT_LIST_DIR}/VERSION" name_version LIMIT_COUNT 1)
+#   string(REGEX REPLACE "^v" "" name_version "${name_version}")
+#   project(Name VERSION ${name_version} LANGUAGES Fortran)
+# or keep the literal with the project hook: it must then equal the new version once the hook has run.
 #
 # Requirements:
 #   git-cliff  →  cargo install git-cliff
@@ -49,6 +64,8 @@ usage() {
 STAGE="preflight"
 NEW_TAG=""
 RELEASE_FILES=(CHANGELOG.md VERSION) # files modified and committed by the release
+RELEASE_HOOK="scripts/release_hook.sh" # the project's hook (see the header)
+HAS_HOOK=false
 
 on_error() {
   echo ""
@@ -63,6 +80,9 @@ on_error() {
       echo "  Files were modified locally (maybe staged) but not committed."
       echo "  To discard and start over:"
       echo "    git checkout HEAD -- ${RELEASE_FILES[*]}"
+      if $HAS_HOOK; then
+        echo "  ${RELEASE_HOOK} may have changed other files before it failed: see git status"
+      fi
       ;;
     committed)
       echo "  Commit was made but not tagged/pushed. To resume:"
@@ -156,6 +176,30 @@ BEHIND="$(git rev-list --count HEAD..origin/${TRUNK} 2>/dev/null || echo 0)"
 [[ "$BEHIND" -eq 0 ]] \
   || die "${TRUNK} is ${BEHIND} commit(s) behind origin/${TRUNK} — run: git pull origin ${TRUNK}"
 
+# ── Project hook: --check ─────────────────────────────────────────────────────
+if [[ -e "$RELEASE_HOOK" ]]; then
+  if [[ -x "$RELEASE_HOOK" ]]; then
+    HAS_HOOK=true
+    "./${RELEASE_HOOK}" --check "$NEW_TAG" \
+      || die "${RELEASE_HOOK} --check ${NEW_TAG} failed (see above): nothing was changed"
+  else
+    warn "${RELEASE_HOOK} is not executable: not run (chmod +x ${RELEASE_HOOK} to use it)"
+  fi
+fi
+
+# ── CMake project version ─────────────────────────────────────────────────────
+# a version written into project() goes stale (see the header): refused, unless the project hook keeps it
+CMAKE_VERSION_RE='^[[:space:]]*project\([^)]*VERSION[[:space:]]+[0-9]+(\.[0-9]+)*'
+cmake_literal_version() { # the version written into project() of CMakeLists.txt, empty if none
+  [[ -f CMakeLists.txt ]] || return 0
+  grep -Eo "$CMAKE_VERSION_RE" CMakeLists.txt | head -n 1 | grep -Eo '[0-9]+(\.[0-9]+)*$' || true
+}
+CMAKE_LITERAL="$(cmake_literal_version)"
+if [[ -n "$CMAKE_LITERAL" ]] && ! $HAS_HOOK; then
+  die "CMakeLists.txt declares project(... VERSION ${CMAKE_LITERAL}), which this script does not update: read it from
+  VERSION (see the header of this script), or keep it with ${RELEASE_HOOK}; nothing was changed"
+fi
+
 # ── fpm manifest ──────────────────────────────────────────────────────────────
 # fpm.toml carries its own copy of the version (X.Y.Z, without the v prefix that
 # fpm does not accept): it is kept aligned when the manifest declares one.
@@ -176,6 +220,7 @@ echo -e "${BOLD}This will:${RESET}"
 echo -e "  1. Regenerate ${CYAN}CHANGELOG.md${RESET} up to ${BOLD}${NEW_TAG}${RESET}"
 echo -e "  2. Update ${CYAN}VERSION${RESET} to ${BOLD}${NEW_TAG}${RESET}"
 $HAS_FPM_VERSION && echo -e "     and the version of ${CYAN}fpm.toml${RESET} to ${BOLD}${NEW_TAG#v}${RESET}"
+$HAS_HOOK && echo -e "     then run ${CYAN}${RELEASE_HOOK} ${NEW_TAG}${RESET}, committing the files it changes"
 echo -e "  3. Commit with message: ${CYAN}chore(release): ${NEW_TAG}${RESET}"
 echo -e "  4. Create annotated tag ${BOLD}${NEW_TAG}${RESET}"
 echo -e "  5. Push commit and tag to origin  →  triggers GitHub release workflow"
@@ -206,6 +251,27 @@ if $HAS_FPM_VERSION; then
   mv fpm.toml.tmp fpm.toml
   grep -q "^version = \"${NEW_TAG#v}\"$" fpm.toml || die "fpm.toml update failed — version mismatch"
   success "fpm.toml updated to ${NEW_TAG#v}"
+fi
+
+# ── Project hook ──────────────────────────────────────────────────────────────
+if $HAS_HOOK; then
+  info "Running ${RELEASE_HOOK} ${NEW_TAG}…"
+  HOOK_OUT="$("./${RELEASE_HOOK}" "$NEW_TAG")" || die "${RELEASE_HOOK} ${NEW_TAG} failed (see above)"
+  HOOK_COUNT=0
+  while IFS= read -r f; do
+    [[ -n "$f" ]] || continue
+    # a path of this repository, so that a stray line of output cannot add anything else to the release commit
+    [[ "$f" != /* && "$f" != ../* && "$f" != */../* && -f "$f" ]] \
+      || die "${RELEASE_HOOK} printed '${f}', which is not a file of the repository (relative to its root)"
+    RELEASE_FILES+=("$f")
+    HOOK_COUNT=$((HOOK_COUNT + 1))
+  done <<< "$HOOK_OUT"
+  success "${RELEASE_HOOK}: ${HOOK_COUNT} file(s) to commit"
+fi
+if [[ -n "$CMAKE_LITERAL" ]]; then # kept by the hook: it must now be the new version
+  [[ "$(cmake_literal_version)" == "${NEW_TAG#v}" ]] \
+    || die "CMakeLists.txt still declares project(... VERSION $(cmake_literal_version)) after ${RELEASE_HOOK}:" \
+           "${NEW_TAG#v} expected"
 fi
 
 # ── Commit ────────────────────────────────────────────────────────────────────
