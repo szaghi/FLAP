@@ -1,7 +1,7 @@
 #!/usr/bin/make
 
 # defaults
-STATIC = no
+STATIC = yes
 COMPILER = gnu
 
 #main building variables

@@ -176,7 +176,7 @@ cmake -B build && cmake --build build
 
 ```bash
 fobis fetch
-make STATIC=yes                        # exe/libflap.a
+make                                   # static/libflap.a (make STATIC=no: the tests, into exe/)
 ```
 
 A Fortran 2018 compiler is required: tested with gfortran 16, nvfortran 26.5 and Intel ifx 2025.3 (see

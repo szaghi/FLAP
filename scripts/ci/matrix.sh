@@ -6,7 +6,7 @@
 #
 #   FoBiS  tests-<family>-debug, and on gnu tests-gnu-r16p (the quadruple-precision kind)  scripts/run_tests.sh
 #   CMake                                                                                   ctest
-#   make                                                                                    every exe/flap_test_*
+#   make STATIC=no                                                                          every exe/flap_test_*
 #
 # The completion tests drive bash, zsh and fish when they are installed (the fortran-toolchains images have them).
 set -euo pipefail
@@ -30,7 +30,7 @@ ctest --test-dir build-cmake --output-on-failure
 
 echo "== make"
 rm -rf exe
-make FC="$FC"
+make STATIC=no FC="$FC"
 for t in exe/flap_test_*; do
   "$t" > /dev/null || { echo "FAIL $t"; exit 1; }
 done

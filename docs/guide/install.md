@@ -78,8 +78,8 @@ As a subproject (`add_subdirectory`), the tests are off unless `BUILD_TESTING_FL
 ```bash
 git clone https://github.com/szaghi/FLAP && cd FLAP
 fobis fetch
-make                  # the library and some tests, into exe/
-make STATIC=yes       # the static library only: exe/libflap.a
+make                  # the static library: static/libflap.a, its modules in static/mod/
+make STATIC=no        # the library and some tests, into exe/
 ```
 
 ## Install script
