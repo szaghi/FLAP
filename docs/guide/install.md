@@ -82,15 +82,19 @@ make                  # the static library: static/libflap.a, its modules in sta
 make STATIC=no        # the library and some tests, into exe/
 ```
 
-## Install script
-
-Every release ships an `install.sh`, which downloads FLAP and builds it with one of the tools above:
+## One-line install
 
 ```bash
-./install.sh --download git --build fobis
-./install.sh --download wget --build cmake --tag v2.5.0   # --tag applies to wget
-./install.sh --build fobis --mode static-gnu              # the FoBiS mode
+curl -fsSL https://github.com/szaghi/FLAP/releases/latest/download/install.sh | bash
 ```
+
+It installs the latest release into `~/.local` with the build system you choose among those FLAP ships
+(`--build fobis|fpm|cmake|make`: a menu asks when you do not say), the compiler you name (`--fc`, `--gnu`, `--intel`,
+`--nvidia`), one install per compiler (`lib/flap/<compiler>-<version>/`, `include/flap/<compiler>-<version>/`), and
+makes it usable through pkg-config (`pkg-config --cflags --libs flap`, with `PKG_CONFIG_PATH=$HOME/.local/lib/pkgconfig`).
+The release carries FLAP's dependencies (FACE, PENF), so CMake and make need no network. Pass options after
+`bash -s --`, e.g. `... | bash -s -- --build cmake --prefix /opt/flap`; `--help` lists them all, `--uninstall`
+removes the install. The installer is FoBiS's ([One-line installer](https://szaghi.github.io/FoBiS/cookbook/installer)).
 
 ## Compiler notes
 

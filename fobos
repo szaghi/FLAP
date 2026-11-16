@@ -13,6 +13,11 @@ docs_examples = docs/examples
 fpm           = true
 matrix        = linux-gnu
 
+# the one-line installer, scripts/install.sh (FoBiS#217): where the make build leaves the library and the modules
+[installer]
+make_lib = static
+make_mod = static/mod
+
 [dependencies]
 deps_dir = src/third_party
 FACE     = https://github.com/szaghi/FACE
